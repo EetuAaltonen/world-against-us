@@ -1,3 +1,1 @@
 # zombie-survival-multiplayer
-
-test
