@@ -2,25 +2,29 @@
 view_enabled = true;
 view_visible[0] = true;
 
+// Set view
 viewWidth = 2560;
 viewHeight = 1440;
-
-windowWidth = 1280;
-windowHeight = 720;
-
 
 view_xport[0] = 0;
 view_yport[0] = 0;
 view_wport[0] = viewWidth;
 view_hport[0] = viewHeight;
 
-isCameraCreated = false;
+// Set camera
+cameraViewWidth = 1280;
+cameraViewHeight = 720;
 cameraTarget = noone;
+cameraZoom = 1;
+cameraZoomMax = 8;
+cameraZoomMin = 1;
+cameraZoomFactor = 0.4;
 
-var displayWidth = display_get_width();
-var displayHeight = display_get_height();
-var xPos = (displayWidth * 0.5) - (windowWidth * 0.5);
-var yPos = (displayHeight * 0.5) - (windowHeight * 0.5);
+view_camera[0] = camera_create_view(
+	0, 0,
+	cameraViewWidth, cameraViewHeight,
+	0, cameraTarget, -1, -1, 0, 0
+);
 
-window_set_rectangle(xPos, yPos, windowWidth, windowHeight);
+// Set surface
 surface_resize(application_surface, viewWidth, viewHeight);

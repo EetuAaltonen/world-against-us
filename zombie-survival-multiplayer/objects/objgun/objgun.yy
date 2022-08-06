@@ -1,8 +1,5 @@
 {
-  "spriteId": {
-    "name": "sprAk47",
-    "path": "sprites/sprAk47/sprAk47.yy",
-  },
+  "spriteId": null,
   "solid": false,
   "visible": true,
   "managed": true,

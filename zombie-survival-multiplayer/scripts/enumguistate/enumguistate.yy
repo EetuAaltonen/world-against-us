@@ -6,7 +6,7 @@
     "path": "folders/Scripts/Enums.yy",
   },
   "resourceVersion": "1.0",
-  "name": "InventoryType",
+  "name": "EnumGUIState",
   "tags": [],
   "resourceType": "GMScript",
 }

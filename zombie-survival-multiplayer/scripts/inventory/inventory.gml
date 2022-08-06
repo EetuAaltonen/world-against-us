@@ -1,10 +1,7 @@
-function Inventory(_type) constructor
+function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 {
     items = ds_list_create();
-	size = {
-		columns: 10,
-		rows: 10
-	};
+	size = _size;
 	type = _type;
 	
 	// Init grid data
@@ -19,13 +16,18 @@ function Inventory(_type) constructor
 		columns: size.columns,
 		rows: size.rows,
 		size: {
-			w: 82,
-			h: 82
+			w: 48,//82,
+			h: 48,//82
 		},
 		outline: 2
 	};
 	
 	showInventory = false;
+	
+	// Item search
+	searchIndex = noone;
+	searchDuration = TimerFromSeconds(2);
+	searchTimer = 0;
 	
 	// Hover effect
 	mouseHoverIndex = noone;
@@ -35,16 +37,24 @@ function Inventory(_type) constructor
 		return ds_list_size(items);
     }
 
-    static AddItem = function(_item)
+    static AddItem = function(_item, _gridIndex = noone, _known = true)
     {
-		var gridDir = 1;
-		_item.gridDir = gridDir;
-        _item.gridIndex = FindEmptyIndex(_item.size);
-		_item.UpdateIconScale(grid);
-		var newValue = _item.gridIndex.Clone();
+		var addedItem = noone;
+        _item.gridIndex = (_gridIndex != noone) ? _gridIndex : FindEmptyIndex(_item);
+		_item.known = _known;
 		
-		FillGridArea(_item.gridIndex.col, _item.gridIndex.row, _item.size, newValue);
-		ds_list_add(items, _item);
+		if (_item.gridIndex != noone)
+		{
+			_item.sourceType = type;
+			FillGridArea(_item.gridIndex.col, _item.gridIndex.row, _item.size, _item.gridIndex.Clone());
+			addedItem = _item.Clone();
+			ds_list_add(items, addedItem);
+		} else {
+			// MESSAGE LOG
+			AddMessageLog("Item: '" + string(_item.name) + "' doesn't fit!");
+		}
+		
+		return addedItem;
     }
 	
 	static GetItem = function(_index)
@@ -92,7 +102,7 @@ function Inventory(_type) constructor
 		}
     }
 	
-	static FindEmptyIndex = function(_itemSize, _itemRotation = 1)
+	static FindEmptyIndex = function(_item, _itemRotation = 1)
 	{
 		var index = noone;
 		for (var i = 0; i < size.rows; i++)
@@ -103,9 +113,19 @@ function Inventory(_type) constructor
 				if (index != noone) break;
 				if (gridData[i][j] == noone)
 				{
-					if (IsGridAreaEmpty(j, i, _itemSize))
+					if (IsGridAreaEmpty(j, i, _item))
 					{
 						index = new GridIndex(j, i);
+					} else {
+						// CHECK ROTATED VERSION
+						_item.Rotate();
+						if (IsGridAreaEmpty(j, i, _item))
+						{
+							index = new GridIndex(j, i);
+						} else {
+							// REVERSE ROTATION IF DIDN'T FIT
+							_item.Rotate();
+						}
 					}
 				}
 			}
@@ -113,19 +133,20 @@ function Inventory(_type) constructor
 		return index;
 	}
 	
-	static IsGridAreaEmpty = function(_col, _row, _itemSize)
+	static IsGridAreaEmpty = function(_col, _row, _item, _ignoreSource, _ignoreGridIndex)
 	{
 		var isEmpty = true;
-		if ((_col + _itemSize.w - 1) < array_length(gridData[0]) &&
-			(_row + _itemSize.h - 1) < array_length(gridData))
+		if ((_col + _item.size.w - 1) < array_length(gridData[0]) &&
+			(_row + _item.size.h - 1) < array_length(gridData))
 		{
-			for (var i = _row; i < (_row + _itemSize.h); i++)
+			for (var i = _row; i < (_row + _item.size.h); i++)
 			{
 				if (!isEmpty) break;
-				for (var j = _col; j < (_col + _itemSize.w); j++)
+				for (var j = _col; j < (_col + _item.size.w); j++)
 				{
 					if (!isEmpty) break;
-					isEmpty = (gridData[i][j] == noone);
+					var gridIndex = gridData[i][j];
+					isEmpty = (gridIndex == noone || (_item.sourceType == _ignoreSource && (gridIndex.col == _ignoreGridIndex.col && gridIndex.row == _ignoreGridIndex.row)));
 				}
 			}
 		} else {
@@ -145,156 +166,383 @@ function Inventory(_type) constructor
 		}
 	}
 	
-	static DrawGUI = function(_viewXPos, _viewYPos)
+	static DrawGUI = function(_guiXPos, _guiYPos)
 	{
-		InventoryInteractions();
+		if (searchIndex == noone)
+		{
+			InventoryInteractions();
+		} else {
+			InventorySearch();	
+		}
 		
-		var xPos = _viewXPos;
-		var yPos = _viewYPos;
+		var xPos = _guiXPos;
+		var yPos = _guiYPos;
 		for (var i = 0; i < grid.rows; i++)
 		{
 			for (var j = 0; j < grid.columns; j++)
 			{
+				var frameColor = make_colour_rgb(110, 110, 110);
 				draw_rectangle_color(
 					xPos, yPos,
 					xPos + grid.size.w,
 					yPos + grid.size.h,
-					c_white, c_white, c_white, c_white, false
+					frameColor, frameColor, frameColor, frameColor, false
 				);
-			
+				
+				var gridColor = make_colour_rgb(144, 144, 144);
+				if (mouseHoverIndex != noone)
+				{
+					if ((global.DragItem != noone) && (mouseHoverIndex.col == j && mouseHoverIndex.row == i))
+					{
+						gridColor = make_colour_rgb(100, 100, 100);
+					}
+				}
 				draw_rectangle_color(
 					xPos + grid.outline,
 					yPos + grid.outline,
 					xPos + grid.size.w - grid.outline,
 					yPos + grid.size.h - grid.outline,
-					c_gray, c_gray, c_gray, c_gray, false
+					gridColor, gridColor, gridColor, gridColor, false
 				);
 				
-				// Debug info
+				// DEBUG INFO
+				/*
 				draw_set_color(c_red);
 				var text = (gridData[i][j] != noone) ? 1 : 0;
 				draw_text(xPos + 10, yPos + 10, text);
 				draw_set_color(c_black);
+				*/
 				
 				xPos += grid.size.w;
 			}
 			yPos += grid.size.h;
-			xPos = _viewXPos;
+			xPos = _guiXPos;
 		}
 	
 		var itemCount = GetItemCount();
-		for (var i = 0; i < itemCount; i++)
+		for (var i = 0; i < itemCount + 1; i++)
 		{
-			var item = GetItem(i);
-			xPos = _viewXPos + (grid.size.w * item.gridIndex.col);
-			yPos = _viewYPos + (grid.size.h * item.gridIndex.row);
+			var drawDragItem = (i >= itemCount);
+			var item = noone;
 			
-			draw_rectangle_color(
-				xPos, yPos,
-				xPos + (grid.size.w * item.size.w),
-				yPos + (grid.size.h * item.size.h),
-				c_black, c_black, c_black, c_black, false
-			);
-			
-			var gridColor = c_dkgray
-			// Highlight item
-			if (mouseHoverIndex != noone)
+			if (drawDragItem)
 			{
-				if (mouseHoverIndex.col >= item.gridIndex.col && mouseHoverIndex.col <= (item.gridIndex.col + item.size.w - 1) &&
-					mouseHoverIndex.row >= item.gridIndex.row && mouseHoverIndex.row <= (item.gridIndex.row + item.size.h - 1))
+				if (global.DragItem == noone || mouseHoverIndex == noone) break;
+				if (!IsGridAreaEmpty(mouseHoverIndex.col, mouseHoverIndex.row, global.DragItem, global.DragItem.sourceType, global.DragItem.gridIndex)) break;
+				
+				var item = global.DragItem.Clone();
+				item.gridIndex = mouseHoverIndex.Clone();
+			} else {
+				item = GetItem(i);
+			}
+			
+			xPos = _guiXPos + (grid.size.w * item.gridIndex.col);
+			yPos = _guiYPos + (grid.size.h * item.gridIndex.row);
+			
+			var itemDragged = false;
+			if (global.DragItem != noone)
+			{
+				if (global.DragItem.sourceType == item.sourceType)
 				{
-					gridColor = c_orange;
+					if (item.gridIndex.col == global.DragItem.gridIndex.col && item.gridIndex.row == global.DragItem.gridIndex.row)
+					{
+						itemDragged = true;
+					}
 				}
 			}
 			
-			draw_rectangle_color(
-				xPos + grid.outline,
-				yPos + grid.outline,
-				xPos + (grid.size.w * item.size.w) - grid.outline,
-				yPos + (grid.size.h * item.size.h) - grid.outline,
-				gridColor, gridColor, gridColor, gridColor, false
-			);
+			// Highlight item
+			if (!itemDragged)
+			{
+				var outlineColor = make_colour_rgb(30, 30, 18);
+				draw_rectangle_color(
+					xPos, yPos,
+					xPos + (grid.size.w * item.size.w),
+					yPos + (grid.size.h * item.size.h),
+					outlineColor, outlineColor, outlineColor, outlineColor, false
+				);
+				
+				var gridColor = make_colour_rgb(187, 169, 140);
+				if (!item.known) {
+					gridColor = make_colour_rgb(3, 3, 3);//make_colour_rgb(13, 13, 8);
+				} else if ((mouseHoverIndex != noone && global.DragItem == noone) || drawDragItem)
+				{
+					if ((mouseHoverIndex.col >= item.gridIndex.col && mouseHoverIndex.col <= (item.gridIndex.col + item.size.w - 1) &&
+						mouseHoverIndex.row >= item.gridIndex.row && mouseHoverIndex.row <= (item.gridIndex.row + item.size.h - 1)) || drawDragItem)
+					{
+						gridColor = make_colour_rgb(167, 75, 49);
+					}
+				}
+				
+				draw_rectangle_color(
+					xPos + grid.outline,
+					yPos + grid.outline,
+					xPos + (grid.size.w * item.size.w) - grid.outline,
+					yPos + (grid.size.h * item.size.h) - grid.outline,
+					gridColor, gridColor, gridColor, gridColor, false
+				);
+			}
 			
-			draw_sprite_ext(
-				item.icon, 0,
-				xPos + ((grid.size.w * 0.5) * item.size.w),
-				yPos + ((grid.size.h * 0.5) * item.size.h),
-				item.iconXScale, item.iconYScale, 0, c_white, 1
-			);
+			// Calculate icon scale and draw the sprite
+			var padding = 0.85;
+			var iconAlpha = itemDragged ? 0.4 : 1;
+			var iconRotation = item.rotated ? 90 : 0;
+			var iconScale = 1;
+			if (item.rotated)
+			{
+				iconScale = ScaleSpriteToFitSize(
+					item.icon,
+					(grid.size.w * padding) * item.size.h,
+					(grid.size.h * padding) * item.size.w
+				);
+			} else {
+				iconScale = ScaleSpriteToFitSize(
+					item.icon,
+					(grid.size.w * padding) * item.size.w,
+					(grid.size.h * padding) * item.size.h
+				);
+			}
+			
+			if (item.known)
+			{
+				draw_sprite_ext(
+					item.icon, 0,
+					xPos + ((grid.size.w * 0.5) * item.size.w),
+					yPos + ((grid.size.h * 0.5) * item.size.h),
+					iconScale, iconScale, iconRotation, c_white, iconAlpha
+				);
+			} else {
+				if (item.gridIndex == searchIndex)
+				{
+					shader_set(shdrSearchSprite);
+				} else {
+					shader_set(shdrFogSprite);	
+				}
+				
+				draw_sprite_ext(
+					item.icon, 0,
+					xPos + ((grid.size.w * 0.5) * item.size.w),
+					yPos + ((grid.size.h * 0.5) * item.size.h),
+					iconScale, iconScale, iconRotation, c_white, iconAlpha
+				);
+				shader_reset();	
+			}
+			
 		}
 		
-		mouseHoverIndex = GetMouseHoverIndex(_viewXPos, _viewYPos, grid);
+		mouseHoverIndex = GetMouseHoverIndex(_guiXPos, _guiYPos, grid);
 		if (mouseHoverIndex != noone)
 		{
-			draw_text(mouse_x, mouse_y + 100, string(gridData[mouseHoverIndex.row][mouseHoverIndex.col]));
+			var mouseX = window_mouse_get_x();
+			var mouseY = window_mouse_get_y();
+			draw_text(mouseX, mouseY + 100, string(gridData[mouseHoverIndex.row][mouseHoverIndex.col]));
 		}
 	}
 	
-	static GetMouseHoverIndex = function(_viewXPos, _viewYPos, grid)
+	static GetMouseHoverIndex = function(_guiXPos, _guiYPos, grid)
 	{
+		var mouseX = window_mouse_get_x();
+		var mouseY = window_mouse_get_y();
 		var mouseHoverIndex = noone;
 		var gridWidth = grid.size.w * grid.columns;
 		var gridHeight = grid.size.h * grid.rows;
 		
-		if (mouse_x > _viewXPos && mouse_x < _viewXPos + gridWidth &&
-			mouse_y > _viewYPos && mouse_y < _viewYPos + gridHeight)
+		if (mouseX > _guiXPos && mouseX < _guiXPos + gridWidth &&
+			mouseY > _guiYPos && mouseY < _guiYPos + gridHeight)
 		{
-			var indexX = floor((mouse_x - _viewXPos) / grid.size.w);
-			var indexY = floor((mouse_y - _viewYPos) / grid.size.h);
+			var indexX = floor((mouseX - _guiXPos) / grid.size.w);
+			var indexY = floor((mouseY - _guiYPos) / grid.size.h);
 			mouseHoverIndex = new GridIndex(indexX, indexY);
 		}
 		
 		return mouseHoverIndex;
 	}
 	
+	static InventorySearch = function()
+	{
+		if (searchIndex != noone)
+		{
+			if (searchTimer-- <= 0)
+			{
+				var item = GetItemByGridIndex(searchIndex);
+				item.known = true;
+				
+				searchIndex = noone;
+				searchTimer = 0;
+			}
+		}
+	}
+	
 	static InventoryInteractions = function()
-	{	
+	{
 		if (mouseHoverIndex	!= noone)
 		{
-			if (gridData[mouseHoverIndex.row][mouseHoverIndex.col] != noone)
+			// ROTATE
+			if (keyboard_check_released(ord("R")))
 			{
-				switch (type)
+				if (global.DragItem != noone)
 				{
-					case INVENTORY_TYPE.PlayerBackpack:
+					global.DragItem.Rotate();
+				} else {
+					var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
+					if (itemGridIndex != noone)
 					{
-						if (keyboard_check(vk_shift) && mouse_check_button_released(mb_right))
+						var item = GetItemByGridIndex(itemGridIndex);
+						if (item != noone)
+						{
+							var rotatedItem = item.Clone();
+							rotatedItem.Rotate();
+							if (IsGridAreaEmpty(rotatedItem.gridIndex.col, rotatedItem.gridIndex.row, rotatedItem, rotatedItem.sourceType, rotatedItem.gridIndex))
+							{
+								// Clear old fill area
+								FillGridArea(item.gridIndex.col, item.gridIndex.row, item.size, noone);
+								item.Rotate();
+								
+								// Fill new area
+								FillGridArea(item.gridIndex.col, item.gridIndex.row, item.size, item.gridIndex);
+							} else {
+								AddMessageLog("Can't rotate " + item.name);
+							}
+						}
+					}
+				}
+			}
+			// DRAG -N- DROP
+			else if (!keyboard_check(vk_anykey))
+			{
+				if (mouse_check_button_pressed(mb_left))
+				{
+					var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
+					if (itemGridIndex != noone)
+					{
+						var item = GetItemByGridIndex(itemGridIndex);
+						global.DragItem = item.Clone();
+					}	
+				} else if (mouse_check_button_released(mb_left))
+				{
+					if (global.DragItem != noone)
+					{
+						var newGridIndex = mouseHoverIndex.Clone();
+						if (IsGridAreaEmpty(newGridIndex.col, newGridIndex.row, global.DragItem, global.DragItem.sourceType, global.DragItem.gridIndex))
+						{
+							var inventorySource = (global.DragItem.sourceType == INVENTORY_TYPE.PlayerBackpack) ? global.PlayerBackpack : global.ObjLootContainer.loot;
+							if (inventorySource != noone)
+							{
+								if (type == global.DragItem.sourceType)
+								{
+									var item = inventorySource.GetItemByGridIndex(global.DragItem.gridIndex);
+									
+									// Clear previous spot
+									FillGridArea(item.gridIndex.col, item.gridIndex.row, item.size, noone);
+									
+									// Set rotation
+									if (global.DragItem.rotated != item.rotated)
+									{
+										item.Rotate();
+									}
+									
+									// Set new spot
+									item.gridIndex = newGridIndex;
+									FillGridArea(item.gridIndex.col, item.gridIndex.row, item.size, item.gridIndex.Clone());
+								} else {
+									var newItem = AddItem(global.DragItem.Clone(), newGridIndex, global.DragItem.known);
+									if (newItem != noone)
+									{
+										with (inventorySource)
+										{
+											var oldItem = GetItemByGridIndex(global.DragItem.gridIndex);
+											RemoveItemByGridIndex(oldItem.gridIndex);
+										}
+									} else {
+										// MESSAGE LOG
+										AddMessageLog(string(global.DragItem.name) + " transfer failed!");	
+									}
+								}
+							}
+						} else {
+							// MESSAGE LOG
+							AddMessageLog(string(global.DragItem.name) + " doesn't fit!");
+						}
+						global.DragItem = noone;
+					}
+				} else if (mouse_check_button_released(mb_middle))
+				{
+					var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
+					if (itemGridIndex != noone)
+					{
+						var item = GetItemByGridIndex(itemGridIndex);
+						if (item != noone)
+						{
+							searchIndex = item.gridIndex;
+							searchTimer = searchDuration;
+						}
+					}
+				} else if (mouse_check_button_released(mb_right))
+				{
+					if (type == INVENTORY_TYPE.PlayerBackpack)
+					{
+						if (global.ObjGun != noone)
 						{
 							var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
-							RemoveItemByGridIndex(itemGridIndex);
-						} else if (keyboard_check(vk_control) && mouse_check_button_released(mb_left))
+							if (itemGridIndex != noone)
+							{
+								var item = GetItemByGridIndex(itemGridIndex);
+								if (item != noone)
+								{
+									if (item.type == "Primary_Weapon")
+									{
+										global.ObjGun.primaryWeapon = item;
+										global.ObjGun.initWeapon = true;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			// QUICK TRANSFER
+			else if (keyboard_check(vk_control) && mouse_check_button_released(mb_left))
+			{
+				var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
+				if (itemGridIndex != noone)
+				{
+					var item = GetItemByGridIndex(itemGridIndex);
+					if (item != noone)
+					{						
+						if (type == INVENTORY_TYPE.PlayerBackpack)
 						{
-							var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
-							var item = GetItemByGridIndex(itemGridIndex);
 							if (global.ObjLootContainer != noone)
 							{
 								if (global.ObjLootContainer.loot != noone)
 								{
 									with (global.ObjLootContainer.loot)
 									{
-										AddItem(item.Clone());
+										if (AddItem(item.Clone(), noone, item.known) != noone)
+										{
+											other.RemoveItemByGridIndex(itemGridIndex);	
+										}
 									}
-									RemoveItemByGridIndex(itemGridIndex);
 								}
-							}	
-						}
-					}break;
-					case INVENTORY_TYPE.LootContainer:
-					{
-						if (keyboard_check(vk_control) && mouse_check_button_released(mb_left))
-						{
-							var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
-							var item = GetItemByGridIndex(itemGridIndex);
+							}
+						} else {
 							if (global.PlayerBackpack != noone)
 							{
 								with (global.PlayerBackpack)
 								{
-									AddItem(item.Clone());
+									if (AddItem(item.Clone(), noone, item.known) != noone)
+									{
+										other.RemoveItemByGridIndex(itemGridIndex);
+									}
 								}
-								RemoveItemByGridIndex(itemGridIndex);
 							}
-						}
-					}break;
+						}	
+					}
 				}
+			} else if (keyboard_check(vk_shift) && mouse_check_button_released(mb_right))
+			{
+				// TODO: Write item drop function
+				//var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
+				//RemoveItemByGridIndex(itemGridIndex);
 			}
 		}
 	}

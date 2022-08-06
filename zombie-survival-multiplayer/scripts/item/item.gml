@@ -1,31 +1,35 @@
-function Item(_name, _icon, _size, _weight, _descripton, _iconXScale = 1, _iconYScale = 1, _gridIndex = noone) constructor
+function Item(_name, _icon, _size, _type, _weight, _descripton, _metadata = noone, _rotated = false, _known = true, _sourceType = noone, _gridIndex = noone) constructor
 {
 	name = _name;
 	icon = _icon;
-	iconXScale = _iconXScale;
-	iconYScale = _iconYScale;
-	gridIndex = _gridIndex;
 	size = _size;
+	type = _type;
 	weight = _weight;
 	description = _descripton;
+	metadata = _metadata;
 	
-	static UpdateIconScale = function(_grid)
-	{
-		var spriteWidth = sprite_get_width(icon);
-		var spriteHeight = sprite_get_height(icon);
-		while ((spriteWidth * iconXScale < (_grid.size.w * 0.85) * size.w) &&
-				(spriteHeight * iconYScale < (_grid.size.h * 0.85) * size.h))
-		{
-			iconXScale += 0.1;
-			iconYScale += 0.1;
-		}
-	}
+	rotated = _rotated;
+	known = _known;
+	sourceType = _sourceType;
+	gridIndex = _gridIndex;
+	
 	
 	static Clone = function()
 	{
 		return new Item(
-			name, icon, size, weight, description,
-			iconXScale, iconYScale, gridIndex
+			name, icon, size, type, weight, description,
+			metadata, rotated, known, sourceType,
+			(gridIndex != noone) ? gridIndex.Clone() : gridIndex
 		);
+	}
+	
+	static Rotate = function()
+	{
+		if (size.w != size.h)
+		{
+			rotated = !rotated;
+			// Swap width and height
+			size = new Size(size.h, size.w);
+		}
 	}
 }

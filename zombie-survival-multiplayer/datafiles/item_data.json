@@ -1,0 +1,104 @@
+{
+  "item_data": [
+    {
+      "name": "Army Helmet",
+      "icon": "sprArmyHelmet",
+      "type": "Helmet",
+      "size": {
+        "w": 2,
+        "h": 2
+      },
+      "description": "An army helmet to protect the head",
+      "weight": 2
+    },
+    {
+      "name": "Water Bottle",
+      "icon": "sprWaterBottle",
+      "type": "Consumable",
+      "size": {
+        "w": 1,
+        "h": 2
+      },
+      "description": "A bottle of clean water",
+      "weight": 1
+    },
+    {
+      "name": "Knife",
+      "icon": "sprKnife",
+      "type": "MeleeWeapon",
+      "size": {
+        "w": 2,
+        "h": 1
+      },
+      "description": "A knife",
+      "weight": 0.3
+    },
+    {
+      "name": "Hand Grenade",
+      "icon": "sprHandGrenade",
+      "type": "Throwable",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "A hand grenade",
+      "weight": 0.3
+    },
+    {
+      "name": "Ak-47",
+      "icon": "sprAk47",
+      "type": "Primary_Weapon",
+      "size": {
+        "w": 4,
+        "h": 2
+      },
+      "description": "Assault rifle",
+      "weight": 8,
+      "metadata": {
+        "magazine_size": 30,
+        "bullet_count": 0,
+        "caliber": 7.62,
+        "fire_rate": 600,
+        "range": 100,
+        "recoil": 5,
+        "attachment_slots": ["scope", "laser", "foregrip"],
+        "holding_pos": {
+          "X": 49,
+          "Y": 7
+        },
+        "barrel_pos": {
+          "X": 140,
+          "Y": 8
+        }
+      }
+    },
+    {
+      "name": "MP5",
+      "icon": "sprMP5",
+      "type": "Primary_Weapon",
+      "size": {
+        "w": 3,
+        "h": 2
+      },
+      "description": "SMG",
+      "weight": 4,
+      "metadata": {
+        "magazine_size": 15,
+        "bullet_count": 0,
+        "caliber": 9,
+        "fire_rate": 800,
+        "range": 50,
+        "recoil": 10,
+        "attachment_slots": ["scope", "laser", "foregrip"],
+        "holding_pos": {
+          "X": 43,
+          "Y": 52
+        },
+        "barrel_pos": {
+          "X": 140,
+          "Y": 50
+        }
+      }
+    }
+  ]
+}

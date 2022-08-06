@@ -28,7 +28,7 @@
     "path": "folders/Objects/Game.yy",
   },
   "resourceVersion": "1.0",
-  "name": "objGUI",
+  "name": "objDatabase",
   "tags": [],
   "resourceType": "GMObject",
 }

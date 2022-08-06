@@ -1,7 +1,5 @@
-var viewX = camera_get_view_x(view_camera[0]);
-var viewY = camera_get_view_y(view_camera[0]);
-var viewW = camera_get_view_width(view_camera[0]);
-var viewH = camera_get_view_height(view_camera[0]);
+// CHECK GUI STATE
+if (!IsGUIStateClosed()) return;
 
 var hInput = keyboard_check(ord("D")) - keyboard_check(ord("A"));
 var vInput = keyboard_check(ord("S")) - keyboard_check(ord("W"));
@@ -45,13 +43,3 @@ if (place_meeting(x, y + vSpeed, objBlock))
 y += vSpeed;
 var sprHeightCenter = sprite_get_height(sprite_index) * 0.5;
 y = clamp(y, 0 + sprHeightCenter, room_height - sprHeightCenter);
-
-var gotoX = x - (viewW * 0.5);
-var gotoY = y - (viewH * 0.5);
-gotoX = clamp(gotoX, 0, room_width - viewW);
-gotoY = clamp(gotoY, 0, room_height - viewH);
-
-var newX = lerp(viewX, gotoX, 0.1);
-var newY = lerp(viewY, gotoY, 0.1);
-
-camera_set_view_pos(view_camera[0], newX, newY);
