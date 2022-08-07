@@ -1,8 +1,5 @@
 {
-  "spriteId": {
-    "name": "spr9mmBullet",
-    "path": "sprites/spr9mmBullet/spr9mmBullet.yy",
-  },
+  "spriteId": null,
   "solid": false,
   "visible": true,
   "managed": true,
@@ -35,7 +32,7 @@
     "path": "folders/Objects/Projectiles.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj9mmBullet",
+  "name": "objProjectile",
   "tags": [],
   "resourceType": "GMObject",
 }
