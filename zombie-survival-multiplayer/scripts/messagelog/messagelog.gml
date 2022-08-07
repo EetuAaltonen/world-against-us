@@ -1,3 +1,6 @@
 function AddMessageLog(_message) {
-	ds_list_add(global.MessageLog, _message);
+	if (!is_undefined(global.MessageLog))
+	{
+		ds_list_add(global.MessageLog, _message);
+	}
 }

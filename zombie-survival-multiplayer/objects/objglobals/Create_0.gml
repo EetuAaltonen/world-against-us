@@ -27,4 +27,4 @@ global.GUIH = 0;
 global.DragItem = noone;
 
 // Message log
-global.MessageLog = noone;
+global.MessageLog = undefined;
