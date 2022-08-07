@@ -181,30 +181,17 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 		{
 			for (var j = 0; j < grid.columns; j++)
 			{
-				var frameColor = make_colour_rgb(110, 110, 110);
-				draw_rectangle_color(
-					xPos, yPos,
-					xPos + grid.size.w,
-					yPos + grid.size.h,
-					frameColor, frameColor, frameColor, frameColor, false
-				);
-				
+				// DRAW GRID BACKGROUND
+				var outlineColor = make_colour_rgb(110, 110, 110);
 				var gridColor = make_colour_rgb(144, 144, 144);
 				if (mouseHoverIndex != noone)
 				{
-					if ((global.DragItem != noone) && (mouseHoverIndex.col == j && mouseHoverIndex.row == i))
+					if ((mouseHoverIndex.col == j && mouseHoverIndex.row == i))
 					{
 						gridColor = make_colour_rgb(100, 100, 100);
 					}
 				}
-				draw_rectangle_color(
-					xPos + grid.outline,
-					yPos + grid.outline,
-					xPos + grid.size.w - grid.outline,
-					yPos + grid.size.h - grid.outline,
-					gridColor, gridColor, gridColor, gridColor, false
-				);
-				
+				GUIDrawBox(xPos, yPos, grid.size.w, grid.size.h, gridColor, grid.outline, outlineColor);
 				// DEBUG INFO
 				/*
 				draw_set_color(c_red);
@@ -222,6 +209,7 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 		var itemCount = GetItemCount();
 		for (var i = 0; i < itemCount + 1; i++)
 		{
+			// DO EXTRA LOOP TO DRAW DRAGGED ITEM
 			var drawDragItem = (i >= itemCount);
 			var item = noone;
 			
@@ -251,20 +239,13 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 				}
 			}
 			
-			// Highlight item
+			// DRAW ITEM BACKGROUND
 			if (!itemDragged)
 			{
 				var outlineColor = make_colour_rgb(30, 30, 18);
-				draw_rectangle_color(
-					xPos, yPos,
-					xPos + (grid.size.w * item.size.w),
-					yPos + (grid.size.h * item.size.h),
-					outlineColor, outlineColor, outlineColor, outlineColor, false
-				);
-				
 				var gridColor = make_colour_rgb(187, 169, 140);
 				if (!item.known) {
-					gridColor = make_colour_rgb(3, 3, 3);//make_colour_rgb(13, 13, 8);
+					gridColor = make_colour_rgb(3, 3, 3);
 				} else if ((mouseHoverIndex != noone && global.DragItem == noone) || drawDragItem)
 				{
 					if ((mouseHoverIndex.col >= item.gridIndex.col && mouseHoverIndex.col <= (item.gridIndex.col + item.size.w - 1) &&
@@ -274,16 +255,10 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 					}
 				}
 				
-				draw_rectangle_color(
-					xPos + grid.outline,
-					yPos + grid.outline,
-					xPos + (grid.size.w * item.size.w) - grid.outline,
-					yPos + (grid.size.h * item.size.h) - grid.outline,
-					gridColor, gridColor, gridColor, gridColor, false
-				);
+				GUIDrawBox(xPos, yPos, (grid.size.w * item.size.w), (grid.size.h * item.size.h), gridColor, grid.outline, outlineColor);
 			}
 			
-			// Calculate icon scale and draw the sprite
+			// CALCULATE ICON SIZE
 			var padding = 0.85;
 			var iconAlpha = itemDragged ? 0.4 : 1;
 			var iconRotation = item.rotated ? 90 : 0;
@@ -303,6 +278,7 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 				);
 			}
 			
+			// DRAW ITEM
 			if (item.known)
 			{
 				draw_sprite_ext(
@@ -330,7 +306,9 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 			
 		}
 		
+		// UPDATE MOUSE HOVER INDEX
 		mouseHoverIndex = GetMouseHoverIndex(_guiXPos, _guiYPos, grid);
+		// MOUSE DEBUG INFO
 		if (mouseHoverIndex != noone)
 		{
 			var mouseX = window_mouse_get_x();

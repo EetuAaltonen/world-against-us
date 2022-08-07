@@ -5,29 +5,31 @@ if (primaryWeapon != noone && !initWeapon)
 {
 	if (array_length(bulletAnimations) > 0)
 	{
-		var bgWidth = 30;
-		var vOffset = 10;
+		// DRAW MAGAZINE BACKGROUND
+		var bulletMargin = 10;
+		var bgWidth = 100;
+		var bgHeight = (bulletMargin * primaryWeapon.metadata.magazine_size) + (bulletMargin * 4);
 		var xPos = global.GUIW - bgWidth;
-		var yPos = global.GUIH - vOffset;
-		var bulletScale = 0.25;
-
+		var yPos = global.GUIH - bgHeight;
+		
 		draw_set_alpha(0.6);
-		draw_rectangle_color(
-			xPos - bgWidth,
-			yPos - (vOffset * 4) - ((vOffset - 1) * primaryWeapon.metadata.magazine_size),
-			global.GUIW, global.GUIH,
-			c_black, c_black,
-			c_black, c_black, false
-		);
-
+		GUIDrawBox(xPos, yPos, bgWidth, bgHeight, c_black);
 		draw_set_alpha(1);
+		
+		// DRAW BULLETS
+		var bulletSprite = GetBulletSpriteFromCaliber(primaryWeapon.metadata.caliber);
+		var bulletScale = ScaleSpriteToFitSize(bulletSprite, undefined, bulletMargin);
+		var animationEndPos = 100;
+		xPos = global.GUIW - (bgWidth * 0.5);
+		yPos = global.GUIH - (bulletMargin * 2);
+		
 		for (var i = 0; i < primaryWeapon.metadata.magazine_size; i++)
 		{
 			if (i < primaryWeapon.metadata.bullet_count)
 			{
 				draw_sprite_ext(
-					spr9mmBullet, 0,
-					xPos, yPos - (vOffset * i),
+					bulletSprite, 0,
+					xPos, yPos - (bulletMargin * i),
 					-bulletScale, bulletScale, 0, c_white, 1
 				);
 			} else {
@@ -36,13 +38,14 @@ if (primaryWeapon != noone && !initWeapon)
 				if (step >= 0 && step < 1)
 				{
 					draw_sprite_ext(
-						spr9mmBullet, 0,
-						xPos + (animationEndPos * step), yPos - (vOffset * i) - (animationEndPos * step),
+						bulletSprite, 0,
+						xPos + (animationEndPos * step), yPos - (bulletMargin * i) - (animationEndPos * step),
 						-bulletScale, bulletScale, -180 * step, c_white, 1
 					);
 					bulletAnimations[i] += bulletAnimationStep;
 				}
 			}
+			
 		}
 	}
 }

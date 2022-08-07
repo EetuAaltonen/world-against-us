@@ -2,11 +2,7 @@ if (global.ShowHUD)
 {
 	// HUD BACKGROUND
 	draw_set_alpha(alphaHUGBg);
-	draw_rectangle_color(
-		0, global.GUIH - hudHeight,
-		global.GUIW, global.GUIH,
-		colHUDBg, colHUDBg, colHUDBg, colHUDBg, false
-	);
+	GUIDrawBox(0, global.GUIH - hudHeight, global.GUIW, hudHeight, colHUDBg);
 	draw_set_alpha(1);
 	
 	var hudVerticalCenter = (global.GUIH - (hudHeight * 0.5));
