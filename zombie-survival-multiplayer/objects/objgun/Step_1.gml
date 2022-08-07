@@ -38,8 +38,10 @@ if (primaryWeapon != noone)
 			var bulletXPos = barrelXPos * cs - barrelYPos * sn; 
 			var bulletYPos = barrelXPos * sn + barrelYPos * cs;
 			
-			var bullet = instance_create_layer(x + bulletXPos, y + bulletYPos, "Projectiles", obj9mmBullet);
+			var bullet = instance_create_layer(x + bulletXPos, y + bulletYPos, "Projectiles", objProjectile);
 			var bulletRecoil = random_range(-primaryWeapon.metadata.recoil, primaryWeapon.metadata.recoil);
+			
+			bullet.sprite_index = GetBulletSpriteFromCaliber(primaryWeapon.metadata.caliber);
 			bullet.direction = image_angle + bulletRecoil;
 			bullet.image_angle = bullet.direction;
 			bullet.image_xscale = 0.2;

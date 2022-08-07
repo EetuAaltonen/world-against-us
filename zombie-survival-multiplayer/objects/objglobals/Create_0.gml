@@ -4,6 +4,7 @@ global.ObjGUI = noone;
 global.ShowHUD = true;
 
 global.ItemData = noone;
+global.BulletData = undefined;
 
 global.PlayerBackpack = noone;
 

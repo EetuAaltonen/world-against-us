@@ -21,3 +21,7 @@ if (file_exists(filePath))
 		ds_map_add(itemData, formattedItem.name, formattedItem);
 	}
 }
+
+bulletData = ds_map_create();
+ds_map_add(bulletData, 7.62, spr762Bullet);
+ds_map_add(bulletData, 9, spr9mmBullet);

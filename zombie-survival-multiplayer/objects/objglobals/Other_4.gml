@@ -2,7 +2,11 @@
 if (instance_exists(objCamera)) global.ObjCamera = instance_find(objCamera, 0);
 if (instance_exists(objDisplay)) global.ObjGUI = instance_find(objDisplay, 0);
 
-if (instance_exists(objDatabase)) global.ItemData = instance_find(objDatabase, 0).itemData;
+if (instance_exists(objDatabase))
+{
+	global.ItemData = instance_find(objDatabase, 0).itemData;
+	global.BulletData = instance_find(objDatabase, 0).bulletData;
+}
 
 if (instance_exists(objInventory)) global.PlayerBackpack = instance_find(objInventory, 0).inventory;
 if (instance_exists(objLootContainer)) global.ObjLootContainer = instance_find(objLootContainer, 0);
