@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Scripts",
-    "path": "folders/Scripts.yy",
+    "name": "Files",
+    "path": "folders/Scripts/Files.yy",
   },
   "resourceVersion": "1.0",
   "name": "JSONConverts",
