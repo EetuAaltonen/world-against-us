@@ -1,36 +1,30 @@
 var travelledDistance = point_distance(x, y, spawnPoint._x, spawnPoint._y);
 
-if(!isBulletHit)
+if (initSpeed) {
+	speed = flySpeed;
+	flyStepRatio = new Vector2((hspeed / flySpeed), (vspeed / flySpeed));
+	initSpeed = true;
+}
+	
+// DESTROY OUTSIDE ROOM OR BEYOND RANGE LIMIT
+if ((x < 0 || x > room_width || y < 0 || y > room_height) ||
+	travelledDistance > range)
 {
-	if (initSpeed) { speed = flySpeed; initSpeed = true; }
+	instance_destroy();
+}
 	
-	if ((x < 0 || x > room_width || y < 0 || y > room_height) ||
-		travelledDistance > range)
+// CHECK COLLISION
+if (collision_line(x, y, x + hspeed, y + vspeed, objBlockParent, true, true))
+{
+	// FIND THE POINT ON THE OBJECT'S SURFACE
+	while (!place_meeting(x, y, objBlockParent))
 	{
-		instance_destroy();
+		x += flyStepRatio.X;
+		y += flyStepRatio.Y;
 	}
-	
-	if (collision_line(x, y, x + hspeed, y + vspeed, objBlock, true, true))
-	{		
-		// Find the point on the object's surface
-		var stepXRatio = hspeed / flySpeed;
-		var stepYRatio = vspeed / flySpeed;
 		
-		while (!place_meeting(x, y, objBlock))
-		{
-			x += stepXRatio;
-			y += stepYRatio;
-			//x += vnx;
-			//y += vny;
-		}
-		
-		var hitCorrection = ((sprite_width + bulletHoleSize) * 0.5);
-		x += hitCorrection * stepXRatio;
-		y += hitCorrection * stepYRatio;
-		
-		speed = 0;
-		isBulletHit = true;
-		bulletHoleTimer = bulletHoleDuration;
-	}
+	var hitCorrection = (sprite_width * 0.5) + (bulletHoleRadius * 2);
+	x += hitCorrection * flyStepRatio.X;
+	y += hitCorrection * flyStepRatio.Y;
 }
 	
