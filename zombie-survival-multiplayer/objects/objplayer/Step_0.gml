@@ -20,9 +20,9 @@ hSpeed = clamp(hSpeed, -maxSpeed, maxSpeed);
 vSpeed = clamp(vSpeed, -maxSpeed, maxSpeed);
 dirSpeed = sqrt((hSpeed * hSpeed) + (vSpeed * vSpeed));
 
-if (place_meeting(x + hSpeed, y, objBlock))
+if (place_meeting(x + hSpeed, y, objBlockParent))
 {
-	while (!place_meeting(x + sign(hSpeed), y, objBlock))
+	while (!place_meeting(x + sign(hSpeed), y, objBlockParent))
 	{
 		x += sign(hSpeed);
 	}
@@ -32,9 +32,9 @@ x += hSpeed;
 var sprWidthCenter = sprite_get_width(sprite_index) * 0.5;
 x = clamp(x, 0 + sprWidthCenter, room_width - sprWidthCenter);
 
-if (place_meeting(x, y + vSpeed, objBlock))
+if (place_meeting(x, y + vSpeed, objBlockParent))
 {
-	while (!place_meeting(x, y + sign(vSpeed), objBlock))
+	while (!place_meeting(x, y + sign(vSpeed), objBlockParent))
 	{
 		y += sign(vSpeed);
 	}
