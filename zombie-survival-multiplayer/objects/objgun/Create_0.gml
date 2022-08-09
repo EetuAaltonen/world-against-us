@@ -1,5 +1,8 @@
 primaryWeapon = noone;
+isAiming = false;
+rotatedWeaponBarrelPos = undefined;
 initWeapon = false;
+gunYOffset = 40;
 
 fireDelay = 0;
 recoilAnimation = 0;
