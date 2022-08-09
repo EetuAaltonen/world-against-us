@@ -6,7 +6,7 @@
     "path": "folders/Scripts/Structs.yy",
   },
   "resourceVersion": "1.0",
-  "name": "Position",
+  "name": "Vector2",
   "tags": [],
   "resourceType": "GMScript",
 }
