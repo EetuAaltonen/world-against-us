@@ -2,11 +2,10 @@ if (initLoot)
 {
 	initLoot = false;
 	
-	// Set known to false
-	loot.AddItem(global.ItemData[? "Ak-47"].Clone(), noone, false);
+	// SET KNOWN TO FALSE
 	loot.AddItem(global.ItemData[? "MP5"].Clone(), noone, false);
-	loot.AddItem(global.ItemData[? "Army Helmet"], noone, false);
-	loot.AddItem(global.ItemData[? "Knife"], noone, false);
-	loot.AddItem(global.ItemData[? "Hand Grenade"], noone, false);
-	loot.AddItem(global.ItemData[? "Water Bottle"], noone, false);
+	loot.AddItem(global.ItemData[? "Army Helmet"].Clone(), noone, false);
+	loot.AddItem(global.ItemData[? "Knife"].Clone(), noone, false);
+	loot.AddItem(global.ItemData[? "Hand Grenade"].Clone(), noone, false);
+	loot.AddItem(global.ItemData[? "Water Bottle"].Clone(), noone, false);
 }

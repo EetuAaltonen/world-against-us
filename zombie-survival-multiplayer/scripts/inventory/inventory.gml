@@ -102,7 +102,7 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 		}
     }
 	
-	static FindEmptyIndex = function(_item, _itemRotation = 1)
+	static FindEmptyIndex = function(_item)
 	{
 		var index = noone;
 		for (var i = 0; i < size.rows; i++)
@@ -304,6 +304,17 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 				shader_reset();	
 			}
 			
+			// ITEM QUANTITY
+			if (item.quantity > 1)
+			{
+				draw_set_font(font_small_bold);
+				draw_text(
+					xPos + 5,
+					yPos + grid.size.h - 15,
+					string(item.quantity)
+				);
+				draw_set_font(font_default);
+			}
 		}
 		
 		// UPDATE MOUSE HOVER INDEX

@@ -8,7 +8,10 @@ function JSONStructToItem(_jsonStruct) {
 		),
 		_jsonStruct[$ "type"],
 		_jsonStruct[$ "weight"],
+		_jsonStruct[$ "max_stack"],
+		_jsonStruct[$ "base_price"],
 		_jsonStruct[$ "description"],
+		1, // DEFAULT QUANTITY TO 1
 		_jsonStruct[$ "metadata"]
 	);
 }

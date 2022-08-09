@@ -1,11 +1,14 @@
-function Item(_name, _icon, _size, _type, _weight, _descripton, _metadata = noone, _rotated = false, _known = true, _sourceType = noone, _gridIndex = noone) constructor
+function Item(_name, _icon, _size, _type, _weight, _maxStack, _basePrice, _descripton, _quantity = 1, _metadata = noone, _rotated = false, _known = true, _sourceType = noone, _gridIndex = noone) constructor
 {
 	name = _name;
 	icon = _icon;
 	size = _size;
 	type = _type;
 	weight = _weight;
+	maxStack = _maxStack;
+	basePrice = _basePrice;
 	description = _descripton;
+	quantity = _quantity;
 	metadata = _metadata;
 	
 	rotated = _rotated;
@@ -14,10 +17,11 @@ function Item(_name, _icon, _size, _type, _weight, _descripton, _metadata = noon
 	gridIndex = _gridIndex;
 	
 	
-	static Clone = function()
+	static Clone = function(_newQuantity = undefined)
 	{
 		return new Item(
-			name, icon, size, type, weight, description,
+			name, icon, size, type, weight, maxStack, basePrice, description,
+			_newQuantity ?? quantity,
 			metadata, rotated, known, sourceType,
 			(gridIndex != noone) ? gridIndex.Clone() : gridIndex
 		);
@@ -31,5 +35,14 @@ function Item(_name, _icon, _size, _type, _weight, _descripton, _metadata = noon
 			// Swap width and height
 			size = new Size(size.h, size.w);
 		}
+	}
+	
+	static Compare = function(_other)
+	{
+		return (
+			name == _other.name &&
+			icon == _other.icon &&
+			type == _other.type
+		);
 	}
 }

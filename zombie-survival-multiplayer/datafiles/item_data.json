@@ -1,6 +1,19 @@
 {
   "item_data": [
     {
+      "name": "Money",
+      "icon": "sprMoney",
+      "type": "Other",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "A stack of money",
+      "weight": 0.01,
+      "max_stack": 999,
+      "base_price": 1
+    },
+    {
       "name": "Army Helmet",
       "icon": "sprArmyHelmet",
       "type": "Helmet",
@@ -9,7 +22,9 @@
         "h": 2
       },
       "description": "An army helmet to protect the head",
-      "weight": 2
+      "weight": 2,
+      "max_stack": 1,
+      "base_price": 80
     },
     {
       "name": "Water Bottle",
@@ -20,7 +35,9 @@
         "h": 2
       },
       "description": "A bottle of clean water",
-      "weight": 1
+      "weight": 1,
+      "max_stack": 1,
+      "base_price": 10
     },
     {
       "name": "Knife",
@@ -31,7 +48,9 @@
         "h": 1
       },
       "description": "A knife",
-      "weight": 0.3
+      "weight": 0.3,
+      "max_stack": 1,
+      "base_price": 30
     },
     {
       "name": "Hand Grenade",
@@ -42,7 +61,9 @@
         "h": 1
       },
       "description": "A hand grenade",
-      "weight": 0.3
+      "weight": 0.3,
+      "max_stack": 1,
+      "base_price": 60
     },
     {
       "name": "Ak-47",
@@ -54,6 +75,8 @@
       },
       "description": "Assault rifle",
       "weight": 8,
+      "max_stack": 1,
+      "base_price": 450,
       "metadata": {
         "magazine_size": 30,
         "bullet_count": 0,
@@ -62,10 +85,6 @@
         "range": 100,
         "recoil": 5,
         "attachment_slots": ["scope", "laser", "foregrip"],
-        "holding_pos": {
-          "X": 49,
-          "Y": 7
-        },
         "barrel_pos": {
           "X": 140,
           "Y": 8
@@ -82,6 +101,8 @@
       },
       "description": "SMG",
       "weight": 4,
+      "max_stack": 1,
+      "base_price": 250,
       "metadata": {
         "magazine_size": 15,
         "bullet_count": 0,
@@ -90,13 +111,9 @@
         "range": 50,
         "recoil": 10,
         "attachment_slots": ["scope", "laser", "foregrip"],
-        "holding_pos": {
-          "X": 43,
-          "Y": 52
-        },
         "barrel_pos": {
           "X": 140,
-          "Y": 50
+          "Y": 11
         }
       }
     }
