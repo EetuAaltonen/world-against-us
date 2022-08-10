@@ -1,7 +1,7 @@
 // CHECK GUI STATE
 if (!IsGUIStateClosed()) return;
 
-if (loot != noone)
+if (inventory != noone)
 {
 	if (insideInteractionRange)
 	{

@@ -9,7 +9,7 @@ if (instance_exists(objDatabase))
 }
 
 if (instance_exists(objInventory)) global.PlayerBackpack = instance_find(objInventory, 0).inventory;
-if (instance_exists(objLootContainer)) global.ObjLootContainer = instance_find(objLootContainer, 0);
+if (instance_exists(objTempInventory)) global.ObjTempInventory = instance_find(objTempInventory, 0);
 
 if (instance_exists(objSpawner)) global.ObjSpawner = instance_find(objSpawner, 0);
 

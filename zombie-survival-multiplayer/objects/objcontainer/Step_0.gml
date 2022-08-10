@@ -7,7 +7,7 @@ if (global.ObjPlayer != noone)
 	
 	if (insideInteractionRange && keyboard_check_released(ord("F")))
 	{
+		global.ObjTempInventory.inventory = inventory;
 		RequestGUIState(GUI_STATE.LootContainer);
-		SetLootContainer(loot);
 	}
 }

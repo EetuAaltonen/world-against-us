@@ -389,8 +389,6 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 								
 								// Fill new area
 								FillGridArea(item.gridIndex.col, item.gridIndex.row, item.size, item.gridIndex);
-							} else {
-								AddMessageLog("Can't rotate " + item.name);
 							}
 						}
 					}
@@ -414,7 +412,7 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 						var newGridIndex = mouseHoverIndex.Clone();
 						if (IsGridAreaEmpty(newGridIndex.col, newGridIndex.row, global.DragItem, global.DragItem.sourceType, global.DragItem.gridIndex))
 						{
-							var inventorySource = (global.DragItem.sourceType == INVENTORY_TYPE.PlayerBackpack) ? global.PlayerBackpack : global.ObjLootContainer.loot;
+							var inventorySource = (global.DragItem.sourceType == INVENTORY_TYPE.PlayerBackpack) ? global.PlayerBackpack : global.ObjTempInventory.inventory;
 							if (inventorySource != noone)
 							{
 								if (type == global.DragItem.sourceType)
@@ -448,9 +446,6 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 									}
 								}
 							}
-						} else {
-							// MESSAGE LOG
-							AddMessageLog(string(global.DragItem.name) + " doesn't fit!");
 						}
 						global.DragItem = noone;
 					}
@@ -500,11 +495,11 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 					{						
 						if (type == INVENTORY_TYPE.PlayerBackpack)
 						{
-							if (global.ObjLootContainer != noone)
+							if (global.ObjTempInventory != noone)
 							{
-								if (global.ObjLootContainer.loot != noone)
+								if (global.ObjTempInventory.inventory != noone)
 								{
-									with (global.ObjLootContainer.loot)
+									with (global.ObjTempInventory.inventory)
 									{
 										if (AddItem(item.Clone(), noone, item.known) != noone)
 										{
