@@ -6,8 +6,8 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 	
 	// Init grid data
 	gridData = [];
-    for(var i = 0; i < size.rows; i++){
-	  for(var j = 0; j < size.columns; j ++){
+    for (var i = 0; i < size.rows; i++) {
+	  for (var j = 0; j < size.columns; j ++) {
 	    gridData[i, j] = noone;
 	  }
 	}
@@ -25,9 +25,9 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 	showInventory = false;
 	
 	// Item search
-	searchIndex = noone;
-	searchDuration = TimerFromSeconds(2);
-	searchTimer = 0;
+	identifyIndex = undefined;
+	identifyDuration = TimerFromSeconds(2);
+	identifyTimer = 0;
 	
 	// Hover effect
 	mouseHoverIndex = noone;
@@ -168,11 +168,11 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 	
 	static DrawGUI = function(_guiXPos, _guiYPos)
 	{
-		if (searchIndex == noone)
+		if (is_undefined(identifyIndex))
 		{
 			InventoryInteractions();
 		} else {
-			InventorySearch();	
+			InventoryIdentify();
 		}
 		
 		var xPos = _guiXPos;
@@ -288,9 +288,9 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 					iconScale, iconScale, iconRotation, c_white, iconAlpha
 				);
 			} else {
-				if (item.gridIndex == searchIndex)
+				if (item.gridIndex == identifyIndex)
 				{
-					shader_set(shdrSearchSprite);
+					shader_set(shdrIdentifySprite);
 				} else {
 					shader_set(shdrFogSprite);	
 				}
@@ -347,17 +347,17 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 		return mouseHoverIndex;
 	}
 	
-	static InventorySearch = function()
+	static InventoryIdentify = function()
 	{
-		if (searchIndex != noone)
+		if (!is_undefined(identifyIndex))
 		{
-			if (searchTimer-- <= 0)
+			if (identifyTimer-- <= 0)
 			{
-				var item = GetItemByGridIndex(searchIndex);
+				var item = GetItemByGridIndex(identifyIndex);
 				item.known = true;
 				
-				searchIndex = noone;
-				searchTimer = 0;
+				identifyIndex = undefined;
+				identifyTimer = 0;
 			}
 		}
 	}
@@ -457,8 +457,8 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 						var item = GetItemByGridIndex(itemGridIndex);
 						if (item != noone)
 						{
-							searchIndex = item.gridIndex;
-							searchTimer = searchDuration;
+							identifyIndex = item.gridIndex;
+							identifyTimer = identifyDuration;
 						}
 					}
 				} else if (mouse_check_button_released(mb_right))
