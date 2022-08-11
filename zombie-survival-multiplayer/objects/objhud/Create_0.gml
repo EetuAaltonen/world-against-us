@@ -14,9 +14,6 @@ pulseIndicatorSize = 8;
 initPulseLine = true;
 
 // STYLES
-colHUDBg = make_colour_rgb(0, 0, 0);
-alphaHUGBg = 0.8;
-
 scaleHUDIcons = 0.35;
 
 colPulseLine = make_colour_rgb(53, 138, 0);

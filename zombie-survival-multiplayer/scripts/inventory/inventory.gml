@@ -16,8 +16,8 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 		columns: size.columns,
 		rows: size.rows,
 		size: {
-			w: 48,//82,
-			h: 48,//82
+			w: 48,
+			h: 48,
 		},
 		outline: 2
 	};
@@ -182,16 +182,15 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 			for (var j = 0; j < grid.columns; j++)
 			{
 				// DRAW GRID BACKGROUND
-				var outlineColor = make_colour_rgb(110, 110, 110);
-				var gridColor = make_colour_rgb(144, 144, 144);
+				var gridSpriteIndex = 0;
 				if (mouseHoverIndex != noone)
 				{
 					if ((mouseHoverIndex.col == j && mouseHoverIndex.row == i))
 					{
-						gridColor = make_colour_rgb(100, 100, 100);
+						gridSpriteIndex = 1;
 					}
 				}
-				GUIDrawBox(xPos, yPos, grid.size.w, grid.size.h, gridColor, grid.outline, outlineColor);
+				draw_sprite_ext(sprGUIGrid, gridSpriteIndex, xPos, yPos, 1, 1, 0, c_white, 1);
 				// DEBUG INFO
 				/*
 				draw_set_color(c_red);
@@ -242,20 +241,19 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 			// DRAW ITEM BACKGROUND
 			if (!itemDragged)
 			{
-				var outlineColor = make_colour_rgb(30, 30, 18);
-				var gridColor = make_colour_rgb(187, 169, 140);
+				var gridSpriteIndex = 0;
 				if (!item.known) {
-					gridColor = make_colour_rgb(3, 3, 3);
+					gridSpriteIndex = 2;
 				} else if ((mouseHoverIndex != noone && global.DragItem == noone) || drawDragItem)
 				{
 					if ((mouseHoverIndex.col >= item.gridIndex.col && mouseHoverIndex.col <= (item.gridIndex.col + item.size.w - 1) &&
 						mouseHoverIndex.row >= item.gridIndex.row && mouseHoverIndex.row <= (item.gridIndex.row + item.size.h - 1)) || drawDragItem)
 					{
-						gridColor = make_colour_rgb(167, 75, 49);
+						gridSpriteIndex = 1;
 					}
 				}
 				
-				GUIDrawBox(xPos, yPos, (grid.size.w * item.size.w), (grid.size.h * item.size.h), gridColor, grid.outline, outlineColor);
+				draw_sprite_ext(sprGUIItemBg, gridSpriteIndex, xPos, yPos, item.size.w, item.size.h, 0, c_white, 1);
 			}
 			
 			// CALCULATE ICON SIZE

@@ -12,9 +12,7 @@ if (primaryWeapon != noone && !initWeapon)
 		var xPos = global.GUIW - bgWidth;
 		var yPos = global.GUIH - bgHeight;
 		
-		draw_set_alpha(0.6);
-		GUIDrawBox(xPos, yPos, bgWidth, bgHeight, c_black);
-		draw_set_alpha(1);
+		draw_sprite_ext(sprGUIBg, 0, xPos, yPos, bgWidth, bgHeight, 0, c_white, 0.8);
 		
 		// DRAW BULLETS
 		var bulletSprite = GetBulletSpriteFromCaliber(primaryWeapon.metadata.caliber);

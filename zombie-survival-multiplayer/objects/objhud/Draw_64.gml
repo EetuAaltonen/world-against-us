@@ -1,9 +1,7 @@
 if (global.ShowHUD)
 {
 	// HUD BACKGROUND
-	draw_set_alpha(alphaHUGBg);
-	GUIDrawBox(0, global.GUIH - hudHeight, global.GUIW, hudHeight, colHUDBg);
-	draw_set_alpha(1);
+	draw_sprite_ext(sprGUIBg, 0, 0, global.GUIH - hudHeight, global.GUIW, hudHeight, 0, c_white, 0.8);
 	
 	var hudVerticalCenter = (global.GUIH - (hudHeight * 0.5));
 	draw_set_color(c_white);
