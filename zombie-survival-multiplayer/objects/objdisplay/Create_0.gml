@@ -16,3 +16,6 @@ window_set_rectangle(windowXPos, windowYPos, windowWidth, windowHeight);
 
 // Set GUI size
 display_set_gui_size(windowWidth, windowHeight);
+
+// Set surface
+surface_resize(application_surface, windowWidth, windowHeight);

@@ -1,3 +1,6 @@
+// CHECK GUI STATE
+if (!IsGUIStateClosed()) return;
+
 if (cameraTarget != noone)
 {
 	// Zoom

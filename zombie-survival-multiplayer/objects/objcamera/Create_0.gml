@@ -25,6 +25,3 @@ view_camera[0] = camera_create_view(
 	cameraViewWidth, cameraViewHeight,
 	0, cameraTarget, -1, -1, 0, 0
 );
-
-// Set surface
-surface_resize(application_surface, viewWidth, viewHeight);
