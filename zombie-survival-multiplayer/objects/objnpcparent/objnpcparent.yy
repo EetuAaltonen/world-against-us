@@ -26,7 +26,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "NPCs",
-    "path": "folders/Objects/NPCs.yy",
+    "path": "folders/Objects/Characters/NPCs.yy",
   },
   "resourceVersion": "1.0",
   "name": "objNPCParent",

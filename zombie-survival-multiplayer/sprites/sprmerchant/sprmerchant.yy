@@ -70,7 +70,7 @@
   "nineSlice": null,
   "parent": {
     "name": "NPCs",
-    "path": "folders/Sprites/NPCs.yy",
+    "path": "folders/Sprites/Characters/NPCs.yy",
   },
   "resourceVersion": "1.0",
   "name": "sprMerchant",
