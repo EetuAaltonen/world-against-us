@@ -1,17 +1,11 @@
 {
-  "spriteId": {
-    "name": "sprPlayer",
-    "path": "sprites/sprPlayer/sprPlayer.yy",
-  },
+  "spriteId": null,
   "solid": false,
   "visible": true,
   "managed": true,
   "spriteMaskId": null,
   "persistent": false,
-  "parentObjectId": {
-    "name": "objCharacterParent",
-    "path": "objects/objCharacterParent/objCharacterParent.yy",
-  },
+  "parentObjectId": null,
   "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
@@ -35,7 +29,7 @@
     "path": "folders/Objects/Characters.yy",
   },
   "resourceVersion": "1.0",
-  "name": "objPlayer",
+  "name": "objCharacterParent",
   "tags": [],
   "resourceType": "GMObject",
 }
