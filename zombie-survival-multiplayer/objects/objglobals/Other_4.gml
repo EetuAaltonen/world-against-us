@@ -15,6 +15,8 @@ if (instance_exists(objSpawner)) global.ObjSpawner = instance_find(objSpawner, 0
 
 if (instance_exists(objMessageLog)) global.MessageLog = instance_find(objMessageLog, 0).messages;
 
+if (instance_exists(objGridPath)) global.RoomGrid = instance_find(objGridPath, 0).roomGrid;
+
 // Fetch view variables
 global.ViewW = view_wport[0];
 global.ViewH = view_hport[0];

@@ -12,6 +12,9 @@ global.PlayerBackpack = noone;
 global.ObjPlayer = noone;
 global.ObjSpawner = noone;
 
+// Coop
+global.CoopPlayers = ds_map_create();
+
 global.ObjGun = noone;
 
 // View variables
@@ -28,3 +31,6 @@ global.DragItem = noone;
 
 // Message log
 global.MessageLog = undefined;
+
+// AI Path
+global.RoomGrid = undefined;
