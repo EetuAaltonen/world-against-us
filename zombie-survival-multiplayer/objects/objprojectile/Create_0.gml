@@ -1,5 +1,6 @@
 // INHERITED EVENT
 event_inherited();
+damage = 20;
 
 speed = 0;
 flySpeed = 100;

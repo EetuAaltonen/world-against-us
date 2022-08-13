@@ -29,8 +29,11 @@ if (cameraTarget != noone)
 	
 	camera_set_view_pos(view_camera[0], newX, newY);
 } else {
-	if (instance_exists(objPlayer))
+	if (global.ObjPlayer != noone)
 	{
-		cameraTarget = instance_find(objPlayer, 0);
+		if (instance_exists(global.ObjPlayer))
+		{
+			cameraTarget = global.ObjPlayer;
+		}
 	}	
 }

@@ -1,7 +1,7 @@
 var damageSource = instance_place(x, y, objDamageParent);
 if (damageSource != noone)
 {
-	// LOOP THROUGH PARENT INTERACTIONS
+	// LOOP THROUGH INTERACTIONS
 	var currentObject = object_index;
 	var checkInteraction = true;
 	while (checkInteraction)
@@ -10,25 +10,31 @@ if (damageSource != noone)
 		{
 			case objBlockParent:
 			{
+				checkInteraction = false;
+				
 				if (damageSource.object_index == objProjectile)
 				{
 					BulletCollisionInteraction(self, damageSource);
-					checkInteraction = false;
 				}
 			} break;
-			
 			case objBreakableParent:
 			{
-				if (damageDelayTimer <= 0)
+				checkInteraction = false;
+				
+				if (condition > 0)
 				{
-					BreakableCollisionInteraction(self, damageSource);
-					damageDelayTimer = damageDelay;
-					checkInteraction = false;
+					if (damageDelayTimer <= 0)
+					{
+						BreakableCollisionInteraction(self, damageSource);
+						damageDelayTimer = damageDelay;
+					}
 				}
 			} break;
+			default:
+			{
+				currentObject = object_get_parent(currentObject);
+				if (currentObject == -100 || currentObject == -1) { checkInteraction = false; }
+			}
 		}
-		
-		currentObject = object_get_parent(currentObject);
-		if (currentObject == -100 || currentObject == -1) { checkInteraction = false; }
-	}	
+	}
 }

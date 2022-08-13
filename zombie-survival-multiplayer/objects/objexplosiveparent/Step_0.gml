@@ -3,6 +3,8 @@ event_inherited();
 
 if (condition <= 0)
 {
+	visible = false;
+	
 	with (blastInstance)
 	{
 		// DESTROY EXPLOSIVE BLAST AND SELF
