@@ -15,7 +15,14 @@ if (global.ShowHUD)
 		heartScale, heartScale,
 		0, c_white, image_alpha
 	);
-	draw_text(iconPos.X, hudVerticalCenter + 10, string(100) + "%");
+	
+	if (global.ObjPlayer != noone)
+	{
+		if (!is_undefined(global.ObjPlayer.character))
+		{
+			draw_text(iconPos.X, hudVerticalCenter + 10, string(global.ObjPlayer.character.hp) + "%");
+		}
+	}
 	
 	// HEART PULSE
 	var linePointCount = ds_list_size(pulseLinePoints);
