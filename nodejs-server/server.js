@@ -5,16 +5,17 @@ const server = dgram.createSocket("udp4");
 
 const MESSAGE_TYPE = {
   CONNECT_TO_HOST: 0,
-  CLIENT_SYNC: 1,
+  OTHER_CONNECTED_TO_HOST: 1,
   LATENCY: 2,
   DATA: 3,
-  DISCONNECT: 4,
+  DISCONNECT_FROM_HOST: 4,
+  OTHER_DISCONNECT_FROM_HOST: 5,
 };
 
 var data;
 var content;
 var clients = {};
-var allPlayerData = [];
+var allPlayerData = {};
 
 server.on("error", (err) => {
   console.log(`server error:\n${err.stack}`);
@@ -32,63 +33,151 @@ server.on("message", (msg, rinfo) => {
           clients[newUuid] = { address: rinfo.address, port: rinfo.port };
           console.log(clients);
 
-          var uuidPackage = new PackageContent("client_id", newUuid);
+          // Response with new Uuid
+          var allPlayerContent = new PackageContent(
+            "all_player_data",
+            allPlayerData
+          );
           var jsonData = JSON.stringify({
+            client_id: newUuid,
             message_type: MESSAGE_TYPE.CONNECT_TO_HOST,
-            content: [uuidPackage],
+            content: [allPlayerContent],
           });
-          console.log(`New client added: ${newUuid}`);
           server.send(jsonData, rinfo.port, rinfo.address);
 
           // Create new player data
-          allPlayerData.push(new PlayerData(newUuid, new Vector2(0, 0)));
+          var newPlayerData = new PlayerData(
+            newUuid,
+            0,
+            new Vector2(0, 0),
+            new Vector2(0, 0),
+            new InputMap()
+          );
 
-          // Inform all other clients
-          jsonData = JSON.stringify({
-            message_type: MESSAGE_TYPE.DATA,
-            content: [new PackageContent("all_player_data", allPlayerData)],
+          var valueKeyPair = data.content[0];
+          if (valueKeyPair.key == "player_data") {
+            const newPosition = new Vector2(
+              valueKeyPair.value.position.X,
+              valueKeyPair.value.position.Y
+            );
+
+            const newVectorSpeed = new Vector2(
+              valueKeyPair.value.vector_speed.X,
+              valueKeyPair.value.vector_speed.Y
+            );
+
+            const newInputMap = new InputMap(
+              valueKeyPair.value.input_map.key_up,
+              valueKeyPair.value.input_map.key_down,
+              valueKeyPair.value.input_map.key_let,
+              valueKeyPair.value.input_map.key_right
+            );
+
+            newPlayerData.position = newPosition;
+            newPlayerData.vector_speed = newVectorSpeed;
+            newPlayerData.input_map = newInputMap;
+          }
+
+          allPlayerData[newUuid] = newPlayerData;
+          console.log(`New client added: ${newUuid}`);
+
+          // Broadcast others about a new player data
+          var playerDataContent = new PackageContent(
+            "player_data",
+            newPlayerData
+          );
+          var jsonData = JSON.stringify({
+            client_id: newUuid,
+            message_type: MESSAGE_TYPE.OTHER_CONNECTED_TO_HOST,
+            content: [playerDataContent],
           });
-          BroadcastToClients(jsonData);
+          BroadcastToClients(jsonData, newUuid);
         }
         break;
-      case MESSAGE_TYPE.DISCONNECT:
+      case MESSAGE_TYPE.DISCONNECT_FROM_HOST:
         {
+          // Delete disconnected player
           delete clients[data.client_id];
-          allPlayerData = allPlayerData.filter(
-            (x) => x.uuid !== data.client_id
-          );
+          delete allPlayerData[data.client_id];
           console.log(`Client ${data.client_id} deleted`);
           console.log(clients);
+
+          // Broadcast others about the player disconnect
+          var jsonData = JSON.stringify({
+            client_id: data.client_id,
+            message_type: MESSAGE_TYPE.OTHER_DISCONNECT_FROM_HOST,
+            content: [],
+          });
+          BroadcastToClients(jsonData, data.client_id);
         }
         break;
       case MESSAGE_TYPE.DATA:
         {
-          data.content.forEach((contentItem) => {
-            switch (contentItem.key) {
+          data.content.forEach((valueKeyPair) => {
+            switch (valueKeyPair.key) {
               case "player_position":
                 {
                   const newPosition = new Vector2(
-                    contentItem.data.X,
-                    contentItem.data.Y
+                    valueKeyPair.value.X,
+                    valueKeyPair.value.Y
                   );
-                  const updatedData = allPlayerData.map((obj) => {
-                    if (obj.uuid === data.client_id) {
-                      return { ...obj, position: newPosition };
-                    }
-                    return obj;
+                  allPlayerData[data.client_id].position = newPosition;
+
+                  // Response with all player data package
+                  var jsonData = JSON.stringify({
+                    client_id: data.client_id,
+                    message_type: MESSAGE_TYPE.DATA,
+                    content: [
+                      new PackageContent("player_position", newPosition),
+                    ],
                   });
-                  allPlayerData = updatedData;
+                  BroadcastToClients(jsonData, data.client_id);
+                }
+                break;
+              case "player_vector_speed":
+                {
+                  const newVectorSpeed = new Vector2(
+                    valueKeyPair.value.X,
+                    valueKeyPair.value.Y
+                  );
+                  allPlayerData[data.client_id].vector_speed = newVectorSpeed;
+
+                  // Response with all player data package
+                  var jsonData = JSON.stringify({
+                    client_id: data.client_id,
+                    message_type: MESSAGE_TYPE.DATA,
+                    content: [
+                      new PackageContent("player_vector_speed", newVectorSpeed),
+                    ],
+                  });
+                  BroadcastToClients(jsonData, data.client_id);
+                }
+                break;
+
+              case "player_input":
+                {
+                  var newInputs = valueKeyPair.value;
+                  newInputs.forEach((input) => {
+                    allPlayerData[data.client_id].input_map[input.key] =
+                      input.value;
+                  });
+
+                  // Response with all player data package
+                  var jsonData = JSON.stringify({
+                    client_id: data.client_id,
+                    message_type: MESSAGE_TYPE.DATA,
+                    content: [
+                      new PackageContent(
+                        "player_input",
+                        allPlayerData[data.client_id].input_map
+                      ),
+                    ],
+                  });
+                  BroadcastToClients(jsonData, data.client_id);
                 }
                 break;
             }
           });
-
-          // Response with all player data package
-          var jsonData = JSON.stringify({
-            message_type: MESSAGE_TYPE.DATA,
-            content: [new PackageContent("all_player_data", allPlayerData)],
-          });
-          server.send(jsonData, rinfo.port, rinfo.address);
         }
         break;
     }
@@ -113,9 +202,21 @@ class PackageContent {
 }
 
 class PlayerData {
-  constructor(uuid, position) {
+  constructor(uuid, tick_time, position, vector_speed, input_map) {
     this.uuid = uuid;
+    this.tick_time = tick_time;
     this.position = position;
+    this.vector_speed = vector_speed;
+    this.input_map = input_map;
+  }
+}
+
+class InputMap {
+  constructor(key_up = 0, key_down = 0, key_left = 0, key_right = 0) {
+    this.key_up = key_up;
+    this.key_down = key_down;
+    this.key_left = key_left;
+    this.key_right = key_right;
   }
 }
 
