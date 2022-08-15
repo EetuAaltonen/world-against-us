@@ -17,26 +17,26 @@ if (async_load[? "size"] > 0)
 						var contentSize = array_length(content);
 						for (var i = 0; i < contentSize; i++)
 						{
-							var valueKeyPair = content[@ i];
-							switch (valueKeyPair[$ "key"])
+							var keyValuePair = content[@ i];
+							switch (keyValuePair[$ "key"])
 							{
 								case "player_position":
 								{
-									var position = valueKeyPair[$ "value"];
+									var position = keyValuePair[$ "value"];
 							
 									x = position[$ "x"];
 									y = position[$ "y"];
 								} break;
 								case "player_vector_speed":
 								{
-									var vectorSpeed = valueKeyPair[$ "value"];
+									var vectorSpeed = keyValuePair[$ "value"];
 							
 									hSpeed = vectorSpeed[$ "x"];
 									vSpeed = vectorSpeed[$ "y"];
 								} break;
 								case "player_input":
 								{
-									var inputMap = valueKeyPair[$ "value"];
+									var inputMap = keyValuePair[$ "value"];
 									GetRemotePlayerMovementInput(inputMap);
 								} break;
 							}

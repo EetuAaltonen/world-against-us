@@ -7,10 +7,10 @@ function GetContentValueByKey(_content, _key)
 		var contentSize = array_length(_content);
 		for (var i = 0; i < contentSize; i++)
 		{
-			var valueKeyPair = _content[@ i];
-			if (valueKeyPair[$ "key"] == _key)
+			var keyValuePair = _content[@ i];
+			if (keyValuePair[$ "key"] == _key)
 			{
-				value = valueKeyPair[$ "value"];
+				value = keyValuePair[$ "value"];
 				break;
 			}
 		}

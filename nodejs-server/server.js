@@ -54,23 +54,23 @@ server.on("message", (msg, rinfo) => {
             new InputMap()
           );
 
-          var valueKeyPair = data.content[0];
-          if (valueKeyPair.key == "player_data") {
+          var keyValuePair = data.content[0];
+          if (keyValuePair.key == "player_data") {
             const newPosition = new Vector2(
-              valueKeyPair.value.position.X,
-              valueKeyPair.value.position.Y
+              keyValuePair.value.position.X,
+              keyValuePair.value.position.Y
             );
 
             const newVectorSpeed = new Vector2(
-              valueKeyPair.value.vector_speed.X,
-              valueKeyPair.value.vector_speed.Y
+              keyValuePair.value.vector_speed.X,
+              keyValuePair.value.vector_speed.Y
             );
 
             const newInputMap = new InputMap(
-              valueKeyPair.value.input_map.key_up,
-              valueKeyPair.value.input_map.key_down,
-              valueKeyPair.value.input_map.key_let,
-              valueKeyPair.value.input_map.key_right
+              keyValuePair.value.input_map.key_up,
+              keyValuePair.value.input_map.key_down,
+              keyValuePair.value.input_map.key_let,
+              keyValuePair.value.input_map.key_right
             );
 
             newPlayerData.position = newPosition;
@@ -113,13 +113,13 @@ server.on("message", (msg, rinfo) => {
         break;
       case MESSAGE_TYPE.DATA:
         {
-          data.content.forEach((valueKeyPair) => {
-            switch (valueKeyPair.key) {
+          data.content.forEach((keyValuePair) => {
+            switch (keyValuePair.key) {
               case "player_position":
                 {
                   const newPosition = new Vector2(
-                    valueKeyPair.value.X,
-                    valueKeyPair.value.Y
+                    keyValuePair.value.X,
+                    keyValuePair.value.Y
                   );
                   allPlayerData[data.client_id].position = newPosition;
 
@@ -137,8 +137,8 @@ server.on("message", (msg, rinfo) => {
               case "player_vector_speed":
                 {
                   const newVectorSpeed = new Vector2(
-                    valueKeyPair.value.X,
-                    valueKeyPair.value.Y
+                    keyValuePair.value.X,
+                    keyValuePair.value.Y
                   );
                   allPlayerData[data.client_id].vector_speed = newVectorSpeed;
 
@@ -156,7 +156,7 @@ server.on("message", (msg, rinfo) => {
 
               case "player_input":
                 {
-                  var newInputs = valueKeyPair.value;
+                  var newInputs = keyValuePair.value;
                   newInputs.forEach((input) => {
                     allPlayerData[data.client_id].input_map[input.key] =
                       input.value;
