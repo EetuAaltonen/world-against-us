@@ -8,6 +8,8 @@ if (instance_exists(objDatabase))
 	global.BulletData = instance_find(objDatabase, 0).bulletData;
 }
 
+if (instance_exists(objNetwork)) global.ObjNetwork = instance_find(objNetwork, 0);
+
 if (instance_exists(objInventory)) global.PlayerBackpack = instance_find(objInventory, 0).inventory;
 if (instance_exists(objTempInventory)) global.ObjTempInventory = instance_find(objTempInventory, 0);
 

@@ -12,8 +12,11 @@ global.PlayerBackpack = noone;
 global.ObjPlayer = noone;
 global.ObjSpawner = noone;
 
+// Network
+global.ObjNetwork = noone;
+
 // Coop
-global.CoopPlayers = ds_map_create();
+global.OtherPlayerData = ds_map_create();
 
 global.ObjGun = noone;
 

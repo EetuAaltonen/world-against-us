@@ -8,8 +8,8 @@ if (global.ObjPlayer == noone)
 
 if (global.ObjGun == noone)
 {
-	if (instance_exists(objGun))
+	if (global.ObjPlayer != noone)
 	{
-		global.ObjGun = instance_find(objGun, 0);
+		global.ObjGun = global.ObjPlayer.gun;
 	}
 }

@@ -1,11 +1,11 @@
 // CHECK GUI STATE
 if (!IsGUIStateClosed()) return;
 
-if (global.ObjPlayer != noone)
+if (owner != noone)
 {
 	// POSITION
-	x = global.ObjPlayer.x;
-	y = global.ObjPlayer.y + gunYOffset;
+	x = owner.x;
+	y = owner.y + gunYOffset;
 
 	image_angle = point_direction(x, y, mouse_x, mouse_y);
 
