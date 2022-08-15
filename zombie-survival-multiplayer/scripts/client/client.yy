@@ -6,7 +6,7 @@
     "path": "folders/Scripts/Structs/Network.yy",
   },
   "resourceVersion": "1.0",
-  "name": "Socket",
+  "name": "Client",
   "tags": [],
   "resourceType": "GMScript",
 }
