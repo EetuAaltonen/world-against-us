@@ -1,6 +1,7 @@
 function Character(_name, _type, _maxHp = 100, _maxStamina = 100) constructor
 {
 	name = _name;
+	uuid = undefined;
 	type = _type;
 	
 	maxHp = _maxHp;

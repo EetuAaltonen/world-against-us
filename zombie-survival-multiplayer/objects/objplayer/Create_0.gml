@@ -12,10 +12,23 @@ dirSpeed = 0;
 maxSpeed = 10;
 
 // SPAWN GUN
-var gun = instance_create_layer(x, y, "Equipment", objGun);
+gun = instance_create_layer(x, y, "Equipment", objGun);
+gun.owner = self;
 
 // COOP PLAYER
 startLocation = new Vector2(x, y);
-targetLocation = new Vector2(x, y);
-lerpDuration = TimerRatePerSecond(30);
+targetLocation = undefined;
+lerpDuration = 0;
 timeElapsed = 0;
+tick_time = 0;
+local_tick_time = 0;
+
+// CONTROLS
+key_up = 0;
+key_down = 0;
+key_left = 0;
+key_right = 0;
+
+// NETWORKING VALUE MONITORING
+ResetPlayerMovementValues();
+ResetPlayerInputValues();
