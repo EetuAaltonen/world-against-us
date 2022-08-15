@@ -12,3 +12,7 @@ function TimerFromSeconds(_seconds)
 {
 	return room_speed * _seconds;
 }
+function TimerFromMilliseconds(_milliseconds)
+{
+	return TimerFromSeconds(_milliseconds * 0.001);
+}
