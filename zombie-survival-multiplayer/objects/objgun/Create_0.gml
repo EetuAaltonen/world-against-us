@@ -1,3 +1,5 @@
+owner = noone;
+
 primaryWeapon = noone;
 isAiming = false;
 rotatedWeaponBarrelPos = undefined;
