@@ -80,9 +80,9 @@ if (global.ShowHUD)
 	{
 		if (global.ObjPlayer != noone)
 		{
-			var weapon = global.ObjPlayer.gun;
-			
-			if (weapon.primaryWeapon != noone && !weapon.initWeapon)
+			var weapon = global.ObjPlayer.weapon;
+
+			if (!is_undefined(weapon.primaryWeapon) && !weapon.initWeapon)
 			{
 				if (array_length(weapon.bulletAnimations) > 0)
 				{
