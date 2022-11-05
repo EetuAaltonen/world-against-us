@@ -6,10 +6,10 @@ if (global.ObjPlayer == noone)
 	}
 }
 
-if (global.ObjGun == noone)
+if (global.ObjWeapon == noone)
 {
 	if (global.ObjPlayer != noone)
 	{
-		global.ObjGun = global.ObjPlayer.gun;
+		global.ObjWeapon = global.ObjPlayer.weapon;
 	}
 }

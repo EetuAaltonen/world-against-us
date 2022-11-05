@@ -1,3 +1,5 @@
+#macro UNDEFINED_UUID "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined"
+
 // Global controllers
 global.ObjCamera = noone;
 global.ObjGUI = noone;
@@ -18,7 +20,7 @@ global.ObjNetwork = noone;
 // Coop
 global.OtherPlayerData = ds_map_create();
 
-global.ObjGun = noone;
+global.ObjWeapon = noone;
 
 // View variables
 global.ViewW = 0;

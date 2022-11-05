@@ -1,8 +1,11 @@
-function ResetPlayerMovementValues()
+function ResetPlayerPositionValues()
 {
 	prev_x = x;
 	prev_y = y;
-	
+}
+
+function ResetPlayerVelocityValues()
+{
 	prev_hspeed = hSpeed;
 	prev_vspeed = vSpeed;
 }
