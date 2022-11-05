@@ -1,31 +1,51 @@
 if (character.type == CHARACTER_TYPE.PLAYER)
 {
-	if (!is_undefined(global.ObjNetwork.client.routinePacket))
+	if (!is_undefined(global.ObjNetwork.client.clientId))
 	{
 		if (global.ObjNetwork.client.tickTimer == 1)
 		{
-			if (x != prev_x || y != prev_y) global.ObjNetwork.client.routinePacket.AddContent("player_position", new Vector2(x, y));
-			if (hSpeed != prev_hspeed || vSpeed != prev_vspeed) global.ObjNetwork.client.routinePacket.AddContent("player_vector_speed", new Vector2(hSpeed, vSpeed));
+			if (x != prev_x || y != prev_y)
+			{				
+				var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.DATA_PLAYER_POSITION);
+				var scaledPosition = ScaleFloatValuesToIntVector2(x, y);
+				
+				buffer_write(networkBuffer, buffer_u32, scaledPosition.X);
+				buffer_write(networkBuffer, buffer_u32, scaledPosition.Y);
+				global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
+				
+				// RESET PREVIOUS VALUES
+				ResetPlayerPositionValues();
+			}
+			
+			if (hSpeed != prev_hspeed || vSpeed != prev_vspeed)
+			{
+				var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.DATA_PLAYER_VELOCITY);
+				var scaledSpeed = ScaleFloatValuesToIntVector2(hSpeed, vSpeed);
+				
+				buffer_write(networkBuffer, buffer_s16, scaledSpeed.X);
+				buffer_write(networkBuffer, buffer_s16, scaledSpeed.Y);
+				global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
+				
+				// RESET PREVIOUS VALUES
+				ResetPlayerVelocityValues();
+			}
+		}
+		
+		if (key_up != prev_key_up || key_down != prev_key_down ||
+			key_left != prev_key_left || key_right != prev_key_right)
+		{
+			var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.DATA_PLAYER_MOVEMENT_INPUT);
+			
+			buffer_write(networkBuffer, buffer_s8, key_up);
+			buffer_write(networkBuffer, buffer_s8, key_down);
+			buffer_write(networkBuffer, buffer_s8, key_left);
+			buffer_write(networkBuffer, buffer_s8, key_right);
+			global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
 			
 			// RESET PREVIOUS VALUES
-			ResetPlayerMovementValues();
+			ResetPlayerInputValues();
 		}
-	}
 	
-	if (!is_undefined(global.ObjNetwork.client.importantPacket))
-	{
-		var inputMap = [];
-		if (key_up != prev_key_up) array_push(inputMap, new InputKey("key_up", key_up));
-		if (key_down != prev_key_down) array_push(inputMap, new InputKey("key_down", key_down));
-		if (key_left != prev_key_left) array_push(inputMap, new InputKey("key_left", key_left));
-		if (key_right != prev_key_right) array_push(inputMap, new InputKey("key_right", key_right));
 		
-		if (array_length(inputMap) > 0)
-		{
-			global.ObjNetwork.client.importantPacket.AddContent("player_input", inputMap);
-		}
-		
-		// RESET PREVIOUS VALUES
-		ResetPlayerInputValues();
 	}
 }

@@ -1,7 +1,7 @@
 {
   "spriteId": {
-    "name": "sprPlayer",
-    "path": "sprites/sprPlayer/sprPlayer.yy",
+    "name": "sprSoldier",
+    "path": "sprites/sprSoldier/sprSoldier.yy",
   },
   "solid": false,
   "visible": true,
