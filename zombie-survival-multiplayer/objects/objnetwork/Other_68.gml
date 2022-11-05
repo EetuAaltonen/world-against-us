@@ -1,31 +1,29 @@
 if (async_load[? "size"] > 0)
 {
-	// Stop latency timer
-	if (isLatencyTimerRunning)
-	{
-		latency = latencyTimer;
-		latencyTimer = 0;
-		isLatencyTimerRunning = false;
-	}
+	var networkBuffer = async_load[? "buffer"];
+	var packetHeader = PacketDecodeHeader(networkBuffer);
 	
-	var data = DecodeBuffer(async_load[? "buffer"]);
-	var clientId = data[$ "client_id"];
-	
-	switch (data[$ "message_type"])
+	if (!is_undefined(packetHeader.clientId))
 	{
-		case MESSAGE_TYPE.CONNECT_TO_HOST:
+		switch (packetHeader.messageType)
 		{
-			if (!is_undefined(clientId))
+			case MESSAGE_TYPE.CONNECT_TO_HOST:
 			{
 				with (client)
 				{
-					SetClientId(clientId);
-				
-					// RESET PACKETS
-					importantPacket = new Packet(clientId, MESSAGE_TYPE.DATA);
-					routinePacket = new Packet(clientId, MESSAGE_TYPE.DATA);
+					SetClientId(packetHeader.clientId);
 				}
-			}
-		} break;
+			} break;
+			case MESSAGE_TYPE.LATENCY:
+			{
+				// Stop latency timer
+				if (isLatencyTimerRunning)
+				{
+					latency = latencyTimer;
+					latencyTimer = 0;
+					isLatencyTimerRunning = false;
+				}
+			} break;
+		}
 	}
 }

@@ -13,6 +13,9 @@ function Client(_hostAddress, _hostPort) constructor
 	tickTimer = tickDelay;
 	rollbackThreshold = 800; // Time in ms
 	
+	latencyReqDelay = TimerFromSeconds(3);
+	latencyReqTimer = latencyReqDelay;
+	
 	reconnectDelay = TimerFromSeconds(5);
 	reconnectTimer = 0;
 	
@@ -24,33 +27,47 @@ function Client(_hostAddress, _hostPort) constructor
 		clientId = _clientId;
 	}
 	
+	static CreateBuffer = function(_messageType)
+	{
+		var networkBuffer = buffer_create(32, buffer_grow, 1);
+		
+		buffer_seek(networkBuffer, buffer_seek_start, 0);
+		buffer_write(networkBuffer, buffer_u8, _messageType);
+		buffer_write(networkBuffer, buffer_text, clientId ?? UNDEFINED_UUID);
+		
+		return networkBuffer;
+	}
+	
 	static ConnectToHost = function()
 	{
-		var connectPacket = CreatePacket(MESSAGE_TYPE.CONNECT_TO_HOST);
+		var networkBuffer = CreateBuffer(MESSAGE_TYPE.CONNECT_TO_HOST);
+		var scaledPosition = ScaleFloatValuesToIntVector2(global.ObjPlayer.x, global.ObjPlayer.y);
+		var scaledSpeed = ScaleFloatValuesToIntVector2(global.ObjPlayer.hSpeed, global.ObjPlayer.vSpeed);
 		
-		connectPacket.AddContent("player_data", new PlayerData(
-			clientId,
-			new Vector2(global.ObjPlayer.x, global.ObjPlayer.y),
-			new Vector2(global.ObjPlayer.hSpeed, global.ObjPlayer.vSpeed),
-			new InputMap(
-				global.ObjPlayer.key_up,
-				global.ObjPlayer.key_down,
-				global.ObjPlayer.key_left,
-				global.ObjPlayer.key_right
+		var playerData = {
+			player_data: new PlayerData(
+				clientId,
+				new Vector2(scaledPosition.X, scaledPosition.Y),
+				new Vector2(scaledSpeed.X, scaledSpeed.Y),
+				new InputMap(
+					global.ObjPlayer.key_up,
+					global.ObjPlayer.key_down,
+					global.ObjPlayer.key_left,
+					global.ObjPlayer.key_right
+				),
+				global.ObjWeapon.primaryWeapon ?? {}
 			)
-		));
+		};
+		var jsonData = json_stringify(playerData);
 		
-		SendPacketOverUDP(connectPacket);
+		buffer_write(networkBuffer, buffer_text, jsonData);
+		SendPacketOverUDP(networkBuffer);
 	}
 	
 	static DisconnectFromHost = function()
 	{
-		var disconnectPacket = CreatePacket(MESSAGE_TYPE.DISCONNECT_FROM_HOST);
-		SendPacketOverUDP(disconnectPacket);
-		
-		// RESET PACKETS
-		importantPacket = undefined;
-		routinePacket = undefined;
+		var networkBuffer = CreateBuffer(MESSAGE_TYPE.DISCONNECT_FROM_HOST);
+		SendPacketOverUDP(networkBuffer);
 	}
 	
 	static CreatePacket = function(_messageType)
@@ -58,39 +75,10 @@ function Client(_hostAddress, _hostPort) constructor
 		return new Packet(clientId, _messageType);
 	}
 	
-	static SendPacketOverUDP = function(_packet)
+	static SendPacketOverUDP = function(_networkBuffer)
 	{
-		var jsonData = json_stringify(_packet);
-		var networkBuffer = buffer_create(16384, buffer_fixed, 2);
-		
-		buffer_seek(networkBuffer, buffer_seek_start, 0);
-		buffer_write(networkBuffer, buffer_text, jsonData);
-			
-		network_send_udp_raw(socket, hostAddress, hostPort, networkBuffer, buffer_tell(networkBuffer));
-		buffer_delete(networkBuffer);
-	}
-	
-	static SendRoutinePacket = function()
-	{
-		if (!is_undefined(routinePacket))
-		{
-			SendPacketOverUDP(routinePacket);
-			routinePacket = new Packet(clientId, MESSAGE_TYPE.DATA);
-			ResetTickTimer();
-		} else {
-			show_debug_message("Calling undefined routine packet to send");
-		}	
-	}
-	
-	static SendImportantPacket = function()
-	{
-		if (!is_undefined(importantPacket))
-		{
-			SendPacketOverUDP(importantPacket);
-			importantPacket = new Packet(clientId, MESSAGE_TYPE.DATA);
-		} else {
-			show_debug_message("Calling undefined important packet to send");
-		}	
+		network_send_udp_raw(socket, hostAddress, hostPort, _networkBuffer, buffer_tell(_networkBuffer));
+		buffer_delete(_networkBuffer);
 	}
 	
 	static ResetTickTimer = function()
@@ -100,6 +88,11 @@ function Client(_hostAddress, _hostPort) constructor
 	
 	static ResetReconnectTimer = function()
 	{
-		reconnectTimer = reconnectDelay--;
+		reconnectTimer = reconnectDelay;
+	}
+	
+	static ResetLatencyReqTimer = function()
+	{
+		latencyReqTimer = latencyReqDelay;
 	}
 }
