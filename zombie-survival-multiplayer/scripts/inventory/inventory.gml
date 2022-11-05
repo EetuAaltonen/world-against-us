@@ -1,11 +1,12 @@
-function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
+function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }) constructor
 {
+	inventoryId = _inventoryId
     items = ds_list_create();
 	size = _size;
 	type = _type;
 	
-	// Init grid data
 	gridData = [];
+	// Init grid data
     for (var i = 0; i < size.rows; i++) {
 	  for (var j = 0; j < size.columns; j ++) {
 	    gridData[i, j] = noone;
@@ -18,8 +19,7 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 		size: {
 			w: 48,
 			h: 48,
-		},
-		outline: 2
+		}
 	};
 	
 	showInventory = false;
@@ -37,17 +37,32 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 		return ds_list_size(items);
     }
 
-    static AddItem = function(_item, _gridIndex = noone, _known = true)
+    static AddItem = function(_item, _grid_index = noone, _known = true, _ignore_network = false)
     {
 		var addedItem = noone;
-        _item.gridIndex = (_gridIndex != noone) ? _gridIndex : FindEmptyIndex(_item);
+        _item.grid_index = (_grid_index != noone) ? new GridIndex(_grid_index.col, _grid_index.row) : FindEmptyIndex(_item);
 		_item.known = _known;
 		
-		if (_item.gridIndex != noone)
+		if (_item.grid_index != noone)
 		{
-			_item.sourceType = type;
-			FillGridArea(_item.gridIndex.col, _item.gridIndex.row, _item.size, _item.gridIndex.Clone());
+			_item.source_type = type;
+			FillGridArea(_item.grid_index.col, _item.grid_index.row, _item.size, new GridIndex(_item.grid_index.col, _item.grid_index.row));
 			addedItem = _item.Clone();
+			
+			if (!_ignore_network)
+			{
+				if (type == INVENTORY_TYPE.LootContainer)
+				{
+					// NETWORKING CONTAINER DELETE ITEM
+					var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_ADD_ITEM);
+					var jsonData = json_stringify(_item);
+				
+					buffer_write(networkBuffer, buffer_text , inventoryId);
+					buffer_write(networkBuffer, buffer_text, jsonData);
+					global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
+				}
+			}
+			
 			ds_list_add(items, addedItem);
 		} else {
 			// MESSAGE LOG
@@ -69,8 +84,8 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 		for (var i = 0; i < itemCount; i++)
 		{
 			var item = GetItem(i);
-			if (item.gridIndex.col == _gridIndex.col &&
-				item.gridIndex.row == _gridIndex.row)
+			if (item.grid_index.col == _gridIndex.col &&
+				item.grid_index.row == _gridIndex.row)
 			{
 				foundItem = item;
 				break;
@@ -79,10 +94,67 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 		return foundItem;
     }
 	
+	static MoveAndRotateItemByGridIndex = function(_gridIndex, _newGridIndex, _isRotated)
+	{
+		var item = GetItemByGridIndex(_gridIndex);
+		var originalRotation = item.rotated;
+		
+		if (item != noone)
+		{
+			// Clear previous spot
+			FillGridArea(item.grid_index.col, item.grid_index.row, item.size, noone);
+			
+			// Set rotation
+			if (_isRotated != item.rotated)
+			{
+				item.Rotate();
+			}
+		
+			if (IsGridAreaEmpty(item.grid_index.col, item.grid_index.row, item, item.source_type, item.grid_index))
+			{
+				if (type == INVENTORY_TYPE.LootContainer)
+				{
+					// NETWORKING CONTAINER DELETE ITEM
+					var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_MOVE_AND_ROTATE_ITEM);
+					var jsonData = json_stringify(item);
+					show_debug_message(string(item.rotated));
+				
+					buffer_write(networkBuffer, buffer_text , inventoryId);
+					buffer_write(networkBuffer, buffer_u16, _newGridIndex.col);
+					buffer_write(networkBuffer, buffer_u16, _newGridIndex.row);
+					buffer_write(networkBuffer, buffer_bool, item.rotated);
+					buffer_write(networkBuffer, buffer_text, jsonData);
+					global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
+				}
+				
+				item.grid_index = _newGridIndex;
+			} else {
+				// Reverse rotation if item doesn't fit
+		        if (item.rotated != originalRotation) {
+		          item.Rotate();
+		        }
+			}
+			
+			// Set new spot
+			FillGridArea(item.grid_index.col, item.grid_index.row, item.size, item.grid_index.Clone());
+		}
+	}
+	
 	static RemoveItem = function(_index)
     {
 		var item = GetItem(_index);
-		FillGridArea(item.gridIndex.col, item.gridIndex.row, item.size, noone);
+		if (type == INVENTORY_TYPE.LootContainer)
+		{
+			// NETWORKING CONTAINER DELETE ITEM
+			var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_DELETE_ITEM);
+			var jsonData = json_stringify(item);
+			
+			buffer_write(networkBuffer, buffer_text , inventoryId);
+			buffer_write(networkBuffer, buffer_text, jsonData);
+			global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
+		}
+		
+		FillGridArea(item.grid_index.col, item.grid_index.row, item.size, noone);
 		ds_list_delete(items, _index);
     }
 	
@@ -92,11 +164,10 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 		for (var i = 0; i < itemCount; i++)
 		{
 			var item = GetItem(i);
-			if (item.gridIndex.col == _gridIndex.col &&
-				item.gridIndex.row == _gridIndex.row)
+			if (item.grid_index.col == _gridIndex.col &&
+				item.grid_index.row == _gridIndex.row)
 			{
-				FillGridArea(item.gridIndex.col, item.gridIndex.row, item.size, noone);
-				ds_list_delete(items, i);
+				RemoveItem(i);
 				break;
 			}
 		}
@@ -146,7 +217,7 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 				{
 					if (!isEmpty) break;
 					var gridIndex = gridData[i][j];
-					isEmpty = (gridIndex == noone || (_item.sourceType == _ignoreSource && (gridIndex.col == _ignoreGridIndex.col && gridIndex.row == _ignoreGridIndex.row)));
+					isEmpty = (gridIndex == noone || (_item.source_type == _ignoreSource && (gridIndex.col == _ignoreGridIndex.col && gridIndex.row == _ignoreGridIndex.row)));
 				}
 			}
 		} else {
@@ -215,23 +286,23 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 			if (drawDragItem)
 			{
 				if (global.DragItem == noone || mouseHoverIndex == noone) break;
-				if (!IsGridAreaEmpty(mouseHoverIndex.col, mouseHoverIndex.row, global.DragItem, global.DragItem.sourceType, global.DragItem.gridIndex)) break;
+				if (!IsGridAreaEmpty(mouseHoverIndex.col, mouseHoverIndex.row, global.DragItem, global.DragItem.source_type, global.DragItem.grid_index)) break;
 				
 				var item = global.DragItem.Clone();
-				item.gridIndex = mouseHoverIndex.Clone();
+				item.grid_index = mouseHoverIndex.Clone();
 			} else {
 				item = GetItem(i);
 			}
 			
-			xPos = _guiXPos + (grid.size.w * item.gridIndex.col);
-			yPos = _guiYPos + (grid.size.h * item.gridIndex.row);
+			xPos = _guiXPos + (grid.size.w * item.grid_index.col);
+			yPos = _guiYPos + (grid.size.h * item.grid_index.row);
 			
 			var itemDragged = false;
 			if (global.DragItem != noone)
 			{
-				if (global.DragItem.sourceType == item.sourceType)
+				if (global.DragItem.source_type == item.source_type)
 				{
-					if (item.gridIndex.col == global.DragItem.gridIndex.col && item.gridIndex.row == global.DragItem.gridIndex.row)
+					if (item.grid_index.col == global.DragItem.grid_index.col && item.grid_index.row == global.DragItem.grid_index.row)
 					{
 						itemDragged = true;
 					}
@@ -246,8 +317,8 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 					gridSpriteIndex = 2;
 				} else if ((mouseHoverIndex != noone && global.DragItem == noone) || drawDragItem)
 				{
-					if ((mouseHoverIndex.col >= item.gridIndex.col && mouseHoverIndex.col <= (item.gridIndex.col + item.size.w - 1) &&
-						mouseHoverIndex.row >= item.gridIndex.row && mouseHoverIndex.row <= (item.gridIndex.row + item.size.h - 1)) || drawDragItem)
+					if ((mouseHoverIndex.col >= item.grid_index.col && mouseHoverIndex.col <= (item.grid_index.col + item.size.w - 1) &&
+						mouseHoverIndex.row >= item.grid_index.row && mouseHoverIndex.row <= (item.grid_index.row + item.size.h - 1)) || drawDragItem)
 					{
 						gridSpriteIndex = 1;
 					}
@@ -286,7 +357,7 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 					iconScale, iconScale, iconRotation, c_white, iconAlpha
 				);
 			} else {
-				if (item.gridIndex == identifyIndex)
+				if (item.grid_index == identifyIndex)
 				{
 					shader_set(shdrIdentifySprite);
 				} else {
@@ -354,6 +425,18 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 				var item = GetItemByGridIndex(identifyIndex);
 				item.known = true;
 				
+				if (type == INVENTORY_TYPE.LootContainer)
+				{
+					// NETWORKING CONTAINER DELETE ITEM
+					var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_IDENTIFY_ITEM);
+					var jsonData = json_stringify(item);
+			
+					buffer_write(networkBuffer, buffer_text , inventoryId);
+					buffer_write(networkBuffer, buffer_text, jsonData);
+					global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
+				}
+				
+				// RESET INDENTIFY TARGET AND TIMER
 				identifyIndex = undefined;
 				identifyTimer = 0;
 			}
@@ -374,21 +457,8 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 					var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
 					if (itemGridIndex != noone)
 					{
-						var item = GetItemByGridIndex(itemGridIndex);
-						if (item != noone)
-						{
-							var rotatedItem = item.Clone();
-							rotatedItem.Rotate();
-							if (IsGridAreaEmpty(rotatedItem.gridIndex.col, rotatedItem.gridIndex.row, rotatedItem, rotatedItem.sourceType, rotatedItem.gridIndex))
-							{
-								// Clear old fill area
-								FillGridArea(item.gridIndex.col, item.gridIndex.row, item.size, noone);
-								item.Rotate();
-								
-								// Fill new area
-								FillGridArea(item.gridIndex.col, item.gridIndex.row, item.size, item.gridIndex);
-							}
-						}
+						var isItemRotated = GetItemByGridIndex(itemGridIndex).rotated;
+						MoveAndRotateItemByGridIndex(itemGridIndex, itemGridIndex, !isItemRotated);
 					}
 				}
 			}
@@ -408,35 +478,25 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 					if (global.DragItem != noone)
 					{
 						var newGridIndex = mouseHoverIndex.Clone();
-						if (IsGridAreaEmpty(newGridIndex.col, newGridIndex.row, global.DragItem, global.DragItem.sourceType, global.DragItem.gridIndex))
+						if (IsGridAreaEmpty(newGridIndex.col, newGridIndex.row, global.DragItem, global.DragItem.source_type, global.DragItem.grid_index))
 						{
-							var inventorySource = (global.DragItem.sourceType == INVENTORY_TYPE.PlayerBackpack) ? global.PlayerBackpack : global.ObjTempInventory.inventory;
+							var inventorySource = (global.DragItem.source_type == INVENTORY_TYPE.PlayerBackpack) ? global.PlayerBackpack : global.ObjTempInventory.inventory;
 							if (inventorySource != noone)
 							{
-								if (type == global.DragItem.sourceType)
+								if (type == global.DragItem.source_type)
 								{
-									var item = inventorySource.GetItemByGridIndex(global.DragItem.gridIndex);
-									
-									// Clear previous spot
-									FillGridArea(item.gridIndex.col, item.gridIndex.row, item.size, noone);
-									
-									// Set rotation
-									if (global.DragItem.rotated != item.rotated)
+									with (inventorySource)
 									{
-										item.Rotate();
+										MoveAndRotateItemByGridIndex(global.DragItem.grid_index, newGridIndex, global.DragItem.rotated);
 									}
-									
-									// Set new spot
-									item.gridIndex = newGridIndex;
-									FillGridArea(item.gridIndex.col, item.gridIndex.row, item.size, item.gridIndex.Clone());
 								} else {
 									var newItem = AddItem(global.DragItem.Clone(), newGridIndex, global.DragItem.known);
 									if (newItem != noone)
 									{
 										with (inventorySource)
 										{
-											var oldItem = GetItemByGridIndex(global.DragItem.gridIndex);
-											RemoveItemByGridIndex(oldItem.gridIndex);
+											var oldItem = GetItemByGridIndex(global.DragItem.grid_index);
+											RemoveItemByGridIndex(oldItem.grid_index);
 										}
 									} else {
 										// MESSAGE LOG
@@ -455,7 +515,7 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 						var item = GetItemByGridIndex(itemGridIndex);
 						if (item != noone)
 						{
-							identifyIndex = item.gridIndex;
+							identifyIndex = item.grid_index;
 							identifyTimer = identifyDuration;
 						}
 					}
@@ -463,7 +523,7 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 				{
 					if (type == INVENTORY_TYPE.PlayerBackpack)
 					{
-						if (global.ObjGun != noone)
+						if (global.ObjWeapon != noone)
 						{
 							var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
 							if (itemGridIndex != noone)
@@ -473,8 +533,8 @@ function Inventory(_type, _size = { columns: 10, rows: 10 }) constructor
 								{
 									if (item.type == "Primary_Weapon")
 									{
-										global.ObjGun.primaryWeapon = item;
-										global.ObjGun.initWeapon = true;
+										global.ObjWeapon.primaryWeapon = item;
+										global.ObjWeapon.initWeapon = true;
 									}
 								}
 							}
