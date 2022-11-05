@@ -1,0 +1,2 @@
+inventory = noone;
+requestContent = false;
