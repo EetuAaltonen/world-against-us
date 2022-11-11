@@ -27,12 +27,12 @@ global.ViewW = 0;
 global.ViewH = 0;
 
 // GUI
-global.GUIState = GUI_STATE.Noone;
+global.GUIState = undefined;
 global.GUIW = 0;
 global.GUIH = 0;
 
 // Inventory
-global.DragItem = noone;
+global.DragItem = undefined;
 
 // Message log
 global.MessageLog = undefined;

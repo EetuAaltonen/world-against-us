@@ -8,6 +8,6 @@ if (IsGUIStateClosed())
 	if (keyboard_check_released(vk_tab) ||
 		keyboard_check_released(vk_escape))
 	{
-		RequestGUIState(GUI_STATE.Noone);
+		RequestGUIState(undefined);
 	}
 }
