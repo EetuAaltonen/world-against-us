@@ -1,7 +1,10 @@
 draw_self();
 
+// DEBUG INFO
+/*
 draw_circle_color(x, y, aggroRadius, c_red, c_red, true);
 draw_circle_color(x, y, stopRadius, c_green, c_green, true);
+*/
 
 if (!is_undefined(character))
 {
