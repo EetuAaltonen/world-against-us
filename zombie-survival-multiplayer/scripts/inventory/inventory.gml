@@ -30,7 +30,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }) const
 	identifyTimer = 0;
 	
 	// Hover effect
-	mouseHoverIndex = noone;
+	mouseHoverIndex = undefined;
 	
 	static GetItemCount = function()
     {
@@ -39,7 +39,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }) const
 
     static AddItem = function(_item, _grid_index = noone, _known = true, _ignore_network = false)
     {
-		var addedItem = noone;
+		var isItemAdded = false;
         _item.grid_index = (_grid_index != noone) ? new GridIndex(_grid_index.col, _grid_index.row) : FindEmptyIndex(_item);
 		_item.known = _known;
 		
@@ -47,7 +47,6 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }) const
 		{
 			_item.source_type = type;
 			FillGridArea(_item.grid_index.col, _item.grid_index.row, _item.size, new GridIndex(_item.grid_index.col, _item.grid_index.row));
-			addedItem = _item.Clone();
 			
 			if (!_ignore_network)
 			{
@@ -63,13 +62,14 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }) const
 				}
 			}
 			
-			ds_list_add(items, addedItem);
+			ds_list_add(items, _item.Clone());
+			isItemAdded = true;
 		} else {
 			// MESSAGE LOG
 			AddMessageLog("Item: '" + string(_item.name) + "' doesn't fit!");
 		}
 		
-		return addedItem;
+		return isItemAdded;
     }
 	
 	static GetItem = function(_index)
@@ -110,7 +110,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }) const
 				item.Rotate();
 			}
 		
-			if (IsGridAreaEmpty(item.grid_index.col, item.grid_index.row, item, item.source_type, item.grid_index))
+			if (IsGridAreaEmpty(_newGridIndex.col, _newGridIndex.row, item, item.source_type, item.grid_index))
 			{
 				if (type == INVENTORY_TYPE.LootContainer)
 				{
@@ -237,185 +237,6 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }) const
 		}
 	}
 	
-	static DrawGUI = function(_guiXPos, _guiYPos)
-	{
-		if (is_undefined(identifyIndex))
-		{
-			InventoryInteractions();
-		} else {
-			InventoryIdentify();
-		}
-		
-		var xPos = _guiXPos;
-		var yPos = _guiYPos;
-		for (var i = 0; i < grid.rows; i++)
-		{
-			for (var j = 0; j < grid.columns; j++)
-			{
-				// DRAW GRID BACKGROUND
-				var gridSpriteIndex = 0;
-				if (mouseHoverIndex != noone)
-				{
-					if ((mouseHoverIndex.col == j && mouseHoverIndex.row == i))
-					{
-						gridSpriteIndex = 1;
-					}
-				}
-				draw_sprite_ext(sprGUIGrid, gridSpriteIndex, xPos, yPos, 1, 1, 0, c_white, 1);
-				// DEBUG INFO
-				/*
-				draw_set_color(c_red);
-				var text = (gridData[i][j] != noone) ? 1 : 0;
-				draw_text(xPos + 10, yPos + 10, text);
-				draw_set_color(c_black);
-				*/
-				
-				xPos += grid.size.w;
-			}
-			yPos += grid.size.h;
-			xPos = _guiXPos;
-		}
-	
-		var itemCount = GetItemCount();
-		for (var i = 0; i < itemCount + 1; i++)
-		{
-			// DO EXTRA LOOP TO DRAW DRAGGED ITEM
-			var drawDragItem = (i >= itemCount);
-			var item = noone;
-			
-			if (drawDragItem)
-			{
-				if (global.DragItem == noone || mouseHoverIndex == noone) break;
-				if (!IsGridAreaEmpty(mouseHoverIndex.col, mouseHoverIndex.row, global.DragItem, global.DragItem.source_type, global.DragItem.grid_index)) break;
-				
-				var item = global.DragItem.Clone();
-				item.grid_index = mouseHoverIndex.Clone();
-			} else {
-				item = GetItem(i);
-			}
-			
-			xPos = _guiXPos + (grid.size.w * item.grid_index.col);
-			yPos = _guiYPos + (grid.size.h * item.grid_index.row);
-			
-			var itemDragged = false;
-			if (global.DragItem != noone)
-			{
-				if (global.DragItem.source_type == item.source_type)
-				{
-					if (item.grid_index.col == global.DragItem.grid_index.col && item.grid_index.row == global.DragItem.grid_index.row)
-					{
-						itemDragged = true;
-					}
-				}
-			}
-			
-			// DRAW ITEM BACKGROUND
-			if (!itemDragged)
-			{
-				var gridSpriteIndex = 0;
-				if (!item.known) {
-					gridSpriteIndex = 2;
-				} else if ((mouseHoverIndex != noone && global.DragItem == noone) || drawDragItem)
-				{
-					if ((mouseHoverIndex.col >= item.grid_index.col && mouseHoverIndex.col <= (item.grid_index.col + item.size.w - 1) &&
-						mouseHoverIndex.row >= item.grid_index.row && mouseHoverIndex.row <= (item.grid_index.row + item.size.h - 1)) || drawDragItem)
-					{
-						gridSpriteIndex = 1;
-					}
-				}
-				
-				draw_sprite_ext(sprGUIItemBg, gridSpriteIndex, xPos, yPos, item.size.w, item.size.h, 0, c_white, 1);
-			}
-			
-			// CALCULATE ICON SIZE
-			var padding = 0.85;
-			var iconAlpha = itemDragged ? 0.4 : 1;
-			var iconRotation = item.rotated ? 90 : 0;
-			var iconScale = 1;
-			if (item.rotated)
-			{
-				iconScale = ScaleSpriteToFitSize(
-					item.icon,
-					(grid.size.w * padding) * item.size.h,
-					(grid.size.h * padding) * item.size.w
-				);
-			} else {
-				iconScale = ScaleSpriteToFitSize(
-					item.icon,
-					(grid.size.w * padding) * item.size.w,
-					(grid.size.h * padding) * item.size.h
-				);
-			}
-			
-			// DRAW ITEM
-			if (item.known)
-			{
-				draw_sprite_ext(
-					item.icon, 0,
-					xPos + ((grid.size.w * 0.5) * item.size.w),
-					yPos + ((grid.size.h * 0.5) * item.size.h),
-					iconScale, iconScale, iconRotation, c_white, iconAlpha
-				);
-			} else {
-				if (item.grid_index == identifyIndex)
-				{
-					shader_set(shdrIdentifySprite);
-				} else {
-					shader_set(shdrFogSprite);	
-				}
-				
-				draw_sprite_ext(
-					item.icon, 0,
-					xPos + ((grid.size.w * 0.5) * item.size.w),
-					yPos + ((grid.size.h * 0.5) * item.size.h),
-					iconScale, iconScale, iconRotation, c_white, iconAlpha
-				);
-				shader_reset();	
-			}
-			
-			// ITEM QUANTITY
-			if (item.quantity > 1)
-			{
-				draw_set_font(font_small_bold);
-				draw_text(
-					xPos + 5,
-					yPos + grid.size.h - 15,
-					string(item.quantity)
-				);
-				draw_set_font(font_default);
-			}
-		}
-		
-		// UPDATE MOUSE HOVER INDEX
-		mouseHoverIndex = GetMouseHoverIndex(_guiXPos, _guiYPos, grid);
-		// MOUSE DEBUG INFO
-		if (mouseHoverIndex != noone)
-		{
-			var mouseX = window_mouse_get_x();
-			var mouseY = window_mouse_get_y();
-			draw_text(mouseX, mouseY + 100, string(gridData[mouseHoverIndex.row][mouseHoverIndex.col]));
-		}
-	}
-	
-	static GetMouseHoverIndex = function(_guiXPos, _guiYPos, grid)
-	{
-		var mouseX = window_mouse_get_x();
-		var mouseY = window_mouse_get_y();
-		var mouseHoverIndex = noone;
-		var gridWidth = grid.size.w * grid.columns;
-		var gridHeight = grid.size.h * grid.rows;
-		
-		if (mouseX > _guiXPos && mouseX < _guiXPos + gridWidth &&
-			mouseY > _guiYPos && mouseY < _guiYPos + gridHeight)
-		{
-			var indexX = floor((mouseX - _guiXPos) / grid.size.w);
-			var indexY = floor((mouseY - _guiYPos) / grid.size.h);
-			mouseHoverIndex = new GridIndex(indexX, indexY);
-		}
-		
-		return mouseHoverIndex;
-	}
-	
 	static InventoryIdentify = function()
 	{
 		if (!is_undefined(identifyIndex))
@@ -439,152 +260,6 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }) const
 				// RESET INDENTIFY TARGET AND TIMER
 				identifyIndex = undefined;
 				identifyTimer = 0;
-			}
-		}
-	}
-	
-	static InventoryInteractions = function()
-	{
-		if (mouseHoverIndex	!= noone)
-		{
-			// ROTATE
-			if (keyboard_check_released(ord("R")))
-			{
-				if (global.DragItem != noone)
-				{
-					global.DragItem.Rotate();
-				} else {
-					var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
-					if (itemGridIndex != noone)
-					{
-						var isItemRotated = GetItemByGridIndex(itemGridIndex).rotated;
-						MoveAndRotateItemByGridIndex(itemGridIndex, itemGridIndex, !isItemRotated);
-					}
-				}
-			}
-			// DRAG -N- DROP
-			else if (!keyboard_check(vk_anykey))
-			{
-				if (mouse_check_button_pressed(mb_left))
-				{
-					var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
-					if (itemGridIndex != noone)
-					{
-						var item = GetItemByGridIndex(itemGridIndex);
-						global.DragItem = item.Clone();
-					}	
-				} else if (mouse_check_button_released(mb_left))
-				{
-					if (global.DragItem != noone)
-					{
-						var newGridIndex = mouseHoverIndex.Clone();
-						if (IsGridAreaEmpty(newGridIndex.col, newGridIndex.row, global.DragItem, global.DragItem.source_type, global.DragItem.grid_index))
-						{
-							var inventorySource = (global.DragItem.source_type == INVENTORY_TYPE.PlayerBackpack) ? global.PlayerBackpack : global.ObjTempInventory.inventory;
-							if (inventorySource != noone)
-							{
-								if (type == global.DragItem.source_type)
-								{
-									with (inventorySource)
-									{
-										MoveAndRotateItemByGridIndex(global.DragItem.grid_index, newGridIndex, global.DragItem.rotated);
-									}
-								} else {
-									var newItem = AddItem(global.DragItem.Clone(), newGridIndex, global.DragItem.known);
-									if (newItem != noone)
-									{
-										with (inventorySource)
-										{
-											var oldItem = GetItemByGridIndex(global.DragItem.grid_index);
-											RemoveItemByGridIndex(oldItem.grid_index);
-										}
-									} else {
-										// MESSAGE LOG
-										AddMessageLog(string(global.DragItem.name) + " transfer failed!");	
-									}
-								}
-							}
-						}
-						global.DragItem = noone;
-					}
-				} else if (mouse_check_button_released(mb_middle))
-				{
-					var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
-					if (itemGridIndex != noone)
-					{
-						var item = GetItemByGridIndex(itemGridIndex);
-						if (item != noone)
-						{
-							identifyIndex = item.grid_index;
-							identifyTimer = identifyDuration;
-						}
-					}
-				} else if (mouse_check_button_released(mb_right))
-				{
-					if (type == INVENTORY_TYPE.PlayerBackpack)
-					{
-						if (global.ObjWeapon != noone)
-						{
-							var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
-							if (itemGridIndex != noone)
-							{
-								var item = GetItemByGridIndex(itemGridIndex);
-								if (item != noone)
-								{
-									if (item.type == "Primary_Weapon")
-									{
-										global.ObjWeapon.primaryWeapon = item;
-										global.ObjWeapon.initWeapon = true;
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			// QUICK TRANSFER
-			else if (keyboard_check(vk_control) && mouse_check_button_released(mb_left))
-			{
-				var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
-				if (itemGridIndex != noone)
-				{
-					var item = GetItemByGridIndex(itemGridIndex);
-					if (item != noone)
-					{						
-						if (type == INVENTORY_TYPE.PlayerBackpack)
-						{
-							if (global.ObjTempInventory != noone)
-							{
-								if (global.ObjTempInventory.inventory != noone)
-								{
-									with (global.ObjTempInventory.inventory)
-									{
-										if (AddItem(item.Clone(), noone, item.known) != noone)
-										{
-											other.RemoveItemByGridIndex(itemGridIndex);	
-										}
-									}
-								}
-							}
-						} else {
-							if (global.PlayerBackpack != noone)
-							{
-								with (global.PlayerBackpack)
-								{
-									if (AddItem(item.Clone(), noone, item.known) != noone)
-									{
-										other.RemoveItemByGridIndex(itemGridIndex);
-									}
-								}
-							}
-						}	
-					}
-				}
-			} else if (keyboard_check(vk_shift) && mouse_check_button_released(mb_right))
-			{
-				// TODO: Write item drop function
-				//var itemGridIndex = gridData[mouseHoverIndex.row][mouseHoverIndex.col];
-				//RemoveItemByGridIndex(itemGridIndex);
 			}
 		}
 	}
