@@ -1,6 +1,7 @@
 // Fetch global controllers
 if (instance_exists(objCamera)) global.ObjCamera = instance_find(objCamera, 0);
 if (instance_exists(objDisplay)) global.ObjGUI = instance_find(objDisplay, 0);
+if (instance_exists(objWindowHandler)) global.ObjWindowHandler = instance_find(objWindowHandler, 0);
 
 if (instance_exists(objDatabase))
 {
