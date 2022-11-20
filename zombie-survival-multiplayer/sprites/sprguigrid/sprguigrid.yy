@@ -70,7 +70,31 @@
   "layers": [
     {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"37691451-5908-47c2-91dd-e7ffe4f0e490","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
-  "nineSlice": null,
+  "nineSlice": {
+    "left": 2,
+    "top": 2,
+    "right": 2,
+    "bottom": 2,
+    "guideColour": [
+      4294902015,
+      4294902015,
+      4294902015,
+      4294902015,
+    ],
+    "highlightColour": 1728023040,
+    "highlightStyle": 0,
+    "enabled": true,
+    "tileMode": [
+      0,
+      0,
+      0,
+      0,
+      0,
+    ],
+    "resourceVersion": "1.0",
+    "loadedVersion": null,
+    "resourceType": "GMNineSliceData",
+  },
   "parent": {
     "name": "GUI",
     "path": "folders/Sprites/GUI.yy",

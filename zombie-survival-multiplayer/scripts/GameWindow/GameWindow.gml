@@ -1,4 +1,4 @@
-function GameWindow(_windowId, _type, _guiPos, _size, _zIndex = 0) constructor
+function GameWindow(_windowId, _type, _guiPos, _size, _zIndex) constructor
 {
 	windowId = _windowId;
     type = _type;
@@ -16,8 +16,8 @@ function GameWindow(_windowId, _type, _guiPos, _size, _zIndex = 0) constructor
 	{
 		if (isActive)
 		{
-			CheckInteraction();
 			UpdateContent();
+			CheckInteraction();
 		}
 	}
 	

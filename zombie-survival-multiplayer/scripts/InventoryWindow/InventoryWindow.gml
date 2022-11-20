@@ -1,4 +1,4 @@
-function InventoryWindow(_windowId, _type, _guiPos, _size, _zIndex = 0, _inventory) : GameWindow(_windowId, _type, _guiPos, _size, _zIndex = 0) constructor
+function InventoryWindow(_windowId, _type, _guiPos, _size, _zIndex, _inventory = undefined) : GameWindow(_windowId, _type, _guiPos, _size, _zIndex) constructor
 {
 	inventory = _inventory;
 	gridPos = new Vector2(_guiPos.X + 10, _guiPos.Y + 10);
@@ -10,6 +10,9 @@ function InventoryWindow(_windowId, _type, _guiPos, _size, _zIndex = 0, _invento
 		{
 			inventory.InventoryIdentify();
 		}
+		
+		// UPDATE MOUSE HOVER INDEX
+		UpdateMouseHoverIndex();
 	}
 	
 	static OnFocusLost = function()
@@ -37,9 +40,7 @@ function InventoryWindow(_windowId, _type, _guiPos, _size, _zIndex = 0, _invento
 	
 	static CheckContentInteraction = function()
 	{
-		// UPDATE MOUSE HOVER INDEX
-		UpdateMouseHoverIndex();
-		
+		// CHECK FOR INTERACTIONS
 		if (!is_undefined(mouseHoverIndex))
 		{
 			if (is_undefined(inventory.identifyIndex))
