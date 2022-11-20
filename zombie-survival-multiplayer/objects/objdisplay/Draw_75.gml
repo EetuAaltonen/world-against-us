@@ -1,4 +1,4 @@
-if (updateWindow)
+/*if (updateWindow)
 {
 	updateWindow = false;
 	
@@ -9,4 +9,4 @@ if (updateWindow)
 	window_set_rectangle(windowXPos, windowYPos, windowWidth, windowHeight);
 	global.GUIW = display_get_gui_width();
 	global.GUIH = display_get_gui_height();
-}
+}*/
