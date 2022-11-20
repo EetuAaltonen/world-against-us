@@ -9,10 +9,7 @@ if (async_load[? "size"] > 0)
 		{
 			case MESSAGE_TYPE.CONNECT_TO_HOST:
 			{
-				with (client)
-				{
-					SetClientId(packetHeader.clientId);
-				}
+				client.SetClientId(packetHeader.clientId);
 			} break;
 			case MESSAGE_TYPE.LATENCY:
 			{

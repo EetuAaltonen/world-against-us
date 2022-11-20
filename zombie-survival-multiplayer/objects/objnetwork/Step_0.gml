@@ -11,7 +11,8 @@ if (is_undefined(client.clientId))
 {
 	if (client.reconnectTimer-- <= 0)
 	{
-		client.ConnectToHost();
+		// TODO: Fix connect to host function to work with the new main menu
+		//client.ConnectToHost();
 		client.ResetReconnectTimer();
 	}
 } else {
