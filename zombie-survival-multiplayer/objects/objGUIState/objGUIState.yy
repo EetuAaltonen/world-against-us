@@ -1,7 +1,7 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "objGUI",
+  "name": "objGUIState",
   "spriteId": null,
   "solid": false,
   "visible": true,
