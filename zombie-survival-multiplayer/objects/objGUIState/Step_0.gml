@@ -6,5 +6,10 @@ if (room == roomMap1)
 		{
 			RequestGUIState(GUI_STATE.PlayerBackpack);
 		}
+	} else {
+		if (KeyboardReleasedCloseWindow())
+		{
+			RequestGUIState(undefined);
+		}
 	}
-}
+} 

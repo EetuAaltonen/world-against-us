@@ -1,14 +1,20 @@
 // DISPLAY PROPERTIES
-idealDisplayWidth = 0; // Calculated later
+idealDisplayWidth = 640;
 idealDisplayHeight = 360;
 windowScale = 1;
+windowScaleStep = 0.25;
+
+idealGUIWidth = 1920;
+idealGUIHeight = 1080;
+
+isFullscreen = window_get_fullscreen();
 
 displayWidth = display_get_width();
 displayHeight = display_get_height();
 aspectRatio = displayWidth / displayHeight;
 
 // CALCULATE DISPLAY WIDTH
-idealDisplayWidth = idealDisplayHeight * aspectRatio;
+//idealDisplayWidth = idealDisplayHeight * aspectRatio;
 
 // WINDOW RECENTER
 recenterWindow = false;
@@ -26,7 +32,7 @@ if (displayHeight mod idealDisplayHeight != 0)
 }*/
 
 // CHECK FOR ODD NUMERS
-if (idealDisplayWidth & 1) idealDisplayWidth++;
+//if (idealDisplayWidth & 1) idealDisplayWidth++;
 //if (idealDisplayHeight & 1) idealDisplayHeight++;
 
 // SET VIEWS TO ROOMS
@@ -55,7 +61,7 @@ window_set_size(idealDisplayWidth * windowScale, idealDisplayHeight * windowScal
 surface_resize(application_surface, idealDisplayWidth * windowScale, idealDisplayHeight * windowScale);
 
 // Set GUI SIZE
-display_set_gui_size(idealDisplayWidth * windowScale, idealDisplayHeight * windowScale);
+display_set_gui_size(idealGUIWidth, idealGUIHeight);
 
 // SET DEFAULT DRAW PROPERTIES
 draw_set_font(font_default);

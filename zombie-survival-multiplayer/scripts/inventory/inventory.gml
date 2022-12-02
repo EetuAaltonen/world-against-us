@@ -29,9 +29,6 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }) const
 	identifyDuration = TimerFromSeconds(2);
 	identifyTimer = 0;
 	
-	// Hover effect
-	mouseHoverIndex = undefined;
-	
 	static GetItemCount = function()
     {
 		return ds_list_size(items);
