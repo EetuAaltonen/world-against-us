@@ -1,5 +1,6 @@
 defaultHost = "127.0.0.1";
-client = new Client(undefined, 8080);
+defaultPort = 8080;
+client = new Client(undefined, undefined);
 
 latency = 0;
 latencyTimer = 0;

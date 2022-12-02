@@ -9,7 +9,17 @@ if (async_load[? "size"] > 0)
 		{
 			case MESSAGE_TYPE.CONNECT_TO_HOST:
 			{
-				client.SetClientId(packetHeader.clientId);
+				if (client.isConnecting)
+				{
+					if (room == roomMainMenu)
+					{
+						if (!is_undefined(packetHeader.clientId))
+						{
+							client.SetClientId(packetHeader.clientId);
+							room_goto(roomMap1);
+						}
+					}
+				}
 			} break;
 			case MESSAGE_TYPE.LATENCY:
 			{

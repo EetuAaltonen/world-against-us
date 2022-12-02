@@ -7,15 +7,8 @@ if (client.tickTimer-- <= 0)
 	client.ResetTickTimer();
 }
 
-if (is_undefined(client.clientId))
+if (!is_undefined(client.clientId))
 {
-	if (client.reconnectTimer-- <= 0)
-	{
-		// TODO: Fix connect to host function to work with the new main menu
-		//client.ConnectToHost();
-		client.ResetReconnectTimer();
-	}
-} else {
 	if (client.latencyReqTimer-- <= 0)
 	{
 		if (!isLatencyTimerRunning)

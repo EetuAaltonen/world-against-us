@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Network",
-    "path": "folders/Scripts/Structs/Network.yy",
+    "path": "folders/Scripts/Network.yy",
   },
 }

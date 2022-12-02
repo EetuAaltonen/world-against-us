@@ -81,71 +81,82 @@ server.on("message", (msg, rinfo) => {
             const bufferUuid = Buffer.from(newUuid + NULL_TERMINATION, "utf8");
             const bufferMessageType = Buffer.allocUnsafe(BIT8);
             bufferMessageType.writeUInt8(MESSAGE_TYPE.CONNECT_TO_HOST, 0);
-            const bufferAllPlayerData = Buffer.from(
-              JSON.stringify(playersService.GetAllPlayers()),
-              "utf8"
-            );
 
-            const buffer = Buffer.concat([
-              bufferUuid,
-              bufferMessageType,
-              bufferAllPlayerData,
-            ]);
+            const buffer = Buffer.concat([bufferUuid, bufferMessageType]);
             server.send(buffer, rinfo.port, rinfo.address);
-
-            // Create new player data
-            const jsonString = msg.toString("utf8", 0, msg.length);
-            const content = JSON.parse(jsonString);
-            const newPlayerData = new PlayerData(
-              newUuid,
-              0,
-              new Vector2(0, 0),
-              new Vector2(0, 0),
-              new InputMap()
-            );
-
-            const newPosition = new Vector2(
-              content.player_data.position.X,
-              content.player_data.position.Y
-            );
-
-            const newVectorSpeed = new Vector2(
-              content.player_data.vector_speed.X,
-              content.player_data.vector_speed.Y
-            );
-
-            const newInputMap = new InputMap(
-              content.player_data.input_map.key_up,
-              content.player_data.input_map.key_down,
-              content.player_data.input_map.key_let,
-              content.player_data.input_map.key_right
-            );
-
-            newPlayerData.position = newPosition;
-            newPlayerData.vector_speed = newVectorSpeed;
-            newPlayerData.input_map = newInputMap;
-            newPlayerData.primary_weapon = content.player_data.primary_weapon;
-
-            playersService.AddPlayer(newUuid, newPlayerData);
-
-            // Broadcast others about a new player data
-            const broadcastMessageType = Buffer.allocUnsafe(BIT8);
-            broadcastMessageType.writeUInt8(
-              MESSAGE_TYPE.OTHER_CONNECTED_TO_HOST,
-              0
-            );
-            const broadcastPlayerData = Buffer.from(
-              JSON.stringify(newPlayerData),
-              "utf8"
-            );
-
-            const broadcastBuffer = Buffer.concat([
-              bufferUuid,
-              broadcastMessageType,
-              broadcastPlayerData,
-            ]);
-            networkService.BroadcastToClients(broadcastBuffer, newUuid);
           }
+        }
+        break;
+      case MESSAGE_TYPE.DATA_PLAYER_SYNC:
+        {
+          // Create new player data
+          const jsonString = msg.toString("utf8", 0, msg.length);
+          const content = JSON.parse(jsonString);
+          const newPlayerData = new PlayerData(
+            clientId,
+            0,
+            new Vector2(0, 0),
+            new Vector2(0, 0),
+            new InputMap()
+          );
+
+          const newPosition = new Vector2(
+            content.player_data.position.X,
+            content.player_data.position.Y
+          );
+
+          const newVectorSpeed = new Vector2(
+            content.player_data.vector_speed.X,
+            content.player_data.vector_speed.Y
+          );
+
+          const newInputMap = new InputMap(
+            content.player_data.input_map.key_up,
+            content.player_data.input_map.key_down,
+            content.player_data.input_map.key_let,
+            content.player_data.input_map.key_right
+          );
+
+          newPlayerData.position = newPosition;
+          newPlayerData.vector_speed = newVectorSpeed;
+          newPlayerData.input_map = newInputMap;
+          newPlayerData.primary_weapon = content.player_data.primary_weapon;
+
+          playersService.AddPlayer(clientId, newPlayerData);
+
+          // Response with all player data
+          const bufferUuid = Buffer.from(clientId + NULL_TERMINATION, "utf8");
+          const bufferMessageType = Buffer.allocUnsafe(BIT8);
+          bufferMessageType.writeUInt8(MESSAGE_TYPE.CONNECT_TO_HOST, 0);
+          const bufferAllPlayerData = Buffer.from(
+            JSON.stringify(playersService.GetAllPlayers()),
+            "utf8"
+          );
+
+          const buffer = Buffer.concat([
+            bufferUuid,
+            bufferMessageType,
+            bufferAllPlayerData,
+          ]);
+          server.send(buffer, rinfo.port, rinfo.address);
+
+          // Broadcast others about a new player data
+          const broadcastMessageType = Buffer.allocUnsafe(BIT8);
+          broadcastMessageType.writeUInt8(
+            MESSAGE_TYPE.OTHER_CONNECTED_TO_HOST,
+            0
+          );
+          const broadcastPlayerData = Buffer.from(
+            JSON.stringify(newPlayerData),
+            "utf8"
+          );
+
+          const broadcastBuffer = Buffer.concat([
+            bufferUuid,
+            broadcastMessageType,
+            broadcastPlayerData,
+          ]);
+          networkService.BroadcastToClients(broadcastBuffer, clientId);
         }
         break;
       case MESSAGE_TYPE.DISCONNECT_FROM_HOST:

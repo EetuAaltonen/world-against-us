@@ -5,7 +5,7 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Network",
-    "path": "folders/Scripts/Structs/Network.yy",
+    "name": "Packet",
+    "path": "folders/Scripts/Network/Packet.yy",
   },
 }

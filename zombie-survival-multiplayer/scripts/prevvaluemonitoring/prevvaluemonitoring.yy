@@ -1,12 +1,11 @@
 {
+  "resourceType": "GMScript",
+  "resourceVersion": "1.0",
+  "name": "PrevValueMonitoring",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Network",
-    "path": "folders/Scripts/Network.yy",
+    "name": "Player",
+    "path": "folders/Scripts/Network/Player.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "PrevValueMonitoring",
-  "tags": [],
-  "resourceType": "GMScript",
 }
