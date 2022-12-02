@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "GameWindow",
-    "path": "folders/Scripts/Structs/GameWindow.yy",
+    "path": "folders/Scripts/GUI/GameWindow.yy",
   },
 }

@@ -1,6 +1,5 @@
 // UPDATE FOCUSED WINDOW
-var mouseX = window_mouse_get_x();
-var mouseY = window_mouse_get_y();
+var mousePosition = new Vector2(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0));
 var newFocusedWindow = undefined;
 
 var windowCount = ds_list_size(gameWindows);
@@ -8,8 +7,7 @@ for (var i = 0; i < windowCount; i++)
 {
 	var window = gameWindows[| i];
 	
-	if (mouseX >= window.guiPos.X && mouseX <= (window.guiPos.X + window.size.w) &&
-		mouseY >= window.guiPos.Y && mouseY <= (window.guiPos.Y + window.size.h))
+	if (point_in_rectangle(mousePosition.X, mousePosition.Y, window.position.X, window.position.Y, (window.position.X + window.size.w), (window.position.Y + window.size.h)))
 	{
 		if (!is_undefined(newFocusedWindow))
 		{
@@ -48,8 +46,7 @@ if (!is_undefined(newFocusedWindow))
 }
 
 // CHECK WINDOW TO CLOSE
-if (keyboard_check_released(vk_tab) ||
-	keyboard_check_released(vk_escape))
+if (KeyboardReleasedCloseWindow())
 {
 	var windowToClose = undefined;
 	var windowIndex = undefined;
@@ -90,25 +87,6 @@ if (keyboard_check_released(vk_tab) ||
 	}
 }
 
-// INTERACTIONS OUT OF WINDOWS
-// RESET DRAGGED ITEM IF DROPPED OUT OF WINDOW
-if (mouse_check_button_released(mb_left))
-{
-	if (!is_undefined(global.DragItem))
-	{
-		if (is_undefined(focusedWindow))
-		{
-			global.DragItem = undefined;
-		} else {
-			if (focusedWindow.type != GAME_WINDOW_TYPE.PlayerBackpack &&
-				focusedWindow.type != GAME_WINDOW_TYPE.LootContainer)
-			{
-				global.DragItem = undefined;	
-			}
-		}
-	}
-}
-
 // UPDATE WINDOWS
 var windowCount = ds_list_size(gameWindows);
 for (var i = 0; i < windowCount; i++)
@@ -116,4 +94,3 @@ for (var i = 0; i < windowCount; i++)
 	var window = gameWindows[| i];
 	window.Update();
 }
-
