@@ -40,7 +40,6 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 			}
 			
 			UpdateContent();
-			CheckInteraction();
 		}
 	}
 	
@@ -51,20 +50,10 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 		{
 			var childElement = childElements[| i];
 			childElement.Update();
-			if (isFocused)
-			{
-				childElement.CheckInteraction();
-			}
 		}
 	}
 	
 	static OnFocusLost = function()
-	{
-		// OVERRIDE FUNCTION
-		return;
-	}
-	
-	static CheckInteraction = function()
 	{
 		// OVERRIDE FUNCTION
 		return;

@@ -67,7 +67,11 @@ function WindowElement(_elementId, _position, _size, _backgroundColor) construct
 			}
 			
 			UpdateContent();
-			CheckHovered();
+			if (parentWindow.isFocused)
+			{
+				CheckHovered();
+				CheckInteraction();
+			}
 		}
 	}
 	
@@ -78,7 +82,6 @@ function WindowElement(_elementId, _position, _size, _backgroundColor) construct
 		{
 			var childElement = childElements[| i];
 			childElement.Update();
-			childElement.CheckInteraction();
 		}
 	}
 	
