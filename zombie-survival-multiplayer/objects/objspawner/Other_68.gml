@@ -5,7 +5,7 @@ if (async_load[? "size"] > 0)
 	
 	switch (packetHeader.messageType)
 	{
-		case MESSAGE_TYPE.CONNECT_TO_HOST:
+		case MESSAGE_TYPE.DATA_PLAYER_SYNC:
 		{
 			var jsonString = buffer_read(networkBuffer, buffer_string);
 			var allPlayerData = json_parse(jsonString);
@@ -15,7 +15,7 @@ if (async_load[? "size"] > 0)
 			for (var i = 0; i < playerCount; i++) {
 				var playerUuid = playerUuids[i];
 				var playerData = allPlayerData[$ playerUuid];
-					
+				
 				if (playerUuid != global.ObjNetwork.client.clientId)
 				{	
 					var coopPlayerObj = global.OtherPlayerData[? playerUuid];

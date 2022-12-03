@@ -1,1 +1,1 @@
-var player = instance_create_layer(x, y, "Player", objPlayer);
+instance_create_layer(x, y, "Player", objPlayer);

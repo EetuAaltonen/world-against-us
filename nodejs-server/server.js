@@ -127,7 +127,7 @@ server.on("message", (msg, rinfo) => {
           // Response with all player data
           const bufferUuid = Buffer.from(clientId + NULL_TERMINATION, "utf8");
           const bufferMessageType = Buffer.allocUnsafe(BIT8);
-          bufferMessageType.writeUInt8(MESSAGE_TYPE.CONNECT_TO_HOST, 0);
+          bufferMessageType.writeUInt8(MESSAGE_TYPE.DATA_PLAYER_SYNC, 0);
           const bufferAllPlayerData = Buffer.from(
             JSON.stringify(playersService.GetAllPlayers()),
             "utf8"
@@ -142,10 +142,7 @@ server.on("message", (msg, rinfo) => {
 
           // Broadcast others about a new player data
           const broadcastMessageType = Buffer.allocUnsafe(BIT8);
-          broadcastMessageType.writeUInt8(
-            MESSAGE_TYPE.OTHER_CONNECTED_TO_HOST,
-            0
-          );
+          broadcastMessageType.writeUInt8(MESSAGE_TYPE.DATA_PLAYER_SYNC, 0);
           const broadcastPlayerData = Buffer.from(
             JSON.stringify(newPlayerData),
             "utf8"
