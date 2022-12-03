@@ -2,6 +2,25 @@ function OnClickMenuConnect()
 {
 	if (!is_undefined(global.ObjNetwork))
 	{
+		var addressInputElement = parentElement.GetChildElementById("MultiplayerAddressInput");
+		var addressValue = global.ObjNetwork.defaultHost;
+		if (!is_undefined(addressInputElement))
+		{
+			if (addressInputElement.input != addressInputElement.placeholder)
+			{
+				addressValue = addressInputElement.input;
+			}
+		}
+		var portInputElement = parentElement.GetChildElementById("MultiplayerPortInput");
+		var portValue = global.ObjNetwork.defaultPort;
+		if (!is_undefined(portInputElement))
+		{
+			if (portInputElement.input != portInputElement.placeholder)
+			{
+				portValue = portInputElement.input;
+			}
+		}
+		
 		var windowSize = new Size(global.GUIW, global.GUIH);
 		var windowStyle = new GameWindowStyle(#217fb5, 1);
 	
@@ -18,7 +37,7 @@ function OnClickMenuConnect()
 				"MultiplayerConnectTitle",
 				new Vector2(windowSize.w * 0.5, windowSize.h * 0.5),
 				undefined, undefined,
-				"Connecting " + string(global.ObjNetwork.defaultHost) + ":" + string(global.ObjNetwork.defaultPort) + "....",
+				string("Connecting {0}:{1}...", addressValue, portValue),
 				font_default, fa_center, fa_middle, c_black, 1
 			)
 		);
@@ -29,8 +48,8 @@ function OnClickMenuConnect()
 		
 		var client = global.ObjNetwork.client;
 		client.CreateSocket();
-		client.hostAddress = global.ObjNetwork.defaultHost;
-		client.hostPort = global.ObjNetwork.defaultPort;
+		client.hostAddress = addressValue;
+		client.hostPort = portValue;
 		client.ConnectToHost();
 	}
 }

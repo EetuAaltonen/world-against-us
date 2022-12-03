@@ -17,14 +17,13 @@ function Client(_hostAddress = undefined, _hostPort = undefined) constructor
 	isConnecting = false;
 	isPlayerDataSynced = false;
 	
-	
-	// TODO: Research how to implement a network socket
 	static CreateSocket = function(_clientId)
 	{
+		if (!is_undefined(socket)) { DeleteSocket(); }
 		socket = network_create_socket(network_socket_udp);
 	}
 	
-	static DeleteSocket = function(_clientId)
+	static DeleteSocket = function()
 	{
 		SetClientId(undefined);
 		network_destroy(socket);

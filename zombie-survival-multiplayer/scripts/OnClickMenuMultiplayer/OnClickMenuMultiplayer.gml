@@ -48,18 +48,12 @@ function OnClickMenuMultiplayer()
 	);
 	
 	// CONNECT BUTTON
-	var buttonSize = new Size(100, 30);
-	var formInputElements = ds_list_create();
-	ds_list_add(formInputElements,
-		addressInput,
-		portInput
-	);
-	
+	var buttonSize = new Size(100, 30);	
 	ds_list_add(multiplayerPanelElements,
-		new WindowFormButton(
+		new WindowButton(
 			"MultiplayerConnectButton",
 			new Vector2(panelSize.w * 0.5 - (buttonSize.w * 0.5), panelSize.h - buttonSize.h - 20),
-			buttonSize, #48a630, "Connect", OnClickMenuConnect, formInputElements
+			buttonSize, #48a630, "Connect", OnClickMenuConnect
 		)
 	);
 	
