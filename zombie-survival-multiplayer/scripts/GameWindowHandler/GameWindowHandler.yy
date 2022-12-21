@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "EnumGUIState",
+  "name": "GameWindowHandler",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "GUI",
-    "path": "folders/Scripts/GUI.yy",
+    "name": "GameWindow",
+    "path": "folders/Scripts/GUI/GameWindow.yy",
   },
 }

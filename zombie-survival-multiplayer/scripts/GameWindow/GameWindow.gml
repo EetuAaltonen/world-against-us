@@ -14,7 +14,7 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 	isActive = true;
 	isFocused = false;
 	isVisible = true;
-	mouseHoverIndex = undefined;
+	hoveredElement = undefined;
 	
 	static AddChildElements = function(_childElements)
 	{
@@ -30,6 +30,12 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 		childElements = _childElements;
 	}
 	
+	static OnOpen = function()
+	{
+		// OVERRIDE FUNCTION
+		return;
+	}
+	
 	static Update = function()
 	{
 		if (isActive)
@@ -38,7 +44,6 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 			{
 				onCreate = false;
 			}
-			
 			UpdateContent();
 		}
 	}
@@ -59,13 +64,20 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 		return;
 	}
 	
+	static OnClose = function()
+	{
+		// OVERRIDE FUNCTION
+		return;
+	}
+	
 	static Draw = function()
 	{
 		if (isVisible)
 		{
+			DrawBackground();
+			
 			if (!onCreate)
 			{
-				DrawBackground();
 				DrawContent();
 			}
 		}

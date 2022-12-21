@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "EnumGUIState",
+  "name": "EnumGUIAction",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {

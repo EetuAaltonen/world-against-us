@@ -1,0 +1,1 @@
+gameWindowHandler = new GameWindowHandler();
