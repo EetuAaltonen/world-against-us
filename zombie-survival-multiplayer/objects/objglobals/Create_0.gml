@@ -1,41 +1,54 @@
 #macro UNDEFINED_UUID "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined"
 
-// Global controllers
-global.ObjCamera = noone;
-global.ObjGUI = noone;
-global.ShowHUD = true;
+// SET RANDOM SEED
+randomise();
 
-global.ItemData = noone;
-global.BulletData = undefined;
+// ROOM START AFTER
+onRoomStartAfter = true;
 
-global.PlayerBackpack = noone;
+initGlobalVariables = function()
+{
+	// Global controllers
+	global.ObjCamera = noone;
+	global.GUIStateHandler = undefined;
+	global.ObjHud = noone;
 
-// Player
-global.ObjPlayer = noone;
-global.ObjSpawner = noone;
+	global.ItemData = noone;
+	global.BulletData = undefined;
 
-// Network
-global.ObjNetwork = noone;
+	global.PlayerBackpack = noone;
+	global.PlayerMagazinePockets = undefined;
+	global.PlayerMedicinePockets = undefined;
 
-// Coop
-global.OtherPlayerData = ds_map_create();
+	// Player
+	global.ObjPlayer = noone;
+	global.ObjSpawner = noone;
 
-global.ObjWeapon = noone;
+	// Network
+	global.ObjNetwork = noone;
 
-// View variables
-global.ViewW = 0;
-global.ViewH = 0;
+	// Coop
+	global.OtherPlayerData = ds_map_create();
 
-// GUI
-global.GUIState = undefined;
-global.GUIW = 0;
-global.GUIH = 0;
+	global.ObjWeapon = noone;
 
-// Inventory
-global.DragItem = undefined;
+	// View variables
+	global.ViewW = 0;
+	global.ViewH = 0;
 
-// Message log
-global.MessageLog = undefined;
+	// GUI
+	global.GUIW = 0;
+	global.GUIH = 0;
 
-// AI Path
-global.RoomGrid = undefined;
+	// Mouse
+	global.ObjMouse = noone;
+
+	// Message log
+	global.MessageLog = undefined;
+
+	// AI Path
+	global.RoomGrid = undefined;
+}
+
+// INIT GLOBAL VARIABLES
+initGlobalVariables();
