@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "Item",
+  "name": "CalculateItemIconRotation",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "ItemData",
-    "path": "folders/Scripts/Inventory/ItemData.yy",
+    "name": "Sprite",
+    "path": "folders/Scripts/GUI/Functions/Sprite.yy",
   },
 }

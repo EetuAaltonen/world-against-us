@@ -1,4 +1,4 @@
-function Item(_name, _icon, _size, _type, _weight, _max_stack, _base_price, _descripton, _quantity = 1, _metadata = noone, _rotated = false, _known = true, _source_type = noone, _grid_index = noone) constructor
+function Item(_name, _icon, _size, _type, _weight, _max_stack, _base_price, _descripton, _quantity = 1, _metadata = noone, _isRotated = false, _known = true, _grid_index = noone) constructor
 {
 	name = _name;
 	icon = _icon;
@@ -11,38 +11,48 @@ function Item(_name, _icon, _size, _type, _weight, _max_stack, _base_price, _des
 	quantity = _quantity;
 	metadata = _metadata;
 	
-	rotated = _rotated;
+	isRotated = _isRotated;
 	known = _known;
-	source_type = _source_type;
+	sourceInventory = undefined;
 	grid_index = _grid_index;
 	
 	
 	static Clone = function(_newQuantity = undefined)
 	{
-		return new Item(
-			name, icon, size, type, weight, max_stack, base_price, description,
+		var cloneItem = new Item(
+			name, icon, size, type,
+			weight, max_stack, base_price, description,
 			_newQuantity ?? quantity,
-			metadata, rotated, known, source_type,
+			CloneStruct(metadata),
+			isRotated, known,
 			(grid_index != noone) ? new GridIndex(grid_index.col, grid_index.row) : grid_index
 		);
+		cloneItem.sourceInventory = sourceInventory;
+		
+		return cloneItem;
 	}
 	
 	static Rotate = function()
 	{
 		if (size.w != size.h)
 		{
-			rotated = !rotated;
+			isRotated = !isRotated;
 			// Swap width and height
-			size = new Size(size.h, size.w);
+			size = SwapSize(size);
 		}
 	}
 	
 	static Compare = function(_other)
 	{
-		return (
-			name == _other.name &&
-			icon == _other.icon &&
-			type == _other.type
-		);
+		var isIdentical = false;
+		if (!is_undefined(_other))
+		{
+			isIdentical = (
+				name == _other.name &&
+				icon == _other.icon &&
+				type == _other.type
+			);
+		}
+		return isIdentical;
 	}
 }

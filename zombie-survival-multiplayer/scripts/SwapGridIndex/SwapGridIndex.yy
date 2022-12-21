@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "Item",
+  "name": "SwapGridIndex",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "ItemData",
-    "path": "folders/Scripts/Inventory/ItemData.yy",
+    "name": "Structs",
+    "path": "folders/Scripts/Structs.yy",
   },
 }

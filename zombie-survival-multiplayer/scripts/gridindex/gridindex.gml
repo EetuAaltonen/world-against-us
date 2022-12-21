@@ -7,4 +7,9 @@ function GridIndex(_col, _row) constructor
 	{
 		return new GridIndex(col, row);	
 	}
+	
+	static Compare = function(_other)
+	{
+		return (col == _other.col && row == _other.row);	
+	}
 }
