@@ -15,6 +15,7 @@ function WindowElement(_elementId, _position, _size, _backgroundColor) construct
 	isVisible = true;
 	isActive = true;
 	isHovered = false;
+	hoverAnimation = isHovered;
 	
 	static AddChildElements = function(_childElements)
 	{
@@ -72,6 +73,8 @@ function WindowElement(_elementId, _position, _size, _backgroundColor) construct
 				CheckHovered();
 				CheckInteraction();
 			}
+			
+			hoverAnimation = Approach(hoverAnimation, isHovered, 0.1);
 		}
 	}
 	
@@ -95,7 +98,7 @@ function WindowElement(_elementId, _position, _size, _backgroundColor) construct
 	{
 		if (!is_undefined(size))
 		{
-			var mousePosition = new Vector2(device_mouse_x_to_gui(0), device_mouse_y_to_gui(0));
+			var mousePosition = MouseGUIPosition();
 			if (point_in_rectangle(mousePosition.X, mousePosition.Y, position.X, position.Y, (position.X + size.w), (position.Y + size.h)))
 			{
 				isHovered = true;

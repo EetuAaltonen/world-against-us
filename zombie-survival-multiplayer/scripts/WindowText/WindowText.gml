@@ -15,8 +15,7 @@ function WindowText(_elementId, _position, _size, _backgroundColor, _text, _text
 		
 		draw_text_color(position.X, position.Y, string(text), textColor, textColor, textColor, textColor, textAlpha);
 		
-		draw_set_font(font_default);
-		draw_set_halign(fa_left);
-		draw_set_valign(fa_top);
+		// RESET DRAW PROPERTIES
+		ResetDrawProperties();
 	}
 }
