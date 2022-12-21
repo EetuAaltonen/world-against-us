@@ -1,15 +1,42 @@
 function PlayerWeaponFunctions()
 {
-	image_angle = point_direction(x, y, mouse_x, mouse_y);
-
-	// SHOOTING DELAY AND ANIMATION
-	fireDelay = max(-1, fireDelay - 1);
-	recoilAnimation = max(0, recoilAnimation - 1);
-				
 	// NETWORKING WEAPON FUNCTIONS
-	var isWeaponUsed = false;
-	var isWeaponReloaded = false;
-	var bulletCount = primaryWeapon.metadata.bullet_count;
+	var onWeaponUsed = false;
+	var onWeaponReloaded = false;
+	var magazine = primaryWeapon.metadata.magazine;
+	
+	// SHOOT
+	if (mouse_check_button(mb_left))
+	{
+		if (!is_undefined(magazine))
+		{
+			if (magazine.metadata.bullet_count > 0 && fireDelay <= 0)
+			{
+				UseWeapon(mouse_x, mouse_y);
+				onWeaponUsed = true;
+			}
+		}
+	}
+	// RELOAD
+	else if (keyboard_check_released(ord("R")))
+	{
+		var magazine = FetchMagazineFromPockets(primaryWeapon.metadata.caliber);
+		if (!is_undefined(magazine))
+		{
+			InventoryReloadWeapon(primaryWeapon, magazine);
+			onWeaponReloaded = true;
+		} else {
+			// MESSAGE LOG
+			AddMessageLog(string("Reloading failed, missing magazine with {0} caliber ammo", primaryWeapon.metadata.caliber));	
+		}
+	}
+	
+	// TODO: Fix weapon functions network coding
+	/*		
+	// NETWORKING WEAPON FUNCTIONS
+	var onWeaponUsed = false;
+	var onWeaponReloaded = false;
+	var bulletCount = 0; //primaryWeapon.metadata.bullet_count;
 		
 	if (primaryWeapon.metadata.bullet_count > 0)
 	{
@@ -17,29 +44,29 @@ function PlayerWeaponFunctions()
 		if (mouse_check_button(mb_left) && fireDelay <= 0)
 		{
 			UseWeapon(mouse_x, mouse_y);
-			isWeaponUsed = true;
+			onWeaponUsed = true;
 		}
 	}
 
 	// RELOAD
 	if (keyboard_check_released(ord("R")))
 	{
-		ReloadWeapon(primaryWeapon.metadata.magazine_size);
-		bulletCount = primaryWeapon.metadata.bullet_count;
-		isWeaponReloaded = true;
+		//ReloadWeapon(primaryWeapon.metadata.magazine_size);
+		//bulletCount = primaryWeapon.metadata.bullet_count;
+		onWeaponReloaded = true;
 	}
 		
 	// SEND WEAPON FUNCTIONS
 	if (!is_undefined(global.ObjNetwork.client.clientId))
 	{
-		if (isWeaponUsed || isWeaponReloaded || isAiming != prev_is_aiming || prev_weapon_angle != image_angle)
+		if (onWeaponUsed || onWeaponReloaded || isAiming != prev_is_aiming || prev_weapon_angle != image_angle)
 		{
 			var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.DATA_PLAYER_WEAPON_FUNCTION);
-			var formatMouseX = max(0, min(room_width, mouse_x));
-			var formatMouseY = max(0, min(room_height, mouse_y));
+			var formatMouseX = clamp(mouse_x, 0, room_width);
+			var formatMouseY = clamp(mouse_y, 0, room_height);
 			var scaledMousePos = ScaleFloatValuesToIntVector2(formatMouseX, formatMouseY);
 						
-			buffer_write(networkBuffer, buffer_bool, isWeaponUsed);
+			buffer_write(networkBuffer, buffer_bool, onWeaponUsed);
 			buffer_write(networkBuffer, buffer_u8, bulletCount);
 			buffer_write(networkBuffer, buffer_bool, isAiming);
 			buffer_write(networkBuffer, buffer_u32, scaledMousePos.X);
@@ -50,11 +77,12 @@ function PlayerWeaponFunctions()
 			prev_is_aiming = isAiming;
 			prev_weapon_angle = image_angle;
 		}
-	}
+	}*/
 }
 
 function UseWeapon(_mouseX, _mouseY)
 {
+	// CREATE A BULLET INSTANCE
 	var bullet = instance_create_layer(x + rotatedWeaponBarrelPos.X, y + rotatedWeaponBarrelPos.Y, "Projectiles", objProjectile);
 	var aimRecoilReduction = (isAiming) ? 0.3 : 1;
 	var bulletRecoil = random_range(-primaryWeapon.metadata.recoil, primaryWeapon.metadata.recoil) * aimRecoilReduction;
@@ -67,16 +95,11 @@ function UseWeapon(_mouseX, _mouseY)
 	bullet.image_yscale = bullet.image_xscale;
 	bullet.range = MetersToPixels(primaryWeapon.metadata.range);
 	
+	var magazine = primaryWeapon.metadata.magazine;
 	recoilAnimation = 8;
-	bulletAnimations[primaryWeapon.metadata.bullet_count - 1] = 0;
-	primaryWeapon.metadata.bullet_count--;
+	bulletAnimations[magazine.metadata.bullet_count - 1] = 0;
+	magazine.metadata.bullet_count--;
 	fireDelay = TimerRatePerMinute(primaryWeapon.metadata.fire_rate);
-}
-
-function ReloadWeapon(_newBulletCount)
-{
-	primaryWeapon.metadata.bullet_count = _newBulletCount;
-	bulletAnimations = array_create(primaryWeapon.metadata.magazine_size, 1);
 }
 
 function InitializeWeapon()
@@ -84,7 +107,7 @@ function InitializeWeapon()
 	sprite_index = primaryWeapon.icon;
 	fireDelay = 0;
 	recoilAnimation = 0;
-	bulletAnimations = array_create(primaryWeapon.metadata.magazine_size, 1);
+	//bulletAnimations = array_create(primaryWeapon.metadata.magazine_size, 1);
 }
 
 function CalculateBarrelPos()

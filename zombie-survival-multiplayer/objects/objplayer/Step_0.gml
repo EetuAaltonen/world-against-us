@@ -4,8 +4,21 @@ event_inherited();
 if (character.type == CHARACTER_TYPE.PLAYER)
 {
 	// CHECK GUI STATE
-	if (!IsGUIStateClosed()) return;
+	if (!global.GUIStateHandler.IsGUIStateClosed()) return;
 	GetLocalPlayerMovementInput();
+	
+	// QUICK HEAL
+	if (keyboard_check_released(ord("Q")))
+	{
+		var medicine = FetchMedicineFromPockets();
+		if (!is_undefined(medicine))
+		{
+			character.UseMedicine(medicine)
+		} else {
+			// MESSAGE LOG
+			AddMessageLog(string("Quick healing failed, missing healing items"));
+		}
+	}
 }
 
 var hInput = key_right - key_left;
@@ -50,3 +63,54 @@ if (place_meeting(x, y + vSpeed, objBlockParent))
 y += vSpeed;
 var sprHeightCenter = sprite_get_height(sprite_index) * 0.5;
 y = clamp(y, 0 + sprHeightCenter, room_height - sprHeightCenter);
+
+// SEND MOVEMENT NETWORK DATA
+if (character.type == CHARACTER_TYPE.PLAYER)
+{
+	if (!is_undefined(global.ObjNetwork.client.clientId))
+	{
+		if (global.ObjNetwork.client.tickTimer == 1)
+		{
+			if (x != prev_x || y != prev_y)
+			{				
+				var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.DATA_PLAYER_POSITION);
+				var scaledPosition = ScaleFloatValuesToIntVector2(x, y);
+				
+				buffer_write(networkBuffer, buffer_u32, scaledPosition.X);
+				buffer_write(networkBuffer, buffer_u32, scaledPosition.Y);
+				global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
+				
+				// RESET PREVIOUS VALUES
+				ResetPlayerPositionValues();
+			}
+			
+			if (hSpeed != prev_hspeed || vSpeed != prev_vspeed)
+			{
+				var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.DATA_PLAYER_VELOCITY);
+				var scaledSpeed = ScaleFloatValuesToIntVector2(hSpeed, vSpeed);
+				
+				buffer_write(networkBuffer, buffer_s16, scaledSpeed.X);
+				buffer_write(networkBuffer, buffer_s16, scaledSpeed.Y);
+				global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
+				
+				// RESET PREVIOUS VALUES
+				ResetPlayerVelocityValues();
+			}
+		}
+		
+		if (key_up != prev_key_up || key_down != prev_key_down ||
+			key_left != prev_key_left || key_right != prev_key_right)
+		{
+			var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.DATA_PLAYER_MOVEMENT_INPUT);
+			
+			buffer_write(networkBuffer, buffer_s8, key_up);
+			buffer_write(networkBuffer, buffer_s8, key_down);
+			buffer_write(networkBuffer, buffer_s8, key_left);
+			buffer_write(networkBuffer, buffer_s8, key_right);
+			global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
+			
+			// RESET PREVIOUS VALUES
+			ResetPlayerInputValues();
+		}
+	}
+}

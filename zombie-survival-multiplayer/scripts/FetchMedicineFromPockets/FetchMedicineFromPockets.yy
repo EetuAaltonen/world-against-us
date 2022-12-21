@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "WeaponFunctions",
+  "name": "FetchMedicineFromPockets",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Weapon",
-    "path": "folders/Scripts/Weapon.yy",
+    "name": "Functions",
+    "path": "folders/Scripts/Inventory/Functions.yy",
   },
 }

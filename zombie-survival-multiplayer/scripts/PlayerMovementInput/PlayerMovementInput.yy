@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "WeaponFunctions",
+  "name": "PlayerMovementInput",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Weapon",
-    "path": "folders/Scripts/Weapon.yy",
+    "name": "Player",
+    "path": "folders/Scripts/Characters/Player.yy",
   },
 }
