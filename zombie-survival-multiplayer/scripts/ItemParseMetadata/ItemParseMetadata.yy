@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "JSONParse",
+  "name": "ItemParseMetadata",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
