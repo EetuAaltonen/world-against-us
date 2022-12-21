@@ -89,6 +89,9 @@ function Client(_hostAddress = undefined, _hostPort = undefined) constructor
 	{
 		var networkBuffer = CreateBuffer(MESSAGE_TYPE.DISCONNECT_FROM_HOST);
 		SendPacketOverUDP(networkBuffer);
+		
+		// REQUIRE A NEW PLAYER DATA SYNC DURING THE NEXT CONNECTION
+		isPlayerDataSynced = false;
 	}
 	
 	static SendPacketOverUDP = function(_networkBuffer)
