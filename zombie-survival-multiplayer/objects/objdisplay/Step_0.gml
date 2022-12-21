@@ -4,7 +4,7 @@ if (recenterWindow)
 	alarm[0] = 10;
 }
 
-if (keyboard_check_released(ord("Q")))
+if (keyboard_check_released(ord("P")))
 {
 	isFullscreen = !isFullscreen
 	window_set_fullscreen(isFullscreen);

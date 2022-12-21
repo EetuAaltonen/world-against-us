@@ -1,3 +1,6 @@
+// ROOM START AFTER
+onRoomStartAfter = true;
+
 // DISPLAY PROPERTIES
 idealDisplayWidth = 640;
 idealDisplayHeight = 360;
@@ -67,6 +70,3 @@ display_set_gui_size(idealGUIWidth, idealGUIHeight);
 draw_set_font(font_default);
 draw_set_color(c_black);
 draw_set_alpha(1);
-
-// GO TO NEXT ROOM
-room_goto(roomMainMenu);
