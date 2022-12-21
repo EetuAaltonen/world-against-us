@@ -37,7 +37,77 @@
       "description": "A bottle of clean water",
       "weight": 1,
       "max_stack": 1,
-      "base_price": 10
+      "base_price": 10,
+      "metadata": {
+        "consumable_type": "Liquid",
+        "hydration": 10
+      }
+    },
+    {
+      "name": "Canned Meat",
+      "icon": "sprCannedMeat",
+      "type": "Consumable",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "A can of meat",
+      "weight": 1,
+      "max_stack": 1,
+      "base_price": 20,
+      "metadata": {
+        "consumable_type": "Food",
+        "nutrition": 40
+      }
+    },
+    {
+      "name": "Snickers Bar",
+      "icon": "sprSnickersBar",
+      "type": "Consumable",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "A chocolate bar",
+      "weight": 1,
+      "max_stack": 1,
+      "base_price": 10,
+      "metadata": {
+        "consumable_type": "Food",
+        "nutrition": 10
+      }
+    },
+    {
+      "name": "Bandage",
+      "icon": "sprBandage",
+      "type": "Medicine",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "A roll of bandage",
+      "weight": 1,
+      "max_stack": 1,
+      "base_price": 20,
+      "metadata": {
+        "healing_value": 50
+      }
+    },
+    {
+      "name": "First Aid Kit",
+      "icon": "sprFirstAidKit",
+      "type": "Medicine",
+      "size": {
+        "w": 2,
+        "h": 2
+      },
+      "description": "To heal general injuries",
+      "weight": 1,
+      "max_stack": 1,
+      "base_price": 20,
+      "metadata": {
+        "healing_value": 500
+      }
     },
     {
       "name": "Knife",
@@ -78,8 +148,6 @@
       "max_stack": 1,
       "base_price": 450,
       "metadata": {
-        "magazine_size": 30,
-        "bullet_count": 0,
         "caliber": 7.62,
         "fire_rate": 600,
         "range": 100,
@@ -104,8 +172,6 @@
       "max_stack": 1,
       "base_price": 250,
       "metadata": {
-        "magazine_size": 15,
-        "bullet_count": 0,
         "caliber": 9,
         "fire_rate": 800,
         "range": 50,
@@ -115,6 +181,39 @@
           "X": 140,
           "Y": 11
         }
+      }
+    },
+    {
+      "name": "Ak-47 Mag",
+      "icon": "sprAk47Mag",
+      "type": "Magazine",
+      "size": {
+        "w": 1,
+        "h": 2
+      },
+      "description": "Gun magazine",
+      "weight": 0.1,
+      "max_stack": 1,
+      "base_price": 100,
+      "metadata": {
+        "caliber": 7.62,
+        "magazine_size": 30
+      }
+    },
+    {
+      "name": "7.62 Bullet",
+      "icon": "spr762Bullet",
+      "type": "Ammo",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "7.62 caliber bullet",
+      "weight": 0.1,
+      "max_stack": 120,
+      "base_price": 10,
+      "metadata": {
+        "caliber": 7.62
       }
     }
   ]
