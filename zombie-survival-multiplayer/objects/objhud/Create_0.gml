@@ -1,4 +1,4 @@
-hudHeight = 80;
+hudHeight = 100;
 
 heartBaseScale = 0.5;
 heartPulseScale = 0.7;

@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "GUIOpenPlayerBackpack",
+  "name": "WindowHealthBar",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Functions",
-    "path": "folders/Scripts/GUI/Functions.yy",
+    "name": "WindowElement",
+    "path": "folders/Scripts/GUI/WindowElement.yy",
   },
 }

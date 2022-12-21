@@ -1,8 +1,10 @@
 if (!is_undefined(character))
 {
-	if (character.hp <= 0)
+	if (character.isDead)
 	{
 		instance_destroy();
+	} else {
+		character.UpdateStats();
 	}
 	
 	var damageSource = instance_place(x, y, objDamageParent);
@@ -35,3 +37,5 @@ if (!is_undefined(character))
 		}
 	}
 }
+
+depth = -y;
