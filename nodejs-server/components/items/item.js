@@ -13,9 +13,8 @@ class Item {
 
     quantity = 1,
     metadata = -4,
-    rotated = false,
+    isRotated = false,
     known = true,
-    source_type = -4,
     grid_index = -4
   ) {
     this.name = name;
@@ -29,15 +28,15 @@ class Item {
 
     this.quantity = quantity;
     this.metadata = metadata;
-    this.rotated = rotated;
+    this.isRotated = isRotated;
     this.known = known;
-    this.source_type = source_type;
+
     this.grid_index = grid_index;
   }
 
   Rotate() {
     if (size.w != size.h) {
-      rotated = !rotated;
+      isRotated = !isRotated;
       // Swap width and height
       size = new Size(size.h, size.w);
     }

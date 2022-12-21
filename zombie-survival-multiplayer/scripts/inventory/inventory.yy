@@ -5,7 +5,7 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Structs",
-    "path": "folders/Scripts/Structs.yy",
+    "name": "Inventory",
+    "path": "folders/Scripts/Inventory.yy",
   },
 }

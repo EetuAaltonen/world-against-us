@@ -1,3 +1,4 @@
-inventory = new Inventory("playerTempId1234", INVENTORY_TYPE.PlayerBackpack, { columns: 10, rows: 6 });
+inventory = new Inventory("PlayerBackpack", INVENTORY_TYPE.PlayerBackpack, { columns: 10, rows: 6 });
+magazinePockets = new Inventory("PlayerMagazinePocket", INVENTORY_TYPE.MagazinePockets, { columns: 4, rows: 2 }, ["Magazine", "Ammo"]);
+medicinePockets = new Inventory("PlayerMedicinePocket", INVENTORY_TYPE.MedicinePockets, { columns: 4, rows: 2 }, ["Medicine"]);
 initInventory = true;
-showInventory = false;

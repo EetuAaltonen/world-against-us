@@ -34,7 +34,7 @@ class Inventory {
     item.known = known;
 
     if (item.grid_index != undefined) {
-      item.source_type = this.type;
+      item.sourceInventory = this;
       this.FillGridArea(
         item.grid_index.col,
         item.grid_index.row,
@@ -69,12 +69,12 @@ class Inventory {
 
   MoveAndRotateByIndex(gridIndex, newGridIndex, isRotated) {
     var item = this.GetByIndex(gridIndex);
-    const originalRotation = item.rotated;
+    const originalRotation = item.isRotated;
     if (item != undefined) {
       // Clear previous spot
       this.FillGridArea(gridIndex.col, gridIndex.row, item.size, undefined);
 
-      if (item.rotated != isRotated) {
+      if (item.isRotated != isRotated) {
         this.RotateItem(item);
       }
 
@@ -83,14 +83,14 @@ class Inventory {
           item.grid_index.col,
           item.grid_index.row,
           item,
-          item.source_type,
+          item.sourceInventory,
           item.grid_index
         )
       ) {
         item.grid_index = newGridIndex;
       } else {
         // Reverse rotation if item doesn't fit
-        if (item.rotated != originalRotation) {
+        if (item.isRotated != originalRotation) {
           this.RotateItem(item);
         }
       }
@@ -125,7 +125,7 @@ class Inventory {
   RotateByIndex(gridIndex, isRotated) {
     var item = this.GetByIndex(gridIndex);
     if (item != undefined) {
-      if (item.rotated != isRotated) {
+      if (item.isRotated != isRotated) {
         // Clear old fill area
         this.FillGridArea(
           item.grid_index.col,
@@ -209,18 +209,13 @@ class Inventory {
           if (gridIndex != undefined) {
             if (ignoreGridIndex != undefined) {
               isEmpty =
-                item.source_type == ignoreSource &&
+                item.sourceInventory.inventoryId == ignoreSource.inventoryId &&
                 gridIndex.col == ignoreGridIndex.col &&
                 gridIndex.row == ignoreGridIndex.row;
             } else {
               isEmpty = false;
             }
           }
-          /*isEmpty =
-            gridIndex == undefined ||
-            (item.source_type == ignoreSource &&
-              gridIndex.col == ignoreGridIndex.col &&
-              gridIndex.row == ignoreGridIndex.row);*/
         }
       }
     } else {
@@ -240,7 +235,7 @@ class Inventory {
   // TODO: Move this into Item class
   RotateItem(item) {
     if (item.size.w != item.size.h) {
-      item.rotated = !item.rotated;
+      item.isRotated = !item.isRotated;
       // Swap width and height
       item.size = new Size(item.size.h, item.size.w);
     }
