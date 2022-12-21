@@ -1,5 +1,5 @@
 // CHECK GUI STATE
-if (!IsGUIStateClosed()) return;
+if (!global.GUIStateHandler.IsGUIStateClosed()) return;
 
 if (cameraTarget != noone)
 {
@@ -29,11 +29,8 @@ if (cameraTarget != noone)
 	
 	camera_set_view_pos(view_camera[0], newX, newY);
 } else {
-	if (global.ObjPlayer != noone)
+	if (instance_exists(global.ObjPlayer))
 	{
-		if (instance_exists(global.ObjPlayer))
-		{
-			cameraTarget = global.ObjPlayer;
-		}
+		cameraTarget = global.ObjPlayer;
 	}	
 }
