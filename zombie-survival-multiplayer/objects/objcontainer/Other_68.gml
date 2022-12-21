@@ -28,7 +28,8 @@ if (async_load[? "size"] > 0)
 						}
 					
 						global.ObjTempInventory.inventory = inventory;
-						RequestGUIState(GUI_STATE.LootContainer);
+						// TODO: Fix loot container GUI state
+						//RequestGUIState(GUI_STATE.LootContainer);
 				
 						requestContent = false;
 					}

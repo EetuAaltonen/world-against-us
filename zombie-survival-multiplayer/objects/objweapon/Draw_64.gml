@@ -31,7 +31,7 @@ if (!is_undefined(primaryWeapon))
 	if (owner.character.type == CHARACTER_TYPE.PLAYER)
 	{
 		// CHECK GUI STATE
-		if (!IsGUIStateClosed()) return;
+		if (!global.GUIStateHandler.IsGUIStateClosed()) return;
 
 		var mouseX = window_mouse_get_x();
 		var mouseY = window_mouse_get_y();
@@ -55,7 +55,7 @@ if (!is_undefined(primaryWeapon))
 		if (owner.character.type == CHARACTER_TYPE.PLAYER)
 		{
 			// CHECK GUI STATE
-			if (!IsGUIStateClosed()) return;	
+			if (!global.GUIStateHandler.IsGUIStateClosed()) return;	
 			
 			var mouseX = window_mouse_get_x();
 			var mouseY = window_mouse_get_y();

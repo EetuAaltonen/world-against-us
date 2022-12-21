@@ -1,7 +1,7 @@
 function GUIOpenLootContainer()
 {
-	var windowSize = new Size(global.GUIW * 0.4, global.GUIH);
-	var windowStyle = new GameWindowStyle(c_black, 1);
+	var windowSize = new Size(global.GUIW * 0.4, global.GUIH - global.ObjHud.hudHeight);
+	var windowStyle = new GameWindowStyle(c_black, 0.9);
 	
 	var lootContainerWindow = new GameWindow(
 		"lootContainerWindow",
@@ -32,5 +32,5 @@ function GUIOpenLootContainer()
 	
 	// ADD NEW WINDOW
 	lootContainerWindow.AddChildElements(lootContainerElements);
-	ds_list_add(global.ObjWindowHandler.gameWindows, lootContainerWindow);
+	global.GameWindowHandler.OpenWindow(lootContainerWindow);
 }

@@ -1,13 +1,14 @@
 // CHECK GUI STATE
-if (!IsGUIStateClosed()) return;
+if (!global.GUIStateHandler.IsGUIStateClosed()) return;
 
-if (global.ObjPlayer != noone)
+if (instance_exists(global.ObjPlayer))
 {
 	insideInteractionRange = (point_distance(x, y, global.ObjPlayer.x, global.ObjPlayer.y) < interactionRange);
 	
 	if (insideInteractionRange && keyboard_check_released(ord("F")))
 	{
 		global.ObjTempInventory.inventory = stock;
-		RequestGUIState(GUI_STATE.Merchant);
+		// TODO: Fix GUI state
+		//RequestGUIState(GUI_STATE.Merchant);
 	}
 }

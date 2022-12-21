@@ -1,7 +1,7 @@
 // CHECK GUI STATE
-if (!IsGUIStateClosed()) return;
+if (!global.GUIStateHandler.IsGUIStateClosed()) return;
 
-if (global.ObjPlayer != noone)
+if (instance_exists(global.ObjPlayer))
 {
 	if (!requestContent)
 	{

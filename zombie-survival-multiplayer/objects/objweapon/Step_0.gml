@@ -1,5 +1,5 @@
 // CHECK GUI STATE
-if (!IsGUIStateClosed()) return;
+if (!global.GUIStateHandler.IsGUIStateClosed()) return;
 
 // AIM WITH WEAPON
 if (owner.character.type == CHARACTER_TYPE.PLAYER)

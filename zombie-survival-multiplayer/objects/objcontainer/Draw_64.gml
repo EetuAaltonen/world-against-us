@@ -1,5 +1,5 @@
 // CHECK GUI STATE
-if (!IsGUIStateClosed()) return;
+if (!global.GUIStateHandler.IsGUIStateClosed()) return;
 
 if (insideInteractionRange)
 {
@@ -10,6 +10,6 @@ if (insideInteractionRange)
 		
 	draw_text_color(textGUIPos.X, textGUIPos.Y, "Loot", textColor, textColor, textColor, textColor, 1);
 		
-	draw_set_color(c_black);
-	draw_set_halign(fa_left);
+	// RESET DRAW PROPERTIES
+	ResetDrawProperties();
 }
