@@ -1,6 +1,6 @@
-function RotateVector(_baseVector, _angle)
+function RotateVector(_baseVector, _angleDeg)
 {
-	var radAngle = degtorad(-_angle);
+	var radAngle = degtorad(-_angleDeg);
 	var cs = cos(radAngle);
 	var sn = sin(radAngle);
 	var newX = _baseVector.X * cs - _baseVector.Y * sn;
