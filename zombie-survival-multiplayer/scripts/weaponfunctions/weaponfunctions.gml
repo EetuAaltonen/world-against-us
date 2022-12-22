@@ -88,7 +88,7 @@ function UseWeapon(_mouseX, _mouseY)
 	var bulletRecoil = random_range(-primaryWeapon.metadata.recoil, primaryWeapon.metadata.recoil) * aimRecoilReduction;
 	var barrelAngle = point_direction(x + rotatedWeaponBarrelPos.X, y +rotatedWeaponBarrelPos.Y, _mouseX, _mouseY);
 			
-	bullet.sprite_index = GetBulletSpriteFromCaliber(primaryWeapon.metadata.caliber);
+	bullet.sprite_index = GetBulletSpriteByCaliber(primaryWeapon.metadata.caliber);
 	bullet.direction = barrelAngle + bulletRecoil;
 	bullet.image_angle = bullet.direction;
 	bullet.image_xscale = 0.2;

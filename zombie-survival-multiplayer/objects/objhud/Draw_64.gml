@@ -104,7 +104,7 @@ if (global.GUIStateHandler.IsGUIStateClosed())
 				draw_sprite_ext(sprGUIBg, 0, xPos, yPos, bgWidth, bgHeight, 0, c_black, 0.8);
 		
 				// DRAW BULLETS
-				var bulletSprite = GetBulletSpriteFromCaliber(weapon.primaryWeapon.metadata.caliber);
+				var bulletSprite = GetBulletSpriteByCaliber(weapon.primaryWeapon.metadata.caliber);
 				var bulletScale = ScaleSpriteToFitSize(bulletSprite, new Size(undefined, bulletMargin));
 				var animationEndPos = 100;
 				xPos = global.GUIW - (bgWidth * 0.5);
