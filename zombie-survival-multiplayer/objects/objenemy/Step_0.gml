@@ -1,7 +1,39 @@
 // INHERITED EVENT
 event_inherited();
 
-if (global.ObjPlayer != noone)
+if (!is_undefined(global.RoomGrid))
+{
+	var distanceToTarget = point_distance(x, y, targetPosition.X, targetPosition.Y);
+	//var distanceToTarget = point_distance(x, y, lastKnownTargetPos.X, lastKnownTargetPos.Y);
+		
+	if (updatePath)
+	{
+		updatePath = false;
+		pathUpdateTimer = pathUpdateDelay;
+			
+		if (distanceToTarget > stopRadius)
+		{
+			if (mp_grid_path(global.RoomGrid, path, x, y, targetPosition.X, targetPosition.Y, true))
+			{
+				path_start(path, maxSpeed, path_action_stop, false);
+				pathUpdateTimer = pathUpdateDelay;
+			}
+		}
+	}
+		
+	if (distanceToTarget <= stopRadius)
+	{
+		path_end();
+	}
+		
+	if (pathUpdateTimer-- <= 0)
+	{
+		updatePath = true;
+		pathUpdateTimer = pathUpdateDelay;
+	}
+}
+
+/*if (global.ObjPlayer != noone)
 {
 	if (!is_undefined(global.RoomGrid))
 	{
@@ -49,4 +81,4 @@ if (global.ObjPlayer != noone)
 			pathUpdateTimer = pathUpdateDelay;
 		}
 	}
-}
+}*/

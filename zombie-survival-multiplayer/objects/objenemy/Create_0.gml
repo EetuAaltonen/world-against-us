@@ -6,15 +6,16 @@ acceleration = 1;
 hSpeed = 0;
 vSpeed = 0;
 dirSpeed = 0;
-maxSpeed = 6;
+maxSpeed = 1;
 
 // PATH FINDING
 path = path_add();
 updatePath = false;
-pathUpdateDelay = TimerFromSeconds(4);
+pathUpdateDelay = TimerFromSeconds(1);//TimerFromSeconds(4);
 pathUpdateTimer = pathUpdateDelay;
 
 // TARGET
+targetPosition = new Vector2(x, y);
 lastKnownTargetPos = new Vector2(x, y);
 aggroRadius = 1280;
-stopRadius = 128;
+stopRadius = 10;//128;
