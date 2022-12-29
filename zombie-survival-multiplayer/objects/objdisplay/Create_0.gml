@@ -1,6 +1,3 @@
-// ROOM START AFTER
-onRoomStartAfter = true;
-
 // DISPLAY PROPERTIES
 idealDisplayWidth = 640;
 idealDisplayHeight = 360;
