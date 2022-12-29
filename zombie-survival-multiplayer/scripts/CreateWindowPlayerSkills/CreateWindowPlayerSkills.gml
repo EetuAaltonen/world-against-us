@@ -2,7 +2,6 @@ function CreateWindowPlayerSkills(_zIndex)
 {
 	var windowSize = new Size(global.GUIW * 0.4, global.GUIH - global.ObjHud.hudHeight);
 	var windowStyle = new GameWindowStyle(c_black, 0.9);
-	
 	var skillsWindow = new GameWindow(
 		GAME_WINDOW.PlayerSkills,
 		new Vector2(0, 0),

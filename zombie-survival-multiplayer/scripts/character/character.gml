@@ -43,8 +43,7 @@ function Character(_name, _type) constructor
 	
 	static Clone = function()
 	{
-		var cloneCharacter = new Character(name, type);
-		return cloneCharacter;
+		return new Character(name, type);
 	}
 	
 	static UpdateStats = function()

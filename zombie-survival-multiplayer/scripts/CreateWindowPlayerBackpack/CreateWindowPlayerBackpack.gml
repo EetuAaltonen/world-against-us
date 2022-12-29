@@ -2,7 +2,6 @@ function CreateWindowPlayerBackpack(_zIndex)
 {
 	var windowSize = new Size(global.GUIW * 0.4, global.GUIH - global.ObjHud.hudHeight);
 	var windowStyle = new GameWindowStyle(c_black, 0.9);
-	
 	var backpackWindow = new GameWindow(
 		GAME_WINDOW.PlayerBackpack,
 		new Vector2(0, 0),

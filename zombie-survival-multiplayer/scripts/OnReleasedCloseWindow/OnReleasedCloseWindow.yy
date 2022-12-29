@@ -5,7 +5,7 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "KeyBindings",
-    "path": "folders/Scripts/KeyBindings.yy",
+    "name": "KeyBinding",
+    "path": "folders/Scripts/KeyBinding.yy",
   },
 }
