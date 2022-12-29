@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "CloneStruct",
+  "name": "ScaleFloatValuesToIntVector2",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Struct",
-    "path": "folders/Scripts/Struct.yy",
+    "name": "Network",
+    "path": "folders/Scripts/Network.yy",
   },
 }
