@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "JSONParse",
+  "name": "FormatDataMapFromFile",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "ItemData",
-    "path": "folders/Scripts/Inventory/ItemData.yy",
+    "name": "File",
+    "path": "folders/Scripts/File.yy",
   },
 }

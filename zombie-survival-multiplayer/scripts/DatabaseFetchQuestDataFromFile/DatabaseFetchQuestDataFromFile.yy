@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "ItemParseMetadata",
+  "name": "DatabaseFetchQuestDataFromFile",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "ItemData",
-    "path": "folders/Scripts/Inventory/ItemData.yy",
+    "name": "Database",
+    "path": "folders/Scripts/Database.yy",
   },
 }
