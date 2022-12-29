@@ -1,0 +1,40 @@
+{
+  "quest_data": [
+    {
+      "quest_id": "MoneyHunt",
+      "name": "Money Hunt",
+      "description": "",
+      "icon": "sprMoney",
+      "type": "MainQuest",
+      "rewards": [{ "type": "Item", "reward": "Money", "amount": "50" }],
+      "steps": [
+        {
+          "quest_step_id": "TheNumberOneDime",
+          "name": "The Number One Dime",
+          "description": "",
+          "icon": "sprMoney",
+          "type": "FindItem",
+          "completion_check_function_name": "QuestStepCheckTheNumberOneDime1"
+        }
+      ]
+    },
+    {
+      "quest_id": "MedicineHunt",
+      "name": "Medicine Hunt",
+      "description": "",
+      "icon": "sprHeart",
+      "type": "MainQuest",
+      "rewards": [{ "type": "Item", "reward": "First Aid Kit", "amount": "1" }],
+      "steps": [
+        {
+          "quest_step_id": "TheFirstNeedOfAid",
+          "name": "The First Need Of Aid",
+          "description": "",
+          "icon": "sprFirstAidKit",
+          "type": "FindItem",
+          "completion_check_function_name": "QuestStepCheckTheNumberOneDime1"
+        }
+      ]
+    }
+  ]
+}

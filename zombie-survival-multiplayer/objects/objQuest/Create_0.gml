@@ -1,0 +1,1 @@
+questHandler = new QuestHandler();
