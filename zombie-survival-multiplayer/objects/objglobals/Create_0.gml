@@ -3,9 +3,6 @@
 // SET RANDOM SEED
 randomise();
 
-// ROOM START AFTER
-onRoomStartAfter = true;
-
 initGlobalVariables = function()
 {
 	// Global controllers
@@ -13,12 +10,18 @@ initGlobalVariables = function()
 	global.GUIStateHandler = undefined;
 	global.ObjHud = noone;
 
-	global.ItemData = noone;
+	global.ItemData = undefined;
 	global.BulletData = undefined;
 
-	global.PlayerBackpack = noone;
+	global.PlayerBackpack = undefined;
 	global.PlayerMagazinePockets = undefined;
 	global.PlayerMedicinePockets = undefined;
+	
+	// Journal
+	global.ObjJournal = noone;
+	// Quest
+	global.QuestData = undefined;
+	global.QuestHandlerRef = undefined;
 
 	// Player
 	global.ObjPlayer = noone;
@@ -26,6 +29,9 @@ initGlobalVariables = function()
 
 	// Network
 	global.ObjNetwork = noone;
+	
+	// Game save
+	global.GameSaveHandlerRef = undefined;
 
 	// Coop
 	global.OtherPlayerData = ds_map_create();
@@ -45,9 +51,11 @@ initGlobalVariables = function()
 
 	// Message log
 	global.MessageLog = undefined;
+	// Notification
+	global.NotificationHandlerRef = undefined;
 
 	// AI Path
-	global.RoomGrid = undefined;
+	global.ObjGridPath = undefined;
 }
 
 // INIT GLOBAL VARIABLES

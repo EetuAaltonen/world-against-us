@@ -12,6 +12,8 @@ controllers = [
 	// MAIN MENU
 	new GameController(objGlobals, [], [roomLaunch]),
 	new GameController(objNetwork, [], [roomLaunch]),
+	new GameController(objGameSave, [], [roomLaunch]),
+	
 	new GameController(objGUI, [], [roomLaunch]),
 	new GameController(objMouse, [], [roomLaunch]),
 	
@@ -21,10 +23,13 @@ controllers = [
 	new GameController(objCamera, [], [roomMainMenu, roomLaunch]),
 	new GameController(objHud, [], [roomMainMenu, roomLaunch]),
 	new GameController(objMessageLog, [], [roomMainMenu, roomLaunch]),
+	new GameController(objNotification, [], [roomMainMenu, roomLaunch]),
 	
 	new GameController(objDatabase, [], [roomMainMenu, roomLaunch]),
 	new GameController(objInventory, [], [roomMainMenu, roomLaunch]),
 	new GameController(objTempInventory, [], [roomMainMenu, roomLaunch]),
+	new GameController(objJournal, [], [roomMainMenu, roomLaunch]),
+	new GameController(objQuest, [], [roomMainMenu, roomLaunch]),
 	
 	new GameController(objGridPath, [], [roomMainMenu, roomLaunch])
 ];

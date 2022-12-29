@@ -17,6 +17,7 @@ for (var i = 0; i < controllerCount; i++)
 			instance_destroy(controller.objectIndex);
 			continue;
 		}
+		
 		// DESTROY IF CONTROLLER IS NOT IN RESTRICTED ROOM
 		if (array_length(controller.restrictedRooms) > 0)
 		{
@@ -46,11 +47,10 @@ for (var i = 0; i < controllerCount; i++)
 		controller.SetInstance(controllerInstance);
 	}
 	
-	// SET ROOM START AFTER
+	// CONSOLE LOG
 	if (controller.instance != noone)
 	{
-		show_debug_message(string("->Instance loaded {0}", object_get_name(controller.objectIndex)));
-		controller.instance.onRoomStartAfter = true;	
+		show_debug_message(string("->Instance loaded {0}", object_get_name(controller.objectIndex)));	
 	}
 }
 
