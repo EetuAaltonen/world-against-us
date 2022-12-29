@@ -25,6 +25,18 @@ if (async_load[? "size"] > 0)
 					}
 				}
 			}
+			
+			var notificationDescription = string(
+				"Player syncronized\n" + 
+				"Game is still in the early development state."
+			);
+			global.NotificationHandlerRef.AddNotification(
+				new Notification(
+					sprSoldier,
+					"Welcome to the Server",
+					notificationDescription
+				)
+			);
 		} break;
 		case MESSAGE_TYPE.OTHER_CONNECTED_TO_HOST:
 		{
