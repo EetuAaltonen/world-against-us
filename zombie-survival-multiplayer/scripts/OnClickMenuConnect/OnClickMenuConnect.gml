@@ -5,7 +5,7 @@ function OnClickMenuConnect()
 		var currentGUIState = global.GUIStateHandler.GetGUIState();
 		var guiState = new GUIState(
 			currentGUIState.index, currentGUIState.view, GUI_ACTION.Connect,
-			[GAME_WINDOW.MainMenuMultiplayer]
+			[GAME_WINDOW.MainMenuConnect]
 		);
 		if (global.GUIStateHandler.RequestGUIState(guiState))
 		{

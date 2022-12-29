@@ -1,11 +1,11 @@
 function CreateWindowMainMenuRoot(_zIndex)
 {
+	var windowSize = new Size(global.GUIW, global.GUIH);
+	var windowStyle = new GameWindowStyle(#486a7d, 1);
 	var mainMenuWindow = new GameWindow(
 		GAME_WINDOW.MainMenuRoot,
 		new Vector2(0, 0),
-		new Size(1920, 1080),
-		new GameWindowStyle(#486a7d, 1),
-		_zIndex
+		windowSize, windowStyle, _zIndex
 	);
 	
 	var mainMenuElements = ds_list_create();

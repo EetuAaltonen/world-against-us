@@ -27,7 +27,7 @@ function WindowButtonMenu(_elementId, _position, _size, _backgroundColor, _butto
 			{
 				var buttonData = buttonsData[| i];
 				var newButton = new WindowButton(
-					("MainMenu" + buttonData.title),
+					(elementId + buttonData.title),
 					new Vector2(buttonPosition.X, buttonPosition.Y),
 					buttonStyle.size, buttonStyle.color, buttonData.title, buttonStyle, buttonData.onClick
 				);
