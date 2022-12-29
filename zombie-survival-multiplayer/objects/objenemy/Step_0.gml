@@ -1,7 +1,7 @@
 // INHERITED EVENT
 event_inherited();
 
-if (!is_undefined(global.RoomGrid))
+if (!is_undefined(global.ObjGridPath.roomGrid))
 {
 	var distanceToTarget = point_distance(x, y, targetPosition.X, targetPosition.Y);
 	//var distanceToTarget = point_distance(x, y, lastKnownTargetPos.X, lastKnownTargetPos.Y);
@@ -13,7 +13,7 @@ if (!is_undefined(global.RoomGrid))
 			
 		if (distanceToTarget > stopRadius)
 		{
-			if (mp_grid_path(global.RoomGrid, path, x, y, targetPosition.X, targetPosition.Y, true))
+			if (mp_grid_path(global.ObjGridPath.roomGrid, path, x, y, targetPosition.X, targetPosition.Y, true))
 			{
 				path_start(path, maxSpeed, path_action_stop, false);
 				pathUpdateTimer = pathUpdateDelay;
@@ -35,7 +35,7 @@ if (!is_undefined(global.RoomGrid))
 
 /*if (global.ObjPlayer != noone)
 {
-	if (!is_undefined(global.RoomGrid))
+	if (!is_undefined(global.ObjGridPath.roomGrid))
 	{
 		var distanceToPlayer = point_distance(x, y, global.ObjPlayer.x, global.ObjPlayer.y);
 		var distanceToTarget = point_distance(x, y, lastKnownTargetPos.X, lastKnownTargetPos.Y);
@@ -57,7 +57,7 @@ if (!is_undefined(global.RoomGrid))
 			
 			if (distanceToTarget > stopRadius)
 			{
-				if (mp_grid_path(global.RoomGrid, path, x, y, lastKnownTargetPos.X, lastKnownTargetPos.Y, true))
+				if (mp_grid_path(global.ObjGridPath.roomGrid, path, x, y, lastKnownTargetPos.X, lastKnownTargetPos.Y, true))
 				{
 					path_start(path, maxSpeed, path_action_stop, false);
 					pathUpdateTimer = pathUpdateDelay;
