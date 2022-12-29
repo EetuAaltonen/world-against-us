@@ -6,7 +6,7 @@ draw_set_color(c_black);
 if (!is_undefined(dragItem))
 {
 	var iconScale = CalculateItemIconScale(dragItem, dragItemIconMaxBaseSize);
-	var iconRotation = dragItem.isRotated ? 90 : 0;
+	var iconRotation = dragItem.is_rotated ? 90 : 0;
 	draw_sprite_ext(
 		dragItem.icon, 0,
 		mousePosition.X, mousePosition.Y,

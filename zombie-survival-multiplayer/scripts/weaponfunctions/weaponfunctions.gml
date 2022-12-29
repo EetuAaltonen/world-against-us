@@ -118,5 +118,5 @@ function CalculateBarrelPos()
 		primaryWeapon.metadata.barrel_pos.X - xOrigin,
 		((primaryWeapon.metadata.barrel_pos.Y - yOrigin) * image_yscale)
 	);
-	rotatedWeaponBarrelPos = RotateVector(barrelPos, image_angle);
+	rotatedWeaponBarrelPos = RotateVector2(barrelPos, image_angle);
 }

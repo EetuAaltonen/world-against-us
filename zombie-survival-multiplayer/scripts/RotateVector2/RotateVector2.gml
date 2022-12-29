@@ -1,4 +1,4 @@
-function RotateVector(_baseVector, _angleDeg)
+function RotateVector2(_baseVector, _angleDeg)
 {
 	var radAngle = degtorad(-_angleDeg);
 	var cs = cos(radAngle);

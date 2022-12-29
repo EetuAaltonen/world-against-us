@@ -38,13 +38,13 @@ function EnemyHorde(_hordeId, _instance, _enemyObject, _enemyCount, _enemyOffset
 			
 			for (var j = 0; j < currentRingSpotCount; j++)
 			{
-				var newGridSpot = RotateVector(spotVector, angleStep * j);
+				var newGridSpot = RotateVector2(spotVector, angleStep * j);
 				array_push(gridSpots, newGridSpot);
 			}
 		}
 		/*for (var i = 0; i < enemyCount; i++)
 		{
-			var newGridSpot = RotateVector(spotVector, angle * i);
+			var newGridSpot = RotateVector2(spotVector, angle * i);
 			array_push(gridSpots, newGridSpot);
 		}*/
 		array_copy(enemyPositions, 0, gridSpots, 0, array_length(gridSpots));
