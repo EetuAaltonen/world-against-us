@@ -20,12 +20,15 @@ function WindowImage(_elementId, _position, _size, _backgroundColor, _spriteInde
 	static InitImageScale = function()
 	{
 		var spriteSize = new Size(sprite_get_width(spriteIndex), sprite_get_height(spriteIndex));
-		if (spriteSize.w > spriteSize.h)
+		var imageWidthRatio = (size.w / spriteSize.w);
+		var imageHeightRatio = (size.h / spriteSize.h);
+		
+		if (imageWidthRatio < imageHeightRatio)
 		{
-			imageScale = size.w / spriteSize.w;
-			//imagePosition.Y = (size.h * 0.5) - (spriteSize.h * 0.5 * imageScale);
+			imageScale = imageWidthRatio;
+			imagePosition.Y = (size.h * 0.5) - (spriteSize.h * 0.5 * imageScale);
 		} else {
-			imageScale = size.h / spriteSize.h;
+			imageScale = imageHeightRatio;
 			imagePosition.X = (size.w * 0.5) - (spriteSize.w * 0.5 * imageScale);
 		}
 	}
