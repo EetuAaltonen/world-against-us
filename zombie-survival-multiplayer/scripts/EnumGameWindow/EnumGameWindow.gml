@@ -8,6 +8,9 @@ enum GAME_WINDOW
 	PlayerBackpack,
 	PlayerHealthStatus,
 	PlayerSkills,
+	// JOURNAL
+	Journal,
+	Quests,
 	// INVENTORY
-	ItemActionMenu,
+	ItemActionMenu
 }

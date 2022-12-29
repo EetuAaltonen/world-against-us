@@ -6,5 +6,8 @@ enum GUI_VIEW {
 	// PLAYER OVERVIEW
 	Backpack,
 	HealthStatus,
-	Skills
+	Skills,
+	// JOURNAL
+	Journal,
+	Quests
 }
