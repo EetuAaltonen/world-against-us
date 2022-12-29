@@ -1,1 +1,1 @@
-inventory = noone;
+inventory = undefined;

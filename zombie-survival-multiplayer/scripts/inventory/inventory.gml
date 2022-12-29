@@ -10,7 +10,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 	// Init grid data
     for (var i = 0; i < size.rows; i++) {
 	  for (var j = 0; j < size.columns; j ++) {
-	    gridData[i, j] = noone;
+	    gridData[i, j] = undefined;
 	  }
 	}
 	
@@ -33,15 +33,15 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 		return ds_list_size(items);
     }
 
-    static AddItem = function(_item, _grid_index = noone, _known = true, _ignore_network = false)
+    static AddItem = function(_item, _grid_index = undefined, _known = true, _ignore_network = false)
     {
 		var isItemAdded = false;
-        _item.grid_index = (_grid_index != noone) ? new GridIndex(_grid_index.col, _grid_index.row) : FindEmptyIndex(_item);
+        _item.grid_index = !is_undefined(_grid_index) ? new GridIndex(_grid_index.col, _grid_index.row) : FindEmptyIndex(_item);
 		_item.known = _known;
 		
 		if (IsItemTypeWhiteListed(_item))
 		{
-			if (_item.grid_index != noone)
+			if (!is_undefined(_item.grid_index))
 			{
 				_item.sourceInventory = self;
 				FillGridArea(_item.grid_index.col, _item.grid_index.row, _item.size, new GridIndex(_item.grid_index.col, _item.grid_index.row));
@@ -115,15 +115,15 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 	static MoveAndRotateItemByGridIndex = function(_gridIndex, _newGridIndex, _isRotated)
 	{
 		var item = GetItemByGridIndex(_gridIndex);
-		var originalRotation = item.isRotated;
+		var originalRotation = item.is_rotated;
 		
 		if (!is_undefined(item))
 		{
 			// Clear previous spot
-			FillGridArea(item.grid_index.col, item.grid_index.row, item.size, noone);
+			FillGridArea(item.grid_index.col, item.grid_index.row, item.size, undefined);
 			
 			// Set rotation
-			if (_isRotated != item.isRotated)
+			if (_isRotated != item.is_rotated)
 			{
 				item.Rotate();
 			}
@@ -135,12 +135,11 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 					// NETWORKING CONTAINER DELETE ITEM
 					var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_MOVE_AND_ROTATE_ITEM);
 					var jsonData = json_stringify(item);
-					show_debug_message(string(item.isRotated));
 				
 					buffer_write(networkBuffer, buffer_text , inventoryId);
 					buffer_write(networkBuffer, buffer_u16, _newGridIndex.col);
 					buffer_write(networkBuffer, buffer_u16, _newGridIndex.row);
-					buffer_write(networkBuffer, buffer_bool, item.isRotated);
+					buffer_write(networkBuffer, buffer_bool, item.is_rotated);
 					buffer_write(networkBuffer, buffer_text, jsonData);
 					global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
 				}
@@ -148,7 +147,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 				item.grid_index = _newGridIndex;
 			} else {
 				// Reverse rotation if item doesn't fit
-			    if (item.isRotated != originalRotation) {
+			    if (item.is_rotated != originalRotation) {
 			        item.Rotate();
 			    }
 			}
@@ -177,7 +176,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 			global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
 		}
 		
-		FillGridArea(item.grid_index.col, item.grid_index.row, item.size, noone);
+		FillGridArea(item.grid_index.col, item.grid_index.row, item.size, undefined);
 		ds_list_delete(items, _index);
     }
 	
@@ -198,14 +197,14 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 	
 	static FindEmptyIndex = function(_item)
 	{
-		var index = noone;
+		var index = undefined;
 		for (var i = 0; i < size.rows; i++)
 		{
-			if (index != noone) break;
+			if (!is_undefined(index)) break;
 			for (var j = 0; j < size.columns; j++)
 			{
-				if (index != noone) break;
-				if (gridData[i][j] == noone)
+				if (!is_undefined(index)) break;
+				if (is_undefined(gridData[i][j]))
 				{
 					if (IsGridAreaEmpty(j, i, _item))
 					{
@@ -244,7 +243,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 				{
 					if (!isEmpty) break;
 					var gridIndex = gridData[i][j];
-					if (gridIndex != noone)
+					if (!is_undefined(gridIndex))
 					{
 						if (!is_undefined(_ignoreSource) && !is_undefined(_ignoreGridIndex))
 						{

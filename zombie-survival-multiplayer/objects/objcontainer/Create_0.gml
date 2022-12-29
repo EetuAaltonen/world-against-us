@@ -1,2 +1,2 @@
-inventory = noone;
+inventory = undefined;
 requestContent = false;

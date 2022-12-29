@@ -36,9 +36,9 @@ function WindowInventoryGrid(_elementId, _position, _size, _backgroundColor, _in
 					if (keyboard_check_released(ord("R")))
 					{
 						var itemGridIndex = inventory.gridData[mouseHoverIndex.row][mouseHoverIndex.col];
-						if (itemGridIndex != noone)
+						if (!is_undefined(itemGridIndex))
 						{
-							var isItemRotated = inventory.GetItemByGridIndex(itemGridIndex).isRotated;
+							var isItemRotated = inventory.GetItemByGridIndex(itemGridIndex).is_rotated;
 							inventory.MoveAndRotateItemByGridIndex(itemGridIndex, itemGridIndex, !isItemRotated);
 						}
 					}
@@ -46,7 +46,7 @@ function WindowInventoryGrid(_elementId, _position, _size, _backgroundColor, _in
 					else if (mouse_check_button_released(mb_middle))
 					{
 						var itemGridIndex = inventory.gridData[mouseHoverIndex.row][mouseHoverIndex.col];
-						if (itemGridIndex != noone)
+						if (!is_undefined(itemGridIndex))
 						{
 							var item = inventory.GetItemByGridIndex(itemGridIndex);
 							if (!is_undefined(item))
@@ -60,7 +60,7 @@ function WindowInventoryGrid(_elementId, _position, _size, _backgroundColor, _in
 					else if (mouse_check_button_released(mb_right))
 					{
 						var itemGridIndex = inventory.gridData[mouseHoverIndex.row][mouseHoverIndex.col];
-						if (itemGridIndex != noone)
+						if (!is_undefined(itemGridIndex))
 						{
 							var item = inventory.GetItemByGridIndex(itemGridIndex);
 							if (!is_undefined(item))
@@ -82,7 +82,7 @@ function WindowInventoryGrid(_elementId, _position, _size, _backgroundColor, _in
 					else if (mouse_check_button_pressed(mb_left))
 					{
 						var itemGridIndex = inventory.gridData[mouseHoverIndex.row][mouseHoverIndex.col];
-						if (itemGridIndex != noone)
+						if (!is_undefined(itemGridIndex))
 						{
 							var item = inventory.GetItemByGridIndex(itemGridIndex);
 							if (item.known)
@@ -196,7 +196,7 @@ function WindowInventoryGrid(_elementId, _position, _size, _backgroundColor, _in
 				if (!itemDragged)
 				{
 					var iconScale = CalculateItemIconScale(item, gridCellSize);
-					var iconRotation = CalculateItemIconRotation(item.isRotated);
+					var iconRotation = CalculateItemIconRotation(item.is_rotated);
 				
 					// DRAW BACKGROUND
 					var gridSpriteIndex = 0;
@@ -295,7 +295,7 @@ function WindowInventoryGrid(_elementId, _position, _size, _backgroundColor, _in
 				
 				// DRAW ITEM
 				var iconScale = CalculateItemIconScale(global.ObjMouse.dragItem, gridCellSize);
-				var iconRotation = CalculateItemIconRotation(global.ObjMouse.dragItem.isRotated);
+				var iconRotation = CalculateItemIconRotation(global.ObjMouse.dragItem.is_rotated);
 				/*draw_sprite_ext(
 					global.ObjMouse.dragItem.icon, 0,
 					xHoverPos + ((inventory.grid.size.w * 0.5) * global.ObjMouse.dragItem.size.w * gridSpriteScale),

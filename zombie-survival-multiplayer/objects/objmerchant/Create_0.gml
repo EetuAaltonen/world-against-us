@@ -1,4 +1,4 @@
-stock = noone;
+stock = undefined;
 initStock = true;
 
 interactionRange = 200;

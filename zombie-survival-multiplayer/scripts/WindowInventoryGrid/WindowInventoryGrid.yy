@@ -5,7 +5,7 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "WindowElement",
-    "path": "folders/Scripts/GUI/WindowElement.yy",
+    "name": "InventoryGrid",
+    "path": "folders/Scripts/GUI/WindowElement/InventoryGrid.yy",
   },
 }

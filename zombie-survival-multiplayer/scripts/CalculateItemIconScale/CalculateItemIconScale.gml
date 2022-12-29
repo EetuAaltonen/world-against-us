@@ -3,7 +3,7 @@ function CalculateItemIconScale(_item, _gridCellSize)
 	// CALCULATE ICON SIZE
 	var padding = 0.85;
 	var iconScale = 1;
-	if (_item.isRotated)
+	if (_item.is_rotated)
 	{
 		iconScale = ScaleSpriteToFitSize(
 			_item.icon,

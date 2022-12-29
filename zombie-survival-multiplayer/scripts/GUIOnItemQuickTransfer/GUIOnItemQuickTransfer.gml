@@ -1,7 +1,7 @@
 function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 {
 	var itemGridIndex = _inventory.gridData[_mouseHoverIndex.row][_mouseHoverIndex.col];
-	if (itemGridIndex != noone)
+	if (!is_undefined(itemGridIndex))
 	{
 		var item = _inventory.GetItemByGridIndex(itemGridIndex);
 		if (!is_undefined(item))
@@ -9,27 +9,27 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 			if (_inventory.type == INVENTORY_TYPE.PlayerBackpack)
 			{
 				var targetInventory = global.ObjTempInventory.inventory;
-				if (targetInventory != noone)
+				if (!is_undefined(targetInventory))
 				{
-					if (targetInventory.AddItem(item.Clone(), noone, item.known))
+					if (targetInventory.AddItem(item.Clone(), undefined, item.known))
 					{
 						_inventory.RemoveItemByGridIndex(itemGridIndex);	
 					}
 				} else {
 					if (item.type == "Magazine" || item.type == "Ammo")
 					{
-						if (global.PlayerMagazinePockets != noone)
+						if (!is_undefined(global.PlayerMagazinePockets))
 						{
-							if (global.PlayerMagazinePockets.AddItem(item.Clone(), noone, item.known))
+							if (global.PlayerMagazinePockets.AddItem(item.Clone(), undefined, item.known))
 							{
 								_inventory.RemoveItemByGridIndex(itemGridIndex);
 							}
 						}
 					} else if (item.type == "Medicine")
 					{
-						if (global.PlayerMedicinePockets != noone)
+						if (!is_undefined(global.PlayerMedicinePockets))
 						{
-							if (global.PlayerMedicinePockets.AddItem(item.Clone(), noone, item.known))
+							if (global.PlayerMedicinePockets.AddItem(item.Clone(), undefined, item.known))
 							{
 								_inventory.RemoveItemByGridIndex(itemGridIndex);
 							}
@@ -37,9 +37,9 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 					}
 				}
 			} else {
-				if (global.PlayerBackpack != noone)
+				if (!is_undefined(global.PlayerBackpack))
 				{
-					if (global.PlayerBackpack.AddItem(item.Clone(), noone, item.known))
+					if (global.PlayerBackpack.AddItem(item.Clone(), undefined, item.known))
 					{
 						_inventory.RemoveItemByGridIndex(itemGridIndex);
 					}

@@ -5,7 +5,7 @@ function GUIOnDragItemReleased(_inventory, _mouseHoverIndex)
 		var inventorySource = global.ObjMouse.dragItem.sourceInventory;
 		if (_inventory.inventoryId == inventorySource.inventoryId)
 		{
-			_inventory.MoveAndRotateItemByGridIndex(global.ObjMouse.dragItem.grid_index, _mouseHoverIndex, global.ObjMouse.dragItem.isRotated);
+			_inventory.MoveAndRotateItemByGridIndex(global.ObjMouse.dragItem.grid_index, _mouseHoverIndex, global.ObjMouse.dragItem.is_rotated);
 		} else {
 			if (_inventory.AddItem(global.ObjMouse.dragItem.Clone(), _mouseHoverIndex, global.ObjMouse.dragItem.known))
 			{
@@ -16,7 +16,7 @@ function GUIOnDragItemReleased(_inventory, _mouseHoverIndex)
 	} else {
 		// ITEM DROP ACTIONS
 		var targetItemGridIndex = _inventory.gridData[_mouseHoverIndex.row][_mouseHoverIndex.col];
-		if (targetItemGridIndex != noone)
+		if (!is_undefined(targetItemGridIndex))
 		{
 			var targetItem = _inventory.GetItemByGridIndex(targetItemGridIndex);
 			if (!is_undefined(targetItem))

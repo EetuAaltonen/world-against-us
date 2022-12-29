@@ -1,7 +1,7 @@
 function InventoryReloadWeapon(_weapon, _magazine)
 {
 	// SET ROTATION TO DEFAULT
-	if (_magazine.isRotated)
+	if (_magazine.is_rotated)
 	{
 		_magazine.Rotate();	
 	}

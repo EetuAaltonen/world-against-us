@@ -1,7 +1,7 @@
 // CHECK GUI STATE
 if (!global.GUIStateHandler.IsGUIStateClosed()) return;
 
-if (stock != noone)
+if (!is_undefined(stock))
 {
 	if (insideInteractionRange)
 	{
