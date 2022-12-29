@@ -29,7 +29,7 @@ const BIT32 = 4;
 const BIT64 = 8;
 
 const data = FilesService.ReadJSON(
-  "../zombie-survival-multiplayer/datafiles/item_data1.json"
+  "../zombie-survival-multiplayer/datafiles/item_data.json"
 );
 const itemsDatabase = new ItemsDatabase(data.item_data);
 const containersService = new ContainersService(itemsDatabase);
