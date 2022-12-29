@@ -1,12 +1,11 @@
 {
+  "resourceType": "GMScript",
+  "resourceVersion": "1.0",
+  "name": "Vector2",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Structs",
-    "path": "folders/Scripts/Structs.yy",
+    "name": "Vector",
+    "path": "folders/Scripts/Vector.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "Vector2",
-  "tags": [],
-  "resourceType": "GMScript",
 }
