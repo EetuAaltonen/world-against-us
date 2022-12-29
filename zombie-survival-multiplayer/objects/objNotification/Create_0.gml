@@ -1,0 +1,1 @@
+notificationHandler = new NotificationHandler();
