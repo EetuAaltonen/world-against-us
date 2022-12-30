@@ -1,4 +1,4 @@
-function WindowText(_elementId, _position, _size, _backgroundColor, _text, _textFont, _textHAlign, _textVAlign, _textColor, _textAlpha) : WindowElement(_elementId, _position, _size, _backgroundColor) constructor
+function WindowText(_elementId, _relativePosition, _size, _backgroundColor, _text, _textFont, _textHAlign, _textVAlign, _textColor, _textAlpha) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	text = _text;
 	textFont = _textFont;

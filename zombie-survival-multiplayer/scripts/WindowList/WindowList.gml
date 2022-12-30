@@ -1,4 +1,4 @@
-function WindowList(_elementId, _position, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction = undefined) : WindowElement(_elementId, _position, _size, _backgroundColor) constructor
+function WindowList(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction = undefined) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	listData = _listData;
 	drawFunction = _drawFunction;

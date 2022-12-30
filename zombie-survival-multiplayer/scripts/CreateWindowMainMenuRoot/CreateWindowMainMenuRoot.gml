@@ -12,7 +12,7 @@ function CreateWindowMainMenuRoot(_zIndex)
 	// MENU TITLE
 	var mainMenuTitle = new WindowText(
 		"MainMenuTitle",
-		new Vector2(global.GUIW * 0.5, 50),
+		new Vector2(windowSize.w * 0.5, 50),
 		undefined, undefined,
 		"Menu", font_large, fa_center, fa_middle, c_dkgray, 1
 	);

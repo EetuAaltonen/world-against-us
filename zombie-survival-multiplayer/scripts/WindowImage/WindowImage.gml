@@ -1,4 +1,4 @@
-function WindowImage(_elementId, _position, _size, _backgroundColor, _spriteIndex, _imageIndex = 0, _imageAlpha = 1) : WindowElement(_elementId, _position, _size, _backgroundColor) constructor
+function WindowImage(_elementId, _relativePosition, _size, _backgroundColor, _spriteIndex, _imageIndex = 0, _imageAlpha = 1) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	spriteIndex = _spriteIndex;
 	imageIndex = _imageIndex;

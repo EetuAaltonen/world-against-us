@@ -1,4 +1,4 @@
-function WindowActionMenu(_elementId, _position, _size, _backgroundColor, _buttonsData, _buttonStyle, _targetItem) : WindowButtonMenu(_elementId, _position, _size, _backgroundColor, _buttonsData, _buttonStyle) constructor
+function WindowActionMenu(_elementId, _relativePosition, _size, _backgroundColor, _buttonsData, _buttonStyle, _targetItem) : WindowButtonMenu(_elementId, _relativePosition, _size, _backgroundColor, _buttonsData, _buttonStyle) constructor
 {
 	targetItem = _targetItem;
 	

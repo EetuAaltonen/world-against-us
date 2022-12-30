@@ -1,4 +1,4 @@
-function WindowListMap(_elementId, _position, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction = undefined) : WindowList(_elementId, _position, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction) constructor
+function WindowListMap(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction = undefined) : WindowList(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction) constructor
 {
 	static UpdateContent = function()
 	{

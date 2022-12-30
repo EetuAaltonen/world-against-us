@@ -1,4 +1,4 @@
-function WindowPanel(_elementId, _position, _size, _backgroundColor) : WindowElement(_elementId, _position, _size, _backgroundColor) constructor
+function WindowPanel(_elementId, _relativePosition, _size, _backgroundColor) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {	
 	static UpdateContent = function()
 	{

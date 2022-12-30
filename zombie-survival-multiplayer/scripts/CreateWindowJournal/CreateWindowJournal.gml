@@ -30,7 +30,7 @@ function CreateWindowJournal(_zIndex, _drawListFunction)
 	var journalEntryList = new WindowList(
 		"JournalEntryList",
 		new Vector2(400, 200), new Size(470, 600), undefined,
-		global.ObjJournal.journalEntries, _drawListFunction
+		global.ObjJournal.journalEntries, _drawListFunction, false
 	);
 	
 	ds_list_add(journalElements,

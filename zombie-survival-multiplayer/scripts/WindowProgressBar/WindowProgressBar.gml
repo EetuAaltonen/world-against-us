@@ -1,4 +1,4 @@
-function WindowProgressBar(_elementId, _position, _size, _backgroundColor, _value, _maxValue, _title, _progressBarColor, _titleColor = c_black, _textColor = c_black, _valueAsPercentage = false) : WindowElement(_elementId, _position, _size, _backgroundColor) constructor
+function WindowProgressBar(_elementId, _relativePosition, _size, _backgroundColor, _value, _maxValue, _title, _progressBarColor, _titleColor = c_black, _textColor = c_black, _valueAsPercentage = false) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	value = _value;
 	maxValue = _maxValue;

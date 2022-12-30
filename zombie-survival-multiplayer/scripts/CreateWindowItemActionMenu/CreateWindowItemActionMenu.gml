@@ -2,8 +2,6 @@ function CreateWindowItemActionMenu(_zIndex, _targetItem)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH);
 	var windowStyle = new GameWindowStyle(c_black, 0);
-	var mousePosition = MouseGUIPosition();
-	
 	var actionMenuWindow = new GameWindow(
 		GAME_WINDOW.ItemActionMenu,
 		new Vector2(0, 0),
@@ -24,6 +22,7 @@ function CreateWindowItemActionMenu(_zIndex, _targetItem)
 	);
 	
 	// ACTION MENU
+	var mousePosition = MouseGUIPosition();
 	var buttonCount = ds_list_size(actionMenuButtons);
 	var itemActionMenu = new WindowActionMenu(
 		"ItemActionMenu",

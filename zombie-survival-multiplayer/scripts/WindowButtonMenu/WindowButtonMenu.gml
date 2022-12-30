@@ -1,4 +1,4 @@
-function WindowButtonMenu(_elementId, _position, _size, _backgroundColor, _buttonsData, _buttonStyle) : WindowElement(_elementId, _position, _size, _backgroundColor) constructor
+function WindowButtonMenu(_elementId, _relativePosition, _size, _backgroundColor, _buttonsData, _buttonStyle) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	buttonsData = _buttonsData;
 	buttonStyle = _buttonStyle;

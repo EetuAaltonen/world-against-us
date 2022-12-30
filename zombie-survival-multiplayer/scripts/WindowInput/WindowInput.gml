@@ -1,4 +1,4 @@
-function WindowInput(_elementId, _position, _size, _backgroundColor, _placeholder) : WindowElement(_elementId, _position, _size, _backgroundColor) constructor
+function WindowInput(_elementId, _relativePosition, _size, _backgroundColor, _placeholder) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	placeholder = _placeholder;
 	input = placeholder;

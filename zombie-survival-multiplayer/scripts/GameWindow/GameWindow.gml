@@ -9,12 +9,9 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 	
 	childElements = ds_list_create();
 	
-	onCreate = true;
-	
 	isActive = true;
 	isFocused = false;
 	isVisible = true;
-	hoveredElement = undefined;
 	
 	static AddChildElements = function(_childElements)
 	{
@@ -23,8 +20,11 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 		for (var i = 0; i < childElementCount; i++)
 		{
 			var childElement = _childElements[| i];
+			childElement.position.X = position.X + childElement.relativePosition.X;
+			childElement.position.Y = position.Y + childElement.relativePosition.Y;
 			childElement.parentWindow = self;
 			childElement.parentElement = undefined;
+			childElement.Update();
 		}
 		
 		childElements = _childElements;
@@ -40,10 +40,6 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 	{
 		if (isActive)
 		{
-			if (onCreate)
-			{
-				onCreate = false;
-			}
 			UpdateContent();
 		}
 	}
@@ -54,6 +50,8 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 		for (var i = 0; i < childElementCount; i++)
 		{
 			var childElement = childElements[| i];
+			childElement.position.X = position.X + childElement.relativePosition.X;
+			childElement.position.Y = position.Y + childElement.relativePosition.Y;
 			childElement.Update();
 		}
 	}
@@ -75,11 +73,7 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 		if (isVisible)
 		{
 			DrawBackground();
-			
-			if (!onCreate)
-			{
-				DrawContent();
-			}
+			DrawContent();
 		}
 	}
 	

@@ -1,4 +1,4 @@
-function WindowButton(_elementId, _position, _size, _backgroundColor, _title, _buttonStyle, _callbackFunction) : WindowElement(_elementId, _position, _size, _backgroundColor) constructor
+function WindowButton(_elementId, _relativePosition, _size, _backgroundColor, _title, _buttonStyle, _callbackFunction) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	title = _title;
 	buttonStyle = _buttonStyle;

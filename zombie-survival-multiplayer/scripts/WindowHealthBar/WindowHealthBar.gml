@@ -1,4 +1,4 @@
-function WindowHealthBar(_elementId, _position, _size, _sourceCharacter, _bodyPartIndex, _backgroundColor, _healthBarColor, _titleColor, _textColor) : WindowElement(_elementId, _position, _size, _backgroundColor) constructor
+function WindowHealthBar(_elementId, _relativePosition, _size, _sourceCharacter, _bodyPartIndex, _backgroundColor, _healthBarColor, _titleColor, _textColor) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	sourceCharacter = _sourceCharacter;
 	bodyPartIndex = _bodyPartIndex;

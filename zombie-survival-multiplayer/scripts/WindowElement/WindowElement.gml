@@ -1,7 +1,8 @@
-function WindowElement(_elementId, _position, _size, _backgroundColor) constructor
+function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	elementId = _elementId;
-	position = _position;
+	relativePosition = _relativePosition;
+	position = relativePosition.Clone();
 	size = _size;
 	backgroundColor = _backgroundColor;
 	
@@ -9,8 +10,6 @@ function WindowElement(_elementId, _position, _size, _backgroundColor) construct
 	parentElement = undefined;
 	
 	childElements = ds_list_create();
-	
-	onCreate = true;
 	
 	isVisible = true;
 	isActive = true;
@@ -24,20 +23,13 @@ function WindowElement(_elementId, _position, _size, _backgroundColor) construct
 		for (var i = 0; i < childElementCount; i++)
 		{
 			var childElement = _childElements[| i];
+			childElement.position.X = position.X + childElement.relativePosition.X;
+			childElement.position.Y = position.Y + childElement.relativePosition.Y;
 			childElement.parentWindow = parentWindow;
 			childElement.parentElement = self;
+			childElement.Update();
 		}
 		childElements = _childElements;
-	}
-	
-	static InitRelativePosition = function()
-	{
-		var parent = parentElement ?? parentWindow;
-		var newPosition = new Vector2(
-			parent.position.X + position.X,
-			parent.position.Y + position.Y
-		);
-		position = newPosition;
 	}
 	
 	static GetChildElementById = function(_elementId)
@@ -61,12 +53,6 @@ function WindowElement(_elementId, _position, _size, _backgroundColor) construct
 	{
 		if (isActive)
 		{
-			if (onCreate)
-			{
-				onCreate = false;
-				InitRelativePosition();
-			}
-			
 			UpdateContent();
 			if (parentWindow.isFocused)
 			{
@@ -84,6 +70,8 @@ function WindowElement(_elementId, _position, _size, _backgroundColor) construct
 		for (var i = 0; i < childElementCount; i++)
 		{
 			var childElement = childElements[| i];
+			childElement.position.X = position.X + childElement.relativePosition.X;
+			childElement.position.Y = position.Y + childElement.relativePosition.Y;
 			childElement.Update();
 		}
 	}
@@ -136,11 +124,8 @@ function WindowElement(_elementId, _position, _size, _backgroundColor) construct
 	{
 		if (isVisible)
 		{
-			if (!onCreate)
-			{
-				DrawBackground();
-				DrawContent();
-			}
+			DrawBackground();
+			DrawContent();
 		}
 	}
 	
