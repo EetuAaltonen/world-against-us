@@ -58,15 +58,18 @@ function GameSaveHandler(_saveName) constructor
 			if (file_exists(saveFileName))
 			{
 				var buffer = buffer_load(saveFileName);
-				var gameSaveString = buffer_read(buffer, buffer_text);
-				buffer_delete(buffer);
-				if (string_length(gameSaveString) > 0)
+				if (buffer_get_size(buffer) > 0)
 				{
-					var gameSaveStruct = json_parse(gameSaveString);
-					var gameSave = new GameSave(saveName);
-					gameSave.ParseGameSaveStruct(gameSaveStruct);
+					var gameSaveString = buffer_read(buffer, buffer_text);
+					buffer_delete(buffer);
+					if (string_length(gameSaveString) > 0)
+					{
+						var gameSaveStruct = json_parse(gameSaveString);
+						var gameSave = new GameSave(saveName);
+						gameSave.ParseGameSaveStruct(gameSaveStruct);
 				
-					isFileLoaded = true;
+						isFileLoaded = true;
+					}
 				}
 			}
 		} catch (_error)
