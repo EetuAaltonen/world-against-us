@@ -43,7 +43,11 @@ for (var i = 0; i < controllerCount; i++)
 			}
 		}
 		
-		var controllerInstance = instance_create_layer(-1, -1, "Controllers", controller.objectIndex);
+		if (!layer_exists(controller.layerName)) {
+			var layerDepth = controllerLayers[? controller.layerName] ?? depth;
+			layer_create(layerDepth, controller.layerName);
+		}
+		var controllerInstance = instance_create_layer(-1, -1, controller.layerName, controller.objectIndex);
 		controller.SetInstance(controllerInstance);
 	}
 	

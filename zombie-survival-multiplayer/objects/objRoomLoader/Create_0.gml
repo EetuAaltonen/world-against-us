@@ -1,4 +1,4 @@
-depth = -9999;
+depth = -9000;
 
 var systemTimeStart = string(current_hour) + ":" + string(current_minute) + "." + string(current_second);
 show_debug_message("");
@@ -15,15 +15,15 @@ controllers = [
 	new GameController(objGameSave, [], [roomLaunch]),
 	
 	new GameController(objGUI, [], [roomLaunch]),
-	new GameController(objMouse, [], [roomLaunch]),
+	new GameController(objMouse, [], [roomLaunch], "Controllers_All_Front"),
 	
 	new GameController(objMainMenu, [roomMainMenu], [roomLaunch]),
 	
 	// GAME
 	new GameController(objCamera, [], [roomMainMenu, roomLaunch]),
-	new GameController(objHud, [], [roomMainMenu, roomLaunch]),
-	new GameController(objMessageLog, [], [roomMainMenu, roomLaunch]),
-	new GameController(objNotification, [], [roomMainMenu, roomLaunch]),
+	new GameController(objHud, [], [roomMainMenu, roomLaunch], "Controllers_Behind"),
+	new GameController(objMessageLog, [], [roomMainMenu, roomLaunch], "Controllers_Front"),
+	new GameController(objNotification, [], [roomMainMenu, roomLaunch], "Controllers_Front"),
 	
 	new GameController(objDatabase, [], [roomMainMenu, roomLaunch]),
 	new GameController(objInventory, [], [roomMainMenu, roomLaunch]),
@@ -33,6 +33,12 @@ controllers = [
 	
 	new GameController(objGridPath, [], [roomMainMenu, roomLaunch])
 ];
+
+controllerLayers = ds_map_create();
+ds_map_add(controllerLayers, "Controllers", depth);
+ds_map_add(controllerLayers, "Controllers_Behind", depth + 1);
+ds_map_add(controllerLayers, "Controllers_Front", depth - 1);
+ds_map_add(controllerLayers, "Controllers_All_Front", depth - 2);
 
 // ROOM FADE-IN EFFECT
 roomFadeAlphaStart = 1;
