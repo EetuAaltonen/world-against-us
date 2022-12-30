@@ -1,3 +1,6 @@
+// INHERITED EVENT
+event_inherited();
+
 // CHECK GUI STATE
 if (!global.GUIStateHandler.IsGUIStateClosed()) return;
 

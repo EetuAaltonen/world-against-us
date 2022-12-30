@@ -1,3 +1,6 @@
+// UPDATE DEPTH ON VIEW PORT
+UpdateInstanceDepthOnViewPort();
+
 if (!is_undefined(character))
 {
 	if (character.isDead)
@@ -37,5 +40,3 @@ if (!is_undefined(character))
 		}
 	}
 }
-
-depth = -y;

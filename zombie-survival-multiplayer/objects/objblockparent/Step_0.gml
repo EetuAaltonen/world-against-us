@@ -1,3 +1,6 @@
+// UPDATE DEPTH ON VIEW PORT
+UpdateInstanceDepthOnViewPort();
+
 var damageSource = instance_place(x, y, objDamageParent);
 if (damageSource != noone)
 {
