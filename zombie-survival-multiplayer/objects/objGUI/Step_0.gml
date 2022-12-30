@@ -2,7 +2,20 @@ if (stateHandler.IsGUIStateClosed())
 {
 	if (room != roomMainMenu)
 	{
-		if (keyboard_check_released(vk_tab))
+		if (keyboard_check_released(vk_escape))
+		{
+			// OPEN	ESC MENU
+			var guiState = new GUIState(
+				GUI_STATE.EscMenu, undefined, undefined,
+				[GAME_WINDOW.EscMenu], GUI_CHAIN_RULE.OverwriteAll
+			);
+			if (global.GUIStateHandler.RequestGUIState(guiState))
+			{
+				global.GameWindowHandler.OpenWindowGroup([
+					CreateWindowEscMenu(-1)
+				]);
+			}
+		} else if (keyboard_check_released(vk_tab))
 		{
 			// OPEN PLAYER BACKPACK
 			var guiState = new GUIState(

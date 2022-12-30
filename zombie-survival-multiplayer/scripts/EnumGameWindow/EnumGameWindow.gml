@@ -4,6 +4,8 @@ enum GAME_WINDOW
 	MainMenuRoot,
 	MainMenuMultiplayer,
 	MainMenuConnect,
+	// ESC MENU
+	EscMenu,
 	// PLAYER OVERVIEW
 	PlayerBackpack,
 	PlayerHealthStatus,
