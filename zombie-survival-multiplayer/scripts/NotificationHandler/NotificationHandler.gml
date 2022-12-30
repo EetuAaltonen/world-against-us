@@ -33,6 +33,11 @@ function NotificationHandler() constructor
 		}
 	}
 	
+	static ClearNotifications = function()
+	{
+		ds_list_clear(notifications);
+	}
+	
 	static Draw = function()
 	{
 		var notificationCount = ds_list_size(notifications);
