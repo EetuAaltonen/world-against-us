@@ -41,22 +41,21 @@ function CreateWindowMainMenuMultiplayer(_zIndex)
 		inputSize, #48a630, "*Port"
 	);
 	
-	ds_list_add(multiplayerPanelElements,
-		addressInput,
-		portInput
-	);
-	
 	// CONNECT BUTTON
 	var buttonSize = new Size(100, 30);
 	var buttonStyle = new ButtonStyle(
 		buttonSize, #48a630, #2c8017, font_default, 0, undefined, undefined
 	);
+	var multiplayerConnectButton = new WindowButton(
+		"MultiplayerConnectButton",
+		new Vector2(panelSize.w * 0.5 - (buttonSize.w * 0.5), panelSize.h - buttonSize.h - 20),
+		buttonSize, buttonStyle.color, "Connect", buttonStyle, OnClickMenuConnect
+	);
+	
 	ds_list_add(multiplayerPanelElements,
-		new WindowButton(
-			"MultiplayerConnectButton",
-			new Vector2(panelSize.w * 0.5 - (buttonSize.w * 0.5), panelSize.h - buttonSize.h - 20),
-			buttonSize, buttonStyle.color, "Connect", buttonStyle, OnClickMenuConnect
-		)
+		addressInput,
+		portInput,
+		multiplayerConnectButton
 	);
 	
 	multiplayerWindow.AddChildElements(multiplayerElements);

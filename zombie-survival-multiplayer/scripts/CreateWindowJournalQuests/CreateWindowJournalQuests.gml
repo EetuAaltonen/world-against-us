@@ -1,4 +1,4 @@
-function CreateWindowJournalQuest(_zIndex, _drawListFunction, _listElementCallbackFunction)
+function CreateWindowJournalQuest(_zIndex)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH - global.ObjHud.hudHeight);
 	var windowStyle = new GameWindowStyle(c_black, 0.9);
@@ -31,7 +31,7 @@ function CreateWindowJournalQuest(_zIndex, _drawListFunction, _listElementCallba
 	var questListMap = new WindowListMap(
 		"QuestListMap",
 		new Vector2(400, 200), new Size(470, 600), undefined,
-		allQuests, _drawListFunction, true, _listElementCallbackFunction 
+		allQuests, ListDrawJournalQuest, true, OnClickListJournalQuest 
 	);
 	
 	ds_list_add(questElements,

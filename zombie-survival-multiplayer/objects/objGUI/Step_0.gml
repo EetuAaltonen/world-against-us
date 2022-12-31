@@ -38,7 +38,7 @@ if (stateHandler.IsGUIStateClosed())
 			if (global.GUIStateHandler.RequestGUIState(guiState))
 			{
 				global.GameWindowHandler.OpenWindowGroup([
-					CreateWindowJournal(-1, ListDrawJournalEntry)
+					CreateWindowJournal(-1)
 				]);
 			}
 		}
@@ -108,7 +108,7 @@ if (stateHandler.IsGUIStateClosed())
 				if (global.GUIStateHandler.RequestGUIState(guiState))
 				{
 					global.GameWindowHandler.OpenWindowGroup([
-						CreateWindowJournal(-1, ListDrawJournalEntry)
+						CreateWindowJournal(-1)
 					]);
 				}
 			} else if (keyboard_check_released(ord("2")))
@@ -121,7 +121,7 @@ if (stateHandler.IsGUIStateClosed())
 				if (global.GUIStateHandler.RequestGUIState(guiState))
 				{
 					global.GameWindowHandler.OpenWindowGroup([
-						CreateWindowJournalQuest(-1, ListDrawJournalQuest, OnClickListJournalQuest)
+						CreateWindowJournalQuest(-1)
 					]);
 				}
 			}

@@ -1,4 +1,4 @@
-function CreateWindowJournal(_zIndex, _drawListFunction)
+function CreateWindowJournal(_zIndex)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH - global.ObjHud.hudHeight);
 	var windowStyle = new GameWindowStyle(c_black, 0.9);
@@ -30,7 +30,7 @@ function CreateWindowJournal(_zIndex, _drawListFunction)
 	var journalEntryList = new WindowList(
 		"JournalEntryList",
 		new Vector2(400, 200), new Size(470, 600), undefined,
-		global.ObjJournal.journalEntries, _drawListFunction, false
+		global.ObjJournal.journalEntries, ListDrawJournalEntry, false
 	);
 	
 	ds_list_add(journalElements,

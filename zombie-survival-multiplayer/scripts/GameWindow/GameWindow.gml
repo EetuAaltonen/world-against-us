@@ -30,6 +30,23 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 		childElements = _childElements;
 	}
 	
+	static GetChildElementById = function(_elementId)
+	{
+		var foundChildElement = undefined;
+		var childElementCount = ds_list_size(childElements);
+		for (var i = 0; i < childElementCount; i++)
+		{
+			var childElement = childElements[| i];
+			if (childElement.elementId == _elementId)
+			{
+				foundChildElement = childElement;
+				break;
+			}
+		}
+		
+		return foundChildElement;
+	}
+	
 	static OnOpen = function()
 	{
 		// OVERRIDE FUNCTION
@@ -79,7 +96,10 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 	
 	static DrawBackground = function()
 	{
-		draw_sprite_ext(sprGUIBg, 0, position.X, position.Y, size.w, size.h, 0, style.backgroundColor, style.backgroundAlpha);
+		if (!is_undefined(style.backgroundColor))
+		{
+			draw_sprite_ext(sprGUIBg, 0, position.X, position.Y, size.w, size.h, 0, style.backgroundColor, style.backgroundAlpha);
+		}
 	}
 	
 	static DrawContent = function()
