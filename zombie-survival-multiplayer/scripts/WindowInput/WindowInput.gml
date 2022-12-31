@@ -2,6 +2,7 @@ function WindowInput(_elementId, _relativePosition, _size, _backgroundColor, _pl
 {
 	placeholder = _placeholder;
 	input = placeholder;
+	
 	isTyping = false;
 	
 	static CheckInteraction = function()
@@ -46,6 +47,7 @@ function WindowInput(_elementId, _relativePosition, _size, _backgroundColor, _pl
 			} else if (keyboard_check(vk_anykey))
 			{
 				input = string_lower(keyboard_string);
+				keyboard_string = input;
 			}
 		}
 	}
