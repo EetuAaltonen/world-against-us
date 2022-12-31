@@ -1,1 +1,1 @@
-gameSaveHandler = new GameSaveHandler("Development save");
+gameSaveHandler = new GameSaveHandler();

@@ -1,4 +1,5 @@
 #macro UNDEFINED_UUID "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined"
+#macro SAVE_FILE_SUFFIX "_save.json"
 
 // SET RANDOM SEED
 randomise();

@@ -2,6 +2,7 @@ enum GAME_WINDOW
 {
 	// MAIN MENU
 	MainMenuRoot,
+	MainMenuSingleplayer,
 	MainMenuMultiplayer,
 	MainMenuConnect,
 	// ESC MENU

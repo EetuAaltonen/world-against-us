@@ -16,13 +16,13 @@ controllers = [
 	
 	new GameController(objGUI, [], [roomLaunch]),
 	new GameController(objMouse, [], [roomLaunch], "Controllers_All_Front"),
+	new GameController(objMessageLog, [], [roomLaunch], "Controllers_Front"),
 	
 	new GameController(objMainMenu, [roomMainMenu], [roomLaunch]),
 	
 	// GAME
 	new GameController(objCamera, [], [roomMainMenu, roomLaunch]),
 	new GameController(objHud, [], [roomMainMenu, roomLaunch], "Controllers_Behind"),
-	new GameController(objMessageLog, [], [roomMainMenu, roomLaunch], "Controllers_Front"),
 	new GameController(objNotification, [], [roomMainMenu, roomLaunch], "Controllers_Front"),
 	
 	new GameController(objDatabase, [], [roomMainMenu, roomLaunch]),

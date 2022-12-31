@@ -1,7 +1,28 @@
-function GameSaveHandler(_saveName) constructor
+function GameSaveHandler() constructor
 {
-	saveName = _saveName;
-	saveFileName = string("{0}.json", saveName);
+	saveName = undefined;
+	saveFileName = undefined;
+	
+	static SetSaveFileName = function(_saveName)
+	{
+		saveName = string_lettersdigits(string_replace_all(string_lower(_saveName), " ", "_"));
+		saveFileName = string("{0}{1}", saveName, SAVE_FILE_SUFFIX);
+	}
+	
+	static FetchSaveFileNames = function()
+	{
+		var saveFileNames = ds_list_create();
+		var fileName = file_find_first(string("*{0}", SAVE_FILE_SUFFIX), fa_directory);
+		
+		while(fileName != "")
+		{
+			ds_list_add(saveFileNames, fileName);
+			fileName = file_find_next();
+		}
+		file_find_close();
+		ds_list_sort(saveFileNames, true);
+		return saveFileNames;
+	}
 	
 	static SaveToFile = function()
 	{
