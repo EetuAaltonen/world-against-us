@@ -1,7 +1,7 @@
 function CreateWindowMainMenuRoot(_zIndex)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH);
-	var windowStyle = new GameWindowStyle(#486a7d, 1);
+	var windowStyle = new GameWindowStyle(undefined, 0);
 	var mainMenuWindow = new GameWindow(
 		GAME_WINDOW.MainMenuRoot,
 		new Vector2(0, 0),
@@ -12,9 +12,9 @@ function CreateWindowMainMenuRoot(_zIndex)
 	// MENU TITLE
 	var mainMenuTitle = new WindowText(
 		"MainMenuTitle",
-		new Vector2(windowSize.w * 0.5, 50),
+		new Vector2(windowSize.w * 0.5, 100),
 		undefined, undefined,
-		"Menu", font_large, fa_center, fa_middle, c_dkgray, 1
+		"Zombie Survival (Multiplayer)", font_huge, fa_center, fa_middle, c_white, 1
 	);
 	ds_list_add(mainMenuElements, mainMenuTitle);
 	
@@ -26,14 +26,14 @@ function CreateWindowMainMenuRoot(_zIndex)
 	);
 
 	var mainButtonStyle = new ButtonStyle(
-		new Size(200, 50),
-		#6f4082, #9365a6,
-		font_default, 25, fa_middle, fa_center
+		new Size(400, 100),
+		c_white, c_ltgray,
+		font_large, 20, fa_middle, fa_center
 	);
 	
 	var mainMenuButtonMenu = new WindowButtonMenu(
 		"MainMenuButtonMenu",
-		new Vector2(mainMenuWindow.size.w * 0.5, mainMenuWindow.size.h * 0.4),
+		new Vector2(400, 450),
 		undefined, undefined, mainMenuButtons, mainButtonStyle
 	);
 	ds_list_add(mainMenuElements, mainMenuButtonMenu);
