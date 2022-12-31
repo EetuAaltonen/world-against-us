@@ -3,7 +3,7 @@ function JSONStructToQuest(_jsonStruct)
 	var questData = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 	if (variable_struct_names_count(questData) <= 0) return undefined;
 	
-	var icon = GetSpriteByIndex(questData[$ "icon"]);
+	var icon = GetSpriteByName(questData[$ "icon"]);
 	// PARSE REWARD
 	var rewards = QuestParseRewards(questData[$ "rewards"]);
 	

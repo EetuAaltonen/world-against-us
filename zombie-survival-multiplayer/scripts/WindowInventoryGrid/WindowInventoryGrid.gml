@@ -261,40 +261,6 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 			var mousePosition = MouseGUIPosition();
 			draw_text(mousePosition.X + 5, mousePosition.Y + 20, string(inventory.gridData[mouseHoverIndex.row][mouseHoverIndex.col]));
 		}
-			
-		// DRAW DRAGGED ITEM
-		DrawDraggedItem();
-	}
-	
-	static DrawDraggedItem = function()
-	{
-		if (!is_undefined(global.ObjMouse.dragItem))
-		{
-			if (!is_undefined(mouseHoverIndex))
-			{
-				var xHoverPos = position.X + (gridCellSize.w * mouseHoverIndex.col);
-				var yHoverPos = position.Y + (gridCellSize.h * mouseHoverIndex.row);
-				
-				// DRAW BACKGROUND
-				// TODO: Check available interactions
-				/*var isGridIndexEmpty = inventory.IsGridAreaEmpty(mouseHoverIndex.col, mouseHoverIndex.row, global.ObjMouse.dragItem, global.ObjMouse.dragItem.sourceInventory, global.ObjMouse.dragItem.grid_index)
-				var backgroundIndex = (isGridIndexEmpty) ? 0 : 3;*/
-				draw_sprite_ext(sprGUIItemBg, 0, xHoverPos, yHoverPos, global.ObjMouse.dragItem.size.w * gridSpriteScale, global.ObjMouse.dragItem.size.h * gridSpriteScale, 0, #0fb80f, 0.2);
-				
-				// DRAW ITEM
-				var iconScale = CalculateItemIconScale(global.ObjMouse.dragItem, gridCellSize);
-				var iconRotation = CalculateItemIconRotation(global.ObjMouse.dragItem.is_rotated);
-				/*draw_sprite_ext(
-					global.ObjMouse.dragItem.icon, 0,
-					xHoverPos + ((inventory.grid.size.w * 0.5) * global.ObjMouse.dragItem.size.w * gridSpriteScale),
-					yHoverPos + ((inventory.grid.size.h * 0.5) * global.ObjMouse.dragItem.size.h * gridSpriteScale),
-					iconScale, iconScale, iconRotation, c_white, 0.4
-				);*/
-				
-				// ITEM QUANTITY
-				//DrawItemAltText(global.ObjMouse.dragItem.quantity, xHoverPos, yHoverPos);
-			}
-		}
 	}
 	
 	static DrawItemAltText = function(_altText, _guiXPos, _guiYPos)

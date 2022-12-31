@@ -3,7 +3,7 @@ function JSONStructToItem(_jsonStruct)
 	var itemData = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 	if (variable_struct_names_count(itemData) <= 0) return undefined;
 	
-	var icon = GetSpriteByIndex(itemData[$ "icon"]);
+	var icon = GetSpriteByName(itemData[$ "icon"]);
 	var quantity = is_undefined(itemData[$ "quantity"]) ? 1 : itemData[$ "quantity"]; // DEFAULT QUANTITY TO 1
 	var size = new Size(
 		itemData[$ "size"].w,
