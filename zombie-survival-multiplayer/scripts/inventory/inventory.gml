@@ -162,22 +162,25 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 		return (array_length(filterArray) == 0) || ArrayContainsValue(filterArray, _item.type);
     }
 	
-	static RemoveItem = function(_index)
+	static RemoveItemByIndex = function(_index)
     {
 		var item = GetItemByIndex(_index);
-		if (type == INVENTORY_TYPE.LootContainer)
+		if (!is_undefined(item))
 		{
-			// NETWORKING CONTAINER DELETE ITEM
-			var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_DELETE_ITEM);
-			var jsonData = json_stringify(item);
+			if (type == INVENTORY_TYPE.LootContainer)
+			{
+				// NETWORKING CONTAINER DELETE ITEM
+				var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_DELETE_ITEM);
+				var jsonData = json_stringify(item);
 			
-			buffer_write(networkBuffer, buffer_text , inventoryId);
-			buffer_write(networkBuffer, buffer_text, jsonData);
-			global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
-		}
+				buffer_write(networkBuffer, buffer_text , inventoryId);
+				buffer_write(networkBuffer, buffer_text, jsonData);
+				global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
+			}
 		
-		FillGridArea(item.grid_index.col, item.grid_index.row, item.size, undefined);
-		ds_list_delete(items, _index);
+			FillGridArea(item.grid_index.col, item.grid_index.row, item.size, undefined);
+			ds_list_delete(items, _index);
+		}
     }
 	
 	static RemoveItemByGridIndex = function(_gridIndex)
@@ -189,7 +192,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 			if (item.grid_index.col == _gridIndex.col &&
 				item.grid_index.row == _gridIndex.row)
 			{
-				RemoveItem(i);
+				RemoveItemByIndex(i);
 				break;
 			}
 		}

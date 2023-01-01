@@ -254,6 +254,29 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 				}
 			}
 		}
+		
+		// DRAW DRAGGED ITEM
+		if (!is_undefined(global.ObjMouse.dragItem))
+		{
+			if (!is_undefined(mouseHoverIndex))
+			{
+				var dragItem = global.ObjMouse.dragItem;
+				var xHoverPos = position.X + (gridCellSize.w * mouseHoverIndex.col);
+				var yHoverPos = position.Y + (gridCellSize.h * mouseHoverIndex.row);
+				var isGridAreaEmpty = inventory.IsGridAreaEmpty(
+					mouseHoverIndex.col, mouseHoverIndex.row,
+					dragItem, dragItem.sourceInventory, dragItem.grid_index
+				);
+				var gridAreaColor = isGridAreaEmpty ? #0fb80f : #b80f0f;
+				draw_sprite_ext(
+					sprGUIItemBg, 0,
+					xHoverPos, yHoverPos,
+					dragItem.size.w * gridSpriteScale,
+					dragItem.size.h * gridSpriteScale,
+					0, gridAreaColor, 0.2
+				);
+			}
+		}
 			
 		// MOUSE DEBUG INFO
 		if (!is_undefined(mouseHoverIndex))

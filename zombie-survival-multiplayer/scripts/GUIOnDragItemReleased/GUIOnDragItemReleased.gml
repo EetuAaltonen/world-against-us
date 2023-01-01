@@ -9,8 +9,7 @@ function GUIOnDragItemReleased(_inventory, _mouseHoverIndex)
 		} else {
 			if (_inventory.AddItem(global.ObjMouse.dragItem.Clone(), _mouseHoverIndex, global.ObjMouse.dragItem.known))
 			{
-				var oldItem = inventorySource.GetItemByGridIndex(global.ObjMouse.dragItem.grid_index);
-				inventorySource.RemoveItemByGridIndex(oldItem.grid_index);
+				inventorySource.RemoveItemByGridIndex(global.ObjMouse.dragItem.grid_index);
 			}
 		}
 	} else {

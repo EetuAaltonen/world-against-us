@@ -50,6 +50,10 @@ if (stateHandler.IsGUIStateClosed())
 		if (currentGUIState.index != GUI_STATE.MainMenu ||
 			(currentGUIState.index == GUI_STATE.MainMenu && !is_undefined(currentGUIState.view)))
 		{
+			// RESET DRAG ITEM
+			global.ObjMouse.dragItem = undefined;
+			
+			// CLOSE CURRENT GUI STATE
 			stateHandler.CloseCurrentGUIState();
 		}
 	} else if (room != roomMainMenu)
