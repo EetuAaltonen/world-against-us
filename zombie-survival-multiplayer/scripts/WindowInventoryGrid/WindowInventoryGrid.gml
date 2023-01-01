@@ -246,6 +246,10 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 				{
 					var altText = string("{0} / {1}", item.metadata.healing_left, item.metadata.healing_value);
 					DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
+				} else if (item.type == "Fuel")
+				{
+					var altText = string("{0} / {1}", item.metadata.fuel_left, item.metadata.fuel_value);
+					DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
 				} else {
 					if (item.quantity > 1)
 					{

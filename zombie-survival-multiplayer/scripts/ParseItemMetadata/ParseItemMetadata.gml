@@ -38,6 +38,13 @@ function ParseItemMetadata(_metadata, _itemType)
 				);
 				if (!is_undefined(_metadata[$ "healing_left"])) { variable_struct_set(parsedMetadata, "healing_left", _metadata[$ "healing_left"]); }
 			} break;
+			case "Fuel":
+			{
+				parsedMetadata = new MetadataFuel(
+					_metadata[$ "fuel_value"]
+				);
+				if (!is_undefined(_metadata[$ "fuel_left"])) { variable_struct_set(parsedMetadata, "fuel_left", _metadata[$ "fuel_left"]); }
+			} break;
 			case "Consumable":
 			{
 				var consumableType = _metadata[$ "consumable_type"];
