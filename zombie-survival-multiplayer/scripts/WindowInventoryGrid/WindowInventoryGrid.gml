@@ -120,10 +120,10 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 	
 	static UpdateMouseHoverIndex = function()
 	{
+		mouseHoverIndex = undefined;
+		
 		if (parentWindow.isFocused)
 		{
-			mouseHoverIndex = undefined;
-			
 			var mousePositionToGrid = MouseGUIPosition();
 			if (point_in_rectangle(mousePositionToGrid.X, mousePositionToGrid.Y, position.X, position.Y, position.X + size.w, position.Y + size.h))
 			{

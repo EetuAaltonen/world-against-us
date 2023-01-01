@@ -75,8 +75,12 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 	
 	static OnFocusLost = function()
 	{
-		// OVERRIDE FUNCTION
-		return;
+		var childElementCount = ds_list_size(childElements);
+		for (var i = 0; i < childElementCount; i++)
+		{
+			var childElement = childElements[| i];
+			childElement.OnFocusLostParentWindow();
+		}
 	}
 	
 	static OnClose = function()

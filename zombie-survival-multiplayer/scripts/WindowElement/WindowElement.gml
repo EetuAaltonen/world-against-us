@@ -114,6 +114,11 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 		return;
 	}
 	
+	static OnFocusLostParentWindow = function()
+	{
+		Update();
+	}
+	
 	static OnHoveredEnd = function()
 	{
 		// OVERRIDE FUNCTION
