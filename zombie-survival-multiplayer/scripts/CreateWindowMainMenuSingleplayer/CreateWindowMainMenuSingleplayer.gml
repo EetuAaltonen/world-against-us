@@ -18,7 +18,7 @@ function CreateWindowMainMenuSingleplayer(_zIndex)
 		c_dkgray, saveFiles, ListDrawSaveFile, true, OnClickListSaveFile
 	);
 	
-	var panelSize = new Size(600, 200);
+	var panelSize = new Size(800, 300);
 	var saveFilePanel = new WindowPanel(
 		"SaveFilePanel",
 		new Vector2(windowSize.w * 0.5 - (panelSize.w * 0.5), windowSize.h * 0.5 - (panelSize.h * 0.5)),
@@ -33,13 +33,13 @@ function CreateWindowMainMenuSingleplayer(_zIndex)
 	// PANEL TITLE
 	var saveFilePanelTitle = new WindowText(
 		"saveFilePanelTitle",
-		new Vector2(panelSize.w * 0.5, 20),
+		new Vector2(panelSize.w * 0.5, 50),
 		undefined, undefined,
-		"Save file", font_default, fa_center, fa_middle, c_black, 1
+		"Save file", font_large, fa_center, fa_middle, c_black, 1
 	);
 	
 	// SAVE NAME
-	var inputSize = new Size(500, 30);
+	var inputSize = new Size(700, 50);
 	var saveInput = new WindowInput(
 		"SaveInput",
 		new Vector2(panelSize.w * 0.5 - (inputSize.w * 0.5), panelSize.h * 0.5 - (inputSize.h * 0.5) - 20),
@@ -47,13 +47,13 @@ function CreateWindowMainMenuSingleplayer(_zIndex)
 	);
 	
 	// PLAY BUTTON
-	var buttonSize = new Size(100, 30);
+	var buttonSize = new Size(160, 60);
 	var buttonStyle = new ButtonStyle(
 		buttonSize, #48a630, #2c8017, font_default, 0, undefined, undefined
 	);
 	var savePlayButton = new WindowButton(
 		"SavePlayButton",
-		new Vector2(panelSize.w * 0.5 - (buttonSize.w * 0.5), panelSize.h - buttonSize.h - 20),
+		new Vector2(panelSize.w * 0.5 - (buttonSize.w * 0.5), panelSize.h - (buttonSize.h * 0.5) - 60),
 		buttonSize, buttonStyle.color, "Play", buttonStyle, OnClickMenuSingleplayerPlay
 	);
 	

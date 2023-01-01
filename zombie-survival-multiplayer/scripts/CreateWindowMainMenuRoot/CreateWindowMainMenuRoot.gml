@@ -33,7 +33,7 @@ function CreateWindowMainMenuRoot(_zIndex)
 	
 	var mainMenuButtonMenu = new WindowButtonMenu(
 		"MainMenuButtonMenu",
-		new Vector2(400, 450),
+		new Vector2(500, 470),
 		undefined, undefined, mainMenuButtons, mainButtonStyle
 	);
 	ds_list_add(mainMenuElements, mainMenuButtonMenu);
