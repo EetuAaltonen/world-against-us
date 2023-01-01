@@ -15,6 +15,7 @@ aspectRatio = displayWidth / displayHeight;
 
 // CALCULATE DISPLAY WIDTH
 //idealDisplayWidth = idealDisplayHeight * aspectRatio;
+//idealDisplayHeight = idealDisplayWidth / aspectRatio;
 
 // WINDOW RECENTER
 recenterWindow = false;
@@ -24,8 +25,9 @@ recenterWindow = false;
 {
 	var d = round(displayWidth / idealDisplayWidth);
 	idealDisplayWidth = displayWidth / d;
-}
-if (displayHeight mod idealDisplayHeight != 0)
+}*/
+
+/*if (displayHeight mod idealDisplayHeight != 0)
 {
 	var d = round(displayHeight / idealDisplayHeight);
 	idealDisplayHeight = displayHeight / d;

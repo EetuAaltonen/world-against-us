@@ -13,7 +13,11 @@ function WindowImage(_elementId, _relativePosition, _size, _backgroundColor, _sp
 		if (initImage)
 		{
 			initImage = false;
-			InitImageScale();
+			if (!is_undefined(spriteIndex))
+			{
+				if (!sprite_exists(spriteIndex)) { spriteIndex = sprMissingSprite; }
+				InitImageScale();
+			}
 		}
 	}
 	
@@ -23,6 +27,7 @@ function WindowImage(_elementId, _relativePosition, _size, _backgroundColor, _sp
 		var imageWidthRatio = (size.w / spriteSize.w);
 		var imageHeightRatio = (size.h / spriteSize.h);
 		
+		imagePosition = new Vector2(0, 0);
 		if (imageWidthRatio < imageHeightRatio)
 		{
 			imageScale = imageWidthRatio;
@@ -31,15 +36,20 @@ function WindowImage(_elementId, _relativePosition, _size, _backgroundColor, _sp
 			imageScale = imageHeightRatio;
 			imagePosition.X = (size.w * 0.5) - (spriteSize.w * 0.5 * imageScale);
 		}
+		imagePosition.X += (sprite_get_xoffset(spriteIndex) * imageScale);
+		imagePosition.Y += (sprite_get_yoffset(spriteIndex) * imageScale);
 	}
 	
 	static DrawContent = function()
 	{
-		if (sprite_exists(spriteIndex))
+		if (!is_undefined(spriteIndex))
 		{
-			draw_sprite_ext(spriteIndex, imageIndex, position.X + imagePosition.X, position.Y + imagePosition.Y, imageScale, imageScale, 0, c_white, imageAlpha);
-		} else {
-			draw_sprite_ext(sprGUIBg, 0, position.X, position.Y, size.w, size.h, 0, #fc03e7, 1);	
+			if (sprite_exists(spriteIndex))
+			{
+				draw_sprite_ext(spriteIndex, imageIndex, position.X + imagePosition.X, position.Y + imagePosition.Y, imageScale, imageScale, 0, c_white, imageAlpha);
+			} else {
+				draw_sprite_ext(sprGUIBg, 0, position.X, position.Y, size.w, size.h, 0, #fc03e7, 1);	
+			}
 		}
 	}
 }
