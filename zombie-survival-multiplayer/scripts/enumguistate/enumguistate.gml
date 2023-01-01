@@ -3,5 +3,6 @@ enum GUI_STATE {
 	EscMenu,
 	PlayerOverview,
 	Journal,
-	LootContainer
+	LootContainer,
+	Facility
 }

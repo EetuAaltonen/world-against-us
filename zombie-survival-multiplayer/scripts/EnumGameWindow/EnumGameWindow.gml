@@ -15,5 +15,7 @@ enum GAME_WINDOW
 	Journal,
 	Quests,
 	// INVENTORY
-	ItemActionMenu
+	ItemActionMenu,
+	// WORLD - FACILITY
+	Facility
 }
