@@ -215,6 +215,22 @@
       "metadata": {
         "caliber": "7.62"
       }
+    },
+    {
+      "name": "Gas Can",
+      "icon": "sprGasCan",
+      "type": "Fuel",
+      "size": {
+        "w": 2,
+        "h": 3
+      },
+      "description": "Flammable liquid",
+      "weight": 10000,
+      "max_stack": 1,
+      "base_price": 1000,
+      "metadata": {
+        "fuel_value": 500
+      }
     }
   ]
 }

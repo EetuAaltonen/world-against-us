@@ -16,4 +16,6 @@ if (ds_list_size(inventory.items) <= 0)
 	
 	inventory.AddItem(global.ItemData[? "Canned Meat"].Clone(), undefined, true, true);
 	inventory.AddItem(global.ItemData[? "Snickers Bar"].Clone(), undefined, true, true);
+	
+	inventory.AddItem(global.ItemData[? "Gas Can"].Clone(), undefined, true, true);
 }
