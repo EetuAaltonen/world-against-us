@@ -1,15 +1,15 @@
 // DRAW DEFAULT POINTER
-var drawDefaultPointer = function(_mouseX, _mouseY) {
-	draw_circle_color(_mouseX, _mouseY, 2, c_ltgray, c_ltgray, false);
+var drawDefaultPointer = function(_mousePosition) {
+	draw_circle_color(_mousePosition.X, _mousePosition.Y, 2, c_ltgray, c_ltgray, false);
 }
 		
 if (!is_undefined(primaryWeapon))
 {
-	var drawCrosshairLaser = function(_mouseX, _mouseY) {
+	var drawCrosshairLaser = function(_mousePosition) {
 		// DRAW CROSSHAIR
 		draw_sprite_ext(
 			sprCrosshair, 0,
-			_mouseX, _mouseY,
+			_mousePosition.X, _mousePosition.Y,
 			0.3, 0.3,
 			0, c_white, 1 
 		);
@@ -18,12 +18,12 @@ if (!is_undefined(primaryWeapon))
 		{
 			// DRAW WEAPON LASER
 			var barrelGUIPos = PositionToGUI(new Vector2(
-				x + rotatedWeaponBarrelPos.X,
-				y + rotatedWeaponBarrelPos.Y
+				x + (rotatedWeaponBarrelPos.X * spriteScale),
+				y + (rotatedWeaponBarrelPos.Y * spriteScale)
 			));
 			draw_line_width_color(
 				barrelGUIPos.X, barrelGUIPos.Y,
-				_mouseX, _mouseY, 1, c_red, c_red
+				_mousePosition.X, _mousePosition.Y, 1, c_red, c_red
 			);
 		}
 	}
@@ -33,14 +33,12 @@ if (!is_undefined(primaryWeapon))
 		// CHECK GUI STATE
 		if (!global.GUIStateHandler.IsGUIStateClosed()) return;
 
-		var mouseX = window_mouse_get_x();
-		var mouseY = window_mouse_get_y();
-		
+		var mousePosition = MouseGUIPosition();
 		if (isAiming)
 		{
-			drawCrosshairLaser(mouseX, mouseY);
+			drawCrosshairLaser(mousePosition);
 		} else {
-			drawDefaultPointer(mouseX, mouseY);
+			drawDefaultPointer(mousePosition);
 		}
 	} else {
 		if (isAiming)
@@ -55,12 +53,11 @@ if (!is_undefined(primaryWeapon))
 		if (owner.character.type == CHARACTER_TYPE.PLAYER)
 		{
 			// CHECK GUI STATE
-			if (!global.GUIStateHandler.IsGUIStateClosed()) return;	
-			
-			var mouseX = window_mouse_get_x();
-			var mouseY = window_mouse_get_y();
-			
-			drawDefaultPointer(mouseX, mouseY);
+			if (global.GUIStateHandler.IsGUIStateClosed())
+			{
+				var mousePosition = MouseGUIPosition();
+				drawDefaultPointer(mousePosition);
+			}
 		}
 	}
 }

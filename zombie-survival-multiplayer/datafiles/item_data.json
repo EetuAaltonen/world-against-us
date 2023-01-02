@@ -154,7 +154,7 @@
         "recoil": 5,
         "attachment_slots": ["scope", "laser", "foregrip"],
         "barrel_pos": {
-          "X": 140,
+          "X": 127,
           "Y": 8
         }
       }
