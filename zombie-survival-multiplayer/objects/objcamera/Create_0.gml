@@ -1,8 +1,14 @@
 // Set camera
-cameraViewWidth = view_get_wport(0);
-cameraViewHeight = view_get_hport(0);
-cameraTarget = noone;
-cameraZoom = 1;
-cameraZoomMax = 8;
-cameraZoomMin = 0.5;
-cameraZoomFactor = 0.4;
+viewBaseSize = new Size(640, 360);
+viewSize = viewBaseSize.Clone();
+viewPosition = new Vector2(0, 0);
+
+maxZoom = 2;
+minZoom = 1;
+baseZoom = 1;
+zoom = baseZoom;
+
+zoomInputStep = 0.5;
+viewZoomStep = 0.05;
+
+target = noone;

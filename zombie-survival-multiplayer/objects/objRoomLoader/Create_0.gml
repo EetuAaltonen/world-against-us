@@ -9,6 +9,9 @@ controllers = [
 	new GameController(objDisplay, [], []),
 	new GameController(objGameWindow, [], []),
 	
+	// CAMERA
+	new GameController(objCamera, [], [roomLaunch]),
+	
 	// MAIN MENU
 	new GameController(objGlobals, [], [roomLaunch]),
 	new GameController(objNetwork, [], [roomLaunch]),
@@ -21,7 +24,6 @@ controllers = [
 	new GameController(objMainMenu, [roomMainMenu], [roomLaunch]),
 	
 	// GAME
-	new GameController(objCamera, [], [roomMainMenu, roomLaunch]),
 	new GameController(objHud, [], [roomMainMenu, roomLaunch], "Controllers_Behind"),
 	new GameController(objNotification, [], [roomMainMenu, roomLaunch], "Controllers_Front"),
 	

@@ -38,7 +38,7 @@ recenterWindow = false;
 //if (idealDisplayHeight & 1) idealDisplayHeight++;
 
 // SET VIEWS TO ROOMS
-for (var i = 1; i < room_last; i++)
+for (var i = 1; i <= room_last; i++)
 {
 	if (room_exists(i))
 	{
