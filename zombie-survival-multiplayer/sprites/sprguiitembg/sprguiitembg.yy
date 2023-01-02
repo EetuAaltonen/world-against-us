@@ -99,6 +99,6 @@
   },
   "parent": {
     "name": "GUI",
-    "path": "folders/Sprites/GUI.yy",
+    "path": "folders/Sprites/Game/GUI.yy",
   },
 }

@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Facility",
-    "path": "folders/Scripts/GUI/Facility.yy",
+    "path": "folders/Scripts/Game/GUI/Facility.yy",
   },
 }

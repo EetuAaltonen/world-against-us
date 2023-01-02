@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Inventory",
-    "path": "folders/Scripts/GUI/GameWindow/Functions/Inventory.yy",
+    "path": "folders/Scripts/Game/GUI/GameWindow/Functions/Inventory.yy",
   },
 }

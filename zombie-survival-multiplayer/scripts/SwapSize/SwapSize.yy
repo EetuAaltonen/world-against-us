@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Size",
-    "path": "folders/Scripts/Size.yy",
+    "path": "folders/Scripts/Game/Data/Utility/Size.yy",
   },
 }

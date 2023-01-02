@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "MousePosition",
+  "name": "MouseGUIPosition",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Coordinates",
-    "path": "folders/Scripts/Coordinates.yy",
+    "name": "Mouse",
+    "path": "folders/Scripts/Game/GUI/Mouse.yy",
   },
 }

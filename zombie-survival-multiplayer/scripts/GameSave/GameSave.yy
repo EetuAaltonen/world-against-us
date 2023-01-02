@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "GameSave",
-    "path": "folders/Scripts/GameSave.yy",
+    "path": "folders/Scripts/Game/GameSave.yy",
   },
 }

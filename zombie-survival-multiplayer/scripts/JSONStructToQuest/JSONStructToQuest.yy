@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "JSON",
-    "path": "folders/Scripts/JSON.yy",
+    "path": "folders/Scripts/Game/Data/JSON.yy",
   },
 }

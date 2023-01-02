@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "objHouse1",
   "spriteId": {
     "name": "sprHouse1",
     "path": "sprites/sprHouse1/sprHouse1.yy",
@@ -28,11 +31,7 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Buildings",
-    "path": "folders/Objects/Buildings.yy",
+    "name": "Structures",
+    "path": "folders/Objects/World/Structures.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "objHouse1",
-  "tags": [],
-  "resourceType": "GMObject",
 }

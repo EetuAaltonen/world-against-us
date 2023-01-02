@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "WindowElement",
-    "path": "folders/Scripts/GUI/WindowElement.yy",
+    "path": "folders/Scripts/Game/GUI/WindowElement.yy",
   },
 }

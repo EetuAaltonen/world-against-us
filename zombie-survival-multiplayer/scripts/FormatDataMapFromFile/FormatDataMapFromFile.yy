@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "File",
-    "path": "folders/Scripts/File.yy",
+    "path": "folders/Scripts/Game/Data/File.yy",
   },
 }

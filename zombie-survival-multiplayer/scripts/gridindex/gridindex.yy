@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "InventoryGrid",
-    "path": "folders/Scripts/GUI/WindowElement/InventoryGrid.yy",
+    "path": "folders/Scripts/Game/GUI/WindowElement/InventoryGrid.yy",
   },
 }

@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "objWall",
   "spriteId": {
     "name": "sprWall",
     "path": "sprites/sprWall/sprWall.yy",
@@ -28,11 +31,7 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Objects",
-    "path": "folders/Objects.yy",
+    "name": "World",
+    "path": "folders/Objects/World.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "objWall",
-  "tags": [],
-  "resourceType": "GMObject",
 }

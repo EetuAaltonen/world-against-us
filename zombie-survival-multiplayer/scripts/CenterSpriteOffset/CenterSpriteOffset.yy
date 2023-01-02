@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Sprite",
-    "path": "folders/Scripts/Sprite.yy",
+    "path": "folders/Scripts/Game/Data/Utility/Sprite.yy",
   },
 }

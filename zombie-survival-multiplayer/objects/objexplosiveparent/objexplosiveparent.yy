@@ -34,6 +34,6 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Explosions",
-    "path": "folders/Objects/Breakable/Explosions.yy",
+    "path": "folders/Objects/World/Breakable/Explosions.yy",
   },
 }

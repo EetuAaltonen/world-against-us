@@ -68,7 +68,7 @@
   ],
   "nineSlice": null,
   "parent": {
-    "name": "Sprites",
-    "path": "folders/Sprites.yy",
+    "name": "GameSave",
+    "path": "folders/Sprites/Game/GameSave.yy",
   },
 }

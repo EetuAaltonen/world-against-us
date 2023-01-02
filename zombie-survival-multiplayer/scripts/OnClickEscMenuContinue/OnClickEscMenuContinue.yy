@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "EscMenu",
-    "path": "folders/Scripts/GUI/EscMenu.yy",
+    "path": "folders/Scripts/Game/GUI/EscMenu.yy",
   },
 }

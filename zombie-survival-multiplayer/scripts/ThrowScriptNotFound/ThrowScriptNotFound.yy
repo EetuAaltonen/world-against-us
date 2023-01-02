@@ -5,7 +5,7 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Error",
-    "path": "folders/Scripts/Error.yy",
+    "name": "Message",
+    "path": "folders/Scripts/Game/Message.yy",
   },
 }

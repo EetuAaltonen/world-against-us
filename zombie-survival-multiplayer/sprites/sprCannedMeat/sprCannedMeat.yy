@@ -69,6 +69,6 @@
   "nineSlice": null,
   "parent": {
     "name": "Consumable",
-    "path": "folders/Sprites/Items/Consumable.yy",
+    "path": "folders/Sprites/World/Item/Consumable.yy",
   },
 }

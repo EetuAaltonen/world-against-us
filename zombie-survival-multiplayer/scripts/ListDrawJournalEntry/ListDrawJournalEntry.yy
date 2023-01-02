@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Journal",
-    "path": "folders/Scripts/GUI/GameWindow/Functions/Journal.yy",
+    "path": "folders/Scripts/Game/GUI/GameWindow/Functions/Journal.yy",
   },
 }

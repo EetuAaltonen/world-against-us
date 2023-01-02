@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Struct",
-    "path": "folders/Scripts/Struct.yy",
+    "path": "folders/Scripts/Game/Data/Struct.yy",
   },
 }

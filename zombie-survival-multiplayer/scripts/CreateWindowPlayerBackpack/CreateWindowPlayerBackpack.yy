@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "PlayerOverview",
-    "path": "folders/Scripts/GUI/GameWindow/Functions/PlayerOverview.yy",
+    "path": "folders/Scripts/Game/GUI/GameWindow/Functions/PlayerOverview.yy",
   },
 }

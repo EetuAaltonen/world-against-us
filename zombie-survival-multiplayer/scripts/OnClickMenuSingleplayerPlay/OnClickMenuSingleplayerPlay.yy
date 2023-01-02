@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "MainMenu",
-    "path": "folders/Scripts/GUI/MainMenu.yy",
+    "path": "folders/Scripts/Game/GUI/MainMenu.yy",
   },
 }

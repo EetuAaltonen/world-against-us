@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "objNPCParent",
   "spriteId": null,
   "solid": false,
   "visible": true,
@@ -25,11 +28,7 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "NPCs",
-    "path": "folders/Objects/Characters/NPCs.yy",
+    "name": "NPC",
+    "path": "folders/Objects/World/Character/NPC.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "objNPCParent",
-  "tags": [],
-  "resourceType": "GMObject",
 }

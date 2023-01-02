@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Array",
-    "path": "folders/Scripts/Array.yy",
+    "path": "folders/Scripts/Game/Data/Utility/Array.yy",
   },
 }

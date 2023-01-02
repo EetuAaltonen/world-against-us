@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Weapon",
-    "path": "folders/Scripts/Weapon.yy",
+    "path": "folders/Scripts/World/Character/Weapon.yy",
   },
 }

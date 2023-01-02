@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Database",
-    "path": "folders/Scripts/Database.yy",
+    "path": "folders/Scripts/Game/Data/Database.yy",
   },
 }

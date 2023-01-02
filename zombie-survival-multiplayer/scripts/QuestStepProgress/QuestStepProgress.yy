@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Quest",
-    "path": "folders/Scripts/Quest.yy",
+    "path": "folders/Scripts/Game/Data/Quest.yy",
   },
 }

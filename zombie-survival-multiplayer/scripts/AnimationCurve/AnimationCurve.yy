@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Animation",
-    "path": "folders/Scripts/Animation.yy",
+    "path": "folders/Scripts/Game/Data/Utility/Animation.yy",
   },
 }

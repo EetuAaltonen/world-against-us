@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Coordinates",
-    "path": "folders/Scripts/Coordinates.yy",
+    "path": "folders/Scripts/World/Coordinates.yy",
   },
 }

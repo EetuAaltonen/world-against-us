@@ -69,6 +69,6 @@
   "nineSlice": null,
   "parent": {
     "name": "HUD",
-    "path": "folders/Sprites/HUD.yy",
+    "path": "folders/Sprites/Game/HUD.yy",
   },
 }

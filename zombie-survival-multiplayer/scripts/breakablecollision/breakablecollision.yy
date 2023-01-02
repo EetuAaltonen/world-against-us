@@ -1,12 +1,11 @@
 {
+  "resourceType": "GMScript",
+  "resourceVersion": "1.0",
+  "name": "BreakableCollision",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
     "name": "Collision",
-    "path": "folders/Scripts/Collision.yy",
+    "path": "folders/Scripts/World/Collision.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "BreakableCollision",
-  "tags": [],
-  "resourceType": "GMScript",
 }

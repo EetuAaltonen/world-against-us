@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Notification",
-    "path": "folders/Scripts/GUI/Notification.yy",
+    "path": "folders/Scripts/Game/GUI/Notification.yy",
   },
 }

@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Vector",
-    "path": "folders/Scripts/Vector.yy",
+    "path": "folders/Scripts/Game/Data/Utility/Vector.yy",
   },
 }

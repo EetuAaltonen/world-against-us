@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "objTree",
   "spriteId": {
     "name": "sprTree",
     "path": "sprites/sprTree/sprTree.yy",
@@ -29,10 +32,6 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Plans",
-    "path": "folders/Objects/Plans.yy",
+    "path": "folders/Objects/World/Plans.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "objTree",
-  "tags": [],
-  "resourceType": "GMObject",
 }

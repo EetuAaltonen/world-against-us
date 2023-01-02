@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Functions",
-    "path": "folders/Scripts/Inventory/Functions.yy",
+    "path": "folders/Scripts/Game/Data/Inventory/Functions.yy",
   },
 }
