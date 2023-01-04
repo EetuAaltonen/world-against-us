@@ -27,7 +27,7 @@ function WindowItemHolder(_elementId, _relativePosition, _size, _backgroundColor
 						new WindowImage(
 							string("{0}Image", elementId),
 							new Vector2(2, 2), new Size(size.w - 4, size.h - 4),
-							c_green, itemData.icon
+							c_green, itemData.icon, 0, 1, 0
 						)
 					);
 					AddChildElements(childImageElements);	

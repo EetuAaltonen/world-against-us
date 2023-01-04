@@ -1,8 +1,9 @@
-function WindowImage(_elementId, _relativePosition, _size, _backgroundColor, _spriteIndex, _imageIndex = 0, _imageAlpha = 1) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
+function WindowImage(_elementId, _relativePosition, _size, _backgroundColor, _spriteIndex, _imageIndex, _imageAlpha, _rotation) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	spriteIndex = _spriteIndex;
 	imageIndex = _imageIndex;
 	imageAlpha = _imageAlpha;
+	rotation = _rotation;
 	
 	initImage = true;
 	imageScale = 1;
@@ -46,9 +47,7 @@ function WindowImage(_elementId, _relativePosition, _size, _backgroundColor, _sp
 		{
 			if (sprite_exists(spriteIndex))
 			{
-				draw_sprite_ext(spriteIndex, imageIndex, position.X + imagePosition.X, position.Y + imagePosition.Y, imageScale, imageScale, 0, c_white, imageAlpha);
-			} else {
-				draw_sprite_ext(sprGUIBg, 0, position.X, position.Y, size.w, size.h, 0, #fc03e7, 1);	
+				draw_sprite_ext(spriteIndex, imageIndex, position.X + imagePosition.X, position.Y + imagePosition.Y, imageScale, imageScale, rotation, c_white, imageAlpha);
 			}
 		}
 	}

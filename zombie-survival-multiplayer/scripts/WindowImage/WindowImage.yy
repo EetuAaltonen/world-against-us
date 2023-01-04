@@ -5,7 +5,7 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "WindowElement",
-    "path": "folders/Scripts/Game/GUI/WindowElement.yy",
+    "name": "Image",
+    "path": "folders/Scripts/Game/GUI/WindowElement/Image.yy",
   },
 }
