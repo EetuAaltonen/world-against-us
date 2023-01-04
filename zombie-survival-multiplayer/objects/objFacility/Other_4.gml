@@ -1,0 +1,1 @@
+if (!is_undefined(facility)) { facility.facility_id = facilityId; }
