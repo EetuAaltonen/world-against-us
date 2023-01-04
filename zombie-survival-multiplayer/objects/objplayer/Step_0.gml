@@ -42,11 +42,15 @@ dirSpeed = sqrt((hSpeed * hSpeed) + (vSpeed * vSpeed));
 
 if (place_meeting(x + hSpeed, y, objBlockParent))
 {
-	while (!place_meeting(x + sign(hSpeed), y, objBlockParent))
+	var meetInstance = instance_place(x + hSpeed, y, objBlockParent);
+	if (meetInstance.mask_index != sprNoMask)
 	{
-		x += sign(hSpeed);
+		while (!place_meeting(x + sign(hSpeed), y, objBlockParent))
+		{
+			x += sign(hSpeed);
+		}
+		hSpeed = 0;
 	}
-	hSpeed = 0;
 }
 x += hSpeed;
 var sprWidthCenter = sprite_get_width(sprite_index) * 0.5;
@@ -54,11 +58,15 @@ x = clamp(x, 0 + sprWidthCenter, room_width - sprWidthCenter);
 
 if (place_meeting(x, y + vSpeed, objBlockParent))
 {
-	while (!place_meeting(x, y + sign(vSpeed), objBlockParent))
+	var meetInstance = instance_place(x, y + vSpeed, objBlockParent);
+	if (meetInstance.mask_index != sprNoMask)
 	{
-		y += sign(vSpeed);
+		while (!place_meeting(x, y + sign(vSpeed), objBlockParent))
+		{
+			y += sign(vSpeed);
+		}
+		vSpeed = 0;
 	}
-	vSpeed = 0;
 }
 y += vSpeed;
 var sprHeightCenter = sprite_get_height(sprite_index) * 0.5;

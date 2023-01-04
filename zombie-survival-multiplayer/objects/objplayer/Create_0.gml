@@ -5,14 +5,14 @@ character = new Character("Player", CHARACTER_TYPE.PLAYER);
 image_index = 0;
 image_speed = 0;
 
-acceleration = 1;
+acceleration = 0.15;
 hSpeed = 0;
 vSpeed = 0;
 dirSpeed = 0;
-maxSpeed = 10;
+maxSpeed = 2.5;
 
 // SPAWN WEAPON
-weapon = instance_create_layer(x, y, "Equipment", objWeapon);
+weapon = instance_create_layer(x, y, layer, objWeapon);
 weapon.owner = self;
 
 // COOP PLAYER
