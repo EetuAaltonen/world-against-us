@@ -1,0 +1,1 @@
+electricalNetwork = new ElectricalNetwork("566695CB", "1FBA300C", 0);

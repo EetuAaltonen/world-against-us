@@ -16,7 +16,7 @@ if (async_load[? "size"] > 0)
 						if (!is_undefined(packetHeader.clientId))
 						{
 							client.SetClientId(packetHeader.clientId);
-							room_goto(roomMap1);
+							room_goto(roomPrologue);
 						}
 					}
 				}

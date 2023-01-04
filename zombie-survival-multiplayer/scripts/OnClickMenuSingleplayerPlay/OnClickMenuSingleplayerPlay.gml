@@ -6,7 +6,7 @@ function OnClickMenuSingleplayerPlay()
 		if (string_length(saveInput.input) > 3)
 		{
 			global.GameSaveHandlerRef.SetSaveFileName(saveInput.input);
-			room_goto(roomMap1);
+			room_goto(roomPrologue);
 		} else {
 			ds_list_add(global.MessageLog, "Save file name is too short (min 4)");
 		}
