@@ -1,0 +1,2 @@
+// SKIP DRAW SELF
+return;
