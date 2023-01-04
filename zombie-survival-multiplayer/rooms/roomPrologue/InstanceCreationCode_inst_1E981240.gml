@@ -1,0 +1,1 @@
+electricalNetwork = new ElectricalNetwork("1E981240", undefined, 0);

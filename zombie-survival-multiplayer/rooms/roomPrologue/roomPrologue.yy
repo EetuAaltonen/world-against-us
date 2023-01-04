@@ -30,6 +30,7 @@
       ],"visible":true,"depth":200,"userdefinedDepth":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritVisibility":true,"inheritSubLayers":true,"gridX":32,"gridY":32,"layers":[],"hierarchyFrozen":false,"effectEnabled":true,"effectType":null,"properties":[],},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Facility","instances":[
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_289421E4","properties":[],"isDnd":false,"objectId":{"name":"objFacilityGenerator","path":"objects/objFacilityGenerator/objFacilityGenerator.yy",},"inheritCode":false,"hasCreationCode":true,"colour":4294967295,"rotation":0.0,"scaleX":0.5,"scaleY":0.5,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":928.0,"y":1760.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_1E981240","properties":[],"isDnd":false,"objectId":{"name":"objVendingMachine","path":"objects/objVendingMachine/objVendingMachine.yy",},"inheritCode":false,"hasCreationCode":true,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":128.0,"y":1376.0,},
       ],"visible":true,"depth":300,"userdefinedDepth":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritVisibility":true,"inheritSubLayers":true,"gridX":32,"gridY":32,"layers":[],"hierarchyFrozen":false,"effectEnabled":true,"effectType":null,"properties":[],},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Structures","instances":[
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_5BCEEE3D","properties":[],"isDnd":false,"objectId":{"name":"objSandbagBarricade","path":"objects/objSandbagBarricade/objSandbagBarricade.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":3.0,"scaleY":3.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":192.0,"y":1184.0,},
@@ -42,7 +43,7 @@
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_50300BD3","properties":[],"isDnd":false,"objectId":{"name":"objCrashedCar","path":"objects/objCrashedCar/objCrashedCar.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":2.0,"scaleY":2.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":224.0,"y":1600.0,},
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_B39EDD4","properties":[],"isDnd":false,"objectId":{"name":"objCrashedCar","path":"objects/objCrashedCar/objCrashedCar.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":-2.0,"scaleY":2.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":672.0,"y":1856.0,},
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_4736678C","properties":[],"isDnd":false,"objectId":{"name":"objCrashedCar","path":"objects/objCrashedCar/objCrashedCar.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":2.0,"scaleY":2.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":288.0,"y":1920.0,},
-      ],"visible":true,"depth":400,"userdefinedDepth":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritVisibility":true,"inheritSubLayers":true,"gridX":32,"gridY":32,"layers":[],"hierarchyFrozen":false,"effectEnabled":true,"effectType":null,"properties":[],},
+      ],"visible":true,"depth":400,"userdefinedDepth":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritVisibility":true,"inheritSubLayers":true,"gridX":32,"gridY":32,"layers":[],"hierarchyFrozen":false,"effectEnabled":true,"effectType":"none","properties":[],},
     {"resourceType":"GMRTileLayer","resourceVersion":"1.1","name":"TilesRoad","tilesetId":{"name":"TileSetRoad","path":"tilesets/TileSetRoad/TileSetRoad.yy",},"x":0,"y":0,"tiles":{"TileDataFormat":1,"SerialiseWidth":9,"SerialiseHeight":15,"TileCompressedData":[
 -2,-2147483648,4,4,5,6,7,-5,-2147483648,
 4,4,5,6,7,-5,-2147483648,4,4,
@@ -94,6 +95,7 @@
     {"name":"inst_50300BD3","path":"rooms/roomPrologue/roomPrologue.yy",},
     {"name":"inst_B39EDD4","path":"rooms/roomPrologue/roomPrologue.yy",},
     {"name":"inst_4736678C","path":"rooms/roomPrologue/roomPrologue.yy",},
+    {"name":"inst_1E981240","path":"rooms/roomPrologue/roomPrologue.yy",},
   ],
   "inheritCreationOrder": false,
   "sequenceId": null,
