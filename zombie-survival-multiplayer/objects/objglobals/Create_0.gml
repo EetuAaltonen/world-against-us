@@ -33,6 +33,9 @@ initGlobalVariables = function()
 	
 	// Game save
 	global.GameSaveHandlerRef = undefined;
+	
+	// Highlight
+	global.HighlightHandlerRef = undefined;
 
 	// Coop
 	global.OtherPlayerData = ds_map_create();
