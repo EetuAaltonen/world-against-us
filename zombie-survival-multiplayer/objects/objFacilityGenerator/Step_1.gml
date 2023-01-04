@@ -1,4 +1,4 @@
 // Inherit the parent event
 event_inherited();
 
-electricalNetwork.electricOutputPower = (inventory.GetItemCount() > 0) ? electricalNetwork.maxElectricOutputPower : 0;
+electricalNetwork.electricOutputPower = (facility.inventory.GetItemCount() > 0) ? electricalNetwork.maxElectricOutputPower : 0;
