@@ -6,7 +6,7 @@ interactionFunction = function()
 {
 	var guiState = new GUIState(
 		GUI_STATE.Facility, undefined, undefined,
-		[GAME_WINDOW.PlayerBackpack, GAME_WINDOW.Facility], GUI_CHAIN_RULE.OverwriteAll
+		[GAME_WINDOW.PlayerBackpack, GAME_WINDOW.FacilityGenerator], GUI_CHAIN_RULE.OverwriteAll
 	);
 	if (global.GUIStateHandler.RequestGUIState(guiState))
 	{

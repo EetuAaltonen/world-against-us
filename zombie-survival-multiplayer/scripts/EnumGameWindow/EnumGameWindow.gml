@@ -17,5 +17,6 @@ enum GAME_WINDOW
 	// INVENTORY
 	ItemActionMenu,
 	// WORLD - FACILITY
-	Facility
+	FacilityGenerator,
+	FacilityVendingMachine
 }
