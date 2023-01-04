@@ -1,4 +1,4 @@
-// INHERITED EVENT
+// Inherit the parent event
 event_inherited();
 character = new Character("Zombie", CHARACTER_TYPE.HOSTILE);
 

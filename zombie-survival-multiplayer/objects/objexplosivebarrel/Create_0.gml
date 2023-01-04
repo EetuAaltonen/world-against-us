@@ -1,4 +1,4 @@
-// INHERITED EVENT
+// Inherit the parent event
 event_inherited();
 damage = 100;
 blastRadius = 500;

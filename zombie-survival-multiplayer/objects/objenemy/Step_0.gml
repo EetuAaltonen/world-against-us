@@ -1,4 +1,4 @@
-// INHERITED EVENT
+// Inherit the parent event
 event_inherited();
 
 if (!is_undefined(global.ObjGridPath.roomGrid))
