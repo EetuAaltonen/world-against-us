@@ -2,7 +2,7 @@ if (global.GUIStateHandler.IsGUIStateClosed())
 {
 	if (!is_undefined(interactionFunction))
 	{
-		if (insideInteractionRange)
+		if (global.HighlightHandlerRef.highlightedInstanceId == id)
 		{
 			var textGUIPos = PositionToGUI(new Vector2(x, y - sprite_height - 10));
 			var textColor = #ffa600;

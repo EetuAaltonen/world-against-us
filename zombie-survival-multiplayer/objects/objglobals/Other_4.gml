@@ -36,7 +36,7 @@ if (instance_exists(objQuest)) global.QuestHandlerRef = instance_find(objQuest, 
 if (instance_exists(objMessageLog)) global.MessageLog = instance_find(objMessageLog, 0).messages;
 if (instance_exists(objNotification)) global.NotificationHandlerRef = instance_find(objNotification, 0).notificationHandler;
 
-if (instance_exists(objInstanceHighlight)) global.HighlightHandlerRef = instance_find(objInstanceHighlight, 0).highlightHandler;
+if (instance_exists(objInstanceHighlighter)) global.HighlightHandlerRef = instance_find(objInstanceHighlighter, 0).highlightHandler;
 
 if (instance_exists(objGridPath)) global.ObjGridPath = instance_find(objGridPath, 0);
 

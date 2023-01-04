@@ -1,7 +1,7 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "objInstanceHighlight",
+  "name": "objInstanceHighlighter",
   "spriteId": null,
   "solid": false,
   "visible": true,

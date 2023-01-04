@@ -5,12 +5,14 @@ if (global.GUIStateHandler.IsGUIStateClosed())
 {
 	if (!is_undefined(interactionFunction))
 	{
-		if (instance_exists(global.ObjPlayer))
+		if (keyboard_check_released(ord("F")))
 		{
-			insideInteractionRange = (point_distance(x, y, global.ObjPlayer.x, global.ObjPlayer.y) < interactionRange);
-			if (insideInteractionRange && keyboard_check_released(ord("F")))
+			if (instance_exists(global.ObjPlayer))
 			{
-				interactionFunction();
+				if (global.HighlightHandlerRef.highlightedInstanceId == id)
+				{
+					interactionFunction();
+				}
 			}
 		}
 	}

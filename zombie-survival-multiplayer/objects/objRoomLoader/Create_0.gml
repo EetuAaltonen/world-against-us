@@ -33,6 +33,8 @@ controllers = [
 	new GameController(objJournal, [], [roomMainMenu, roomLaunch]),
 	new GameController(objQuest, [], [roomMainMenu, roomLaunch]),
 	
+	new GameController(objInstanceHighlighter, [], [roomMainMenu, roomLaunch]),
+	
 	new GameController(objGridPath, [], [roomMainMenu, roomLaunch])
 ];
 
