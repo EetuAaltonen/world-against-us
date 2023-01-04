@@ -16,7 +16,7 @@ function CreateWindowJournal(_zIndex)
 			windowSize.w * 0.5 - (journalBackgroundSize.w * 0.5),
 			windowSize.h * 0.5 - (journalBackgroundSize.h * 0.5)
 		),
-		journalBackgroundSize, undefined, sprJournal
+		journalBackgroundSize, undefined, sprJournal, 0, 1
 	);
 	
 	var journalTitle = new WindowText(

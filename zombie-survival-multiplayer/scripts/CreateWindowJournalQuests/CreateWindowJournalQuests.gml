@@ -16,7 +16,7 @@ function CreateWindowJournalQuest(_zIndex)
 			windowSize.w * 0.5 - (questBackgroundSize.w * 0.5),
 			windowSize.h * 0.5 - (questBackgroundSize.h * 0.5)
 		),
-		questBackgroundSize, undefined, sprJournal
+		questBackgroundSize, undefined, sprJournal, 0, 1, 0
 	);
 	
 	var questTitle = new WindowText(

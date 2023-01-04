@@ -57,7 +57,7 @@ function CreateWindowPlayerHealthStatus(_zIndex)
 		new Vector2(0, 0),
 		new Size(healthStatusPanelSize.w, healthStatusPanelSize.h),
 		undefined,
-		sprHumanBody, 0, 1
+		sprHumanBody, 0, 1, 0
 	);
 	// HEALTH BARS
 	var healthBarSize = new Size(140, 15);

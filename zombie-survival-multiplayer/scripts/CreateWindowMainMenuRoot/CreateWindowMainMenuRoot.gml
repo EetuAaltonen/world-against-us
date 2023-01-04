@@ -8,15 +8,20 @@ function CreateWindowMainMenuRoot(_zIndex)
 		windowSize, windowStyle, _zIndex
 	);
 	
-	var mainMenuElements = ds_list_create();
 	// MENU TITLE
+	var mainMenuTitlePanelSize = new Size(windowSize.w, 90);
+	var mainMenuTitlePanel = new WindowPanel(
+		"MainMenuTitlePanel",
+		new Vector2(0, 50),
+		mainMenuTitlePanelSize, #121212
+	);
+	
 	var mainMenuTitle = new WindowText(
 		"MainMenuTitle",
-		new Vector2(windowSize.w * 0.5, 100),
+		new Vector2(mainMenuTitlePanelSize.w * 0.5, mainMenuTitlePanelSize.h * 0.5),
 		undefined, undefined,
 		"Zombie Survival (Multiplayer)", font_huge, fa_center, fa_middle, c_white, 1
 	);
-	ds_list_add(mainMenuElements, mainMenuTitle);
 	
 	var mainMenuButtons = ds_list_create();
 	ds_list_add(mainMenuButtons,
@@ -33,11 +38,22 @@ function CreateWindowMainMenuRoot(_zIndex)
 	
 	var mainMenuButtonMenu = new WindowButtonMenu(
 		"MainMenuButtonMenu",
-		new Vector2(500, 470),
+		new Vector2(600, 470),
 		undefined, undefined, mainMenuButtons, mainButtonStyle
 	);
-	ds_list_add(mainMenuElements, mainMenuButtonMenu);
+	
+	var mainMenuTitlePanelElements = ds_list_create();
+	ds_list_add(mainMenuTitlePanelElements,
+		mainMenuTitle
+	);
+	
+	var mainMenuElements = ds_list_create();
+	ds_list_add(mainMenuElements, 
+		mainMenuTitlePanel,
+		mainMenuButtonMenu
+	);
 	
 	mainMenuWindow.AddChildElements(mainMenuElements);
+	mainMenuTitlePanel.AddChildElements(mainMenuTitlePanelElements);
 	return mainMenuWindow;
 }
