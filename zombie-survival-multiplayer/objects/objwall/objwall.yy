@@ -12,8 +12,8 @@
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "objBlockParent",
-    "path": "objects/objBlockParent/objBlockParent.yy",
+    "name": "objStructure",
+    "path": "objects/objStructure/objStructure.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
@@ -31,7 +31,7 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "World",
-    "path": "folders/Objects/World.yy",
+    "name": "Structures",
+    "path": "folders/Objects/World/Structures.yy",
   },
 }

@@ -12,8 +12,8 @@
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "objBlockParent",
-    "path": "objects/objBlockParent/objBlockParent.yy",
+    "name": "objStructure",
+    "path": "objects/objStructure/objStructure.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
