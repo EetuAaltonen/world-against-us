@@ -3,8 +3,8 @@
   "resourceVersion": "1.0",
   "name": "objPickable",
   "spriteId": {
-    "name": "sprMoney",
-    "path": "sprites/sprMoney/sprMoney.yy",
+    "name": "sprPickable",
+    "path": "sprites/sprPickable/sprPickable.yy",
   },
   "solid": false,
   "visible": true,
