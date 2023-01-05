@@ -1,7 +1,7 @@
 {
   "resourceType": "GMFont",
   "resourceVersion": "1.0",
-  "name": "font_default",
+  "name": "font_default_bold",
   "hinting": 1,
   "glyphOperations": 0,
   "interpreter": 0,
