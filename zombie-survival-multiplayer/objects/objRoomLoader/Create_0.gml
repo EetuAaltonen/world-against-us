@@ -12,6 +12,9 @@ controllers = [
 	// CAMERA
 	new GameController(objCamera, [], [roomLaunch]),
 	
+	// INSTANCE DRAW HANDLER
+	new GameController(objInstanceDrawHandler, [], [roomLaunch]),
+	
 	// MAIN MENU
 	new GameController(objGlobals, [], [roomLaunch]),
 	new GameController(objNetwork, [], [roomLaunch]),
@@ -33,7 +36,7 @@ controllers = [
 	new GameController(objJournal, [], [roomMainMenu, roomLaunch]),
 	new GameController(objQuest, [], [roomMainMenu, roomLaunch]),
 	
-	new GameController(objInstanceHighlighter, [], [roomMainMenu, roomLaunch]),
+	new GameController(objInstanceHighlighter, [], [roomMainMenu, roomLaunch], "HighlightedInstances"),
 	
 	new GameController(objGridPath, [], [roomMainMenu, roomLaunch])
 ];
@@ -43,6 +46,7 @@ ds_map_add(controllerLayers, "Controllers", depth);
 ds_map_add(controllerLayers, "Controllers_Behind", depth + 1);
 ds_map_add(controllerLayers, "Controllers_Front", depth - 1);
 ds_map_add(controllerLayers, "Controllers_All_Front", depth - 2);
+ds_map_add(controllerLayers, "HighlightedInstances", 500);
 
 // ROOM FADE-IN EFFECT
 roomFadeAlphaStart = 1;
