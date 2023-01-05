@@ -10,10 +10,10 @@ function HighlightHandler() constructor
 			{
 				var newHighlightedId = undefined;
 				var nearestDistance = undefined;
-				var instanceCount = instance_number(objInteractable);
+				var instanceCount = instance_number(objInteractableParent);
 				for (var i = 0; i < instanceCount; i++)
 				{
-					var instance = instance_find(objInteractable, i);
+					var instance = instance_find(objInteractableParent, i);
 					if (instance_exists(instance))
 					{
 						if (!is_undefined(instance.interactionFunction))
