@@ -138,25 +138,28 @@ function GameSave(_save_name) constructor
 						var facilityCount = array_length(roomData.facilities);
 						for (var j = 0; j < facilityCount; j++)
 						{
-							var facility = roomData.facilities[j];
-							var instanceCount = instance_number(objFacility);
+							var facilityStruct = roomData.facilities[j];
+							var facility = ParseJSONStructToFacility(facilityStruct);
+							var inventoryStruct = facilityStruct[$ "inventory"] ?? undefined;
+							var itemArray = (!is_undefined(inventoryStruct)) ? ParseJSONStructToItemArray(inventoryStruct[$ "items"]) : [];
+							var instanceCount = instance_number(objFacilityParent);
 							for (var k = 0; k < instanceCount; k++)
 							{
-								var instance = instance_find(objFacility, k);
+								var instance = instance_find(objFacilityParent, k);
 								if (instance_exists(instance))
 								{
 									if (instance.facilityId == facility.facility_id)
 									{
 										if (!is_undefined(instance.facility))
 										{
+											instance.facility.metadata = facility.metadata;
 											if (!is_undefined(instance.facility.inventory))
 											{
-												var itemCount = array_length(facility.items);
+												var itemCount = array_length(itemArray);
 												for (var l = 0; l < itemCount; l++)
 												{
-													var item = facility.items[l];
-													var parsedItem = ParseJSONStructToItem(item);
-													instance.facility.inventory.AddItem(parsedItem.Clone(), parsedItem.grid_index, true);
+													var item = itemArray[l];
+													instance.facility.inventory.AddItem(item, item.grid_index, item.known);
 												}
 											}
 										}

@@ -39,10 +39,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 		}
 		return {
 			inventory_id: inventoryId,
-			items: itemArray,
-			type: type,
-			size: size,
-			filterArray: filterArray
+			items: itemArray
 		}
 	}
 	
