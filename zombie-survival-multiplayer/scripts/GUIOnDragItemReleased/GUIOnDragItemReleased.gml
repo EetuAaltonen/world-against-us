@@ -36,7 +36,7 @@ function GUIOnDragItemReleased(_inventory, _mouseHoverIndex)
 					}
 		
 				// RELOAD MAGAZINE
-				} else if (global.ObjMouse.dragItem.type == "Ammo")
+				} else if (global.ObjMouse.dragItem.type == "Bullet")
 				{
 					if (targetItem.type == "Magazine")
 					{

@@ -16,7 +16,7 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 						_inventory.RemoveItemByGridIndex(itemGridIndex);	
 					}
 				} else {
-					if (item.type == "Magazine" || item.type == "Ammo")
+					if (item.type == "Magazine" || item.type == "Bullet")
 					{
 						if (!is_undefined(global.PlayerMagazinePockets))
 						{

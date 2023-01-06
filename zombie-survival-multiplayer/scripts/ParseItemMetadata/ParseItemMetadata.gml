@@ -25,7 +25,7 @@ function ParseItemMetadata(_metadata, _itemType)
 				);
 				if (!is_undefined(_metadata[$ "bullet_count"])) { variable_struct_set(parsedMetadata, "bullet_count", _metadata[$ "bullet_count"]); }
 			} break;
-			case "Ammo":
+			case "Bullet":
 			{
 				parsedMetadata = new MetadataAmmo(
 					_metadata[$ "caliber"]
