@@ -193,7 +193,12 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					gridSpriteIndex = 2;
 				} else if ((!is_undefined(mouseHoverIndex) && is_undefined(global.ObjMouse.dragItem)))
 				{
-					if (point_in_rectangle(mouseHoverIndex.col, mouseHoverIndex.row, item.grid_index.col, item.grid_index.row, (item.grid_index.col + (item.size.w - 1)), (item.grid_index.row + (item.size.h - 1))))
+					if (point_in_rectangle(
+						mouseHoverIndex.col, mouseHoverIndex.row,
+						item.grid_index.col, item.grid_index.row,
+						(item.grid_index.col + (item.size.w - 1)),
+						(item.grid_index.row + (item.size.h - 1)))
+					)
 					{
 						gridSpriteIndex = 1;
 					}

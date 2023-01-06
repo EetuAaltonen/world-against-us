@@ -2,45 +2,38 @@ function GameSave(_save_name) constructor
 {
 	save_name = _save_name;
 	player = {
-		inventory_items: [],
+		backpack_items: [],
 		magazine_pockets_items: [],
 		medicine_pockets_items: [],
 		quests_progress: []
 	}
 	
+	world = {
+		rooms: []
+	}
+	
+	static ToJSONStruct = function()
+	{
+		var gameSaveStruct = {}
+		variable_struct_set(gameSaveStruct, save_name, {
+			player: player,
+			world: world,
+		});
+		return gameSaveStruct;
+	}
+	
 	static FetchSaveData = function()
 	{
-		// INVENTORY ITEMS
-		var items = [];
-		var itemCount = ds_list_size(global.PlayerBackpack.items);
-		for (var i = 0; i < itemCount; i++)
-		{
-			var item = global.PlayerBackpack.items[| i];
-			array_push(items, item.ToJSONStruct());
-		}
-		player.inventory_items = items;
+		// PLAYER - BACKPACK ITEMS
+		player.backpack_items = global.PlayerBackpack.ToJSONStruct().items;
 		
-		// MAGAZINE POCKETS ITEMS
-		var items = [];
-		var itemCount = ds_list_size(global.PlayerMagazinePockets.items);
-		for (var i = 0; i < itemCount; i++)
-		{
-			var item = global.PlayerMagazinePockets.items[| i];
-			array_push(items, item.ToJSONStruct());
-		}
-		player.magazine_pockets_items = items;
+		// PLAYER - MAGAZINE POCKETS ITEMS
+		player.magazine_pockets_items = global.PlayerMagazinePockets.ToJSONStruct().items;
 		
-		// MEDICINE POCKETS ITEMS
-		var items = [];
-		var itemCount = ds_list_size(global.PlayerMedicinePockets.items);
-		for (var i = 0; i < itemCount; i++)
-		{
-			var item = global.PlayerMedicinePockets.items[| i];
-			array_push(items, item.ToJSONStruct());
-		}
-		player.medicine_pockets_items = items;
+		// PLAYER - MEDICINE POCKETS ITEMS
+		player.medicine_pockets_items = global.PlayerMedicinePockets.ToJSONStruct().items;
 		
-		// QUESTS
+		// PLAYER - QUESTS
 		var quests_progress = [];
 		var allQuestsProgress = global.QuestHandlerRef.GetAllQuestsProgress();
 		var questIndices = ds_map_keys_to_array(allQuestsProgress);
@@ -55,13 +48,14 @@ function GameSave(_save_name) constructor
 			array_push(quests_progress, questProgressStruct);
 		}
 		player.quests_progress = quests_progress;
-	}
-	
-	static ToJSONString = function()
-	{
-		var gameSaveStruct = {}
-		variable_struct_set(gameSaveStruct, save_name, { "player": player });
-		return json_stringify(gameSaveStruct);
+		
+		// WORLD - FACILITIES
+		var roomName = room_get_name(room);
+		var roomData = new RoomData(roomName);
+		array_push(
+			world.rooms,
+			roomData.ToJSONStruct()
+		);
 	}
 	
 	static ParseGameSaveStruct = function(_gameSaveStruct)
@@ -70,14 +64,14 @@ function GameSave(_save_name) constructor
 		var playerDataStruct = saveDataStruct[$ "player"];
 		
 		// PARSE INVENTORY ITEMS
-		var inventoryStruct = playerDataStruct[$ "inventory_items"];
+		var inventoryStruct = playerDataStruct[$ "backpack_items"];
 		if (!is_undefined(inventoryStruct))
 		{
 			var itemCount = array_length(inventoryStruct);
 			for (var i = 0; i < itemCount; i++)
 			{
 				var itemStruct = inventoryStruct[@ i];
-				var item = JSONStructToItem(itemStruct);
+				var item = ParseJSONStructToItem(itemStruct);
 				global.PlayerBackpack.AddItem(item, item.grid_index, item.known, true);
 			}
 		}
@@ -90,7 +84,7 @@ function GameSave(_save_name) constructor
 			for (var i = 0; i < itemCount; i++)
 			{
 				var itemStruct = magazinePocketsStruct[@ i];
-				var item = JSONStructToItem(itemStruct);
+				var item = ParseJSONStructToItem(itemStruct);
 				global.PlayerMagazinePockets.AddItem(item, item.grid_index, item.known, true);
 			}
 		}
@@ -103,7 +97,7 @@ function GameSave(_save_name) constructor
 			for (var i = 0; i < itemCount; i++)
 			{
 				var itemStruct = medicinePocketsStruct[@ i];
-				var item = JSONStructToItem(itemStruct);
+				var item = ParseJSONStructToItem(itemStruct);
 				global.PlayerMedicinePockets.AddItem(item, item.grid_index, item.known, true);
 			}
 		}
@@ -123,6 +117,55 @@ function GameSave(_save_name) constructor
 					questProgress.quest_id, questProgress.steps_progress,
 					questProgress.is_completed, questProgress.is_reward_paid
 				));
+			}
+		}
+		
+		// PARSE WORLD ROOMS
+		var worldDataStruct = saveDataStruct[$ "world"];
+		if (!is_undefined(worldDataStruct))
+		{
+			var roomsDataStruct = worldDataStruct[$ "rooms"];
+			if (!is_undefined(roomsDataStruct))
+			{
+				var roomCount = array_length(roomsDataStruct);
+				for (var i = 0; i < roomCount; i++)
+				{
+					var roomDataStruct = roomsDataStruct[@ i];
+					var roomName = variable_struct_get_names(roomDataStruct)[0];
+					if (room_get_name(room) = roomName)
+					{
+						var roomData = roomDataStruct[$ roomName];
+						var facilityCount = array_length(roomData.facilities);
+						for (var j = 0; j < facilityCount; j++)
+						{
+							var facility = roomData.facilities[j];
+							var instanceCount = instance_number(objFacility);
+							for (var k = 0; k < instanceCount; k++)
+							{
+								var instance = instance_find(objFacility, k);
+								if (instance_exists(instance))
+								{
+									if (instance.facilityId == facility.facility_id)
+									{
+										if (!is_undefined(instance.facility))
+										{
+											if (!is_undefined(instance.facility.inventory))
+											{
+												var itemCount = array_length(facility.items);
+												for (var l = 0; l < itemCount; l++)
+												{
+													var item = facility.items[l];
+													var parsedItem = ParseJSONStructToItem(item);
+													instance.facility.inventory.AddItem(parsedItem.Clone(), parsedItem.grid_index, true);
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}

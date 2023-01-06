@@ -5,7 +5,7 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "ItemData",
-    "path": "folders/Scripts/Game/Data/Inventory/ItemData.yy",
+    "name": "Item",
+    "path": "folders/Scripts/Game/Data/Inventory/Item.yy",
   },
 }

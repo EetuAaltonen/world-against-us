@@ -18,27 +18,16 @@ function Item(_name, _icon, _size, _type, _weight, _max_stack, _base_price, _des
 	
 	static ToJSONStruct = function()
 	{
-		var formatIcon = sprite_get_name(icon);
-		var formatSize = size.ToJSONStruct();
 		var formatMetadata = !is_undefined(metadata) ? metadata.ToJSONStruct(metadata) : metadata;
 		var formatGridIndex = grid_index.ToJSONStruct();
-		
 		return {
 			name: name,
-			icon: formatIcon,
-			size: formatSize,
-			type: type,
-			weight: weight,
-			max_stack: max_stack,
-			base_price: base_price,
-			description: description,
 			quantity: quantity,
 			metadata: formatMetadata,
-	
 			is_rotated: is_rotated,
 			known: known,
 			grid_index: formatGridIndex
-		}
+		};
 	}
 	
 	static Clone = function(_newQuantity = undefined)

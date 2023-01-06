@@ -29,8 +29,7 @@ function GameSaveHandler() constructor
 		var isFileSaved = false;
 		var gameSave = new GameSave(saveName);
 		gameSave.FetchSaveData();
-		
-		var gameSaveString = gameSave.ToJSONString();
+		var gameSaveString = json_stringify(gameSave.ToJSONStruct());
 		try
 		{
 			var buffer = buffer_create(
@@ -42,9 +41,9 @@ function GameSaveHandler() constructor
 			buffer_delete(buffer);
 			
 			isFileSaved = true;
-		} catch (_error)
+		} catch (error)
 		{
-			show_debug_message(_error);
+			show_debug_message(error);
 		}
 		return isFileSaved;
 	}
@@ -64,9 +63,9 @@ function GameSaveHandler() constructor
 			buffer_delete(buffer);
 			
 			isFileReseted = true;
-		} catch (_error)
+		} catch (error)
 		{
-			show_debug_message(_error);
+			show_debug_message(error);
 		}
 		return isFileReseted;
 	}
@@ -93,9 +92,9 @@ function GameSaveHandler() constructor
 					}
 				}
 			}
-		} catch (_error)
+		} catch (error)
 		{
-			show_debug_message(_error);
+			show_debug_message(error);
 		}
 		return isFileLoaded;
 	}

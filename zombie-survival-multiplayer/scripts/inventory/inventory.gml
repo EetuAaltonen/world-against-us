@@ -28,6 +28,24 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 	identifyDuration = TimerFromSeconds(2);
 	identifyTimer = 0;
 	
+	static ToJSONStruct = function()
+	{
+		var itemArray = [];
+		var itemCount = GetItemCount();
+		for (var i = 0; i < itemCount; i++)
+		{
+			var item = items[| i];
+			array_push(itemArray, item.ToJSONStruct());
+		}
+		return {
+			inventory_id: inventoryId,
+			items: itemArray,
+			type: type,
+			size: size,
+			filterArray: filterArray
+		}
+	}
+	
 	static GetItemCount = function()
     {
 		return ds_list_size(items);
