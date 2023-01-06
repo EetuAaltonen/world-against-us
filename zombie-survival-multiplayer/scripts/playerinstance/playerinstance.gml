@@ -12,7 +12,7 @@ function SpawnerCreatePlayerInstance(_playerUuid, _playerData)
 	coopPlayerObj.image_index = 1;
 	
 	// PRIMARY WEAPON
-	var primaryWeapon = JSONStructToItem(primaryWeapon);
+	var primaryWeapon = ParseJSONStructToItem(primaryWeapon);
 	
 	with (coopPlayerObj)
 	{
@@ -26,7 +26,7 @@ function SpawnerCreatePlayerInstance(_playerUuid, _playerData)
 		
 		if (!is_undefined(primaryWeapon))
 		{
-			weapon.primaryWeapon = JSONStructToItem(primaryWeapon);
+			weapon.primaryWeapon = ParseJSONStructToItem(primaryWeapon);
 			weapon.initWeapon = true;
 		}
 	}

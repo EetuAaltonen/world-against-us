@@ -18,7 +18,7 @@ function DatabaseFetchItemDataFromFile(_fileName)
 		for (var i = 0; i < dataCount; i++)
 		{
 			var jsonStruct = data[i];
-			var formattedItem = JSONStructToItem(jsonStruct);
+			var formattedItem = ParseItemJSONStruct(jsonStruct);
 			ds_map_add(itemData, formattedItem.name, formattedItem);
 		}
 	}

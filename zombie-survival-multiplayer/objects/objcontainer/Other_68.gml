@@ -23,7 +23,7 @@ if (async_load[? "size"] > 0)
 						{
 							var itemStruct = itemsStruct[i];
 							// SET KNOWN TO FALSE AND IGNORE NETWORK
-							var item = JSONStructToItem(itemStruct);
+							var item = ParseJSONStructToItem(itemStruct);
 							inventory.AddItem(item, item.grid_index, item.known, true);
 						}
 					

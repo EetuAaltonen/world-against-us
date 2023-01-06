@@ -39,7 +39,7 @@ if (async_load[? "size"] > 0)
 				case MESSAGE_TYPE.DATA_PLAYER_WEAPON_EQUIP:
 				{
 					var jsonString = buffer_read(networkBuffer, buffer_string);
-					primaryWeapon = JSONStructToItem(jsonString);
+					primaryWeapon = ParseJSONStructToItem(jsonString);
 					if (!is_undefined(primaryWeapon))
 					{
 						initWeapon = true;
