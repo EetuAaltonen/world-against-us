@@ -35,6 +35,6 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Pickable",
-    "path": "folders/Objects/World/Interactable/Pickable.yy",
+    "path": "folders/Objects/World/Pickable.yy",
   },
 }

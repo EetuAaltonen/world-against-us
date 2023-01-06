@@ -32,7 +32,7 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Interactable",
-    "path": "folders/Objects/World/Interactable.yy",
+    "name": "World",
+    "path": "folders/Objects/World.yy",
   },
 }

@@ -33,6 +33,6 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Containers",
-    "path": "folders/Objects/World/Interactable/Containers.yy",
+    "path": "folders/Objects/World/Containers.yy",
   },
 }
