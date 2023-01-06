@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "ReadDataFromJSONFile",
+  "name": "ReadJSONFile",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
