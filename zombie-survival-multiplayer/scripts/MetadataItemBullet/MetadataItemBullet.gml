@@ -1,4 +1,4 @@
-function MetadataAmmo(_caliber) : Metadata() constructor
+function MetadataItemBullet(_caliber) : Metadata() constructor
 {
 	caliber = _caliber;
 	

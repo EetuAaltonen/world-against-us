@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "MetadataPrimaryWeapon",
+  "name": "MetadataItemMedicine",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {

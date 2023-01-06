@@ -1,4 +1,4 @@
-function MetadataFuel(_fuel_value) : Metadata() constructor
+function MetadataItemFuel(_fuel_value) : Metadata() constructor
 {
 	fuel_value = _fuel_value;
     fuel_left = fuel_value;

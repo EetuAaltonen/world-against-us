@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "MetadataAmmo",
+  "name": "MetadataItemBullet",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {

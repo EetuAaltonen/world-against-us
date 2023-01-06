@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "MetadataMagazine",
+  "name": "MetadataItemLiquid",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {

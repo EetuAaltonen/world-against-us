@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "MetadataMedicine",
+  "name": "MetadataItemFood",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {

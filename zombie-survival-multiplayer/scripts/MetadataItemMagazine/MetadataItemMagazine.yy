@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "MetadataConsumableFood",
+  "name": "MetadataItemMagazine",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {

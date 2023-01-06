@@ -7,7 +7,7 @@ function ParseItemMetadata(_metadata, _itemType)
 		{
 			case "Primary_Weapon":
 			{
-				parsedMetadata = new MetadataPrimaryWeapon(
+				parsedMetadata = new MetadataItemWeapon(
 					_metadata[$ "caliber"],
 					_metadata[$ "fire_rate"],
 					_metadata[$ "range"],
@@ -19,7 +19,7 @@ function ParseItemMetadata(_metadata, _itemType)
 			} break;
 			case "Magazine":
 			{
-				parsedMetadata = new MetadataMagazine(
+				parsedMetadata = new MetadataItemMagazine(
 					_metadata[$ "caliber"],
 					_metadata[$ "magazine_size"]
 				);
@@ -27,20 +27,20 @@ function ParseItemMetadata(_metadata, _itemType)
 			} break;
 			case "Bullet":
 			{
-				parsedMetadata = new MetadataAmmo(
+				parsedMetadata = new MetadataItemBullet(
 					_metadata[$ "caliber"]
 				);
 			} break;
 			case "Medicine":
 			{
-				parsedMetadata = new MetadataMedicine(
+				parsedMetadata = new MetadataItemMedicine(
 					_metadata[$ "healing_value"]
 				);
 				if (!is_undefined(_metadata[$ "healing_left"])) { variable_struct_set(parsedMetadata, "healing_left", _metadata[$ "healing_left"]); }
 			} break;
 			case "Fuel":
 			{
-				parsedMetadata = new MetadataFuel(
+				parsedMetadata = new MetadataItemFuel(
 					_metadata[$ "fuel_value"]
 				);
 				if (!is_undefined(_metadata[$ "fuel_left"])) { variable_struct_set(parsedMetadata, "fuel_left", _metadata[$ "fuel_left"]); }
@@ -50,13 +50,13 @@ function ParseItemMetadata(_metadata, _itemType)
 				var consumableType = _metadata[$ "consumable_type"];
 				if (consumableType == "Food")
 				{
-					parsedMetadata = new MetadataConsumableFood(
+					parsedMetadata = new MetadataItemFood(
 						_metadata[$ "consumable_type"],
 						_metadata[$ "nutrition"]
 					);
 				} else if (consumableType == "Liquid")
 				{
-					parsedMetadata = new MetadataConsumableLiquid(
+					parsedMetadata = new MetadataItemLiquid(
 						_metadata[$ "consumable_type"],
 						_metadata[$ "hydration"]
 					);

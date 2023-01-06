@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "MetadataFuel",
+  "name": "MetadataItemWeapon",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {

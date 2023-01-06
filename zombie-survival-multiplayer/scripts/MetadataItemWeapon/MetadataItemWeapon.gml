@@ -1,4 +1,4 @@
-function MetadataPrimaryWeapon(_caliber, _fire_rate, _range, _recoil, _attachment_slots, _barrel_pos) : Metadata() constructor
+function MetadataItemWeapon(_caliber, _fire_rate, _range, _recoil, _attachment_slots, _barrel_pos) : Metadata() constructor
 {
     caliber = _caliber;
     fire_rate = _fire_rate;
