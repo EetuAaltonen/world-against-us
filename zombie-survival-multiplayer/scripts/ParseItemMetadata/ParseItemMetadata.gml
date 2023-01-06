@@ -15,7 +15,7 @@ function ParseItemMetadata(_metadata, _itemType)
 					_metadata[$ "attachment_slots"],
 					_metadata[$ "barrel_pos"]
 				);
-				if (!is_undefined(_metadata[$ "magazine"]) && !is_ptr(_metadata[$ "magazine"])) { variable_struct_set(parsedMetadata, "magazine", _metadata[$ "magazine"]); }
+				if (!is_undefined(_metadata[$ "magazine"] ?? undefined)) { variable_struct_set(parsedMetadata, "magazine", _metadata[$ "magazine"]); }
 			} break;
 			case "Magazine":
 			{

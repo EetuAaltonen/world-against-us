@@ -203,7 +203,7 @@
     {
       "name": "7.62 Bullet",
       "icon": "spr762Bullet",
-      "type": "Ammo",
+      "type": "Bullet",
       "size": {
         "w": 1,
         "h": 1
