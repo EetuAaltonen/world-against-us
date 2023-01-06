@@ -17,10 +17,10 @@ function RoomData(_roomName) constructor
 	static FetchFacilities = function()
 	{
 		var facilityArray = [];
-		var facilityInstanceCount = instance_number(objFacility);
+		var facilityInstanceCount = instance_number(objFacilityParent);
 		for (var i = 0; i < facilityInstanceCount; i++)
 		{
-			var facilityInstance = instance_find(objFacility, i);
+			var facilityInstance = instance_find(objFacilityParent, i);
 			if (instance_exists(facilityInstance))
 			{
 				if (!is_undefined(facilityInstance.facility))
