@@ -3,4 +3,4 @@ event_inherited();
 
 image_speed = 0;
 
-facility = new FacilityRoadGate(undefined, undefined, false);
+facility = new Facility(undefined, undefined, "Road_Gate", new MetadataFacilityRoadGate(false));

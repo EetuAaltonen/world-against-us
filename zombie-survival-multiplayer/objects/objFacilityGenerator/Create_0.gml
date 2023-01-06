@@ -18,4 +18,4 @@ interactionFunction = function()
 }
 
 var inventory = new Inventory(undefined, INVENTORY_TYPE.Facility, { columns: 2, rows: 3 }, ["Fuel"]);
-facility = new FacilityGenerator(undefined, inventory, 15);
+facility = new Facility(undefined, inventory, "Generator", new MetadataFacilityGenerator(15, 0));

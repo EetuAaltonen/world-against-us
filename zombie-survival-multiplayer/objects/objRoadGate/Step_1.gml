@@ -1,9 +1,9 @@
 // Inherit the parent event
 event_inherited();
 
-if (!facility.is_open)
+if (!facility.metadata.is_open)
 {
-	facility.is_open = (electricalNetwork.electricPower > 0);
+	facility.metadata.is_open = (electricalNetwork.electricPower > 0);
 }
-mask_index = facility.is_open ? sprNoMask : sprite_index;
-image_index = facility.is_open ? 1 : 0;
+mask_index = facility.metadata.is_open ? sprNoMask : sprite_index;
+image_index = facility.metadata.is_open ? 1 : 0;
