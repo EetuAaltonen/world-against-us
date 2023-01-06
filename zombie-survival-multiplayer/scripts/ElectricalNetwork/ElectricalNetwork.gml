@@ -15,10 +15,10 @@ function ElectricalNetwork(_electricId, _targetId, _maxElectricOutputPower) cons
 			initNetwork = false;
 			if (!is_undefined(targetId))
 			{
-				var instanceCount = instance_number(objFacility);
+				var instanceCount = instance_number(objFacilityParent);
 				for (var i = 0; i < instanceCount; ++i;)
 				{
-					var facilityInstance = instance_find(objFacility, i);
+					var facilityInstance = instance_find(objFacilityParent, i);
 					if (instance_exists(facilityInstance))
 					{
 						if (!is_undefined(facilityInstance.electricalNetwork))

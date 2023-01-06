@@ -1,7 +1,7 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "objFacility",
+  "name": "objFacilityParent",
   "spriteId": null,
   "solid": false,
   "visible": true,
@@ -35,6 +35,6 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Facility",
-    "path": "folders/Objects/World/Interactable/Facility.yy",
+    "path": "folders/Objects/World/Facility.yy",
   },
 }

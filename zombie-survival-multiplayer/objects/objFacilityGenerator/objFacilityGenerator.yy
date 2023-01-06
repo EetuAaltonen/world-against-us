@@ -12,8 +12,8 @@
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "objFacility",
-    "path": "objects/objFacility/objFacility.yy",
+    "name": "objFacilityParent",
+    "path": "objects/objFacilityParent/objFacilityParent.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
@@ -35,6 +35,6 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Facility",
-    "path": "folders/Objects/World/Interactable/Facility.yy",
+    "path": "folders/Objects/World/Facility.yy",
   },
 }
