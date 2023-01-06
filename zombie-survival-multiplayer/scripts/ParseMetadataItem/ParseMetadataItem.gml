@@ -1,4 +1,4 @@
-function ParseItemMetadata(_metadata, _itemType)
+function ParseMetadataItem(_metadata, _itemType)
 {
 	var parsedMetadata = new Metadata();
 	if (!is_undefined(_metadata) && !is_undefined(_itemType))

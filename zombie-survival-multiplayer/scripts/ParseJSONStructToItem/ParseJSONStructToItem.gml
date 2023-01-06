@@ -10,7 +10,7 @@ function ParseJSONStructToItem(_jsonStruct)
 		if (is_undefined(databaseItem)) return item;
 		item = databaseItem.Clone();
 		
-		item.metadata = ParseItemMetadata(itemStruct[$ "metadata"], item.type);
+		item.metadata = ParseMetadataItem(itemStruct[$ "metadata"], item.type);
 		item.quantity = itemStruct[$ "quantity"] ?? 1;
 		if (bool(itemStruct[$ "is_rotated"] ?? false)) { item.Rotate(); }
 		item.known = bool(itemStruct[$ "known"] ?? true);

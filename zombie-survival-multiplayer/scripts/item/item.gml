@@ -36,7 +36,7 @@ function Item(_name, _icon, _size, _type, _weight, _max_stack, _base_price, _des
 			name, icon, size, type,
 			weight, max_stack, base_price, description,
 			_newQuantity ?? quantity,
-			ParseItemMetadata(metadata, type),
+			ParseMetadataItem(metadata, type),
 			is_rotated, known,
 			!is_undefined(grid_index) ? new GridIndex(grid_index.col, grid_index.row) : grid_index
 		);

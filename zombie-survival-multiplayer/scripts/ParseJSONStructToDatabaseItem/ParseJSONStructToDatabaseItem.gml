@@ -14,7 +14,7 @@ function ParseJSONStructToDatabaseItem(_jsonStruct)
 			);
 			var quantity = 1;
 			var itemType = _jsonStruct[$ "type"];
-			var metadata = ParseItemMetadata(_jsonStruct[$ "metadata"], itemType);
+			var metadata = ParseMetadataItem(_jsonStruct[$ "metadata"], itemType);
 	
 			item = new Item(
 				_jsonStruct[$ "name"],

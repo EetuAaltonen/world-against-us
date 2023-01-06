@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "ParseItemMetadata",
+  "name": "ParseMetadataItem",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
