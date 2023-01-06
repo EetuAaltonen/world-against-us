@@ -1,5 +1,6 @@
 // ITEM DATA
-itemData = ReadDataFromJSONFile("item_data.json", "item_data", FormatDataMapFromFile, "name", JSONStructToItem);
+var jsonStruct = ReadJSONFile("item_data.json") ?? {};
+itemData = ParseStructArrayToMap(jsonStruct[$ "item_data"], "name", ParseJSONStructToDatabaseItem);
 
 // BULLET DATA
 bulletData = ds_map_create();

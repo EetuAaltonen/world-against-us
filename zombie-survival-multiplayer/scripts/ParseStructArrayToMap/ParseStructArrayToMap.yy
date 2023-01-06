@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "FormatDataMapFromFile",
+  "name": "ParseStructArrayToMap",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
