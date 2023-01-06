@@ -16,7 +16,7 @@
     {"inherit":false,"visible":false,"xview":0,"yview":0,"wview":1366,"hview":768,"xport":0,"yport":0,"wport":1366,"hport":768,"hborder":32,"vborder":32,"hspeed":-1,"vspeed":-1,"objectId":null,},
   ],
   "layers": [
-    {"resourceType":"GMREffectLayer","resourceVersion":"1.0","name":"EffectNight","effectType":"_filter_gradient","visible":false,"hierarchyFrozen":false,"depth":0,"userdefinedDepth":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritVisibility":true,"inheritSubLayers":true,"gridX":32,"gridY":32,"layers":[],"effectEnabled":true,"properties":[
+    {"resourceType":"GMREffectLayer","resourceVersion":"1.0","name":"EffectNight","visible":false,"depth":0,"userdefinedDepth":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritVisibility":true,"inheritSubLayers":true,"gridX":32,"gridY":32,"layers":[],"hierarchyFrozen":false,"effectEnabled":true,"effectType":"_filter_gradient","properties":[
         {"type":1,"name":"g_GradientColour1","value":"#D1000000",},
         {"type":1,"name":"g_GradientColour2","value":"#00000000",},
         {"type":0,"name":"g_GradientPosition1","value":"0",},
@@ -25,7 +25,7 @@
         {"type":0,"name":"g_GradientPosition2","value":"0",},
         {"type":0,"name":"g_GradientMode","value":"4",},
       ],},
-    {"resourceType":"GMREffectLayer","resourceVersion":"1.0","name":"EffectFog","effectType":"_filter_fractal_noise","visible":false,"hierarchyFrozen":false,"depth":100,"userdefinedDepth":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritVisibility":true,"inheritSubLayers":true,"gridX":32,"gridY":32,"layers":[],"effectEnabled":true,"properties":[
+    {"resourceType":"GMREffectLayer","resourceVersion":"1.0","name":"EffectFog","visible":false,"depth":100,"userdefinedDepth":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritVisibility":true,"inheritSubLayers":true,"gridX":32,"gridY":32,"layers":[],"hierarchyFrozen":false,"effectEnabled":true,"effectType":"_filter_fractal_noise","properties":[
         {"type":0,"name":"g_FractalNoiseScale","value":"300",},
         {"type":0,"name":"g_FractalNoisePersistence","value":"0.3",},
         {"type":0,"name":"g_FractalNoiseOffset","value":"0",},
