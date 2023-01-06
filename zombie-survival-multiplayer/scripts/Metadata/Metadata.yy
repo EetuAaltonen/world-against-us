@@ -5,7 +5,7 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Metadata",
-    "path": "folders/Scripts/Game/Data/Inventory/ItemData/Metadata.yy",
+    "name": "Data",
+    "path": "folders/Scripts/Game/Data.yy",
   },
 }

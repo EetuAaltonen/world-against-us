@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Metadata",
-    "path": "folders/Scripts/Game/Data/Inventory/ItemData/Metadata.yy",
+    "path": "folders/Scripts/Game/Data/Inventory/Item/Metadata.yy",
   },
 }
