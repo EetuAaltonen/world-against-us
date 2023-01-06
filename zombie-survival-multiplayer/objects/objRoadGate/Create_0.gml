@@ -2,4 +2,5 @@
 event_inherited();
 
 image_speed = 0;
-isOpen = false;
+
+facility = new FacilityRoadGate(undefined, undefined, false);

@@ -1,6 +1,9 @@
 // Inherit the parent event
 event_inherited();
 
-isOpen = (electricalNetwork.electricPower > 0);
-mask_index = isOpen ? sprNoMask : sprite_index;
-image_index = isOpen ? 1 : 0;
+if (!facility.is_open)
+{
+	facility.is_open = (electricalNetwork.electricPower > 0);
+}
+mask_index = facility.is_open ? sprNoMask : sprite_index;
+image_index = facility.is_open ? 1 : 0;
