@@ -1,4 +1,4 @@
-function ParseStructArrayToMap(_structArray, _mapKeyIndicator, _elementParseFunction)
+function ParseJSONStructArrayToMap(_structArray, _mapKeyIndicator, _elementParseFunction)
 {
 	var dataMap = ds_map_create();
 	if (!is_undefined(_structArray))

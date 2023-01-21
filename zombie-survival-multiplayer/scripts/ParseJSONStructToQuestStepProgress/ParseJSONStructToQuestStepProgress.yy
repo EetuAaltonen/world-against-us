@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "ParseJSONStructToItemArray",
+  "name": "ParseJSONStructToQuestStepProgress",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
     "name": "Functions",
-    "path": "folders/Scripts/Game/Data/Inventory/Item/Functions.yy",
+    "path": "folders/Scripts/Game/Data/Quest/Functions.yy",
   },
 }

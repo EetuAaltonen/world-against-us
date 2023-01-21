@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "DatabaseFetchQuestDataFromFile",
+  "name": "ParseJSONStructToDatabaseQuestReward",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {

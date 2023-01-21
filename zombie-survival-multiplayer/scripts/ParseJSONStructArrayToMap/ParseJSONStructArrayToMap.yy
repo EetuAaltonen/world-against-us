@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "ParseStructArrayToMap",
+  "name": "ParseJSONStructArrayToMap",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {

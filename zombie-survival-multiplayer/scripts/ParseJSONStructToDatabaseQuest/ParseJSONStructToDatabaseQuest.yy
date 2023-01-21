@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "JSONStructToQuest",
+  "name": "ParseJSONStructToDatabaseQuest",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "JSON",
-    "path": "folders/Scripts/Game/Data/JSON.yy",
+    "name": "Database",
+    "path": "folders/Scripts/Game/Data/Database.yy",
   },
 }
