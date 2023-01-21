@@ -1,3 +1,4 @@
+/// @description Custom RoomStartEvent
 // OPEN MAIN MENU ROOT WINDOW
 var guiState = new GUIState(
 	GUI_STATE.MainMenu, undefined, undefined,

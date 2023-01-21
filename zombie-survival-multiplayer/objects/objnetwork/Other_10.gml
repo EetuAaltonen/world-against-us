@@ -1,3 +1,4 @@
+/// @description Custom RoomStartEvent
 // DISCONNECT FROM THE SERVERWHEN RETURNING TO MAINMENU
 if (room == roomMainMenu)
 {

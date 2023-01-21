@@ -52,9 +52,23 @@ for (var i = 0; i < controllerCount; i++)
 	}
 	
 	// CONSOLE LOG
-	if (controller.instance != noone)
+	if (instance_exists(controller.instance))
 	{
 		show_debug_message(string("->Instance loaded {0}", object_get_name(controller.objectIndex)));	
+	}
+}
+
+// EXECUTE CUSTOM USER EVENT 0 OF CONTROLLERS ON ROOM START
+// ORDERED BY CONTROLLER LIST
+for (var i = 0; i < controllerCount; i++)
+{
+	var controller = controllers[@ i];
+	if (instance_exists(controller.instance))
+	{
+		with (controller.instance)
+		{
+			event_perform(ev_other, ev_user0);
+		}
 	}
 }
 

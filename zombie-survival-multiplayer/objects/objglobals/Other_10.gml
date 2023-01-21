@@ -1,3 +1,4 @@
+/// @description Custom RoomStartEvent
 // RESET GLOBAL VARIABLES
 initGlobalVariables();
 
