@@ -1,7 +1,7 @@
 function ParseJSONStructToDatabaseItem(_jsonStruct)
 {
 	var item = undefined;
-	if (_jsonStruct)
+	if (!is_undefined(_jsonStruct))
 	{
 		try
 		{

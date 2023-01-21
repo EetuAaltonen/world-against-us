@@ -1,6 +1,6 @@
-function QuestReward(_type, _reward, _amount) constructor
+function QuestReward(_type, _reward_name, _quantity) constructor
 {
 	type = _type;
-	reward = _reward;
-	amount = _amount;
+	reward_name = _reward_name;
+	quantity = _quantity;
 }

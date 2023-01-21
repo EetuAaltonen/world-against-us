@@ -35,17 +35,13 @@ function GameSave(_save_name) constructor
 		
 		// PLAYER - QUESTS
 		var quests_progress = [];
-		var allQuestsProgress = global.QuestHandlerRef.GetAllQuestsProgress();
-		var questIndices = ds_map_keys_to_array(allQuestsProgress);
+		var questIndices = ds_map_keys_to_array(global.QuestHandlerRef.questsProgress);
 		var questCount = array_length(questIndices);
 		for (var i = 0; i < questCount; i++)
 		{
 			var questKey = questIndices[@ i];
-			var questProgress = allQuestsProgress[? questKey];
-			var questProgressStruct = {};
-			variable_struct_set(questProgressStruct, questKey, questProgress.ToJSONStruct());
-			// TODO: Save quest steps
-			array_push(quests_progress, questProgressStruct);
+			var questProgress = global.QuestHandlerRef.questsProgress[? questKey];
+			array_push(quests_progress, questProgress.ToJSONStruct());
 		}
 		player.quests_progress = quests_progress;
 		
@@ -58,7 +54,7 @@ function GameSave(_save_name) constructor
 		);
 	}
 	
-	static ParseGameSaveStruct = function(_gameSaveStruct)
+	static ParseGameSavePlayerDataStruct = function(_gameSaveStruct)
 	{
 		var saveDataStruct = _gameSaveStruct[$ save_name];
 		var playerDataStruct = saveDataStruct[$ "player"];
@@ -106,21 +102,15 @@ function GameSave(_save_name) constructor
 		var questsStruct = playerDataStruct[$ "quests_progress"];
 		if (!is_undefined(questsStruct))
 		{
-			var questCount = array_length(questsStruct);
-			for (var i = 0; i < questCount; i++)
-			{
-				var questProgressStruct = questsStruct[@ i];
-				var questId = variable_struct_get_names(questProgressStruct)[0];
-				var questProgress = questProgressStruct[$ questId];
-				// TODO: Parse quest steps progress
-				ds_map_add(global.QuestHandlerRef.questsProgress, questId, new QuestProgress(
-					questProgress.quest_id, questProgress.steps_progress,
-					questProgress.is_completed, questProgress.is_reward_paid
-				));
-			}
+			var questsProgressMap = ParseJSONStructArrayToMap(questsStruct, "quest_id", ParseJSONStructToQuestProgress);
+			global.QuestHandlerRef.questsProgress = questsProgressMap;
 		}
-		
+	}
+	
+	static ParseGameSaveRoomDataStruct = function(_gameSaveStruct)
+	{
 		// PARSE WORLD ROOMS
+		var saveDataStruct = _gameSaveStruct[$ save_name];
 		var worldDataStruct = saveDataStruct[$ "world"];
 		if (!is_undefined(worldDataStruct))
 		{

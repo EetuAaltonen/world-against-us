@@ -70,9 +70,9 @@ function GameSaveHandler() constructor
 		return isFileReseted;
 	}
 	
-	static LoadFromFile = function()
+	static LoadPlayerDataFromFile = function()
 	{
-		var isFileLoaded = false;
+		var isPlayerDataLoaded = false;
 		try
 		{
 			if (file_exists(saveFileName))
@@ -82,20 +82,47 @@ function GameSaveHandler() constructor
 				{
 					var gameSaveString = buffer_read(buffer, buffer_text);
 					buffer_delete(buffer);
-					if (string_length(gameSaveString) > 0)
+					if (string_length(gameSaveString) > 0 && gameSaveString != "{}")
 					{
 						var gameSaveStruct = json_parse(gameSaveString);
 						var gameSave = new GameSave(saveName);
-						gameSave.ParseGameSaveStruct(gameSaveStruct);
-				
-						isFileLoaded = true;
+						gameSave.ParseGameSavePlayerDataStruct(gameSaveStruct);
 					}
 				}
+				isPlayerDataLoaded = true;
 			}
 		} catch (error)
 		{
 			show_debug_message(error);
 		}
-		return isFileLoaded;
+		return isPlayerDataLoaded;
+	}
+	
+	static LoadRoomDataFromFile = function()
+	{
+		var isRoomDataLoaded = false;
+		try
+		{
+			if (file_exists(saveFileName))
+			{
+				var buffer = buffer_load(saveFileName);
+				if (buffer_get_size(buffer) > 0)
+				{
+					var gameSaveString = buffer_read(buffer, buffer_text);
+					buffer_delete(buffer);
+					if (string_length(gameSaveString) > 0 && gameSaveString != "{}")
+					{
+						var gameSaveStruct = json_parse(gameSaveString);
+						var gameSave = new GameSave(saveName);
+						gameSave.ParseGameSaveRoomDataStruct(gameSaveStruct);
+					}
+				}
+				isRoomDataLoaded = true;
+			}
+		} catch (error)
+		{
+			show_debug_message(error);
+		}
+		return isRoomDataLoaded;
 	}
 }
