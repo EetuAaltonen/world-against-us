@@ -7,13 +7,6 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 	filterArray = _filterArray;
 	
 	gridData = [];
-	// Init grid data
-    for (var i = 0; i < size.rows; i++) {
-	  for (var j = 0; j < size.columns; j ++) {
-	    gridData[i, j] = undefined;
-	  }
-	}
-	
 	grid = {
 		columns: size.columns,
 		rows: size.rows,
@@ -22,6 +15,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 			h: 48,
 		}
 	};
+	InitGridData();
 	
 	// Item search
 	identifyIndex = undefined;
@@ -43,10 +37,27 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 		}
 	}
 	
+	static InitGridData = function()
+	{
+		// RESET GRID DATA
+	    for (var i = 0; i < size.rows; i++) {
+		  for (var j = 0; j < size.columns; j ++) {
+		    gridData[i, j] = undefined;
+		  }
+		}
+	}
+	
 	static GetItemCount = function()
     {
 		return ds_list_size(items);
     }
+	
+	static ClearItems = function()
+	{
+		// CLEAR ITEMS
+		ds_list_clear(items);
+		InitGridData();
+	}
 
     static AddItem = function(_item, _grid_index = undefined, _known = true, _ignore_network = false)
     {
