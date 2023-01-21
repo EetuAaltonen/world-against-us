@@ -3,33 +3,36 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 	var itemGridIndex = _inventory.gridData[_mouseHoverIndex.row][_mouseHoverIndex.col];
 	if (!is_undefined(itemGridIndex))
 	{
-		var item = _inventory.GetItemByGridIndex(itemGridIndex);
-		if (!is_undefined(item))
-		{						
+		var cloneItem = _inventory.GetItemByGridIndex(itemGridIndex).Clone();
+		if (!is_undefined(cloneItem))
+		{
+			// RESET ITEM ROTATION
+			if (cloneItem.is_rotated) { cloneItem.Rotate(); }
+			
 			if (_inventory.type == INVENTORY_TYPE.PlayerBackpack)
 			{
 				var targetInventory = global.ObjTempInventory.inventory;
 				if (!is_undefined(targetInventory))
 				{
-					if (targetInventory.AddItem(item.Clone(), undefined, item.known))
+					if (targetInventory.AddItem(cloneItem, undefined, cloneItem.known))
 					{
 						_inventory.RemoveItemByGridIndex(itemGridIndex);	
 					}
 				} else {
-					if (item.type == "Magazine" || item.type == "Bullet")
+					if (cloneItem.type == "Magazine" || cloneItem.type == "Bullet")
 					{
 						if (!is_undefined(global.PlayerMagazinePockets))
 						{
-							if (global.PlayerMagazinePockets.AddItem(item.Clone(), undefined, item.known))
+							if (global.PlayerMagazinePockets.AddItem(cloneItem, undefined, cloneItem.known))
 							{
 								_inventory.RemoveItemByGridIndex(itemGridIndex);
 							}
 						}
-					} else if (item.type == "Medicine")
+					} else if (cloneItem.type == "Medicine")
 					{
 						if (!is_undefined(global.PlayerMedicinePockets))
 						{
-							if (global.PlayerMedicinePockets.AddItem(item.Clone(), undefined, item.known))
+							if (global.PlayerMedicinePockets.AddItem(cloneItem, undefined, cloneItem.known))
 							{
 								_inventory.RemoveItemByGridIndex(itemGridIndex);
 							}
@@ -39,7 +42,7 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 			} else {
 				if (!is_undefined(global.PlayerBackpack))
 				{
-					if (global.PlayerBackpack.AddItem(item.Clone(), undefined, item.known))
+					if (global.PlayerBackpack.AddItem(cloneItem, undefined, cloneItem.known))
 					{
 						_inventory.RemoveItemByGridIndex(itemGridIndex);
 					}
