@@ -9,7 +9,7 @@ function CreateWindowJournalQuest(_zIndex)
 	);
 	
 	var questElements = ds_list_create();
-	var questBackgroundSize = new Size(windowSize.w, 800);
+	var questBackgroundSize = new Size(windowSize.w, 900);
 	var questBackground = new WindowImage(
 		"questBackground",
 		new Vector2(
@@ -27,17 +27,23 @@ function CreateWindowJournalQuest(_zIndex)
 		
 	);
 	
-	var allQuests = global.QuestHandlerRef.GetAllQuestsProgress();
 	var questListMap = new WindowListMap(
 		"QuestListMap",
-		new Vector2(400, 200), new Size(470, 600), undefined,
-		allQuests, ListDrawJournalQuest, true, OnClickListJournalQuest 
+		new Vector2(330, 200), new Size(540, 600), undefined,
+		global.QuestHandlerRef.questsProgress, ListDrawJournalQuest, true, OnClickListJournalQuest 
+	);
+	
+	var questStepListArray = new WindowListArray(
+		"QuestStepListArray",
+		new Vector2(1030, 200), new Size(540, 600), undefined,
+		[], ListDrawJournalQuestStep, true, function() { show_message(string(self)); }
 	);
 	
 	ds_list_add(questElements,
 		questBackground,
 		questTitle,
-		questListMap
+		questListMap,
+		questStepListArray
 	);
 	
 	questWindow.AddChildElements(questElements);

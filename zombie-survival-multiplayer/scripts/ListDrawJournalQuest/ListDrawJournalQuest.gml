@@ -1,7 +1,7 @@
-function ListDrawJournalQuest(_position, _size, _questProgressData)
+function ListDrawJournalQuest(_position, _size, _questProgress)
 {
 	var outlineWidth = 2;
-	var outlineColor = _questProgressData.is_completed ? #21c208 : c_black;
+	var outlineColor = _questProgress.is_completed ? #21c208 : c_black;
 	draw_sprite_ext(
 		sprGUIBg, 0,
 		_position.X, _position.Y,
@@ -16,7 +16,7 @@ function ListDrawJournalQuest(_position, _size, _questProgressData)
 		0, c_ltgray, 1
 	);
 	
-	var quest = global.QuestData[? _questProgressData.quest_id];
+	var quest = global.QuestData[? _questProgress.quest_id];
 	var iconSize = new Size(80, _size.h - 20);
 	var iconScale = ScaleSpriteToFitSize(quest.icon, iconSize);
 	var iconCenter = CenterSpriteOffset(quest.icon, iconScale);

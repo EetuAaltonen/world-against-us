@@ -1,8 +1,22 @@
 function OnClickListJournalQuest(_questProgress)
 {
-	var allQuestsProgress = global.QuestHandlerRef.GetAllQuestsProgress();
-	var questProgress = allQuestsProgress[? _questProgress.quest_id];
+	var questStepList = parentWindow.GetChildElementById("QuestStepListArray");
+	if (!is_undefined(questStepList))
+	{
+		var quest = global.QuestData[? _questProgress.quest_id];
 	
-	questProgress.is_completed = !questProgress.is_completed;
-	questProgress.is_reward_paid = !questProgress.is_reward_paid;
+		var questStepProgressData = [];
+		var questStepProgressCount = array_length(_questProgress.steps_progress);
+		for (var i = 0; i < questStepProgressCount; i++)
+		{
+			var questStepProgress = _questProgress.steps_progress[@ i];
+			array_push(questStepProgressData, {
+				database_quest_step: quest.steps[? questStepProgress.quest_step_id],
+				is_completed: questStepProgress.is_completed
+			});
+		}
+		
+		questStepList.listData = questStepProgressData;
+		questStepList.initListElements = true;
+	}
 }

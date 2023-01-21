@@ -9,7 +9,7 @@ function CreateWindowJournal(_zIndex)
 	);
 	
 	var journalElements = ds_list_create();
-	var journalBackgroundSize = new Size(windowSize.w, 800);
+	var journalBackgroundSize = new Size(windowSize.w, 900);
 	var journalBackground = new WindowImage(
 		"journalBackground",
 		new Vector2(

@@ -12,6 +12,8 @@ function WindowList(_elementId, _relativePosition, _size, _backgroundColor, _lis
 		if (initListElements)
 		{
 			initListElements = false;
+			// CLEAR CHILD ELEMENTS
+			ds_list_clear(childElements);
 			
 			var listElements = ds_list_create();
 			var listElementSize = new Size(size.w, 60);
