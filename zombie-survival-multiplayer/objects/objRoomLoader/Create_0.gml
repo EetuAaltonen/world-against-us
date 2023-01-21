@@ -18,7 +18,6 @@ controllers = [
 	// MAIN MENU
 	new GameController(objGlobals, [], [roomLaunch]),
 	new GameController(objNetwork, [], [roomLaunch]),
-	new GameController(objGameSave, [], [roomLaunch]),
 	
 	new GameController(objGUI, [], [roomLaunch]),
 	new GameController(objMouse, [], [roomLaunch], "Controllers_All_Front"),
@@ -27,18 +26,22 @@ controllers = [
 	new GameController(objMainMenu, [roomMainMenu], [roomLaunch]),
 	
 	// GAME
-	new GameController(objHud, [], [roomMainMenu, roomLaunch], "Controllers_Behind"),
-	new GameController(objNotification, [], [roomMainMenu, roomLaunch], "Controllers_Front"),
+	new GameController(objHud, [], [roomLaunch, roomMainMenu, roomLoadSave], "Controllers_Behind"),
+	new GameController(objNotification, [], [roomLaunch, roomMainMenu], "Controllers_Front"),
 	
-	new GameController(objDatabase, [], [roomMainMenu, roomLaunch]),
-	new GameController(objInventory, [], [roomMainMenu, roomLaunch]),
-	new GameController(objTempInventory, [], [roomMainMenu, roomLaunch]),
-	new GameController(objJournal, [], [roomMainMenu, roomLaunch]),
-	new GameController(objQuest, [], [roomMainMenu, roomLaunch]),
+	new GameController(objDatabase, [], [roomLaunch, roomMainMenu]),
+	new GameController(objInventory, [], [roomLaunch, roomMainMenu]),
+	new GameController(objTempInventory, [], [roomLaunch, roomMainMenu, roomLoadSave]),
+	new GameController(objJournal, [], [roomLaunch, roomMainMenu]),
+	new GameController(objQuest, [], [roomLaunch, roomMainMenu]),
 	
-	new GameController(objInstanceHighlighter, [], [roomMainMenu, roomLaunch], "HighlightedInstances"),
+	new GameController(objInstanceHighlighter, [], [roomLaunch, roomMainMenu, roomLoadSave], "HighlightedInstances"),
 	
-	new GameController(objGridPath, [], [roomMainMenu, roomLaunch])
+	new GameController(objGridPath, [], [roomLaunch, roomMainMenu, roomLoadSave]),
+	
+	// LOAD THE GAME SAVE OBJECT LAST
+	// TO SET THE WORLD STATE AFTER EVERYTHING IS LOADED
+	new GameController(objGameSave, [], [roomLaunch]),
 ];
 
 controllerLayers = ds_map_create();
