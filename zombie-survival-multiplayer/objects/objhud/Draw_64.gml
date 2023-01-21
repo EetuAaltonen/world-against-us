@@ -1,5 +1,5 @@
 // HUD BACKGROUND
-draw_sprite_ext(sprGUIBg, 0, 0, global.GUIH - hudHeight, global.GUIW, hudHeight, 0, c_black, 0.9);
+draw_sprite_ext(sprGUIBg, 0, 0, global.GUIH - hudHeight, global.GUIW, hudHeight, 0, c_black, hudAlpha);
 	
 var hudVerticalCenter = (global.GUIH - (hudHeight * 0.5));
 draw_set_color(c_white);
