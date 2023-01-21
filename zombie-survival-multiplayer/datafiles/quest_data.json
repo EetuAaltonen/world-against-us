@@ -6,7 +6,7 @@
       "description": "",
       "icon": "sprMoney",
       "type": "MainQuest",
-      "rewards": [{ "type": "Item", "reward": "Money", "amount": "50" }],
+      "rewards": [{ "type": "Item", "reward_name": "Money", "quantity": "50" }],
       "steps": [
         {
           "quest_step_id": "TheNumberOneDime",
@@ -14,7 +14,15 @@
           "description": "",
           "icon": "sprMoney",
           "type": "FindItem",
-          "completion_check_function_name": "QuestStepCheckTheNumberOneDime1"
+          "completion_check_function_name": "QuestStepCheckTheNumberOneDime"
+        },
+        {
+          "quest_step_id": "GreedyChoise",
+          "name": "Greedy Choise",
+          "description": "",
+          "icon": "sprMP5",
+          "type": "TalkTo",
+          "completion_check_function_name": "QuestStepCheckGreedyChoise"
         }
       ]
     },
@@ -24,7 +32,9 @@
       "description": "",
       "icon": "sprHeart",
       "type": "MainQuest",
-      "rewards": [{ "type": "Item", "reward": "First Aid Kit", "amount": "1" }],
+      "rewards": [
+        { "type": "Item", "reward_name": "First Aid Kit", "quantity": "1" }
+      ],
       "steps": [
         {
           "quest_step_id": "TheFirstNeedOfAid",
