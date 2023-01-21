@@ -36,6 +36,7 @@ function NotificationHandler() constructor
 	static ClearNotifications = function()
 	{
 		ds_list_clear(notifications);
+		animationCurve.Reset();
 	}
 	
 	static Draw = function()

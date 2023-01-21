@@ -63,6 +63,9 @@ function GameSave(_save_name) constructor
 		var inventoryStruct = playerDataStruct[$ "backpack_items"];
 		if (!is_undefined(inventoryStruct))
 		{
+			// CLEAR BACKPACK
+			global.PlayerBackpack.ClearItems();
+			// ADD NEW ITEMS
 			var itemCount = array_length(inventoryStruct);
 			for (var i = 0; i < itemCount; i++)
 			{
@@ -76,6 +79,9 @@ function GameSave(_save_name) constructor
 		var magazinePocketsStruct = playerDataStruct[$ "magazine_pockets_items"];
 		if (!is_undefined(magazinePocketsStruct))
 		{
+			// CLEAR MAGAZINE POCKETS
+			global.PlayerMagazinePockets.ClearItems();
+			// ADD NEW ITEMS
 			var itemCount = array_length(magazinePocketsStruct);
 			for (var i = 0; i < itemCount; i++)
 			{
@@ -89,6 +95,9 @@ function GameSave(_save_name) constructor
 		var medicinePocketsStruct = playerDataStruct[$ "medicine_pockets_items"];
 		if (!is_undefined(medicinePocketsStruct))
 		{
+			// CLEAR MEDICINE POCKETS
+			global.PlayerMedicinePockets.ClearItems();
+			// ADD NEW ITEMS
 			var itemCount = array_length(medicinePocketsStruct);
 			for (var i = 0; i < itemCount; i++)
 			{
@@ -131,7 +140,7 @@ function GameSave(_save_name) constructor
 							var facilityStruct = roomData.facilities[j];
 							var facility = ParseJSONStructToFacility(facilityStruct);
 							var inventoryStruct = facilityStruct[$ "inventory"] ?? undefined;
-							var itemArray = (!is_undefined(inventoryStruct)) ? ParseJSONStructToItemArray(inventoryStruct[$ "items"]) : [];
+							var itemArray = (!is_undefined(inventoryStruct)) ? ParseJSONStructToArray(inventoryStruct[$ "items"], ParseJSONStructToItem) : [];
 							var instanceCount = instance_number(objFacilityParent);
 							for (var k = 0; k < instanceCount; k++)
 							{
@@ -145,6 +154,9 @@ function GameSave(_save_name) constructor
 											instance.facility.metadata = facility.metadata;
 											if (!is_undefined(instance.facility.inventory))
 											{
+												// CLEAR FACILITY INVENTORY
+												instance.facility.inventory.ClearItems();
+												// ADD NEW ITEMS
 												var itemCount = array_length(itemArray);
 												for (var l = 0; l < itemCount; l++)
 												{
