@@ -7,6 +7,24 @@ function GameSaveHandler() constructor
 	{
 		saveName = string_lettersdigits(string_replace_all(string_lower(_saveName), " ", "_"));
 		saveFileName = string("{0}{1}", saveName, SAVE_FILE_SUFFIX);
+		
+		try
+		{
+			if (!file_exists(saveFileName))
+			{
+				var emptySaveString = EMPTY_SAVE_DATA;
+				var buffer = buffer_create(
+					string_byte_length(emptySaveString) + 1,
+					buffer_fixed, 1
+				);
+				buffer_write(buffer, buffer_text, emptySaveString);
+				buffer_save(buffer, saveFileName);
+				buffer_delete(buffer);
+			}
+		} catch (error)
+		{
+			show_debug_message(error);
+		}
 	}
 	
 	static FetchSaveFileNames = function()
@@ -82,7 +100,7 @@ function GameSaveHandler() constructor
 				{
 					var gameSaveString = buffer_read(buffer, buffer_text);
 					buffer_delete(buffer);
-					if (string_length(gameSaveString) > 0 && gameSaveString != "{}")
+					if (string_length(gameSaveString) > 0 && gameSaveString != EMPTY_SAVE_DATA)
 					{
 						var gameSaveStruct = json_parse(gameSaveString);
 						var gameSave = new GameSave(saveName);
@@ -110,7 +128,7 @@ function GameSaveHandler() constructor
 				{
 					var gameSaveString = buffer_read(buffer, buffer_text);
 					buffer_delete(buffer);
-					if (string_length(gameSaveString) > 0 && gameSaveString != "{}")
+					if (string_length(gameSaveString) > 0 && gameSaveString != EMPTY_SAVE_DATA)
 					{
 						var gameSaveStruct = json_parse(gameSaveString);
 						var gameSave = new GameSave(saveName);
