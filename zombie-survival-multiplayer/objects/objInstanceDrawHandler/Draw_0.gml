@@ -41,7 +41,9 @@ for (var i = 0; i < instanceCount; i++)
 	{
 		with (instance)
 		{
-			if (visible) { event_perform(ev_draw, ev_draw_normal); }
+			// SET VISIBLE TO TRUE TO EXECUTE DRAW EVENT CALL
+			visible = true;
+			event_perform(ev_draw, ev_draw_normal);
 		}
 	}
 }
