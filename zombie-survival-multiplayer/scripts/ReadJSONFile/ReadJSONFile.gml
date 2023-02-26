@@ -13,8 +13,8 @@ function ReadJSONFile(_fileName)
 				json += file_text_readln(file);	
 			}
 			file_text_close(file);
+			jsonStruct = json_parse(json);
 		}
-		jsonStruct = json_parse(json)
 	} catch (error)
 	{
 		show_debug_message(error);
