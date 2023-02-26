@@ -123,6 +123,19 @@
       "base_price": 30
     },
     {
+      "name": "Crowbar",
+      "icon": "sprCrowbar",
+      "type": "MeleeWeapon",
+      "size": {
+        "w": 1,
+        "h": 2
+      },
+      "description": "This is a tool. Prove me wrong.",
+      "weight": 800,
+      "max_stack": 1,
+      "base_price": 200
+    },
+    {
       "name": "Hand Grenade",
       "icon": "sprHandGrenade",
       "type": "Throwable",
