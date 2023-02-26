@@ -1,6 +1,3 @@
-// Inherit the parent event
-event_inherited();
-
 if (global.GUIStateHandler.IsGUIStateClosed())
 {
 	if (!is_undefined(interactionFunction))

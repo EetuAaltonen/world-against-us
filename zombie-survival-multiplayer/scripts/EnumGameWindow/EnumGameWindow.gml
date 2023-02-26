@@ -16,6 +16,8 @@ enum GAME_WINDOW
 	Quests,
 	// INVENTORY
 	ItemActionMenu,
+	// LOOT CONTAINER
+	LootContainer,
 	// WORLD - FACILITY
 	FacilityGenerator,
 	FacilityVendingMachine
