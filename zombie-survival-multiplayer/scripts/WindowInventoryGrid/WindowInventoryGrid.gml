@@ -190,7 +190,12 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 				// DRAW BACKGROUND
 				var gridSpriteIndex = 0;
 				if (!item.known) {
-					gridSpriteIndex = 2;
+					if (item.grid_index == inventory.identifyIndex)
+					{
+						gridSpriteIndex = 3;
+					} else {
+						gridSpriteIndex = 2;
+					}
 				} else if ((!is_undefined(mouseHoverIndex) && is_undefined(global.ObjMouse.dragItem)))
 				{
 					if (point_in_rectangle(
@@ -233,32 +238,35 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					iconScale, iconScale, iconRotation, c_white, 1
 				);
 				shader_reset();
-					
-				// ITEM NAME
-				var nameTextPos = new Vector2(
-					xPos + 5,
-					yPos
-				);
-				DrawItemAltText(item.name, nameTextPos.X, nameTextPos.Y + 1);
 				
-				// ITEM ALT TEXT
-				var altTextPos = new Vector2(xPos + 5, yPos + (gridCellSize.h * item.size.h) - 15);
-				if (item.type == "Magazine")
+				if (item.known)
 				{
-					var altText = string("{0} / {1}", item.metadata.bullet_count, item.metadata.magazine_size);
-					DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
-				} else if (item.type == "Medicine")
-				{
-					var altText = string("{0} / {1}", item.metadata.healing_left, item.metadata.healing_value);
-					DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
-				} else if (item.type == "Fuel")
-				{
-					var altText = string("{0} / {1}", item.metadata.fuel_left, item.metadata.fuel_value);
-					DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
-				} else {
-					if (item.quantity > 1)
+					// ITEM NAME
+					var nameTextPos = new Vector2(
+						xPos + 5,
+						yPos
+					);
+					DrawItemAltText(item.name, nameTextPos.X, nameTextPos.Y + 1);
+				
+					// ITEM ALT TEXT
+					var altTextPos = new Vector2(xPos + 5, yPos + (gridCellSize.h * item.size.h) - 15);
+					if (item.type == "Magazine")
 					{
-						DrawItemAltText(item.quantity, altTextPos.X, altTextPos.Y);
+						var altText = string("{0} / {1}", item.metadata.bullet_count, item.metadata.magazine_size);
+						DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
+					} else if (item.type == "Medicine")
+					{
+						var altText = string("{0} / {1}", item.metadata.healing_left, item.metadata.healing_value);
+						DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
+					} else if (item.type == "Fuel")
+					{
+						var altText = string("{0} / {1}", item.metadata.fuel_left, item.metadata.fuel_value);
+						DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
+					} else {
+						if (item.quantity > 1)
+						{
+							DrawItemAltText(item.quantity, altTextPos.X, altTextPos.Y);
+						}
 					}
 				}
 			}
