@@ -19,6 +19,9 @@ initGlobalVariables = function()
 	global.PlayerMagazinePockets = undefined;
 	global.PlayerMedicinePockets = undefined;
 	
+	// Loot table
+	global.LootTableData = undefined;
+	
 	// Journal
 	global.ObjJournal = noone;
 	// Quest

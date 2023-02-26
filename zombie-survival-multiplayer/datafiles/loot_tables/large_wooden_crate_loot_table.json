@@ -1,0 +1,48 @@
+{
+  "tag": "large_wooden_crate",
+  "pools": [
+    {
+      "roll_chance": 100,
+      "rolls": {
+        "min": 1,
+        "max": 4
+      },
+      "entries": [
+        {
+          "name": "Snickers Bar",
+          "count": 1,
+          "weight": 2
+        },
+        {
+          "name": "Water Bottle",
+          "count": 1,
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "roll_chance": 10,
+      "rolls": {
+        "min": 1,
+        "max": 1
+      },
+      "entries": [
+        {
+          "name": "Army Helmet",
+          "count": 1,
+          "weight": 1
+        },
+        {
+          "name": "First Aid Kit",
+          "count": 1,
+          "weight": 2
+        },
+        {
+          "name": "Hand Grenade",
+          "count": 1,
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

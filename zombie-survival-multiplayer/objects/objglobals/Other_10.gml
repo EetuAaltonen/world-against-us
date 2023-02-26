@@ -13,7 +13,7 @@ if (instance_exists(objDatabase))
 	var databaseInstance = instance_find(objDatabase, 0);
 	global.ItemData = databaseInstance.itemData;
 	global.BulletData = databaseInstance.bulletData;
-	
+	global.LootTableData = databaseInstance.lootTableData;
 	global.QuestData = databaseInstance.questData;
 }
 
