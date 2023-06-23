@@ -36,3 +36,12 @@ if (keyboard_check_released(ord("P")))
 		}
 	}
 }
+
+
+// DEBUG FPS
+if (fpsUpdateTimer-- < 0)
+{
+	fpsReal = fps_real;
+	_fps = fps;
+	fpsUpdateTimer = fpsUpdateInterval;
+}
