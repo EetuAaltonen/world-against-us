@@ -35,6 +35,9 @@ controllers = [
 	new GameController(objJournal, [], [roomLaunch, roomMainMenu]),
 	new GameController(objQuest, [], [roomLaunch, roomMainMenu]),
 	
+	new GameController(objMap, [], [roomLaunch, roomMainMenu], "Controllers_Behind"),
+
+	
 	new GameController(objInstanceHighlighter, [], [roomLaunch, roomMainMenu, roomLoadSave], "HighlightedInstances"),
 	
 	new GameController(objGridPath, [], [roomLaunch, roomMainMenu, roomLoadSave]),

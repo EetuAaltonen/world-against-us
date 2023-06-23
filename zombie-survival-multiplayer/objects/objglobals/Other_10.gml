@@ -15,6 +15,8 @@ if (instance_exists(objDatabase))
 	global.BulletData = databaseInstance.bulletData;
 	global.LootTableData = databaseInstance.lootTableData;
 	global.QuestData = databaseInstance.questData;
+	global.MapIconStyleData = databaseInstance.mapIconStyleData;
+
 }
 
 if (instance_exists(objNetwork)) global.ObjNetwork = instance_find(objNetwork, 0);
@@ -33,6 +35,8 @@ if (instance_exists(objSpawner)) global.ObjSpawner = instance_find(objSpawner, 0
 	
 if (instance_exists(objJournal)) global.ObjJournal = instance_find(objJournal, 0);
 if (instance_exists(objQuest)) global.QuestHandlerRef = instance_find(objQuest, 0).questHandler;
+
+if (instance_exists(objMap)) global.ObjMap = instance_find(objMap, 0);
 
 if (instance_exists(objMessageLog)) global.MessageLog = instance_find(objMessageLog, 0).messages;
 if (instance_exists(objNotification)) global.NotificationHandlerRef = instance_find(objNotification, 0).notificationHandler;

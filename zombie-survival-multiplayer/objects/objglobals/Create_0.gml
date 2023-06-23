@@ -27,6 +27,10 @@ initGlobalVariables = function()
 	// Quest
 	global.QuestData = undefined;
 	global.QuestHandlerRef = undefined;
+	// Map
+	global.ObjMap = noone;
+	global.MapIconStyleData = undefined;
+
 
 	// Player
 	global.ObjPlayer = noone;
