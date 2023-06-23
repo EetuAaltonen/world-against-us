@@ -10,8 +10,8 @@
     "path": "folders/Objects/World/Containers.yy",
   },
   "parentObjectId": {
-    "name": "objContainer",
-    "path": "objects/objContainer/objContainer.yy",
+    "name": "objContainerParent",
+    "path": "objects/objContainerParent/objContainerParent.yy",
   },
   "persistent": false,
   "physicsAngularDamping": 0.1,
