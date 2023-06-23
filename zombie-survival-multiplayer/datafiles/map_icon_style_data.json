@@ -1,0 +1,58 @@
+{
+  "map_icon_style_data": [
+    {
+      "obj_index": "objPlayer",
+      "color": {
+        "red": 16,
+        "green": 128,
+        "blue": 230
+      },
+      "constant_alpha": true
+    },
+    {
+      "obj_index": "objEnemy",
+      "color": {
+        "red": 190,
+        "green": 0,
+        "blue": 0
+      },
+      "constant_alpha": true
+    },
+    {
+      "obj_index": "objStructureParent",
+      "color": {
+        "red": 40,
+        "green": 40,
+        "blue": 40
+      },
+      "constant_alpha": true
+    },
+    {
+      "obj_index": "objFacilityParent",
+      "color": {
+        "red": 225,
+        "green": 100,
+        "blue": 0
+      },
+      "constant_alpha": false
+    },
+    {
+      "obj_index": "objContainerParent",
+      "color": {
+        "red": 225,
+        "green": 225,
+        "blue": 0
+      },
+      "constant_alpha": true
+    },
+    {
+      "obj_index": "objPickable",
+      "color": {
+        "red": 10,
+        "green": 225,
+        "blue": 0
+      },
+      "constant_alpha": true
+    }
+  ]
+}
