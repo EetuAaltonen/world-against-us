@@ -23,7 +23,7 @@ function AnimationCurve(_curveIndex, _channelIndex, _duration) constructor
 		animationCurve = animcurve_get(curveIndex);
 		curveChannel = animcurve_get_channel(animationCurve, channelIndex);
 		position = startPosition;
-		stepPosition = ((1 / room_speed) / duration);
+		stepPosition = ((1 / game_get_speed(gamespeed_fps)) / duration);
 	}
 	
 	static Play = function()

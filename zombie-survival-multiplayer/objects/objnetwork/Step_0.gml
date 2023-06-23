@@ -17,7 +17,7 @@ if (!is_undefined(client.clientId))
 			buffer_write(networkBuffer, buffer_u64, current_time);
 			client.SendPacketOverUDP(networkBuffer);
 		} else {
-			show_debug_message("Latency check took too long (" + string(client.latencyReqDelay / room_speed) + ")");
+			show_debug_message("Latency check took too long (" + string(client.latencyReqDelay / game_get_speed(gamespeed_fps)) + ")");
 			latency = 999;
 		}
 		

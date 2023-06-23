@@ -52,9 +52,9 @@ function Character(_name, _type) constructor
 		{
 			isDead = true;
 		} else {
-			fullness = clamp(fullness - (hungerRate / room_speed), 0, maxFullness);
-			hydration = clamp(hydration - (thirstRate / room_speed), 0, maxHydration);
-			energy = clamp(energy - (fatigueRate / room_speed), 0, maxEnergy);
+			fullness = clamp(fullness - (hungerRate / game_get_speed(gamespeed_fps)), 0, maxFullness);
+			hydration = clamp(hydration - (thirstRate / game_get_speed(gamespeed_fps)), 0, maxHydration);
+			energy = clamp(energy - (fatigueRate / game_get_speed(gamespeed_fps)), 0, maxEnergy);
 		}
 	}
 	
