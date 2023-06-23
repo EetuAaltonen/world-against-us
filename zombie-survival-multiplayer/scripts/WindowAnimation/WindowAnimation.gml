@@ -9,7 +9,7 @@ function WindowAnimation(_elementId, _relativePosition, _size, _backgroundColor,
 			initImage = false;
 			if (!is_undefined(spriteIndex))
 			{
-				if (!sprite_exists(spriteIndex)) { spriteIndex = sprMissingSprite; }
+				if (!sprite_exists(spriteIndex)) { spriteIndex = SPRITE_ERROR; }
 				InitImageScale();
 			}
 		}

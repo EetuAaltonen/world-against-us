@@ -16,6 +16,8 @@ enum GAME_WINDOW
 	Quests,
 	// INVENTORY
 	ItemActionMenu,
+	// MAP
+	Map,
 	// LOOT CONTAINER
 	LootContainer,
 	// WORLD - FACILITY

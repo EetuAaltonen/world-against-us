@@ -16,7 +16,7 @@ function WindowImage(_elementId, _relativePosition, _size, _backgroundColor, _sp
 			initImage = false;
 			if (!is_undefined(spriteIndex))
 			{
-				if (!sprite_exists(spriteIndex)) { spriteIndex = sprMissingSprite; }
+				if (!sprite_exists(spriteIndex)) { spriteIndex = SPRITE_ERROR; }
 				InitImageScale();
 			}
 		}

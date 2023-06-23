@@ -2,6 +2,8 @@
 #macro SAVE_FILE_SUFFIX "_save.json"
 #macro EMPTY_SAVE_DATA "{ }"
 
+#macro SPRITE_ERROR sprError;
+
 // SET RANDOM SEED
 randomise();
 

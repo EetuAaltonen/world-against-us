@@ -49,10 +49,17 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 		return foundChildElement;
 	}
 	
+	static OnUpdate = function()
+	{
+		// OVERRIDE FUNCTION
+		return;
+	}
+	
 	static Update = function()
 	{
 		if (isActive)
 		{
+			OnUpdate();
 			UpdateContent();
 			if (parentWindow.isFocused)
 			{

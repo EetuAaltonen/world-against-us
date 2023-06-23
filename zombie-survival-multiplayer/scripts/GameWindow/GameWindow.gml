@@ -53,10 +53,17 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 		return;
 	}
 	
+	static OnUpdate = function()
+	{
+		// OVERRIDE FUNCTION
+		return;
+	}
+	
 	static Update = function()
 	{
 		if (isActive)
 		{
+			OnUpdate();
 			UpdateContent();
 		}
 	}
