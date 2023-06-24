@@ -9,6 +9,9 @@
 #macro SPRITE_ERROR sprError
 #macro SPRITE_NO_MASK sprNoMask
 
+// GUI STATE
+#macro ROOT_GUI_STATE new GUIState(GUI_STATE.GameRoot, undefined, undefined, [], GUI_CHAIN_RULE.OverwriteAll, CallbackGUIStateInputRoot, undefined)
+
 // DEFAULT KEYBINDINGS
 #macro KEY_ESC_MENU	vk_escape
 #macro KEY_PLAYER_OVERVIEW vk_tab

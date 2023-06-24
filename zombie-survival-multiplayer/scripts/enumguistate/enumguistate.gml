@@ -1,4 +1,5 @@
 enum GUI_STATE {
+	GameRoot,
 	MainMenu,
 	EscMenu,
 	PlayerOverview,

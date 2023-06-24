@@ -1,6 +1,6 @@
 function GUIStateHandler() constructor
 {
-	stateChain = [GUI_STATE_ROOT];
+	state_chain = [ROOT_GUI_STATE];
 	
 	static RequestGUIState = function(_guiState)
 	{
@@ -20,7 +20,7 @@ function GUIStateHandler() constructor
 			}
 			
 			// PUSH NEW GUI STATE TO CHAIN
-			array_push(stateChain, _guiState);
+			array_push(state_chain, _guiState);
 			isStateChanged = true;
 		}
 		return isStateChanged;
@@ -58,7 +58,7 @@ function GUIStateHandler() constructor
 	
 	static GetGUIState = function()
 	{
-		return array_last(stateChain);
+		return array_last(state_chain);
 	}
 	
 	static CheckKeyboardInputGUIState = function()
@@ -66,16 +66,17 @@ function GUIStateHandler() constructor
 		var currentGUIState = GetGUIState();
 		if (!is_undefined(currentGUIState))
 		{
-			if (IsKeyReleasedGUIStateClose() || currentGUIState.IsKeyReleasedAlternateGUIStateClose())
+			if (!IsGUIStateClosed())
 			{
-				if (currentGUIState.index != GUI_STATE.MainMenu ||
-				(currentGUIState.index == GUI_STATE.MainMenu && !is_undefined(currentGUIState.view)))
+				if (IsKeyReleasedGUIStateClose() || currentGUIState.IsKeyReleasedAlternateGUIStateClose())
 				{
 					// RESET DRAG ITEM
 					global.ObjMouse.dragItem = undefined;
 					
 					// CLOSE CURRENT GUI STATE
 					CloseCurrentGUIState();
+				} else {
+					currentGUIState.CallbackInputFunction();
 				}
 			} else {
 				currentGUIState.CallbackInputFunction();
@@ -86,18 +87,28 @@ function GUIStateHandler() constructor
 	static ResetGUIState = function()
 	{
 		global.GameWindowHandlerRef.CloseAllWindows();
-		array_delete(stateChain, 1, array_length(stateChain));
+		array_delete(state_chain, 1, array_length(state_chain));
 	}
 	
 	static CloseCurrentGUIState = function()
 	{
-		var currentGUIState = array_pop(stateChain);
+		var currentGUIState = array_pop(state_chain);
 		// CLOSE CURRENT WINDOW
 		global.GameWindowHandlerRef.CloseWindowGroupByIndexGroup(currentGUIState.windowIndexGroup);
 	}
 	
 	static IsGUIStateClosed = function()
 	{
-		return is_undefined(GetGUIState().index);
+		var isGUIStateClosed = true;
+		var currentGUIState = GetGUIState();
+		if (!is_undefined(currentGUIState))
+		{
+			isGUIStateClosed = (
+				currentGUIState.index == GUI_STATE.GameRoot || (currentGUIState.index == GUI_STATE.MainMenu && is_undefined(currentGUIState.view))
+			);
+		} else {
+			show_debug_message(string("Current GUI state is undefined!"));
+		}
+		return isGUIStateClosed;
 	}
 }
