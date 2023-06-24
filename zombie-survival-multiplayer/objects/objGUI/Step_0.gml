@@ -20,7 +20,7 @@ if (stateHandler.IsGUIStateClosed())
 		{
 			// OPEN PLAYER BACKPACK
 			var guiState = new GUIState(
-				GUI_STATE.PlayerOverview, GUI_VIEW.Backpack, undefined,
+				GUI_STATE.PlayerOverview, GUI_VIEW.PlayerBackpack, undefined,
 				[GAME_WINDOW.PlayerBackpack], GUI_CHAIN_RULE.OverwriteAll,
 				CallbackGUIStateInputPlayerOverview, KEY_PLAYER_OVERVIEW
 			);
@@ -35,7 +35,7 @@ if (stateHandler.IsGUIStateClosed())
 			// OPEN JOURNAL
 			var guiState = new GUIState(
 				GUI_STATE.Journal, undefined, undefined,
-				[GAME_WINDOW.Journal], GUI_CHAIN_RULE.OverwriteAll,
+				[GAME_WINDOW.JournalEntries], GUI_CHAIN_RULE.OverwriteAll,
 				CallbackGUIStateInputJournal, KEY_JOURNAL
 			);
 			if (stateHandler.RequestGUIState(guiState))

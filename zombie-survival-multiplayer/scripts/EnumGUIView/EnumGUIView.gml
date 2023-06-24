@@ -4,10 +4,10 @@ enum GUI_VIEW {
 	Multiplayer,
 	Settings,
 	// PLAYER OVERVIEW
-	Backpack,
-	HealthStatus,
-	Skills,
-	// JOURNAL
-	Journal,
-	Quests
+	PlayerBackpack,
+	PlayerHealthStatus,
+	PlayerSkills,
+	// JOURNAL OVERVIEW
+	JournalEntries,
+	JournalQuests
 }

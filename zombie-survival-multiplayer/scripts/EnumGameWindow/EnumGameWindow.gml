@@ -11,9 +11,9 @@ enum GAME_WINDOW
 	PlayerBackpack,
 	PlayerHealthStatus,
 	PlayerSkills,
-	// JOURNAL
-	Journal,
-	Quests,
+	// JOURNAL OVERVIEW
+	JournalEntries,
+	JournalQuests,
 	// INVENTORY
 	ItemActionMenu,
 	// MAP
