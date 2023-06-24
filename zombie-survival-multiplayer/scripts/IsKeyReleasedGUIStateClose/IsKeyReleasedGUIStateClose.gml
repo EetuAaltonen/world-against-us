@@ -1,4 +1,4 @@
-function KeyboardReleasedCloseWindow()
+function IsKeyReleasedGUIStateClose()
 {
 	return keyboard_check_released(vk_tab) || keyboard_check_released(vk_escape);
 }

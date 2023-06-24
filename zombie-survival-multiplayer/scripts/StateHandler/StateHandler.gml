@@ -32,6 +32,28 @@ function StateHandler() constructor
 		return array_last(stateChain);
 	}
 	
+	static CheckKeyboardInputGUIState = function()
+	{
+		var currentGUIState = GetGUIState();
+		if (!is_undefined(currentGUIState))
+		{
+			if (IsKeyReleasedGUIStateClose() || currentGUIState.IsKeyReleasedAlternateGUIStateClose())
+			{
+				if (currentGUIState.index != GUI_STATE.MainMenu ||
+				(currentGUIState.index == GUI_STATE.MainMenu && !is_undefined(currentGUIState.view)))
+				{
+					// RESET DRAG ITEM
+					global.ObjMouse.dragItem = undefined;
+					
+					// CLOSE CURRENT GUI STATE
+					CloseCurrentGUIState();
+				}
+			} else {
+				currentGUIState.CallbackInputFunction();
+			}
+		}
+	}
+	
 	static ResetGUIState = function()
 	{
 		global.GameWindowHandler.CloseAllWindows();
