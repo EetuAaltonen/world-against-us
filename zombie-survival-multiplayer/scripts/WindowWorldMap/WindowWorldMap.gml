@@ -76,7 +76,7 @@ function WindowWorldMap(_elementId, _relativePosition, _size, _backgroundColor, 
 				
 					var iconScale = mapScale;
 					var iconSize = new Size(mapEntry.icon_size.w * iconScale, mapEntry.icon_size.h * iconScale);
-					var iconAlpha = (!mapEntry.icon_style.constant_alpha && mapEntry.instance.mask_index == sprNoMask) ? 0.3 : 1;
+					var iconAlpha = (!mapEntry.icon_style.constant_alpha && mapEntry.instance.mask_index == SPRITE_NO_MASK) ? 0.3 : 1;
 					draw_sprite_ext(
 						sprGUIBg, 0,
 						positionOnGUI.X - (mapEntry.icon_offset.X * iconScale),
