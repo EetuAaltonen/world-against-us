@@ -43,7 +43,7 @@ dirSpeed = sqrt((hSpeed * hSpeed) + (vSpeed * vSpeed));
 if (place_meeting(x + hSpeed, y, objBlockParent))
 {
 	var meetInstance = instance_place(x + hSpeed, y, objBlockParent);
-	if (meetInstance.mask_index != sprNoMask)
+	if (meetInstance.mask_index != SPRITE_NO_MASK)
 	{
 		while (!place_meeting(x + sign(hSpeed), y, objBlockParent))
 		{
@@ -59,7 +59,7 @@ x = clamp(x, 0 + sprWidthCenter, room_width - sprWidthCenter);
 if (place_meeting(x, y + vSpeed, objBlockParent))
 {
 	var meetInstance = instance_place(x, y + vSpeed, objBlockParent);
-	if (meetInstance.mask_index != sprNoMask)
+	if (meetInstance.mask_index != SPRITE_NO_MASK)
 	{
 		while (!place_meeting(x, y + sign(vSpeed), objBlockParent))
 		{

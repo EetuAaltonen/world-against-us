@@ -1,8 +1,13 @@
+// NETWORKING
 #macro UNDEFINED_UUID "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined"
+
+// SAVE FILES
 #macro SAVE_FILE_SUFFIX "_save.json"
 #macro EMPTY_SAVE_DATA "{ }"
 
-#macro SPRITE_ERROR sprError;
+// SPRITE MODIFIERS
+#macro SPRITE_ERROR sprError
+#macro SPRITE_NO_MASK sprNoMask
 
 // SET RANDOM SEED
 randomise();

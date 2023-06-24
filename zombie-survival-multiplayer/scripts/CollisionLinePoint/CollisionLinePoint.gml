@@ -6,7 +6,7 @@ function CollisionLinePoint(_startPosition, _endPosition, _objectToCheck, _preci
 		_objectToCheck, _preciseCollisions, _notme
 	);
 	var collidePosition = new Vector2(_endPosition.X, _endPosition.Y);
-	if (collideInstance != noone && collideInstance.mask_index != sprNoMask) {
+	if (collideInstance != noone && collideInstance.mask_index != SPRITE_NO_MASK) {
 	    var p0 = 0;
 	    var p1 = 1;
 	    repeat (ceil(log2(point_distance(_startPosition.X, _startPosition.Y, _endPosition.X, _endPosition.Y))) + 1) {
@@ -16,7 +16,7 @@ function CollisionLinePoint(_startPosition, _endPosition, _objectToCheck, _preci
 	        var px = _startPosition.X + (_endPosition.X - _startPosition.X) * p0;
 	        var py = _startPosition.Y + (_endPosition.Y - _startPosition.Y) * p0;
 	        var nearestCollideInstance = collision_line(px, py, nx, ny, _objectToCheck, _preciseCollisions, _notme);
-	        if (nearestCollideInstance != noone && nearestCollideInstance.mask_index != sprNoMask) {
+	        if (nearestCollideInstance != noone && nearestCollideInstance.mask_index != SPRITE_NO_MASK) {
 	            collideInstance = nearestCollideInstance;
 				collidePosition.X = nx;
 				collidePosition.Y = ny;

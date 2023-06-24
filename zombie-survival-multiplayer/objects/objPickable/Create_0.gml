@@ -7,7 +7,7 @@ interactionFunction = function()
 	show_message(string(data));
 }
 
-mask_index = sprNoMask;
+mask_index = SPRITE_NO_MASK;
 
 enum PICKABLE_TYPE
 {
