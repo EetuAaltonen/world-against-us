@@ -9,6 +9,12 @@
 #macro SPRITE_ERROR sprError
 #macro SPRITE_NO_MASK sprNoMask
 
+// DEFAULT KEYBINDINGS
+#macro KEY_ESC_MENU	vk_escape
+#macro KEY_PLAYER_OVERVIEW vk_tab
+#macro KEY_JOURNAL ord("J")
+#macro KEY_MAP ord("M")
+
 // SET RANDOM SEED
 randomise();
 
