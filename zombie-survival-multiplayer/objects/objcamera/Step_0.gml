@@ -3,7 +3,7 @@ if (target != noone)
 	if (instance_exists(target))
 	{
 		// DISABLE ZOOM CONTROLS WHILE WINDOW OPEN
-		if (global.GUIStateHandler.IsGUIStateClosed())
+		if (global.GUIStateHandlerRef.IsGUIStateClosed())
 		{
 			// ZOOM
 			var mousScrollUp = (mouse_wheel_up() != 0);

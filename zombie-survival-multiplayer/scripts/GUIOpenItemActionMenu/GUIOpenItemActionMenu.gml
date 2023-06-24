@@ -1,13 +1,13 @@
 function GUIOpenItemActionMenu(_targetItem)
 {
-	var currentGUIState = global.GUIStateHandler.GetGUIState();
+	var currentGUIState = global.GUIStateHandlerRef.GetGUIState();
 	var guiState = new GUIState(
 		currentGUIState.index, currentGUIState.view, GUI_ACTION.ItemActionMenu,
 		[GAME_WINDOW.ItemActionMenu]
 	);
-	if (global.GUIStateHandler.RequestGUIState(guiState))
+	if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 	{
-		global.GameWindowHandler.OpenWindowGroup([
+		global.GameWindowHandlerRef.OpenWindowGroup([
 			CreateWindowItemActionMenu(parentWindow.zIndex - 1, _targetItem)
 		]);
 	}

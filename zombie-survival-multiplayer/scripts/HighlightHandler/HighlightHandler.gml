@@ -4,7 +4,7 @@ function HighlightHandler() constructor
 	
 	static Update = function()
 	{
-		if (global.GUIStateHandler.IsGUIStateClosed())
+		if (global.GUIStateHandlerRef.IsGUIStateClosed())
 		{
 			if (instance_exists(global.ObjPlayer))
 			{

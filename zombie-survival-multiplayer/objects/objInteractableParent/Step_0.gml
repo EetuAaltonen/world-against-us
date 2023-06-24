@@ -1,4 +1,4 @@
-if (global.GUIStateHandler.IsGUIStateClosed())
+if (global.GUIStateHandlerRef.IsGUIStateClosed())
 {
 	if (!is_undefined(interactionFunction))
 	{

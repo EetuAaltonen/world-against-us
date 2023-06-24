@@ -1,12 +1,12 @@
 function OnClickMenuSingleplayer()
 {
 	var guiState = new GUIState(
-		global.GUIStateHandler.GetGUIState().index, GUI_VIEW.Singleplayer, undefined,
+		global.GUIStateHandlerRef.GetGUIState().index, GUI_VIEW.Singleplayer, undefined,
 		[GAME_WINDOW.MainMenuSingleplayer]
 	);
-	if (global.GUIStateHandler.RequestGUIState(guiState))
+	if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 	{
-		global.GameWindowHandler.OpenWindowGroup([
+		global.GameWindowHandlerRef.OpenWindowGroup([
 			CreateWindowMainMenuSingleplayer(parentWindow.zIndex - 1)
 		]);
 	}

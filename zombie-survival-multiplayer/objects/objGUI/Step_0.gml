@@ -1,4 +1,4 @@
-if (stateHandler.IsGUIStateClosed())
+if (guiStateHandler.IsGUIStateClosed())
 {
 	if (room != roomMainMenu)
 	{
@@ -10,9 +10,9 @@ if (stateHandler.IsGUIStateClosed())
 				GUI_STATE.EscMenu, undefined, undefined,
 				[GAME_WINDOW.EscMenu], GUI_CHAIN_RULE.OverwriteAll
 			);
-			if (stateHandler.RequestGUIState(guiState))
+			if (guiStateHandler.RequestGUIState(guiState))
 			{
-				global.GameWindowHandler.OpenWindowGroup([
+				global.GameWindowHandlerRef.OpenWindowGroup([
 					CreateWindowEscMenu(-1)
 				]);
 			}
@@ -24,9 +24,9 @@ if (stateHandler.IsGUIStateClosed())
 				[GAME_WINDOW.PlayerBackpack], GUI_CHAIN_RULE.OverwriteAll,
 				CallbackGUIStateInputPlayerOverview, KEY_PLAYER_OVERVIEW
 			);
-			if (stateHandler.RequestGUIState(guiState))
+			if (guiStateHandler.RequestGUIState(guiState))
 			{
-				global.GameWindowHandler.OpenWindowGroup([
+				global.GameWindowHandlerRef.OpenWindowGroup([
 					CreateWindowPlayerBackpack(-1)
 				]);
 			}
@@ -38,9 +38,9 @@ if (stateHandler.IsGUIStateClosed())
 				[GAME_WINDOW.JournalEntries], GUI_CHAIN_RULE.OverwriteAll,
 				CallbackGUIStateInputJournal, KEY_JOURNAL
 			);
-			if (stateHandler.RequestGUIState(guiState))
+			if (guiStateHandler.RequestGUIState(guiState))
 			{
-				global.GameWindowHandler.OpenWindowGroup([
+				global.GameWindowHandlerRef.OpenWindowGroup([
 					CreateWindowJournal(-1)
 				]);
 			}
@@ -52,9 +52,9 @@ if (stateHandler.IsGUIStateClosed())
 				[GAME_WINDOW.Map], GUI_CHAIN_RULE.OverwriteAll,
 				undefined, KEY_MAP
 			);
-			if (stateHandler.RequestGUIState(guiState))
+			if (guiStateHandler.RequestGUIState(guiState))
 			{
-				global.GameWindowHandler.OpenWindowGroup([
+				global.GameWindowHandlerRef.OpenWindowGroup([
 					CreateWindowMap(-1)
 				]);
 				// RESET MAP UPDATE TIMER
@@ -65,5 +65,5 @@ if (stateHandler.IsGUIStateClosed())
 	}
 } else {
 	// CHECK CURRENT GUI STATE KEYBINDINGS
-	stateHandler.CheckKeyboardInputGUIState();
+	guiStateHandler.CheckKeyboardInputGUIState();
 }

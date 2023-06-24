@@ -22,7 +22,8 @@ initGlobalVariables = function()
 {
 	// Global controllers
 	global.ObjCamera = noone;
-	global.GUIStateHandler = undefined;
+	global.GUIStateHandlerRef = undefined;
+	global.GameWindowHandlerRef = undefined;
 	global.ObjHud = noone;
 
 	global.ItemData = undefined;

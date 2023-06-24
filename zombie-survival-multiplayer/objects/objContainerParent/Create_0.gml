@@ -33,9 +33,9 @@ interactionFunction = function()
 		GUI_STATE.LootContainer, undefined, undefined,
 		[GAME_WINDOW.PlayerBackpack, GAME_WINDOW.LootContainer], GUI_CHAIN_RULE.OverwriteAll
 	);
-	if (global.GUIStateHandler.RequestGUIState(guiState))
+	if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 	{
-		global.GameWindowHandler.OpenWindowGroup([
+		global.GameWindowHandlerRef.OpenWindowGroup([
 			CreateWindowPlayerBackpack(-1),
 			CreateWindowLootContainer(-1, inventory)
 		]);

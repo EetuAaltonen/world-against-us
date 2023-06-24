@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "Journal",
-    "path": "folders/Scripts/Game/GUI/GameWindow/Functions/Journal.yy",
+    "path": "folders/Scripts/Game/GUI/Journal.yy",
   },
 }

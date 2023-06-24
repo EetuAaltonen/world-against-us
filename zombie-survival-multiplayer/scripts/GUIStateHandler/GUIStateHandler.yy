@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "StateHandler",
+  "name": "GUIStateHandler",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

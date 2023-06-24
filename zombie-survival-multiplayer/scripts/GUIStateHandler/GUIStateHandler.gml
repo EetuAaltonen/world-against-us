@@ -1,7 +1,6 @@
-function StateHandler() constructor
+function GUIStateHandler() constructor
 {
-	undefinedState = new GUIState(undefined, undefined, undefined, []);
-	stateChain = [undefinedState];
+	stateChain = [GUI_STATE_ROOT];
 	
 	static RequestGUIState = function(_guiState)
 	{
@@ -86,7 +85,7 @@ function StateHandler() constructor
 	
 	static ResetGUIState = function()
 	{
-		global.GameWindowHandler.CloseAllWindows();
+		global.GameWindowHandlerRef.CloseAllWindows();
 		array_delete(stateChain, 1, array_length(stateChain));
 	}
 	
@@ -94,7 +93,7 @@ function StateHandler() constructor
 	{
 		var currentGUIState = array_pop(stateChain);
 		// CLOSE CURRENT WINDOW
-		global.GameWindowHandler.CloseWindowGroupByIndexGroup(currentGUIState.windowIndexGroup);
+		global.GameWindowHandlerRef.CloseWindowGroupByIndexGroup(currentGUIState.windowIndexGroup);
 	}
 	
 	static IsGUIStateClosed = function()

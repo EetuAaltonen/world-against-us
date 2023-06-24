@@ -32,7 +32,7 @@ if (owner != noone)
 			if (owner.character.type == CHARACTER_TYPE.PLAYER)
 			{
 				// CHECK GUI STATE
-				if (global.GUIStateHandler.IsGUIStateClosed())
+				if (global.GUIStateHandlerRef.IsGUIStateClosed())
 				{
 					image_angle = point_direction(x, y, mouse_x, mouse_y);
 					// SHOOTING DELAY AND ANIMATION

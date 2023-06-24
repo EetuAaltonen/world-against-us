@@ -1,6 +1,6 @@
-if (!global.GUIStateHandler.IsGUIStateClosed())
+if (!global.GUIStateHandlerRef.IsGUIStateClosed())
 {
-	var currentGUIState = global.GUIStateHandler.GetGUIState();
+	var currentGUIState = global.GUIStateHandlerRef.GetGUIState();
 	if (currentGUIState.index == GUI_STATE.Map)
 	{
 		if (mapUpdateTimer-- <= 0)

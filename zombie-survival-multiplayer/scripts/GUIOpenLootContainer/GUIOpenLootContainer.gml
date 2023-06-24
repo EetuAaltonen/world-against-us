@@ -32,5 +32,5 @@ function GUIOpenLootContainer()
 	
 	// ADD NEW WINDOW
 	lootContainerWindow.AddChildElements(lootContainerElements);
-	global.GameWindowHandler.OpenWindow(lootContainerWindow);
+	global.GameWindowHandlerRef.OpenWindow(lootContainerWindow);
 }

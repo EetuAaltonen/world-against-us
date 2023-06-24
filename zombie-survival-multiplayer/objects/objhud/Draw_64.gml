@@ -84,7 +84,7 @@ if (instance_exists(global.ObjPlayer))
 }
 	
 // WEAPON AMMO
-if (global.GUIStateHandler.IsGUIStateClosed())
+if (global.GUIStateHandlerRef.IsGUIStateClosed())
 {
 	if (instance_exists(global.ObjPlayer))
 	{

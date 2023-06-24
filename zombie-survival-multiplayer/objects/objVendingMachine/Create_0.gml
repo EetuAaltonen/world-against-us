@@ -10,9 +10,9 @@ interactionFunction = function()
 			GUI_STATE.Facility, undefined, undefined,
 			[GAME_WINDOW.PlayerBackpack, GAME_WINDOW.FacilityVendingMachine], GUI_CHAIN_RULE.OverwriteAll
 		);
-		if (global.GUIStateHandler.RequestGUIState(guiState))
+		if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 		{
-			global.GameWindowHandler.OpenWindowGroup([
+			global.GameWindowHandlerRef.OpenWindowGroup([
 				CreateWindowPlayerBackpack(-1),
 				CreateWindowFacilityVendingMachine(-1, facility)
 			]);

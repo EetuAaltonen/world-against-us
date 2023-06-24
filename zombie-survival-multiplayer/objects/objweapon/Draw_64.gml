@@ -47,7 +47,7 @@ if (!is_undefined(primaryWeapon))
 	if (owner.character.type == CHARACTER_TYPE.PLAYER)
 	{
 		// CHECK GUI STATE
-		if (!global.GUIStateHandler.IsGUIStateClosed()) return;
+		if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;
 
 		var mousePosition = MouseGUIPosition();
 		if (isAiming)
@@ -69,7 +69,7 @@ if (!is_undefined(primaryWeapon))
 		if (owner.character.type == CHARACTER_TYPE.PLAYER)
 		{
 			// CHECK GUI STATE
-			if (global.GUIStateHandler.IsGUIStateClosed())
+			if (global.GUIStateHandlerRef.IsGUIStateClosed())
 			{
 				var mousePosition = MouseGUIPosition();
 				drawDefaultPointer(mousePosition);

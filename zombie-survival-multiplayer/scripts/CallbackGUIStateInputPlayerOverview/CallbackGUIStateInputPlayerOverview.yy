@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "PlayerOverview",
-    "path": "folders/Scripts/Game/GUI/GameWindow/Functions/PlayerOverview.yy",
+    "path": "folders/Scripts/Game/GUI/PlayerOverview.yy",
   },
 }

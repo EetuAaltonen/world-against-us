@@ -4,7 +4,7 @@ event_inherited();
 if (character.type == CHARACTER_TYPE.PLAYER)
 {
 	// CHECK GUI STATE
-	if (!global.GUIStateHandler.IsGUIStateClosed()) return;
+	if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;
 	GetLocalPlayerMovementInput();
 	
 	// QUICK HEAL

@@ -1,5 +1,5 @@
 // CHECK GUI STATE
-if (!global.GUIStateHandler.IsGUIStateClosed()) return;
+if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;
 
 if (!is_undefined(stock))
 {

@@ -4,9 +4,9 @@ var guiState = new GUIState(
 	GUI_STATE.MainMenu, undefined, undefined,
 	[GAME_WINDOW.MainMenuRoot]
 );
-if (global.GUIStateHandler.RequestGUIState(guiState))
+if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 {
-	global.GameWindowHandler.OpenWindowGroup([
+	global.GameWindowHandlerRef.OpenWindowGroup([
 		CreateWindowMainMenuRoot(0)
 	]);
 }
