@@ -5,7 +5,7 @@ function StateHandler() constructor
 	
 	static RequestGUIState = function(_guiState)
 	{
-		isStateChanged = false;
+		var isStateChanged = false;
 		var currentGUIState = GetGUIState();
 		// SKIP IF GUI STATE NOT CHANGED
 		if (_guiState.index != currentGUIState.index ||
@@ -25,6 +25,36 @@ function StateHandler() constructor
 			isStateChanged = true;
 		}
 		return isStateChanged;
+	}
+	
+	static RequestGUIView = function(_guiView, _windowIndexGroup)
+	{
+		var isViewChanged = false;
+		var currentGUIState = GetGUIState();
+		if (!is_undefined(currentGUIState))
+		{
+			var newGUIState = currentGUIState.Clone();
+			newGUIState.view = _guiView;
+			newGUIState.windowIndexGroup = _windowIndexGroup;
+			
+			isViewChanged = RequestGUIState(newGUIState);
+		}
+		return isViewChanged;
+	}
+	
+	static RequestGUIAction = function(_guiAction, _windowIndexGroup)
+	{
+		var isActionChanged = false;
+		var currentGUIState = GetGUIState();
+		if (!is_undefined(currentGUIState))
+		{
+			var newGUIState = currentGUIState.Clone();
+			newGUIState.action = _guiAction;
+			newGUIState.windowIndexGroup = _windowIndexGroup;
+			
+			isActionChanged = RequestGUIState(newGUIState);
+		}
+		return isActionChanged;
 	}
 	
 	static GetGUIState = function()

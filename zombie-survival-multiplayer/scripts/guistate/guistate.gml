@@ -30,4 +30,17 @@ function GUIState(_index, _view, _action, _windowIndexGroup, _chainRule = GUI_CH
 		}
 		return isCloseKeyReleased;
 	}
+	
+	static Clone = function()
+	{
+		return new GUIState(
+			index,
+			view,
+			action,
+			windowIndexGroup,
+			chainRule,
+			callback_input_function,
+			alternate_close_key
+		);
+	}
 }
