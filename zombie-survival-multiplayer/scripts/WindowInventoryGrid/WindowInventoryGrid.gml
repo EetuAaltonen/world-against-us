@@ -250,23 +250,30 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 				
 					// ITEM ALT TEXT
 					var altTextPos = new Vector2(xPos + 5, yPos + (gridCellSize.h * item.size.h) - 15);
-					if (item.type == "Magazine")
+					switch (item.type)
 					{
-						var altText = string("{0} / {1}", item.metadata.bullet_count, item.metadata.magazine_size);
-						DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
-					} else if (item.type == "Medicine")
-					{
-						var altText = string("{0} / {1}", item.metadata.healing_left, item.metadata.healing_value);
-						DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
-					} else if (item.type == "Fuel")
-					{
-						var altText = string("{0} / {1}", item.metadata.fuel_left, item.metadata.fuel_value);
-						DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
-					} else {
-						if (item.quantity > 1)
+						case "Magazine":
 						{
-							DrawItemAltText(item.quantity, altTextPos.X, altTextPos.Y);
-						}
+							var altText = string("{0} / {1}", item.metadata.GetBulletCount(), item.metadata.capacity);
+							DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
+						} break;
+						case "Medicine":
+						{
+							var altText = string("{0} / {1}", item.metadata.healing_left, item.metadata.healing_value);
+							DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
+						} break;
+						case "Fuel":
+						{
+							var altText = string("{0} / {1}", item.metadata.fuel_left, item.metadata.fuel_value);
+							DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
+						} break;
+						default:
+						{
+							if (item.quantity > 1)
+							{
+								DrawItemAltText(item.quantity, altTextPos.X, altTextPos.Y);
+							}
+						} break;
 					}
 				}
 			}
