@@ -18,6 +18,7 @@ function ParseJSONStructToDatabaseItem(_jsonStruct)
 	
 			item = new Item(
 				_jsonStruct[$ "name"],
+				_jsonStruct[$ "short_name"],
 				icon,
 				size,
 				itemType,

@@ -1,6 +1,7 @@
-function Item(_name, _icon, _size, _type, _weight, _max_stack, _base_price, _description, _quantity = 1, _metadata = undefined, _is_rotated = false, _known = true, _grid_index = undefined) constructor
+function Item(_name, _short_name, _icon, _size, _type, _weight, _max_stack, _base_price, _description, _quantity = 1, _metadata = undefined, _is_rotated = false, _known = true, _grid_index = undefined) constructor
 {
 	name = _name;
+	short_name = _short_name;
 	icon = _icon;
 	size = _size;
 	type = _type;
@@ -22,6 +23,7 @@ function Item(_name, _icon, _size, _type, _weight, _max_stack, _base_price, _des
 		var formatGridIndex = grid_index.ToJSONStruct();
 		return {
 			name: name,
+			short_name: short_name,
 			quantity: quantity,
 			metadata: formatMetadata,
 			is_rotated: is_rotated,
@@ -33,7 +35,7 @@ function Item(_name, _icon, _size, _type, _weight, _max_stack, _base_price, _des
 	static Clone = function(_newQuantity = undefined)
 	{
 		var cloneItem = new Item(
-			name, icon, size, type,
+			name, short_name, icon, size, type,
 			weight, max_stack, base_price, description,
 			_newQuantity ?? quantity,
 			ParseMetadataItem(metadata, type),
@@ -62,6 +64,7 @@ function Item(_name, _icon, _size, _type, _weight, _max_stack, _base_price, _des
 		{
 			isIdentical = (
 				name == _other.name &&
+				short_name == _other.short_name &&
 				icon == _other.icon &&
 				type == _other.type &&
 				known == _other.known

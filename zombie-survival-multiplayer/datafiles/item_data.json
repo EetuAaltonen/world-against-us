@@ -2,6 +2,7 @@
   "item_data": [
     {
       "name": "Money",
+      "short_name": "Money",
       "icon": "sprMoney",
       "type": "Other",
       "size": {
@@ -15,6 +16,7 @@
     },
     {
       "name": "Army Helmet",
+      "short_name": "A. Helmet",
       "icon": "sprArmyHelmet",
       "type": "Helmet",
       "size": {
@@ -28,6 +30,7 @@
     },
     {
       "name": "Water Bottle",
+      "short_name": "Water",
       "icon": "sprWaterBottle",
       "type": "Consumable",
       "size": {
@@ -45,6 +48,7 @@
     },
     {
       "name": "Canned Meat",
+      "short_name": "Meat",
       "icon": "sprCannedMeat",
       "type": "Consumable",
       "size": {
@@ -62,6 +66,7 @@
     },
     {
       "name": "Snickers Bar",
+      "short_name": "Snick.",
       "icon": "sprSnickersBar",
       "type": "Consumable",
       "size": {
@@ -79,6 +84,7 @@
     },
     {
       "name": "Bandage",
+      "short_name": "Band.",
       "icon": "sprBandage",
       "type": "Medicine",
       "size": {
@@ -95,6 +101,7 @@
     },
     {
       "name": "First Aid Kit",
+      "short_name": "First Aid",
       "icon": "sprFirstAidKit",
       "type": "Medicine",
       "size": {
@@ -111,6 +118,7 @@
     },
     {
       "name": "Knife",
+      "short_name": "Knife",
       "icon": "sprKnife",
       "type": "MeleeWeapon",
       "size": {
@@ -124,6 +132,7 @@
     },
     {
       "name": "Crowbar",
+      "short_name": "Crowbar",
       "icon": "sprCrowbar",
       "type": "MeleeWeapon",
       "size": {
@@ -137,6 +146,7 @@
     },
     {
       "name": "Hand Grenade",
+      "short_name": "Grenade",
       "icon": "sprHandGrenade",
       "type": "Throwable",
       "size": {
@@ -149,7 +159,8 @@
       "base_price": 60
     },
     {
-      "name": "Ak-47",
+      "name": "Ak-47 Assault Rifle",
+      "short_name": "Ak-47",
       "icon": "sprAk47",
       "type": "Primary_Weapon",
       "size": {
@@ -173,7 +184,8 @@
       }
     },
     {
-      "name": "MP5",
+      "name": "MP5 Submachine gun",
+      "short_name": "MP5 SMG",
       "icon": "sprMP5",
       "type": "Primary_Weapon",
       "size": {
@@ -197,7 +209,8 @@
       }
     },
     {
-      "name": "Ak-47 Mag",
+      "name": "Ak-47 Magazine",
+      "short_name": "Ak Mag.",
       "icon": "sprAk47Mag",
       "type": "Magazine",
       "size": {
@@ -215,6 +228,7 @@
     },
     {
       "name": "7.62 Bullet",
+      "short_name": "7.62",
       "icon": "spr762Bullet",
       "type": "Bullet",
       "size": {
@@ -231,6 +245,7 @@
     },
     {
       "name": "7.62 Tracer Bullet",
+      "short_name": "7.62 T.",
       "icon": "spr762TracerBullet",
       "type": "Bullet",
       "size": {
@@ -247,6 +262,7 @@
     },
     {
       "name": "Gas Can",
+      "short_name": "Gas Can",
       "icon": "sprGasCan",
       "type": "Fuel",
       "size": {

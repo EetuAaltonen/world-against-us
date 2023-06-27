@@ -6,11 +6,11 @@ if (room == roomLoadSave)
 	{
 		inventory.AddItem(global.ItemData[? "Money"].Clone(100), undefined, true, true);
 		inventory.AddItem(global.ItemData[? "Water Bottle"].Clone(), undefined, true, true);
-		inventory.AddItem(global.ItemData[? "Ak-47"].Clone(), undefined, true, true);
+		inventory.AddItem(global.ItemData[? "Ak-47 Assault Rifle"].Clone(), undefined, true, true);
 	
-		inventory.AddItem(global.ItemData[? "Ak-47 Mag"].Clone(), undefined, true, true);
-		inventory.AddItem(global.ItemData[? "Ak-47 Mag"].Clone(), undefined, true, true);
-		inventory.AddItem(global.ItemData[? "Ak-47 Mag"].Clone(), undefined, true, true);
+		inventory.AddItem(global.ItemData[? "Ak-47 Magazine"].Clone(), undefined, true, true);
+		inventory.AddItem(global.ItemData[? "Ak-47 Magazine"].Clone(), undefined, true, true);
+		inventory.AddItem(global.ItemData[? "Ak-47 Magazine"].Clone(), undefined, true, true);
 	
 		inventory.AddItem(global.ItemData[? "7.62 Bullet"].Clone(120), undefined, true, true);
 		inventory.AddItem(global.ItemData[? "7.62 Bullet"].Clone(1), undefined, true, true);
