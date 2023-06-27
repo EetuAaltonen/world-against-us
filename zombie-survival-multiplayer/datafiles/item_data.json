@@ -230,6 +230,22 @@
       }
     },
     {
+      "name": "7.62 Tracer Bullet",
+      "icon": "spr762TracerBullet",
+      "type": "Bullet",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "7.62 caliber tracer bullet",
+      "weight": 8,
+      "max_stack": 120,
+      "base_price": 10,
+      "metadata": {
+        "caliber": "7.62"
+      }
+    },
+    {
       "name": "Gas Can",
       "icon": "sprGasCan",
       "type": "Fuel",
