@@ -62,35 +62,55 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
     static AddItem = function(_item, _grid_index = undefined, _known = true, _ignore_network = false)
     {
 		var isItemAdded = false;
-        _item.grid_index = !is_undefined(_grid_index) ? new GridIndex(_grid_index.col, _grid_index.row) : FindEmptyIndex(_item);
-		_item.known = _known;
-		
 		if (IsItemTypeWhiteListed(_item))
 		{
-			if (!is_undefined(_item.grid_index))
+			if (!is_undefined(_grid_index))
 			{
-				_item.sourceInventory = self;
-				FillGridArea(_item.grid_index.col, _item.grid_index.row, _item.size, new GridIndex(_item.grid_index.col, _item.grid_index.row));
-			
-				if (!_ignore_network)
-				{
-					if (type == INVENTORY_TYPE.LootContainer)
-					{
-						// NETWORKING CONTAINER DELETE ITEM
-						var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_ADD_ITEM);
-						var jsonData = json_stringify(_item);
-				
-						buffer_write(networkBuffer, buffer_text , inventoryId);
-						buffer_write(networkBuffer, buffer_text, jsonData);
-						global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
-					}
-				}
-			
-				ds_list_add(items, _item.Clone());
-				isItemAdded = true;
+				_item.grid_index = _grid_index.Clone();
 			} else {
-				// MESSAGE LOG
-				AddMessageLog(string(_item.name) + " doesn't fit!");
+				if (_item.quantity < _item.max_stack)
+				{
+					if (StackItem(_item))
+					{
+						// ITEM IS ADDED WHEN IT FITS TO A STACK
+						isItemAdded = true;
+					} else {
+						_item.grid_index = FindEmptyIndex(_item);
+					}
+				} else {
+					_item.grid_index = FindEmptyIndex(_item);
+				}
+			}
+			
+			if (!isItemAdded)
+			{
+				if (!is_undefined(_item.grid_index))
+				{
+					_item.known = _known;
+					_item.sourceInventory = self;
+				
+					FillGridArea(_item.grid_index.col, _item.grid_index.row, _item.size, new GridIndex(_item.grid_index.col, _item.grid_index.row));
+			
+					if (!_ignore_network)
+					{
+						if (type == INVENTORY_TYPE.LootContainer)
+						{
+							// NETWORKING CONTAINER DELETE ITEM
+							var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_ADD_ITEM);
+							var jsonData = json_stringify(_item);
+				
+							buffer_write(networkBuffer, buffer_text , inventoryId);
+							buffer_write(networkBuffer, buffer_text, jsonData);
+							global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
+						}
+					}
+			
+					ds_list_add(items, _item.Clone());
+					isItemAdded = true;
+				} else {
+					// MESSAGE LOG
+					AddMessageLog(string(_item.name) + " doesn't fit!");
+				}
 			}
 		} else {
 			// MESSAGE LOG
@@ -99,16 +119,37 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 		return isItemAdded;
     }
 	
+	static StackItem = function(_item, _grid_index = undefined)
+	{
+		var isItemStacked = false;
+		var itemCount = GetItemCount();
+		for (var i = 0; i < itemCount; i++)
+		{
+			var item = GetItemByIndex(i);
+			if (item.max_stack > 1)
+			{
+				if (item.Compare(_item))
+				{
+					item.Stack(_item);
+					isItemStacked = _item.quantity <= 0;
+				}
+			}
+		}
+		
+		return isItemStacked;
+	}
+	
 	static ReplaceWithRollback = function(_oldItem, _newItem)
     {
 		var isItemReplaced = true;
 		var oldItemClone = _oldItem.Clone();
+		var oldGridIndex = _oldItem.grid_index;
 		
-		RemoveItemByGridIndex(_oldItem.grid_index);
+		RemoveItemByGridIndex(oldGridIndex);
 		if (!AddItem(_newItem))
 		{
 			// ROLLBACK IF NEW ITEM DOESN'T FIT
-			AddItem(oldItemClone);
+			AddItem(oldItemClone, oldGridIndex);
 			isItemReplaced = false;
 		}
 		

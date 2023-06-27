@@ -23,16 +23,11 @@ function GUIOnDragItemReleased(_inventory, _mouseHoverIndex)
 				// STACK ITEMS
 				if (global.ObjMouse.dragItem.Compare(targetItem))
 				{
-					var availableStackSize = targetItem.max_stack - targetItem.quantity;
-					var quantityToStack = min(availableStackSize, global.ObjMouse.dragItem.quantity);
-					if (quantityToStack > 0)
+					targetItem.Stack(global.ObjMouse.dragItem);
+					if (global.ObjMouse.dragItem.quantity <= 0)
 					{
-						targetItem.quantity += quantityToStack;
-						global.ObjMouse.dragItem.quantity -= quantityToStack;
-						if (global.ObjMouse.dragItem.quantity <= 0)
-						{
-							global.ObjMouse.dragItem.sourceInventory.RemoveItemByGridIndex(global.ObjMouse.dragItem.grid_index);
-						}
+						var inventorySource = global.ObjMouse.dragItem.sourceInventory;
+						inventorySource.RemoveItemByGridIndex(global.ObjMouse.dragItem.grid_index);
 					}
 		
 				// RELOAD MAGAZINE

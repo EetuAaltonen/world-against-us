@@ -63,9 +63,20 @@ function Item(_name, _icon, _size, _type, _weight, _max_stack, _base_price, _des
 			isIdentical = (
 				name == _other.name &&
 				icon == _other.icon &&
-				type == _other.type
+				type == _other.type &&
+				known == _other.known
 			);
 		}
 		return isIdentical;
+	}
+	
+	static Stack = function(_sourceItem)
+	{
+		var quantityToStack = min((max_stack - quantity), _sourceItem.quantity);
+		if (quantityToStack > 0)
+		{
+			quantity += quantityToStack;
+			_sourceItem.quantity -= quantityToStack;
+		}
 	}
 }
