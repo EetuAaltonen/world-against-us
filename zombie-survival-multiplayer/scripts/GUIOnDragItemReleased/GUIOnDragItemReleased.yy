@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Functions",
-    "path": "folders/Scripts/Game/GUI/Functions.yy",
+    "name": "DragItem",
+    "path": "folders/Scripts/Game/GUI/DragItem.yy",
   },
 }

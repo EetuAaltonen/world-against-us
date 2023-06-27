@@ -10,7 +10,7 @@ function PlayerWeaponFunctions()
 	{
 		if (!is_undefined(magazine))
 		{
-			if (magazine.metadata.bullet_count > 0 && fireDelay <= 0)
+			if (magazine.metadata.GetBulletCount() > 0 && fireDelay <= 0)
 			{
 				UseWeapon(mouse_x, mouse_y);
 				onWeaponUsed = true;
@@ -36,9 +36,9 @@ function PlayerWeaponFunctions()
 	// NETWORKING WEAPON FUNCTIONS
 	var onWeaponUsed = false;
 	var onWeaponReloaded = false;
-	var bulletCount = 0; //primaryWeapon.metadata.bullet_count;
+	var bulletCount = 0; //primaryWeapon.metadata.GetBulletCount();
 		
-	if (primaryWeapon.metadata.bullet_count > 0)
+	if (primaryWeapon.metadata.GetBulletCount() > 0)
 	{
 		// SHOOT
 		if (mouse_check_button(mb_left) && fireDelay <= 0)
@@ -51,8 +51,8 @@ function PlayerWeaponFunctions()
 	// RELOAD
 	if (keyboard_check_released(ord("R")))
 	{
-		//ReloadWeapon(primaryWeapon.metadata.magazine_size);
-		//bulletCount = primaryWeapon.metadata.bullet_count;
+		//ReloadWeapon(primaryWeapon.metadata.capacity);
+		//bulletCount = primaryWeapon.metadata.GetBulletCount();
 		onWeaponReloaded = true;
 	}
 		
@@ -82,6 +82,7 @@ function PlayerWeaponFunctions()
 
 function UseWeapon(_mouseX, _mouseY)
 {
+	// TODO: Fetch bullet(item) and it's data from magazine before instantiating
 	// CREATE A BULLET INSTANCE
 	var bullet = instance_create_layer(x + rotatedWeaponBarrelPos.X, y + rotatedWeaponBarrelPos.Y, "Projectiles", objProjectile);
 	var aimRecoilReduction = (isAiming) ? 0.3 : 1;
@@ -97,8 +98,7 @@ function UseWeapon(_mouseX, _mouseY)
 	
 	var magazine = primaryWeapon.metadata.magazine;
 	recoilAnimation = 8;
-	bulletAnimations[magazine.metadata.bullet_count - 1] = 0;
-	magazine.metadata.bullet_count--;
+	array_pop(magazine.metadata.bullets);
 	fireDelay = TimerRatePerMinute(primaryWeapon.metadata.fire_rate);
 }
 

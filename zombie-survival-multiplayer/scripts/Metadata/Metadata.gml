@@ -1,6 +1,6 @@
 function Metadata() constructor
 {
-	// OVERRIDE THIS CLASS
+	// BASE CLASS TO OVERRIDE
 	
 	static ToJSONStruct = function()
 	{

@@ -210,7 +210,7 @@
       "base_price": 100,
       "metadata": {
         "caliber": "7.62",
-        "magazine_size": 30
+        "capacity": 30
       }
     },
     {

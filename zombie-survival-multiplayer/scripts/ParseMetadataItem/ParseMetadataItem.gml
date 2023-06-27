@@ -21,9 +21,13 @@ function ParseMetadataItem(_metadata, _itemType)
 			{
 				parsedMetadata = new MetadataItemMagazine(
 					_metadata[$ "caliber"],
-					_metadata[$ "magazine_size"]
+					_metadata[$ "capacity"]
 				);
-				if (!is_undefined(_metadata[$ "bullet_count"])) { variable_struct_set(parsedMetadata, "bullet_count", _metadata[$ "bullet_count"]); }
+				if (!is_undefined(_metadata[$ "bullets"]))
+				{
+					var bullets = ParseJSONStructToArray(_metadata[$ "bullets"], ParseJSONStructToItem);
+					variable_struct_set(parsedMetadata, "bullets", bullets);
+				}
 			} break;
 			case "Bullet":
 			{

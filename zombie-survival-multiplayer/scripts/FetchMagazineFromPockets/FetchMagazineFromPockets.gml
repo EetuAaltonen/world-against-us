@@ -13,10 +13,10 @@ function FetchMagazineFromPockets(_caliber)
 				{
 					if (!is_undefined(foundMagazine))
 					{
-						if (item.metadata.bullet_count > foundMagazine.metadata.bullet_count)
+						if (item.metadata.GetBulletCount() > foundMagazine.metadata.GetBulletCount())
 						{
 							foundMagazine = item;
-						} else if (item.metadata.bullet_count == foundMagazine.metadata.bullet_count)
+						} else if (item.metadata.GetBulletCount() == foundMagazine.metadata.GetBulletCount())
 						{
 							if (item.grid_index.col < foundMagazine.grid_index.col)
 							{
@@ -30,7 +30,7 @@ function FetchMagazineFromPockets(_caliber)
 							}
 						}
 					} else {
-						if (item.metadata.bullet_count > 0)
+						if (item.metadata.GetBulletCount() > 0)
 						{
 							foundMagazine = item;
 						}

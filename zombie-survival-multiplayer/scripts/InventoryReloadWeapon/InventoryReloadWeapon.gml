@@ -1,19 +1,24 @@
 function InventoryReloadWeapon(_weapon, _magazine)
 {
-	// SET ROTATION TO DEFAULT
-	if (_magazine.is_rotated)
+	var reloadedMagazine = _magazine.Clone();
+	reloadedMagazine.sourceInventory = undefined;
+	if (reloadedMagazine.is_rotated)
 	{
-		_magazine.Rotate();	
+		reloadedMagazine.Rotate();	
 	}
 	
 	if (is_undefined(_weapon.metadata.magazine))
 	{
+		_weapon.metadata.magazine = reloadedMagazine;
 		_magazine.sourceInventory.RemoveItemByGridIndex(_magazine.grid_index);
-		_weapon.metadata.magazine = _magazine;
+		
+		global.ObjHud.hudElementMagazine.InitMagazine();
 	} else {
 		if (_magazine.sourceInventory.ReplaceWithRollback(_magazine, _weapon.metadata.magazine))
 		{
-			_weapon.metadata.magazine = _magazine;
+			_weapon.metadata.magazine = reloadedMagazine;
+			
+			global.ObjHud.hudElementMagazine.InitMagazine();
 		}
 	}
 }

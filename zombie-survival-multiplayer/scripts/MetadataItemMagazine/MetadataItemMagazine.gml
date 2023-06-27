@@ -1,15 +1,38 @@
-function MetadataItemMagazine(_caliber, _magazine_size) : Metadata() constructor
+function MetadataItemMagazine(_caliber, _capacity) : Metadata() constructor
 {
 	caliber = _caliber;
-    magazine_size = _magazine_size;
-	bullet_count = 0;
+    capacity = _capacity;
+	bullets = [];
 	
 	static ToJSONStruct = function()
 	{
+		var bulletArray = [];
+		var bulletCount = array_length(bullets);
+		for (var i = 0; i < bulletCount; i++)
+		{
+			var bullet = bullets[@ i];
+			array_push(bulletArray, bullet.ToJSONStruct());
+		}
+		
 		return {
 			caliber: caliber,
-			magazine_size: magazine_size,
-			bullet_count: bullet_count
+			capacity: capacity,
+			bullets: bullets
 		}
+	}
+	
+	static GetBulletCount = function()
+	{
+		return array_length(bullets);
+	}
+	
+	static LoadBullet = function(_bullet)
+	{
+		return array_push(bullets, _bullet);
+	}
+	
+	static UnloadBullet = function()
+	{
+		return array_pop(bullets);
 	}
 }

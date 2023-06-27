@@ -43,10 +43,12 @@ function GUIOnDragItemReleased(_inventory, _mouseHoverIndex)
 						if (targetItem.metadata.caliber == global.ObjMouse.dragItem.metadata.caliber)
 						{
 							var sourceItem = global.ObjMouse.dragItem.sourceInventory.GetItemByGridIndex(global.ObjMouse.dragItem.grid_index);
-							var reloadCount = min(sourceItem.quantity, (targetItem.metadata.magazine_size - targetItem.metadata.bullet_count));
-					
-							targetItem.metadata.bullet_count += reloadCount;
-							sourceItem.quantity -= reloadCount;
+							var reloadCount = min(sourceItem.quantity, (targetItem.metadata.capacity - array_length(targetItem.metadata.bullets)));
+							repeat(reloadCount)
+							{
+								targetItem.metadata.LoadBullet(sourceItem.Clone(1));
+								sourceItem.quantity--;
+							}
 							if (sourceItem.quantity <= 0)
 							{
 								sourceItem.sourceInventory.RemoveItemByGridIndex(sourceItem.grid_index);
