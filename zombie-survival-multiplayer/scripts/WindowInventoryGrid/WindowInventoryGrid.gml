@@ -241,15 +241,32 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 				
 				if (item.known)
 				{
-					// ITEM NAME
+					var textBgPadding = 2;
+					var textBgAlpha = 0.2;
+					var textBgHeight = 16;
+					// DRAW ITEM NAME BACKGROUND
+					draw_sprite_ext(
+						sprGUIBg, gridSpriteIndex, xPos + textBgPadding, yPos + textBgPadding,
+						item.size.w * gridCellSize.w - (textBgPadding * 2), textBgHeight,
+						0, c_white, textBgAlpha
+					);
+					
+					// ITEM (SHORT)NAME
 					var nameTextPos = new Vector2(
 						xPos + 5,
 						yPos
 					);
-					DrawItemAltText(item.name, nameTextPos.X, nameTextPos.Y + 1);
-				
+					DrawItemAltText(item.short_name, nameTextPos.X, nameTextPos.Y + 1);
+					
+					// DRAW ITEM ALT TEXT BACKGROUND
+					draw_sprite_ext(
+						sprGUIBg, gridSpriteIndex, xPos + textBgPadding, yPos + (item.size.h * gridCellSize.h) - textBgHeight - textBgPadding,
+						item.size.w * gridCellSize.w - (textBgPadding * 2), textBgHeight,
+						0, c_white, textBgAlpha
+					);
+					
 					// ITEM ALT TEXT
-					var altTextPos = new Vector2(xPos + 5, yPos + (gridCellSize.h * item.size.h) - 15);
+					var altTextPos = new Vector2(xPos + 5, yPos + (item.size.h * gridCellSize.h) - 20);
 					switch (item.type)
 					{
 						case "Magazine":
@@ -271,7 +288,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 						{
 							if (item.quantity > 1)
 							{
-								DrawItemAltText(item.quantity, altTextPos.X, altTextPos.Y);
+								DrawItemAltText(string("{0}x", item.quantity), altTextPos.X, altTextPos.Y);
 							}
 						} break;
 					}
