@@ -1,21 +1,14 @@
 hudHeight = 100;
 hudAlpha = 0.95;
 
-heartBaseScale = 0.5;
-heartPulseScale = 0.7;
-heartScale = heartBaseScale;
+// HUD ELEMENTS
+var hudVerticalCenter = (global.GUIH - (hudHeight * 0.5));
+hudElementHealth = new HUDElementHealth(new Vector2(60, hudVerticalCenter));
 
-beatRate = 70; // per minute
-pulseDelay = 10; // in frames
+hudElementFullness = new HUDElementIconValuePair(new Vector2(160, hudVerticalCenter), sprHunger);
+hudElementHydration = new HUDElementIconValuePair(new Vector2(230, hudVerticalCenter), sprHydration);
+hudElementEnergy = new HUDElementIconValuePair(new Vector2(300, hudVerticalCenter), sprEnergy);
 
-pulseTimer = TimerRatePerMinute(beatRate);
+hudElementMagazine = new HUDElementMagazine(new Vector2(global.GUIW - 100, /*Bottom pivot*/global.GUIH - hudHeight))
 
-pulseLinePoints = ds_list_create();
-pulseIndicatorSize = 8;
-initPulseLine = true;
-
-// STYLES
-scaleHUDIcons = 0.35;
-
-colPulseLine = make_colour_rgb(53, 138, 0);
-colPulsePointer = make_colour_rgb(55, 255, 0);
+initHUDValues = true;

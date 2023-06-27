@@ -13,9 +13,6 @@ weaponYOffset = 10;
 fireDelay = 0;
 recoilAnimation = 0;
 
-bulletAnimations = array_create(0, -1);
-bulletAnimationStep = 0.05;
-
 // NETWORKING VALUE MONITORING
 weapon_aim_pos = new Vector2(x, y);
 prev_is_aiming = isAiming;

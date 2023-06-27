@@ -107,7 +107,7 @@ function InitializeWeapon()
 	sprite_index = primaryWeapon.icon;
 	fireDelay = 0;
 	recoilAnimation = 0;
-	//bulletAnimations = array_create(primaryWeapon.metadata.magazine_size, 1);
+	global.ObjHud.hudElementMagazine.InitMagazine();
 }
 
 function CalculateBarrelPos()
