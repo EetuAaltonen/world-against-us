@@ -4,8 +4,8 @@ itemData = ParseJSONStructArrayToMap(jsonItemStruct[$ "item_data"], "name", Pars
 
 // BULLET DATA
 bulletData = ds_map_create();
-ds_map_add(bulletData, 7.62, spr762Bullet);
-ds_map_add(bulletData, 9, spr9mmBullet);
+ds_map_add(bulletData, "7.62 Bullet", spr762BulletProjectile);
+ds_map_add(bulletData, "7.62 Tracer Bullet", spr762TracerBulletProjectile);
 
 // QUEST DATA
 var jsonQuestStruct = ReadJSONFile("quest_data.json") ?? {};
