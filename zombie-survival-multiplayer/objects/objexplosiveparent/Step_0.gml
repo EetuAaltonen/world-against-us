@@ -4,21 +4,25 @@ event_inherited();
 if (condition <= 0)
 {
 	visible = false;
-	// DESTROY EXPLOSIVE BLAST AND SELF
-	if (sprite_width >= blastInstance.blastRadius)
+	
+	if (blastInstance != noone)
 	{
-		instance_destroy(blastInstance);
-		instance_destroy();
-	} else {
-		// INCREASE SCALE
-		var newSpriteScale = ScaleSpriteToFitSize(
-			sprite_index,
-			new Size(
-				sprite_width + blastInstance.blastRadiusStep, 
-				sprite_height + blastInstance.blastRadiusStep
-			)
-		);
-		image_xscale = newSpriteScale;
-		image_yscale = newSpriteScale;
+		// DESTROY EXPLOSIVE BLAST AND SELF
+		if (blastInstance.sprite_width >= blastRadius)
+		{
+			instance_destroy(blastInstance);
+			instance_destroy();
+		} else {
+			// INCREASE SCALE
+			var newSpriteScale = ScaleSpriteToFitSize(
+				blastInstance.sprite_index,
+				new Size(
+					blastInstance.sprite_width + blastRadiusStep, 
+					blastInstance.sprite_height + blastRadiusStep
+				)
+			);
+			blastInstance.image_xscale = newSpriteScale;
+			blastInstance.image_yscale = newSpriteScale;
+		}
 	}
 }

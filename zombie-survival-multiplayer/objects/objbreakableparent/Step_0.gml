@@ -1,4 +1,7 @@
 // Inherit the parent event
 event_inherited();
 
-damageDelayTimer = max(0, damageDelayTimer - 1);
+if (damageDelayTimer > 0)
+{
+	damageDelayTimer = max(0, --damageDelayTimer);
+}
