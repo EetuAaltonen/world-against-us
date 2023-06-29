@@ -1,4 +1,4 @@
-// Inherit the parent event
+// INHERIT THE PARENT EVENT
 event_inherited();
 
 image_speed = 0;
@@ -15,4 +15,5 @@ bullet = undefined;
 traceTailPosition = new Vector2(x, y);
 traceTailStep = new Vector2(0, 0);
 
+objectsToHit = [objCharacterParent, objBlockParent];
 isHit = false;

@@ -2,6 +2,7 @@ function CheckCollisionProjectile(_collisionPoint, _projectile)
 {
 	var isProjectileCollided = false;
 	var nearestInstance = _collisionPoint.nearest_instance;
+	
 	if (nearestInstance != noone) {
 		objectIndexToCheck = nearestInstance.object_index;
 		while (isProjectileCollided = false && objectIndexToCheck != -1 && objectIndexToCheck != -100)
@@ -25,26 +26,20 @@ function CheckCollisionProjectile(_collisionPoint, _projectile)
 			
 				case objBreakableParent:
 				{
-					if (damageDelayTimer <= 0)
+					if (nearestInstance.damageDelayTimer <= 0)
 					{
 						nearestInstance.condition = max(0, nearestInstance.condition - _projectile.damageSource.bullet.metadata.base_damage);
-						nearestInstance.damageDelayTimer = damageDelay;
+						nearestInstance.damageDelayTimer = nearestInstance.damageDelay;
 						isProjectileCollided = true;
 					}
 				} break;
 				
 				case objCharacterParent:
 				{
-					// TODO: Fix character damage taking, checking the owner object to hit only their enemies
-					/*if (damageInstance.object_index == objProjectile)
+					if (instance_exists(nearestInstance))
 					{
-						character.TakeDamage(damageInstance.damageSource);
-						with (damageInstance)
-						{
-							instance_destroy();	
-						}
-						checkInteraction = false;
-					}*/
+						nearestInstance.character.TakeDamage(_projectile.damageSource);
+					}
 					
 					isProjectileCollided = true;
 				} break;

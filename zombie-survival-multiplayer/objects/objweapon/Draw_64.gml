@@ -13,14 +13,18 @@ if (!is_undefined(primaryWeapon))
 		var laserEndPoint = PositionToWorld(_mousePosition);
 			
 		// CHECK COLLISION
+		var objectsToHit = [objCharacterParent, objBlockParent];
 		var collisionPoint = CheckCollisionLinePoint(
 			new Vector2(laserStartPoint.X, laserStartPoint.Y),
 			new Vector2(laserEndPoint.X, laserEndPoint.Y),
-			objBlockParent, true, true
+			objectsToHit, true, true
 		);
-		if (collisionPoint.nearest_instance != noone) {
-			laserEndPoint.X = collisionPoint.position.X;
-			laserEndPoint.Y = collisionPoint.position.Y;
+		if (!is_undefined(collisionPoint))
+		{
+			if (collisionPoint.nearest_instance != noone) {
+				laserEndPoint.X = collisionPoint.position.X;
+				laserEndPoint.Y = collisionPoint.position.Y;
+			}
 		}
 		
 		var laserGUIStartPoint = PositionToGUI(laserStartPoint);

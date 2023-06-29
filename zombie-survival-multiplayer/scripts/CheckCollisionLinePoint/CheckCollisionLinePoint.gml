@@ -1,31 +1,50 @@
-function CheckCollisionLinePoint(_startPosition, _endPosition, _objectToCheck, _preciseCollisions, _notme)
+function CheckCollisionLinePoint(_startPosition, _endPosition, _objectsToCheck, _preciseCollisions, _notme)
 {
-	var collideInstance = collision_line(
-		_startPosition.X, _startPosition.Y,
-		_endPosition.X, _endPosition.Y,
-		_objectToCheck, _preciseCollisions, _notme
-	);
-	var collidePosition = new Vector2(_endPosition.X, _endPosition.Y);
-	if (collideInstance != noone && collideInstance.mask_index != SPRITE_NO_MASK) {
-	    var p0 = 0;
-	    var p1 = 1;
-	    repeat (ceil(log2(point_distance(_startPosition.X, _startPosition.Y, _endPosition.X, _endPosition.Y))) + 1) {
-	        var np = p0 + (p1 - p0) * 0.5;
-	        var nx = _startPosition.X + (_endPosition.X - _startPosition.X) * np;
-	        var ny = _startPosition.Y + (_endPosition.Y - _startPosition.Y) * np;
-	        var px = _startPosition.X + (_endPosition.X - _startPosition.X) * p0;
-	        var py = _startPosition.Y + (_endPosition.Y - _startPosition.Y) * p0;
-	        var nearestCollideInstance = collision_line(px, py, nx, ny, _objectToCheck, _preciseCollisions, _notme);
-	        if (nearestCollideInstance != noone && nearestCollideInstance.mask_index != SPRITE_NO_MASK) {
-	            collideInstance = nearestCollideInstance;
-				collidePosition.X = nx;
-				collidePosition.Y = ny;
-	            p1 = np;
-	        } else {
-				p0 = np;
+	var collisionPoint = undefined;
+	
+	var objectToCheckCount = array_length(_objectsToCheck);
+	for (var i = 0; i < objectToCheckCount; i++)
+	{
+		var collidePosition = new Vector2(_endPosition.X, _endPosition.Y);
+		var collideInstance = collision_line(
+			_startPosition.X, _startPosition.Y,
+			_endPosition.X, _endPosition.Y,
+			_objectsToCheck[i], _preciseCollisions, _notme
+		);
+		
+		if (collideInstance != noone && collideInstance.mask_index != SPRITE_NO_MASK) {
+		    var p0 = 0;
+		    var p1 = 1;
+		    repeat (ceil(log2(point_distance(_startPosition.X, _startPosition.Y, _endPosition.X, _endPosition.Y))) + 1)
+			{
+		        var np = p0 + (p1 - p0) * 0.5;
+		        var nx = _startPosition.X + (_endPosition.X - _startPosition.X) * np;
+		        var ny = _startPosition.Y + (_endPosition.Y - _startPosition.Y) * np;
+		        var px = _startPosition.X + (_endPosition.X - _startPosition.X) * p0;
+		        var py = _startPosition.Y + (_endPosition.Y - _startPosition.Y) * p0;
+		        var nearestCollideInstance = collision_line(px, py, nx, ny, _objectsToCheck[i], _preciseCollisions, _notme);
+		        if (nearestCollideInstance != noone && nearestCollideInstance.mask_index != SPRITE_NO_MASK) {
+		            collideInstance = nearestCollideInstance;
+					collidePosition.X = nx;
+					collidePosition.Y = ny;
+		            p1 = np;
+		        } else {
+					p0 = np;
+				}
+		    }
+			
+			if (collideInstance != noone)
+			{
+				// CHECKS THAT YOU DON'T SHOOT TARGETS BEHIND THE WALLS ETC.
+				if (is_undefined(collisionPoint) ||
+					(point_distance(collidePosition.X, collidePosition.Y, _startPosition.X, _startPosition.Y) < point_distance(collisionPoint.position.X, collisionPoint.position.Y, _startPosition.X, _startPosition.Y))
+				)
+				{
+					collisionPoint = new CollisionPoint(collideInstance, collidePosition);
+				}
 			}
-	    }
+		}
 	}
-	var collisionPoint = new CollisionPoint(collideInstance, collidePosition);
+	
 	return collisionPoint;
 }
