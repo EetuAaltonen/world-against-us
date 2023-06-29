@@ -13,7 +13,11 @@ if (character.type == CHARACTER_TYPE.PLAYER)
 		var medicine = FetchMedicineFromPockets();
 		if (!is_undefined(medicine))
 		{
-			character.UseMedicine(medicine)
+			character.UseMedicine(medicine);
+			if (medicine.metadata.healing_left <= 0)
+			{
+				medicine.sourceInventory.RemoveItemByGridIndex(medicine.grid_index);
+			}
 		} else {
 			// MESSAGE LOG
 			AddMessageLog(string("Quick healing failed, missing healing items"));

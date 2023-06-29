@@ -30,6 +30,10 @@ function WindowHealthBar(_elementId, _relativePosition, _size, _sourceCharacter,
 						{
 							var medicine = global.ObjMouse.dragItem.sourceInventory.GetItemByGridIndex(global.ObjMouse.dragItem.grid_index);
 							sourceCharacter.UseMedicine(medicine, bodyPartIndex);
+							if (medicine.metadata.healing_left <= 0)
+							{
+								medicine.sourceInventory.RemoveItemByGridIndex(medicine.grid_index);
+							}
 						}
 						global.ObjMouse.dragItem = undefined;
 					}
