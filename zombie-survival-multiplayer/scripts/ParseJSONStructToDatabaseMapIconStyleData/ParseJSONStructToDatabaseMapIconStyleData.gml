@@ -10,6 +10,7 @@ function ParseJSONStructToDatabaseMapIconStyleData(_jsonStruct)
 			var objectIndex = asset_get_index(_jsonStruct[$ "obj_index"] ?? noone);
 			if (objectIndex > -1)
 			{
+				// TODO: Use RGBA struct
 				var colorStruct = _jsonStruct[$ "color"];
 				var rgbColor = make_color_rgb(
 					colorStruct[$ "red"] ?? 0,

@@ -14,9 +14,9 @@ if (room == roomLoadSave)
 	
 		inventory.AddItem(global.ItemData[? "7.62 Bullet"].Clone(120), undefined, true, true);
 		inventory.AddItem(global.ItemData[? "7.62 Bullet"].Clone(1), undefined, true, true);
-		inventory.AddItem(global.ItemData[? "7.62 Tracer Bullet"].Clone(1), undefined, true, true);
+		inventory.AddItem(global.ItemData[? "7.62 Tracer Bullet"].Clone(120), undefined, true, true);
 		inventory.AddItem(global.ItemData[? "7.62 Bullet"].Clone(1), undefined, true, true);
-		inventory.AddItem(global.ItemData[? "7.62 Tracer Bullet"].Clone(1), undefined, true, true);
+		inventory.AddItem(global.ItemData[? "7.62 Tracer Bullet"].Clone(3), undefined, true, true);
 		inventory.AddItem(global.ItemData[? "7.62 Bullet"].Clone(1), undefined, true, true);
 	
 		inventory.AddItem(global.ItemData[? "Bandage"].Clone(), undefined, true, true);
