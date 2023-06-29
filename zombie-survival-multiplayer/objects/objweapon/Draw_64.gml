@@ -7,13 +7,13 @@ if (!is_undefined(primaryWeapon))
 {
 	var drawCrosshairLaser = function(_mousePosition) {
 		var laserStartPoint = new Vector2(
-			x + (rotatedWeaponBarrelPos.X * spriteScale),
-			y + (rotatedWeaponBarrelPos.Y * spriteScale)
+			x + rotatedWeaponBarrelPos.X,
+			y + rotatedWeaponBarrelPos.Y
 		);
 		var laserEndPoint = PositionToWorld(_mousePosition);
 			
 		// CHECK COLLISION
-		var collisionPoint = CollisionLinePoint(
+		var collisionPoint = CheckCollisionLinePoint(
 			new Vector2(laserStartPoint.X, laserStartPoint.Y),
 			new Vector2(laserEndPoint.X, laserEndPoint.Y),
 			objBlockParent, true, true

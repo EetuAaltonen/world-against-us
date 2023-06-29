@@ -7,6 +7,7 @@ function MetadataItemWeapon(_caliber, _fire_rate, _range, _recoil, _attachment_s
     attachment_slots = _attachment_slots;
 	barrel_pos = new Vector2(_barrel_pos.X, _barrel_pos.Y);
 	magazine = undefined;
+	// TODO: isHolstered variable
 	
 	static ToJSONStruct = function()
 	{
