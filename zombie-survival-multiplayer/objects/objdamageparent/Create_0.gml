@@ -1,1 +1,1 @@
-damage = 1;
+damageSource = undefined; // OVERRIDE THIS VARIABLE

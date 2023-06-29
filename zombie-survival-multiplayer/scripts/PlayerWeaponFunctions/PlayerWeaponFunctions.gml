@@ -82,24 +82,24 @@ function PlayerWeaponFunctions()
 
 function UseWeapon(_mouseX, _mouseY)
 {
-	// TODO: Fetch bullet(item) and it's data from magazine before instantiating
-	// CREATE A BULLET INSTANCE
-	var bullet = instance_create_layer(x + rotatedWeaponBarrelPos.X, y + rotatedWeaponBarrelPos.Y, "Projectiles", objProjectile);
+	var magazine = primaryWeapon.metadata.magazine;
+	var bullet = array_pop(magazine.metadata.bullets);
+	var projectileSpawnPoint = new Vector2(x + rotatedWeaponBarrelPos.X, y + rotatedWeaponBarrelPos.Y);
+	
+	// CREATE PROJECTILE INSTANCE
+	var projectileInstance = instance_create_layer(projectileSpawnPoint.X, projectileSpawnPoint.Y, "Projectiles", objProjectile);
 	var aimRecoilReduction = (isAiming) ? 0.3 : 1;
 	var bulletRecoil = random_range(-primaryWeapon.metadata.recoil, primaryWeapon.metadata.recoil) * aimRecoilReduction;
 	var barrelAngle = point_direction(x + rotatedWeaponBarrelPos.X, y +rotatedWeaponBarrelPos.Y, _mouseX, _mouseY);
-			
-	bullet.sprite_index = GetBulletSpriteByCaliber(primaryWeapon.metadata.caliber);
-	bullet.direction = barrelAngle + bulletRecoil;
-	bullet.image_angle = bullet.direction;
-	bullet.image_xscale = 0.2;
-	bullet.image_yscale = bullet.image_xscale;
-	bullet.range = MetersToPixels(primaryWeapon.metadata.range);
 	
-	var magazine = primaryWeapon.metadata.magazine;
-	recoilAnimation = 8;
-	array_pop(magazine.metadata.bullets);
+	projectileInstance.sprite_index = GetProjectileSpriteByBullet(bullet.name);
+	projectileInstance.direction = barrelAngle + bulletRecoil;
+	projectileInstance.image_angle = projectileInstance.direction;
+	projectileInstance.damageSource = new DamageSource(bullet.Clone(), MetersToPixels(primaryWeapon.metadata.range), projectileSpawnPoint);
+	
+	recoilAnimation = baseRecoilAnimation;
 	fireDelay = TimerRatePerMinute(primaryWeapon.metadata.fire_rate);
+	muzzleFlashTimer = muzzleFlashTime;
 }
 
 function InitializeWeapon()
@@ -107,6 +107,7 @@ function InitializeWeapon()
 	sprite_index = primaryWeapon.icon;
 	fireDelay = 0;
 	recoilAnimation = 0;
+	muzzleFlashTimer = 0;
 	global.ObjHud.hudElementMagazine.InitMagazine();
 }
 
@@ -115,8 +116,8 @@ function CalculateBarrelPos()
 	var xOrigin = sprite_get_xoffset(sprite_index);
 	var yOrigin = sprite_get_yoffset(sprite_index);
 	var barrelPos = new Vector2(
-		primaryWeapon.metadata.barrel_pos.X - xOrigin,
-		((primaryWeapon.metadata.barrel_pos.Y - yOrigin) * image_yscale)
+		(primaryWeapon.metadata.barrel_pos.X - xOrigin) * image_xscale,
+		(primaryWeapon.metadata.barrel_pos.Y - yOrigin) * image_yscale
 	);
 	rotatedWeaponBarrelPos = RotateVector2(barrelPos, image_angle);
 }
