@@ -3,14 +3,25 @@ function ParseJSONStructArrayToMap(_structArray, _mapKeyIndicator, _elementParse
 	var dataMap = ds_map_create();
 	if (!is_undefined(_structArray))
 	{
-		if (script_exists(_elementParseFunction))
+		try
 		{
-			var arrayLength = array_length(_structArray);
-			for (var i = 0; i < arrayLength; i++)
+			if (script_exists(_elementParseFunction))
 			{
-				var parsedData = script_execute(_elementParseFunction, _structArray[i]);
-				ds_map_add(dataMap, parsedData[$ _mapKeyIndicator], parsedData);
+				var arrayLength = array_length(_structArray);
+				for (var i = 0; i < arrayLength; i++)
+				{
+					var parsedData = script_execute(_elementParseFunction, _structArray[i]);
+					if (!is_undefined(parsedData[$ _mapKeyIndicator]))
+					{
+						ds_map_add(dataMap, parsedData[$ _mapKeyIndicator], parsedData);
+					} else {
+						throw (string("Struct is missing {0} property in some where", _mapKeyIndicator));
+					}
+				}
 			}
+		} catch (error)
+		{
+			show_debug_message(error);
 		}
 	}
 	return dataMap;
