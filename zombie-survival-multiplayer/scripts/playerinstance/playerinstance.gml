@@ -7,7 +7,7 @@ function SpawnerCreatePlayerInstance(_playerUuid, _playerData)
 	var primaryWeapon = _playerData[$ "primary_weapon"];
 	
 	var coopPlayerObj = instance_create_layer(scaledPosition.X, scaledPosition.Y, "Player", objPlayer);
-	coopPlayerObj.character = new Character(_playerUuid, CHARACTER_TYPE.COOP_PLAYER);
+	coopPlayerObj.character = new Character(_playerUuid, CHARACTER_TYPE.COOP_PLAYER, CHARACTER_RACE.humanoid);
 	coopPlayerObj.character.uuid = _playerUuid;
 	coopPlayerObj.image_index = 1;
 	

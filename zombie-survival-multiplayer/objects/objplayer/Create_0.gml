@@ -1,6 +1,6 @@
 // Inherit the parent event
 event_inherited();
-character = new Character("Player", CHARACTER_TYPE.PLAYER);
+character = new CharacterPlayer("Player", CHARACTER_TYPE.PLAYER, CHARACTER_RACE.humanoid);
 
 image_index = 0;
 image_speed = 0;
@@ -12,6 +12,7 @@ dirSpeed = 0;
 maxSpeed = 2.5;
 
 // SPAWN WEAPON
+// TODO: Move the weapon under character struct
 weapon = instance_create_layer(x, y, layer, objWeapon);
 weapon.owner = self;
 

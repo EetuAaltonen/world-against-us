@@ -1,136 +1,65 @@
-function Character(_name, _type) constructor
+function Character(_name, _type, _race) constructor
 {
 	name = _name;
 	uuid = undefined;
 	type = _type;
+	race = _race;
 	
-	totalHpPercent = 0;
+	total_hp_percent = 0;
 	stamina = 100;
-	
-	maxFullness = 100;
-	fullness = maxFullness;
-	hungerBaseRate = 0.0025;
-	hungerRate = hungerBaseRate;
-	
-	maxHydration = 100;
-	hydration = maxHydration;
-	thirstBaseRate = 0.00015;
-	thirstRate = thirstBaseRate;
-	
-	maxEnergy = 100;
-	energy = maxEnergy;
-	fatigueBaseRate = 0.0001;
-	fatigueRate = fatigueBaseRate;
-	
-	bodyParts = ds_map_create();
+	body_parts = undefined;
 	InitBodyParts();
 	
 	isDead = false;
 	
 	static InitBodyParts = function()
 	{
-		ds_map_clear(bodyParts);
-		ds_map_add(bodyParts, CHARACTER_BODY_PARTS.Head, new CharacterBodyPart("Head"));
-		ds_map_add(bodyParts, CHARACTER_BODY_PARTS.Chest, new CharacterBodyPart("Chest"));
-		ds_map_add(bodyParts, CHARACTER_BODY_PARTS.RightArm, new CharacterBodyPart("Right Arm"));
-		ds_map_add(bodyParts, CHARACTER_BODY_PARTS.LeftArm, new CharacterBodyPart("Left Arm"));
-		ds_map_add(bodyParts, CHARACTER_BODY_PARTS.Stomach, new CharacterBodyPart("Stomach"));
-		ds_map_add(bodyParts, CHARACTER_BODY_PARTS.RightLeg, new CharacterBodyPart("Right Leg"));
-		ds_map_add(bodyParts, CHARACTER_BODY_PARTS.LeftLeg, new CharacterBodyPart("Left Leg"));
-		
-		UpdateTotalHp();
+		body_parts = InitCharacterBodyParts(race);
+		if (!is_undefined(body_parts))
+		{
+			UpdateTotalHp();
+		}
 	}
 	
 	static Clone = function()
 	{
-		return new Character(name, type);
-	}
-	
-	static UpdateStats = function()
-	{
-		if (totalHpPercent <= 0)
-		{
-			isDead = true;
-		} else {
-			fullness = clamp(fullness - (hungerRate / game_get_speed(gamespeed_fps)), 0, maxFullness);
-			hydration = clamp(hydration - (thirstRate / game_get_speed(gamespeed_fps)), 0, maxHydration);
-			energy = clamp(energy - (fatigueRate / game_get_speed(gamespeed_fps)), 0, maxEnergy);
-		}
+		return new Character(
+			name, type
+		);
 	}
 	
 	static UpdateTotalHp = function()
 	{
 		var totalBodyPartMaxCondition = 0;
 		var totalBodyPartCondition = 0;
-		var bodyPartIndices = ds_map_keys_to_array(bodyParts);
+		var bodyPartIndices = ds_map_keys_to_array(body_parts);
 		var bodyPartCount = array_length(bodyPartIndices);
 		
 		for (var i = 0; i < bodyPartCount; i++)
 		{
-			var bodyPart = bodyParts[? bodyPartIndices[@ i]];
+			var bodyPart = body_parts[? bodyPartIndices[@ i]];
 			
-			totalBodyPartMaxCondition += bodyPart.maxCondition;
+			totalBodyPartMaxCondition += bodyPart.max_condition;
 			totalBodyPartCondition += bodyPart.condition;
 		}
 		
-		totalHpPercent = floor((totalBodyPartCondition / totalBodyPartMaxCondition) * 100);
+		total_hp_percent = floor((totalBodyPartCondition / totalBodyPartMaxCondition) * 100);
 	}
 	
-	static TakeDamage = function(_damage, _targetBodyPart = undefined)
+	static Update = function()
+	{
+		UpdateStats();
+	}
+	
+	static UpdateStats = function()
+	{
+		// OVERRIDE THIS FUNCTION
+	}
+	
+	static TakeDamage = function(_damage_source, _targetBodyPart = undefined)
 	{
 		// TODO: Code is still just a stump
-		show_message(string(_item));
-		
-		UpdateTotalHp();
-	}
-	
-	static UseMedicine = function(_item, _targetBodyPartIndex = undefined)
-	{
-		if (totalHpPercent < 100)
-		{
-			if (!is_undefined(_targetBodyPartIndex))
-			{
-				var bodyPart = bodyParts[? _targetBodyPartIndex];
-				if (bodyPart.condition < bodyPart.maxCondition)
-				{
-					var healAmount = min(_item.metadata.healing_left, (bodyPart.maxCondition - bodyPart.condition));
-						
-					bodyPart.Heal(healAmount);
-					_item.metadata.healing_left -= healAmount;
-					if (_item.metadata.healing_left <= 0)
-					{
-						_item.sourceInventory.RemoveItemByGridIndex(_item.grid_index);
-					}
-					
-					// MESSAGE LOG
-					AddMessageLog(string("{0} healed to {1} / {2}", bodyPart.name, bodyPart.condition, bodyPart.maxCondition));
-				} else {
-					// MESSAGE LOG
-					AddMessageLog(string("{0} is already fully healed", bodyPart.name));
-				}
-			} else {
-				while (true)
-				{
-					var mostDamagedBodyPart = FetchMostDamagedBodyPart();
-					if (is_undefined(mostDamagedBodyPart)) break;
-					if (_item.metadata.healing_left <= 0)
-					{
-						_item.sourceInventory.RemoveItemByGridIndex(_item.grid_index);
-						break;
-					}
-					
-					var healAmount = min(_item.metadata.healing_left, (mostDamagedBodyPart.maxCondition - mostDamagedBodyPart.condition));
-					mostDamagedBodyPart.condition += healAmount;
-					_item.metadata.healing_left -= healAmount;
-					
-					// MESSAGE LOG
-					AddMessageLog(string("{0} healed to {1} / {2}", mostDamagedBodyPart.name, mostDamagedBodyPart.condition, mostDamagedBodyPart.maxCondition));
-				}
-			}
-		} else {
-			// MESSAGE LOG
-			AddMessageLog("You are already fully healed");	
-		}
+		show_message(string(_damage_source));
 		
 		UpdateTotalHp();
 	}
@@ -138,13 +67,13 @@ function Character(_name, _type) constructor
 	static FetchMostDamagedBodyPart = function()
 	{
 		var mostDamagedBodyPart = undefined;
-		var bodyPartIndices = ds_map_keys_to_array(bodyParts);
+		var bodyPartIndices = ds_map_keys_to_array(body_parts);
 		var bodyPartCount = array_length(bodyPartIndices);
 		
 		for (var i = 0; i < bodyPartCount; i++)
 		{
-			var bodyPart = bodyParts[? bodyPartIndices[@ i]];
-			if (bodyPart.condition < bodyPart.maxCondition)
+			var bodyPart = body_parts[? bodyPartIndices[@ i]];
+			if (bodyPart.condition < bodyPart.max_condition)
 			{
 				if (is_undefined(mostDamagedBodyPart))
 				{
@@ -158,29 +87,5 @@ function Character(_name, _type) constructor
 			}
 		}
 		return mostDamagedBodyPart;
-	}
-	
-	static EatItem = function(_item)
-	{
-		if (ceil(fullness) < maxFullness)
-		{
-			// TODO: Code is still just a stump
-			show_message(string(_item));
-		} else {
-			// MESSAGE LOG
-			AddMessageLog("You don't feel hungry");	
-		}
-	}
-	
-	static DrinkItem = function(_item)
-	{
-		if (ceil(hydration) < maxHydration)
-		{
-			// TODO: Code is still just a stump
-			show_message(string(_item));
-		} else {
-			// MESSAGE LOG
-			AddMessageLog("You feel already well hydrated");
-		}
 	}
 }

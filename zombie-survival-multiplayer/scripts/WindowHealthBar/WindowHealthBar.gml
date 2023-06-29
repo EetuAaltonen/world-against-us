@@ -12,7 +12,7 @@ function WindowHealthBar(_elementId, _relativePosition, _size, _sourceCharacter,
 	{
 		if (is_undefined(sourceBodyPart))
 		{
-			sourceBodyPart = sourceCharacter.bodyParts[? bodyPartIndex];
+			sourceBodyPart = sourceCharacter.body_parts[? bodyPartIndex];
 		}
 	}
 	
@@ -43,7 +43,7 @@ function WindowHealthBar(_elementId, _relativePosition, _size, _sourceCharacter,
 		if (!is_undefined(sourceBodyPart))
 		{
 			// PROGRESS BAR
-			var healthPercent = (sourceBodyPart.condition / sourceBodyPart.maxCondition);
+			var healthPercent = (sourceBodyPart.condition / sourceBodyPart.max_condition);
 			var margin = 1;
 			if (healthPercent > 0)
 			{
@@ -62,7 +62,7 @@ function WindowHealthBar(_elementId, _relativePosition, _size, _sourceCharacter,
 			draw_set_valign(fa_middle);
 			draw_set_color(textColor);
 		
-			var valueFormatText = string("{0} / {1}", sourceBodyPart.condition, sourceBodyPart.maxCondition);
+			var valueFormatText = string("{0} / {1}", sourceBodyPart.condition, sourceBodyPart.max_condition);
 			draw_text(position.X + (size.w * 0.5), position.Y + (size.h * 0.5) + margin, valueFormatText);
 		
 			// RESET DRAW PROPERTIES

@@ -1,9 +1,9 @@
 if (!is_undefined(character))
 {
-	if (character.totalHpPercent < 100)
+	if (character.total_hp_percent < 100)
 	{
 		var barGUIPosition = PositionToGUI(new Vector2(x, y));
-		var barScale = character.totalHpPercent;
+		var barScale = character.total_hp_percent;
 		draw_sprite_ext(
 			sprHpBar, 0,
 			barGUIPosition.X - (barScale * 0.5),

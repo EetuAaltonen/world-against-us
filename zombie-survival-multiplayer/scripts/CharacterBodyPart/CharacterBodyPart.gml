@@ -2,8 +2,8 @@ function CharacterBodyPart(_name) constructor
 {
 	name = _name;
 	
-	maxCondition = 100;
-	condition = 10;//maxCondition; // TODO: Debugging
+	max_condition = 100;
+	condition = 10;//max_condition; // TODO: Debugging
 	
 	static TakeDamage = function(_damage)
 	{
@@ -12,6 +12,6 @@ function CharacterBodyPart(_name) constructor
 	
 	static Heal = function(_amount)
 	{
-		condition = min(maxCondition, condition + _amount);
+		condition = min(max_condition, condition + _amount);
 	}
 }
