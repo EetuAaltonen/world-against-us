@@ -1,4 +1,4 @@
-function CollisionLinePoint(_startPosition, _endPosition, _objectToCheck, _preciseCollisions, _notme)
+function CheckCollisionLinePoint(_startPosition, _endPosition, _objectToCheck, _preciseCollisions, _notme)
 {
 	var collideInstance = collision_line(
 		_startPosition.X, _startPosition.Y,

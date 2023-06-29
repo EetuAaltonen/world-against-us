@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "CollisionLinePoint",
+  "name": "CheckCollisionLinePoint",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
