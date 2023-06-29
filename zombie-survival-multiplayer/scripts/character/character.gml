@@ -24,7 +24,13 @@ function Character(_name, _type, _race) constructor
 	static Clone = function()
 	{
 		return new Character(
-			name, type
+			name,
+			uuid,
+			type,
+			race,
+			total_hp_percent,
+			stamina,
+			body_parts
 		);
 	}
 	
@@ -48,7 +54,17 @@ function Character(_name, _type, _race) constructor
 	
 	static Update = function()
 	{
-		UpdateStats();
+		if (!isDead)
+		{
+			if (total_hp_percent <= 0)
+			{
+				isDead = true;
+				other.sprite_index = sprGraveStone;
+				other.mask_index = SPRITE_NO_MASK;
+			} else {
+				UpdateStats();
+			}
+		}
 	}
 	
 	static UpdateStats = function()
@@ -56,12 +72,46 @@ function Character(_name, _type, _race) constructor
 		// OVERRIDE THIS FUNCTION
 	}
 	
-	static TakeDamage = function(_damage_source, _targetBodyPart = undefined)
+	static TakeDamage = function(_damageSource, _targetBodyPart = undefined)
 	{
 		// TODO: Code is still just a stump
-		show_message(string(_damage_source));
+		var incomingDamage = _damageSource.bullet.metadata.base_damage;
+		while (incomingDamage > 0)
+		{
+			var leastDamagedBodyPart = FetchLeastDamagedBodyPart();
+			if (is_undefined(leastDamagedBodyPart)) break;
+			
+			var dealtDamage = min(leastDamagedBodyPart.condition, incomingDamage);
+			leastDamagedBodyPart.TakeDamage(dealtDamage);
+			incomingDamage -= dealtDamage;
+		}
 		
 		UpdateTotalHp();
+	}
+	
+	static FetchLeastDamagedBodyPart = function()
+	{
+		var leastDamagedBodyPart = undefined;
+		var bodyPartIndices = ds_map_keys_to_array(body_parts);
+		var bodyPartCount = array_length(bodyPartIndices);
+		
+		for (var i = 0; i < bodyPartCount; i++)
+		{
+			var bodyPart = body_parts[? bodyPartIndices[@ i]];
+			if (bodyPart.condition > 0)
+			{
+				if (is_undefined(leastDamagedBodyPart))
+				{
+					leastDamagedBodyPart = bodyPart;
+				} else {
+					if (bodyPart.condition > leastDamagedBodyPart.condition)
+					{
+						leastDamagedBodyPart = bodyPart;
+					}
+				}
+			}
+		}
+		return leastDamagedBodyPart;
 	}
 	
 	static FetchMostDamagedBodyPart = function()

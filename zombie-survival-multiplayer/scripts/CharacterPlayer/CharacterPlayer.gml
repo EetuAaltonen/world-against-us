@@ -17,14 +17,9 @@ function CharacterPlayer(_name, _type, _race) : Character(_name, _type, _race) c
 	
 	static UpdateStats = function()
 	{
-		if (total_hp_percent <= 0)
-		{
-			isDead = true;
-		} else {
-			fullness = clamp(fullness - (hunger_rate / game_get_speed(gamespeed_fps)), 0, max_fullness);
-			hydration = clamp(hydration - (thirst_rate / game_get_speed(gamespeed_fps)), 0, max_hydration);
-			energy = clamp(energy - (fatigue_rate / game_get_speed(gamespeed_fps)), 0, max_energy);
-		}
+		fullness = clamp(fullness - (hunger_rate / game_get_speed(gamespeed_fps)), 0, max_fullness);
+		hydration = clamp(hydration - (thirst_rate / game_get_speed(gamespeed_fps)), 0, max_hydration);
+		energy = clamp(energy - (fatigue_rate / game_get_speed(gamespeed_fps)), 0, max_energy);
 	}
 	
 	static UseMedicine = function(_item, _targetBodyPartIndex = undefined)

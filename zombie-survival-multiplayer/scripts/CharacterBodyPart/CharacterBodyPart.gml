@@ -1,9 +1,8 @@
-function CharacterBodyPart(_name) constructor
+function CharacterBodyPart(_name, _max_condition) constructor
 {
 	name = _name;
-	
-	max_condition = 100;
-	condition = 10;//max_condition; // TODO: Debugging
+	max_condition = _max_condition;
+	condition = max_condition;
 	
 	static TakeDamage = function(_damage)
 	{
