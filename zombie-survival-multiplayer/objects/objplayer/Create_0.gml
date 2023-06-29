@@ -1,5 +1,6 @@
-// Inherit the parent event
+// INHERIT THE PARENT EVENT
 event_inherited();
+
 character = new CharacterPlayer("Player", CHARACTER_TYPE.PLAYER, CHARACTER_RACE.humanoid);
 
 image_index = 0;
@@ -13,7 +14,7 @@ maxSpeed = 2.5;
 
 // SPAWN WEAPON
 // TODO: Move the weapon under character struct
-weapon = instance_create_layer(x, y, layer, objWeapon);
+weapon = instance_create_depth(x, y, depth - 1, objWeapon);
 weapon.owner = self;
 
 // COOP PLAYER

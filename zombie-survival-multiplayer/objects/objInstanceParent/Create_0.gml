@@ -1,0 +1,1 @@
+isInCameraView = false;

@@ -87,7 +87,7 @@ function UseWeapon(_mouseX, _mouseY)
 	var projectileSpawnPoint = new Vector2(x + rotatedWeaponBarrelPos.X, y + rotatedWeaponBarrelPos.Y);
 	
 	// CREATE PROJECTILE INSTANCE
-	var projectileInstance = instance_create_layer(projectileSpawnPoint.X, projectileSpawnPoint.Y, "Projectiles", objProjectile);
+	var projectileInstance = instance_create_depth(projectileSpawnPoint.X, projectileSpawnPoint.Y, 0/*top most depth*/, objProjectile);
 	var aimRecoilReduction = (isAiming) ? 0.3 : 1;
 	var bulletRecoil = random_range(-primaryWeapon.metadata.recoil, primaryWeapon.metadata.recoil) * aimRecoilReduction;
 	var barrelAngle = point_direction(x + rotatedWeaponBarrelPos.X, y +rotatedWeaponBarrelPos.Y, _mouseX, _mouseY);

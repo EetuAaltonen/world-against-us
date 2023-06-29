@@ -1,4 +1,4 @@
-// Inherit the parent event
+// INHERIT THE PARENT EVENT
 event_inherited();
 
 facility.metadata.is_open = (electricalNetwork.electricPower > 0);

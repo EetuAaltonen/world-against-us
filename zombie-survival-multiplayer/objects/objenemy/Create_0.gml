@@ -1,5 +1,6 @@
-// Inherit the parent event
+// INHERIT THE PARENT EVENT
 event_inherited();
+
 character = new Character("Zombie", CHARACTER_TYPE.HOSTILE, CHARACTER_RACE.humanoid);
 
 acceleration = 1;

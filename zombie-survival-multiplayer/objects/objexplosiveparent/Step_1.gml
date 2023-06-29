@@ -1,5 +1,8 @@
+// INHERIT THE PARENT EVENT
+event_inherited();
+
 if (blastInstance == noone)
 {
-	blastInstance = instance_create_layer(x, y, "Projectiles", objExplosiveBlast);
+	blastInstance = instance_create_depth(x, y, 0, objExplosiveBlast);
 	blastInstance.damage = damage;
 }

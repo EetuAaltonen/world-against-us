@@ -1,4 +1,4 @@
-// Inherit the parent event
+// INHERIT THE PARENT EVENT
 event_inherited();
 
 interactionText = "Open";

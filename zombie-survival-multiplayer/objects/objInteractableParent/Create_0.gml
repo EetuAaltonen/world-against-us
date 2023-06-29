@@ -1,7 +1,5 @@
-// Inherit the parent event
-event_inherited();
-
-defaultLayer = layer;
+// INHERIT THE PARENT EVENT
+//event_inherited();
 
 interactionText = "Interact";
 interactionFunction = undefined;

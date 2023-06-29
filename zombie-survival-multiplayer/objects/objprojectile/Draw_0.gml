@@ -1,4 +1,5 @@
-if (sprite_index != -1 && !isHit) draw_self();
+// OVERRIDE INHERITED EVENT
+if (isInCameraView && sprite_index != -1 && !isHit) draw_self();
 
 var trailRGBColor = damageSource.bullet.metadata.trail_rgba_color;
 var rgbColor = trailRGBColor.MakeColor();

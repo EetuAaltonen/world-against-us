@@ -11,7 +11,10 @@
     "name": "World",
     "path": "folders/Objects/World.yy",
   },
-  "parentObjectId": null,
+  "parentObjectId": {
+    "name": "objInstanceParent",
+    "path": "objects/objInstanceParent/objInstanceParent.yy",
+  },
   "persistent": false,
   "physicsAngularDamping": 0.1,
   "physicsDensity": 0.5,

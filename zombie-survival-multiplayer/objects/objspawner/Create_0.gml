@@ -1,1 +1,1 @@
-instance_create_layer(x, y, "Player", objPlayer);
+instance_create_depth(x, y, depth, objPlayer);

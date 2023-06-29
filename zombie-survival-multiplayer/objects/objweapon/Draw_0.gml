@@ -8,4 +8,4 @@ if (muzzleFlashTimer > 0)
 	);
 }
 
-if (sprite_index != -1) draw_self();
+if (isInCameraView && sprite_index != -1) draw_self();

@@ -98,7 +98,7 @@ function EnemyHorde(_hordeId, _instance, _enemyObject, _enemyCount, _enemyOffset
 	{
 		for (var i = 0; i < enemyCount; i++)
 		{
-			var enemyInstance = instance_create_layer(instance.x, instance.y, enemyLayer, enemyObject);
+			var enemyInstance = instance_create_depth(instance.x, instance.y, instance.depth, enemyObject);
 			ds_list_add(enemyInstances, enemyInstance);
 		}
 	}

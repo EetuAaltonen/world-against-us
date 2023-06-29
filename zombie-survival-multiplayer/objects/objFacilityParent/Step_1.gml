@@ -1,3 +1,6 @@
+// INHERIT THE PARENT EVENT
+event_inherited();
+
 if (!is_undefined(electricalNetwork))
 {
 	if (electricalNetwork.targetInstance == noone)

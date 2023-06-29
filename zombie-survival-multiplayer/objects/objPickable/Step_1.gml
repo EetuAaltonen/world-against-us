@@ -1,3 +1,6 @@
+// INHERIT THE PARENT EVENT
+event_inherited();
+
 // SET IMAGE INDEX
 if (initPickable)
 {
