@@ -36,8 +36,9 @@ if (owner != noone)
 				{
 					image_angle = point_direction(x, y, mouse_x, mouse_y);
 					// SHOOTING DELAY AND ANIMATION
-					fireDelay = max(-1, fireDelay - 1);
-					recoilAnimation = max(0, recoilAnimation - 1);
+					fireDelay = max(-1, --fireDelay);
+					muzzleFlashTimer = max(0, --muzzleFlashTimer);
+					recoilAnimation = max(0, --recoilAnimation);
 					
 					PlayerWeaponFunctions();
 				}

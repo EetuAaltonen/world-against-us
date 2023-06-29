@@ -10,7 +10,10 @@ rotatedWeaponBarrelPos = undefined;
 initWeapon = false;
 weaponYOffset = 10;
 
+muzzleFlashTime = 2; // FRAMES
+muzzleFlashTimer = 0;
 fireDelay = 0;
+baseRecoilAnimation = 8;
 recoilAnimation = 0;
 
 // NETWORKING VALUE MONITORING

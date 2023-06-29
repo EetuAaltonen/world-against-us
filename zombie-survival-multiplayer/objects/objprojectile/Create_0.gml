@@ -1,13 +1,18 @@
 // Inherit the parent event
 event_inherited();
-damage = 20;
 
+image_speed = 0;
 speed = 0;
 flySpeed = 100;
-flyStepRatio = undefined;
+projectileTrailWidth = 2;
 initSpeed = true;
-spawnPoint = { _x: x, _y: y };
-range = 0;
 
-bulletHoleRadius = 4;
-bulletHoleDuration = TimerFromSeconds(5);
+bullet = undefined;
+// TODO: Fix bullet hole logic
+//bulletHoleRadius = 4;
+//bulletHoleDuration = TimerFromSeconds(5);
+
+traceTailPosition = new Vector2(x, y);
+traceTailStep = new Vector2(0, 0);
+
+isHit = false;

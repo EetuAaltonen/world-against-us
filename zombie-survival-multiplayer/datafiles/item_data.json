@@ -240,7 +240,14 @@
       "max_stack": 120,
       "base_price": 10,
       "metadata": {
-        "caliber": "7.62"
+        "base_damage": 30,
+        "caliber": "7.62",
+        "trail_rgba_color": {
+          "red": 255,
+          "green": 255,
+          "blue": 0,
+          "alpha": 0.1
+        }
       }
     },
     {
@@ -257,7 +264,14 @@
       "max_stack": 120,
       "base_price": 10,
       "metadata": {
-        "caliber": "7.62"
+        "base_damage": 30,
+        "caliber": "7.62",
+        "trail_rgba_color": {
+          "red": 0,
+          "green": 255,
+          "blue": 0,
+          "alpha": 0.4
+        }
       }
     },
     {
