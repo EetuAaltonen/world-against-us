@@ -100,7 +100,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					{
 						if (!is_undefined(global.ObjMouse.dragItem))
 						{
-							GUIOnDragItemReleased(inventory, mouseHoverIndex);
+							OnReleasedGUIDragItem(inventory, mouseHoverIndex);
 							global.ObjMouse.dragItem = undefined;
 						}
 					}
@@ -208,7 +208,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 						gridSpriteIndex = 1;
 					}
 				}
-				draw_sprite_ext(itemBackgroundSprite, gridSpriteIndex, xPos, yPos, item.size.w * gridSpriteScale, item.size.h * gridSpriteScale, 0, c_white, 1);
+				draw_sprite_ext(itemBackgroundSprite, gridSpriteIndex, xPos, yPos, item.size.w * gridSpriteScale, item.size.h * gridSpriteScale, 0, c_white, 0.5);
 				
 				// DRAW ITEM
 				if (!item.known)

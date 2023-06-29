@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "GUIOnDragItemReleased",
+  "name": "OnReleasedGUIDragItem",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

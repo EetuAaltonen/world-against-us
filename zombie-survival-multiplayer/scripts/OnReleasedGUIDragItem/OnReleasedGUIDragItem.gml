@@ -1,4 +1,4 @@
-function GUIOnDragItemReleased(_inventory, _mouseHoverIndex)
+function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 {
 	if (_inventory.IsGridAreaEmpty(_mouseHoverIndex.col, _mouseHoverIndex.row, global.ObjMouse.dragItem, global.ObjMouse.dragItem.sourceInventory, global.ObjMouse.dragItem.grid_index))
 	{
