@@ -2,7 +2,7 @@
   "resourceType": "GMSprite",
   "resourceVersion": "1.0",
   "name": "sprHpBar",
-  "bbox_bottom": 9,
+  "bbox_bottom": 3,
   "bbox_left": 0,
   "bbox_right": 0,
   "bbox_top": 0,
@@ -17,7 +17,7 @@
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 10,
+  "height": 4,
   "HTile": false,
   "layers": [
     {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"e456915a-5928-4985-bdce-d10cc1f5bc68","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
