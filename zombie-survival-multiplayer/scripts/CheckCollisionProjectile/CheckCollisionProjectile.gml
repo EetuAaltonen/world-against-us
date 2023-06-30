@@ -1,51 +1,59 @@
 function CheckCollisionProjectile(_collisionPoint, _projectile)
 {
 	var isProjectileCollided = false;
-	var nearestInstance = _collisionPoint.nearest_instance;
+	var nearestHitboxInstance = _collisionPoint.nearest_instance;
 	
-	if (nearestInstance != noone) {
-		objectIndexToCheck = nearestInstance.object_index;
-		while (isProjectileCollided = false && objectIndexToCheck != -1 && objectIndexToCheck != -100)
+	if (nearestHitboxInstance != noone) {
+		var hitboxOwnerInstance = nearestHitboxInstance.ownerInstance;
+		if (instance_exists(hitboxOwnerInstance))
 		{
-			switch (objectIndexToCheck)
+			var objectIndexToCheck = hitboxOwnerInstance.object_index;
+			while (isProjectileCollided = false && objectIndexToCheck != -1 && objectIndexToCheck != -100)
 			{
-				// CHILD OBJECTS
-				case objMapEdge:
+				switch (objectIndexToCheck)
 				{
-					objectIndexToCheck = -1;
-					break;
-				} break;
-				
-				// PARENT OBJECTS
-				case objBlockParent:
-				{
-				
-				
-					isProjectileCollided = true;
-				} break;
-			
-				case objBreakableParent:
-				{
-					if (nearestInstance.damageDelayTimer <= 0)
+					// CHILD OBJECTS
+					case objMapEdge:
 					{
-						nearestInstance.condition = max(0, nearestInstance.condition - _projectile.damageSource.bullet.metadata.base_damage);
-						nearestInstance.damageDelayTimer = nearestInstance.damageDelay;
+						objectIndexToCheck = -1;
+						break;
+					} break;
+				
+					// PARENT OBJECTS
+					case objBlockParent:
+					{
+				
+				
 						isProjectileCollided = true;
-					}
-				} break;
-				
-				case objCharacterParent:
-				{
-					if (instance_exists(nearestInstance))
-					{
-						nearestInstance.character.TakeDamage(_projectile.damageSource);
-					}
-					
-					isProjectileCollided = true;
-				} break;
-			}
+					} break;
 			
-			objectIndexToCheck = object_get_parent(objectIndexToCheck);
+					case objBreakableParent:
+					{
+						if (instance_exists(hitboxOwnerInstance))
+						{
+							if (hitboxOwnerInstance.damageDelayTimer <= 0)
+							{
+								hitboxOwnerInstance.condition = max(0, hitboxOwnerInstance.condition - _projectile.damageSource.bullet.metadata.base_damage);
+								hitboxOwnerInstance.damageDelayTimer = hitboxOwnerInstance.damageDelay;
+								isProjectileCollided = true;
+							
+							}
+						}
+					} break;
+				
+					case objCharacterParent:
+					{
+						if (instance_exists(hitboxOwnerInstance))
+						{
+							hitboxOwnerInstance.character.TakeDamage(_projectile.damageSource);
+						}
+					
+						isProjectileCollided = true;
+					} break;
+				}
+			
+				objectIndexToCheck = object_get_parent(objectIndexToCheck);
+			}
 		}
 	}
 	
