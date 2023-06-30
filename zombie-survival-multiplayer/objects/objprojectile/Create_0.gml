@@ -15,5 +15,5 @@ bullet = undefined;
 traceTailPosition = new Vector2(x, y);
 traceTailStep = new Vector2(0, 0);
 
-objectsToHit = [objCharacterParent, objBlockParent];
+hitIgnoreInstance = noone;
 isHit = false;

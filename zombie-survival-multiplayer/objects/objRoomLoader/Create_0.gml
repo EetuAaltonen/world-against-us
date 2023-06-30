@@ -17,14 +17,14 @@ controllers = [
 	new GameController(objNetwork, [], [roomLaunch]),
 	
 	new GameController(objGUI, [], [roomLaunch]),
-	new GameController(objMouse, [], [roomLaunch], "Controllers_All_Front"),
-	new GameController(objMessageLog, [], [roomLaunch], "Controllers_Front"),
+	new GameController(objMouse, [], [roomLaunch], LAYER_CONTROLLERS_ALL_FRONT),
+	new GameController(objMessageLog, [], [roomLaunch], LAYER_CONTROLLERS_FRONT),
 	
 	new GameController(objMainMenu, [roomMainMenu], [roomLaunch]),
 	
 	// GAME
-	new GameController(objHud, [], [roomLaunch, roomMainMenu, roomLoadSave], "Controllers_Behind"),
-	new GameController(objNotification, [], [roomLaunch, roomMainMenu], "Controllers_Front"),
+	new GameController(objHud, [], [roomLaunch, roomMainMenu, roomLoadSave], LAYER_CONTROLLERS_BEHIND),
+	new GameController(objNotification, [], [roomLaunch, roomMainMenu], LAYER_CONTROLLERS_FRONT),
 	
 	new GameController(objDatabase, [], [roomLaunch, roomMainMenu]),
 	new GameController(objInventory, [], [roomLaunch, roomMainMenu]),
@@ -32,10 +32,10 @@ controllers = [
 	new GameController(objJournal, [], [roomLaunch, roomMainMenu]),
 	new GameController(objQuest, [], [roomLaunch, roomMainMenu]),
 	
-	new GameController(objMap, [], [roomLaunch, roomMainMenu], "Controllers_Behind"),
+	new GameController(objMap, [], [roomLaunch, roomMainMenu], LAYER_CONTROLLERS_BEHIND),
 
 	
-	new GameController(objInstanceHighlighter, [], [roomLaunch, roomMainMenu, roomLoadSave], "HighlightedInstances"),
+	new GameController(objInstanceHighlighter, [], [roomLaunch, roomMainMenu, roomLoadSave], LAYER_HIGHLIGHT_INTERACTABLE),
 	
 	new GameController(objGridPath, [], [roomLaunch, roomMainMenu, roomLoadSave]),
 	
@@ -45,11 +45,13 @@ controllers = [
 ];
 
 controllerLayers = ds_map_create();
-ds_map_add(controllerLayers, "Controllers", depth);
-ds_map_add(controllerLayers, "Controllers_Behind", depth + 1);
-ds_map_add(controllerLayers, "Controllers_Front", depth - 1);
-ds_map_add(controllerLayers, "Controllers_All_Front", depth - 2);
-ds_map_add(controllerLayers, "HighlightedInstances", depth); // DEPTH CHANGED AT RUNTIME
+ds_map_add(controllerLayers, LAYER_CONTROLLERS, depth);
+ds_map_add(controllerLayers, LAYER_CONTROLLERS_BEHIND, depth + 1);
+ds_map_add(controllerLayers, LAYER_CONTROLLERS_FRONT, depth - 1);
+ds_map_add(controllerLayers, LAYER_CONTROLLERS_ALL_FRONT, depth - 2);
+
+ds_map_add(controllerLayers, LAYER_HIGHLIGHT_TARGET, depth); // DEPTH CHANGED AT RUNTIME
+ds_map_add(controllerLayers, LAYER_HIGHLIGHT_INTERACTABLE, depth); // DEPTH CHANGED AT RUNTIME
 
 // ROOM FADE-IN EFFECT
 roomFadeAlphaStart = 1;

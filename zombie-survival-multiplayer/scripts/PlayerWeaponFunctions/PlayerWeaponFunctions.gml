@@ -96,6 +96,7 @@ function UseWeapon(_mouseX, _mouseY)
 	projectileInstance.direction = barrelAngle + bulletRecoil;
 	projectileInstance.image_angle = projectileInstance.direction;
 	projectileInstance.damageSource = new DamageSource(bullet.Clone(), MetersToPixels(primaryWeapon.metadata.range), projectileSpawnPoint);
+	projectileInstance.hitIgnoreInstance = objPlayer;
 	
 	recoilAnimation = baseRecoilAnimation;
 	fireDelay = TimerRatePerMinute(primaryWeapon.metadata.fire_rate);

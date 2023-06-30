@@ -9,6 +9,18 @@
 #macro SPRITE_ERROR sprError
 #macro SPRITE_NO_MASK sprNoMask
 
+// COLLISION
+#macro OBJECTS_TO_HIT [objHitbox]
+
+// LAYERS
+#macro LAYER_CONTROLLERS "Controllers"
+#macro LAYER_CONTROLLERS_BEHIND "Controllers_Behind"
+#macro LAYER_CONTROLLERS_FRONT "Controllers_Front"
+#macro LAYER_CONTROLLERS_ALL_FRONT "Controllers_All_Front"
+
+#macro LAYER_HIGHLIGHT_INTERACTABLE "HighlightedInteractable"
+#macro LAYER_HIGHLIGHT_TARGET "HighlightedTarget"
+
 // GUI STATE
 #macro ROOT_GUI_STATE new GUIState(GUI_STATE.GameRoot, undefined, undefined, [], GUI_CHAIN_RULE.OverwriteAll, CallbackGUIStateInputRoot, undefined)
 
