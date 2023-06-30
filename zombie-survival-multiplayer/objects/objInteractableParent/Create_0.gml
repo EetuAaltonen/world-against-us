@@ -1,5 +1,5 @@
 // INHERIT THE PARENT EVENT
-//event_inherited();
+event_inherited();
 
 interactionText = "Interact";
 interactionFunction = undefined;

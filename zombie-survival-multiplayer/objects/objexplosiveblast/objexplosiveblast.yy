@@ -12,10 +12,7 @@
     "name": "Explosions",
     "path": "folders/Objects/World/Breakable/Explosions.yy",
   },
-  "parentObjectId": {
-    "name": "objDamageParent",
-    "path": "objects/objDamageParent/objDamageParent.yy",
-  },
+  "parentObjectId": null,
   "persistent": false,
   "physicsAngularDamping": 0.1,
   "physicsDensity": 0.5,

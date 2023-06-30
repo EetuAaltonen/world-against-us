@@ -1,3 +1,6 @@
+// INHERIT THE PARENT EVENT
+event_inherited();
+
 owner = noone;
 spriteScale = 0.8;
 image_speed = 0;
