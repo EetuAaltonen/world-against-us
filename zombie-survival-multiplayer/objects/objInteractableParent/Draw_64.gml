@@ -2,9 +2,9 @@ if (global.GUIStateHandlerRef.IsGUIStateClosed())
 {
 	if (!is_undefined(interactionFunction))
 	{
-		if (instance_exists(global.HighlightHandlerRef.highlightedInstance))
+		if (instance_exists(global.HighlightHandlerRef.highlightedInteractable))
 		{
-			if (global.HighlightHandlerRef.highlightedInstance.id == id)
+			if (global.HighlightHandlerRef.highlightedInteractable.id == id)
 			{
 				var textGUIPos = PositionToGUI(new Vector2(x, y - sprite_yoffset - 25));
 				var textColor = #ffe900;

@@ -1,6 +1,7 @@
 function HighlightHandler() constructor
 {
-	highlightedInstance = noone;
+	highlightedTarget = noone;
+	highlightedInteractable = noone;
 	
 	static Update = function()
 	{
@@ -34,9 +35,10 @@ function HighlightHandler() constructor
 								nearestDistance = highlightDistance;
 							}
 						} else {
-							if (instance == highlightedInstance)
+							if (instance == highlightedInteractable)
 							{
-								ResetHighlightedInstance();
+								ResetHighlightedInstance(LAYER_HIGHLIGHT_INTERACTABLE);
+								highlightedInteractable = noone;
 							}
 						}
 					}
@@ -44,36 +46,29 @@ function HighlightHandler() constructor
 			}
 			if (newHighlightedInstance != noone)
 			{
-				SetHighlightedInstance(newHighlightedInstance);
+				SetHighlightedInstance(newHighlightedInstance, LAYER_HIGHLIGHT_INTERACTABLE);
+				highlightedInteractable = newHighlightedInstance;
 			}
 		}
 	}
 	
-	static SetHighlightedInstance = function(_newHighlightedInstance)
+	static SetHighlightedInstance = function(_newHighlightedInstance, _highlightLayerName)
 	{
-		var highlightLayerId = layer_get_id("HighlightedInstances");
-		var highlightLayerDepth = layer_get_depth(highlightLayerId);
-		
-		if (highlightLayerDepth != _newHighlightedInstance.depth)
+		if (instance_exists(_newHighlightedInstance))
 		{
+			var highlightLayerId = layer_get_id(_highlightLayerName);
 			layer_depth(highlightLayerId, _newHighlightedInstance.depth);
 			layer_add_instance(highlightLayerId, _newHighlightedInstance);
 		}
-
-		highlightedInstance = _newHighlightedInstance;
 	}
 	
-	static ResetHighlightedInstance = function()
+	static ResetHighlightedInstance = function(_highlightLayerName)
 	{
-		if (instance_exists(highlightedInstance))
+		if (instance_exists(highlightedInteractable))
 		{
-			var highlightLayerId = layer_get_id("HighlightedInstances");
-			if (layer_has_instance(highlightLayerId, highlightedInstance))
-			{
-				highlightedInstance.depth--;
-			}
+			var highlightLayerId = layer_get_id(_highlightLayerName);
+			highlightedInteractable.depth = highlightedInteractable.depth - 1;
 			layer_depth(highlightLayerId, -1);
-			highlightedInstance = noone;
 		}
 	}
 }
