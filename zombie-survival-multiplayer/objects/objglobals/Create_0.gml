@@ -35,6 +35,9 @@ randomise();
 
 initGlobalVariables = function()
 {
+	// DEBUG MODE
+	global.DEBUGMODE = false;
+	
 	// Global controllers
 	global.ObjCamera = noone;
 	global.GUIStateHandlerRef = undefined;
