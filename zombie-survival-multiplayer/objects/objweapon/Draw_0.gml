@@ -15,6 +15,7 @@ if (!is_undefined(primaryWeapon))
 	var drawCrosshairLaser = function(_mousePosition) {
 		if (!is_undefined(rotatedWeaponBarrelPos))
 		{
+			var mouseWorldPosition = PositionToWorld(_mousePosition);
 			var laserAimAngleLine = new Vector2Line(
 				new Vector2(x + rotatedWeaponBarrelPos.X, y + rotatedWeaponBarrelPos.Y),
 				PositionToWorld(_mousePosition)
@@ -23,7 +24,7 @@ if (!is_undefined(primaryWeapon))
 			// CHECK COLLISION
 			var collisionPoint = CheckCollisionLinePoint(
 				laserAimAngleLine.start_point, laserAimAngleLine.end_point,
-				OBJECTS_TO_HIT, true, true, objPlayer
+				OBJECTS_TO_HIT, true, true, objPlayer, false
 			);
 			if (!is_undefined(collisionPoint))
 			{
@@ -31,9 +32,7 @@ if (!is_undefined(primaryWeapon))
 				
 				if (!is_undefined(collisionPointOnHitbox))
 				{
-				
-					laserAimAngleLine.X = collisionPointOnHitbox.X;
-					laserAimAngleLine.Y = collisionPointOnHitbox.Y;
+					laserAimAngleLine.end_point = collisionPointOnHitbox.Clone();
 				
 					var highlightedTarget = collisionPoint.nearest_instance.ownerInstance;
 					global.HighlightHandlerRef.SetHighlightedInstance(highlightedTarget, LAYER_HIGHLIGHT_TARGET);
@@ -46,19 +45,24 @@ if (!is_undefined(primaryWeapon))
 						);
 					}
 				} else {
+					laserAimAngleLine.end_point = collisionPoint.position.Clone();
 					global.HighlightHandlerRef.ResetHighlightedInstance(LAYER_HIGHLIGHT_TARGET);
 				}
 			} else {
 				global.HighlightHandlerRef.ResetHighlightedInstance(LAYER_HIGHLIGHT_TARGET);
 			}
 			
-			// DRAW WEAPON LASER
-			draw_line_width_color(
-				laserAimAngleLine.start_point.X, laserAimAngleLine.start_point.Y,
-				laserAimAngleLine.end_point.X, laserAimAngleLine.end_point.Y,
-				1, c_ltgray, c_ltgray
-			);
+			// DEBUG MODE
+			if (global.DEBUGMODE)
+			{
+				draw_line_width_color(
+					laserAimAngleLine.start_point.X, laserAimAngleLine.start_point.Y,
+					mouseWorldPosition.X, mouseWorldPosition.Y,
+					1, c_ltgray, c_ltgray
+				);
+			}
 			
+			// DRAW WEAPON LASER
 			draw_line_width_color(
 				laserAimAngleLine.start_point.X, laserAimAngleLine.start_point.Y,
 				laserAimAngleLine.end_point.X, laserAimAngleLine.end_point.Y,

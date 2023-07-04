@@ -20,7 +20,7 @@ if (global.GUIStateHandlerRef.IsGUIStateClosed())
 		}
 	}
 } else {
-	// DEBUGGING
+	// DEBUG MODE
 	draw_set_color(c_yellow);
 	draw_text(mousePosition.X + 10, mousePosition.Y + 10, string(mousePosition.X) + " : " + string(mousePosition.Y));
 	// RESET DRAW PROPERTIES

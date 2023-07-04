@@ -1,71 +1,92 @@
-function CheckCollisionLinePoint(_startPosition, _endPosition, _objectsToCheck, _preciseCollisions, _notme, _ignoreOwnerInstance = noone)
+function CheckCollisionLinePoint(_startPosition, _stepEndPosition, _objectsToCheck, _preciseCollisions, _notme, _ignoreOwnerInstance = noone, _priorityHighlightedTarget = false)
 {
 	// TODO: Bug - When aiming upward/over from above the object laser goes through it sometimes in an specific angles
-	var collisionPoint = undefined;
+	var finaleCollisionPoint = undefined;
 	
 	var objectToCheckCount = array_length(_objectsToCheck);
 	for (var i = 0; i < objectToCheckCount; i++)
 	{
-		var collidePosition = new Vector2(_endPosition.X, _endPosition.Y);
+		var collidePosition = _stepEndPosition.Clone();
 		var collideInstance = noone;
 		var collideInstances = ds_list_create();
 		
 		var collideInstanceCount = collision_line_list(
 			_startPosition.X, _startPosition.Y,
-			_endPosition.X, _endPosition.Y,
+			_stepEndPosition.X, _stepEndPosition.Y,
 			_objectsToCheck[i], _preciseCollisions, _notme,
 			collideInstances, true
 		);
 		
-		for (var j = 0; j < collideInstanceCount; j++)
+		// CHECK 6 THE MOST CLOSEST TARGETS
+		var instanceCountToCheck = (_priorityHighlightedTarget && global.HighlightHandlerRef.highlightedTarget != noone) ? collideInstanceCount : min(6, collideInstanceCount);
+		
+		for (var j = 0; j < instanceCountToCheck; j++)
 		{
-			var instance = collideInstances[| j];
-			if (instance.ownerInstance.object_index != _ignoreOwnerInstance)
+			var nextClosestInstance = collideInstances[| j];
+			if (nextClosestInstance.ownerInstance.object_index != _ignoreOwnerInstance && nextClosestInstance.mask_index != SPRITE_NO_MASK)
 			{
-				collideInstance = instance;
-				break;
+				if (collideInstance == noone)
+				{
+					collideInstance = nextClosestInstance;
+				} else {
+					// CHECK THE NEXT CLOSESTS TARGET
+					if (_priorityHighlightedTarget && global.HighlightHandlerRef.highlightedTarget != noone)
+					{
+						if (collideInstance.ownerInstance != global.HighlightHandlerRef.highlightedTarget)
+						{
+							if (nextClosestInstance.ownerInstance == global.HighlightHandlerRef.highlightedTarget)
+							{
+								collideInstance = nextClosestInstance;
+								break;
+							}
+						}
+					} else {
+						if (abs(nextClosestInstance.y - _startPosition.Y) < abs(collideInstance.y - _startPosition.Y))
+						{
+							collideInstance = nextClosestInstance;
+						}
+					}
+				}
 			}
 		}
 		
-		if (collideInstance != noone && collideInstance.mask_index != SPRITE_NO_MASK) {
-			var p0 = 0;
-			var p1 = 1;
-			repeat (ceil(log2(point_distance(_startPosition.X, _startPosition.Y, _endPosition.X, _endPosition.Y))) + 1)
+		if (collideInstance != noone) {
+			if (!_priorityHighlightedTarget || (_priorityHighlightedTarget && (global.HighlightHandlerRef.highlightedTarget == collideInstance.ownerInstance || global.HighlightHandlerRef.highlightedTarget == noone)))
 			{
-				var np = p0 + (p1 - p0) * 0.5;
-				var nx = _startPosition.X + (_endPosition.X - _startPosition.X) * np;
-				var ny = _startPosition.Y + (_endPosition.Y - _startPosition.Y) * np;
-				var px = _startPosition.X + (_endPosition.X - _startPosition.X) * p0;
-				var py = _startPosition.Y + (_endPosition.Y - _startPosition.Y) * p0;
-				var nearestCollideInstance = collision_line(px, py, nx, ny, _objectsToCheck[i], _preciseCollisions, _notme);
-				if (nearestCollideInstance != noone)
+				var p0 = 0;
+				var p1 = 1;
+				repeat (ceil(log2(point_distance(_startPosition.X, _startPosition.Y, _stepEndPosition.X, _stepEndPosition.Y))) + 1)
 				{
-					if (nearestCollideInstance.ownerInstance.object_index != _ignoreOwnerInstance && nearestCollideInstance.mask_index != SPRITE_NO_MASK)
+					var np = p0 + (p1 - p0) * 0.5;
+					var nx = _startPosition.X + (_stepEndPosition.X - _startPosition.X) * np;
+					var ny = _startPosition.Y + (_stepEndPosition.Y - _startPosition.Y) * np;
+					var px = _startPosition.X + (_stepEndPosition.X - _startPosition.X) * p0;
+					var py = _startPosition.Y + (_stepEndPosition.Y - _startPosition.Y) * p0;
+					var nearestCollideInstance = collision_line(px, py, nx, ny, collideInstance, _preciseCollisions, _notme);
+					if (nearestCollideInstance != noone)
 					{
-						collideInstance = nearestCollideInstance;
-						collidePosition.X = nx;
-						collidePosition.Y = ny;
-						p1 = np;
+						if (nearestCollideInstance.ownerInstance.object_index != _ignoreOwnerInstance && nearestCollideInstance.mask_index != SPRITE_NO_MASK)
+						{
+							collideInstance = nearestCollideInstance;
+							collidePosition.X = nx;
+							collidePosition.Y = ny;
+							p1 = np;
+						} else {
+							p0 = np;
+						}
 					} else {
 						p0 = np;
 					}
-				} else {
-					p0 = np;
 				}
-			}
 			
-			if (collideInstance != noone)
-			{
 				// CHECKS THAT YOU DON'T SHOOT TARGETS BEHIND THE WALLS ETC.
-				if (is_undefined(collisionPoint) ||
-					(point_distance(collidePosition.X, collidePosition.Y, _startPosition.X, _startPosition.Y) < point_distance(collisionPoint.position.X, collisionPoint.position.Y, _startPosition.X, _startPosition.Y))
-				)
+				if (collideInstance != noone)
 				{
-					collisionPoint = new CollisionPoint(collideInstance, collidePosition);
+					finaleCollisionPoint = new CollisionPoint(collideInstance, collidePosition);
 				}
 			}
 		}
 	}
 	
-	return collisionPoint;
+	return finaleCollisionPoint;
 }

@@ -18,7 +18,7 @@ if (speed > 0 && !isHit)
 	} else {
 		var collisionPoint = CheckCollisionLinePoint(
 			new Vector2(x, y), new Vector2(x + hspeed, y + vspeed),
-			OBJECTS_TO_HIT, true, true, hitIgnoreInstance
+			OBJECTS_TO_HIT, true, true, hitIgnoreInstance, true
 		);
 			
 		if (!is_undefined(collisionPoint))
