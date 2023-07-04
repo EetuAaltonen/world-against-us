@@ -1,6 +1,3 @@
-// INHERIT THE PARENT EVENT
-event_inherited();
-
 if (!is_undefined(character))
 {
 	if (character.total_hp_percent < 100)

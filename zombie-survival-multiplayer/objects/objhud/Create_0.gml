@@ -12,3 +12,5 @@ hudElementEnergy = new HUDElementIconValuePair(new Vector2(300, hudVerticalCente
 hudElementMagazine = new HUDElementMagazine(new Vector2(global.GUIW - 100, /*Bottom pivot*/global.GUIH - hudHeight))
 
 initHUDValues = true;
+
+highlightedTargetCollisionPos = new Vector2(0, 0);
