@@ -72,21 +72,48 @@ function Character(_name, _type, _race) constructor
 		// OVERRIDE THIS FUNCTION
 	}
 	
-	static TakeDamage = function(_damageSource, _targetBodyPart = undefined)
+	static GetBodyPartByBoundingPosition = function(_position)
+	{
+		var targetBodyPart = undefined;
+		var bodyPartIndices = ds_map_keys_to_array(body_parts);
+		var bodyPartCount = array_length(bodyPartIndices);
+		
+		for (var i = 0; i < bodyPartCount; i++)
+		{
+			var bodyPart = body_parts[? bodyPartIndices[@ i]];
+			if (point_in_rectangle(_position.X, _position.Y,
+				bodyPart.bounding_box.top_left_point.X, bodyPart.bounding_box.top_left_point.Y,
+				bodyPart.bounding_box.bottom_right_point.X, bodyPart.bounding_box.bottom_right_point.Y
+			))
+			{
+				targetBodyPart = bodyPart;
+				break;
+			}
+		}
+		
+		return targetBodyPart;
+	}
+	
+	static TakeDamage = function(_damageSource, _targetBodyPartIndex = undefined)
 	{
 		// TODO: Code is still just a stump
 		var incomingDamage = _damageSource.bullet.metadata.base_damage;
+		var targetBodyPart = body_parts[? _targetBodyPartIndex];
+		
 		while (incomingDamage > 0)
 		{
-			var leastDamagedBodyPart = FetchLeastDamagedBodyPart();
-			if (is_undefined(leastDamagedBodyPart)) break;
+			if (is_undefined(targetBodyPart)) break;
 			
-			var dealtDamage = min(leastDamagedBodyPart.condition, incomingDamage);
-			leastDamagedBodyPart.TakeDamage(dealtDamage);
+			var dealtDamage = min(targetBodyPart.condition, incomingDamage);
+			targetBodyPart.TakeDamage(dealtDamage);
 			incomingDamage -= dealtDamage;
+			
+			UpdateTotalHp();
+			
+			if (total_hp_percent <= 0 || incomingDamage <= 0) break;
+			
+			targetBodyPart = FetchLeastDamagedBodyPart();
 		}
-		
-		UpdateTotalHp();
 	}
 	
 	static FetchLeastDamagedBodyPart = function()
