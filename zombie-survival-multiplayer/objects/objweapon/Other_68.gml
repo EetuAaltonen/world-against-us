@@ -27,7 +27,7 @@ if (async_load[? "size"] > 0)
 						
 						if (isWeaponUsed)
 						{
-							UseWeapon(weapon_aim_pos.X, weapon_aim_pos.Y);
+							UseWeapon(weapon_aim_pos);
 						} else if (isWeaponAiming != isAiming)
 						{
 							isAiming = isWeaponAiming;	

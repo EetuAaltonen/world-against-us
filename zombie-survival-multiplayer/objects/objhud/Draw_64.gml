@@ -66,7 +66,7 @@ if (global.DEBUGMODE)
 				
 						var targetHUDBoundaryBoxLocation = new Vector2(
 							targetHUDElementLocation.X + targetHUDElementPadding,
-							targetHUDElementLocation.Y + targetHUDElementPadding,
+							targetHUDElementLocation.Y + targetHUDElementPadding
 						);
 					
 						var bodyPartIndices = ds_map_keys_to_array(highlightedInstance.character.body_parts);
@@ -89,12 +89,12 @@ if (global.DEBUGMODE)
 								),
 								new Vector2(
 									targetHUDBoundaryBoxLocation.X + (spriteSize.w * bodyPart.bounding_box.bottom_right_point.X * targetHUDElementScale),
-									targetHUDBoundaryBoxLocation.Y + (spriteSize.h * bodyPart.bounding_box.bottom_right_point.Y * targetHUDElementScale),
+									targetHUDBoundaryBoxLocation.Y + (spriteSize.h * bodyPart.bounding_box.bottom_right_point.Y * targetHUDElementScale)
 								),
 								new Vector2(
 									targetHUDBoundaryBoxLocation.X + (spriteSize.w * bodyPart.bounding_box.bottom_left_point.X * targetHUDElementScale),
-									targetHUDBoundaryBoxLocation.Y + (spriteSize.h * bodyPart.bounding_box.bottom_left_point.Y * targetHUDElementScale),
-								),
+									targetHUDBoundaryBoxLocation.Y + (spriteSize.h * bodyPart.bounding_box.bottom_left_point.Y * targetHUDElementScale)
+								)
 							);
 							bodyPartRectangle.Draw(1, c_red);
 						

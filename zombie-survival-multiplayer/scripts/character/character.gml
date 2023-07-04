@@ -25,12 +25,8 @@ function Character(_name, _type, _race) constructor
 	{
 		return new Character(
 			name,
-			uuid,
 			type,
-			race,
-			total_hp_percent,
-			stamina,
-			body_parts
+			race
 		);
 	}
 	
