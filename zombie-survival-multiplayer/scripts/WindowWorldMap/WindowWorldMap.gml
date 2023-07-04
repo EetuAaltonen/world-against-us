@@ -7,7 +7,7 @@ function WindowWorldMap(_elementId, _relativePosition, _size, _backgroundColor, 
 	mapMaxZoom = 3;
 	mapScale = 1;
 	positionOffset = new Vector2(0, 0);
-	prevMousePos = new Vector2(mouse_x, mouse_y);
+	prevMousePos = MouseWorldPosition();
 	positionFinal = position.Clone();
 	sizeZoomed = size.Clone;
 
@@ -16,14 +16,11 @@ function WindowWorldMap(_elementId, _relativePosition, _size, _backgroundColor, 
 	{
 		if (mouse_check_button(mb_left))
 		{
-			if (mouse_check_button_pressed(mb_left))
-			{
-				prevMousePos = new Vector2(mouse_x, mouse_y);
-			}
-			positionOffset.X += (mouse_x - prevMousePos.X) * min(3, max(1.5, (mapZoomBase / mapZoom)));
-			positionOffset.Y += (mouse_y - prevMousePos.Y) * min(3, max(1.5, (mapZoomBase / mapZoom)));
+			var mouseWorldPosition = MouseWorldPosition();
+			positionOffset.X += (mouseWorldPosition.X - prevMousePos.X) * min(3, max(1.5, (mapZoomBase / mapZoom)));
+			positionOffset.Y += (mouseWorldPosition.Y - prevMousePos.Y) * min(3, max(1.5, (mapZoomBase / mapZoom)));
 			
-			prevMousePos = new Vector2(mouse_x, mouse_y);
+			prevMousePos = mouseWorldPosition;
 		} else if (mouse_check_button_released(mb_right))
 		{
 			positionOffset = new Vector2(0, 0);

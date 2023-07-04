@@ -23,7 +23,8 @@ function HighlightHandler() constructor
 						if (distanceToPlayer <= instance.interactionRange)
 						{
 							var offsetToCenterY = ((instance.sprite_height * 0.5) - instance.sprite_yoffset);
-							var distanceToMouse = point_distance(instance.x, instance.y + offsetToCenterY, mouse_x, mouse_y);
+							var mouseWorldPosition = MouseWorldPosition();
+							var distanceToMouse = point_distance(instance.x, instance.y + offsetToCenterY, mouseWorldPosition.X, mouseWorldPosition.Y);
 							var distanceMouseToPlayer = point_distance(mouse_x, mouse_y, global.ObjPlayer.x, global.ObjPlayer.y + playerOffsetToBottomY);
 							var highlightDistance = min(
 								distanceToPlayer,
