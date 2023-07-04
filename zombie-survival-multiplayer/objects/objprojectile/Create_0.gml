@@ -3,10 +3,10 @@ event_inherited();
 
 image_speed = 0;
 speed = 0;
-flySpeed = 100;
+flySpeed = 8;//100; DEBUGGING
 projectileTrailWidth = 2;
+aimAngleLine = undefined;
 initSpeed = true;
-
 bullet = undefined;
 // TODO: Fix bullet hole logic
 //bulletHoleRadius = 4;

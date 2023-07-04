@@ -34,7 +34,8 @@ if (owner != noone)
 				// CHECK GUI STATE
 				if (global.GUIStateHandlerRef.IsGUIStateClosed())
 				{
-					image_angle = point_direction(x, y, mouse_x, mouse_y);
+					var mouseWorldPosition = MouseWorldPosition();
+					image_angle = point_direction(x, y, mouseWorldPosition.X, mouseWorldPosition.Y);
 					// SHOOTING DELAY AND ANIMATION
 					fireDelay = max(-1, --fireDelay);
 					muzzleFlashTimer = max(0, --muzzleFlashTimer);

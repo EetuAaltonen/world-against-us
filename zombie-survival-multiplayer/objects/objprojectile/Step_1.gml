@@ -23,12 +23,24 @@ if (speed > 0 && !isHit)
 			
 		if (!is_undefined(collisionPoint))
 		{
-			if (CheckCollisionProjectile(collisionPoint, self))
+			var projectileCollisionPosition = CheckCollisionProjectile(collisionPoint, self);
+			if (!is_undefined(projectileCollisionPosition))
 			{
 				isHit = true;
 			
-				x = collisionPoint.position.X;
-				y = collisionPoint.position.Y;
+				x = projectileCollisionPosition.X;
+				y = projectileCollisionPosition.Y;
+				aimAngleLine.end_point.X = projectileCollisionPosition.X;
+				aimAngleLine.end_point.Y = projectileCollisionPosition.Y;
+				speed = 0;
+			}
+		} else {
+			if ((abs(aimAngleLine.end_point.X - x) <= abs(hspeed)) && (abs(aimAngleLine.end_point.Y - y) <= abs(vspeed)))
+			{
+				isHit = true;
+			
+				x = aimAngleLine.end_point.X;
+				y = aimAngleLine.end_point.Y;
 				speed = 0;
 			}
 		}

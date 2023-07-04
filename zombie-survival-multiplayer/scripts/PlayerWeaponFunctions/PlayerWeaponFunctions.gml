@@ -12,7 +12,8 @@ function PlayerWeaponFunctions()
 		{
 			if (magazine.metadata.GetBulletCount() > 0 && fireDelay <= 0)
 			{
-				UseWeapon(mouse_x, mouse_y);
+				var mouseWorldPosition = MouseWorldPosition();
+				UseWeapon(mouseWorldPosition);
 				onWeaponUsed = true;
 			}
 		}
@@ -80,7 +81,7 @@ function PlayerWeaponFunctions()
 	}*/
 }
 
-function UseWeapon(_mouseX, _mouseY)
+function UseWeapon(_mouseWorldPosition)
 {
 	var magazine = primaryWeapon.metadata.magazine;
 	var bullet = array_pop(magazine.metadata.bullets);
@@ -90,7 +91,20 @@ function UseWeapon(_mouseX, _mouseY)
 	var projectileInstance = instance_create_depth(projectileSpawnPoint.X, projectileSpawnPoint.Y, 0/*top most depth*/, objProjectile);
 	var aimRecoilReduction = (isAiming) ? 0.3 : 1;
 	var bulletRecoil = random_range(-primaryWeapon.metadata.recoil, primaryWeapon.metadata.recoil) * aimRecoilReduction;
-	var barrelAngle = point_direction(x + rotatedWeaponBarrelPos.X, y +rotatedWeaponBarrelPos.Y, _mouseX, _mouseY);
+	var barrelAngle = point_direction(x + rotatedWeaponBarrelPos.X, y + rotatedWeaponBarrelPos.Y, _mouseWorldPosition.X, _mouseWorldPosition.Y);
+	
+	var aimAngleVectorLine = new Vector2Line(
+		projectileSpawnPoint,
+		_mouseWorldPosition
+	);
+	var aimAngleDirectionVector = new Vector2(
+		aimAngleVectorLine.end_point.X - aimAngleVectorLine.start_point.X,
+		aimAngleVectorLine.end_point.Y - aimAngleVectorLine.start_point.Y,
+	);
+	aimAngleDirectionVector = RotateVector2(aimAngleDirectionVector, bulletRecoil);
+	aimAngleVectorLine.end_point.X = aimAngleVectorLine.start_point.X + aimAngleDirectionVector.X;
+	aimAngleVectorLine.end_point.Y = aimAngleVectorLine.start_point.Y + aimAngleDirectionVector.Y;
+	projectileInstance.aimAngleLine = aimAngleVectorLine;
 	
 	projectileInstance.sprite_index = GetProjectileSpriteByBullet(bullet.name);
 	projectileInstance.direction = barrelAngle + bulletRecoil;

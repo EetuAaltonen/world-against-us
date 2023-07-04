@@ -10,5 +10,17 @@ draw_line_width_color(
 	x, y, projectileTrailWidth, rgbColor, rgbColor
 );
 
+if (global.DEBUGMODE)
+{
+	if (!is_undefined(aimAngleLine))
+	{
+		draw_circle_color(
+			aimAngleLine.end_point.X,
+			aimAngleLine.end_point.Y,
+			3, c_red, c_red, false
+		);
+	}
+}
+
 // RESET DRAW PROPERTIES
 ResetDrawProperties();
