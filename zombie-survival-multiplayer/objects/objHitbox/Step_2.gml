@@ -13,4 +13,9 @@ if (instance_exists(ownerInstance))
 	{
 		mask_index = (ownerInstance.mask_index == SPRITE_NO_MASK) ? SPRITE_NO_MASK : defaultMaskIndex;
 	}
+	
+	boundingBox = new Vector2Rectangle(
+		new Vector2(bbox_left, bbox_top), new Vector2(bbox_right, bbox_top),
+		new Vector2(bbox_right, bbox_bottom), new Vector2(bbox_left, bbox_bottom)
+	);
 }
