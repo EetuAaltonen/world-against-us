@@ -320,10 +320,13 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 		}
 			
 		// MOUSE DEBUG INFO
-		if (!is_undefined(mouseHoverIndex))
+		if (global.DEBUGMODE)
 		{
-			var mousePosition = MouseGUIPosition();
-			draw_text(mousePosition.X + 5, mousePosition.Y + 20, string(inventory.gridData[mouseHoverIndex.row][mouseHoverIndex.col]));
+			if (!is_undefined(mouseHoverIndex))
+			{
+				var mousePosition = MouseGUIPosition();
+				draw_text(mousePosition.X + 5, mousePosition.Y + 50, string(inventory.gridData[mouseHoverIndex.row][mouseHoverIndex.col]));
+			}
 		}
 	}
 	
