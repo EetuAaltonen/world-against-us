@@ -1,0 +1,61 @@
+:: StoryTitle
+walkie_talkie_dialogue
+
+
+:: StoryData
+{
+  "ifid": "65A5D124-FA07-4810-9F53-A27E59DFD444",
+  "format": "Harlowe",
+  "format-version": "3.3.5",
+  "start": "default",
+  "zoom": 0.6
+}
+
+
+:: default {"position":"800,300","size":"100,100"}
+;;character:sprDialogWalkieTalkieHostile
+Who is this? Where is Michael?
+[[- Hi, I'm lonely survival with no clue where am I.->walkie_talkie_1]]
+[[- Don't know who are you talking about. I'm lack of shelter and in need of rescuing!->walkie_talkie_0]]
+;;end
+
+
+:: prologue_overhead1 {"position":"700,900","size":"100,100"}
+Michael, can you hear me??
+[[Next->prologue_overhead2]]
+;;end
+
+
+:: prologue_overhead2 {"position":"900,700","size":"100,100"}
+*static noise
+[[Next->prologue_overhead3]]
+;;end
+
+
+:: prologue_overhead3 {"position":"1100,700","size":"100,100"}
+Please answer me...
+[[Next->prologue_overhead4]]
+;;end
+
+
+:: prologue_overhead4 {"position":"1300,900","size":"100,100"}
+Michael?
+[[Next->prologue_overhead1]]
+;;end
+
+
+:: walkie_talkie_0 {"position":"1000,500","size":"100,100"}
+God will rescue you eventually.
+;;end
+
+
+:: walkie_talkie_1 {"position":"1000,300","size":"100,100"}
+Have you seen Michael?
+[[- No, but I can help you to find him.->walkie_talkie_2]]
+;;end
+
+
+:: walkie_talkie_2 {"position":"1200,300","size":"100,100"}
+;;character:sprDialogWalkieTalkieNeutral
+That's deal then, we are coming.
+;;end

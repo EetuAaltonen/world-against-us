@@ -14,6 +14,8 @@ enum GAME_WINDOW
 	// JOURNAL OVERVIEW
 	JournalEntries,
 	JournalQuests,
+	// DIALOGUE
+	Dialogue,
 	// INVENTORY
 	ItemActionMenu,
 	// MAP
