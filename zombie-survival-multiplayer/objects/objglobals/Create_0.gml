@@ -24,6 +24,9 @@
 // GUI STATE
 #macro ROOT_GUI_STATE new GUIState(GUI_STATE.GameRoot, undefined, undefined, [], GUI_CHAIN_RULE.OverwriteAll, CallbackGUIStateInputRoot, undefined)
 
+// DIALOGUE
+#macro DIALOGUE_DEFAULT_INDEX "default"
+
 // DEFAULT KEYBINDINGS
 #macro KEY_ESC_MENU	vk_escape
 #macro KEY_PLAYER_OVERVIEW vk_tab
@@ -43,26 +46,28 @@ initGlobalVariables = function()
 	global.GUIStateHandlerRef = undefined;
 	global.GameWindowHandlerRef = undefined;
 	global.ObjHud = noone;
+	global.DialogueHandlerRef = undefined;
 
+	// Global Database
 	global.ItemData = undefined;
 	global.BulletData = undefined;
+	global.LootTableData = undefined;
+	global.QuestData = undefined;
+	global.DialogueData = undefined;
+	global.MapIconStyleData = undefined;
 
 	global.PlayerBackpack = undefined;
 	global.PlayerMagazinePockets = undefined;
 	global.PlayerMedicinePockets = undefined;
 	
-	// Loot table
-	global.LootTableData = undefined;
-	
 	// Journal
 	global.ObjJournal = noone;
-	// Quest
-	global.QuestData = undefined;
+	
+	// Quest Handler
 	global.QuestHandlerRef = undefined;
+	
 	// Map
 	global.ObjMap = noone;
-	global.MapIconStyleData = undefined;
-
 
 	// Player
 	global.ObjPlayer = noone;

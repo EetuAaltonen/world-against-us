@@ -1,0 +1,1 @@
+dialogueHandler = new DialogueHandler();

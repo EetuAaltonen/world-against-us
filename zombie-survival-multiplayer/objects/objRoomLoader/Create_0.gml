@@ -26,6 +26,8 @@ controllers = [
 	new GameController(objHud, [], [roomLaunch, roomMainMenu, roomLoadSave], LAYER_CONTROLLERS_BEHIND),
 	new GameController(objNotification, [], [roomLaunch, roomMainMenu], LAYER_CONTROLLERS_FRONT),
 	
+	new GameController(objDialogue, [], [roomLaunch, roomMainMenu]),
+	
 	new GameController(objDatabase, [], [roomLaunch, roomMainMenu]),
 	new GameController(objInventory, [], [roomLaunch, roomMainMenu]),
 	new GameController(objTempInventory, [], [roomLaunch, roomMainMenu, roomLoadSave]),
