@@ -22,5 +22,6 @@ enum GAME_WINDOW
 	LootContainer,
 	// WORLD - FACILITY
 	FacilityGenerator,
-	FacilityVendingMachine
+	FacilityVendingMachine,
+	FacilityAmmunitionSortingMachine
 }
