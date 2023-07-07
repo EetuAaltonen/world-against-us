@@ -20,16 +20,19 @@ function CreateWindowEscMenu(_zIndex)
 	
 	var escMenuButtons = ds_list_create();
 	ds_list_add(escMenuButtons,
-		{ title: "Continue", onClick: OnClickEscMenuContinue },
-		{ title: "Save game", onClick: OnClickEscMenuSave },
-		{ title: "Reset save", onClick: OnClickEscMenuReset },
-		{ title: "Main menu", onClick: OnClickEscMenuQuit }
+		{ title: "Continue", onClick: OnClickEscMenuContinue, metadata: undefined },
+		{ title: "Save game", onClick: OnClickEscMenuSave, metadata: undefined },
+		{ title: "Reset save", onClick: OnClickEscMenuReset, metadata: undefined },
+		{ title: "Main menu", onClick: OnClickEscMenuQuit, metadata: undefined }
 	);
 
 	var menuButtonStyle = new ButtonStyle(
-		new Size(200, 50),
+		new Size(200, 50), 25,
 		#6f4082, #9365a6,
-		font_default, 25, fa_middle, fa_center
+		fa_center, fa_middle,
+		c_black, c_black,
+		font_default,
+		fa_center, fa_middle
 	);
 	
 	var escMenuButtonMenu = new WindowButtonMenu(

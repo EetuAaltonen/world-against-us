@@ -5,22 +5,32 @@ function WindowButtonMenu(_elementId, _relativePosition, _size, _backgroundColor
 	
 	initButtons = true;
 	
-	static UpdateContent = function()
+	static InitButtons = function()
 	{
-		if (initButtons)
+		initButtons = false;
+		
+		if (!is_undefined(buttonsData))
 		{
-			initButtons = false;
+			DeleteChildElements();
+			
 			var buttonElements = ds_list_create();
 			var buttonCount = ds_list_size(buttonsData);
 			var buttonMargin = (buttonStyle.margin + buttonStyle.size.h);
 			var buttonPosition = new Vector2(0, 0);
-			if (buttonStyle.hAling == fa_middle)
+			if (buttonStyle.button_h_align == fa_center)
 			{
-				buttonPosition.X += -(buttonStyle.size.w * 0.5);
+				buttonPosition.X -= buttonStyle.size.w * 0.5;
+			} else if (buttonStyle.button_h_align == fa_right)
+			{
+				buttonPosition.X -= buttonStyle.size.w;
 			}
-			if (buttonStyle.vAling == fa_center)
+			
+			if (buttonStyle.button_v_align == fa_center)
 			{
-				buttonPosition.Y += -(buttonMargin * (buttonCount * 0.5));
+				buttonPosition.Y -= buttonMargin * (buttonCount * 0.5);
+			} else if (buttonStyle.button_v_align == fa_bottom)
+			{
+				buttonPosition.Y -= buttonMargin * buttonCount;
 			}
 			
 			for (var i = 0; i < buttonCount; i++)
@@ -29,15 +39,23 @@ function WindowButtonMenu(_elementId, _relativePosition, _size, _backgroundColor
 				var newButton = new WindowButton(
 					(elementId + buttonData.title),
 					new Vector2(buttonPosition.X, buttonPosition.Y),
-					buttonStyle.size, buttonStyle.color, buttonData.title, buttonStyle, buttonData.onClick
+					buttonStyle.size, buttonStyle.button_background_color, buttonData.title, buttonStyle, buttonData.onClick, buttonData.metadata
 				);
 				ds_list_add(buttonElements, newButton);
 				buttonPosition.Y += buttonMargin;
 			}
 			AddChildElements(buttonElements);
-		} else {
-			UpdateChildElements();
 		}
+	}
+	
+	static UpdateContent = function()
+	{
+		if (initButtons)
+		{
+			InitButtons();
+		}
+		
+		UpdateChildElements();
 	}
 	
 	static DrawContent = function()

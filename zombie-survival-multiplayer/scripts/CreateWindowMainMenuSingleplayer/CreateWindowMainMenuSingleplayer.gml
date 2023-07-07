@@ -49,12 +49,17 @@ function CreateWindowMainMenuSingleplayer(_zIndex)
 	// PLAY BUTTON
 	var buttonSize = new Size(160, 60);
 	var buttonStyle = new ButtonStyle(
-		buttonSize, #48a630, #2c8017, font_default, 0, undefined, undefined
+		buttonSize, 0,
+		#48a630, #2c8017,
+		fa_left, fa_middle,
+		c_black, c_black,
+		font_default,
+		fa_center, fa_middle
 	);
 	var savePlayButton = new WindowButton(
 		"SavePlayButton",
 		new Vector2(panelSize.w * 0.5 - (buttonSize.w * 0.5), panelSize.h - (buttonSize.h * 0.5) - 60),
-		buttonSize, buttonStyle.color, "Play", buttonStyle, OnClickMenuSingleplayerPlay
+		buttonSize, buttonStyle.button_background_color, "Play", buttonStyle, OnClickMenuSingleplayerPlay
 	);
 	
 	ds_list_add(saveFilePanelElements,

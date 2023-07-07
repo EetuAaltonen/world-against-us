@@ -12,8 +12,12 @@ function CreateWindowItemActionMenu(_zIndex, _targetItem)
 	// ACTION MENU BUTTONS
 	var actionMenuButtons = ds_list_create();
 	var actionButtonStyle = new ButtonStyle(
-		new Size(200, 25),
-		#d4c600, #6e6702, font_small, 1, fa_left, fa_top
+		new Size(200, 25), 1,
+		#d4c600, #6e6702,
+		fa_left, fa_top,
+		c_black, c_black,
+		font_small,
+		fa_left, fa_top
 	);
 	ds_list_add(actionMenuButtons,
 		{ title: "Use/Consume", onClick: OnClickActionMenuUse },

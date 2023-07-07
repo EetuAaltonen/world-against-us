@@ -25,15 +25,18 @@ function CreateWindowMainMenuRoot(_zIndex)
 	
 	var mainMenuButtons = ds_list_create();
 	ds_list_add(mainMenuButtons,
-		{ title: "Singleplayer", onClick: OnClickMenuSingleplayer },
-		{ title: "Multiplayer", onClick: OnClickMenuMultiplayer },
-		{ title: "Quit", onClick: OnClickMenuQuit }
+		{ title: "Singleplayer", onClick: OnClickMenuSingleplayer, metadata: undefined },
+		{ title: "Multiplayer", onClick: OnClickMenuMultiplayer, metadata: undefined },
+		{ title: "Quit", onClick: OnClickMenuQuit, metadata: undefined }
 	);
 
 	var mainButtonStyle = new ButtonStyle(
-		new Size(400, 100),
+		new Size(400, 100), 20,
 		c_white, c_ltgray,
-		font_large, 20, fa_middle, fa_center
+		fa_center, fa_middle,
+		c_black, c_black,
+		font_large,
+		fa_center, fa_middle 
 	);
 	
 	var mainMenuButtonMenu = new WindowButtonMenu(
