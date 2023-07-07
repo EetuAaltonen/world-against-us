@@ -1,10 +1,16 @@
-function ButtonStyle(_size, _color, _hoverColor, _textFont, _margin, _hAling, _vAling) constructor
+function ButtonStyle(_size, _margin, _button_background_color, _button_background_hover_color, _button_h_align, _button_v_align, _text_color, _text_hover_color, _text_font, _text_h_align, _text_v_align) constructor
 {
 	size = _size;
-	color = _color;
-	hoverColor = _hoverColor;
-	textFont = _textFont;
 	margin = _margin;
-	hAling = _hAling;
-	vAling = _vAling;
+	button_background_color = _button_background_color;
+	button_background_hover_color = _button_background_hover_color;
+	button_h_align = _button_h_align;
+	button_v_align = _button_v_align;
+	text_color = _text_color;
+	text_hover_color = _text_hover_color;
+	text_font = _text_font;
+	text_color = _text_color;
+	text_font = _text_font;
+	text_h_align = _text_h_align;
+	text_v_align = _text_v_align;
 }

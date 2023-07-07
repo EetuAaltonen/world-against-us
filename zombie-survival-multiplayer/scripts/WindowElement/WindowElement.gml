@@ -89,6 +89,11 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 		return;
 	}
 	
+	static DeleteChildElements = function()
+	{
+		childElements = ds_list_create();
+	}
+	
 	static CheckHovered = function()
 	{
 		if (!is_undefined(size))
