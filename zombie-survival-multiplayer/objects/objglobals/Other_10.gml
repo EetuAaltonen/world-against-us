@@ -7,6 +7,7 @@ if (instance_exists(objCamera)) global.ObjCamera = instance_find(objCamera, 0);
 if (instance_exists(objGUI)) global.GUIStateHandlerRef = instance_find(objGUI, 0).guiStateHandler;
 if (instance_exists(objGameWindow)) global.GameWindowHandlerRef = instance_find(objGameWindow, 0).gameWindowHandler;
 if (instance_exists(objHud)) global.ObjHud = instance_find(objHud, 0);
+if (instance_exists(objWorldState)) global.WorldStateData = instance_find(objWorldState, 0).worldStateHandler.world_states;
 if (instance_exists(objDialogue)) global.DialogueHandlerRef = instance_find(objDialogue, 0).dialogueHandler;
 
 if (instance_exists(objDatabase))

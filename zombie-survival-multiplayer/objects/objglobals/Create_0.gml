@@ -33,6 +33,9 @@
 #macro KEY_JOURNAL ord("J")
 #macro KEY_MAP ord("M")
 
+// WORLD STATE INDICES
+#macro WORLD_STATE_UNLOCK_WALKIE_TALKIE "UnlockWalkieTalkie"
+
 // SET RANDOM SEED
 randomise();
 
@@ -46,6 +49,7 @@ initGlobalVariables = function()
 	global.GUIStateHandlerRef = undefined;
 	global.GameWindowHandlerRef = undefined;
 	global.ObjHud = noone;
+	global.WorldStateData = undefined;
 	global.DialogueHandlerRef = undefined;
 
 	// Global Database
