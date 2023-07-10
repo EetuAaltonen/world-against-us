@@ -84,6 +84,22 @@ try {
 											} else {
 												throw (string("Missing sprite for character icon '{0}'", characterIcon));
 											}
+										} else if (string_starts_with(textLine, ";;trigger"))
+										{
+											var triggerParts = string_split(textLine, ":", true, 1);
+											var triggerFunctionName = string_replace(array_last(triggerParts), "\n", "");
+											var triggerFunctioIndex = asset_get_index(triggerFunctionName);
+											if (triggerFunctioIndex != -1)
+											{
+												if (script_exists(triggerFunctioIndex))
+												{
+													dialogue.trigger_function = triggerFunctioIndex;
+												} else {
+													throw (string("Missing script for trigger function '{0}'", triggerFunctionName));
+												}
+											} else {
+												throw (string("Missing script for trigger function '{0}'", triggerFunctionName));
+											}
 										} else if (string_starts_with(textLine, "::"))
 										{
 											throw (string("Missing ';;end' flag in {0}->{1}", dialogueStoryTitle, dialogue.dialogue_index));

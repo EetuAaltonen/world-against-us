@@ -5,6 +5,7 @@ function Dialogue(_dialogue_story_title, _dialogue_index) constructor
 	character_icon = undefined;
 	chat = "";
 	dialogue_options = [];
+	trigger_function = undefined;
 	
 	static Clone = function()
 	{

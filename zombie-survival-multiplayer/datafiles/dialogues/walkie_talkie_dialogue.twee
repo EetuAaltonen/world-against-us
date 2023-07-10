@@ -13,7 +13,7 @@ walkie_talkie_dialogue
 
 
 :: default {"position":"800,300","size":"100,100"}
-;;character:sprDialogWalkieTalkieHostile
+;;character:sprDialogueWalkieTalkieHostile
 Who is this? Where is Michael?
 [[- Hi, I'm lonely survival with no clue where am I.->walkie_talkie_1]]
 [[- Don't know who are you talking about. I'm lack of shelter and in need of rescuing!->walkie_talkie_0]]
@@ -56,6 +56,12 @@ Have you seen Michael?
 
 
 :: walkie_talkie_2 {"position":"1200,300","size":"100,100"}
-;;character:sprDialogWalkieTalkieNeutral
+;;character:sprDialogueWalkieTalkieNeutral
 That's deal then, we are coming.
+[[Bye->walkie_talkie_3]]
+;;end
+
+
+:: walkie_talkie_3 {"position":"1400,300","size":"100,100"}
+;;trigger:scrDialogueTriggerTest
 ;;end
