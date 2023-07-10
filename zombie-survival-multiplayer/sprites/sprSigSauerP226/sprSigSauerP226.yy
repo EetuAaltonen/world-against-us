@@ -1,10 +1,10 @@
 {
   "resourceType": "GMSprite",
   "resourceVersion": "1.0",
-  "name": "sprMuzzleFlash61",
-  "bbox_bottom": 42,
+  "name": "sprSigSauerP226",
+  "bbox_bottom": 20,
   "bbox_left": 0,
-  "bbox_right": 85,
+  "bbox_right": 31,
   "bbox_top": 0,
   "bboxMode": 0,
   "collisionKind": 1,
@@ -13,17 +13,17 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"00ab08c7-3155-48b2-aeb2-e458fd9792ac",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"68d9344e-6d58-4a39-8cd8-20a5dfb172b1",},
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 43,
+  "height": 21,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"45c269cf-1d9e-4250-a641-bf4cf5d20f33","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"d0f9fab8-a62a-4d1c-a386-b254b6b5f886","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": null,
-  "origin": 3,
+  "origin": 9,
   "parent": {
     "name": "Weapon",
     "path": "folders/Sprites/World/Item/Weapon.yy",
@@ -32,7 +32,7 @@
   "sequence": {
     "resourceType": "GMSequence",
     "resourceVersion": "1.4",
-    "name": "sprMuzzleFlash",
+    "name": "sprSigSauerP226",
     "autoRecord": true,
     "backdropHeight": 768,
     "backdropImageOpacity": 0.5,
@@ -54,13 +54,13 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"00ab08c7-3155-48b2-aeb2-e458fd9792ac","path":"sprites/sprMuzzleFlash61/sprMuzzleFlash61.yy",},},},"Disabled":false,"id":"0ff1109a-0a27-42d0-bd6c-ef099e27aef5","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"68d9344e-6d58-4a39-8cd8-20a5dfb172b1","path":"sprites/sprSigSauerP226/sprSigSauerP226.yy",},},},"Disabled":false,"id":"b70fb3c6-4314-4059-96cf-b41008d44c5e","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,
     "volume": 1.0,
-    "xorigin": 0,
-    "yorigin": 21,
+    "xorigin": 8,
+    "yorigin": 3,
   },
   "swatchColours": null,
   "swfPrecision": 2.525,
@@ -70,5 +70,5 @@
   },
   "type": 0,
   "VTile": false,
-  "width": 86,
+  "width": 32,
 }

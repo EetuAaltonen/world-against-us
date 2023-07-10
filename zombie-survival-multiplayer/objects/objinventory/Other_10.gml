@@ -7,6 +7,8 @@ if (room == roomLoadSave)
 		inventory.AddItem(global.ItemData[? "Money"].Clone(100), undefined, true, true);
 		inventory.AddItem(global.ItemData[? "Water Bottle"].Clone(), undefined, true, true);
 		inventory.AddItem(global.ItemData[? "Ak-47 Assault Rifle"].Clone(), undefined, true, true);
+		inventory.AddItem(global.ItemData[? "Sig Sauer P226 Pistol"].Clone(), undefined, true, true);
+		inventory.AddItem(global.ItemData[? "MP5 Submachine gun"].Clone(), undefined, true, true);
 	
 		inventory.AddItem(global.ItemData[? "Ak-47 Magazine"].Clone(), undefined, true, true);
 		inventory.AddItem(global.ItemData[? "Ak-47 Magazine"].Clone(), undefined, true, true);
