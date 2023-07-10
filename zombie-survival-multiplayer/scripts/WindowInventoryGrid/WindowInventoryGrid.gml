@@ -184,8 +184,16 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 			// SKIP DRAWING IF ITEM IS DRAGGED
 			if (!itemDragged)
 			{
-				var iconScale = CalculateItemIconScale(item, gridCellSize);
+				var itemIconScale = 0.8;
+				var iconScale = CalculateItemIconScale(item, new Size(gridCellSize.w * itemIconScale, gridCellSize.h * itemIconScale));
 				var iconRotation = CalculateItemIconRotation(item.is_rotated);
+				var iconOffset = CalculateSpriteOffsetToCenter(item.icon, iconScale);
+				if (item.is_rotated)
+				{
+					var tempIconOffset = iconOffset.Clone();
+					iconOffset.X = tempIconOffset.Y;
+					iconOffset.Y = -tempIconOffset.X;
+				}
 				
 				// DRAW BACKGROUND
 				var gridSpriteIndex = 0;
@@ -233,8 +241,8 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					
 				draw_sprite_ext(
 					item.icon, imageIndex,
-					xPos + ((gridCellSize.w * 0.5) * item.size.w),
-					yPos + ((gridCellSize.h * 0.5) * item.size.h),
+					xPos + ((gridCellSize.w * 0.5) * item.size.w) + iconOffset.X,
+					yPos + ((gridCellSize.h * 0.5) * item.size.h) + iconOffset.Y,
 					iconScale, iconScale, iconRotation, c_white, 1
 				);
 				shader_reset();

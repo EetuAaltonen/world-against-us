@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "CalculateItemIconScale",
+  "name": "CalculateSpriteOffsetToCenter",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

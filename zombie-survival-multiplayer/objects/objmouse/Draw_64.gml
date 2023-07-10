@@ -32,8 +32,9 @@ if (global.GUIStateHandlerRef.IsGUIStateClosed())
 	
 	if (!is_undefined(dragItem))
 	{
-		var iconScale = CalculateItemIconScale(dragItem, dragItemIconMaxBaseSize);
-		var iconRotation = dragItem.is_rotated ? 90 : 0;
+		var iconBaseScale = 0.8;
+		var iconScale = CalculateItemIconScale(dragItem, dragItemIconMaxBaseSize) * iconBaseScale;
+		var iconRotation = CalculateItemIconRotation(dragItem.is_rotated);
 		draw_sprite_ext(
 			dragItem.icon, 0,
 			mousePosition.X, mousePosition.Y,

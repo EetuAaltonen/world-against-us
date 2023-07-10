@@ -20,9 +20,9 @@ function CreateWindowItemActionMenu(_zIndex, _targetItem)
 		fa_left, fa_top
 	);
 	ds_list_add(actionMenuButtons,
-		{ title: "Use/Consume", onClick: OnClickActionMenuUse },
-		{ title: "Empty/Unload", onClick: OnClickActionMenuEmpty },
-		{ title: "Delete", onClick: OnClickActionMenuDelete }
+		{ title: "Use/Consume", onClick: OnClickActionMenuUse, metadata: undefined },
+		{ title: "Empty/Unload", onClick: OnClickActionMenuEmpty, metadata: undefined },
+		{ title: "Delete", onClick: OnClickActionMenuDelete, metadata: undefined }
 	);
 	
 	// ACTION MENU
