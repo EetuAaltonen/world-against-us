@@ -177,9 +177,21 @@
         "range": 100,
         "recoil": 5,
         "attachment_slots": ["scope", "laser", "foregrip"],
+        "weapon_offset": {
+          "X": 20,
+          "Y": -30
+        },
         "barrel_pos": {
-          "X": 127,
-          "Y": 8
+          "X": 92,
+          "Y": 7
+        },
+        "right_hand_position": {
+          "X": 30,
+          "Y": 11
+        },
+        "left_hand_position": {
+          "X": 60,
+          "Y": 10
         }
       }
     },
@@ -202,9 +214,58 @@
         "range": 50,
         "recoil": 10,
         "attachment_slots": ["scope", "laser", "foregrip"],
+        "weapon_offset": {
+          "X": 12,
+          "Y": -30
+        },
         "barrel_pos": {
-          "X": 140,
+          "X": 73,
+          "Y": 6
+        },
+        "right_hand_position": {
+          "X": 20,
+          "Y": 15
+        },
+        "left_hand_position": {
+          "X": 47,
           "Y": 11
+        }
+      }
+    },
+    {
+      "name": "Sig Sauer P226 Pistol",
+      "short_name": "P226",
+      "icon": "sprSigSauerP226",
+      "type": "Primary_Weapon",
+      "size": {
+        "w": 2,
+        "h": 1
+      },
+      "description": "Pistol",
+      "weight": 2000,
+      "max_stack": 1,
+      "base_price": 180,
+      "metadata": {
+        "caliber": "9",
+        "fire_rate": 200,
+        "range": 50,
+        "recoil": 10,
+        "attachment_slots": ["scope", "laser"],
+        "weapon_offset": {
+          "X": 25,
+          "Y": -35
+        },
+        "barrel_pos": {
+          "X": 31,
+          "Y": 3
+        },
+        "right_hand_position": {
+          "X": 10,
+          "Y": 11
+        },
+        "left_hand_position": {
+          "X": 8,
+          "Y": 14
         }
       }
     },

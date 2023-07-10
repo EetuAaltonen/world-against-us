@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "Sprite",
-    "path": "folders/Scripts/Game/GUI/Functions/Sprite.yy",
+    "path": "folders/Scripts/Game/Sprite.yy",
   },
 }

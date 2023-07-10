@@ -16,7 +16,10 @@ function ParseMetadataItem(_metadata, _itemType)
 						_metadata[$ "range"],
 						_metadata[$ "recoil"],
 						_metadata[$ "attachment_slots"],
-						_metadata[$ "barrel_pos"]
+						_metadata[$ "weapon_offset"],
+						_metadata[$ "barrel_pos"],
+						_metadata[$ "right_hand_position"],
+						_metadata[$ "left_hand_position"]
 					);
 					if (!is_undefined(_metadata[$ "magazine"] ?? undefined)) { variable_struct_set(parsedMetadata, "magazine", _metadata[$ "magazine"]); }
 				} break;
