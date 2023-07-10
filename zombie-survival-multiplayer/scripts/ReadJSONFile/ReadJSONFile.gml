@@ -17,7 +17,7 @@ function ReadJSONFile(_fileName)
 		}
 	} catch (error)
 	{
-		show_debug_message(error);
+		show_message(error);
 	}
 	return jsonStruct;
 }

@@ -81,7 +81,7 @@ function ParseMetadataItem(_metadata, _itemType)
 				} break;
 			}
 		} catch (error) {
-			show_debug_message(error);
+			show_message(error);
 		}
 	}
 	return parsedMetadata;

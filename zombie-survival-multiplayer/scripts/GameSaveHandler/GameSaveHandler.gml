@@ -23,7 +23,7 @@ function GameSaveHandler() constructor
 			}
 		} catch (error)
 		{
-			show_debug_message(error);
+			show_message(error);
 		}
 	}
 	
@@ -61,7 +61,7 @@ function GameSaveHandler() constructor
 			isFileSaved = true;
 		} catch (error)
 		{
-			show_debug_message(error);
+			show_message(error);
 		}
 		return isFileSaved;
 	}
@@ -83,7 +83,7 @@ function GameSaveHandler() constructor
 			isFileReseted = true;
 		} catch (error)
 		{
-			show_debug_message(error);
+			show_message(error);
 		}
 		return isFileReseted;
 	}
@@ -111,7 +111,7 @@ function GameSaveHandler() constructor
 			}
 		} catch (error)
 		{
-			show_debug_message(error);
+			show_message(error);
 		}
 		return isPlayerDataLoaded;
 	}
@@ -139,7 +139,7 @@ function GameSaveHandler() constructor
 			}
 		} catch (error)
 		{
-			show_debug_message(error);
+			show_message(error);
 		}
 		return isRoomDataLoaded;
 	}

@@ -125,7 +125,7 @@ try {
 	}
 } catch (error)
 {
-	show_debug_message(error);
+	show_message(error);
 }
 
 // LOOT TABLE DATA
@@ -156,7 +156,7 @@ try {
 	}
 } catch (error)
 {
-	show_debug_message(error);
+	show_message(error);
 }
 
 // MAP ICON STYLE DATA

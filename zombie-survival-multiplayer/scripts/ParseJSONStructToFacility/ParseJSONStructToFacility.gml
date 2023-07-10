@@ -19,7 +19,7 @@ function ParseJSONStructToFacility(_jsonStruct)
 			);
 		} catch (error)
 		{
-			show_debug_message(error);
+			show_message(error);
 		}
 	}
 	return facility;
