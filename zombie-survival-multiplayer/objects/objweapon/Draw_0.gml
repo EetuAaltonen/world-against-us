@@ -8,8 +8,6 @@ if (muzzleFlashTimer > 0)
 	);
 }
 
-if (isInCameraView && sprite_index != -1) draw_self();
-
 if (!is_undefined(primaryWeapon))
 {
 	var drawCrosshairLaser = function(_mousePosition) {
@@ -83,6 +81,135 @@ if (!is_undefined(primaryWeapon))
 		} else {
 			global.HighlightHandlerRef.ResetHighlightedInstance(LAYER_HIGHLIGHT_TARGET);
 		}
+		
+		if (!is_undefined(primaryWeapon.metadata.left_hand_position))
+		{
+			var playerSpritePos = new Vector2(
+				owner.x- owner.sprite_xoffset,
+				owner.y - owner.sprite_yoffset
+			);
+			
+			var leftHandPosition = CalculateHandPosition(primaryWeapon.metadata.left_hand_position);
+			leftHandPosition.X += x;
+			leftHandPosition.Y += y;
+			
+			var leftShoulderPosition = new Vector2(
+				playerSpritePos.X + (42 * owner.image_xscale),
+				playerSpritePos.Y + (28 * owner.image_yscale)
+			);
+			var leftShoulderAngle = point_direction(leftShoulderPosition.X, leftShoulderPosition.Y, leftHandPosition.X, leftHandPosition.Y);
+			
+			var rightHandPosition = CalculateHandPosition(primaryWeapon.metadata.right_hand_position);
+			rightHandPosition.X += x;
+			rightHandPosition.Y += y;
+			
+			var rightShoulderPosition = new Vector2(
+				playerSpritePos.X + (15 * owner.image_xscale),
+				playerSpritePos.Y + (28 * owner.image_yscale)
+			);
+			
+			var rightArmPosition = new Vector2(
+				rightShoulderPosition.X - (sprite_get_xoffset(sprSoldierRightShoulder) * owner.image_xscale),
+				rightShoulderPosition.Y + ((sprite_get_height(sprSoldierRightShoulder) - sprite_get_yoffset(sprSoldierRightShoulder)) * owner.image_yscale)
+			);
+			
+			var rightShoulderToArmVector = new Vector2(
+				rightArmPosition.X - rightShoulderPosition.X,
+				rightArmPosition.Y - rightShoulderPosition.Y,
+			);
+			var rightArmLength = sprite_get_width(sprSoldierRightArm) * abs(owner.image_xscale);
+			var distanceArmToHand = point_distance(rightArmPosition.X, rightArmPosition.Y, rightHandPosition.X, rightHandPosition.Y);
+			var prevDistance = (distanceArmToHand - rightArmLength);
+			repeat(60)
+			{
+				if (abs(distanceArmToHand - rightArmLength) > 1.2 || abs(distanceArmToHand - rightArmLength) < 1)
+				{
+					var correctingDirection = sign(distanceArmToHand - rightArmLength) * sign(owner.image_xscale);
+				
+					rightShoulderToArmVector = rightShoulderToArmVector.Rotate(2 * correctingDirection);
+					rightArmPosition.X = rightShoulderPosition.X + rightShoulderToArmVector.X;
+					rightArmPosition.Y = rightShoulderPosition.Y + rightShoulderToArmVector.Y;
+					
+					distanceArmToHand = point_distance(rightArmPosition.X, rightArmPosition.Y, rightHandPosition.X, rightHandPosition.Y);
+					if (abs(distanceArmToHand - rightArmLength) <= prevDistance)
+					{
+						prevDistance = (distanceArmToHand - rightArmLength);
+					} else {
+						break;
+					}
+				} else {
+					break;	
+				}
+			}
+			
+			var rightShoulderAngle = point_direction(rightShoulderPosition.X, rightShoulderPosition.Y, rightArmPosition.X, rightArmPosition.Y) + (90 + (20 * owner.image_xscale));
+			var rightArmAngle = point_direction(rightArmPosition.X, rightArmPosition.Y, rightHandPosition.X, rightHandPosition.Y);
+			
+			leftShoulderAngle += sign(owner.image_xscale) == 1 ? 90 : 90; 
+			draw_sprite_ext(
+				sprSoldierLeftShoulderArm, 0,
+				leftShoulderPosition.X,
+				leftShoulderPosition.Y,
+				owner.image_xscale, owner.image_yscale,
+				leftShoulderAngle, c_white, image_alpha
+			);
+			
+			if (isInCameraView && sprite_index != -1) draw_self();
+			
+			draw_sprite_ext(
+				sprSoldierRightShoulder, 0,
+				rightShoulderPosition.X,
+				rightShoulderPosition.Y,
+				owner.image_xscale, owner.image_yscale,
+				rightShoulderAngle, c_white, image_alpha
+			);
+			draw_sprite_ext(
+				sprSoldierRightArm, 0,
+				rightArmPosition.X,
+				rightArmPosition.Y,
+				image_xscale, image_yscale,
+				rightArmAngle, c_white, image_alpha
+			);
+			
+			draw_sprite_ext(
+				sprSoldierLeftHand, 0,
+				leftHandPosition.X,
+				leftHandPosition.Y,
+				image_xscale, image_yscale,
+				image_angle, c_white, image_alpha
+			);
+			
+			draw_sprite_ext(
+				sprSoldierRightHand, 0,
+				rightHandPosition.X,
+				rightHandPosition.Y,
+				image_xscale, image_yscale,
+				rightArmAngle/*Use same angle as right arm*/,
+				c_white, image_alpha
+			);
+			
+			if (global.DEBUGMODE)
+			{
+				draw_text(x, y - 100, string(point_distance(rightArmPosition.X, rightArmPosition.Y, rightHandPosition.X, rightHandPosition.Y) - rightArmLength));
+			
+				draw_circle(
+					rightShoulderPosition.X,
+					rightShoulderPosition.Y,
+					2, false
+				);
+				draw_circle(
+					rightShoulderPosition.X + rightShoulderToArmVector.X,
+					rightShoulderPosition.Y + rightShoulderToArmVector.Y,
+					2, false
+				);
+				draw_circle(
+					rightHandPosition.X,
+					rightHandPosition.Y,
+					2, false
+				);
+			}
+		}
+		
 	} else {
 		// TODO: Fix weapon network coding
 		/*if (isAiming)

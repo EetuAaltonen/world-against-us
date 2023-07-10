@@ -5,11 +5,19 @@ if (owner != noone)
 {
 	// POSITION
 	x = owner.x;
-	y = owner.y + weaponYOffset;
-	depth = owner.depth - 1;
+	y = owner.y;
+	
+	var mouseWorldPosition = MouseWorldPosition();
 	
 	if (!is_undefined(primaryWeapon))
 	{
+		// WEAPON OFFSET
+		var weaponOffset = primaryWeapon.metadata.weapon_offset.Clone();
+		weaponOffset.Y = 0;
+		var rotatedWeaponOffset = weaponOffset.Rotate(image_angle);
+		x += rotatedWeaponOffset.X;
+		y += primaryWeapon.metadata.weapon_offset.Y + rotatedWeaponOffset.Y;
+		
 		 if (!initWeapon) {
 			if (owner.character.type == CHARACTER_TYPE.PLAYER)
 			{
@@ -35,7 +43,6 @@ if (owner != noone)
 				// CHECK GUI STATE
 				if (global.GUIStateHandlerRef.IsGUIStateClosed())
 				{
-					var mouseWorldPosition = MouseWorldPosition();
 					image_angle = point_direction(x, y, mouseWorldPosition.X, mouseWorldPosition.Y);
 					// SHOOTING DELAY AND ANIMATION
 					fireDelay = max(-1, --fireDelay);
@@ -57,7 +64,13 @@ if (owner != noone)
 	{
 		image_index = is_undefined(primaryWeapon.metadata.magazine);
 	}
+	
+	var spriteDirection = CalculateSpriteDirectionToAim(new Vector2(x, y), mouseWorldPosition);
+	// DEPTH
+	// TODO: Rotate character and the gun to point -z-axis while pointing gun "upward"
+	//depth = (spriteDirection.image_z_scale == 1) ? owner.depth - 1 : owner.depth + 1;
+	depth = owner.depth - 1;
 
 	// FLIP HORIZONTALLY
-	image_yscale = (image_angle > 90 && image_angle < 270) ? -spriteScale : spriteScale;
+	image_yscale = spriteDirection.image_x_scale * spriteScale;
 }

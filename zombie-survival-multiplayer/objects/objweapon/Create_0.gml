@@ -2,7 +2,7 @@
 event_inherited();
 
 owner = noone;
-spriteScale = 0.8;
+spriteScale = 1;
 image_speed = 0;
 image_xscale = spriteScale;
 image_yscale = spriteScale;
@@ -11,7 +11,6 @@ primaryWeapon = undefined;
 isAiming = false;
 rotatedWeaponBarrelPos = undefined;
 initWeapon = false;
-weaponYOffset = 10;
 
 muzzleFlashTime = 2; // FRAMES
 muzzleFlashTimer = 0;
