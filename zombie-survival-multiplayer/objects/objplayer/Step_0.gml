@@ -76,6 +76,11 @@ y += vSpeed;
 var sprHeightCenter = sprite_get_height(sprite_index) * 0.5;
 y = clamp(y, 0 + sprHeightCenter, room_height - sprHeightCenter);
 
+
+
+var spriteDirection = CalculateSpriteDirectionToAim(new Vector2(x, y), MouseWorldPosition());
+image_xscale = spriteDirection.image_x_scale;
+
 // SEND MOVEMENT NETWORK DATA
 if (character.type == CHARACTER_TYPE.PLAYER)
 {

@@ -134,5 +134,18 @@ function CalculateBarrelPos()
 		(primaryWeapon.metadata.barrel_pos.X - xOrigin) * image_xscale,
 		(primaryWeapon.metadata.barrel_pos.Y - yOrigin) * image_yscale
 	);
-	rotatedWeaponBarrelPos = RotateVector2(barrelPos, image_angle);
+	rotatedWeaponBarrelPos = barrelPos.Rotate(image_angle);
+}
+
+function CalculateHandPosition(_handPosition)
+{
+	var xOrigin = sprite_get_xoffset(sprite_index);
+	var yOrigin = sprite_get_yoffset(sprite_index);
+	var handPosition = new Vector2(
+		(_handPosition.X - xOrigin) * image_xscale,
+		(_handPosition.Y - yOrigin) * image_yscale
+	);
+	handPosition = handPosition.Rotate(image_angle);
+	
+	return handPosition;
 }
