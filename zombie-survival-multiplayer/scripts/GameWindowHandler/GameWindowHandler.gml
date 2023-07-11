@@ -14,6 +14,24 @@ function GameWindowHandler() constructor
 		}
 	}
 	
+	static GetWindowById = function(_windowId)
+	{
+		var window = undefined;
+		var windowCount = ds_list_size(gameWindows);
+		
+		for (var i = windowCount - 1; i >= 0; i--)
+		{
+			var gameWindow = gameWindows[| i];
+			if (gameWindow.windowId == _windowId)
+			{
+				window = gameWindow;
+				break;
+			}
+		}
+		
+		return window;
+	}
+	
 	static CloseWindowById = function(_windowId)
 	{
 		var windowCount = ds_list_size(gameWindows);

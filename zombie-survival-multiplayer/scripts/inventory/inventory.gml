@@ -156,6 +156,26 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 		return isItemReplaced;
     }
 	
+	static SwapWithRollback = function(_sourceItem, _targetItem)
+	{
+		var isItemSwapped = false;
+		var cloneSourceItem = _sourceItem.Clone();
+		var cloneTargetItem = _targetItem.Clone();
+		
+		if (_targetItem.sourceInventory.ReplaceWithRollback(_targetItem, cloneSourceItem))
+		{
+			if (_sourceItem.sourceInventory.ReplaceWithRollback(_sourceItem, cloneTargetItem))
+			{
+				isItemSwapped = true;
+			} else {
+				cloneSourceItem.sourceInventory.RemoveItemByGridIndex(cloneSourceItem.grid_index);
+				cloneTargetItem.sourceInventory.AddItem(cloneTargetItem, cloneTargetItem.grid_index, cloneTargetItem.known);
+			}
+		}
+		
+		return isItemSwapped;
+	}
+	
 	static GetItemByIndex = function(_index)
     {
 		return items[| _index];

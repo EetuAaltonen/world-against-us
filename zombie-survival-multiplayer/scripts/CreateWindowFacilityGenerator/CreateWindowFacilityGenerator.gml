@@ -15,12 +15,11 @@ function CreateWindowFacilityGenerator(_zIndex, _facility)
 		new Vector2(windowSize.w * 0.5, 30),
 		undefined, undefined,
 		"Generator", font_large, fa_center, fa_middle, c_white, 1
-		
 	);
 	
 	// FUEL CAN HOLDER
 	var facillityItemHolderSize = new Size(200, 200)
-	var facillityItemHolder = new WindowItemHolder(
+	var facillityItemHolder = new WindowItemSlot(
 		"FacillityItemHolder",
 		new Vector2((windowSize.w * 0.5) - (facillityItemHolderSize.w * 0.5), 100),
 		facillityItemHolderSize,
