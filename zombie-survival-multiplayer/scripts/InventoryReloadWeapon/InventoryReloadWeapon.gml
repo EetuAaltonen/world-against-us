@@ -17,7 +17,7 @@ function InventoryReloadWeapon(_weapon, _magazine)
 		if (_magazine.sourceInventory.ReplaceWithRollback(_magazine, _weapon.metadata.magazine))
 		{
 			_weapon.metadata.magazine = reloadedMagazine;
-			
+
 			global.ObjHud.hudElementMagazine.InitMagazine();
 		}
 	}

@@ -6,8 +6,38 @@ function ItemActionUsePrimaryWeapon(_item)
 		{
 			if (!_item.Compare(global.ObjWeapon.primaryWeapon))
 			{
-				global.ObjWeapon.primaryWeapon = _item;
-				global.ObjWeapon.initWeapon = true;
+				var cloneItem = _item.Clone();
+				var equippedWeapon = global.PlayerPrimaryWeaponSlot.GetItemByIndex(0);
+				if (!is_undefined(equippedWeapon))
+				{
+					if (_item.sourceInventory.SwapWithRollback(_item, equippedWeapon))
+					{
+						var playerBackpackWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.PlayerBackpack);
+						if (!is_undefined(playerBackpackWindow))
+						{
+							var primaryWeaponSlot = playerBackpackWindow.GetChildElementById("PrimaryWeaponSlot");
+							if (!is_undefined(primaryWeaponSlot))
+							{
+								primaryWeaponSlot.initItem = true;
+							}
+						}
+					}
+				} else {
+					if (global.PlayerPrimaryWeaponSlot.AddItem(cloneItem, undefined, cloneItem.known))
+					{
+						_item.sourceInventory.RemoveItemByGridIndex(_item.grid_index);
+						
+						var playerBackpackWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.PlayerBackpack);
+						if (!is_undefined(playerBackpackWindow))
+						{
+							var primaryWeaponSlot = playerBackpackWindow.GetChildElementById("PrimaryWeaponSlot");
+							if (!is_undefined(primaryWeaponSlot))
+							{
+								primaryWeaponSlot.initItem = true;
+							}
+						}
+					}
+				}
 			}
 		}
 	}

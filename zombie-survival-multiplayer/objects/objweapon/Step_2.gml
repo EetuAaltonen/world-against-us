@@ -14,7 +14,7 @@ if (owner != noone)
 		// WEAPON OFFSET
 		var weaponOffset = primaryWeapon.metadata.weapon_offset.Clone();
 		weaponOffset.Y = 0;
-		var rotatedWeaponOffset = weaponOffset.Rotate(image_angle);
+		rotatedWeaponOffset = weaponOffset.Rotate(image_angle);
 		x += rotatedWeaponOffset.X;
 		y += primaryWeapon.metadata.weapon_offset.Y + rotatedWeaponOffset.Y;
 		
@@ -43,7 +43,26 @@ if (owner != noone)
 				// CHECK GUI STATE
 				if (global.GUIStateHandlerRef.IsGUIStateClosed())
 				{
-					image_angle = point_direction(x, y, mouseWorldPosition.X, mouseWorldPosition.Y);
+					var angleCenterDistanceToBarrel = point_distance(
+						x - rotatedWeaponOffset.X,
+						y - rotatedWeaponOffset.Y,
+						x + rotatedWeaponBarrelPos.X,
+						y + rotatedWeaponBarrelPos.Y
+					);
+					var angleCenterDistanceToMouse = point_distance(
+						x - rotatedWeaponOffset.X,
+						y - rotatedWeaponOffset.Y,
+						mouseWorldPosition.X,
+						mouseWorldPosition.Y
+					);
+					
+					if (angleCenterDistanceToMouse > angleCenterDistanceToBarrel)
+					{
+						image_angle = point_direction(x, y, mouseWorldPosition.X, mouseWorldPosition.Y);
+					} else {
+						image_angle = point_direction(x - rotatedWeaponOffset.X, y - rotatedWeaponOffset.Y, mouseWorldPosition.X, mouseWorldPosition.Y);
+					}
+					
 					// SHOOTING DELAY AND ANIMATION
 					fireDelay = max(-1, --fireDelay);
 					muzzleFlashTimer = max(0, --muzzleFlashTimer);
@@ -65,12 +84,11 @@ if (owner != noone)
 		image_index = is_undefined(primaryWeapon.metadata.magazine);
 	}
 	
-	var spriteDirection = CalculateSpriteDirectionToAim(new Vector2(x, y), mouseWorldPosition);
 	// DEPTH
 	// TODO: Rotate character and the gun to point -z-axis while pointing gun "upward"
 	//depth = (spriteDirection.image_z_scale == 1) ? owner.depth - 1 : owner.depth + 1;
 	depth = owner.depth - 1;
 
 	// FLIP HORIZONTALLY
-	image_yscale = spriteDirection.image_x_scale * spriteScale;
+	image_yscale = /*spriteDirection.image_x_scale * */spriteScale * sign(owner.image_xscale);
 }

@@ -9,6 +9,7 @@ image_yscale = spriteScale;
 
 primaryWeapon = undefined;
 isAiming = false;
+rotatedWeaponOffset = new Vector2(0, 0);
 rotatedWeaponBarrelPos = undefined;
 initWeapon = false;
 

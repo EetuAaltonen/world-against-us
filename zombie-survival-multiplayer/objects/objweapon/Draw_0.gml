@@ -207,6 +207,8 @@ if (!is_undefined(primaryWeapon))
 					rightHandPosition.Y,
 					2, false
 				);
+				
+				draw_circle_color(x - rotatedWeaponOffset.X, y - rotatedWeaponOffset.Y, 2, c_red, c_red, false);
 			}
 		}
 		
