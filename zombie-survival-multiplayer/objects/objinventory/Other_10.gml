@@ -28,5 +28,7 @@ if (room == roomLoadSave)
 		inventory.AddItem(global.ItemData[? "Snickers Bar"].Clone(), undefined, true, true);
 	
 		inventory.AddItem(global.ItemData[? "Gas Can"].Clone(), undefined, true, true);
+		inventory.AddItem(global.ItemData[? "Gas Can"].Clone(), undefined, true, true);
+		inventory.AddItem(global.ItemData[? "Gas Can"].Clone(), undefined, true, true);
 	}
 }

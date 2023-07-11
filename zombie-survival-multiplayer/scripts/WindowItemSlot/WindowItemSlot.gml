@@ -1,19 +1,20 @@
-function WindowItemHolder(_elementId, _relativePosition, _size, _backgroundColor, _inventory) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
+function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, _inventory, _callback_function_on_update_item = undefined) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	inventory = _inventory;
-	initItemHolder = true;
+	initItem = true;
+	callback_function_on_update_item = _callback_function_on_update_item;
 	
 	static UpdateContent = function()
 	{
-		if (initItemHolder)
+		if (initItem)
 		{
-			initItemHolder = false;
-			SetItem();
+			initItem = false;
+			UpdateItem();
 		}
 		UpdateChildElements();
 	}
 	
-	static SetItem = function()
+	static UpdateItem = function()
 	{
 		if (inventory.GetItemCount() > 0)
 		{
@@ -36,6 +37,14 @@ function WindowItemHolder(_elementId, _relativePosition, _size, _backgroundColor
 				var childImageElement = childElements[| 0];
 				childImageElement.spriteIndex = itemData.icon;
 				childImageElement.initImage = true;
+				
+				if (!is_undefined(callback_function_on_update_item))
+				{
+					if (script_exists(callback_function_on_update_item))
+					{
+						script_execute(callback_function_on_update_item, itemData);
+					}
+				}
 			}
 		}
 	}
@@ -52,8 +61,14 @@ function WindowItemHolder(_elementId, _relativePosition, _size, _backgroundColor
 					if (inventory.AddItem(global.ObjMouse.dragItem.Clone()))
 					{
 						global.ObjMouse.dragItem.sourceInventory.RemoveItemByGridIndex(global.ObjMouse.dragItem.grid_index);
-						SetItem();
+						initItem = true;
 					}
+				} else {
+					var item = inventory.GetItemByIndex(0);
+					if (global.ObjMouse.dragItem.sourceInventory.SwapWithRollback(global.ObjMouse.dragItem, item))
+					{
+						initItem = true;
+					}	
 				}
 				global.ObjMouse.dragItem = undefined;
 			}

@@ -1,6 +1,6 @@
 function CreateWindowPlayerBackpack(_zIndex)
 {
-	var windowSize = new Size(global.GUIW * 0.4, global.GUIH - global.ObjHud.hudHeight);
+	var windowSize = new Size(1000, global.GUIH - global.ObjHud.hudHeight);
 	var windowStyle = new GameWindowStyle(c_black, 0.9);
 	var backpackWindow = new GameWindow(
 		GAME_WINDOW.PlayerBackpack,
@@ -20,10 +20,21 @@ function CreateWindowPlayerBackpack(_zIndex)
 	var inventoryGrid = new WindowInventoryGrid(
 		"BackpackInventoryGrid",
 		new Vector2(10, 60),
-		new Size(windowSize.w - 20, 0),
+		new Size(760, 0),
 		undefined,
 		global.PlayerBackpack
 	);
+	
+	// EQUIPPED PRIMARY WEAPON
+	var primaryWeaponSlotSize = new Size(200, 100)
+	var primaryWeaponSlot = new WindowItemSlot(
+		"PrimaryWeaponSlot",
+		new Vector2((windowSize.w - 20) - primaryWeaponSlotSize.w, 60),
+		primaryWeaponSlotSize,
+		c_gray, global.PlayerPrimaryWeaponSlot,
+		CallbackItemSlotPrimaryWeapon
+	);
+	
 	// MAGAZINE POCKETS
 	var magazinePocketTitle = new WindowText(
 		"MagazinePocketTitle",
@@ -60,6 +71,7 @@ function CreateWindowPlayerBackpack(_zIndex)
 	ds_list_add(backpackElements,
 		backpackTitle,
 		inventoryGrid,
+		primaryWeaponSlot,
 		magazinePocketTitle,
 		magazinePocketGrid,
 		medicinePocketTitle,

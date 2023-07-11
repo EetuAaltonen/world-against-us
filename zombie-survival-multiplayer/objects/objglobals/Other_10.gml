@@ -28,9 +28,14 @@ if (instance_exists(objGameSave)) global.GameSaveHandlerRef = instance_find(objG
 
 if (instance_exists(objMouse)) global.ObjMouse = instance_find(objMouse, 0);
 
-if (instance_exists(objInventory)) global.PlayerBackpack = instance_find(objInventory, 0).inventory;
-if (instance_exists(objInventory)) global.PlayerMagazinePockets = instance_find(objInventory, 0).magazinePockets;
-if (instance_exists(objInventory)) global.PlayerMedicinePockets = instance_find(objInventory, 0).medicinePockets;
+if (instance_exists(objInventory))
+{
+	var inventoryInstance = instance_find(objInventory, 0);
+	global.PlayerBackpack = inventoryInstance.inventory;
+	global.PlayerPrimaryWeaponSlot = inventoryInstance.playerPrimaryWeaponSlot;
+	global.PlayerMagazinePockets = inventoryInstance.magazinePockets;
+	global.PlayerMedicinePockets = inventoryInstance.medicinePockets;
+}
 
 if (instance_exists(objTempInventory)) global.ObjTempInventory = instance_find(objTempInventory, 0);
 

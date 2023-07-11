@@ -61,6 +61,7 @@ initGlobalVariables = function()
 	global.MapIconStyleData = undefined;
 
 	global.PlayerBackpack = undefined;
+	global.PlayerPrimaryWeaponSlot = undefined;
 	global.PlayerMagazinePockets = undefined;
 	global.PlayerMedicinePockets = undefined;
 	
