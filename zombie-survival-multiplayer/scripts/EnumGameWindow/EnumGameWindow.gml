@@ -5,6 +5,8 @@ enum GAME_WINDOW
 	MainMenuSingleplayer,
 	MainMenuMultiplayer,
 	MainMenuConnect,
+	// CONFIRM
+	Confirm,
 	// ESC MENU
 	EscMenu,
 	// PLAYER OVERVIEW
