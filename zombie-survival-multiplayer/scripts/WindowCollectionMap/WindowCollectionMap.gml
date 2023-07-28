@@ -1,10 +1,10 @@
-function WindowListMap(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction = undefined) : WindowList(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction) constructor
+function WindowCollectionMap(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction = undefined) : WindowCollectionList(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction) constructor
 {
 	static UpdateContent = function()
 	{
-		if (initListElements)
+		if (initDataElements)
 		{
-			initListElements = false;
+			initDataElements = false;
 			// CLEAR CHILD ELEMENTS
 			ds_list_clear(childElements);
 			
@@ -13,12 +13,12 @@ function WindowListMap(_elementId, _relativePosition, _size, _backgroundColor, _
 			var mapElementMargin = mapElementSize.h;
 			var mapElementPosition = new Vector2(0, 0);
 			
-			var mapElementIndices = ds_map_keys_to_array(listData);
+			var mapElementIndices = ds_map_keys_to_array(dataCollection);
 			var mapElementCount = array_length(mapElementIndices);
 			for (var i = 0; i < mapElementCount; i++)
 			{
-				var elementData = listData[? mapElementIndices[@ i]];
-				var newListElement = new WindowListElement(
+				var elementData = dataCollection[? mapElementIndices[@ i]];
+				var newListElement = new WindowCollectionElement(
 					elementId + string(i),
 					new Vector2(mapElementPosition.X, mapElementPosition.Y),
 					mapElementSize, undefined, elementData,

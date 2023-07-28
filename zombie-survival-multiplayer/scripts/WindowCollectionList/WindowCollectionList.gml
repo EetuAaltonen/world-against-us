@@ -1,17 +1,23 @@
-function WindowList(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction = undefined) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
+function WindowCollectionList(_elementId, _relativePosition, _size, _backgroundColor, _dataCollection, _drawFunction, _isInteractive, _callbackFunction = undefined) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
-	listData = _listData;
+	dataCollection = _dataCollection;
 	drawFunction = _drawFunction;
 	isInteractive = _isInteractive;
 	callbackFunction = _callbackFunction;
 	
-	initListElements = true;
+	initDataElements = true;
+	
+	static UpdateDataCollection = function(newDataCollection)
+	{
+		dataCollection = newDataCollection;
+		initDataElements = true;
+	}
 	
 	static UpdateContent = function()
 	{
-		if (initListElements)
+		if (initDataElements)
 		{
-			initListElements = false;
+			initDataElements = false;
 			// CLEAR CHILD ELEMENTS
 			ds_list_clear(childElements);
 			
@@ -20,11 +26,11 @@ function WindowList(_elementId, _relativePosition, _size, _backgroundColor, _lis
 			var listElementMargin = listElementSize.h;
 			var listElementPosition = new Vector2(0, 0);
 			
-			var listElementCount = ds_list_size(listData);
+			var listElementCount = ds_list_size(dataCollection);
 			for (var i = 0; i < listElementCount; i++)
 			{
-				var elementData = listData[| i];
-				var newListElement = new WindowListElement(
+				var elementData = dataCollection[| i];
+				var newListElement = new WindowCollectionElement(
 					elementId + string(i),
 					new Vector2(listElementPosition.X, listElementPosition.Y),
 					listElementSize, undefined, elementData,
@@ -41,7 +47,7 @@ function WindowList(_elementId, _relativePosition, _size, _backgroundColor, _lis
 	
 	static DrawContent = function()
 	{
-		if (!initListElements)
+		if (!initDataElements)
 		{
 			var listElementCount = ds_list_size(childElements);
 			for (var i = 0; i < listElementCount; i++)

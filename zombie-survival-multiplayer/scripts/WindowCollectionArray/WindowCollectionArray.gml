@@ -1,10 +1,10 @@
-function WindowListArray(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction = undefined) : WindowList(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction) constructor
+function WindowCollectionArray(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction = undefined) : WindowCollectionList(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction) constructor
 {
 	static UpdateContent = function()
 	{
-		if (initListElements)
+		if (initDataElements)
 		{
-			initListElements = false;
+			initDataElements = false;
 			// CLEAR CHILD ELEMENTS
 			ds_list_clear(childElements);
 			
@@ -13,11 +13,11 @@ function WindowListArray(_elementId, _relativePosition, _size, _backgroundColor,
 			var arrayElementMargin = arrayElementSize.h;
 			var arrayElementPosition = new Vector2(0, 0);
 			
-			var arrayElementCount = array_length(listData);
+			var arrayElementCount = array_length(dataCollection);
 			for (var i = 0; i < arrayElementCount; i++)
 			{
-				var elementData = listData[@ i];
-				var newListElement = new WindowListElement(
+				var elementData = dataCollection[@ i];
+				var newListElement = new WindowCollectionElement(
 					elementId + string(i),
 					new Vector2(arrayElementPosition.X, arrayElementPosition.Y),
 					arrayElementSize, undefined, elementData,
