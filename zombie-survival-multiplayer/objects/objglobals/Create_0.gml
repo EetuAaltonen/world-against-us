@@ -1,3 +1,6 @@
+// SET RANDOM SEED
+randomise();
+
 // NETWORKING
 #macro UNDEFINED_UUID "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined"
 
@@ -35,9 +38,6 @@
 
 // WORLD STATE INDICES
 #macro WORLD_STATE_UNLOCK_WALKIE_TALKIE "UnlockWalkieTalkie"
-
-// SET RANDOM SEED
-randomise();
 
 initGlobalVariables = function()
 {
