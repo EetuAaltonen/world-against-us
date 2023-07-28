@@ -27,13 +27,13 @@ function CreateWindowJournalQuest(_zIndex)
 		
 	);
 	
-	var questListMap = new WindowListMap(
+	var questListMap = new WindowCollectionMap(
 		"QuestListMap",
 		new Vector2(330, 200), new Size(540, 600), undefined,
 		global.QuestHandlerRef.questsProgress, ListDrawJournalQuest, true, OnClickListJournalQuest 
 	);
 	
-	var questStepListArray = new WindowListArray(
+	var questStepListArray = new WindowCollectionArray(
 		"QuestStepListArray",
 		new Vector2(1030, 200), new Size(540, 600), undefined,
 		[], ListDrawJournalQuestStep, true, function() { show_message(string(self)); }

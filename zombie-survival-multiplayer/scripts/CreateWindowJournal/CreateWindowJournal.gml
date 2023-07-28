@@ -27,7 +27,7 @@ function CreateWindowJournal(_zIndex)
 		
 	);
 	
-	var journalEntryList = new WindowList(
+	var journalEntryList = new WindowCollectionList(
 		"JournalEntryList",
 		new Vector2(400, 200), new Size(470, 600), undefined,
 		global.ObjJournal.journalEntries, ListDrawJournalEntry, false

@@ -16,7 +16,7 @@ function OnClickListJournalQuest(_questProgress)
 			});
 		}
 		
-		questStepList.listData = questStepProgressData;
-		questStepList.initListElements = true;
+		// UPDATE 
+		questStepList.UpdateDataCollection(questStepProgressData);
 	}
 }
