@@ -5,8 +5,8 @@ function GameSaveHandler() constructor
 	
 	static SetSaveFileName = function(_saveName)
 	{
-		saveName = string_lettersdigits(string_replace_all(string_lower(_saveName), " ", "_"));
-		saveFileName = string("{0}{1}", saveName, SAVE_FILE_SUFFIX);
+		saveName = FormatSaveName(_saveName);
+		saveFileName = ConcatSaveFileSuffix(saveName);
 		
 		try
 		{
