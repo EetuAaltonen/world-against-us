@@ -2,11 +2,6 @@
 var jsonItemStruct = ReadJSONFile("item_data.json") ?? {};
 itemData = ParseJSONStructArrayToMap(jsonItemStruct[$ "item_data"], "name", ParseJSONStructToDatabaseItem);
 
-// BULLET DATA
-bulletData = ds_map_create();
-ds_map_add(bulletData, "7.62 Bullet", spr762BulletProjectile);
-ds_map_add(bulletData, "7.62 Tracer Bullet", spr762TracerBulletProjectile);
-
 // QUEST DATA
 var jsonQuestStruct = ReadJSONFile("quest_data.json") ?? {};
 questData = ParseJSONStructArrayToMap(jsonQuestStruct[$ "quest_data"], "quest_id", ParseJSONStructToDatabaseQuest);
@@ -125,6 +120,7 @@ try {
 	}
 } catch (error)
 {
+	show_debug_message(error);
 	show_message(error);
 }
 
@@ -156,6 +152,7 @@ try {
 	}
 } catch (error)
 {
+	show_debug_message(error);
 	show_message(error);
 }
 
