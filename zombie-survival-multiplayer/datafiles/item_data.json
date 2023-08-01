@@ -4,7 +4,8 @@
       "name": "Money",
       "short_name": "Money",
       "icon": "sprMoney",
-      "type": "Other",
+      "category": "Other",
+      "type": "Currency",
       "size": {
         "w": 1,
         "h": 1
@@ -18,6 +19,7 @@
       "name": "Army Helmet",
       "short_name": "A. Helmet",
       "icon": "sprArmyHelmet",
+      "category": "Armour",
       "type": "Helmet",
       "size": {
         "w": 2,
@@ -32,7 +34,8 @@
       "name": "Water Bottle",
       "short_name": "Water",
       "icon": "sprWaterBottle",
-      "type": "Consumable",
+      "category": "Consumable",
+      "type": "Liquid",
       "size": {
         "w": 1,
         "h": 2
@@ -42,7 +45,6 @@
       "max_stack": 1,
       "base_price": 10,
       "metadata": {
-        "consumable_type": "Liquid",
         "hydration": 10
       }
     },
@@ -50,7 +52,8 @@
       "name": "Canned Meat",
       "short_name": "Meat",
       "icon": "sprCannedMeat",
-      "type": "Consumable",
+      "category": "Consumable",
+      "type": "Food",
       "size": {
         "w": 1,
         "h": 1
@@ -60,15 +63,15 @@
       "max_stack": 1,
       "base_price": 20,
       "metadata": {
-        "consumable_type": "Food",
         "nutrition": 40
       }
     },
     {
       "name": "Snickers Bar",
-      "short_name": "Snick.",
+      "short_name": "Snick",
       "icon": "sprSnickersBar",
-      "type": "Consumable",
+      "category": "Consumable",
+      "type": "Food",
       "size": {
         "w": 1,
         "h": 1
@@ -78,15 +81,15 @@
       "max_stack": 1,
       "base_price": 10,
       "metadata": {
-        "consumable_type": "Food",
         "nutrition": 10
       }
     },
     {
       "name": "Bandage",
-      "short_name": "Band.",
+      "short_name": "Band",
       "icon": "sprBandage",
-      "type": "Medicine",
+      "category": "Medicine",
+      "type": "Bandage",
       "size": {
         "w": 1,
         "h": 1
@@ -103,7 +106,8 @@
       "name": "First Aid Kit",
       "short_name": "First Aid",
       "icon": "sprFirstAidKit",
-      "type": "Medicine",
+      "category": "Medicine",
+      "type": "First Aid",
       "size": {
         "w": 2,
         "h": 2
@@ -120,7 +124,8 @@
       "name": "Knife",
       "short_name": "Knife",
       "icon": "sprKnife",
-      "type": "MeleeWeapon",
+      "category": "Weapon",
+      "type": "Melee",
       "size": {
         "w": 2,
         "h": 1
@@ -128,13 +133,35 @@
       "description": "A knife",
       "weight": 300,
       "max_stack": 1,
-      "base_price": 30
+      "base_price": 30,
+      "metadata": {
+        "damage": 20,
+        "fire_rate": 200,
+        "range": 2,
+        "weapon_offset": {
+          "X": 15,
+          "Y": -30
+        },
+        "barrel_pos": {
+          "X": 0,
+          "Y": 0
+        },
+        "right_hand_position": {
+          "X": 13,
+          "Y": 80
+        },
+        "left_hand_position": {
+          "X": 14,
+          "Y": 60
+        }
+      }
     },
     {
       "name": "Crowbar",
       "short_name": "Crowbar",
       "icon": "sprCrowbar",
-      "type": "MeleeWeapon",
+      "category": "Weapon",
+      "type": "Melee",
       "size": {
         "w": 1,
         "h": 2
@@ -142,13 +169,35 @@
       "description": "This is a tool. Prove me wrong.",
       "weight": 800,
       "max_stack": 1,
-      "base_price": 200
+      "base_price": 200,
+      "metadata": {
+        "damage": 20,
+        "fire_rate": 200,
+        "range": 2,
+        "weapon_offset": {
+          "X": 15,
+          "Y": -30
+        },
+        "barrel_pos": {
+          "X": 0,
+          "Y": 0
+        },
+        "right_hand_position": {
+          "X": 13,
+          "Y": 80
+        },
+        "left_hand_position": {
+          "X": 14,
+          "Y": 60
+        }
+      }
     },
     {
       "name": "Hand Grenade",
       "short_name": "Grenade",
       "icon": "sprHandGrenade",
-      "type": "Throwable",
+      "category": "Throwable",
+      "type": "Explosion",
       "size": {
         "w": 1,
         "h": 1
@@ -162,7 +211,8 @@
       "name": "Ak-47 Assault Rifle",
       "short_name": "Ak-47",
       "icon": "sprAk47",
-      "type": "Primary_Weapon",
+      "category": "Weapon",
+      "type": "Assault Rifle",
       "size": {
         "w": 4,
         "h": 2
@@ -172,11 +222,8 @@
       "max_stack": 1,
       "base_price": 450,
       "metadata": {
-        "caliber": "7.62",
         "fire_rate": 600,
         "range": 100,
-        "recoil": 5,
-        "attachment_slots": ["scope", "laser", "foregrip"],
         "weapon_offset": {
           "X": 20,
           "Y": -30
@@ -192,14 +239,98 @@
         "left_hand_position": {
           "X": 60,
           "Y": 10
-        }
+        },
+        "chamber_type": "Magazine",
+        "caliber": "7.62",
+        "recoil": 5,
+        "attachment_slots": ["scope", "laser", "foregrip"]
+      }
+    },
+    {
+      "name": "Mossberg Maverick Shotgun",
+      "short_name": "M. Maverick",
+      "icon": "sprMossbergMaverick",
+      "category": "Weapon",
+      "type": "Shotgun",
+      "size": {
+        "w": 4,
+        "h": 2
+      },
+      "description": "Shotgun",
+      "weight": 4000,
+      "max_stack": 1,
+      "base_price": 250,
+      "metadata": {
+        "fire_rate": 200,
+        "range": 30,
+        "weapon_offset": {
+          "X": 20,
+          "Y": -35
+        },
+        "barrel_pos": {
+          "X": 99,
+          "Y": 2
+        },
+        "right_hand_position": {
+          "X": 33,
+          "Y": 9
+        },
+        "left_hand_position": {
+          "X": 66,
+          "Y": 10
+        },
+        "chamber_type": "Shell",
+        "caliber": "12",
+        "recoil": 5,
+        "attachment_slots": ["scope", "laser"],
+        "shell_capacity": 6
+      }
+    },
+    {
+      "name": "Flamethrower",
+      "short_name": "Flamethr.",
+      "icon": "sprFlamethrower",
+      "category": "Weapon",
+      "type": "Flamethrower",
+      "size": {
+        "w": 4,
+        "h": 2
+      },
+      "description": "Flamethrower",
+      "weight": 4000,
+      "max_stack": 1,
+      "base_price": 250,
+      "metadata": {
+        "fire_rate": 200,
+        "range": 30,
+        "weapon_offset": {
+          "X": 6,
+          "Y": -30
+        },
+        "barrel_pos": {
+          "X": 80,
+          "Y": 4
+        },
+        "right_hand_position": {
+          "X": 15,
+          "Y": 14
+        },
+        "left_hand_position": {
+          "X": 47,
+          "Y": 12
+        },
+        "chamber_type": "Fuel Tank",
+        "caliber": "0",
+        "recoil": 5,
+        "attachment_slots": []
       }
     },
     {
       "name": "MP5 Submachine gun",
       "short_name": "MP5 SMG",
       "icon": "sprMP5",
-      "type": "Primary_Weapon",
+      "category": "Weapon",
+      "type": "SMG",
       "size": {
         "w": 3,
         "h": 2
@@ -209,11 +340,8 @@
       "max_stack": 1,
       "base_price": 250,
       "metadata": {
-        "caliber": "9",
         "fire_rate": 800,
         "range": 50,
-        "recoil": 10,
-        "attachment_slots": ["scope", "laser", "foregrip"],
         "weapon_offset": {
           "X": 12,
           "Y": -30
@@ -229,14 +357,19 @@
         "left_hand_position": {
           "X": 47,
           "Y": 11
-        }
+        },
+        "chamber_type": "Magazine",
+        "caliber": "9",
+        "recoil": 10,
+        "attachment_slots": ["scope", "laser", "foregrip"]
       }
     },
     {
       "name": "Sig Sauer P226 Pistol",
       "short_name": "P226",
       "icon": "sprSigSauerP226",
-      "type": "Primary_Weapon",
+      "category": "Weapon",
+      "type": "Pistol",
       "size": {
         "w": 2,
         "h": 1
@@ -246,11 +379,8 @@
       "max_stack": 1,
       "base_price": 180,
       "metadata": {
-        "caliber": "9",
         "fire_rate": 200,
         "range": 50,
-        "recoil": 10,
-        "attachment_slots": ["scope", "laser"],
         "weapon_offset": {
           "X": 25,
           "Y": -35
@@ -260,20 +390,80 @@
           "Y": 3
         },
         "right_hand_position": {
-          "X": 10,
+          "X": 9,
           "Y": 11
         },
         "left_hand_position": {
-          "X": 8,
+          "X": 7,
           "Y": 14
+        },
+        "chamber_type": "Magazine",
+        "caliber": "9",
+        "recoil": 8,
+        "attachment_slots": ["scope", "laser"]
+      }
+    },
+    {
+      "name": "Fire Axe",
+      "short_name": "Axe",
+      "icon": "sprFireAxe",
+      "category": "Weapon",
+      "type": "Melee",
+      "size": {
+        "w": 2,
+        "h": 4
+      },
+      "description": "Fire Axe",
+      "weight": 1500,
+      "max_stack": 1,
+      "base_price": 180,
+      "metadata": {
+        "damage": 20,
+        "fire_rate": 200,
+        "range": 2,
+        "weapon_offset": {
+          "X": 15,
+          "Y": -30
+        },
+        "barrel_pos": {
+          "X": 0,
+          "Y": 0
+        },
+        "right_hand_position": {
+          "X": 13,
+          "Y": 80
+        },
+        "left_hand_position": {
+          "X": 14,
+          "Y": 60
         }
       }
     },
     {
-      "name": "Ak-47 Magazine",
-      "short_name": "Ak Mag.",
-      "icon": "sprAk47Mag",
-      "type": "Magazine",
+      "name": "P226 Magazine",
+      "short_name": "9 Mag",
+      "icon": "sprP226Mag",
+      "category": "Magazine",
+      "type": "Pistol",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "Gun magazine",
+      "weight": 100,
+      "max_stack": 1,
+      "base_price": 100,
+      "metadata": {
+        "caliber": "9",
+        "capacity": 15
+      }
+    },
+    {
+      "name": "MP5 Magazine",
+      "short_name": "MP5 Mag",
+      "icon": "sprMP5Mag",
+      "category": "Magazine",
+      "type": "SMG",
       "size": {
         "w": 1,
         "h": 2
@@ -283,15 +473,54 @@
       "max_stack": 1,
       "base_price": 100,
       "metadata": {
+        "caliber": "9",
+        "capacity": 20
+      }
+    },
+    {
+      "name": "Ak-47 Magazine",
+      "short_name": "7.62 Mag",
+      "icon": "sprAk47Mag",
+      "category": "Magazine",
+      "type": "Assault Rifle",
+      "size": {
+        "w": 1,
+        "h": 2
+      },
+      "description": "Ak magazine",
+      "weight": 100,
+      "max_stack": 1,
+      "base_price": 100,
+      "metadata": {
         "caliber": "7.62",
         "capacity": 30
+      }
+    },
+    {
+      "name": "Flamethrower Fuel Tank",
+      "short_name": "Fuel",
+      "icon": "sprFlamethrowerFuel",
+      "category": "Fuel Tank",
+      "type": "Flamethrower",
+      "size": {
+        "w": 2,
+        "h": 3
+      },
+      "description": "Flamethrower fuel",
+      "weight": 2000,
+      "max_stack": 1,
+      "base_price": 100,
+      "metadata": {
+        "caliber": "0",
+        "capacity": 100
       }
     },
     {
       "name": "7.62 Bullet",
       "short_name": "7.62",
       "icon": "spr762Bullet",
-      "type": "Bullet",
+      "category": "Bullet",
+      "type": "Assault Rifle",
       "size": {
         "w": 1,
         "h": 1
@@ -303,19 +532,21 @@
       "metadata": {
         "base_damage": 30,
         "caliber": "7.62",
+        "projectile": "spr762BulletProjectile",
         "trail_rgba_color": {
           "red": 255,
           "green": 255,
           "blue": 0,
-          "alpha": 0.1
+          "alpha": 0.2
         }
       }
     },
     {
       "name": "7.62 Tracer Bullet",
-      "short_name": "7.62 T.",
+      "short_name": "7.62 T",
       "icon": "spr762TracerBullet",
-      "type": "Bullet",
+      "category": "Bullet",
+      "type": "Assault Rifle",
       "size": {
         "w": 1,
         "h": 1
@@ -327,6 +558,7 @@
       "metadata": {
         "base_damage": 30,
         "caliber": "7.62",
+        "projectile": "spr762TracerBulletProjectile",
         "trail_rgba_color": {
           "red": 0,
           "green": 255,
@@ -336,10 +568,63 @@
       }
     },
     {
+      "name": "9mm Bullet",
+      "short_name": "9mm",
+      "icon": "spr9mmBullet",
+      "category": "Bullet",
+      "type": "Pistol",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "9mm caliber bullet",
+      "weight": 8,
+      "max_stack": 120,
+      "base_price": 6,
+      "metadata": {
+        "base_damage": 30,
+        "caliber": "9",
+        "projectile": "spr9BulletProjectile",
+        "trail_rgba_color": {
+          "red": 255,
+          "green": 200,
+          "blue": 0,
+          "alpha": 0.2
+        }
+      }
+    },
+    {
+      "name": "12-gauge Shell",
+      "short_name": "12",
+      "icon": "spr12Gauge",
+      "category": "Bullet",
+      "type": "Shotgun Shell",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "12 gauge shotgun shells",
+      "weight": 8,
+      "max_stack": 120,
+      "base_price": 10,
+      "metadata": {
+        "base_damage": 30,
+        "caliber": "12",
+        "projectile": "spr12GaugeProjectile",
+        "trail_rgba_color": {
+          "red": 255,
+          "green": 0,
+          "blue": 0,
+          "alpha": 0.2
+        }
+      }
+    },
+    {
       "name": "Gas Can",
       "short_name": "Gas Can",
       "icon": "sprGasCan",
-      "type": "Fuel",
+      "category": "Fuel",
+      "type": "Can",
       "size": {
         "w": 2,
         "h": 3
