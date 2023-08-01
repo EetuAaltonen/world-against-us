@@ -31,9 +31,9 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 					}
 		
 				// RELOAD MAGAZINE
-				} else if (global.ObjMouse.dragItem.type == "Bullet")
+				} else if (global.ObjMouse.dragItem.category == "Bullet")
 				{
-					if (targetItem.type == "Magazine")
+					if (targetItem.category == "Magazine")
 					{
 						if (targetItem.metadata.caliber == global.ObjMouse.dragItem.metadata.caliber)
 						{
@@ -49,14 +49,35 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 								sourceItem.sourceInventory.RemoveItemByGridIndex(sourceItem.grid_index);
 							}
 						}
+					} else if (targetItem.category == "Weapon" && targetItem.type == "Shotgun")
+					{
+						if (targetItem.metadata.chamber_type == "Shell")
+						{
+							if (global.ObjMouse.dragItem.type == "Shotgun Shell")
+							{
+								if (targetItem.metadata.caliber == global.ObjMouse.dragItem.metadata.caliber)
+								{
+									InventoryReloadWeaponShotgun(targetItem, global.ObjMouse.dragItem);
+								}
+							}
+						}
 					}
-				} else if (global.ObjMouse.dragItem.type == "Magazine")
+				} else if (global.ObjMouse.dragItem.category == "Magazine")
 				{
-					if (targetItem.type == "Primary_Weapon")
+					if (targetItem.category == "Weapon" && targetItem.type != "Melee")
 					{
 						if (targetItem.metadata.caliber == global.ObjMouse.dragItem.metadata.caliber)
 						{
-							InventoryReloadWeapon(targetItem, global.ObjMouse.dragItem);
+							InventoryReloadWeaponGun(targetItem, global.ObjMouse.dragItem);
+						}
+					}
+				} else if (global.ObjMouse.dragItem.category == "Fuel Tank")
+				{
+					if (targetItem.category == "Weapon" && targetItem.type == "Flamethrower")
+					{
+						if (targetItem.metadata.caliber == global.ObjMouse.dragItem.metadata.caliber)
+						{
+							InventoryReloadWeaponFlamethrower(targetItem, global.ObjMouse.dragItem);
 						}
 					}
 				}

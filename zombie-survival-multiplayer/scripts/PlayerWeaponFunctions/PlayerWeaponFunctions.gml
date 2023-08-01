@@ -106,7 +106,7 @@ function UseWeapon(_mouseWorldPosition)
 	aimAngleVectorLine.end_point.Y = aimAngleVectorLine.start_point.Y + aimAngleDirectionVector.Y;
 	projectileInstance.aimAngleLine = aimAngleVectorLine;
 	
-	projectileInstance.sprite_index = GetProjectileSpriteByBullet(bullet.name);
+	projectileInstance.sprite_index = GetSpriteByName(bullet.metadata.projectile);
 	projectileInstance.direction = barrelAngle + bulletRecoil;
 	projectileInstance.image_angle = projectileInstance.direction;
 	projectileInstance.damageSource = new DamageSource(bullet.Clone(), MetersToPixels(primaryWeapon.metadata.range), projectileSpawnPoint);
@@ -123,7 +123,7 @@ function InitializeWeapon()
 	fireDelay = 0;
 	recoilAnimation = 0;
 	muzzleFlashTimer = 0;
-	global.ObjHud.hudElementMagazine.InitMagazine();
+	global.ObjHud.hudElementMagazine.InitAmmo();
 }
 
 function CalculateBarrelPos()

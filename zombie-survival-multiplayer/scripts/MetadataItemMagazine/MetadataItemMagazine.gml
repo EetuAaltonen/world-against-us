@@ -7,7 +7,7 @@ function MetadataItemMagazine(_caliber, _capacity) : Metadata() constructor
 	static ToJSONStruct = function()
 	{
 		var bulletArray = [];
-		var bulletCount = array_length(bullets);
+		var bulletCount = GetBulletCount();
 		for (var i = 0; i < bulletCount; i++)
 		{
 			var bullet = bullets[@ i];

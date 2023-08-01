@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "InventoryReloadWeapon",
+  "name": "InventoryReloadWeaponFlamethrower",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

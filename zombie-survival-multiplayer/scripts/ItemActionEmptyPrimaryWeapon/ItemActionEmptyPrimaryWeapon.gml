@@ -1,7 +1,21 @@
 function ItemActionEmptyPrimaryWeapon(_item)
 {
-	if (_item.sourceInventory.AddItem(_item.metadata.magazine))
+	switch (_item.type)
 	{
-		_item.metadata.magazine = undefined;
+		case "Melee": {
+			// SKIP
+		} break;
+		case "Flamethrower": {
+			if (_item.sourceInventory.AddItem(_item.metadata.fuel_tank))
+			{
+				_item.metadata.fuel_tank = undefined;
+			}
+		} break;
+		default: {
+			if (_item.sourceInventory.AddItem(_item.metadata.magazine))
+			{
+				_item.metadata.magazine = undefined;
+			}
+		} break;
 	}
 }
