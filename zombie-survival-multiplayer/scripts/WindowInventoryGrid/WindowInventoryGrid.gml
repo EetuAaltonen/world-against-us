@@ -234,11 +234,14 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					
 				// IMAGE INDEX
 				var imageIndex = 0;
-				if (item.type == "Primary_Weapon")
+				if (item.category == "Weapon" && item.type != "Melee")
 				{
-					imageIndex = is_undefined(item.metadata.magazine);
+					if (item.metadata.chamber_type == "Magazine")
+					{
+						imageIndex = is_undefined(item.metadata.magazine);
+					}
 				}
-					
+				
 				draw_sprite_ext(
 					item.icon, imageIndex,
 					xPos + ((gridCellSize.w * 0.5) * item.size.w) + iconOffset.X,
@@ -262,9 +265,9 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					// ITEM (SHORT)NAME
 					var nameTextPos = new Vector2(
 						xPos + 5,
-						yPos
+						yPos + 3
 					);
-					DrawItemAltText(item.short_name, nameTextPos.X, nameTextPos.Y + 1);
+					DrawItemAltText(item.short_name, nameTextPos.X, nameTextPos.Y);
 					
 					// DRAW ITEM ALT TEXT BACKGROUND
 					draw_sprite_ext(
@@ -274,31 +277,11 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					);
 					
 					// ITEM ALT TEXT
-					var altTextPos = new Vector2(xPos + 5, yPos + (item.size.h * gridCellSize.h) - 20);
-					switch (item.type)
+					var altTextPos = new Vector2(xPos + 5, yPos + (item.size.h * gridCellSize.h) - 18);
+					var altText = GetItemAltText(item);
+					if (!is_undefined(altText))
 					{
-						case "Magazine":
-						{
-							var altText = string("{0} / {1}", item.metadata.GetBulletCount(), item.metadata.capacity);
-							DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
-						} break;
-						case "Medicine":
-						{
-							var altText = string("{0} / {1}", item.metadata.healing_left, item.metadata.healing_value);
-							DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
-						} break;
-						case "Fuel":
-						{
-							var altText = string("{0} / {1}", item.metadata.fuel_left, item.metadata.fuel_value);
-							DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
-						} break;
-						default:
-						{
-							if (item.quantity > 1)
-							{
-								DrawItemAltText(string("{0}x", item.quantity), altTextPos.X, altTextPos.Y);
-							}
-						} break;
+						DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
 					}
 				}
 			}
@@ -340,7 +323,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 	
 	static DrawItemAltText = function(_altText, _guiXPos, _guiYPos)
 	{
-		draw_set_font(font_small_bold);
+		draw_set_font(font_tiny_bold);
 		draw_text(_guiXPos, _guiYPos, string(_altText));
 		draw_set_font(font_default);
 	}
