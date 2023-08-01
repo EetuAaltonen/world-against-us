@@ -17,6 +17,7 @@ function ParseJSONStructToArray(_jsonStruct, _jsonStructParseFunction)
 		}
 	} catch (error)
 	{
+		show_debug_message(error);
 		show_message(error);
 	}
 	return array;

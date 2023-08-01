@@ -21,6 +21,7 @@ function ParseJSONStructArrayToMap(_structArray, _mapKeyIndicator, _elementParse
 			}
 		} catch (error)
 		{
+			show_debug_message(error);
 			show_message(error);
 		}
 	}

@@ -25,6 +25,7 @@ function OnClickMenuSingleplayerDeleteConfirmCallback(callerWindowElement)
 			}
 		} catch (error)
 		{
+			show_debug_message(error);
 			show_message(error);
 		}
 	}
