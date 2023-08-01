@@ -1,7 +1,7 @@
 {
   "resourceType": "GMSprite",
   "resourceVersion": "1.0",
-  "name": "sprSoldierLeftShoulderArm",
+  "name": "sprSoldierLeftArm",
   "bbox_bottom": 127,
   "bbox_left": 10,
   "bbox_right": 47,
@@ -14,11 +14,10 @@
   "For3D": false,
   "frames": [
     {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"7056554e-e85b-4ee2-b0df-a6220a236d6b",},
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"5730b9e7-b51e-4d09-ba32-ae8082895b51",},
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 36,
+  "height": 10,
   "HTile": false,
   "layers": [
     {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"436d5720-d722-492b-81fe-082a4527f30b","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
@@ -33,7 +32,7 @@
   "sequence": {
     "resourceType": "GMSequence",
     "resourceVersion": "1.4",
-    "name": "sprSoldierLeftShoulderArm",
+    "name": "sprSoldierLeftArm",
     "autoRecord": true,
     "backdropHeight": 768,
     "backdropImageOpacity": 0.5,
@@ -44,7 +43,7 @@
     "events": {"resourceType":"KeyframeStore<MessageEventKeyframe>","resourceVersion":"1.0","Keyframes":[],},
     "eventStubScript": null,
     "eventToFunction": {},
-    "length": 2.0,
+    "length": 1.0,
     "lockOrigin": false,
     "moments": {"resourceType":"KeyframeStore<MomentsEventKeyframe>","resourceVersion":"1.0","Keyframes":[],},
     "playback": 1,
@@ -55,13 +54,12 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"7056554e-e85b-4ee2-b0df-a6220a236d6b","path":"sprites/sprSoldierLeftShoulderArm/sprSoldierLeftShoulderArm.yy",},},},"Disabled":false,"id":"46eddae1-4d39-45cc-8ea9-e2bd6e495c70","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"5730b9e7-b51e-4d09-ba32-ae8082895b51","path":"sprites/sprSoldierLeftShoulderArm/sprSoldierLeftShoulderArm.yy",},},},"Disabled":false,"id":"c0460874-49a9-4f66-936a-2f0dcf478904","IsCreationKey":false,"Key":1.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"7056554e-e85b-4ee2-b0df-a6220a236d6b","path":"sprites/sprSoldierLeftArm/sprSoldierLeftArm.yy",},},},"Disabled":false,"id":"80c916e1-3d08-4dec-b209-883686485ade","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,
     "volume": 1.0,
-    "xorigin": 7,
+    "xorigin": 3,
     "yorigin": 5,
   },
   "swatchColours": null,
@@ -72,5 +70,5 @@
   },
   "type": 0,
   "VTile": false,
-  "width": 13,
+  "width": 23,
 }
