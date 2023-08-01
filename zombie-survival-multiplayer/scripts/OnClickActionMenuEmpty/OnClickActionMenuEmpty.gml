@@ -1,9 +1,9 @@
 function OnClickActionMenuEmpty()
 {
 	var item = parentElement.targetItem;
-	switch (item.type)
+	switch (item.category)
 	{
-		case "Primary_Weapon": { ItemActionEmptyPrimaryWeapon(item); } break;
+		case "Weapon": { ItemActionEmptyPrimaryWeapon(item); } break;
 		case "Magazine": { ItemActionEmptyMagazine(item); } break;
 	}
 	

@@ -4,7 +4,7 @@ function SpawnerCreatePlayerInstance(_playerUuid, _playerData)
 	var scaledPosition = ScaleIntValuesToFloatVector2(position[$ "x"], position[$ "y"]);
 	var vectorSpeed = _playerData[$ "vector_speed"];
 	var inputMap = _playerData[$ "input_map"];
-	var primaryWeapon = _playerData[$ "primary_weapon"];
+	var primaryWeapon = _playerData[$ "weapon"];
 	
 	var coopPlayerObj = instance_create_depth(scaledPosition.X, scaledPosition.Y, depth, objPlayer);
 	coopPlayerObj.character = new Character(_playerUuid, CHARACTER_TYPE.COOP_PLAYER, CHARACTER_RACE.humanoid);
