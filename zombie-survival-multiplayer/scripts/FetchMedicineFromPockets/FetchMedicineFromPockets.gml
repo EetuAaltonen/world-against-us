@@ -7,7 +7,7 @@ function FetchMedicineFromPockets()
 		for (var i = 0; i < itemCount; i++)
 		{
 			var item = global.PlayerMedicinePockets.GetItemByIndex(i);
-			if (item.type == "Medicine")
+			if (item.category == "Medicine")
 			{
 				if (!is_undefined(foundMedicine))
 				{

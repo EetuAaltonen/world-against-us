@@ -19,7 +19,7 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 						_inventory.RemoveItemByGridIndex(itemGridIndex);	
 					}
 				} else {
-					if (cloneItem.type == "Magazine" || cloneItem.type == "Bullet")
+					if (cloneItem.category == "Magazine" || cloneItem.category == "Bullet")
 					{
 						if (!is_undefined(global.PlayerMagazinePockets))
 						{
@@ -28,7 +28,7 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 								_inventory.RemoveItemByGridIndex(itemGridIndex);
 							}
 						}
-					} else if (cloneItem.type == "Medicine")
+					} else if (cloneItem.category == "Medicine")
 					{
 						if (!is_undefined(global.PlayerMedicinePockets))
 						{

@@ -24,7 +24,7 @@ function WindowHealthBar(_elementId, _relativePosition, _size, _sourceCharacter,
 			{
 				if (!is_undefined(global.ObjMouse.dragItem))
 				{
-					if (global.ObjMouse.dragItem.type == "Medicine")
+					if (global.ObjMouse.dragItem.category == "Medicine")
 					{
 						if (!is_undefined(sourceBodyPart))
 						{

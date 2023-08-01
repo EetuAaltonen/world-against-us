@@ -62,7 +62,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
     static AddItem = function(_item, _grid_index = undefined, _known = true, _ignore_network = false)
     {
 		var isItemAdded = false;
-		if (IsItemTypeWhiteListed(_item))
+		if (IsItemCategoryWhiteListed(_item))
 		{
 			if (!is_undefined(_grid_index))
 			{
@@ -114,7 +114,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 			}
 		} else {
 			// MESSAGE LOG
-			AddMessageLog(string(_item.name) + " type is wrong to fit!");
+			AddMessageLog(string(_item.name) + " category is wrong to fit!");
 		}
 		return isItemAdded;
     }
@@ -244,9 +244,9 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 		}
 	}
 	
-	static IsItemTypeWhiteListed = function(_item)
+	static IsItemCategoryWhiteListed = function(_item)
     {
-		return (array_length(filterArray) == 0) || ArrayContainsValue(filterArray, _item.type);
+		return (array_length(filterArray) == 0) || ArrayContainsValue(filterArray, _item.category);
     }
 	
 	static RemoveItemByIndex = function(_index)

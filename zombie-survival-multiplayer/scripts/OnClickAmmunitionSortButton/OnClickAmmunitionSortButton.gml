@@ -5,12 +5,12 @@ function OnClickAmmunitionSortButton()
 	for (var i = 0; i < inventoryItemCount; i++)
 	{
 		var bulletItem = facilityInventoryGrid.inventory.GetItemByIndex(i);
-		if (bulletItem.type == "Bullet")
+		if (bulletItem.category == "Bullet")
 		{
 			for (var j = 0; j < inventoryItemCount; j++)
 			{
 				var magazineItem = facilityInventoryGrid.inventory.GetItemByIndex(j);
-				if (magazineItem.type == "Magazine")
+				if (magazineItem.category == "Magazine")
 				{
 					if (magazineItem.metadata.caliber == bulletItem.metadata.caliber)
 					{

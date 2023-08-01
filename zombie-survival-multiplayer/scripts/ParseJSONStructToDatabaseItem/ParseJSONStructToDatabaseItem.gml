@@ -13,14 +13,16 @@ function ParseJSONStructToDatabaseItem(_jsonStruct)
 				_jsonStruct[$ "size"].h
 			);
 			var quantity = 1;
+			var itemCategory = _jsonStruct[$ "category"];
 			var itemType = _jsonStruct[$ "type"];
-			var metadata = ParseMetadataItem(_jsonStruct[$ "metadata"], itemType);
+			var metadata = ParseMetadataItem(_jsonStruct[$ "metadata"], itemCategory, itemType);
 	
 			item = new Item(
 				_jsonStruct[$ "name"],
 				_jsonStruct[$ "short_name"],
 				icon,
 				size,
+				itemCategory,
 				itemType,
 				_jsonStruct[$ "weight"],
 				_jsonStruct[$ "max_stack"],
@@ -34,6 +36,7 @@ function ParseJSONStructToDatabaseItem(_jsonStruct)
 			);
 		} catch (error)
 		{
+			show_debug_message(error);
 			show_message(error);
 		}
 	}

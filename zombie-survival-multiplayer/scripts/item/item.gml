@@ -1,9 +1,10 @@
-function Item(_name, _short_name, _icon, _size, _type, _weight, _max_stack, _base_price, _description, _quantity = 1, _metadata = undefined, _is_rotated = false, _known = true, _grid_index = undefined) constructor
+function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_stack, _base_price, _description, _quantity = 1, _metadata = undefined, _is_rotated = false, _known = true, _grid_index = undefined) constructor
 {
 	name = _name;
 	short_name = _short_name;
 	icon = _icon;
 	size = _size;
+	category = _category;
 	type = _type;
 	weight = _weight;
 	max_stack = _max_stack;
@@ -35,10 +36,10 @@ function Item(_name, _short_name, _icon, _size, _type, _weight, _max_stack, _bas
 	static Clone = function(_newQuantity = undefined)
 	{
 		var cloneItem = new Item(
-			name, short_name, icon, size, type,
+			name, short_name, icon, size, category, type,
 			weight, max_stack, base_price, description,
 			_newQuantity ?? quantity,
-			ParseMetadataItem(metadata, type),
+			ParseMetadataItem(metadata, category, type),
 			is_rotated, known,
 			!is_undefined(grid_index) ? new GridIndex(grid_index.col, grid_index.row) : grid_index
 		);
@@ -66,6 +67,7 @@ function Item(_name, _short_name, _icon, _size, _type, _weight, _max_stack, _bas
 				name == _other.name &&
 				short_name == _other.short_name &&
 				icon == _other.icon &&
+				category == _other.category &&
 				type == _other.type &&
 				known == _other.known
 			);

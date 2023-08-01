@@ -7,7 +7,7 @@ function FetchMagazineFromPockets(_caliber)
 		for (var i = 0; i < itemCount; i++)
 		{
 			var item = global.PlayerMagazinePockets.GetItemByIndex(i);
-			if (item.type == "Magazine")
+			if (item.category == "Magazine")
 			{
 				if (item.metadata.caliber == _caliber)
 				{

@@ -68,7 +68,7 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 					if (global.ObjMouse.dragItem.sourceInventory.SwapWithRollback(global.ObjMouse.dragItem, item))
 					{
 						initItem = true;
-					}	
+					}
 				}
 				global.ObjMouse.dragItem = undefined;
 			}
