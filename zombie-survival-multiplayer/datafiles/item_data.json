@@ -261,7 +261,7 @@
       "max_stack": 1,
       "base_price": 250,
       "metadata": {
-        "fire_rate": 200,
+        "fire_rate": 100,
         "range": 30,
         "weapon_offset": {
           "X": 20,
@@ -281,7 +281,7 @@
         },
         "chamber_type": "Shell",
         "caliber": "12",
-        "recoil": 5,
+        "recoil": 10,
         "attachment_slots": ["scope", "laser"],
         "shell_capacity": 6
       }
@@ -301,8 +301,8 @@
       "max_stack": 1,
       "base_price": 250,
       "metadata": {
-        "fire_rate": 200,
-        "range": 30,
+        "fire_rate": 2000,
+        "range": 5,
         "weapon_offset": {
           "X": 6,
           "Y": -30
@@ -321,7 +321,7 @@
         },
         "chamber_type": "Fuel Tank",
         "caliber": "0",
-        "recoil": 5,
+        "recoil": 12,
         "attachment_slots": []
       }
     },
@@ -500,7 +500,7 @@
       "name": "Flamethrower Fuel Tank",
       "short_name": "Fuel",
       "icon": "sprFlamethrowerFuel",
-      "category": "Fuel Tank",
+      "category": "Fuel Ammo",
       "type": "Flamethrower",
       "size": {
         "w": 2,
@@ -512,7 +512,34 @@
       "base_price": 100,
       "metadata": {
         "caliber": "0",
-        "capacity": 100
+        "capacity": 5000
+      }
+    },
+    {
+      "name": "Flamethrower Flame",
+      "short_name": "Flame",
+      "icon": "sprFlamethrowerFlame",
+      "category": "Bullet",
+      "type": "Flamethrower",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "Flamethrower flame",
+      "weight": 8,
+      "max_stack": 120,
+      "base_price": 10,
+      "metadata": {
+        "base_damage": 2,
+        "caliber": "0",
+        "fly_speed": 8,
+        "projectile": "sprFlamethrowerFlame",
+        "trail_rgba_color": {
+          "red": 0,
+          "green": 0,
+          "blue": 0,
+          "alpha": 0.0
+        }
       }
     },
     {
@@ -532,6 +559,7 @@
       "metadata": {
         "base_damage": 30,
         "caliber": "7.62",
+        "fly_speed": 50,
         "projectile": "spr762BulletProjectile",
         "trail_rgba_color": {
           "red": 255,
@@ -558,6 +586,7 @@
       "metadata": {
         "base_damage": 30,
         "caliber": "7.62",
+        "fly_speed": 50,
         "projectile": "spr762TracerBulletProjectile",
         "trail_rgba_color": {
           "red": 0,
@@ -584,6 +613,7 @@
       "metadata": {
         "base_damage": 30,
         "caliber": "9",
+        "fly_speed": 40,
         "projectile": "spr9BulletProjectile",
         "trail_rgba_color": {
           "red": 255,
@@ -610,6 +640,7 @@
       "metadata": {
         "base_damage": 30,
         "caliber": "12",
+        "fly_speed": 40,
         "projectile": "spr12GaugeProjectile",
         "trail_rgba_color": {
           "red": 255,
