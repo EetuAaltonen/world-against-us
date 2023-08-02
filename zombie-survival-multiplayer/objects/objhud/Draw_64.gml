@@ -14,7 +14,7 @@ if (instance_exists(global.ObjPlayer))
 	
 	if (instance_exists(global.ObjWeapon))
 	{
-		hudElementMagazine.Draw();
+		hudElementAmmo.Draw();
 	}
 }
 

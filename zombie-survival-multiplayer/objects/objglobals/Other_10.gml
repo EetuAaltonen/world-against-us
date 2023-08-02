@@ -32,7 +32,7 @@ if (instance_exists(objInventory))
 	var inventoryInstance = instance_find(objInventory, 0);
 	global.PlayerBackpack = inventoryInstance.inventory;
 	global.PlayerPrimaryWeaponSlot = inventoryInstance.playerPrimaryWeaponSlot;
-	global.PlayerMagazinePockets = inventoryInstance.magazinePockets;
+	global.PlayerAmmoPockets = inventoryInstance.magazinePockets;
 	global.PlayerMedicinePockets = inventoryInstance.medicinePockets;
 }
 

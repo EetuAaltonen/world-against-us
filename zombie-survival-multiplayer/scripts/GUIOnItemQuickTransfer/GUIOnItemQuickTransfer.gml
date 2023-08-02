@@ -19,11 +19,12 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 						_inventory.RemoveItemByGridIndex(itemGridIndex);	
 					}
 				} else {
-					if (cloneItem.category == "Magazine" || cloneItem.category == "Bullet")
+					if (cloneItem.category == "Magazine" || cloneItem.category == "Bullet" ||
+						cloneItem.category == "Fuel Ammo")
 					{
-						if (!is_undefined(global.PlayerMagazinePockets))
+						if (!is_undefined(global.PlayerAmmoPockets))
 						{
-							if (global.PlayerMagazinePockets.AddItem(cloneItem, undefined, cloneItem.known))
+							if (global.PlayerAmmoPockets.AddItem(cloneItem, undefined, cloneItem.known))
 							{
 								_inventory.RemoveItemByGridIndex(itemGridIndex);
 							}

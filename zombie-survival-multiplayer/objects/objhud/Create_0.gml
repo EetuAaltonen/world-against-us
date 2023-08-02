@@ -9,7 +9,7 @@ hudElementFullness = new HUDElementIconValuePair(new Vector2(160, hudVerticalCen
 hudElementHydration = new HUDElementIconValuePair(new Vector2(230, hudVerticalCenter), sprHydration);
 hudElementEnergy = new HUDElementIconValuePair(new Vector2(300, hudVerticalCenter), sprEnergy);
 
-hudElementMagazine = new HUDElementMagazine(new Vector2(global.GUIW - 100, /*Bottom pivot*/global.GUIH - hudHeight))
+hudElementAmmo = new HUDElementAmmo(new Vector2(global.GUIW - 100, /*Bottom pivot*/global.GUIH - hudHeight))
 
 initHUDValues = true;
 

@@ -1,2 +1,2 @@
 hudElementHealth.Update();
-hudElementMagazine.Update();
+hudElementAmmo.Update();

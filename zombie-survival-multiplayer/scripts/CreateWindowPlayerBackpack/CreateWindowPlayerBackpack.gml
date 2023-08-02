@@ -40,7 +40,7 @@ function CreateWindowPlayerBackpack(_zIndex)
 		"MagazinePocketTitle",
 		new Vector2(windowSize.w - 10, 530),
 		undefined, undefined,
-		"Magazine Pockets", font_default, fa_right, fa_middle, c_white, 1
+		"Ammo Pockets", font_default, fa_right, fa_middle, c_white, 1
 		
 	);
 	var magazinePocketGridSize = new Size(windowSize.w * 0.33, 0);
@@ -49,7 +49,7 @@ function CreateWindowPlayerBackpack(_zIndex)
 		new Vector2(windowSize.w - magazinePocketGridSize.w - 10, 550),
 		magazinePocketGridSize,
 		undefined,
-		global.PlayerMagazinePockets
+		global.PlayerAmmoPockets
 	);
 	// MEDICINE POCKETS
 	var medicinePocketTitle = new WindowText(

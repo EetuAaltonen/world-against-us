@@ -8,8 +8,8 @@ if (initHUDValues)
 			hudElementHydration.SetValueReference(global.ObjPlayer.character.hydration);
 			hudElementEnergy.SetValueReference(global.ObjPlayer.character.energy);
 			
-			hudElementMagazine.SetWeaponReference(global.ObjPlayer.weapon);
-			hudElementMagazine.InitMagazine();
+			hudElementAmmo.SetWeaponReference(global.ObjPlayer.weapon);
+			hudElementAmmo.initAmmo = true;
 			
 			initHUDValues = false;
 		}

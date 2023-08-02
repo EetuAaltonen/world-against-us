@@ -61,7 +61,7 @@ initGlobalVariables = function()
 
 	global.PlayerBackpack = undefined;
 	global.PlayerPrimaryWeaponSlot = undefined;
-	global.PlayerMagazinePockets = undefined;
+	global.PlayerAmmoPockets = undefined;
 	global.PlayerMedicinePockets = undefined;
 	
 	// Journal

@@ -28,7 +28,7 @@ function GameSave(_save_name) constructor
 		player.backpack_items = global.PlayerBackpack.ToJSONStruct().items;
 		
 		// PLAYER - MAGAZINE POCKETS ITEMS
-		player.magazine_pockets_items = global.PlayerMagazinePockets.ToJSONStruct().items;
+		player.magazine_pockets_items = global.PlayerAmmoPockets.ToJSONStruct().items;
 		
 		// PLAYER - MEDICINE POCKETS ITEMS
 		player.medicine_pockets_items = global.PlayerMedicinePockets.ToJSONStruct().items;
@@ -80,14 +80,14 @@ function GameSave(_save_name) constructor
 		if (!is_undefined(magazinePocketsStruct))
 		{
 			// CLEAR MAGAZINE POCKETS
-			global.PlayerMagazinePockets.ClearItems();
+			global.PlayerAmmoPockets.ClearItems();
 			// ADD NEW ITEMS
 			var itemCount = array_length(magazinePocketsStruct);
 			for (var i = 0; i < itemCount; i++)
 			{
 				var itemStruct = magazinePocketsStruct[@ i];
 				var item = ParseJSONStructToItem(itemStruct);
-				global.PlayerMagazinePockets.AddItem(item, item.grid_index, item.known, true);
+				global.PlayerAmmoPockets.AddItem(item, item.grid_index, item.known, true);
 			}
 		}
 		
