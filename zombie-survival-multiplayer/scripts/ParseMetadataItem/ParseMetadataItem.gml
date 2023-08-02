@@ -85,9 +85,9 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 						variable_struct_set(parsedMetadata, "bullets", bullets);
 					}
 				} break;
-				case "Fuel Tank":
+				case "Fuel Ammo":
 				{
-					parsedMetadata = new MetadataItemFuelTank(
+					parsedMetadata = new MetadataItemFuelAmmo(
 						_metadata[$ "caliber"],
 						_metadata[$ "capacity"]
 					);

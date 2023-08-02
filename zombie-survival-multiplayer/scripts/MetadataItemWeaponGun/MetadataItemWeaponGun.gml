@@ -12,4 +12,24 @@ function MetadataItemWeaponGun(_fire_rate, _range, _weapon_offset, _barrel_pos, 
 			// TODO: Fix ToJSONStruct
 		}
 	}
+	
+	static GetAmmoCount = function()
+	{
+		var bulletCount = 0;
+		if (!is_undefined(magazine))
+		{
+			bulletCount = magazine.metadata.GetAmmoCount();
+		}
+		return bulletCount;
+	}
+	
+	static GetAmmoCapacity = function()
+	{
+		var ammoCapacity = 0;
+		if (!is_undefined(magazine))
+		{
+			ammoCapacity = magazine.metadata.GetAmmoCapacity();
+		}
+		return ammoCapacity;
+	}
 }

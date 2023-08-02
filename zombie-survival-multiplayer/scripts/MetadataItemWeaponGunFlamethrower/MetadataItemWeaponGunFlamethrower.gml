@@ -10,7 +10,7 @@ function MetadataItemWeaponGunFlamethrower(_fire_rate, _range, _weapon_offset, _
 		}
 	}
 	
-	static GetFuelLevel = function()
+	static GetAmmoCount = function()
 	{
 		var fuelLevel = 0;
 		if (!is_undefined(fuel_tank))
@@ -18,5 +18,15 @@ function MetadataItemWeaponGunFlamethrower(_fire_rate, _range, _weapon_offset, _
 			fuelLevel = fuel_tank.metadata.fuel_level;
 		}
 		return fuelLevel;
+	}
+	
+	static GetAmmoCapacity = function()
+	{
+		var fuelCapacity = 0;
+		if (!is_undefined(fuel_tank))
+		{
+			fuelCapacity = fuel_tank.metadata.GetAmmoCapacity();
+		}
+		return fuelCapacity;
 	}
 }

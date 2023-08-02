@@ -7,7 +7,7 @@ function MetadataItemWeaponGunShotgun(_fire_rate, _range, _weapon_offset, _barre
 	{
 		// TODO: Fix ToJSONStruct
 		var shellArray = [];
-		var shellCount = GetShellCount();
+		var shellCount = GetAmmoCount();
 		for (var i = 0; i < shellCount; i++)
 		{
 			var shell = shells[@ i];
@@ -21,17 +21,23 @@ function MetadataItemWeaponGunShotgun(_fire_rate, _range, _weapon_offset, _barre
 		}
 	}
 	
-	static GetShellCount = function()
+	static GetAmmoCount = function()
 	{
 		return array_length(shells);
 	}
 	
-	static LoadShell = function(_shell)
+	static GetAmmoCapacity = function()
 	{
-		return array_push(shells, _shell);
+		return shell_capacity;
 	}
 	
-	static UnloadShell = function()
+	static ReloadAmmo = function(_ammo)
+	{
+		_ammo.sourceInventory = undefined;
+		return array_push(shells, _ammo);
+	}
+	
+	static UnloadAmmo = function()
 	{
 		return array_pop(shells);
 	}

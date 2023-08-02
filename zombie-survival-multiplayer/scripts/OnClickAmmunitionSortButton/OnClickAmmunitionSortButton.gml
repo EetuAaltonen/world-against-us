@@ -14,13 +14,10 @@ function OnClickAmmunitionSortButton()
 				{
 					if (magazineItem.metadata.caliber == bulletItem.metadata.caliber)
 					{
-						var bulletCountToLoad = min((magazineItem.metadata.capacity - magazineItem.metadata.GetBulletCount()), bulletItem.quantity);
+						var bulletCountToLoad = min((magazineItem.metadata.GetAmmoCapacity() - magazineItem.metadata.GetAmmoCount()), bulletItem.quantity);
 						repeat(bulletCountToLoad)
 						{
-							var bulletToLoad = bulletItem.Clone(1)
-							bulletToLoad.sourceInventory = undefined;
-							
-							magazineItem.metadata.LoadBullet(bulletToLoad);
+							magazineItem.metadata.ReloadAmmo(bulletItem.Clone(1));
 							bulletItem.quantity -= 1;
 						}
 						

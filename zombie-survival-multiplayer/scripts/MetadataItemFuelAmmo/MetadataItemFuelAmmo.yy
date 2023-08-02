@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "MetadataItemFuelTank",
+  "name": "MetadataItemFuelAmmo",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

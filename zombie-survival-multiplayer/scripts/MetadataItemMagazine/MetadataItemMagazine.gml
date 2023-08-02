@@ -7,7 +7,7 @@ function MetadataItemMagazine(_caliber, _capacity) : Metadata() constructor
 	static ToJSONStruct = function()
 	{
 		var bulletArray = [];
-		var bulletCount = GetBulletCount();
+		var bulletCount = GetAmmoCount();
 		for (var i = 0; i < bulletCount; i++)
 		{
 			var bullet = bullets[@ i];
@@ -21,17 +21,23 @@ function MetadataItemMagazine(_caliber, _capacity) : Metadata() constructor
 		}
 	}
 	
-	static GetBulletCount = function()
+	static GetAmmoCount = function()
 	{
 		return array_length(bullets);
 	}
 	
-	static LoadBullet = function(_bullet)
+	static GetAmmoCapacity = function()
 	{
-		return array_push(bullets, _bullet);
+		return capacity;
 	}
 	
-	static UnloadBullet = function()
+	static ReloadAmmo = function(_ammo)
+	{
+		_ammo.sourceInventory = undefined;
+		return array_push(bullets, _ammo);
+	}
+	
+	static UnloadAmmo = function()
 	{
 		return array_pop(bullets);
 	}
