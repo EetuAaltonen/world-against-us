@@ -67,7 +67,6 @@ function CheckCollisionProjectile(_collisionPoint, _projectile)
 								{
 									targetInstance.character.TakeDamage(_projectile.damageSource, targetBodyPart.index);
 								}
-								
 								projectileCollisionPosition = collisionPointOnHitbox;
 							}
 						}
@@ -77,7 +76,6 @@ function CheckCollisionProjectile(_collisionPoint, _projectile)
 						show_debug_message(string("**DEBUG: No detected collision with {0}", object_get_name(objectIndexToCheck)));
 					}
 				}
-			
 				objectIndexToCheck = object_get_parent(objectIndexToCheck);
 			}
 		}

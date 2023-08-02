@@ -14,6 +14,14 @@ if (global.DEBUGMODE)
 {
 	if (!is_undefined(aimAngleLine))
 	{
+		draw_line_color(
+			aimAngleLine.start_point.X,
+			aimAngleLine.start_point.Y,
+			aimAngleLine.end_point.X,
+			aimAngleLine.end_point.Y,
+			c_orange, c_orange
+		);
+		
 		draw_circle_color(
 			aimAngleLine.end_point.X,
 			aimAngleLine.end_point.Y,

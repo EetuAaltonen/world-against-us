@@ -109,6 +109,7 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 					parsedMetadata = new MetadataItemBullet(
 						_metadata[$ "base_damage"],
 						_metadata[$ "caliber"],
+						_metadata[$ "fly_speed"],
 						_metadata[$ "projectile"],
 						trailRGBAColor
 					);

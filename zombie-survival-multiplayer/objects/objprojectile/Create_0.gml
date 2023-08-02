@@ -3,7 +3,7 @@ event_inherited();
 
 image_speed = 0;
 speed = 0;
-flySpeed = 50;
+flySpeed = 0;
 projectileTrailWidth = 2;
 aimAngleLine = undefined;
 initSpeed = true;
