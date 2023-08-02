@@ -1,4 +1,4 @@
 inventory = new Inventory("PlayerBackpack", INVENTORY_TYPE.PlayerBackpack, { columns: 10, rows: 6 });
 playerPrimaryWeaponSlot = new Inventory("PlayerPrimaryWeaponSlot", INVENTORY_TYPE.PlayerPrimaryWeaponSlot, { columns: 4, rows: 6 }, ["Weapon"]);
-magazinePockets = new Inventory("PlayerMagazinePocket", INVENTORY_TYPE.MagazinePockets, { columns: 4, rows: 2 }, ["Magazine", "Bullet"]);
+magazinePockets = new Inventory("PlayerMagazinePocket", INVENTORY_TYPE.MagazinePockets, { columns: 4, rows: 2 }, ["Magazine", "Bullet", "Fuel Ammo"]);
 medicinePockets = new Inventory("PlayerMedicinePocket", INVENTORY_TYPE.MedicinePockets, { columns: 4, rows: 2 }, ["Medicine"]);

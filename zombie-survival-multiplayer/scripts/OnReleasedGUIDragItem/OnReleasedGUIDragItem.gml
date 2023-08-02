@@ -38,16 +38,7 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 						if (targetItem.metadata.caliber == global.ObjMouse.dragItem.metadata.caliber)
 						{
 							var sourceItem = global.ObjMouse.dragItem.sourceInventory.GetItemByGridIndex(global.ObjMouse.dragItem.grid_index);
-							var reloadCount = min(sourceItem.quantity, (targetItem.metadata.capacity - array_length(targetItem.metadata.bullets)));
-							repeat(reloadCount)
-							{
-								targetItem.metadata.LoadBullet(sourceItem.Clone(1));
-								sourceItem.quantity--;
-							}
-							if (sourceItem.quantity <= 0)
-							{
-								sourceItem.sourceInventory.RemoveItemByGridIndex(sourceItem.grid_index);
-							}
+							InventoryReloadMagazine(targetItem, sourceItem);
 						}
 					} else if (targetItem.category == "Weapon" && targetItem.type == "Shotgun")
 					{
@@ -57,7 +48,8 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 							{
 								if (targetItem.metadata.caliber == global.ObjMouse.dragItem.metadata.caliber)
 								{
-									InventoryReloadWeaponShotgun(targetItem, global.ObjMouse.dragItem);
+									var sourceItem = global.ObjMouse.dragItem.sourceInventory.GetItemByGridIndex(global.ObjMouse.dragItem.grid_index);
+									InventoryReloadWeaponShotgun(targetItem, sourceItem);
 								}
 							}
 						}
@@ -71,7 +63,7 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 							InventoryReloadWeaponGun(targetItem, global.ObjMouse.dragItem);
 						}
 					}
-				} else if (global.ObjMouse.dragItem.category == "Fuel Tank")
+				} else if (global.ObjMouse.dragItem.category == "Fuel Ammo")
 				{
 					if (targetItem.category == "Weapon" && targetItem.type == "Flamethrower")
 					{

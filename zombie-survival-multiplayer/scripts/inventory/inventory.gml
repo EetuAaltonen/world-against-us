@@ -337,7 +337,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 					{
 						if (!is_undefined(_ignoreSource) && !is_undefined(_ignoreGridIndex))
 						{
-							if (_item.sourceInventory.inventoryId == _ignoreSource.inventoryId)
+							if (inventoryId == _ignoreSource.inventoryId)
 							{
 								if (!gridIndex.Compare(_ignoreGridIndex))
 								{
