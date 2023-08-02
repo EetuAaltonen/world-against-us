@@ -11,13 +11,10 @@ function InventoryReloadWeaponFlamethrower(_weapon, _fuelTank)
 	{
 		_weapon.metadata.fuel_tank = reloadedFuelTank;
 		_fuelTank.sourceInventory.RemoveItemByGridIndex(_fuelTank.grid_index);
-		
-		global.ObjHud.hudElementMagazine.InitAmmo();
 	} else {
 		if (_fuelTank.sourceInventory.ReplaceWithRollback(_fuelTank, _weapon.metadata.fuel_tank))
 		{
 			_weapon.metadata.fuel_tank = reloadedFuelTank;
-			global.ObjHud.hudElementMagazine.InitAmmo();
 		}
 	}
 }

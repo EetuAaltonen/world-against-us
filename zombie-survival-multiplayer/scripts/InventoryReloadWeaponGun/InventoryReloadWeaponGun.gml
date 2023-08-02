@@ -11,14 +11,10 @@ function InventoryReloadWeaponGun(_weapon, _ammo)
 	{
 		_weapon.metadata.magazine = reloadedMagazine;
 		_ammo.sourceInventory.RemoveItemByGridIndex(_ammo.grid_index);
-		
-		global.ObjHud.hudElementMagazine.InitAmmo();
 	} else {
 		if (_ammo.sourceInventory.ReplaceWithRollback(_ammo, _weapon.metadata.magazine))
 		{
 			_weapon.metadata.magazine = reloadedMagazine;
-
-			global.ObjHud.hudElementMagazine.InitAmmo();
 		}
 	}
 }

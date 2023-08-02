@@ -1,22 +1,22 @@
-function FetchMagazineFromPockets(_caliber)
+function FetchAmmoPocketMagazine(_caliber)
 {
 	var foundMagazine = undefined;
-	if (!is_undefined(global.PlayerMagazinePockets))
+	if (!is_undefined(global.PlayerAmmoPockets))
 	{
-		var itemCount = ds_list_size(global.PlayerMagazinePockets.items);
+		var itemCount = ds_list_size(global.PlayerAmmoPockets.items);
 		for (var i = 0; i < itemCount; i++)
 		{
-			var item = global.PlayerMagazinePockets.GetItemByIndex(i);
+			var item = global.PlayerAmmoPockets.GetItemByIndex(i);
 			if (item.category == "Magazine")
 			{
 				if (item.metadata.caliber == _caliber)
 				{
 					if (!is_undefined(foundMagazine))
 					{
-						if (item.metadata.GetBulletCount() > foundMagazine.metadata.GetBulletCount())
+						if (item.metadata.GetAmmoCount() > foundMagazine.metadata.GetAmmoCount())
 						{
 							foundMagazine = item;
-						} else if (item.metadata.GetBulletCount() == foundMagazine.metadata.GetBulletCount())
+						} else if (item.metadata.GetAmmoCount() == foundMagazine.metadata.GetAmmoCount())
 						{
 							if (item.grid_index.col < foundMagazine.grid_index.col)
 							{
@@ -30,7 +30,7 @@ function FetchMagazineFromPockets(_caliber)
 							}
 						}
 					} else {
-						if (item.metadata.GetBulletCount() > 0)
+						if (item.metadata.GetAmmoCount() > 0)
 						{
 							foundMagazine = item;
 						}

@@ -3,32 +3,68 @@ function PlayerWeaponFunctions()
 	// NETWORKING WEAPON FUNCTIONS
 	var onWeaponUsed = false;
 	var onWeaponReloaded = false;
-	var magazine = primaryWeapon.metadata.magazine;
 	
 	// SHOOT
 	if (mouse_check_button(mb_left))
 	{
-		if (!is_undefined(magazine))
+		if (primaryWeapon.metadata.GetAmmoCount() > 0 && fireDelay <= 0)
 		{
-			if (magazine.metadata.GetBulletCount() > 0 && fireDelay <= 0)
-			{
-				var mouseWorldPosition = MouseWorldPosition();
-				UseWeapon(mouseWorldPosition);
-				onWeaponUsed = true;
-			}
+			var mouseWorldPosition = MouseWorldPosition();
+			UseWeapon(mouseWorldPosition);
+			onWeaponUsed = true;
 		}
 	}
 	// RELOAD
 	else if (keyboard_check_released(ord("R")))
 	{
-		var magazine = FetchMagazineFromPockets(primaryWeapon.metadata.caliber);
-		if (!is_undefined(magazine))
+		if (primaryWeapon.type != "Melee")
 		{
-			InventoryReloadWeapon(primaryWeapon, magazine);
-			onWeaponReloaded = true;
-		} else {
-			// MESSAGE LOG
-			AddMessageLog(string("Reloading failed, missing magazine with {0} caliber ammo", primaryWeapon.metadata.caliber));	
+			switch (primaryWeapon.metadata.chamber_type)
+			{
+				case "Shell":
+				{
+					var shellCountToReload = primaryWeapon.metadata.GetAmmoCapacity() - primaryWeapon.metadata.GetAmmoCount();
+					var shellStack = FetchAmmoPocketShellStack(primaryWeapon.metadata.caliber, shellCountToReload);
+					if (!is_undefined(shellStack))
+					{
+						// TODO: Fix quick reload
+						
+						InventoryReloadWeaponShotgun(primaryWeapon, shellStack);
+						onWeaponReloaded = true;
+					} else {
+						// MESSAGE LOG
+						AddMessageLog(string("Reloading failed, missing ammo for {0}", primaryWeapon.name));	
+					}
+				} break;
+				case "Fuel Tank":
+				{
+					var fuelTank = FetchAmmoPocketFuelTank(primaryWeapon.metadata.caliber);
+					if (!is_undefined(fuelTank))
+					{
+						InventoryReloadWeaponFlamethrower(primaryWeapon, fuelTank);
+						onWeaponReloaded = true;
+					} else {
+						// MESSAGE LOG
+						AddMessageLog(string("Reloading failed, missing ammo for {0}", primaryWeapon.name));	
+					}
+				} break;
+				default:
+				{
+					var magazine = FetchAmmoPocketMagazine(primaryWeapon.metadata.caliber);
+					if (!is_undefined(magazine))
+					{
+						// TODO: Fix quick reload
+						InventoryReloadWeaponGun(primaryWeapon, magazine);
+						onWeaponReloaded = true;
+					} else {
+						// MESSAGE LOG
+						AddMessageLog(string("Reloading failed, missing ammo for {0}", primaryWeapon.name));	
+					}
+				}
+			}
+			
+			// UPDATE HUD ELEMENT FOR AMMO
+			global.ObjHud.hudElementAmmo.initAmmo = true;
 		}
 	}
 	
@@ -83,18 +119,75 @@ function PlayerWeaponFunctions()
 
 function UseWeapon(_mouseWorldPosition)
 {
-	var magazine = primaryWeapon.metadata.magazine;
-	var bullet = array_pop(magazine.metadata.bullets);
-	var projectileSpawnPoint = new Vector2(x + rotatedWeaponBarrelPos.X, y + rotatedWeaponBarrelPos.Y);
+	if (primaryWeapon.type != "Melee")
+	{
+		var projectileSpawnPoint = new Vector2(x + rotatedWeaponBarrelPos.X, y + rotatedWeaponBarrelPos.Y);
+		
+		switch (primaryWeapon.metadata.chamber_type)
+		{
+			case "Fuel Tank":
+			{
+				var fuelTank = primaryWeapon.metadata.fuel_tank;
+				if (!is_undefined(fuelTank))
+				{
+					var flame = global.ItemData[? "Flamethrower Flame"].Clone();
+					if (!is_undefined(flame))
+					{
+						WeaponSpawnProjectile(
+							flame, projectileSpawnPoint, _mouseWorldPosition,
+							primaryWeapon.metadata.recoil, isAiming,
+							random_range(0.5, 1), irandom_range(0, 359)
+						);
+						fuelTank.metadata.fuel_level--;
+					}
+				}
+			} break;
+			default:
+			{
+				if (primaryWeapon.metadata.chamber_type == "Magazine")
+				{
+					var magazine = primaryWeapon.metadata.magazine;
+					if (!is_undefined(magazine))
+					{
+						var bullet = array_pop(magazine.metadata.bullets);
+						if (!is_undefined(bullet))
+						{
+							WeaponSpawnProjectile(bullet, projectileSpawnPoint, _mouseWorldPosition, primaryWeapon.metadata.recoil, isAiming);
+						}
+					}
+				} else if (primaryWeapon.metadata.chamber_type == "Shell")
+				{
+					var bullet = array_pop(primaryWeapon.metadata.shells);
+					if (!is_undefined(bullet))
+					{
+						repeat (5)
+						{
+							WeaponSpawnProjectile(bullet, projectileSpawnPoint, _mouseWorldPosition, primaryWeapon.metadata.recoil, isAiming);
+						}
+					}
+					
+				} else {
+					throw ("Invalid weapon chamber_type to shoot")	
+				}
+			}
+		}
+	}
 	
+	recoilAnimation = baseRecoilAnimation;
+	fireDelay = TimerRatePerMinute(primaryWeapon.metadata.fire_rate);
+	muzzleFlashTimer = muzzleFlashTime;
+}
+
+function WeaponSpawnProjectile(_bullet, _spawnPoint, _mouseWorldPosition, _recoil, _isAiming, _scale = 1, _rotation = undefined)
+{
 	// CREATE PROJECTILE INSTANCE
-	var projectileInstance = instance_create_depth(projectileSpawnPoint.X, projectileSpawnPoint.Y, 0/*top most depth*/, objProjectile);
-	var aimRecoilReduction = (isAiming) ? 0.3 : 1;
-	var bulletRecoil = random_range(-primaryWeapon.metadata.recoil, primaryWeapon.metadata.recoil) * aimRecoilReduction;
+	var projectileInstance = instance_create_depth(_spawnPoint.X, _spawnPoint.Y, 0/*top most depth*/, objProjectile);
+	var aimRecoilReduction = (_isAiming) ? 0.3 : 1;
+	var bulletRecoil = random_range(-_recoil, _recoil) * aimRecoilReduction;
 	var barrelAngle = point_direction(x + rotatedWeaponBarrelPos.X, y + rotatedWeaponBarrelPos.Y, _mouseWorldPosition.X, _mouseWorldPosition.Y);
 	
 	var aimAngleVectorLine = new Vector2Line(
-		projectileSpawnPoint,
+		_spawnPoint,
 		_mouseWorldPosition
 	);
 	var aimAngleDirectionVector = new Vector2(
@@ -106,15 +199,14 @@ function UseWeapon(_mouseWorldPosition)
 	aimAngleVectorLine.end_point.Y = aimAngleVectorLine.start_point.Y + aimAngleDirectionVector.Y;
 	projectileInstance.aimAngleLine = aimAngleVectorLine;
 	
-	projectileInstance.sprite_index = GetSpriteByName(bullet.metadata.projectile);
+	projectileInstance.sprite_index = GetSpriteByName(_bullet.metadata.projectile);
+	projectileInstance.flySpeed = _bullet.metadata.fly_speed;
 	projectileInstance.direction = barrelAngle + bulletRecoil;
-	projectileInstance.image_angle = projectileInstance.direction;
-	projectileInstance.damageSource = new DamageSource(bullet.Clone(), MetersToPixels(primaryWeapon.metadata.range), projectileSpawnPoint);
+	projectileInstance.image_angle = _rotation ?? projectileInstance.direction;
+	projectileInstance.image_xscale = _scale;
+	projectileInstance.image_yscale = projectileInstance.image_xscale;
+	projectileInstance.damageSource = new DamageSource(_bullet.Clone(), MetersToPixels(primaryWeapon.metadata.range), _spawnPoint);
 	projectileInstance.hitIgnoreInstance = objPlayer; // HITBOX OWNER OBJECT INDEX
-	
-	recoilAnimation = baseRecoilAnimation;
-	fireDelay = TimerRatePerMinute(primaryWeapon.metadata.fire_rate);
-	muzzleFlashTimer = muzzleFlashTime;
 }
 
 function InitializeWeapon()
@@ -123,7 +215,7 @@ function InitializeWeapon()
 	fireDelay = 0;
 	recoilAnimation = 0;
 	muzzleFlashTimer = 0;
-	global.ObjHud.hudElementMagazine.InitAmmo();
+	global.ObjHud.hudElementAmmo.initAmmo = true;
 }
 
 function CalculateBarrelPos()
