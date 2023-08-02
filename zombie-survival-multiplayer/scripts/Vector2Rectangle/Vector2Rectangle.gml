@@ -1,9 +1,10 @@
 function Vector2Rectangle(_top_left_point, _top_right_point, _bottom_right_point, _bottom_left_point) constructor
 {
-	top_left_point = _top_left_point;
-	top_right_point = _top_right_point;
-	bottom_right_point = _bottom_right_point;
-	bottom_left_point = _bottom_left_point;
+	// CLONE VALUES INSTEAD OF REFERRING
+	top_left_point = _top_left_point.Clone();
+	top_right_point = _top_right_point.Clone();
+	bottom_right_point = _bottom_right_point.Clone();
+	bottom_left_point = _bottom_left_point.Clone();
 	
 	static Clone = function()
 	{

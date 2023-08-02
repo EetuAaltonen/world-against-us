@@ -1,7 +1,8 @@
 function Vector2Line(_start_point, _end_point) constructor
 {
-	start_point = _start_point;
-	end_point = _end_point;
+	// CLONE VALUES INSTEAD OF REFERRING
+	start_point = _start_point.Clone();
+	end_point = _end_point.Clone();
 	
 	static ToJSONStruct = function()
 	{
