@@ -22,6 +22,6 @@ if (facility.inventory.GetItemCount() <= 0)
 		}
 		
 		// DISABLE ITEM INPUT
-		facility.inventory.filterArray = ["OutputOnly"];
+		facility.inventory.filter_array = ["OutputOnly"];
 	}
 }

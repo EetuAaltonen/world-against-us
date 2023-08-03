@@ -99,7 +99,7 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 				if (!is_undefined(global.ObjMouse.dragItem))
 				{
 					var item = inventory.GetItemByIndex(0);
-					if (global.ObjMouse.dragItem.sourceInventory.inventoryId == item.sourceInventory.inventoryId)
+					if (global.ObjMouse.dragItem.sourceInventory.inventory_id == item.sourceInventory.inventory_id)
 					{
 						itemDragged = (item.grid_index.col == global.ObjMouse.dragItem.grid_index.col && item.grid_index.row == global.ObjMouse.dragItem.grid_index.row);
 					}

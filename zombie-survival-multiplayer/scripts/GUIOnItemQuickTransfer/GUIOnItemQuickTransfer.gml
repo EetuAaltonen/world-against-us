@@ -1,6 +1,6 @@
 function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 {
-	var itemGridIndex = _inventory.gridData[_mouseHoverIndex.row][_mouseHoverIndex.col];
+	var itemGridIndex = _inventory.grid_data[_mouseHoverIndex.row][_mouseHoverIndex.col];
 	if (!is_undefined(itemGridIndex))
 	{
 		var cloneItem = _inventory.GetItemByGridIndex(itemGridIndex).Clone();

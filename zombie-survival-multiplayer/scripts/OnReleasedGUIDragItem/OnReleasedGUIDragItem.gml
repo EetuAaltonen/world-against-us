@@ -3,7 +3,7 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 	if (_inventory.IsGridAreaEmpty(_mouseHoverIndex.col, _mouseHoverIndex.row, global.ObjMouse.dragItem, global.ObjMouse.dragItem.sourceInventory, global.ObjMouse.dragItem.grid_index))
 	{
 		var sourceInventory = global.ObjMouse.dragItem.sourceInventory;
-		if (_inventory.inventoryId == sourceInventory.inventoryId)
+		if (_inventory.inventory_id == sourceInventory.inventory_id)
 		{
 			_inventory.MoveAndRotateItemByGridIndex(global.ObjMouse.dragItem.grid_index, _mouseHoverIndex, global.ObjMouse.dragItem.is_rotated);
 		} else {
@@ -12,7 +12,7 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 				sourceInventory.RemoveItemByGridIndex(global.ObjMouse.dragItem.grid_index);
 				
 				// SET EQUIPPED WEAPON TO UNDEFINED
-				if (sourceInventory.inventoryId == "PlayerPrimaryWeaponSlot")
+				if (sourceInventory.inventory_id == "PlayerPrimaryWeaponSlot")
 				{
 					CallbackItemSlotPrimaryWeapon(undefined);
 					var playerBackpackWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.PlayerBackpack);
@@ -29,7 +29,7 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 		}
 	} else {
 		// ITEM DROP ACTIONS
-		var targetItemGridIndex = _inventory.gridData[_mouseHoverIndex.row][_mouseHoverIndex.col];
+		var targetItemGridIndex = _inventory.grid_data[_mouseHoverIndex.row][_mouseHoverIndex.col];
 		if (!is_undefined(targetItemGridIndex))
 		{
 			var targetItem = _inventory.GetItemByGridIndex(targetItemGridIndex);

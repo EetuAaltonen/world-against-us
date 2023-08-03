@@ -13,7 +13,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 	
 	static UpdateContent = function()
 	{
-		if (!is_undefined(inventory.identifyIndex))
+		if (!is_undefined(inventory.identify_index))
 		{
 			inventory.InventoryIdentify();
 		}
@@ -27,14 +27,14 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 		// CHECK FOR INTERACTIONS
 		if (!is_undefined(mouseHoverIndex))
 		{
-			if (is_undefined(inventory.identifyIndex))
+			if (is_undefined(inventory.identify_index))
 			{
 				if (is_undefined(global.ObjMouse.dragItem))
 				{
 					// ROTATE
 					if (keyboard_check_released(ord("R")))
 					{
-						var itemGridIndex = inventory.gridData[mouseHoverIndex.row][mouseHoverIndex.col];
+						var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
 						if (!is_undefined(itemGridIndex))
 						{
 							var isItemRotated = inventory.GetItemByGridIndex(itemGridIndex).is_rotated;
@@ -44,21 +44,21 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					// IDENTIFY ITEM
 					else if (mouse_check_button_released(mb_middle))
 					{
-						var itemGridIndex = inventory.gridData[mouseHoverIndex.row][mouseHoverIndex.col];
+						var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
 						if (!is_undefined(itemGridIndex))
 						{
 							var item = inventory.GetItemByGridIndex(itemGridIndex);
 							if (!is_undefined(item))
 							{
-								inventory.identifyIndex = item.grid_index;
-								inventory.identifyTimer = inventory.identifyDuration;
+								inventory.identify_index = item.grid_index;
+								inventory.identify_timer = inventory.identify_duration;
 							}
 						}
 					}
 					// OPEN ACTION MENU
 					else if (mouse_check_button_released(mb_right))
 					{
-						var itemGridIndex = inventory.gridData[mouseHoverIndex.row][mouseHoverIndex.col];
+						var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
 						if (!is_undefined(itemGridIndex))
 						{
 							var item = inventory.GetItemByGridIndex(itemGridIndex);
@@ -80,7 +80,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					// MUST BE LOCATED UNDER CTRL CHECK
 					else if (mouse_check_button_pressed(mb_left))
 					{
-						var itemGridIndex = inventory.gridData[mouseHoverIndex.row][mouseHoverIndex.col];
+						var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
 						if (!is_undefined(itemGridIndex))
 						{
 							var item = inventory.GetItemByGridIndex(itemGridIndex);
@@ -175,7 +175,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 			var itemDragged = false;
 			if (!is_undefined(global.ObjMouse.dragItem))
 			{
-				if (global.ObjMouse.dragItem.sourceInventory.inventoryId == item.sourceInventory.inventoryId)
+				if (global.ObjMouse.dragItem.sourceInventory.inventory_id == item.sourceInventory.inventory_id)
 				{
 					itemDragged = (item.grid_index.col == global.ObjMouse.dragItem.grid_index.col && item.grid_index.row == global.ObjMouse.dragItem.grid_index.row);
 				}
@@ -198,7 +198,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 				// DRAW BACKGROUND
 				var gridSpriteIndex = 0;
 				if (!item.known) {
-					if (item.grid_index == inventory.identifyIndex)
+					if (item.grid_index == inventory.identify_index)
 					{
 						gridSpriteIndex = 3;
 					} else {
@@ -222,9 +222,9 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 				if (!item.known)
 				{
 					shader_set(shdrFogSprite);
-					if (!is_undefined(inventory.identifyIndex))
+					if (!is_undefined(inventory.identify_index))
 					{
-						if (item.grid_index == inventory.identifyIndex)
+						if (item.grid_index == inventory.identify_index)
 						{
 							shader_reset();
 							shader_set(shdrIdentifySprite);
@@ -316,7 +316,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 			if (!is_undefined(mouseHoverIndex))
 			{
 				var mousePosition = MouseGUIPosition();
-				draw_text(mousePosition.X + 5, mousePosition.Y + 50, string(inventory.gridData[mouseHoverIndex.row][mouseHoverIndex.col]));
+				draw_text(mousePosition.X + 5, mousePosition.Y + 50, string(inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col]));
 			}
 		}
 	}

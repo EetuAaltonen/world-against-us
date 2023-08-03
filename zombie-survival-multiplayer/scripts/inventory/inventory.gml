@@ -1,12 +1,12 @@
-function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filterArray = []) constructor
+function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _filter_array = []) constructor
 {
-	inventoryId = _inventoryId
+	inventory_id = _inventory_id
     items = ds_list_create();
 	type = _type;
 	size = _size;
-	filterArray = _filterArray;
+	filter_array = _filter_array;
 	
-	gridData = [];
+	grid_data = [];
 	grid = {
 		columns: size.columns,
 		rows: size.rows,
@@ -18,9 +18,9 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 	InitGridData();
 	
 	// Item search
-	identifyIndex = undefined;
-	identifyDuration = TimerFromSeconds(2);
-	identifyTimer = 0;
+	identify_index = undefined;
+	identify_duration = TimerFromSeconds(2);
+	identify_timer = 0;
 	
 	static ToJSONStruct = function()
 	{
@@ -32,7 +32,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 			array_push(itemArray, item.ToJSONStruct());
 		}
 		return {
-			inventory_id: inventoryId,
+			inventory_id: inventory_id,
 			items: itemArray
 		}
 	}
@@ -42,7 +42,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 		// RESET GRID DATA
 	    for (var i = 0; i < size.rows; i++) {
 		  for (var j = 0; j < size.columns; j ++) {
-		    gridData[i, j] = undefined;
+		    grid_data[i, j] = undefined;
 		  }
 		}
 	}
@@ -100,7 +100,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 							var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_ADD_ITEM);
 							var jsonData = json_stringify(_item);
 				
-							buffer_write(networkBuffer, buffer_text , inventoryId);
+							buffer_write(networkBuffer, buffer_text , inventory_id);
 							buffer_write(networkBuffer, buffer_text, jsonData);
 							global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
 						}
@@ -222,7 +222,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 					var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_MOVE_AND_ROTATE_ITEM);
 					var jsonData = json_stringify(item);
 				
-					buffer_write(networkBuffer, buffer_text , inventoryId);
+					buffer_write(networkBuffer, buffer_text , inventory_id);
 					buffer_write(networkBuffer, buffer_u16, _newGridIndex.col);
 					buffer_write(networkBuffer, buffer_u16, _newGridIndex.row);
 					buffer_write(networkBuffer, buffer_bool, item.is_rotated);
@@ -245,7 +245,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 	
 	static IsItemCategoryWhiteListed = function(_item)
     {
-		return (array_length(filterArray) == 0) || ArrayContainsValue(filterArray, _item.category);
+		return (array_length(filter_array) == 0) || ArrayContainsValue(filter_array, _item.category);
     }
 	
 	static RemoveItemByIndex = function(_index)
@@ -259,7 +259,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 				var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_DELETE_ITEM);
 				var jsonData = json_stringify(item);
 			
-				buffer_write(networkBuffer, buffer_text , inventoryId);
+				buffer_write(networkBuffer, buffer_text , inventory_id);
 				buffer_write(networkBuffer, buffer_text, jsonData);
 				global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
 			}
@@ -293,7 +293,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 			for (var j = 0; j < size.columns; j++)
 			{
 				if (!is_undefined(index)) break;
-				if (is_undefined(gridData[i][j]))
+				if (is_undefined(grid_data[i][j]))
 				{
 					if (IsGridAreaEmpty(j, i, _item))
 					{
@@ -317,7 +317,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 	
 	static IsItemInsideGridArea = function(_col, _row, _item)
 	{
-		return ((_col + _item.size.w - 1) < array_length(gridData[0]) && (_row + _item.size.h - 1) < array_length(gridData));
+		return ((_col + _item.size.w - 1) < array_length(grid_data[0]) && (_row + _item.size.h - 1) < array_length(grid_data));
 	}
 	
 	static IsGridAreaEmpty = function(_col, _row, _item, _ignoreSource = undefined, _ignoreGridIndex = undefined)
@@ -331,12 +331,12 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 				for (var j = _col; j < (_col + _item.size.w); j++)
 				{
 					if (!isEmpty) break;
-					var gridIndex = gridData[i][j];
+					var gridIndex = grid_data[i][j];
 					if (!is_undefined(gridIndex))
 					{
 						if (!is_undefined(_ignoreSource) && !is_undefined(_ignoreGridIndex))
 						{
-							if (inventoryId == _ignoreSource.inventoryId)
+							if (inventory_id == _ignoreSource.inventory_id)
 							{
 								if (!gridIndex.Compare(_ignoreGridIndex))
 								{
@@ -363,18 +363,18 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 		{
 			for (var j = _col; j < (_col + _itemSize.w); j++)
 			{
-				gridData[i][j] = _value;
+				grid_data[i][j] = _value;
 			}
 		}
 	}
 	
 	static InventoryIdentify = function()
 	{
-		if (!is_undefined(identifyIndex))
+		if (!is_undefined(identify_index))
 		{
-			if (identifyTimer-- <= 0)
+			if (identify_timer-- <= 0)
 			{
-				var item = GetItemByGridIndex(identifyIndex);
+				var item = GetItemByGridIndex(identify_index);
 				item.known = true;
 				
 				if (type == INVENTORY_TYPE.LootContainer)
@@ -383,14 +383,14 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 					var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_IDENTIFY_ITEM);
 					var jsonData = json_stringify(item);
 			
-					buffer_write(networkBuffer, buffer_text , inventoryId);
+					buffer_write(networkBuffer, buffer_text , inventory_id);
 					buffer_write(networkBuffer, buffer_text, jsonData);
 					global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
 				}
 				
 				// RESET INDENTIFY TARGET AND TIMER
-				identifyIndex = undefined;
-				identifyTimer = 0;
+				identify_index = undefined;
+				identify_timer = 0;
 			}
 		}
 	}
