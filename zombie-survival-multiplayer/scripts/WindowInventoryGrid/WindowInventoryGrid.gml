@@ -98,11 +98,13 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					// DROP DRAG ITEM
 					if (mouse_check_button_released(mb_left))
 					{
-						if (!is_undefined(global.ObjMouse.dragItem))
-						{
-							OnReleasedGUIDragItem(inventory, mouseHoverIndex);
-							global.ObjMouse.dragItem = undefined;
-						}
+						OnReleasedGUIDragItem(inventory, mouseHoverIndex);
+						global.ObjMouse.dragItem = undefined;
+					}
+					// SPLIT DRAG ITEM
+					else if (mouse_check_button_released(mb_right))
+					{
+						OnReleasedGUIDragItemSplit(inventory, mouseHoverIndex);
 					}
 					// ROTATE DRAG ITEM
 					else if (keyboard_check_released(ord("R")))
