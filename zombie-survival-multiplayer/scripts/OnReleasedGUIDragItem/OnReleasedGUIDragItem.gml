@@ -2,14 +2,29 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 {
 	if (_inventory.IsGridAreaEmpty(_mouseHoverIndex.col, _mouseHoverIndex.row, global.ObjMouse.dragItem, global.ObjMouse.dragItem.sourceInventory, global.ObjMouse.dragItem.grid_index))
 	{
-		var inventorySource = global.ObjMouse.dragItem.sourceInventory;
-		if (_inventory.inventoryId == inventorySource.inventoryId)
+		var sourceInventory = global.ObjMouse.dragItem.sourceInventory;
+		if (_inventory.inventoryId == sourceInventory.inventoryId)
 		{
 			_inventory.MoveAndRotateItemByGridIndex(global.ObjMouse.dragItem.grid_index, _mouseHoverIndex, global.ObjMouse.dragItem.is_rotated);
 		} else {
 			if (_inventory.AddItem(global.ObjMouse.dragItem.Clone(), _mouseHoverIndex, global.ObjMouse.dragItem.known))
 			{
-				inventorySource.RemoveItemByGridIndex(global.ObjMouse.dragItem.grid_index);
+				sourceInventory.RemoveItemByGridIndex(global.ObjMouse.dragItem.grid_index);
+				
+				// SET EQUIPPED WEAPON TO UNDEFINED
+				if (sourceInventory.inventoryId == "PlayerPrimaryWeaponSlot")
+				{
+					CallbackItemSlotPrimaryWeapon(undefined);
+					var playerBackpackWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.PlayerBackpack);
+					if (!is_undefined(playerBackpackWindow))
+					{
+						var primaryWeaponSlot = playerBackpackWindow.GetChildElementById("PrimaryWeaponSlot");
+						if (!is_undefined(primaryWeaponSlot))
+						{
+							primaryWeaponSlot.initItem = true;
+						}
+					}
+				}
 			}
 		}
 	} else {
@@ -26,8 +41,8 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 					targetItem.Stack(global.ObjMouse.dragItem);
 					if (global.ObjMouse.dragItem.quantity <= 0)
 					{
-						var inventorySource = global.ObjMouse.dragItem.sourceInventory;
-						inventorySource.RemoveItemByGridIndex(global.ObjMouse.dragItem.grid_index);
+						var sourceInventory = global.ObjMouse.dragItem.sourceInventory;
+						sourceInventory.RemoveItemByGridIndex(global.ObjMouse.dragItem.grid_index);
 					}
 		
 				// RELOAD MAGAZINE

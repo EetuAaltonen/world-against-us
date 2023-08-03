@@ -21,6 +21,10 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 			var itemData = inventory.GetItemByIndex(0);
 			if (!is_undefined(itemData))
 			{
+				// RESET ROTATION
+				itemData.sourceInventory.MoveAndRotateItemByGridIndex(itemData.grid_index, itemData.grid_index, false);
+				
+				// CREATE WINDOW ELEMENTS
 				if (ds_list_size(childElements) <= 0)
 				{
 					var childImageElements = ds_list_create();
@@ -37,6 +41,7 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 				var childImageElement = childElements[| 0];
 				childImageElement.spriteIndex = itemData.icon;
 				childImageElement.initImage = true;
+				
 				
 				if (!is_undefined(callback_function_on_update_item))
 				{

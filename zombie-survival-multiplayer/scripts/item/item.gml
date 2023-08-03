@@ -41,7 +41,7 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 			_newQuantity ?? quantity,
 			ParseMetadataItem(metadata, category, type),
 			is_rotated, known,
-			!is_undefined(grid_index) ? new GridIndex(grid_index.col, grid_index.row) : grid_index
+			!is_undefined(grid_index) ? grid_index.Clone() : undefined
 		);
 		cloneItem.sourceInventory = sourceInventory;
 		

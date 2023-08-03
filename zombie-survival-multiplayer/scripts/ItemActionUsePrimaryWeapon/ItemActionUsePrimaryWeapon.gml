@@ -6,7 +6,6 @@ function ItemActionUsePrimaryWeapon(_item)
 		{
 			if (!_item.Compare(global.ObjWeapon.primaryWeapon))
 			{
-				var cloneItem = _item.Clone();
 				var equippedWeapon = global.PlayerPrimaryWeaponSlot.GetItemByIndex(0);
 				if (!is_undefined(equippedWeapon))
 				{
@@ -23,7 +22,7 @@ function ItemActionUsePrimaryWeapon(_item)
 						}
 					}
 				} else {
-					if (global.PlayerPrimaryWeaponSlot.AddItem(cloneItem, undefined, cloneItem.known))
+					if (global.PlayerPrimaryWeaponSlot.AddItem(_item.Clone(), undefined, _item.known))
 					{
 						_item.sourceInventory.RemoveItemByGridIndex(_item.grid_index);
 						
