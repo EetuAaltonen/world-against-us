@@ -1,4 +1,4 @@
-function MetadataItemWeaponGunFlamethrower(_fire_rate, _range, _weapon_offset, _barrel_pos, _right_hand_position, _left_hand_position, _chamber_type, _caliber, _recoil, _attachment_slots) : MetadataItemWeaponGun(_fire_rate, _range, _weapon_offset, _barrel_pos, _right_hand_position, _left_hand_position, _chamber_type, _caliber, _recoil, _attachment_slots) constructor
+function MetadataItemWeaponGunFlamethrower(_fire_rate, _range, _kickback, _weapon_offset, _barrel_pos, _right_hand_position, _left_hand_position, _chamber_type, _caliber, _recoil, _attachment_slots) : MetadataItemWeaponGun(_fire_rate, _range, _kickback, _weapon_offset, _barrel_pos, _right_hand_position, _left_hand_position, _chamber_type, _caliber, _recoil, _attachment_slots) constructor
 {
 	fuel_tank = undefined;
 	

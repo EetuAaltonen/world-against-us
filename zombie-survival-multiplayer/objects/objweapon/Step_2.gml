@@ -66,7 +66,7 @@ if (owner != noone)
 					// SHOOTING DELAY AND ANIMATION
 					fireDelay = max(-1, --fireDelay);
 					muzzleFlashTimer = max(0, --muzzleFlashTimer);
-					recoilAnimation = max(0, --recoilAnimation);
+					kickbackAnimation = max(0, --kickbackAnimation);
 					
 					PlayerWeaponFunctions();
 				}
@@ -75,8 +75,8 @@ if (owner != noone)
 	}
 
 	// ADD RECOIL
-	x -= lengthdir_x(recoilAnimation, image_angle);
-	y -= lengthdir_y(recoilAnimation, image_angle);
+	x -= lengthdir_x(kickbackAnimation, image_angle);
+	y -= lengthdir_y(kickbackAnimation, image_angle);
 	
 	// IMAGE INDEX
 	if (!is_undefined(primaryWeapon))

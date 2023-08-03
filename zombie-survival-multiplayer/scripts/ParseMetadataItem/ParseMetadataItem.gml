@@ -5,7 +5,6 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 	{
 		try
 		{
-			
 			switch (_itemCategory)
 			{
 				case "Weapon":
@@ -15,6 +14,7 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 						parsedMetadata = new MetadataItemWeaponMelee(
 							_metadata[$ "fire_rate"],
 							_metadata[$ "range"],
+							_metadata[$ "kickback"],
 							_metadata[$ "weapon_offset"],
 							_metadata[$ "barrel_pos"],
 							_metadata[$ "right_hand_position"],
@@ -26,6 +26,7 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 						parsedMetadata = new MetadataItemWeaponGunShotgun(
 							_metadata[$ "fire_rate"],
 							_metadata[$ "range"],
+							_metadata[$ "kickback"],
 							_metadata[$ "weapon_offset"],
 							_metadata[$ "barrel_pos"],
 							_metadata[$ "right_hand_position"],
@@ -47,6 +48,7 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 						parsedMetadata = new MetadataItemWeaponGunFlamethrower(
 							_metadata[$ "fire_rate"],
 							_metadata[$ "range"],
+							_metadata[$ "kickback"],
 							_metadata[$ "weapon_offset"],
 							_metadata[$ "barrel_pos"],
 							_metadata[$ "right_hand_position"],
@@ -61,6 +63,7 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 						parsedMetadata = new MetadataItemWeaponGun(
 							_metadata[$ "fire_rate"],
 							_metadata[$ "range"],
+							_metadata[$ "kickback"],
 							_metadata[$ "weapon_offset"],
 							_metadata[$ "barrel_pos"],
 							_metadata[$ "right_hand_position"],

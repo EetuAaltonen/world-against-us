@@ -173,7 +173,7 @@ function UseWeapon(_mouseWorldPosition)
 		}
 	}
 	
-	recoilAnimation = baseRecoilAnimation;
+	kickbackAnimation = primaryWeapon.metadata.kickback;
 	fireDelay = TimerRatePerMinute(primaryWeapon.metadata.fire_rate);
 	muzzleFlashTimer = muzzleFlashTime;
 }
@@ -213,7 +213,7 @@ function InitializeWeapon()
 {
 	sprite_index = primaryWeapon.icon;
 	fireDelay = 0;
-	recoilAnimation = 0;
+	kickbackAnimation = 0;
 	muzzleFlashTimer = 0;
 	global.ObjHud.hudElementAmmo.initAmmo = true;
 }

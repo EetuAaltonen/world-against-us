@@ -16,8 +16,7 @@ initWeapon = false;
 muzzleFlashTime = 2; // FRAMES
 muzzleFlashTimer = 0;
 fireDelay = 0;
-baseRecoilAnimation = 8;
-recoilAnimation = 0;
+kickbackAnimation = 0;
 
 // NETWORKING VALUE MONITORING
 weapon_aim_pos = new Vector2(x, y);
