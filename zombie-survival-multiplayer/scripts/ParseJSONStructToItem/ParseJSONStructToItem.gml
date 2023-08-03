@@ -6,12 +6,14 @@ function ParseJSONStructToItem(_jsonStruct)
 		var itemStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 		if (variable_struct_names_count(itemStruct) <= 0) return item;
 		
-		var databaseItem = global.ItemData[? itemStruct[$ "name"]];
+		var databaseItem = global.ItemDatabase.GetItemByName(
+			itemStruct[$ "name"],
+			itemStruct[$ "quantity"] ?? 1
+		);
 		if (is_undefined(databaseItem)) return item;
 		item = databaseItem.Clone();
 		
 		item.metadata = ParseMetadataItem(itemStruct[$ "metadata"], item.category, item.type);
-		item.quantity = itemStruct[$ "quantity"] ?? 1;
 		if (bool(itemStruct[$ "is_rotated"] ?? false)) { item.Rotate(); }
 		item.known = bool(itemStruct[$ "known"] ?? true);
 		

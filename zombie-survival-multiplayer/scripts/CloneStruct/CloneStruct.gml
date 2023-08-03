@@ -1,7 +1,7 @@
 // ITERATES ON THE INNER STURCTS CASES
 function CloneStruct(struct)
 {
-    var cloneStruct = {};
+    var cloneStruct = EMPTY_STRUCT;
 	if (!is_undefined(struct))
 	{
 	    var keys = variable_struct_get_names(struct);

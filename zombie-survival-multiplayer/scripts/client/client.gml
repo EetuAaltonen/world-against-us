@@ -74,7 +74,7 @@ function Client(_hostAddress = undefined, _hostPort = undefined) constructor
 					global.ObjPlayer.key_left,
 					global.ObjPlayer.key_right
 				),
-				global.ObjWeapon.primaryWeapon ?? {}
+				global.ObjWeapon.primaryWeapon ?? EMPTY_STRUCT
 			)
 		};
 		var jsonData = json_stringify(playerData);

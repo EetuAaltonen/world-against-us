@@ -13,7 +13,7 @@ if (instance_exists(objDialogue)) global.DialogueHandlerRef = instance_find(objD
 if (instance_exists(objDatabase))
 {
 	var databaseInstance = instance_find(objDatabase, 0);
-	global.ItemData = databaseInstance.itemData;
+	global.ItemDatabase = databaseInstance.itemDatabase;
 	global.LootTableData = databaseInstance.lootTableData;
 	global.QuestData = databaseInstance.questData;
 	global.DialogueData = databaseInstance.dialogueData;

@@ -8,6 +8,9 @@ randomise();
 #macro SAVE_FILE_SUFFIX "_save.json"
 #macro EMPTY_SAVE_DATA "{ }"
 
+// STRUCT
+#macro EMPTY_STRUCT {}
+
 // SPRITE MODIFIERS
 #macro SPRITE_ERROR sprError
 #macro SPRITE_NO_MASK sprNoMask
@@ -53,7 +56,7 @@ initGlobalVariables = function()
 	global.DialogueHandlerRef = undefined;
 
 	// Global Database
-	global.ItemData = undefined;
+	global.ItemDatabase = undefined;
 	global.LootTableData = undefined;
 	global.QuestData = undefined;
 	global.DialogueData = undefined;

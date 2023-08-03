@@ -16,7 +16,7 @@ interactionFunction = function()
 		{
 			var lootEntry = lootData[@ i];
 			// TODO: Stack or separate items by count and stackable values
-			var item = global.ItemData[? lootEntry.name];
+			var item = global.ItemDatabase.GetItemByName(lootEntry.name);
 			if (item.max_stack <= 1)
 			{
 				for (var j = 0; j < lootEntry.count; j++)

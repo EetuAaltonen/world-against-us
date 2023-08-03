@@ -82,6 +82,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 				}
 			}
 			
+			// CHECK IF ITEM IS ALREADY STACKED
 			if (!isItemAdded)
 			{
 				if (!is_undefined(_item.grid_index))
@@ -104,8 +105,7 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 							global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
 						}
 					}
-			
-					ds_list_add(items, _item.Clone());
+					ds_list_add(items, _item);
 					isItemAdded = true;
 				} else {
 					// MESSAGE LOG
@@ -142,14 +142,13 @@ function Inventory(_inventoryId, _type, _size = { columns: 10, rows: 10 }, _filt
 	static ReplaceWithRollback = function(_oldItem, _newItem)
     {
 		var isItemReplaced = true;
-		var oldItemClone = _oldItem.Clone();
 		var oldGridIndex = _oldItem.grid_index;
 		
 		RemoveItemByGridIndex(oldGridIndex);
 		if (!AddItem(_newItem))
 		{
 			// ROLLBACK IF NEW ITEM DOESN'T FIT
-			AddItem(oldItemClone, oldGridIndex);
+			AddItem(_oldItem, oldGridIndex);
 			isItemReplaced = false;
 		}
 		

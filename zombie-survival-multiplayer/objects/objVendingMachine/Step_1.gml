@@ -3,9 +3,9 @@ event_inherited();
 
 if (facility.inventory.GetItemCount() <= 0)
 {
-	if (!is_undefined(global.ItemData))
+	if (!is_undefined(global.ItemDatabase))
 	{
-		var itemIndices = ds_map_keys_to_array(global.ItemData);
+		var itemIndices = global.ItemDatabase.GetItemNames();
 		var ignoreItemFunction = function(_element, _index)
 		{
 			var ignoreItems = ["Money"];
@@ -16,8 +16,8 @@ if (facility.inventory.GetItemCount() <= 0)
 		var itemCount = array_length(itemIndices);
 		while(true)
 		{
-			var randomItemIndex = itemIndices[@ irandom_range(0, (itemCount - 1))];
-			var item = global.ItemData[? randomItemIndex];
+			var randomItemName = itemIndices[@ irandom_range(0, (itemCount - 1))];
+			var item = global.ItemDatabase.GetItemByName(randomItemName);
 			if (!facility.inventory.AddItem(item.Clone(), undefined, true)) break;
 		}
 		

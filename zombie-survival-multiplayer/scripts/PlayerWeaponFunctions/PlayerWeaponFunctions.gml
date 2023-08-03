@@ -130,7 +130,7 @@ function UseWeapon(_mouseWorldPosition)
 				var fuelTank = primaryWeapon.metadata.fuel_tank;
 				if (!is_undefined(fuelTank))
 				{
-					var flame = global.ItemData[? "Flamethrower Flame"].Clone();
+					var flame = global.ItemDatabase.GetItemByName("Flamethrower Flame");
 					if (!is_undefined(flame))
 					{
 						WeaponSpawnProjectile(

@@ -1,9 +1,10 @@
-// ITEM DATA
-var jsonItemStruct = ReadJSONFile("item_data.json") ?? {};
-itemData = ParseJSONStructArrayToMap(jsonItemStruct[$ "item_data"], "name", ParseJSONStructToDatabaseItem);
+// ITEM DATABASE
+itemDatabase = new DatabaseItem();
+var jsonItemStruct = ReadJSONFile("item_data.json") ?? EMPTY_STRUCT;
+itemDatabase.itemData = ParseJSONStructArrayToMap(jsonItemStruct[$ "item_data"], "name", ParseJSONStructToDatabaseItem);
 
 // QUEST DATA
-var jsonQuestStruct = ReadJSONFile("quest_data.json") ?? {};
+var jsonQuestStruct = ReadJSONFile("quest_data.json") ?? EMPTY_STRUCT;
 questData = ParseJSONStructArrayToMap(jsonQuestStruct[$ "quest_data"], "quest_id", ParseJSONStructToDatabaseQuest);
 
 // DIALOGUE DATA
@@ -137,7 +138,7 @@ try {
 
 		while (fileName != "")
 		{
-		    var jsonLootTableStruct = ReadJSONFile(string("{0}{1}", "/loot_tables/", fileName)) ?? {};
+		    var jsonLootTableStruct = ReadJSONFile(string("{0}{1}", "/loot_tables/", fileName)) ?? EMPTY_STRUCT;
 			var lootTableTag = jsonLootTableStruct[$ "tag"];
 			var lootTablePoolData = ParseJSONStructToArray(jsonLootTableStruct[$ "pools"], ParseJSONStructToDatabaseLootTablePool);
 			var lootTable = new LootTable(

@@ -14,7 +14,7 @@ function GameSave(_save_name) constructor
 	
 	static ToJSONStruct = function()
 	{
-		var gameSaveStruct = {}
+		var gameSaveStruct = EMPTY_STRUCT
 		variable_struct_set(gameSaveStruct, save_name, {
 			player: player,
 			world: world,

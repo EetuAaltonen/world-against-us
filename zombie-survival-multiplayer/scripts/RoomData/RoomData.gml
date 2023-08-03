@@ -4,7 +4,7 @@ function RoomData(_roomName) constructor
 	
 	static ToJSONStruct = function()
 	{
-		var roomStruct = {};
+		var roomStruct = EMPTY_STRUCT;
 		var facilities = FetchFacilities();
 		var roomDataStruct = {
 			facilities: facilities
