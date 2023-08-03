@@ -3,7 +3,7 @@ function InventoryReloadWeaponShotgun(_weapon, _shell)
 	var reloadCount = min(_shell.quantity, (_weapon.metadata.GetAmmoCapacity() - _weapon.metadata.GetAmmoCount()));
 	repeat(reloadCount)
 	{
-		_weapon.metadata.ReloadAmmo(_shell.Clone(1));
+		_weapon.metadata.ReloadAmmo(_shell.Clone(1, true));
 		_shell.quantity--;
 	}
 	if (_shell.quantity <= 0)

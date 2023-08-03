@@ -1,12 +1,6 @@
 function InventoryReloadWeaponFlamethrower(_weapon, _fuelTank)
 {
-	var reloadedFuelTank = _fuelTank.Clone();
-	reloadedFuelTank.sourceInventory = undefined;
-	if (reloadedFuelTank.is_rotated)
-	{
-		reloadedFuelTank.Rotate();	
-	}
-	
+	var reloadedFuelTank = _fuelTank.Clone(1, true);
 	if (is_undefined(_weapon.metadata.fuel_tank))
 	{
 		_weapon.metadata.fuel_tank = reloadedFuelTank;

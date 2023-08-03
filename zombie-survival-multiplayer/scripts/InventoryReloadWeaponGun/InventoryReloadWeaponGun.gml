@@ -1,11 +1,6 @@
 function InventoryReloadWeaponGun(_weapon, _magazine)
 {
-	var reloadedMagazine = _magazine.Clone();
-	reloadedMagazine.sourceInventory = undefined;
-	if (reloadedMagazine.is_rotated)
-	{
-		reloadedMagazine.Rotate();	
-	}
+	var reloadedMagazine = _magazine.Clone(1, true);
 	
 	if (is_undefined(_weapon.metadata.magazine))
 	{

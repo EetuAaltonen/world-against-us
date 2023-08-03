@@ -33,7 +33,7 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 		};
 	}
 	
-	static Clone = function(_newQuantity = undefined)
+	static Clone = function(_newQuantity = undefined, _ignoreSourceInventory = false)
 	{
 		var cloneItem = new Item(
 			name, short_name, icon, size, category, type,
@@ -41,9 +41,21 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 			_newQuantity ?? quantity,
 			ParseMetadataItem(metadata, category, type),
 			is_rotated, known,
-			!is_undefined(grid_index) ? grid_index.Clone() : undefined
+			undefined
 		);
-		cloneItem.sourceInventory = sourceInventory;
+		
+		if (!_ignoreSourceInventory)
+		{
+			// RESET ROTATION
+			if (cloneItem.is_rotated)
+			{
+				cloneItem.Rotate();	
+			}
+			
+			// RESET SOURCE INVENTORY INFO
+			cloneItem.grid_index = !is_undefined(grid_index) ? grid_index.Clone() : undefined;
+			cloneItem.sourceInventory = sourceInventory;
+		}
 		
 		return cloneItem;
 	}

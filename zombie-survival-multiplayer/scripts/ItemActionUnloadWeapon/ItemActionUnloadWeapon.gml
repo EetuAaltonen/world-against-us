@@ -18,10 +18,10 @@ function ItemActionUnloadWeapon(_weapon)
 				repeat (shellCountToUnload)
 				{
 					var shell = _weapon.metadata.UnloadAmmo();
-					if (!_weapon.sourceInventory.AddItem(shell.Clone(1), undefined, true, true))
+					if (!_weapon.sourceInventory.AddItem(shell.Clone(), undefined, true, true))
 					{
 						// REVERSE UNLOAD IF DOESN'T FIT
-						_weapon.metadata.ReloadAmmo(shell.Clone(1));
+						_weapon.metadata.ReloadAmmo(shell.Clone());
 						// MESSAGE LOG
 						AddMessageLog(string("Couldn't unload {0}", _weapon.name));
 						break;

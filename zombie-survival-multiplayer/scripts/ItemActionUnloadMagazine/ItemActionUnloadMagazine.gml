@@ -4,10 +4,10 @@ function ItemActionUnloadMagazine(_item)
 	repeat(bulletCountToUnload)
 	{
 		var bullet = _item.metadata.UnloadAmmo();
-		if (!_item.sourceInventory.AddItem(bullet.Clone(1), undefined, true, true))
+		if (!_item.sourceInventory.AddItem(bullet.Clone(), undefined, true, true))
 		{
 			// REVERSE UNLOAD IF DOESN'T FIT
-			_item.metadata.ReloadAmmo(bullet.Clone(1));
+			_item.metadata.ReloadAmmo(bullet.Clone());
 			// MESSAGE LOG
 			AddMessageLog(string("Couldn't unload {0}", _item.name));
 			break;
