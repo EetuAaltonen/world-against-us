@@ -89,11 +89,14 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 	
 	static Stack = function(_sourceItem)
 	{
-		var quantityToStack = min((max_stack - quantity), _sourceItem.quantity);
-		if (quantityToStack > 0)
+		if (quantity < max_stack)
 		{
-			quantity += quantityToStack;
-			_sourceItem.quantity -= quantityToStack;
+			var quantityToStack = min((max_stack - quantity), _sourceItem.quantity);
+			if (quantityToStack > 0)
+			{
+				quantity += quantityToStack;
+				_sourceItem.quantity -= quantityToStack;
+			}
 		}
 	}
 }

@@ -3,9 +3,10 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 	var itemGridIndex = _inventory.grid_data[_mouseHoverIndex.row][_mouseHoverIndex.col];
 	if (!is_undefined(itemGridIndex))
 	{
-		var cloneItem = _inventory.GetItemByGridIndex(itemGridIndex).Clone();
-		if (!is_undefined(cloneItem))
+		var sourceItem = _inventory.GetItemByGridIndex(itemGridIndex).Clone();
+		if (!is_undefined(sourceItem))
 		{
+			var cloneItem = sourceItem.Clone();
 			// RESET ITEM ROTATION
 			if (cloneItem.is_rotated) { cloneItem.Rotate(); }
 			

@@ -20,4 +20,24 @@ function GridIndex(_col, _row) constructor
 	{
 		return (col == _other.col && row == _other.row);	
 	}
+	
+	static IsSmaller = function(_other)
+	{
+		var isSmaller = false;
+		
+		if (row <= _other.row)
+		{
+			if (row == _other.row)
+			{
+				if (col < _other.col)
+				{
+					isSmaller = true;
+				}
+			} else {
+				isSmaller = true;
+			}
+		}
+		
+		return isSmaller;
+	}
 }

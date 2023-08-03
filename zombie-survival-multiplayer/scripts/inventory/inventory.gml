@@ -68,17 +68,13 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 			{
 				_item.grid_index = _grid_index.Clone();
 			} else {
-				if (_item.quantity < _item.max_stack)
+				var emptyIndex = FindEmptyIndex(_item);
+				if (StackItem(_item, emptyIndex))
 				{
-					if (StackItem(_item))
-					{
-						// ITEM IS ADDED WHEN IT FITS TO A STACK
-						isItemAdded = true;
-					} else {
-						_item.grid_index = FindEmptyIndex(_item);
-					}
+					// IF ITEM IS FULLY STACKED
+					isItemAdded = true;
 				} else {
-					_item.grid_index = FindEmptyIndex(_item);
+					_item.grid_index = emptyIndex ?? FindEmptyIndex(_item);
 				}
 			}
 			
@@ -119,19 +115,26 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 		return isItemAdded;
     }
 	
-	static StackItem = function(_item, _grid_index = undefined)
+	static StackItem = function(_sourceItem, _priority_grid_index = undefined)
 	{
 		var isItemStacked = false;
-		var itemCount = GetItemCount();
-		for (var i = 0; i < itemCount; i++)
+		if (_sourceItem.max_stack > 1)
 		{
-			var item = GetItemByIndex(i);
-			if (item.max_stack > 1)
+			var itemCount = GetItemCount();
+			for (var i = 0; i < itemCount; i++)
 			{
-				if (item.Compare(_item))
+				var item = GetItemByIndex(i);
+				if (item.Compare(_sourceItem))
 				{
-					item.Stack(_item);
-					isItemStacked = _item.quantity <= 0;
+					var isPriorityGridIndexSmaller = (!is_undefined(_priority_grid_index)) ? _priority_grid_index.IsSmaller(item.grid_index) : false;
+					
+					// IGNORE STACKING IF ITEM STACKS ARE ALREADY FULL
+					// AND CAN BE ADDED WITH SMALLER (PRIORITY) GRID INDEX
+					if ((_sourceItem.quantity < _sourceItem.max_stack && item.quantity < item.max_stack) || !isPriorityGridIndexSmaller)
+					{
+						item.Stack(_sourceItem);
+						isItemStacked = _sourceItem.quantity <= 0;
+					}
 				}
 			}
 		}
