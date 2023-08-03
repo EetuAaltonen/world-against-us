@@ -138,6 +138,7 @@
         "damage": 20,
         "fire_rate": 200,
         "range": 2,
+        "kickback": 0,
         "weapon_offset": {
           "X": 15,
           "Y": -30
@@ -174,6 +175,44 @@
         "damage": 20,
         "fire_rate": 200,
         "range": 2,
+        "kickback": 0,
+        "weapon_offset": {
+          "X": 15,
+          "Y": -30
+        },
+        "barrel_pos": {
+          "X": 0,
+          "Y": 0
+        },
+        "right_hand_position": {
+          "X": 13,
+          "Y": 80
+        },
+        "left_hand_position": {
+          "X": 14,
+          "Y": 60
+        }
+      }
+    },
+    {
+      "name": "Fire Axe",
+      "short_name": "Axe",
+      "icon": "sprFireAxe",
+      "category": "Weapon",
+      "type": "Melee",
+      "size": {
+        "w": 2,
+        "h": 4
+      },
+      "description": "Fire Axe",
+      "weight": 1500,
+      "max_stack": 1,
+      "base_price": 180,
+      "metadata": {
+        "damage": 20,
+        "fire_rate": 200,
+        "range": 2,
+        "kickback": 0,
         "weapon_offset": {
           "X": 15,
           "Y": -30
@@ -224,6 +263,7 @@
       "metadata": {
         "fire_rate": 600,
         "range": 100,
+        "kickback": 8,
         "weapon_offset": {
           "X": 20,
           "Y": -30
@@ -263,6 +303,7 @@
       "metadata": {
         "fire_rate": 100,
         "range": 30,
+        "kickback": 8,
         "weapon_offset": {
           "X": 20,
           "Y": -35
@@ -303,6 +344,7 @@
       "metadata": {
         "fire_rate": 2000,
         "range": 5,
+        "kickback": 0,
         "weapon_offset": {
           "X": 6,
           "Y": -30
@@ -342,6 +384,7 @@
       "metadata": {
         "fire_rate": 800,
         "range": 50,
+        "kickback": 2,
         "weapon_offset": {
           "X": 12,
           "Y": -30
@@ -381,6 +424,7 @@
       "metadata": {
         "fire_rate": 200,
         "range": 50,
+        "kickback": 4,
         "weapon_offset": {
           "X": 25,
           "Y": -35
@@ -401,42 +445,6 @@
         "caliber": "9",
         "recoil": 8,
         "attachment_slots": ["scope", "laser"]
-      }
-    },
-    {
-      "name": "Fire Axe",
-      "short_name": "Axe",
-      "icon": "sprFireAxe",
-      "category": "Weapon",
-      "type": "Melee",
-      "size": {
-        "w": 2,
-        "h": 4
-      },
-      "description": "Fire Axe",
-      "weight": 1500,
-      "max_stack": 1,
-      "base_price": 180,
-      "metadata": {
-        "damage": 20,
-        "fire_rate": 200,
-        "range": 2,
-        "weapon_offset": {
-          "X": 15,
-          "Y": -30
-        },
-        "barrel_pos": {
-          "X": 0,
-          "Y": 0
-        },
-        "right_hand_position": {
-          "X": 13,
-          "Y": 80
-        },
-        "left_hand_position": {
-          "X": 14,
-          "Y": 60
-        }
       }
     },
     {
