@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "ItemActionEmptyPrimaryWeapon",
+  "name": "ItemActionUnloadMagazine",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

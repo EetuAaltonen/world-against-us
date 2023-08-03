@@ -1,6 +1,6 @@
-function InventoryReloadWeaponGun(_weapon, _ammo)
+function InventoryReloadWeaponGun(_weapon, _magazine)
 {
-	var reloadedMagazine = _ammo.Clone();
+	var reloadedMagazine = _magazine.Clone();
 	reloadedMagazine.sourceInventory = undefined;
 	if (reloadedMagazine.is_rotated)
 	{
@@ -10,9 +10,9 @@ function InventoryReloadWeaponGun(_weapon, _ammo)
 	if (is_undefined(_weapon.metadata.magazine))
 	{
 		_weapon.metadata.magazine = reloadedMagazine;
-		_ammo.sourceInventory.RemoveItemByGridIndex(_ammo.grid_index);
+		_magazine.sourceInventory.RemoveItemByGridIndex(_magazine.grid_index);
 	} else {
-		if (_ammo.sourceInventory.ReplaceWithRollback(_ammo, _weapon.metadata.magazine))
+		if (_magazine.sourceInventory.ReplaceWithRollback(_magazine, _weapon.metadata.magazine))
 		{
 			_weapon.metadata.magazine = reloadedMagazine;
 		}
