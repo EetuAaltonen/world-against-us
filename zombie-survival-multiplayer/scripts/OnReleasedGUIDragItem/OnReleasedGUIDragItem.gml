@@ -1,15 +1,17 @@
 function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 {
-	if (_inventory.IsGridAreaEmpty(_mouseHoverIndex.col, _mouseHoverIndex.row, global.ObjMouse.dragItem, global.ObjMouse.dragItem.sourceInventory, global.ObjMouse.dragItem.grid_index))
+	var sourceInventory = global.ObjMouse.dragItem.sourceInventory;
+	var sourceItem = sourceInventory.GetItemByGridIndex(global.ObjMouse.dragItem.grid_index);
+	
+	if (_inventory.IsGridAreaEmpty(_mouseHoverIndex.col, _mouseHoverIndex.row, sourceItem, sourceInventory, sourceItem.grid_index))
 	{
-		var sourceInventory = global.ObjMouse.dragItem.sourceInventory;
 		if (_inventory.inventory_id == sourceInventory.inventory_id)
 		{
-			_inventory.MoveAndRotateItemByGridIndex(global.ObjMouse.dragItem.grid_index, _mouseHoverIndex, global.ObjMouse.dragItem.is_rotated);
+			_inventory.MoveAndRotateItemByGridIndex(sourceItem.grid_index, _mouseHoverIndex, sourceItem.is_rotated);
 		} else {
-			if (_inventory.AddItem(global.ObjMouse.dragItem.Clone(), _mouseHoverIndex, global.ObjMouse.dragItem.known))
+			if (_inventory.AddItem(sourceItem.Clone(), _mouseHoverIndex, sourceItem.known))
 			{
-				sourceInventory.RemoveItemByGridIndex(global.ObjMouse.dragItem.grid_index);
+				sourceInventory.RemoveItemByGridIndex(sourceItem.grid_index);
 				
 				// SET EQUIPPED WEAPON TO UNDEFINED
 				if (sourceInventory.inventory_id == "PlayerPrimaryWeaponSlot")
@@ -36,55 +38,52 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 			if (!is_undefined(targetItem))
 			{
 				// STACK ITEMS
-				if (global.ObjMouse.dragItem.Compare(targetItem))
+				if (sourceItem.Compare(targetItem))
 				{
-					targetItem.Stack(global.ObjMouse.dragItem);
-					if (global.ObjMouse.dragItem.quantity <= 0)
+					targetItem.Stack(sourceItem);
+					if (sourceItem.quantity <= 0)
 					{
-						var sourceInventory = global.ObjMouse.dragItem.sourceInventory;
-						sourceInventory.RemoveItemByGridIndex(global.ObjMouse.dragItem.grid_index);
+						sourceInventory.RemoveItemByGridIndex(sourceItem.grid_index);
 					}
 		
 				// RELOAD MAGAZINE
-				} else if (global.ObjMouse.dragItem.category == "Bullet")
+				} else if (sourceItem.category == "Bullet")
 				{
 					if (targetItem.category == "Magazine")
 					{
-						if (targetItem.metadata.caliber == global.ObjMouse.dragItem.metadata.caliber)
+						if (targetItem.metadata.caliber == sourceItem.metadata.caliber)
 						{
-							var sourceItem = global.ObjMouse.dragItem.sourceInventory.GetItemByGridIndex(global.ObjMouse.dragItem.grid_index);
 							InventoryReloadMagazine(targetItem, sourceItem);
 						}
 					} else if (targetItem.category == "Weapon" && targetItem.type == "Shotgun")
 					{
 						if (targetItem.metadata.chamber_type == "Shell")
 						{
-							if (global.ObjMouse.dragItem.type == "Shotgun Shell")
+							if (sourceItem.type == "Shotgun Shell")
 							{
-								if (targetItem.metadata.caliber == global.ObjMouse.dragItem.metadata.caliber)
+								if (targetItem.metadata.caliber == sourceItem.metadata.caliber)
 								{
-									var sourceItem = global.ObjMouse.dragItem.sourceInventory.GetItemByGridIndex(global.ObjMouse.dragItem.grid_index);
 									InventoryReloadWeaponShotgun(targetItem, sourceItem);
 								}
 							}
 						}
 					}
-				} else if (global.ObjMouse.dragItem.category == "Magazine")
+				} else if (sourceItem.category == "Magazine")
 				{
 					if (targetItem.category == "Weapon" && targetItem.type != "Melee")
 					{
-						if (targetItem.metadata.caliber == global.ObjMouse.dragItem.metadata.caliber)
+						if (targetItem.metadata.caliber == sourceItem.metadata.caliber)
 						{
-							InventoryReloadWeaponGun(targetItem, global.ObjMouse.dragItem);
+							InventoryReloadWeaponGun(targetItem, sourceItem);
 						}
 					}
-				} else if (global.ObjMouse.dragItem.category == "Fuel Ammo")
+				} else if (sourceItem.category == "Fuel Ammo")
 				{
 					if (targetItem.category == "Weapon" && targetItem.type == "Flamethrower")
 					{
-						if (targetItem.metadata.caliber == global.ObjMouse.dragItem.metadata.caliber)
+						if (targetItem.metadata.caliber == sourceItem.metadata.caliber)
 						{
-							InventoryReloadWeaponFlamethrower(targetItem, global.ObjMouse.dragItem);
+							InventoryReloadWeaponFlamethrower(targetItem, sourceItem);
 						}
 					}
 				}
