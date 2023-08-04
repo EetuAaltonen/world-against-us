@@ -21,10 +21,11 @@ interactionFunction = function()
 			{
 				for (var j = 0; j < lootEntry.count; j++)
 				{
-					inventory.AddItem(item.Clone(), item.grid_index, false, true);
+					inventory.AddItem(item, item.grid_index, false, true);
 				}
 			} else {
-				inventory.AddItem(item.Clone(lootEntry.count), item.grid_index, false, true);
+				item.quantity = lootEntry.count;
+				inventory.AddItem(item, item.grid_index, false, true);
 			}
 		}
 	}

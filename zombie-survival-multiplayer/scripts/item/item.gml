@@ -87,11 +87,12 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 		return isIdentical;
 	}
 	
-	static Stack = function(_sourceItem)
+	static Stack = function(_sourceItem, _priorityQuantity = undefined)
 	{
 		if (quantity < max_stack)
 		{
 			var quantityToStack = min((max_stack - quantity), _sourceItem.quantity);
+			quantityToStack = min(_priorityQuantity ?? quantityToStack, quantityToStack);
 			if (quantityToStack > 0)
 			{
 				quantity += quantityToStack;

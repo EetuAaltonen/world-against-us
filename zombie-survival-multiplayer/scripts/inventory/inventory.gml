@@ -59,34 +59,40 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 		InitGridData();
 	}
 
-    static AddItem = function(_item, _grid_index = undefined, _known = true, _ignore_network = false)
+    static AddItem = function(_item, _new_grid_index = undefined, _new_is_rotated = false, _new_known = true, _ignore_network = false)
     {
 		var isItemAdded = false;
 		if (IsItemCategoryWhiteListed(_item))
 		{
-			if (!is_undefined(_grid_index))
+			var cloneItem = _item.Clone();
+			if (cloneItem.is_rotated != _new_is_rotated)
 			{
-				_item.grid_index = _grid_index.Clone();
+				cloneItem.Rotate();	
+			}
+			
+			if (!is_undefined(_new_grid_index))
+			{
+				cloneItem.grid_index = _new_grid_index.Clone();
 			} else {
-				var emptyIndex = FindEmptyIndex(_item);
-				if (StackItem(_item, emptyIndex))
+				var emptyIndex = FindEmptyIndex(cloneItem);
+				if (StackItem(cloneItem, emptyIndex))
 				{
 					// IF ITEM IS FULLY STACKED
 					isItemAdded = true;
 				} else {
-					_item.grid_index = emptyIndex ?? FindEmptyIndex(_item);
+					cloneItem.grid_index = emptyIndex ?? FindEmptyIndex(cloneItem);
 				}
 			}
 			
 			// CHECK IF ITEM IS ALREADY STACKED
 			if (!isItemAdded)
 			{
-				if (!is_undefined(_item.grid_index))
+				if (!is_undefined(cloneItem.grid_index))
 				{
-					_item.known = _known;
-					_item.sourceInventory = self;
+					cloneItem.known = _new_known;
+					cloneItem.sourceInventory = self;
 				
-					FillGridArea(_item.grid_index.col, _item.grid_index.row, _item.size, new GridIndex(_item.grid_index.col, _item.grid_index.row));
+					FillGridArea(cloneItem.grid_index.col, cloneItem.grid_index.row, cloneItem.size, cloneItem.grid_index.Clone());
 			
 					if (!_ignore_network)
 					{
@@ -94,14 +100,14 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 						{
 							// NETWORKING CONTAINER DELETE ITEM
 							var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_ADD_ITEM);
-							var jsonData = json_stringify(_item);
+							var jsonData = json_stringify(cloneItem);
 				
 							buffer_write(networkBuffer, buffer_text , inventory_id);
 							buffer_write(networkBuffer, buffer_text, jsonData);
 							global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
 						}
 					}
-					ds_list_add(items, _item);
+					ds_list_add(items, cloneItem);
 					isItemAdded = true;
 				} else {
 					// MESSAGE LOG
@@ -171,7 +177,7 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 				isItemSwapped = true;
 			} else {
 				cloneSourceItem.sourceInventory.RemoveItemByGridIndex(cloneSourceItem.grid_index);
-				cloneTargetItem.sourceInventory.AddItem(cloneTargetItem, cloneTargetItem.grid_index, cloneTargetItem.known);
+				cloneTargetItem.sourceInventory.AddItem(cloneTargetItem, cloneTargetItem.grid_index, cloneTargetItem.is_rotated, cloneTargetItem.known);
 			}
 		}
 		

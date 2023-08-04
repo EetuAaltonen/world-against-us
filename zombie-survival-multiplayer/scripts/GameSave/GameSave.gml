@@ -71,7 +71,7 @@ function GameSave(_save_name) constructor
 			{
 				var itemStruct = inventoryStruct[@ i];
 				var item = ParseJSONStructToItem(itemStruct);
-				global.PlayerBackpack.AddItem(item, item.grid_index, item.known, true);
+				global.PlayerBackpack.AddItem(item, item.grid_index, item.is_rotated, item.known, true);
 			}
 		}
 		
@@ -87,7 +87,7 @@ function GameSave(_save_name) constructor
 			{
 				var itemStruct = magazinePocketsStruct[@ i];
 				var item = ParseJSONStructToItem(itemStruct);
-				global.PlayerAmmoPockets.AddItem(item, item.grid_index, item.known, true);
+				global.PlayerAmmoPockets.AddItem(item, item.grid_index, item.is_rotated, item.known, true);
 			}
 		}
 		
@@ -103,7 +103,7 @@ function GameSave(_save_name) constructor
 			{
 				var itemStruct = medicinePocketsStruct[@ i];
 				var item = ParseJSONStructToItem(itemStruct);
-				global.PlayerMedicinePockets.AddItem(item, item.grid_index, item.known, true);
+				global.PlayerMedicinePockets.AddItem(item, item.grid_index, item.is_rotated, item.known, true);
 			}
 		}
 		
@@ -161,7 +161,7 @@ function GameSave(_save_name) constructor
 												for (var l = 0; l < itemCount; l++)
 												{
 													var item = itemArray[l];
-													instance.facility.inventory.AddItem(item, item.grid_index, item.known);
+													instance.facility.inventory.AddItem(item, item.grid_index, item.is_rotated, item.known);
 												}
 											}
 										}

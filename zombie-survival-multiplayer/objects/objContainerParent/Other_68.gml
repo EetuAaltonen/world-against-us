@@ -24,7 +24,7 @@ if (async_load[? "size"] > 0)
 							var itemStruct = itemsStruct[i];
 							// SET KNOWN TO FALSE AND IGNORE NETWORK
 							var item = ParseJSONStructToItem(itemStruct);
-							inventory.AddItem(item, item.grid_index, item.known, true);
+							inventory.AddItem(item, item.grid_index, item.is_rotated, item.known, true);
 						}
 					
 						global.ObjTempInventory.inventory = inventory;

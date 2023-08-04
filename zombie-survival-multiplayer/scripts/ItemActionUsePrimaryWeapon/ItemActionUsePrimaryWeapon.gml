@@ -22,7 +22,7 @@ function ItemActionUsePrimaryWeapon(_item)
 						}
 					}
 				} else {
-					if (global.PlayerPrimaryWeaponSlot.AddItem(_item.Clone(), undefined, _item.known))
+					if (global.PlayerPrimaryWeaponSlot.AddItem(_item, undefined, false))
 					{
 						_item.sourceInventory.RemoveItemByGridIndex(_item.grid_index);
 						
