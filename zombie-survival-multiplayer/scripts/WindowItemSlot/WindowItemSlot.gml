@@ -21,9 +21,6 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 			var itemData = inventory.GetItemByIndex(0);
 			if (!is_undefined(itemData))
 			{
-				// RESET ROTATION
-				itemData.sourceInventory.MoveAndRotateItemByGridIndex(itemData.grid_index, itemData.grid_index, false);
-				
 				// CREATE WINDOW ELEMENTS
 				if (ds_list_size(childElements) <= 0)
 				{
@@ -59,18 +56,18 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 		// CHECK FOR INTERACTIONS
 		if (!is_undefined(global.ObjMouse.dragItem))
 		{
+			var dragItemData = global.ObjMouse.dragItem.item_data;
 			if (mouse_check_button_released(mb_left))
 			{
 				if (inventory.GetItemCount() <= 0)
 				{
-					if (inventory.AddItem(global.ObjMouse.dragItem.Clone()))
+					if (inventory.AddItem(dragItemData, undefined, false))
 					{
-						global.ObjMouse.dragItem.sourceInventory.RemoveItemByGridIndex(global.ObjMouse.dragItem.grid_index);
 						initItem = true;
 					}
 				} else {
 					var item = inventory.GetItemByIndex(0);
-					if (global.ObjMouse.dragItem.sourceInventory.SwapWithRollback(global.ObjMouse.dragItem, item))
+					if (dragItemData.sourceInventory.SwapWithRollback(dragItemData, item))
 					{
 						initItem = true;
 					}
@@ -83,7 +80,7 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 				if (inventory.GetItemCount() > 0)
 				{
 					var item = inventory.GetItemByIndex(0);
-					global.ObjMouse.dragItem = item.Clone();
+					OnPressedGUIDragItemStart(item);
 				}
 			}
 		}
@@ -95,17 +92,8 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 		{
 			if (inventory.GetItemCount() > 0)
 			{
-				var itemDragged = false;
-				if (!is_undefined(global.ObjMouse.dragItem))
-				{
-					var item = inventory.GetItemByIndex(0);
-					if (global.ObjMouse.dragItem.sourceInventory.inventory_id == item.sourceInventory.inventory_id)
-					{
-						itemDragged = (item.grid_index.col == global.ObjMouse.dragItem.grid_index.col && item.grid_index.row == global.ObjMouse.dragItem.grid_index.row);
-					}
-				}
 				var windowImage = childElements[| 0];
-				windowImage.imageAlpha = itemDragged ? 0 : 1;
+				windowImage.imageAlpha = 1;
 				windowImage.Draw();
 			}
 		}

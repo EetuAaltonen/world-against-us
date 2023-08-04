@@ -1,25 +1,18 @@
 function OnReleasedGUIDragItemSplit(_inventory, _mouseHoverIndex)
 {
-	var sourceInventory = global.ObjMouse.dragItem.sourceInventory;
-	var sourceItem = sourceInventory.GetItemByGridIndex(global.ObjMouse.dragItem.grid_index);
-	
-	if (!is_undefined(sourceItem))
+	var isDragItemStackEmpty = false;
+
+	if (!is_undefined(global.ObjMouse.dragItem))
 	{
-		if (sourceItem.max_stack > 1)
+		var dragItemData = global.ObjMouse.dragItem.item_data;
+		if (dragItemData.max_stack > 1)
 		{
-			var slitQuantity = keyboard_check(vk_shift) ? ceil(sourceItem.quantity * 0.5) : 1;
-			if (_inventory.IsGridAreaEmpty(_mouseHoverIndex.col, _mouseHoverIndex.row, sourceItem, undefined, undefined))
+			var splitQuantity = keyboard_check(vk_shift) ? ceil(dragItemData.quantity * 0.5) : 1;
+			if (_inventory.IsGridAreaEmpty(_mouseHoverIndex.col, _mouseHoverIndex.row, dragItemData, undefined, undefined))
 			{
-				if (_inventory.AddItem(sourceItem.Clone(slitQuantity), _mouseHoverIndex, sourceItem.known))
+				if (_inventory.AddItem(dragItemData.Clone(splitQuantity, true), _mouseHoverIndex, dragItemData.is_rotated))
 				{
-					global.ObjMouse.dragItem.quantity -= slitQuantity;
-					sourceItem.quantity -= slitQuantity;
-				
-					if (sourceItem.quantity <= 0)
-					{
-						sourceInventory.RemoveItemByGridIndex(sourceItem.grid_index);
-						global.ObjMouse.dragItem = undefined;
-					}
+					dragItemData.quantity -= splitQuantity;
 				}
 			} else {
 				var targetItemGridIndex = _inventory.grid_data[_mouseHoverIndex.row][_mouseHoverIndex.col];
@@ -28,25 +21,20 @@ function OnReleasedGUIDragItemSplit(_inventory, _mouseHoverIndex)
 					var targetItem = _inventory.GetItemByGridIndex(targetItemGridIndex);
 					if (!is_undefined(targetItem))
 					{
-						// STACK ITEMS
-						if (sourceItem.Compare(targetItem))
+						var itemCloneToCombine = dragItemData.Clone(splitQuantity);
+						if (CombineItems(itemCloneToCombine, targetItem))
 						{
-							var itemToStack = sourceItem.Clone(slitQuantity);
-							targetItem.Stack(itemToStack);
-							
-							var stackQuantity = slitQuantity - itemToStack.quantity/*remaining*/;
-							global.ObjMouse.dragItem.quantity -= stackQuantity;
-							sourceItem.quantity -= stackQuantity;
-							
-							if (sourceItem.quantity <= 0)
-							{
-								sourceInventory.RemoveItemByGridIndex(sourceItem.grid_index);
-								global.ObjMouse.dragItem = undefined;
-							}
+							isDragItemStackEmpty = true;
 						}
+						
+						// CHECK IF DRAG ITEM STACK IS EMPTY
+						dragItemData.quantity -= (isDragItemStackEmpty) ? splitQuantity : (splitQuantity - itemCloneToCombine.quantity);
+						isDragItemStackEmpty = (dragItemData.quantity <= 0);
 					}
 				}
 			}
 		}
 	}
+	
+	return isDragItemStackEmpty;
 }
