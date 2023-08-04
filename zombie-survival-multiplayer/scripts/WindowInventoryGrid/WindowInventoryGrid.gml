@@ -84,7 +84,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 						if (!is_undefined(itemGridIndex))
 						{
 							var item = inventory.GetItemByGridIndex(itemGridIndex);
-							if (item.known)
+							if (item.is_known)
 							{
 								OnPressedGUIDragItemStart(item);
 							}
@@ -188,7 +188,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 				
 			// DRAW BACKGROUND
 			var gridSpriteIndex = 0;
-			if (!item.known) {
+			if (!item.is_known) {
 				if (item.grid_index == inventory.identify_index)
 				{
 					gridSpriteIndex = 3;
@@ -210,7 +210,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 			draw_sprite_ext(itemBackgroundSprite, gridSpriteIndex, xPos, yPos, item.size.w * gridSpriteScale, item.size.h * gridSpriteScale, 0, c_white, 0.5);
 				
 			// DRAW ITEM
-			if (!item.known)
+			if (!item.is_known)
 			{
 				shader_set(shdrFogSprite);
 				if (!is_undefined(inventory.identify_index))
@@ -248,7 +248,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 			);
 			shader_reset();
 				
-			if (item.known)
+			if (item.is_known)
 			{
 				var textBgPadding = 2;
 				var textBgAlpha = 0.2;

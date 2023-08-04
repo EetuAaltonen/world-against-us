@@ -4,7 +4,7 @@ function DragItem(_item_data) constructor
 	
 	original_grid_index = _item_data.grid_index;
 	original_is_rotated = _item_data.is_rotated;
-	original_is_known = _item_data.known;
+	original_is_known = _item_data.is_known;
 	
 	static RestoreOriginalItem = function()
 	{

@@ -15,7 +15,7 @@ function ParseJSONStructToItem(_jsonStruct)
 		
 		item.metadata = ParseMetadataItem(itemStruct[$ "metadata"], item.category, item.type);
 		if (bool(itemStruct[$ "is_rotated"] ?? false)) { item.Rotate(); }
-		item.known = bool(itemStruct[$ "known"] ?? true);
+		item.is_known = bool(itemStruct[$ "is_known"] ?? true);
 		
 		if (!is_undefined(itemStruct[$ "grid_index"] ?? undefined)) {
 			item.grid_index = new GridIndex(itemStruct[$ "grid_index"].col, itemStruct[$ "grid_index"].row);

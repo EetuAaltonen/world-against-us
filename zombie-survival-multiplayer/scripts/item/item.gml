@@ -1,4 +1,4 @@
-function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_stack, _base_price, _description, _quantity = 1, _metadata = undefined, _is_rotated = false, _known = true, _grid_index = undefined) constructor
+function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_stack, _base_price, _description, _quantity = 1, _metadata = undefined, _is_rotated = false, _is_known = true, _grid_index = undefined) constructor
 {
 	name = _name;
 	short_name = _short_name;
@@ -14,7 +14,7 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 	metadata = _metadata;
 	
 	is_rotated = _is_rotated;
-	known = _known;
+	is_known = _is_known;
 	sourceInventory = undefined;
 	grid_index = _grid_index;
 	
@@ -28,7 +28,7 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 			quantity: quantity,
 			metadata: formatMetadata,
 			is_rotated: is_rotated,
-			known: known,
+			is_known: is_known,
 			grid_index: formatGridIndex
 		};
 	}
@@ -40,7 +40,7 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 			weight, max_stack, base_price, description,
 			_newQuantity ?? quantity,
 			ParseMetadataItem(metadata, category, type),
-			is_rotated, known,
+			is_rotated, is_known,
 			undefined
 		);
 		
@@ -81,7 +81,7 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 				icon == _other.icon &&
 				category == _other.category &&
 				type == _other.type &&
-				known == _other.known
+				is_known == _other.is_known
 			);
 		}
 		return isIdentical;

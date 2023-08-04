@@ -59,7 +59,7 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 		InitGridData();
 	}
 
-    static AddItem = function(_item, _new_grid_index = undefined, _new_is_rotated = false, _new_known = true, _ignore_network = false)
+    static AddItem = function(_item, _new_grid_index = undefined, _new_is_rotated = false, _new_is_known = true, _ignore_network = false)
     {
 		var isItemAdded = false;
 		if (IsItemCategoryWhiteListed(_item))
@@ -89,7 +89,7 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 			{
 				if (!is_undefined(cloneItem.grid_index))
 				{
-					cloneItem.known = _new_known;
+					cloneItem.is_known = _new_is_known;
 					cloneItem.sourceInventory = self;
 				
 					FillGridArea(cloneItem.grid_index.col, cloneItem.grid_index.row, cloneItem.size, cloneItem.grid_index.Clone());
@@ -177,7 +177,7 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 				isItemSwapped = true;
 			} else {
 				cloneSourceItem.sourceInventory.RemoveItemByGridIndex(cloneSourceItem.grid_index);
-				cloneTargetItem.sourceInventory.AddItem(cloneTargetItem, cloneTargetItem.grid_index, cloneTargetItem.is_rotated, cloneTargetItem.known);
+				cloneTargetItem.sourceInventory.AddItem(cloneTargetItem, cloneTargetItem.grid_index, cloneTargetItem.is_rotated, cloneTargetItem.is_known);
 			}
 		}
 		
@@ -384,7 +384,7 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 			if (identify_timer-- <= 0)
 			{
 				var item = GetItemByGridIndex(identify_index);
-				item.known = true;
+				item.is_known = true;
 				
 				if (type == INVENTORY_TYPE.LootContainer)
 				{
