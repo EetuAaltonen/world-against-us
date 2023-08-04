@@ -1,4 +1,4 @@
-function FetchAmmoPocketFuelTank(_caliber)
+function FetchAmmoPocketFuelTank(_weapon)
 {
 	var foundFuelTank = undefined;
 	if (!is_undefined(global.PlayerAmmoPockets))
@@ -9,7 +9,7 @@ function FetchAmmoPocketFuelTank(_caliber)
 			var item = global.PlayerAmmoPockets.GetItemByIndex(i);
 			if (item.category == "Fuel Ammo")
 			{
-				if (item.metadata.caliber == _caliber)
+				if (IsReloadingCombatibleWeapon(item, _weapon))
 				{
 					if (!is_undefined(foundFuelTank))
 					{

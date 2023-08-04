@@ -1,4 +1,4 @@
-function FetchAmmoPocketMagazine(_caliber)
+function FetchAmmoPocketMagazine(_weapon)
 {
 	var foundMagazine = undefined;
 	if (!is_undefined(global.PlayerAmmoPockets))
@@ -9,7 +9,7 @@ function FetchAmmoPocketMagazine(_caliber)
 			var item = global.PlayerAmmoPockets.GetItemByIndex(i);
 			if (item.category == "Magazine")
 			{
-				if (item.metadata.caliber == _caliber)
+				if (IsReloadingCombatibleWeapon(item, _weapon))
 				{
 					if (!is_undefined(foundMagazine))
 					{

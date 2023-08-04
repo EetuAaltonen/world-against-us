@@ -636,7 +636,7 @@
       "short_name": "12",
       "icon": "spr12Gauge",
       "category": "Bullet",
-      "type": "Shotgun Shell",
+      "type": "Shotgun",
       "size": {
         "w": 1,
         "h": 1

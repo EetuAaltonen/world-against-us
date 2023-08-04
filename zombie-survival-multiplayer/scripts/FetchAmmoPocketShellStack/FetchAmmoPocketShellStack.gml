@@ -1,4 +1,4 @@
-function FetchAmmoPocketShellStack(_caliber, _shellCountToFetch)
+function FetchAmmoPocketShellStack(_weapon, _shellCountToFetch)
 {
 	var foundShellStack = undefined;
 	if (!is_undefined(global.PlayerAmmoPockets))
@@ -7,21 +7,27 @@ function FetchAmmoPocketShellStack(_caliber, _shellCountToFetch)
 		for (var i = 0; i < itemCount; i++)
 		{
 			var item = global.PlayerAmmoPockets.GetItemByIndex(i);
-			if (item.category == "Bullet" && item.type == "Shotgun Shell")
+			if (item.category == "Bullet")
 			{
-				if (item.metadata.caliber == _caliber)
+				if (IsReloadingCombatibleWeapon(item, _weapon))
 				{
 					if (!is_undefined(foundShellStack))
 					{
 						var shellCountToStack = min(item.quantity, (_shellCountToFetch - foundShellStack.quantity))
 						if (shellCountToStack > 0)
 						{
+							// TODO: Don't stack the same type of shells to the same stack
+							// Repeat and return every type of shell stacks separately or call Reload function
 							foundShellStack.quantity += shellCountToStack;
 							item.quantity -= shellCountToStack;
 							
 							if (item.quantity <= 0)
 							{
-								item.sourceInventory.RemoveItemByGridIndex(item.grid_index);
+								item.sourceInventory.RemoveItemByIndex(i);
+								
+								// UPDATE ITEM COUNT AND INDEX AFTER DELETING
+								itemCount = ds_list_size(global.PlayerAmmoPockets.items);
+								i--;
 							}
 						}
 					} else {

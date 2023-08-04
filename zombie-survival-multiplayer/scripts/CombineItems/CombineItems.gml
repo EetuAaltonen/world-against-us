@@ -27,7 +27,7 @@ function CombineItems(_sourceItem, _targetItem, _only_compatibility = false)
 			{
 				if (_targetItem.category == "Magazine")
 				{
-					if (_targetItem.metadata.caliber == _sourceItem.metadata.caliber)
+					if (IsReloadingCombatibleMagazine(_sourceItem, _targetItem))
 					{
 						combineAction = InventoryReloadMagazine;
 						isCombined = true;
@@ -36,13 +36,10 @@ function CombineItems(_sourceItem, _targetItem, _only_compatibility = false)
 				{
 					if (_targetItem.metadata.chamber_type == "Shell")
 					{
-						if (_sourceItem.type == "Shotgun Shell")
+						if (IsReloadingCombatibleWeapon(_sourceItem, _targetItem))
 						{
-							if (_targetItem.metadata.caliber == _sourceItem.metadata.caliber)
-							{
-								combineAction = InventoryReloadWeaponShotgun;
-								isCombined = true;
-							}
+							combineAction = InventoryReloadWeaponShotgun;
+							isCombined = true;
 						}
 					}
 				}
@@ -51,7 +48,7 @@ function CombineItems(_sourceItem, _targetItem, _only_compatibility = false)
 			{
 				if (_targetItem.category == "Weapon" && _targetItem.type != "Melee")
 				{
-					if (_targetItem.metadata.caliber == _sourceItem.metadata.caliber)
+					if (IsReloadingCombatibleWeapon(_sourceItem, _targetItem))
 					{
 						combineAction = InventoryReloadWeaponGun;
 						isCombined = true;
@@ -62,7 +59,7 @@ function CombineItems(_sourceItem, _targetItem, _only_compatibility = false)
 			{
 				if (_targetItem.category == "Weapon" && _targetItem.type == "Flamethrower")
 				{
-					if (_targetItem.metadata.caliber == _sourceItem.metadata.caliber)
+					if (IsReloadingCombatibleWeapon(_sourceItem, _targetItem))
 					{
 						combineAction = InventoryReloadWeaponFlamethrower;
 						isCombined = true;
