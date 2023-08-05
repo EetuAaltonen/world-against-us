@@ -659,6 +659,33 @@
       }
     },
     {
+      "name": "12-gauge Slug Shell",
+      "short_name": "12",
+      "icon": "spr12GaugeSlug",
+      "category": "Bullet",
+      "type": "Shotgun",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "12 gauge slug shotgun shells",
+      "weight": 8,
+      "max_stack": 120,
+      "base_price": 10,
+      "metadata": {
+        "base_damage": 30,
+        "caliber": "12",
+        "fly_speed": 40,
+        "projectile": "spr12GaugeSlugProjectile",
+        "trail_rgba_color": {
+          "red": 255,
+          "green": 0,
+          "blue": 100,
+          "alpha": 0.2
+        }
+      }
+    },
+    {
       "name": "Gas Can",
       "short_name": "Gas Can",
       "icon": "sprGasCan",
