@@ -66,10 +66,16 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 						initItem = true;
 					}
 				} else {
+					// SWAP EQUIPPED ITEM WITH ROLLBACK
 					var item = inventory.GetItemByIndex(0);
-					if (dragItemData.sourceInventory.SwapWithRollback(dragItemData, item))
+					if (dragItemData.sourceInventory.AddItem(item))
 					{
+						inventory.RemoveItemByIndex(0);
+						inventory.AddItem(dragItemData, undefined, false);
 						initItem = true;
+					} else {
+						// RESTORE ITEM IF SWAPPING IS INTERRUPTED
+						global.ObjMouse.dragItem.RestoreOriginalItem();
 					}
 				}
 				global.ObjMouse.dragItem = undefined;

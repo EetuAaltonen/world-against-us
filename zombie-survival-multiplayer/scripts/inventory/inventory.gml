@@ -151,13 +151,12 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 	static ReplaceWithRollback = function(_oldItem, _newItem)
     {
 		var isItemReplaced = true;
-		var oldGridIndex = _oldItem.grid_index;
 		
-		RemoveItemByGridIndex(oldGridIndex);
+		RemoveItemByGridIndex(_oldItem.grid_index);
 		if (!AddItem(_newItem))
 		{
 			// ROLLBACK IF NEW ITEM DOESN'T FIT
-			AddItem(_oldItem, oldGridIndex);
+			AddItem(_oldItem, _oldItem.grid_index, _oldItem.is_rotated);
 			isItemReplaced = false;
 		}
 		
@@ -167,17 +166,16 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 	static SwapWithRollback = function(_sourceItem, _targetItem)
 	{
 		var isItemSwapped = false;
-		var cloneSourceItem = _sourceItem.Clone();
 		var cloneTargetItem = _targetItem.Clone();
 		
-		if (_targetItem.sourceInventory.ReplaceWithRollback(_targetItem, cloneSourceItem))
+		if (_sourceItem.sourceInventory.ReplaceWithRollback(_sourceItem, cloneTargetItem))
 		{
-			if (_sourceItem.sourceInventory.ReplaceWithRollback(_sourceItem, cloneTargetItem))
+			if (_targetItem.sourceInventory.ReplaceWithRollback(_targetItem, _sourceItem))
 			{
 				isItemSwapped = true;
 			} else {
-				cloneSourceItem.sourceInventory.RemoveItemByGridIndex(cloneSourceItem.grid_index);
-				cloneTargetItem.sourceInventory.AddItem(cloneTargetItem, cloneTargetItem.grid_index, cloneTargetItem.is_rotated, cloneTargetItem.is_known);
+				cloneTargetItem.sourceInventory.RemoveItemByGridIndex(cloneTargetItem.grid_index);
+				_sourceItem.sourceInventory.AddItem(_sourceItem, _sourceItem.grid_index, _sourceItem.is_rotated, _sourceItem.is_known);
 			}
 		}
 		

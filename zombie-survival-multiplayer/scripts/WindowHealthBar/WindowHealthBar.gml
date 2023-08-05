@@ -32,6 +32,7 @@ function WindowHealthBar(_elementId, _relativePosition, _size, _sourceCharacter,
 							sourceCharacter.UseMedicine(dragItemData, bodyPartIndex);
 							if (dragItemData.metadata.healing_left > 0)
 							{
+								// RESTORE ITEM IF NO FULLY USED
 								global.ObjMouse.dragItem.RestoreOriginalItem();
 							}
 						}
