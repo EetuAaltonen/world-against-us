@@ -20,7 +20,7 @@ function CreateWindowMainMenuRoot(_zIndex)
 		"MainMenuTitle",
 		new Vector2(mainMenuTitlePanelSize.w * 0.5, mainMenuTitlePanelSize.h * 0.5),
 		undefined, undefined,
-		"Zombie Survival (Multiplayer)", font_huge, fa_center, fa_middle, c_white, 1
+		"World Against Us (Multiplayer)", font_huge, fa_center, fa_middle, c_white, 1
 	);
 	
 	var mainMenuButtons = ds_list_create();
