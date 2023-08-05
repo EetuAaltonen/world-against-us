@@ -1,13 +1,17 @@
-function InventoryReloadWeaponShotgun(_weapon, _shell)
+function InventoryReloadWeaponShotgun(_weapon, _shellStack)
 {
-	var reloadCount = min(_shell.quantity, (_weapon.metadata.GetAmmoCapacity() - _weapon.metadata.GetAmmoCount()));
+	var isShellStackReloaded = false;
+	var reloadCount = min(_shellStack.quantity, (_weapon.metadata.GetAmmoCapacity() - _weapon.metadata.GetAmmoCount()));
+	
 	repeat(reloadCount)
 	{
-		_weapon.metadata.ReloadAmmo(_shell.Clone(1, true));
-		_shell.quantity--;
+		_weapon.metadata.ReloadAmmo(_shellStack.Clone(1, true));
+		_shellStack.quantity--;
 	}
-	if (_shell.quantity <= 0)
+	if (_shellStack.quantity <= 0)
 	{
-		_shell.sourceInventory.RemoveItemByGridIndex(_shell.grid_index);
+		isShellStackReloaded = true;
 	}
+	
+	return isShellStackReloaded;
 }

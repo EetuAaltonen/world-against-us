@@ -1,14 +1,19 @@
 function InventoryReloadWeaponFlamethrower(_weapon, _fuelTank)
 {
+	var isFuelTankReloaded = false;
 	var reloadedFuelTank = _fuelTank.Clone(1, true);
+	
 	if (is_undefined(_weapon.metadata.fuel_tank))
 	{
 		_weapon.metadata.fuel_tank = reloadedFuelTank;
-		_fuelTank.sourceInventory.RemoveItemByGridIndex(_fuelTank.grid_index);
+		isFuelTankReloaded = true;
 	} else {
-		if (_fuelTank.sourceInventory.ReplaceWithRollback(_fuelTank, _weapon.metadata.fuel_tank))
+		if (_fuelTank.sourceInventory.AddItem(_weapon.metadata.fuel_tank))
 		{
-			_weapon.metadata.fuel_tank = reloadedFuelTank;
+			_weapon.metadata.magazine = reloadedFuelTank;
+			isFuelTankReloaded = true;
 		}
 	}
+	
+	return isFuelTankReloaded;
 }

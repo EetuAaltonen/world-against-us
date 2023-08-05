@@ -24,25 +24,40 @@ function PlayerWeaponFunctions()
 				case "Shell":
 				{
 					var shellCountToReload = primaryWeapon.metadata.GetAmmoCapacity() - primaryWeapon.metadata.GetAmmoCount();
-					var shellStack = FetchAmmoPocketShellStack(primaryWeapon.metadata.caliber, shellCountToReload);
-					if (!is_undefined(shellStack))
+					var shellStacks = FetchAmmoPocketShellStacks(primaryWeapon, shellCountToReload);
+					var shellStackCount = array_length(shellStacks);
+					for (var i = 0; i < shellStackCount; i++)
 					{
-						// TODO: Fix quick reload
-						
-						InventoryReloadWeaponShotgun(primaryWeapon, shellStack);
-						onWeaponReloaded = true;
-					} else {
+						var shellStack = shellStacks[@ i];
+						if (!is_undefined(shellStack))
+						{
+							if (InventoryReloadWeaponShotgun(primaryWeapon, shellStack))
+							{
+								shellStack.sourceInventory.RemoveItemByGridIndex(shellStack.grid_index);
+								onWeaponReloaded = true;
+							}
+						}
+					}
+					
+					if (shellStackCount <= 0)
+					{
 						// MESSAGE LOG
-						AddMessageLog(string("Reloading failed, missing ammo for {0}", primaryWeapon.name));	
+						AddMessageLog(string("Reloading failed, missing ammo for {0}", primaryWeapon.name));
 					}
 				} break;
 				case "Fuel Tank":
 				{
-					var fuelTank = FetchAmmoPocketFuelTank(primaryWeapon.metadata.caliber);
+					var fuelTank = FetchAmmoPocketFuelTank(primaryWeapon);
 					if (!is_undefined(fuelTank))
 					{
-						InventoryReloadWeaponFlamethrower(primaryWeapon, fuelTank);
-						onWeaponReloaded = true;
+						// SWAP FUEL TANKS WITH ROLLBACK
+						fuelTank.sourceInventory.RemoveItemByGridIndex(fuelTank.grid_index);
+						if (InventoryReloadWeaponFlamethrower(primaryWeapon, fuelTank))
+						{
+							onWeaponReloaded = true;
+						} else {
+							fuelTank.sourceInventory.AddItem(fuelTank, fuelTank.grid_index, fuelTank.is_rotated, fuelTank.is_known);
+						}
 					} else {
 						// MESSAGE LOG
 						AddMessageLog(string("Reloading failed, missing ammo for {0}", primaryWeapon.name));	
@@ -50,12 +65,17 @@ function PlayerWeaponFunctions()
 				} break;
 				default:
 				{
-					var magazine = FetchAmmoPocketMagazine(primaryWeapon.metadata.caliber);
+					var magazine = FetchAmmoPocketMagazine(primaryWeapon);
 					if (!is_undefined(magazine))
 					{
-						// TODO: Fix quick reload
-						InventoryReloadWeaponGun(primaryWeapon, magazine);
-						onWeaponReloaded = true;
+						// SWAP MAGAZINES WITH ROLLBACK
+						magazine.sourceInventory.RemoveItemByGridIndex(magazine.grid_index);
+						if (InventoryReloadWeaponGun(primaryWeapon, magazine))
+						{
+							onWeaponReloaded = true;
+						} else {
+							magazine.sourceInventory.AddItem(magazine, magazine.grid_index, magazine.is_rotated, magazine.is_known);
+						}
 					} else {
 						// MESSAGE LOG
 						AddMessageLog(string("Reloading failed, missing ammo for {0}", primaryWeapon.name));	
