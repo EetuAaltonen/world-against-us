@@ -8,10 +8,10 @@ if (room == roomLoadSave)
 		inventory.AddItem(global.ItemDatabase.GetItemByName("Mossberg Maverick Shotgun"), undefined, false, true, true);
 		//inventory.AddItem(global.ItemDatabase.GetItemByName("Sig Sauer P226 Pistol"), undefined, false, true, true);
 		inventory.AddItem(global.ItemDatabase.GetItemByName("MP5 Submachine gun"), undefined, false, true, true);
-		inventory.AddItem(global.ItemDatabase.GetItemByName("Flamethrower"), undefined, false, true, true);
+		//inventory.AddItem(global.ItemDatabase.GetItemByName("Flamethrower"), undefined, false, true, true);
 		//inventory.AddItem(global.ItemDatabase.GetItemByName("Fire Axe"), undefined, false, true, true);
 		
-		inventory.AddItem(global.ItemDatabase.GetItemByName("Flamethrower Fuel Tank"), undefined, false, true, true);
+		//inventory.AddItem(global.ItemDatabase.GetItemByName("Flamethrower Fuel Tank"), undefined, false, true, true);
 		
 		inventory.AddItem(global.ItemDatabase.GetItemByName("Ak-47 Magazine"), undefined, false, true, true);
 		inventory.AddItem(global.ItemDatabase.GetItemByName("Ak-47 Magazine"), undefined, false, true, true);
@@ -24,6 +24,7 @@ if (room == roomLoadSave)
 	
 		inventory.AddItem(global.ItemDatabase.GetItemByName("12-gauge Shell", 5), undefined, false, true, true);
 		inventory.AddItem(global.ItemDatabase.GetItemByName("12-gauge Shell", 120), undefined, false, true, true);
+		inventory.AddItem(global.ItemDatabase.GetItemByName("12-gauge Slug Shell", 120), undefined, false, true, true);
 		
 		inventory.AddItem(global.ItemDatabase.GetItemByName("9mm Bullet", 120), undefined, false, true, true);
 		inventory.AddItem(global.ItemDatabase.GetItemByName("9mm Bullet", 120), undefined, false, true, true);
