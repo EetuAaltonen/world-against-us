@@ -26,7 +26,6 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 			childElement.parentElement = undefined;
 			childElement.Update();
 		}
-		
 		childElements = _childElements;
 	}
 	
@@ -47,6 +46,23 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 		return foundChildElement;
 	}
 	
+	static GetHoveredChildElement = function()
+	{
+		var hoveredChildElement = undefined;
+		var childElementCount = ds_list_size(childElements);
+		
+		for (var i = 0; i < childElementCount; i++)
+		{
+			var childElement = childElements[| i];
+			if (childElement.isHovered)
+			{
+				hoveredChildElement = childElement;
+				break;
+			}
+		}
+		return hoveredChildElement;
+	}
+	
 	static OnOpen = function()
 	{
 		// OVERRIDE FUNCTION
@@ -65,6 +81,7 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 		{
 			OnUpdate();
 			UpdateContent();
+			CheckActionInterruptEvents()
 		}
 	}
 	
@@ -77,6 +94,33 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 			childElement.position.X = position.X + childElement.relativePosition.X;
 			childElement.position.Y = position.Y + childElement.relativePosition.Y;
 			childElement.Update();
+		}
+	}
+	
+	static CheckActionInterruptEvents = function()
+	{
+		// RESTORE DRAG ITEM IF DROPPED ONTO VOID
+		if (mouse_check_button_released(mb_left))
+		{
+			if (!is_undefined(global.ObjMouse.dragItem))
+			{
+				var focusedWindow = global.GameWindowHandlerRef.focusedWindow;
+				if (!is_undefined(focusedWindow))
+				{
+					if (windowId == focusedWindow.windowId)
+					{
+						var hoveredElement = GetHoveredChildElement();
+						if (is_undefined(hoveredElement))
+						{
+							global.ObjMouse.dragItem.RestoreOriginalItem();
+							global.ObjMouse.dragItem = undefined;
+						}
+					}
+				} else {
+					global.ObjMouse.dragItem.RestoreOriginalItem();
+					global.ObjMouse.dragItem = undefined;
+				}
+			}
 		}
 	}
 	

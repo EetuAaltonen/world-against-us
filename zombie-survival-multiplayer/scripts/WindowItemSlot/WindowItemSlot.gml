@@ -64,6 +64,9 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 					if (inventory.AddItem(dragItemData, undefined, false))
 					{
 						initItem = true;
+					} else {
+						// RESTORE ITEM IF ITEM CATEGORY IS WRONG
+						global.ObjMouse.dragItem.RestoreOriginalItem();
 					}
 				} else {
 					// SWAP EQUIPPED ITEM WITH ROLLBACK
