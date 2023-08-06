@@ -75,11 +75,18 @@ function GUIStateHandler() constructor
 			{
 				if (IsKeyReleasedGUIStateClose() || currentGUIState.IsKeyReleasedAlternateGUIStateClose())
 				{
-					// RESET DRAG ITEM
-					global.ObjMouse.dragItem = undefined;
-					
 					// CLOSE CURRENT GUI STATE
 					CloseCurrentGUIState();
+					
+					// RESTORE DRAG ITEM IF GUI FULLY CLOSED
+					if (IsGUIStateClosed())
+					{
+						if (!is_undefined(global.ObjMouse.dragItem))
+						{
+							global.ObjMouse.dragItem.RestoreOriginalItem();
+							global.ObjMouse.dragItem = undefined;
+						}
+					}
 				} else {
 					currentGUIState.CallbackInputFunction();
 				}
