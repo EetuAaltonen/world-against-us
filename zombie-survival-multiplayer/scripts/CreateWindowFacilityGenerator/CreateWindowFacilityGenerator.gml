@@ -23,7 +23,7 @@ function CreateWindowFacilityGenerator(_zIndex, _facility)
 		"FacillityItemHolder",
 		new Vector2((windowSize.w * 0.5) - (facillityItemHolderSize.w * 0.5), 100),
 		facillityItemHolderSize,
-		c_blue, _facility.inventory
+		c_gray, _facility.inventory
 	);
 	
 	ds_list_add(facilityElements,

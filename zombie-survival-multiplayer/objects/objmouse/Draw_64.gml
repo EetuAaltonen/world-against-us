@@ -33,13 +33,13 @@ if (global.GUIStateHandlerRef.IsGUIStateClosed())
 	if (!is_undefined(dragItem))
 	{
 		var dragItemData = dragItem.item_data;
-		var iconBaseScale = 0.8;
-		var iconScale = CalculateItemIconScale(dragItemData, dragItemIconMaxBaseSize) * iconBaseScale;
-		var iconRotation = CalculateItemIconRotation(dragItemData.is_rotated);
-		draw_sprite_ext(
-			dragItemData.icon, 0,
-			mousePosition.X, mousePosition.Y,
-			iconScale, iconScale, iconRotation, c_white, 0.4
+		DrawItem(
+			dragItemData, 0, 1, 1,
+			mousePosition,
+			new Size(
+				dragItemData.size.w * dragItemIconMaxBaseSize.w,
+				dragItemData.size.h * dragItemIconMaxBaseSize.h
+			)
 		);
 	}
 }

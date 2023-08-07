@@ -97,13 +97,33 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 	
 	static DrawContent = function()
 	{
-		if (ds_list_size(childElements) > 0)
+		var baseIconScale = 0.9;
+		var imageAlpha = 1;
+		var itemData = inventory.GetItemByIndex(0);
+		
+		if (!is_undefined(itemData))
 		{
-			if (inventory.GetItemCount() > 0)
+			DrawItem(
+				itemData, 0, baseIconScale, imageAlpha,
+				new Vector2(position.X + (size.w * 0.5), position.Y + (size.h * 0.5)),
+				new Size(size.w, size.h),
+				[DRAW_ITEM_FLAGS.NameBg, DRAW_ITEM_FLAGS.NameShort,
+				DRAW_ITEM_FLAGS.AltTextBg, DRAW_ITEM_FLAGS.AltText]
+			);
+		}
+		
+		if (isHovered)
+		{
+			if (!is_undefined(global.ObjMouse.dragItem))
 			{
-				var windowImage = childElements[| 0];
-				windowImage.imageAlpha = 1;
-				windowImage.Draw();
+				var dragItemData = global.ObjMouse.dragItem.item_data;
+				var gridAreaColor = inventory.IsItemCategoryWhiteListed(dragItemData) ? #0fb80f : #b80f0f;
+				draw_sprite_ext(
+					sprGUIBg, 0,
+					position.X, position.Y,
+					size.w, size.h,
+					0, gridAreaColor, 0.5
+				);
 			}
 		}
 	}

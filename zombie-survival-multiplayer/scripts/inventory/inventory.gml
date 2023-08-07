@@ -12,7 +12,7 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 		rows: size.rows,
 		size: {
 			w: 48,
-			h: 48,
+			h: 48
 		}
 	};
 	InitGridData();

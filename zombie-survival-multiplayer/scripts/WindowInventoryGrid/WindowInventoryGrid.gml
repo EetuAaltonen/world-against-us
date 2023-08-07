@@ -175,18 +175,9 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 			xPos = position.X + (gridCellSize.w * item.grid_index.col);
 			yPos = position.Y + (gridCellSize.h * item.grid_index.row);
 			
-			var itemIconScale = 0.8;
-			var iconScale = CalculateItemIconScale(item, new Size(gridCellSize.w * itemIconScale, gridCellSize.h * itemIconScale));
-			var iconRotation = CalculateItemIconRotation(item.is_rotated);
-			var iconOffset = CalculateSpriteOffsetToCenter(item.icon, iconScale);
-			if (item.is_rotated)
-			{
-				var tempIconOffset = iconOffset.Clone();
-				iconOffset.X = tempIconOffset.Y;
-				iconOffset.Y = -tempIconOffset.X;
-			}
+			var iconBaseScale = 0.8;
 				
-			// DRAW BACKGROUND
+			// DRAW ITEM BACKGROUND
 			var gridSpriteIndex = 0;
 			if (!item.is_known) {
 				if (item.grid_index == inventory.identify_index)
@@ -210,7 +201,9 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 			draw_sprite_ext(itemBackgroundSprite, gridSpriteIndex, xPos, yPos, item.size.w * gridSpriteScale, item.size.h * gridSpriteScale, 0, c_white, 0.5);
 				
 			// DRAW ITEM
-			if (!item.is_known)
+			var imageAlpha = 1;
+			// TODO: Fix shader while identifying
+			/*if (!item.is_known)
 			{
 				shader_set(shdrFogSprite);
 				if (!is_undefined(inventory.identify_index))
@@ -222,69 +215,25 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					}
 				}
 			}
-					
-			// IMAGE INDEX
-			var imageIndex = 0;
-			var imageAlpha = 1;
 			
+			// RESET SHADER
+			shader_reset();
+			*/
 			if (!is_undefined(global.ObjMouse.dragItem))
 			{
 				imageAlpha = CombineItems(global.ObjMouse.dragItem.item_data, item, true) ? imageAlpha : 0.2;
 			}
 			
-			if (item.category == "Weapon" && item.type != "Melee")
-			{
-				if (item.metadata.chamber_type == "Magazine")
-				{
-					imageIndex = is_undefined(item.metadata.magazine);
-				}
-			}
-				
-			draw_sprite_ext(
-				item.icon, imageIndex,
-				xPos + ((gridCellSize.w * 0.5) * item.size.w) + iconOffset.X,
-				yPos + ((gridCellSize.h * 0.5) * item.size.h) + iconOffset.Y,
-				iconScale, iconScale, iconRotation, c_white, imageAlpha
+			DrawItem(
+				item, 0, iconBaseScale, imageAlpha,
+				new Vector2(xPos + ((gridCellSize.w * 0.5) * item.size.w), yPos + ((gridCellSize.h * 0.5) * item.size.h)),
+				new Size(gridCellSize.w * item.size.w, gridCellSize.h * item.size.h),
+				[DRAW_ITEM_FLAGS.NameBg, DRAW_ITEM_FLAGS.NameShort,
+				DRAW_ITEM_FLAGS.AltTextBg, DRAW_ITEM_FLAGS.AltText]
 			);
-			shader_reset();
-				
-			if (item.is_known)
-			{
-				var textBgPadding = 2;
-				var textBgAlpha = 0.2;
-				var textBgHeight = 16;
-				// DRAW ITEM NAME BACKGROUND
-				draw_sprite_ext(
-					sprGUIBg, gridSpriteIndex, xPos + textBgPadding, yPos + textBgPadding,
-					item.size.w * gridCellSize.w - (textBgPadding * 2), textBgHeight,
-					0, c_white, textBgAlpha
-				);
-					
-				// ITEM (SHORT)NAME
-				var nameTextPos = new Vector2(
-					xPos + 5,
-					yPos + 3
-				);
-				DrawItemAltText(item.short_name, nameTextPos.X, nameTextPos.Y);
-					
-				// DRAW ITEM ALT TEXT BACKGROUND
-				draw_sprite_ext(
-					sprGUIBg, gridSpriteIndex, xPos + textBgPadding, yPos + (item.size.h * gridCellSize.h) - textBgHeight - textBgPadding,
-					item.size.w * gridCellSize.w - (textBgPadding * 2), textBgHeight,
-					0, c_white, textBgAlpha
-				);
-					
-				// ITEM ALT TEXT
-				var altTextPos = new Vector2(xPos + 5, yPos + (item.size.h * gridCellSize.h) - 18);
-				var altText = GetItemAltText(item);
-				if (!is_undefined(altText))
-				{
-					DrawItemAltText(altText, altTextPos.X, altTextPos.Y);
-				}
-			}
 		}
 		
-		// DRAW DRAGGED ITEM
+		// DRAW DRAG ITEM INDICATOR
 		if (!is_undefined(global.ObjMouse.dragItem))
 		{
 			if (!is_undefined(mouseHoverIndex))
@@ -297,7 +246,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					mouseHoverIndex.col, mouseHoverIndex.row,
 					dragItemData, dragItemData.sourceInventory, dragItemData.grid_index
 				);
-				var gridAreaColor = isGridAreaEmpty ? #0fb80f : #b80f0f;
+				var gridAreaColor = (inventory.IsItemCategoryWhiteListed(dragItemData) && isGridAreaEmpty) ? #0fb80f : #b80f0f;
 				var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
 				if (!is_undefined(itemGridIndex))
 				{
@@ -330,12 +279,5 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 				draw_text(mousePosition.X + 5, mousePosition.Y + 50, string(inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col]));
 			}
 		}
-	}
-	
-	static DrawItemAltText = function(_altText, _guiXPos, _guiYPos)
-	{
-		draw_set_font(font_tiny_bold);
-		draw_text(_guiXPos, _guiYPos, string(_altText));
-		draw_set_font(font_default);
 	}
 }
