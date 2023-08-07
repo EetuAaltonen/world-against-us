@@ -16,36 +16,14 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 	
 	static UpdateItem = function()
 	{
-		if (inventory.GetItemCount() > 0)
+		var itemData = inventory.GetItemByIndex(0);
+		if (!is_undefined(itemData))
 		{
-			var itemData = inventory.GetItemByIndex(0);
-			if (!is_undefined(itemData))
+			if (!is_undefined(callback_function_on_update_item))
 			{
-				// CREATE WINDOW ELEMENTS
-				if (ds_list_size(childElements) <= 0)
+				if (script_exists(callback_function_on_update_item))
 				{
-					var childImageElements = ds_list_create();
-					ds_list_add(childImageElements,
-						new WindowImage(
-							string("{0}Image", elementId),
-							new Vector2(2, 2), new Size(size.w - 4, size.h - 4),
-							c_green, itemData.icon, 0, 1, 0
-						)
-					);
-					AddChildElements(childImageElements);	
-				}
-				
-				var childImageElement = childElements[| 0];
-				childImageElement.spriteIndex = itemData.icon;
-				childImageElement.initImage = true;
-				
-				
-				if (!is_undefined(callback_function_on_update_item))
-				{
-					if (script_exists(callback_function_on_update_item))
-					{
-						script_execute(callback_function_on_update_item, itemData);
-					}
+					script_execute(callback_function_on_update_item, itemData);
 				}
 			}
 		}
@@ -59,37 +37,44 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 			var dragItemData = global.ObjMouse.dragItem.item_data;
 			if (mouse_check_button_released(mb_left))
 			{
-				if (inventory.GetItemCount() <= 0)
+				// CHECK IF ITEM IS WHITELISTED
+				if (inventory.IsItemCategoryWhiteListed(dragItemData))
 				{
-					if (inventory.AddItem(dragItemData, undefined, false))
+					if (inventory.GetItemCount() <= 0)
 					{
-						initItem = true;
+						if (inventory.AddItem(dragItemData, undefined, false))
+						{
+							initItem = true;
+						} else {
+							// RESTORE ITEM IF ITEM CATEGORY IS WRONG
+							global.ObjMouse.dragItem.RestoreOriginalItem();
+						}
 					} else {
-						// RESTORE ITEM IF ITEM CATEGORY IS WRONG
-						global.ObjMouse.dragItem.RestoreOriginalItem();
+						// SWAP EQUIPPED ITEM WITH ROLLBACK
+						var item = inventory.GetItemByIndex(0);
+						if (dragItemData.sourceInventory.AddItem(item))
+						{
+							inventory.RemoveItemByIndex(0);
+							inventory.AddItem(dragItemData, undefined, false);
+							initItem = true;
+						} else {
+							// RESTORE ITEM IF SWAPPING IS INTERRUPTED
+							global.ObjMouse.dragItem.RestoreOriginalItem();
+						}
 					}
 				} else {
-					// SWAP EQUIPPED ITEM WITH ROLLBACK
-					var item = inventory.GetItemByIndex(0);
-					if (dragItemData.sourceInventory.AddItem(item))
-					{
-						inventory.RemoveItemByIndex(0);
-						inventory.AddItem(dragItemData, undefined, false);
-						initItem = true;
-					} else {
-						// RESTORE ITEM IF SWAPPING IS INTERRUPTED
-						global.ObjMouse.dragItem.RestoreOriginalItem();
-					}
+					// RESTORE ITEM IF SWAPPING IS INTERRUPTED
+					global.ObjMouse.dragItem.RestoreOriginalItem();
 				}
 				global.ObjMouse.dragItem = undefined;
 			}
 		} else {
 			if (mouse_check_button_pressed(mb_left))
 			{
-				if (inventory.GetItemCount() > 0)
+				var itemData = inventory.GetItemByIndex(0);
+				if (!is_undefined(itemData))
 				{
-					var item = inventory.GetItemByIndex(0);
-					OnPressedGUIDragItemStart(item);
+					OnPressedGUIDragItemStart(itemData);
 				}
 			}
 		}

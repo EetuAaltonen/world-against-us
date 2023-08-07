@@ -14,6 +14,8 @@ randomise();
 // SPRITE MODIFIERS
 #macro SPRITE_ERROR sprError
 #macro SPRITE_NO_MASK sprNoMask
+#macro ITEM_DEFAULT_ANGLE 0
+#macro ITEM_ROTATED_ANGLE 90
 
 // COLLISION
 #macro OBJECTS_TO_HIT [objHitbox]

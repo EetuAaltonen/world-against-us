@@ -1,4 +1,4 @@
 function CalculateItemIconRotation(_itemRotated)
 {
-	return _itemRotated ? 90 : 0;
+	return _itemRotated ? ITEM_ROTATED_ANGLE : ITEM_DEFAULT_ANGLE;
 }
