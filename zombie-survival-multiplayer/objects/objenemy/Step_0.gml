@@ -1,84 +1,38 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
-if (!is_undefined(global.ObjGridPath.roomGrid))
+if (targetInstance == noone)
 {
-	var distanceToTarget = point_distance(x, y, targetPosition.X, targetPosition.Y);
-	//var distanceToTarget = point_distance(x, y, lastKnownTargetPos.X, lastKnownTargetPos.Y);
-		
-	if (updatePath)
+	targetSeekTimer.Update();
+	
+	if (targetSeekTimer.IsTimerStopped())
 	{
-		updatePath = false;
-		pathUpdateTimer = pathUpdateDelay;
-			
-		if (distanceToTarget > stopRadius)
+		var closestTarget = instance_nearest(x, y, objPlayer);
+		var distanceToTarget = point_distance(x, y, closestTarget.x, closestTarget.y);
+		if (distanceToTarget <= visionRadius)
 		{
-			if (mp_grid_path(global.ObjGridPath.roomGrid, path, x, y, targetPosition.X, targetPosition.Y, true))
-			{
-				path_start(path, maxSpeed, path_action_stop, false);
-				pathUpdateTimer = pathUpdateDelay;
-			}
+			targetInstance = closestTarget;
+		} else {
+			targetSeekTimer.StartTimer();
 		}
 	}
-		
-	if (distanceToTarget <= stopRadius)
-	{
-		path_end();
-	}
-		
-	if (pathUpdateTimer-- <= 0)
-	{
-		updatePath = true;
-		pathUpdateTimer = pathUpdateDelay;
-	}
-}
-
-/*if (global.ObjPlayer != noone)
-{
+} else {
 	if (!is_undefined(global.ObjGridPath.roomGrid))
 	{
-		var distanceToPlayer = point_distance(x, y, global.ObjPlayer.x, global.ObjPlayer.y);
-		var distanceToTarget = point_distance(x, y, lastKnownTargetPos.X, lastKnownTargetPos.Y);
-		
-		if (updatePath)
+		if (instance_exists(targetInstance))
 		{
-			updatePath = false;
-			pathUpdateTimer = pathUpdateDelay;
-			
-			// CALCULATE NEW TARGET POS
-			if (distanceToPlayer <= aggroRadius)
+			if (pathUpdateTimer.IsTimerStopped())
 			{
-				if (!collision_line(x, y, global.ObjPlayer.x, global.ObjPlayer.y, objBlockParent, true, true))
+				if (mp_grid_path(global.ObjGridPath.roomGrid, pathToTarget, x, y, targetInstance.x, targetInstance.y, true))
 				{
-					lastKnownTargetPos = new Vector2(global.ObjPlayer.x, global.ObjPlayer.y);
-					distanceToTarget = point_distance(x, y, lastKnownTargetPos.X, lastKnownTargetPos.Y);
+					path_start(pathToTarget, maxSpeed, path_action_stop, false);
+					// RESET TIMER
+					pathUpdateTimer.StartTimer();
 				}
 			}
-			
-			if (distanceToTarget > stopRadius)
-			{
-				if (mp_grid_path(global.ObjGridPath.roomGrid, path, x, y, lastKnownTargetPos.X, lastKnownTargetPos.Y, true))
-				{
-					path_start(path, maxSpeed, path_action_stop, false);
-					pathUpdateTimer = pathUpdateDelay;
-				}
-			}
-		}
-		
-		if (distanceToTarget <= stopRadius)
-		{
-			path_end();
-		}
-		
-		if (distanceToPlayer < aggroRadius)
-		{
-			pathUpdateTimer = min(pathUpdateTimer, floor((pathUpdateDelay * 0.5) * (distanceToPlayer / aggroRadius)));
-		}
-		
-		if (pathUpdateTimer-- <= 0)
-		{
-			updatePath = true;
-			pathUpdateTimer = pathUpdateDelay;
+				
+			// UPDATE TIMER
+			pathUpdateTimer.Update();
 		}
 	}
-}*/
+}

@@ -10,13 +10,17 @@ dirSpeed = 0;
 maxSpeed = 1;
 
 // PATH FINDING
-path = path_add();
-updatePath = false;
-pathUpdateDelay = TimerFromSeconds(1);//TimerFromSeconds(4);
-pathUpdateTimer = pathUpdateDelay;
+pathToTarget = path_add();
+pathUpdateInterval = TimerFromSeconds(0.5);
+pathUpdateTimer = new Timer(pathUpdateInterval);
 
 // TARGET
+targetSeekInterval = TimerFromSeconds(4);
+targetSeekTimer = new Timer(targetSeekInterval);
+targetSeekTimer.StartTimer();
+
+targetInstance = noone;
 targetPosition = new Vector2(x, y);
-lastKnownTargetPos = new Vector2(x, y);
-aggroRadius = 1280;
-stopRadius = 10;//128;
+
+// SENSES
+visionRadius = MetersToPixels(10);
