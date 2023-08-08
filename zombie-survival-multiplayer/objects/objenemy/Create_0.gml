@@ -7,15 +7,16 @@ acceleration = 1;
 hSpeed = 0;
 vSpeed = 0;
 dirSpeed = 0;
-maxSpeed = 1;
+maxSpeed = 2;
 
 // PATH FINDING
 pathToTarget = path_add();
-pathUpdateInterval = TimerFromSeconds(0.5);
+pathUpdateInterval = TimerFromSeconds(0.25);
 pathUpdateTimer = new Timer(pathUpdateInterval);
+pathBlockingRadius = 20;
 
 // TARGET
-targetSeekInterval = TimerFromSeconds(4);
+targetSeekInterval = TimerFromSeconds(2);
 targetSeekTimer = new Timer(targetSeekInterval);
 targetSeekTimer.StartTimer();
 

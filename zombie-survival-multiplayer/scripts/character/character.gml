@@ -55,8 +55,9 @@ function Character(_name, _type, _race) constructor
 			if (total_hp_percent <= 0)
 			{
 				isDead = true;
-				other.sprite_index = sprGraveStone;
-				other.mask_index = SPRITE_NO_MASK;
+				// TODO: Disable until loot tables are implemented correctly
+				//other.sprite_index = sprGraveStone;
+				//other.mask_index = SPRITE_NO_MASK;
 			} else {
 				UpdateStats();
 			}
