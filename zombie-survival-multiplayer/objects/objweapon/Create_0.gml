@@ -11,6 +11,7 @@ primaryWeapon = undefined;
 isAiming = false;
 rotatedWeaponOffset = new Vector2(0, 0);
 rotatedWeaponBarrelPos = undefined;
+rotatedWeaponChamberPos = undefined;
 initWeapon = false;
 
 muzzleFlashTime = 2; // FRAMES
@@ -22,3 +23,9 @@ kickbackAnimation = 0;
 weapon_aim_pos = new Vector2(x, y);
 prev_is_aiming = isAiming;
 prev_weapon_angle = image_angle;
+
+// EMPTY BULLET CASING PARTICLES
+partSystemBulletCasing = part_system_create();
+partEmitterBulletCasing = part_emitter_create(partSystemBulletCasing);
+partTypeBulletCasing = part_type_create();
+InitializeParticleBulletCasing(partTypeBulletCasing);

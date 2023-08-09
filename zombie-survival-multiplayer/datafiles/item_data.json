@@ -135,13 +135,17 @@
       "max_stack": 1,
       "base_price": 30,
       "metadata": {
-        "damage": 20,
+        "base_damage": 20,
         "fire_rate": 200,
         "range": 2,
         "kickback": 0,
         "weapon_offset": {
           "X": 15,
           "Y": -30
+        },
+        "chamber_pos": {
+          "X": 0,
+          "Y": 0
         },
         "barrel_pos": {
           "X": 0,
@@ -172,13 +176,17 @@
       "max_stack": 1,
       "base_price": 200,
       "metadata": {
-        "damage": 20,
+        "base_damage": 20,
         "fire_rate": 200,
         "range": 2,
         "kickback": 0,
         "weapon_offset": {
           "X": 15,
           "Y": -30
+        },
+        "chamber_pos": {
+          "X": 0,
+          "Y": 0
         },
         "barrel_pos": {
           "X": 0,
@@ -209,13 +217,17 @@
       "max_stack": 1,
       "base_price": 180,
       "metadata": {
-        "damage": 20,
+        "base_damage": 20,
         "fire_rate": 200,
         "range": 2,
         "kickback": 0,
         "weapon_offset": {
           "X": 15,
           "Y": -30
+        },
+        "chamber_pos": {
+          "X": 0,
+          "Y": 0
         },
         "barrel_pos": {
           "X": 0,
@@ -268,6 +280,10 @@
           "X": 20,
           "Y": -30
         },
+        "chamber_pos": {
+          "X": 45,
+          "Y": 4
+        },
         "barrel_pos": {
           "X": 92,
           "Y": 7
@@ -307,6 +323,10 @@
         "weapon_offset": {
           "X": 20,
           "Y": -35
+        },
+        "chamber_pos": {
+          "X": 48,
+          "Y": 3
         },
         "barrel_pos": {
           "X": 99,
@@ -353,6 +373,10 @@
           "X": 80,
           "Y": 4
         },
+        "chamber_pos": {
+          "X": 60,
+          "Y": 2
+        },
         "right_hand_position": {
           "X": 15,
           "Y": 14
@@ -388,6 +412,10 @@
         "weapon_offset": {
           "X": 12,
           "Y": -30
+        },
+        "chamber_pos": {
+          "X": 34,
+          "Y": 6
         },
         "barrel_pos": {
           "X": 73,
@@ -428,6 +456,10 @@
         "weapon_offset": {
           "X": 25,
           "Y": -35
+        },
+        "chamber_pos": {
+          "X": 16,
+          "Y": 2
         },
         "barrel_pos": {
           "X": 31,
@@ -538,7 +570,7 @@
       "max_stack": 120,
       "base_price": 10,
       "metadata": {
-        "base_damage": 2,
+        "base_damage": 10,
         "caliber": "0",
         "fly_speed": 8,
         "projectile": "sprFlamethrowerFlame",
@@ -565,7 +597,7 @@
       "max_stack": 120,
       "base_price": 10,
       "metadata": {
-        "base_damage": 30,
+        "base_damage": 80,
         "caliber": "7.62",
         "fly_speed": 50,
         "projectile": "spr762BulletProjectile",
@@ -592,7 +624,7 @@
       "max_stack": 120,
       "base_price": 10,
       "metadata": {
-        "base_damage": 30,
+        "base_damage": 80,
         "caliber": "7.62",
         "fly_speed": 50,
         "projectile": "spr762TracerBulletProjectile",
@@ -619,7 +651,7 @@
       "max_stack": 120,
       "base_price": 6,
       "metadata": {
-        "base_damage": 30,
+        "base_damage": 60,
         "caliber": "9",
         "fly_speed": 40,
         "projectile": "spr9BulletProjectile",
@@ -646,7 +678,7 @@
       "max_stack": 120,
       "base_price": 10,
       "metadata": {
-        "base_damage": 30,
+        "base_damage": 60,
         "caliber": "12",
         "fly_speed": 40,
         "projectile": "spr12GaugeProjectile",
@@ -673,7 +705,7 @@
       "max_stack": 120,
       "base_price": 10,
       "metadata": {
-        "base_damage": 30,
+        "base_damage": 60,
         "caliber": "12",
         "fly_speed": 40,
         "projectile": "spr12GaugeSlugProjectile",

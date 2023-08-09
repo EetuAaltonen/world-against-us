@@ -38,6 +38,9 @@ if (owner != noone)
 			// CALCULATE BARREL LOCATION
 			CalculateBarrelPos();
 			
+			// CALCULATE BARREL LOCATION
+			CalculateChamberPos();
+			
 			if (owner.character.type == CHARACTER_TYPE.PLAYER)
 			{
 				// CHECK GUI STATE

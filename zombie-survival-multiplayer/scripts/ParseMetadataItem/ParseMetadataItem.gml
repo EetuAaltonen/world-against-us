@@ -16,10 +16,11 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 							_metadata[$ "range"],
 							_metadata[$ "kickback"],
 							_metadata[$ "weapon_offset"],
+							_metadata[$ "chamber_pos"],
 							_metadata[$ "barrel_pos"],
 							_metadata[$ "right_hand_position"],
 							_metadata[$ "left_hand_position"],
-							_metadata[$ "damage"]
+							_metadata[$ "base_damage"]
 						);
 					} else if (_itemType == "Shotgun")
 					{
@@ -28,6 +29,7 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 							_metadata[$ "range"],
 							_metadata[$ "kickback"],
 							_metadata[$ "weapon_offset"],
+							_metadata[$ "chamber_pos"],
 							_metadata[$ "barrel_pos"],
 							_metadata[$ "right_hand_position"],
 							_metadata[$ "left_hand_position"],
@@ -50,6 +52,7 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 							_metadata[$ "range"],
 							_metadata[$ "kickback"],
 							_metadata[$ "weapon_offset"],
+							_metadata[$ "chamber_pos"],
 							_metadata[$ "barrel_pos"],
 							_metadata[$ "right_hand_position"],
 							_metadata[$ "left_hand_position"],
@@ -65,6 +68,7 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 							_metadata[$ "range"],
 							_metadata[$ "kickback"],
 							_metadata[$ "weapon_offset"],
+							_metadata[$ "chamber_pos"],
 							_metadata[$ "barrel_pos"],
 							_metadata[$ "right_hand_position"],
 							_metadata[$ "left_hand_position"],

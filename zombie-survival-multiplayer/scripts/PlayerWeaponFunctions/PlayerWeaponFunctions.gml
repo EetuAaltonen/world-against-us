@@ -173,6 +173,9 @@ function UseWeapon(_mouseWorldPosition)
 						if (!is_undefined(bullet))
 						{
 							WeaponSpawnProjectile(bullet, projectileSpawnPoint, _mouseWorldPosition, primaryWeapon.metadata.recoil, isAiming);
+							
+							// CREATE EMPTY SHELL PARTICLE
+							CreateWeaponBulletEmptyParticle(self, rotatedWeaponChamberPos, bullet.icon);
 						}
 					}
 				} else if (primaryWeapon.metadata.chamber_type == "Shell")
@@ -184,6 +187,9 @@ function UseWeapon(_mouseWorldPosition)
 						{
 							WeaponSpawnProjectile(bullet, projectileSpawnPoint, _mouseWorldPosition, primaryWeapon.metadata.recoil, isAiming);
 						}
+						
+						// CREATE EMPTY SHELL PARTICLE
+						CreateWeaponBulletEmptyParticle(self, rotatedWeaponChamberPos, bullet.icon);
 					}
 					
 				} else {
@@ -196,6 +202,35 @@ function UseWeapon(_mouseWorldPosition)
 	kickbackAnimation = primaryWeapon.metadata.kickback;
 	fireDelay = TimerRatePerMinute(primaryWeapon.metadata.fire_rate);
 	muzzleFlashTimer = muzzleFlashTime;
+}
+
+function CreateWeaponBulletEmptyParticle(_weaponInstance, _rotatedWeaponChamberPos, _bulletIcon)
+{
+	// BURST BULLET CASING PARTICLES
+	if (!is_undefined(_rotatedWeaponChamberPos))
+	{
+		var bulletSpriteName = sprite_get_name(_bulletIcon);
+		var emptyBulletSprite = asset_get_index(string("{0}{1}", bulletSpriteName, "Casing")) ?? SPRITE_ERROR;
+
+		part_system_depth(partSystemBulletCasing, _weaponInstance.depth - 1);
+		part_emitter_region(
+			partSystemBulletCasing, partEmitterBulletCasing,
+			_weaponInstance.x + _rotatedWeaponChamberPos.X,
+			_weaponInstance.x + _rotatedWeaponChamberPos.X,
+			_weaponInstance.y + _rotatedWeaponChamberPos.Y,
+			_weaponInstance.y + _rotatedWeaponChamberPos.Y,
+			ps_shape_rectangle,
+			ps_distr_linear
+		);
+		part_type_sprite(partTypeBulletCasing, emptyBulletSprite, false, false, false);
+		part_type_direction(partTypeBulletCasing,
+			sign(_weaponInstance.image_yscale) == 1 ? 120 : 60,
+			sign(_weaponInstance.image_yscale) == 1 ? 140 : 40,
+			0, 0
+		);
+		part_type_orientation(partTypeBulletCasing, image_angle - 90, image_angle - 90, sign(_weaponInstance.image_yscale) * 5, false, true);
+		part_emitter_burst(partSystemBulletCasing, partEmitterBulletCasing, partTypeBulletCasing, 1);
+	}	
 }
 
 function WeaponSpawnProjectile(_bullet, _spawnPoint, _mouseWorldPosition, _recoil, _isAiming, _scale = 1, _rotation = undefined)
@@ -247,6 +282,17 @@ function CalculateBarrelPos()
 		(primaryWeapon.metadata.barrel_pos.Y - yOrigin) * image_yscale
 	);
 	rotatedWeaponBarrelPos = barrelPos.Rotate(image_angle);
+}
+
+function CalculateChamberPos()
+{
+	var xOrigin = sprite_get_xoffset(sprite_index);
+	var yOrigin = sprite_get_yoffset(sprite_index);
+	var barrelPos = new Vector2(
+		(primaryWeapon.metadata.chamber_pos.X - xOrigin) * image_xscale,
+		(primaryWeapon.metadata.chamber_pos.Y - yOrigin) * image_yscale
+	);
+	rotatedWeaponChamberPos = barrelPos.Rotate(image_angle);
 }
 
 function CalculateHandPosition(_handPosition)

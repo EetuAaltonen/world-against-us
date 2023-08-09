@@ -1,4 +1,4 @@
-function MetadataItemWeaponGunShotgun(_fire_rate, _range, _kickback, _weapon_offset, _barrel_pos, _right_hand_position, _left_hand_position, _chamber_type, _caliber, _recoil, _attachment_slots, _shell_capacity) : MetadataItemWeaponGun(_fire_rate, _range, _kickback, _weapon_offset, _barrel_pos, _right_hand_position, _left_hand_position, _chamber_type, _caliber, _recoil, _attachment_slots) constructor
+function MetadataItemWeaponGunShotgun(_fire_rate, _range, _kickback, _weapon_offset, _chamber_pos, _barrel_pos, _right_hand_position, _left_hand_position, _chamber_type, _caliber, _recoil, _attachment_slots, _shell_capacity) : MetadataItemWeaponGun(_fire_rate, _range, _kickback, _weapon_offset, _chamber_pos, _barrel_pos, _right_hand_position, _left_hand_position, _chamber_type, _caliber, _recoil, _attachment_slots) constructor
 {
     shell_capacity = _shell_capacity;
 	shells = [];
