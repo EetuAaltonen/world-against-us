@@ -38,11 +38,12 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 			if (mouse_check_button_released(mb_left))
 			{
 				// CHECK IF ITEM IS WHITELISTED
-				if (inventory.IsItemCategoryWhiteListed(dragItemData))
+				if (inventory.GetItemCount() <= 0)
 				{
-					if (inventory.GetItemCount() <= 0)
+					if (inventory.IsItemWhiteListed(dragItemData))
 					{
-						if (inventory.AddItem(dragItemData, undefined, false))
+						var addedItemGridIndex = inventory.AddItem(dragItemData, undefined, false);
+						if (!is_undefined(addedItemGridIndex))
 						{
 							initItem = true;
 						} else {
@@ -50,21 +51,31 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 							global.ObjMouse.dragItem.RestoreOriginalItem();
 						}
 					} else {
-						// SWAP EQUIPPED ITEM WITH ROLLBACK
-						var item = inventory.GetItemByIndex(0);
-						if (dragItemData.sourceInventory.AddItem(item))
-						{
-							inventory.RemoveItemByIndex(0);
-							inventory.AddItem(dragItemData, undefined, false);
-							initItem = true;
-						} else {
-							// RESTORE ITEM IF SWAPPING IS INTERRUPTED
-							global.ObjMouse.dragItem.RestoreOriginalItem();
-						}
+						// RESTORE ITEM IF ITEM CATEGORY IS WRONG
+						global.ObjMouse.dragItem.RestoreOriginalItem();
 					}
 				} else {
-					// RESTORE ITEM IF SWAPPING IS INTERRUPTED
-					global.ObjMouse.dragItem.RestoreOriginalItem();
+					// ITEM DROP ACTIONS
+					var slottedItem = inventory.GetItemByIndex(0);
+					if (!is_undefined(slottedItem))
+					{
+						if (CombineItems(dragItemData, slottedItem))
+						{
+							initItem = true;
+						} else {
+							if (inventory.IsItemWhiteListed(dragItemData))
+							{
+								// SWAP EQUIPPED ITEM WITH ROLLBACK
+								if (dragItemData.sourceInventory.SwapWithRollback(dragItemData, slottedItem))
+								{
+									initItem = true;
+								}
+							}  else {
+								// RESTORE ITEM IF SWAPPING IS INTERRUPTED
+								global.ObjMouse.dragItem.RestoreOriginalItem();
+							}
+						}
+					}
 				}
 				global.ObjMouse.dragItem = undefined;
 			}
@@ -90,8 +101,7 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 		{
 			DrawItem(
 				itemData, 0, baseIconScale, imageAlpha,
-				new Vector2(position.X + (size.w * 0.5), position.Y + (size.h * 0.5)),
-				new Size(size.w, size.h),
+				new Vector2(position.X + (size.w * 0.5), position.Y + (size.h * 0.5)), size,
 				[DRAW_ITEM_FLAGS.NameBg, DRAW_ITEM_FLAGS.NameShort,
 				DRAW_ITEM_FLAGS.AltTextBg, DRAW_ITEM_FLAGS.AltText]
 			);
@@ -99,10 +109,20 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 		
 		if (isHovered)
 		{
+			// DRAW DRAG ITEM INDICATOR
 			if (!is_undefined(global.ObjMouse.dragItem))
 			{
 				var dragItemData = global.ObjMouse.dragItem.item_data;
-				var gridAreaColor = inventory.IsItemCategoryWhiteListed(dragItemData) ? #0fb80f : #b80f0f;
+				var gridAreaColor = inventory.IsItemWhiteListed(dragItemData) ? #0fb80f : #b80f0f;
+				
+				if (!is_undefined(itemData))
+				{
+					if (CombineItems(dragItemData, itemData, true))
+					{
+						gridAreaColor = #ffe100;
+					}
+				}
+				
 				draw_sprite_ext(
 					sprGUIBg, 0,
 					position.X, position.Y,

@@ -18,17 +18,17 @@ function CreateWindowFacilityGenerator(_zIndex, _facility)
 	);
 	
 	// FUEL CAN HOLDER
-	var facillityItemHolderSize = new Size(200, 200)
-	var facillityItemHolder = new WindowItemSlot(
-		"FacillityItemHolder",
-		new Vector2((windowSize.w * 0.5) - (facillityItemHolderSize.w * 0.5), 100),
-		facillityItemHolderSize,
+	var facilityItemHolderSize = new Size(200, 200)
+	var facilityItemHolder = new WindowItemSlot(
+		"FacilityItemHolder",
+		new Vector2((windowSize.w * 0.5) - (facilityItemHolderSize.w * 0.5), 100),
+		facilityItemHolderSize,
 		c_gray, _facility.inventory
 	);
 	
 	ds_list_add(facilityElements,
 		facilityTitle,
-		facillityItemHolder
+		facilityItemHolder
 	);
 	
 	facilityWindow.AddChildElements(facilityElements);
