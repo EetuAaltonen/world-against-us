@@ -1,0 +1,33 @@
+{
+  "tag": "construction_site",
+  "blueprints": [
+    {
+      "materials": [
+        {
+          "name": "Wooden Plank",
+          "quantity": 2
+        },
+        {
+          "name": "Nails",
+          "quantity": 1
+        }
+      ],
+      "output_building_name": "Garden Bed",
+      "output_building_object": "objGardenBed"
+    },
+    {
+      "materials": [
+        {
+          "name": "Wooden Plank",
+          "quantity": 1
+        },
+        {
+          "name": "Nails",
+          "quantity": 2
+        }
+      ],
+      "output_building_name": "Solar Panels",
+      "output_building_object": "objSolarPanels"
+    }
+  ]
+}

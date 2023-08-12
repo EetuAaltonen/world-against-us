@@ -3,6 +3,7 @@ enum INVENTORY_TYPE {
 	PlayerPrimaryWeaponSlot,
 	MagazinePockets,
 	MedicinePockets,
+	LootContainer,
 	Facility,
-	LootContainer
+	ConstructionSite,
 }

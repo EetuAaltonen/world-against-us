@@ -59,6 +59,7 @@ initGlobalVariables = function()
 
 	// Global Database
 	global.ItemDatabase = undefined;
+	global.BlueprintData = undefined;
 	global.LootTableData = undefined;
 	global.QuestData = undefined;
 	global.DialogueData = undefined;

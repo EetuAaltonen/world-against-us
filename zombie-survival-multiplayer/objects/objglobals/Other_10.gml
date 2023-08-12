@@ -14,6 +14,7 @@ if (instance_exists(objDatabase))
 {
 	var databaseInstance = instance_find(objDatabase, 0);
 	global.ItemDatabase = databaseInstance.itemDatabase;
+	global.BlueprintData = databaseInstance.blueprintData;
 	global.LootTableData = databaseInstance.lootTableData;
 	global.QuestData = databaseInstance.questData;
 	global.DialogueData = databaseInstance.dialogueData;
