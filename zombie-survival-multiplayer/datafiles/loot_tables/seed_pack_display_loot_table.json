@@ -1,0 +1,19 @@
+{
+  "tag": "seed_pack_display",
+  "pools": [
+    {
+      "roll_chance": 100,
+      "rolls": {
+        "min": 1,
+        "max": 4
+      },
+      "entries": [
+        {
+          "name": "Tomato Seed Pack",
+          "count": 3,
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}
