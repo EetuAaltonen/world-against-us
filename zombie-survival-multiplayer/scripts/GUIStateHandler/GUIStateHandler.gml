@@ -104,9 +104,14 @@ function GUIStateHandler() constructor
 	
 	static CloseCurrentGUIState = function()
 	{
-		var currentGUIState = array_pop(state_chain);
-		// CLOSE CURRENT WINDOW
-		global.GameWindowHandlerRef.CloseWindowGroupByIndexGroup(currentGUIState.windowIndexGroup);
+		if (array_length(state_chain) > 1)
+		{
+			var currentGUIState = array_pop(state_chain);
+			// CLOSE CURRENT WINDOW
+			global.GameWindowHandlerRef.CloseWindowGroupByIndexGroup(currentGUIState.windowIndexGroup);
+		} else {
+			show_message("Invalid 'CloseCurrentGUIState' call. GUI state already closed!");
+		}
 	}
 	
 	static IsGUIStateClosed = function()
