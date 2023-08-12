@@ -734,6 +734,120 @@
       "metadata": {
         "fuel_value": 500
       }
+    },
+    {
+      "name": "Fertilizer Sack",
+      "short_name": "Fertilizer",
+      "icon": "sprFertilizerSack",
+      "category": "Garden Tool",
+      "type": "Fertilizer",
+      "size": {
+        "w": 2,
+        "h": 3
+      },
+      "description": "Fertilizer sack",
+      "weight": 10000,
+      "max_stack": 1,
+      "base_price": 1000,
+      "metadata": {}
+    },
+    {
+      "name": "Garden Tools",
+      "short_name": "Tools",
+      "icon": "sprGardenTools",
+      "category": "Garden Tool",
+      "type": "Garden",
+      "size": {
+        "w": 2,
+        "h": 2
+      },
+      "description": "Garden tools",
+      "weight": 10000,
+      "max_stack": 1,
+      "base_price": 1000,
+      "metadata": {}
+    },
+    {
+      "name": "Watering Can",
+      "short_name": "Watering",
+      "icon": "sprWateringCan",
+      "category": "Garden Tool",
+      "type": "Garden",
+      "size": {
+        "w": 2,
+        "h": 2
+      },
+      "description": "Watering can",
+      "weight": 10000,
+      "max_stack": 1,
+      "base_price": 1000,
+      "metadata": {}
+    },
+    {
+      "name": "Tomato Seed Pack",
+      "short_name": "Tomato",
+      "icon": "sprTomatoSeedPack",
+      "category": "Garden Tool",
+      "type": "Seed",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "Tomato seed pack",
+      "weight": 10000,
+      "max_stack": 120,
+      "base_price": 1000,
+      "metadata": {}
+    },
+    {
+      "name": "Tomato",
+      "short_name": "Tomato",
+      "icon": "sprTomato",
+      "category": "Consumable",
+      "type": "Food",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "A fresh tomato",
+      "weight": 400,
+      "max_stack": 16,
+      "base_price": 2,
+      "metadata": {
+        "nutrition": 10
+      }
+    },
+    {
+      "name": "Nails",
+      "short_name": "Nails",
+      "icon": "sprNails",
+      "category": "Material",
+      "type": "Nail",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "A stack of nails",
+      "weight": 100,
+      "max_stack": 120,
+      "base_price": 5,
+      "metadata": {}
+    },
+    {
+      "name": "Wooden Plank",
+      "short_name": "Plank",
+      "icon": "sprWoodenPlank",
+      "category": "Material",
+      "type": "Plank",
+      "size": {
+        "w": 2,
+        "h": 3
+      },
+      "description": "A wooden plank",
+      "weight": 400,
+      "max_stack": 1,
+      "base_price": 10,
+      "metadata": {}
     }
   ]
 }
