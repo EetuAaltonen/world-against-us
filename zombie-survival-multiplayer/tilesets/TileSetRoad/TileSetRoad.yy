@@ -16,8 +16,8 @@
     "path": "folders/Tile Sets.yy",
   },
   "spriteId": {
-    "name": "sprRoadTiles",
-    "path": "sprites/sprRoadTiles/sprRoadTiles.yy",
+    "name": "sprTilesRoad",
+    "path": "sprites/sprTilesRoad/sprTilesRoad.yy",
   },
   "spriteNoExport": true,
   "textureGroupId": {

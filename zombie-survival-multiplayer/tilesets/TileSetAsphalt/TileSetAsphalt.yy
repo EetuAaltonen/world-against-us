@@ -1,7 +1,7 @@
 {
   "resourceType": "GMTileSet",
   "resourceVersion": "1.0",
-  "name": "TileSetGrass",
+  "name": "TileSetAsphalt",
   "autoTileSets": [],
   "macroPageTiles": {
     "SerialiseHeight": 0,
@@ -16,8 +16,8 @@
     "path": "folders/Tile Sets.yy",
   },
   "spriteId": {
-    "name": "sprTilesGrass",
-    "path": "sprites/sprTilesGrass/sprTilesGrass.yy",
+    "name": "sprTilesAsphalt",
+    "path": "sprites/sprTilesAsphalt/sprTilesAsphalt.yy",
   },
   "spriteNoExport": true,
   "textureGroupId": {
