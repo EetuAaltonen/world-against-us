@@ -11,7 +11,8 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 				var targetInventory = global.ObjTempInventory.inventory;
 				if (!is_undefined(targetInventory))
 				{
-					if (targetInventory.AddItem(sourceItem, undefined, false, sourceItem.is_known))
+					var transferItemGridIndex = targetInventory.AddItem(sourceItem, undefined, false, sourceItem.is_known);
+					if (!is_undefined(transferItemGridIndex))
 					{
 						_inventory.RemoveItemByGridIndex(itemGridIndex);	
 					}
@@ -21,7 +22,8 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 					{
 						if (!is_undefined(global.PlayerAmmoPockets))
 						{
-							if (global.PlayerAmmoPockets.AddItem(sourceItem, undefined, false, sourceItem.is_known))
+							var transferItemGridIndex = global.PlayerAmmoPockets.AddItem(sourceItem, undefined, false, sourceItem.is_known);
+							if (!is_undefined(transferItemGridIndex))
 							{
 								_inventory.RemoveItemByGridIndex(itemGridIndex);
 							}
@@ -30,7 +32,8 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 					{
 						if (!is_undefined(global.PlayerMedicinePockets))
 						{
-							if (global.PlayerMedicinePockets.AddItem(sourceItem, undefined, false, sourceItem.is_known))
+							var transferItemGridIndex = global.PlayerMedicinePockets.AddItem(sourceItem, undefined, false, sourceItem.is_known);
+							if (!is_undefined(transferItemGridIndex))
 							{
 								_inventory.RemoveItemByGridIndex(itemGridIndex);
 							}
@@ -40,7 +43,8 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 			} else {
 				if (!is_undefined(global.PlayerBackpack))
 				{
-					if (global.PlayerBackpack.AddItem(sourceItem, undefined, false, sourceItem.is_known))
+					var transferItemGridIndex = global.PlayerBackpack.AddItem(sourceItem, undefined, false, sourceItem.is_known);
+					if (!is_undefined(transferItemGridIndex))
 					{
 						_inventory.RemoveItemByGridIndex(itemGridIndex);
 					}

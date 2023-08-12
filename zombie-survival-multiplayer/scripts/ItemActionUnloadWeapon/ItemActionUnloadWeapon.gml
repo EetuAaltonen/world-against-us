@@ -7,7 +7,8 @@ function ItemActionUnloadWeapon(_weapon)
 			case "Fuel Tank": {
 				if (!is_undefined(_weapon.metadata.fuel_tank))
 				{
-					if (_weapon.sourceInventory.AddItem(_weapon.metadata.fuel_tank, undefined, false))
+					var unloadedFuelGridIndex = _weapon.sourceInventory.AddItem(_weapon.metadata.fuel_tank, undefined, false);
+					if (!is_undefined(unloadedFuelGridIndex))
 					{
 						_weapon.metadata.fuel_tank = undefined;
 					}
@@ -18,7 +19,8 @@ function ItemActionUnloadWeapon(_weapon)
 				repeat (shellCountToUnload)
 				{
 					var shell = _weapon.metadata.UnloadAmmo();
-					if (!_weapon.sourceInventory.AddItem(shell, undefined, false))
+					var unloadedShellGridIndex = _weapon.sourceInventory.AddItem(shell, undefined, false);
+					if (is_undefined(unloadedShellGridIndex))
 					{
 						// REVERSE UNLOAD IF DOESN'T FIT
 						_weapon.metadata.ReloadAmmo(shell);
@@ -31,7 +33,8 @@ function ItemActionUnloadWeapon(_weapon)
 			default: {
 				if (!is_undefined(_weapon.metadata.magazine))
 				{
-					if (_weapon.sourceInventory.AddItem(_weapon.metadata.magazine, undefined, false))
+					var unloadedMagazineGridIndex = _weapon.sourceInventory.AddItem(_weapon.metadata.magazine, undefined, false);
+					if (!is_undefined(unloadedMagazineGridIndex))
 					{
 						_weapon.metadata.magazine = undefined;
 					}

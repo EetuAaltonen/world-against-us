@@ -8,7 +8,8 @@ function InventoryReloadWeaponFlamethrower(_weapon, _fuelTank)
 		_weapon.metadata.fuel_tank = reloadedFuelTank;
 		isFuelTankReloaded = true;
 	} else {
-		if (_fuelTank.sourceInventory.AddItem(_weapon.metadata.fuel_tank))
+		var unloadedFuelGridIndex = _fuelTank.sourceInventory.AddItem(_weapon.metadata.fuel_tank);
+		if (!is_undefined(unloadedFuelGridIndex))
 		{
 			_weapon.metadata.magazine = reloadedFuelTank;
 			isFuelTankReloaded = true;

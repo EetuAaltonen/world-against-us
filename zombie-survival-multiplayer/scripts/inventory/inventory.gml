@@ -61,8 +61,10 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 
     static AddItem = function(_item, _new_grid_index = undefined, _new_is_rotated = false, _new_is_known = true, _ignore_network = false)
     {
-		var isItemAdded = false;
-		if (IsItemCategoryWhiteListed(_item))
+		var addedItemGridIndex = undefined;
+		var isItemStacked = false;
+		
+		if (IsItemWhiteListed(_item))
 		{
 			var cloneItem = _item.Clone();
 			if (cloneItem.is_rotated != _new_is_rotated)
@@ -75,17 +77,19 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 				cloneItem.grid_index = _new_grid_index.Clone();
 			} else {
 				var emptyIndex = FindEmptyIndex(cloneItem);
-				if (StackItem(cloneItem, emptyIndex))
+				var stackGridIndex = StackItem(cloneItem, emptyIndex);
+				if (!is_undefined(stackGridIndex))
 				{
 					// IF ITEM IS FULLY STACKED
-					isItemAdded = true;
+					isItemStacked = true;
+					addedItemGridIndex = stackGridIndex;
 				} else {
 					cloneItem.grid_index = emptyIndex ?? FindEmptyIndex(cloneItem);
 				}
 			}
 			
 			// CHECK IF ITEM IS ALREADY STACKED
-			if (!isItemAdded)
+			if (!isItemStacked)
 			{
 				if (!is_undefined(cloneItem.grid_index))
 				{
@@ -108,7 +112,7 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 						}
 					}
 					ds_list_add(items, cloneItem);
-					isItemAdded = true;
+					addedItemGridIndex = cloneItem.grid_index.Clone();
 				} else {
 					// MESSAGE LOG
 					AddMessageLog(string(_item.name) + " doesn't fit!");
@@ -118,12 +122,12 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 			// MESSAGE LOG
 			AddMessageLog(string(_item.name) + " category is wrong to fit!");
 		}
-		return isItemAdded;
+		return addedItemGridIndex;
     }
 	
 	static StackItem = function(_sourceItem, _priority_grid_index = undefined)
 	{
-		var isItemStacked = false;
+		var stackGridIndex = undefined;
 		if (_sourceItem.max_stack > 1)
 		{
 			var itemCount = GetItemCount();
@@ -139,42 +143,43 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 					if ((_sourceItem.quantity < _sourceItem.max_stack && item.quantity < item.max_stack) || !isPriorityGridIndexSmaller)
 					{
 						item.Stack(_sourceItem);
-						isItemStacked = _sourceItem.quantity <= 0;
+						if (_sourceItem.quantity <= 0)
+						{
+							stackGridIndex = item.grid_index.Clone();
+						}
 					}
 				}
 			}
 		}
 		
-		return isItemStacked;
+		return stackGridIndex;
 	}
 	
 	static ReplaceWithRollback = function(_oldItem, _newItem)
     {
-		var isItemReplaced = true;
-		
-		RemoveItemByGridIndex(_oldItem.grid_index);
-		if (!AddItem(_newItem))
+		_oldItem.sourceInventory.RemoveItemByGridIndex(_oldItem.grid_index);
+		var replacedItemGridIndex = _oldItem.sourceInventory.AddItem(_newItem);
+		if (is_undefined(replacedItemGridIndex))
 		{
 			// ROLLBACK IF NEW ITEM DOESN'T FIT
-			AddItem(_oldItem, _oldItem.grid_index, _oldItem.is_rotated);
-			isItemReplaced = false;
+			_oldItem.sourceInventory.AddItem(_oldItem, _oldItem.grid_index, _oldItem.is_rotated);
 		}
 		
-		return isItemReplaced;
+		return replacedItemGridIndex;
     }
 	
 	static SwapWithRollback = function(_sourceItem, _targetItem)
 	{
 		var isItemSwapped = false;
-		var cloneTargetItem = _targetItem.Clone();
-		
-		if (_sourceItem.sourceInventory.ReplaceWithRollback(_sourceItem, cloneTargetItem))
+		var swappedTargetItemGridIndex = _sourceItem.sourceInventory.ReplaceWithRollback(_sourceItem, _targetItem);
+		if (!is_undefined(swappedTargetItemGridIndex))
 		{
-			if (_targetItem.sourceInventory.ReplaceWithRollback(_targetItem, _sourceItem))
+			var swappedSourceItemGridIndex = _targetItem.sourceInventory.ReplaceWithRollback(_targetItem, _sourceItem);
+			if (!is_undefined(swappedSourceItemGridIndex))
 			{
 				isItemSwapped = true;
 			} else {
-				cloneTargetItem.sourceInventory.RemoveItemByGridIndex(cloneTargetItem.grid_index);
+				_sourceItem.sourceInventory.RemoveItemByGridIndex(swappedTargetItemGridIndex);
 				_sourceItem.sourceInventory.AddItem(_sourceItem, _sourceItem.grid_index, _sourceItem.is_rotated, _sourceItem.is_known);
 			}
 		}
@@ -250,9 +255,12 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 		}
 	}
 	
-	static IsItemCategoryWhiteListed = function(_item)
+	static IsItemWhiteListed = function(_item)
     {
-		return (array_length(filter_array) == 0) || ArrayContainsValue(filter_array, _item.category);
+		return (array_length(filter_array) == 0) || (
+			ArrayContainsValue(filter_array, _item.category) ||
+			ArrayContainsValue(filter_array, _item.name)
+		);
     }
 	
 	static RemoveItemByIndex = function(_index)

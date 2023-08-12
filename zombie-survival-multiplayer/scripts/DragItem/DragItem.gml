@@ -8,10 +8,11 @@ function DragItem(_item_data) constructor
 	
 	static RestoreOriginalItem = function()
 	{
-		if (!item_data.sourceInventory.AddItem(
+		var restoredItemGridIndex = item_data.sourceInventory.AddItem(
 			item_data, original_grid_index,
 			original_is_rotated, original_is_known
-		))
+		);
+		if (is_undefined(restoredItemGridIndex))
 		{
 			throw (string("Failed to restore dragged item {0}", item_data.name));
 		}

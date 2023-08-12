@@ -8,7 +8,8 @@ function InventoryReloadWeaponGun(_weapon, _magazine)
 		_weapon.metadata.magazine = reloadedMagazine;
 		isMagazineReloaded = true;
 	} else {
-		if (_magazine.sourceInventory.AddItem(_weapon.metadata.magazine))
+		var unloadedMagazineGridIndex = _magazine.sourceInventory.AddItem(_weapon.metadata.magazine);
+		if (!is_undefined(unloadedMagazineGridIndex))
 		{
 			_weapon.metadata.magazine = reloadedMagazine;
 			isMagazineReloaded = true;

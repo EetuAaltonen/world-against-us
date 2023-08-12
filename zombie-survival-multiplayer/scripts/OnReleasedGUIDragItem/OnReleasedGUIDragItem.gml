@@ -7,7 +7,8 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 		var dragItemData = global.ObjMouse.dragItem.item_data;
 		if (_inventory.IsGridAreaEmpty(_mouseHoverIndex.col, _mouseHoverIndex.row, dragItemData))
 		{
-			if (_inventory.AddItem(dragItemData, _mouseHoverIndex, dragItemData.is_rotated))
+			var droppedItemGridIndex = _inventory.AddItem(dragItemData, _mouseHoverIndex, dragItemData.is_rotated);
+			if (!is_undefined(droppedItemGridIndex))
 			{
 				isDragItemDropped = true;
 				

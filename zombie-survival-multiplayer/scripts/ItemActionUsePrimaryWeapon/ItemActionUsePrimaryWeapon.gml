@@ -7,10 +7,13 @@ function ItemActionUsePrimaryWeapon(_item)
 			if (!_item.Compare(global.ObjWeapon.primaryWeapon))
 			{
 				var equippedWeapon = global.PlayerPrimaryWeaponSlot.GetItemByIndex(0);
-				if (!is_undefined(equippedWeapon))
+				if (is_undefined(equippedWeapon))
 				{
-					if (_item.sourceInventory.SwapWithRollback(_item, equippedWeapon))
+					var equippedWeaponGridIndex = global.PlayerPrimaryWeaponSlot.AddItem(_item, undefined, false)
+					if (!is_undefined(equippedWeaponGridIndex))
 					{
+						_item.sourceInventory.RemoveItemByGridIndex(_item.grid_index);
+						
 						var playerBackpackWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.PlayerBackpack);
 						if (!is_undefined(playerBackpackWindow))
 						{
@@ -22,10 +25,8 @@ function ItemActionUsePrimaryWeapon(_item)
 						}
 					}
 				} else {
-					if (global.PlayerPrimaryWeaponSlot.AddItem(_item, undefined, false))
+					if (_item.sourceInventory.SwapWithRollback(_item, equippedWeapon))
 					{
-						_item.sourceInventory.RemoveItemByGridIndex(_item.grid_index);
-						
 						var playerBackpackWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.PlayerBackpack);
 						if (!is_undefined(playerBackpackWindow))
 						{

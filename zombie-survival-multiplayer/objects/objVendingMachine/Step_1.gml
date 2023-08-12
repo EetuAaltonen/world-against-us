@@ -18,7 +18,8 @@ if (facility.inventory.GetItemCount() <= 0)
 		{
 			var randomItemName = itemIndices[@ irandom_range(0, (itemCount - 1))];
 			var item = global.ItemDatabase.GetItemByName(randomItemName);
-			if (!facility.inventory.AddItem(item.Clone(), undefined, true)) break;
+			var addedItemGridIndex = facility.inventory.AddItem(item.Clone(), undefined, true);
+			if (is_undefined(addedItemGridIndex)) break;
 		}
 		
 		// DISABLE ITEM INPUT

@@ -10,7 +10,8 @@ function OnReleasedGUIDragItemSplit(_inventory, _mouseHoverIndex)
 			var splitQuantity = keyboard_check(vk_shift) ? ceil(dragItemData.quantity * 0.5) : 1;
 			if (_inventory.IsGridAreaEmpty(_mouseHoverIndex.col, _mouseHoverIndex.row, dragItemData, undefined, undefined))
 			{
-				if (_inventory.AddItem(dragItemData.Clone(splitQuantity, true), _mouseHoverIndex, dragItemData.is_rotated))
+				var splitItemGridIndex = _inventory.AddItem(dragItemData.Clone(splitQuantity, true), _mouseHoverIndex, dragItemData.is_rotated);
+				if (!is_undefined(splitItemGridIndex))
 				{
 					dragItemData.quantity -= splitQuantity;
 				}
