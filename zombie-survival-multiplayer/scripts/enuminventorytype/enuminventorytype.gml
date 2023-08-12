@@ -6,4 +6,5 @@ enum INVENTORY_TYPE {
 	LootContainer,
 	Facility,
 	ConstructionSite,
+	Garden
 }

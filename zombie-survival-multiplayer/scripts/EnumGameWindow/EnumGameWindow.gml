@@ -29,4 +29,5 @@ enum GAME_WINDOW
 	FacilityVendingMachine,
 	FacilityAmmunitionSortingMachine,
 	ConstructionSite,
+	GardenBed,
 }

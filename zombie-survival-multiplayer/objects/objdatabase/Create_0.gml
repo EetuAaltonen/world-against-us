@@ -12,8 +12,8 @@ dialogueData = ds_map_create();
 // READ ALL LOOT TABLE JSON FILES
 // TODO: Move this to script
 try {
-	var diractoryPath = string("{0}{1}", working_directory, "\dialogues");
-	if directory_exists(diractoryPath)
+	var directoryPath = string("{0}{1}", working_directory, "\dialogues");
+	if directory_exists(directoryPath)
 	{
 		var filePath = string("{0}{1}", working_directory, "/dialogues/");
 		var fileName = file_find_first(filePath + "*dialogue.twee", fa_none);
@@ -130,8 +130,8 @@ lootTableData = ds_map_create();
 // READ ALL LOOT TABLE JSON FILES
 // TODO: Move this to script
 try {
-	var diractoryPath = string("{0}{1}", working_directory, "\loot_tables");
-	if directory_exists(diractoryPath)
+	var directoryPath = string("{0}{1}", working_directory, "\loot_tables");
+	if directory_exists(directoryPath)
 	{
 		var filePath = string("{0}{1}", working_directory, "/loot_tables/");
 		var fileName = file_find_first(filePath + "*loot_table.json", fa_none);
@@ -147,6 +147,34 @@ try {
 			);
 
 			ds_map_add(lootTableData, lootTableTag, lootTable);
+		    fileName = file_find_next();
+		}
+		file_find_close();
+	}
+} catch (error)
+{
+	show_debug_message(error);
+	show_message(error);
+}
+
+// BLUEPRINT DATA
+blueprintData = ds_map_create();
+// READ ALL BLUEPRINT JSON FILES
+// TODO: Move this to script
+try {
+	var directoryPath = string("{0}{1}", working_directory, "\construction_blueprints");
+	if directory_exists(directoryPath)
+	{
+		var filePath = string("{0}{1}", working_directory, "/construction_blueprints/");
+		var fileName = file_find_first(filePath + "*blueprint.json", fa_none);
+
+		while (fileName != "")
+		{
+		    var jsonblueprintStruct = ReadJSONFile(string("{0}{1}", "/construction_blueprints/", fileName)) ?? EMPTY_STRUCT;
+			var blueprintTag = jsonblueprintStruct[$ "tag"];
+			var blueprintMaterials = ParseJSONStructToArray(jsonblueprintStruct[$ "blueprints"], ParseJSONStructToDatabaseConstructionBlueprint);
+
+			ds_map_add(blueprintData, blueprintTag, blueprintMaterials);
 		    fileName = file_find_next();
 		}
 		file_find_close();
