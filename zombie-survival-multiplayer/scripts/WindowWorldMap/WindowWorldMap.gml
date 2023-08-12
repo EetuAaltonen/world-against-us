@@ -7,24 +7,27 @@ function WindowWorldMap(_elementId, _relativePosition, _size, _backgroundColor, 
 	mapMaxZoom = 3;
 	mapScale = 1;
 	positionOffset = new Vector2(0, 0);
-	prevMousePos = MouseWorldPosition();
-	positionFinal = position.Clone();
+	prevMousePos = undefined;
 	sizeZoomed = size.Clone;
+	calculatedPosition = position.Clone();
 
 	
 	static OnUpdate = function()
 	{
-		if (mouse_check_button(mb_left))
+		if (mouse_check_button_pressed(mb_left))
 		{
-			var mouseWorldPosition = MouseWorldPosition();
-			positionOffset.X += (mouseWorldPosition.X - prevMousePos.X) * min(3, max(1.5, (mapZoomBase / mapZoom)));
-			positionOffset.Y += (mouseWorldPosition.Y - prevMousePos.Y) * min(3, max(1.5, (mapZoomBase / mapZoom)));
+			var mouseGUIPosition = MouseGUIPosition();
+			prevMousePos = mouseGUIPosition;
+		} else if (mouse_check_button(mb_left))
+		{
+			var mouseGUIPosition = MouseGUIPosition();
+			positionOffset.X += (mouseGUIPosition.X - prevMousePos.X) * min(3, max(1.5, (mapZoomBase / mapZoom)));
+			positionOffset.Y += (mouseGUIPosition.Y - prevMousePos.Y) * min(3, max(1.5, (mapZoomBase / mapZoom)));
 			
-			prevMousePos = mouseWorldPosition;
+			prevMousePos = mouseGUIPosition;
 		} else if (mouse_check_button_released(mb_right))
 		{
 			positionOffset = new Vector2(0, 0);
-			mapZoom = mapZoomBase;
 		} else {
 			if (mouse_wheel_up())
 			{
@@ -36,24 +39,26 @@ function WindowWorldMap(_elementId, _relativePosition, _size, _backgroundColor, 
 			
 			mapZoom = min(mapMaxZoom, max(mapZoomStep, mapZoom));
 		}
+		
 		mapScale = floor(((size.w * mapZoom) / room_width) * 1000) / 1000;
-		sizeZoomed.w = size.w * mapZoom;
-		sizeZoomed.h = size.h * mapZoom;
-		positionFinal.X = position.X + positionOffset.X + ((size.w - sizeZoomed.w) * 0.5);
-		positionFinal.Y = position.Y + positionOffset.Y + ((size.h - sizeZoomed.h) * 0.5);
+		sizeZoomed.w = (room_width * mapScale) * mapZoom;
+		sizeZoomed.h = (room_height * mapScale) * mapZoom;
+		calculatedPosition.X = position.X + positionOffset.X + ((size.w - sizeZoomed.w) * 0.5);
+		calculatedPosition.Y = position.Y + positionOffset.Y + ((size.h - sizeZoomed.h) * 0.5);
 	}
 	
 	static DrawContent = function()
 	{
-		var backgroundSprite = sprMapPrologueBg;
+		// TODO: Fix world map background
+		/*var backgroundSprite = sprMapPrologueBg;*/
+		
 		var backgroundScale = new Vector2(
-			sizeZoomed.w / sprite_get_width(backgroundSprite),
-			sizeZoomed.h / sprite_get_height(backgroundSprite) 
+			sizeZoomed.w,
+			sizeZoomed.h
 		);
-
 		draw_sprite_ext(
-			backgroundSprite, 0,
-			positionFinal.X, positionFinal.Y,
+			sprGUIBg, 0,
+			calculatedPosition.X, calculatedPosition.Y,
 			backgroundScale.X, backgroundScale.Y,
 			0, c_white, 1
 		);
@@ -66,12 +71,12 @@ function WindowWorldMap(_elementId, _relativePosition, _size, _backgroundColor, 
 			{
 				if (instance_exists(mapEntry.instance))
 				{
-					var var positionOnGUI = new Vector2(
-						positionFinal.X + (mapEntry.instance.x * mapScale),
-						positionFinal.Y + (mapEntry.instance.y * mapScale)
+					var positionOnGUI = new Vector2(
+						calculatedPosition.X + ((mapEntry.instance.x * mapScale) * mapZoom),
+						calculatedPosition.Y + ((mapEntry.instance.y * mapScale) * mapZoom)
 					);
 				
-					var iconScale = mapScale;
+					var iconScale = mapScale * mapZoom;
 					var iconSize = new Size(mapEntry.icon_size.w * iconScale, mapEntry.icon_size.h * iconScale);
 					var iconAlpha = (!mapEntry.icon_style.constant_alpha && mapEntry.instance.mask_index == SPRITE_NO_MASK) ? 0.3 : 1;
 					draw_sprite_ext(

@@ -9,18 +9,7 @@ function CreateWindowMap(_zIndex)
 	);
 	
 	var mapElements = ds_list_create();
-	
-	var mapPanelSize = new Size(1, 1);
-	var roomAspectRate = room_width / room_height;
-	if (roomAspectRate < 1)
-	{
-		mapPanelSize.h = windowSize.h - 140;
-		mapPanelSize.w = mapPanelSize.h * roomAspectRate;
-		
-	} else {
-		mapPanelSize.w = windowSize.w - 100;
-		mapPanelSize.h = mapPanelSize.w / roomAspectRate;
-	}
+	var mapPanelSize = new Size(windowSize.w - 100, windowSize.h - 140);
 	
 	var worldMapElement = new WindowWorldMap(
 		"worldMapElement",
