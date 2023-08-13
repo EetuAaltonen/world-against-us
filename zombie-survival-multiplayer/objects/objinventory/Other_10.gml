@@ -1,6 +1,6 @@
 /// @description Custom RoomStartEvent
 // ADD SOME STARTING SUPPLIES
-if (room == roomLoadSave)
+if (room == roomLoadResources)
 {
 	if (ds_list_size(inventory.items) <= 0)
 	{
