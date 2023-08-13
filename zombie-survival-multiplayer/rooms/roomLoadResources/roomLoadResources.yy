@@ -1,7 +1,7 @@
 {
   "resourceType": "GMRoom",
   "resourceVersion": "1.0",
-  "name": "roomLoadSave",
+  "name": "roomLoadResources",
   "creationCodeFile": "",
   "inheritCode": false,
   "inheritCreationOrder": false,
