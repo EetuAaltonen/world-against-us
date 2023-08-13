@@ -9,45 +9,67 @@ controllers = [
 	new GameController(objDisplay, [], []),
 	new GameController(objGameWindow, [], []),
 	
+	// GLOBAL VARIABLES
+	new GameController(objGlobals, [], [roomLaunch]),
+	
 	// CAMERA
 	new GameController(objCamera, [], [roomLaunch]),
 	
-	// MAIN MENU
-	new GameController(objGlobals, [], [roomLaunch]),
+	// GUI
+	new GameController(objGUI, [], [roomLaunch]),
+	
+	// MOUSE
+	new GameController(objMouse, [], [roomLaunch], LAYER_CONTROLLERS_ALL_FRONT),
+	
+	// NOTIFICATION
+	new GameController(objNotification, [], [roomLaunch], LAYER_CONTROLLERS_FRONT),
+	
+	// NETWORK
 	new GameController(objNetwork, [], [roomLaunch]),
 	
-	new GameController(objGUI, [], [roomLaunch]),
-	new GameController(objMouse, [], [roomLaunch], LAYER_CONTROLLERS_ALL_FRONT),
-	new GameController(objMessageLog, [], [roomLaunch], LAYER_CONTROLLERS_FRONT),
-	
+	// MAIN MENU
 	new GameController(objMainMenu, [roomMainMenu], [roomLaunch]),
 	
-	// GAME
-	new GameController(objHud, [], [roomLaunch, roomMainMenu, roomLoadSave], LAYER_CONTROLLERS_BEHIND),
-	new GameController(objNotification, [], [roomLaunch, roomMainMenu], LAYER_CONTROLLERS_FRONT),
+	// DATABASE
+	new GameController(objDatabase, [], [roomLaunch, roomMainMenu]),
 	
+	// HUD
+	new GameController(objHud, [], [roomLaunch, roomMainMenu, roomLoadResources], LAYER_CONTROLLERS_BEHIND),
+	
+	// WORLD STATE
 	new GameController(objWorldState, [], [roomLaunch, roomMainMenu]),
 	
-	new GameController(objDialogue, [], [roomLaunch, roomMainMenu]),
-	
-	new GameController(objDatabase, [], [roomLaunch, roomMainMenu]),
-	new GameController(objInventory, [], [roomLaunch, roomMainMenu]),
-	new GameController(objTempInventory, [], [roomLaunch, roomMainMenu, roomLoadSave]),
-	new GameController(objJournal, [], [roomLaunch, roomMainMenu]),
+	// QUEST
 	new GameController(objQuest, [], [roomLaunch, roomMainMenu]),
 	
+	// JOURNAL
+	new GameController(objJournal, [], [roomLaunch, roomMainMenu]),
+	
+	// DIALOGUE
+	new GameController(objDialogue, [], [roomLaunch, roomMainMenu]),
+	
+	// MAP
 	new GameController(objMap, [], [roomLaunch, roomMainMenu], LAYER_CONTROLLERS_BEHIND),
-
 	
-	new GameController(objInstanceHighlighter, [], [roomLaunch, roomMainMenu, roomLoadSave], LAYER_HIGHLIGHT_INTERACTABLE),
+	// INVENTORY
+	new GameController(objInventory, [], [roomLaunch, roomMainMenu]),
 	
-	new GameController(objGridPath, [], [roomLaunch, roomMainMenu, roomLoadSave]),
+	// HIGHLIGHT
+	new GameController(objInstanceHighlighter, [], [roomLaunch, roomMainMenu, roomLoadResources], LAYER_HIGHLIGHT_INTERACTABLE),
 	
+	// GRID PATH
+	new GameController(objGridPath, [], [roomLaunch, roomMainMenu, roomLoadResources]),
+	
+	// TEMP INVENTORY
+	new GameController(objTempInventory, [], [roomLaunch, roomMainMenu, roomLoadResources]),
+	
+	/*
 	// LOAD THE GAME SAVE OBJECT LAST
 	// TO SET THE WORLD STATE AFTER EVERYTHING IS LOADED
-	new GameController(objGameSave, [], [roomLaunch]),
+	new GameController(objGameSave, [], [roomLaunch])*/
 ];
 
+// CONTROLLER LAYERS
 controllerLayers = ds_map_create();
 ds_map_add(controllerLayers, LAYER_CONTROLLERS, depth);
 ds_map_add(controllerLayers, LAYER_CONTROLLERS_BEHIND, depth + 1);

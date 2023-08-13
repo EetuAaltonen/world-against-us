@@ -1,4 +1,4 @@
-if (isLatencyTimerRunning)
+/*if (isLatencyTimerRunning)
 {
 	latencyTimer += delta_time * 0.001;
 }
@@ -26,4 +26,4 @@ if (!is_undefined(client.clientId))
 		isLatencyTimerRunning = true;
 		client.ResetLatencyReqTimer();
 	}
-}
+}*/

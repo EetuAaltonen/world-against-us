@@ -1,5 +1,5 @@
-if (!is_undefined(client.clientId))
+/*if (!is_undefined(client.clientId))
 {
 	client.DisconnectFromHost();
 	client.DeleteSocket();
-}
+}*/

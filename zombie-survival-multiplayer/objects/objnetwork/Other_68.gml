@@ -1,4 +1,4 @@
-if (async_load[? "size"] > 0)
+/*if (async_load[? "size"] > 0)
 {
 	var networkBuffer = async_load[? "buffer"];
 	var packetHeader = PacketDecodeHeader(networkBuffer);
@@ -33,4 +33,4 @@ if (async_load[? "size"] > 0)
 			} break;
 		}
 	}
-}
+}*/

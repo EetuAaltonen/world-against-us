@@ -77,3 +77,6 @@ if (room == roomLaunch) { room_goto(roomMainMenu); }
 
 // START ROOM FADE-IN EFFECT
 roomFadeAlpha = roomFadeAlphaStart;
+
+// GO TO MAIN MENU AFTER LAUNCH
+if (room == roomLoadResources) { room_goto(roomCamp); }
