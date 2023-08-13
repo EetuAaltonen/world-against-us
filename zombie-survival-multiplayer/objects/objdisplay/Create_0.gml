@@ -5,13 +5,13 @@ fpsUpdateInterval = TimerFromMilliseconds(250);
 fpsUpdateTimer = fpsUpdateInterval;
 
 // DISPLAY PROPERTIES
-idealDisplayWidth = 640;
-idealDisplayHeight = 360;
+idealDisplayWidth = VIEW_BASE_WIDTH;
+idealDisplayHeight = VIEW_BASE_HEIGHT;
 windowScale = 1;
 windowScaleStep = 0.25;
 
-idealGUIWidth = 1920;
-idealGUIHeight = 1080;
+idealGUIWidth = GUI_BASE_WIDTH;
+idealGUIHeight = GUI_BASE_HEIGHT;
 
 isFullscreen = window_get_fullscreen();
 
@@ -22,9 +22,6 @@ aspectRatio = displayWidth / displayHeight;
 // CALCULATE DISPLAY WIDTH
 //idealDisplayWidth = idealDisplayHeight * aspectRatio;
 //idealDisplayHeight = idealDisplayWidth / aspectRatio;
-
-// WINDOW RECENTER
-recenterWindow = false;
 
 // PERFECT PIXEL SCALING
 /*if (displayWidth mod idealDisplayWidth != 0)
@@ -71,7 +68,8 @@ surface_resize(application_surface, idealDisplayWidth * windowScale, idealDispla
 // Set GUI SIZE
 display_set_gui_size(idealGUIWidth, idealGUIHeight);
 
+// RECENTER WINDOW
+recenterWindow = true;
+
 // SET DEFAULT DRAW PROPERTIES
-draw_set_font(font_default);
-draw_set_color(c_black);
-draw_set_alpha(1);
+ResetDrawProperties();

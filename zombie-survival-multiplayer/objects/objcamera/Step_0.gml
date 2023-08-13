@@ -1,6 +1,6 @@
-if (target != noone)
+if (cameraTarget != noone)
 {
-	if (instance_exists(target))
+	if (instance_exists(cameraTarget))
 	{
 		// DISABLE ZOOM CONTROLS WHILE WINDOW OPEN
 		if (global.GUIStateHandlerRef.IsGUIStateClosed())
@@ -20,15 +20,15 @@ if (target != noone)
 		camera_set_view_size(view_camera[0], viewSize.w, viewSize.h);
 	
 		// POSITION
-		viewPosition.X = lerp(viewPosition.X, target.x - (viewSize.w * 0.5), 1);
-		viewPosition.Y = lerp(viewPosition.Y, target.y - (viewSize.h * 0.5), 1);
+		viewPosition.X = lerp(viewPosition.X, cameraTarget.x - (viewSize.w * 0.5), 1);
+		viewPosition.Y = lerp(viewPosition.Y, cameraTarget.y - (viewSize.h * 0.5), 1);
 		camera_set_view_pos(view_camera[0], viewPosition.X, viewPosition.Y);
 	} else {
-		target = noone;
+		cameraTarget = noone;
 	}
 } else {
-	if (instance_exists(global.ObjPlayer))
+	if (instance_exists(global.InstancePlayer))
 	{
-		target = global.ObjPlayer;
-	}	
+		cameraTarget = global.InstancePlayer;
+	}
 }

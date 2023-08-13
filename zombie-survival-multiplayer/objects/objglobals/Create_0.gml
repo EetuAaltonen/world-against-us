@@ -1,6 +1,12 @@
 // SET RANDOM SEED
 randomise();
 
+// DISPLAY
+#macro VIEW_BASE_WIDTH 640
+#macro VIEW_BASE_HEIGHT 360
+#macro GUI_BASE_WIDTH 1920
+#macro GUI_BASE_HEIGHT 1080
+
 // NETWORKING
 #macro UNDEFINED_UUID "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined"
 
