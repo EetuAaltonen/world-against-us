@@ -2,9 +2,9 @@ function ItemActionUsePrimaryWeapon(_item)
 {
 	if (_item.sourceInventory.type == INVENTORY_TYPE.PlayerBackpack)
 	{
-		if (global.ObjWeapon != noone)
+		if (global.InstanceWeapon != noone)
 		{
-			if (!_item.Compare(global.ObjWeapon.primaryWeapon))
+			if (!_item.Compare(global.InstanceWeapon.primaryWeapon))
 			{
 				var equippedWeapon = global.PlayerPrimaryWeaponSlot.GetItemByIndex(0);
 				if (is_undefined(equippedWeapon))

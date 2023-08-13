@@ -70,7 +70,7 @@ function CreateWindowPlayerHealthStatus(_zIndex)
 		"PlayerHeadHealthBar",
 		new Vector2(healthStatusPanelSize.w * 0.67 - (healthBarSize.w * 0.5), healthStatusPanelSize.h * 0.05),
 		healthBarSize,
-		global.ObjPlayer.character, CHARACTER_BODY_PARTS.Head,
+		global.InstancePlayer.character, CHARACTER_BODY_PARTS.Head,
 		healthBarBgColor, healthBarColor, healthBarTitleColor, healthBarTextColor
 	);
 	// CHEST
@@ -78,7 +78,7 @@ function CreateWindowPlayerHealthStatus(_zIndex)
 		"PlayerChestHealthBar",
 		new Vector2(healthStatusPanelSize.w * 0.5 - (healthBarSize.w * 0.5), healthStatusPanelSize.h * 0.22),
 		healthBarSize,
-		global.ObjPlayer.character, CHARACTER_BODY_PARTS.Chest,
+		global.InstancePlayer.character, CHARACTER_BODY_PARTS.Chest,
 		healthBarBgColor, healthBarColor, healthBarTitleColor, healthBarTextColor
 	);
 	// RIGHT ARM
@@ -86,7 +86,7 @@ function CreateWindowPlayerHealthStatus(_zIndex)
 		"PlayerRightArmHealthBar",
 		new Vector2(healthStatusPanelSize.w * 0.23 - (healthBarSize.w * 0.5), healthStatusPanelSize.h * 0.4),
 		healthBarSize,
-		global.ObjPlayer.character, CHARACTER_BODY_PARTS.RightArm,
+		global.InstancePlayer.character, CHARACTER_BODY_PARTS.RightArm,
 		healthBarBgColor, healthBarColor, healthBarTitleColor, healthBarTextColor
 	);
 	// LEFT ARM
@@ -94,7 +94,7 @@ function CreateWindowPlayerHealthStatus(_zIndex)
 		"PlayerLeftArmHealthBar",
 		new Vector2(healthStatusPanelSize.w * 0.77 - (healthBarSize.w * 0.5), healthStatusPanelSize.h * 0.4),
 		healthBarSize,
-		global.ObjPlayer.character, CHARACTER_BODY_PARTS.LeftArm,
+		global.InstancePlayer.character, CHARACTER_BODY_PARTS.LeftArm,
 		healthBarBgColor, healthBarColor, healthBarTitleColor, healthBarTextColor
 	);
 	// STOMACH
@@ -102,7 +102,7 @@ function CreateWindowPlayerHealthStatus(_zIndex)
 		"PlayerStomachHealthBar",
 		new Vector2(healthStatusPanelSize.w * 0.5 - (healthBarSize.w * 0.5), healthStatusPanelSize.h * 0.4),
 		healthBarSize,
-		global.ObjPlayer.character, CHARACTER_BODY_PARTS.Stomach,
+		global.InstancePlayer.character, CHARACTER_BODY_PARTS.Stomach,
 		healthBarBgColor, healthBarColor, healthBarTitleColor, healthBarTextColor
 	);
 	// RIGHT LEG
@@ -110,7 +110,7 @@ function CreateWindowPlayerHealthStatus(_zIndex)
 		"PlayerRightLegHealthBar",
 		new Vector2(healthStatusPanelSize.w * 0.28 - (healthBarSize.w * 0.5), healthStatusPanelSize.h * 0.75),
 		healthBarSize,
-		global.ObjPlayer.character, CHARACTER_BODY_PARTS.RightLeg,
+		global.InstancePlayer.character, CHARACTER_BODY_PARTS.RightLeg,
 		healthBarBgColor, healthBarColor, healthBarTitleColor, healthBarTextColor
 	);
 	// LEFT LEG
@@ -118,7 +118,7 @@ function CreateWindowPlayerHealthStatus(_zIndex)
 		"PlayerLeftLegHealthBar",
 		new Vector2(healthStatusPanelSize.w * 0.72 - (healthBarSize.w * 0.5), healthStatusPanelSize.h * 0.75),
 		healthBarSize,
-		global.ObjPlayer.character, CHARACTER_BODY_PARTS.LeftLeg,
+		global.InstancePlayer.character, CHARACTER_BODY_PARTS.LeftLeg,
 		healthBarBgColor, healthBarColor, healthBarTitleColor, healthBarTextColor
 	);
 	

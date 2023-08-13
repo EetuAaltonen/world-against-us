@@ -1,14 +1,14 @@
 if (initHUDValues)
 {
-	if (instance_exists(global.ObjPlayer))
+	if (instance_exists(global.InstancePlayer))
 	{
-		if (!is_undefined(global.ObjPlayer.character))
+		if (!is_undefined(global.InstancePlayer.character))
 		{
-			hudElementFullness.SetValueReference(global.ObjPlayer.character.fullness);
-			hudElementHydration.SetValueReference(global.ObjPlayer.character.hydration);
-			hudElementEnergy.SetValueReference(global.ObjPlayer.character.energy);
+			hudElementFullness.SetValueReference(global.InstancePlayer.character.fullness);
+			hudElementHydration.SetValueReference(global.InstancePlayer.character.hydration);
+			hudElementEnergy.SetValueReference(global.InstancePlayer.character.energy);
 			
-			hudElementAmmo.SetWeaponReference(global.ObjPlayer.weapon);
+			hudElementAmmo.SetInstanceReference(global.InstancePlayer.weapon);
 			hudElementAmmo.initAmmo = true;
 			
 			initHUDValues = false;

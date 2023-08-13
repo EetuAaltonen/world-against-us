@@ -60,8 +60,8 @@ function Client(_hostAddress = undefined, _hostPort = undefined) constructor
 	static SyncPlayerData = function()
 	{
 		var networkBuffer = CreateBuffer(MESSAGE_TYPE.DATA_PLAYER_SYNC);
-		var scaledPosition = ScaleFloatValuesToIntVector2(global.ObjPlayer.x, global.ObjPlayer.y);
-		var scaledSpeed = ScaleFloatValuesToIntVector2(global.ObjPlayer.hSpeed, global.ObjPlayer.vSpeed);
+		var scaledPosition = ScaleFloatValuesToIntVector2(global.InstancePlayer.x, global.InstancePlayer.y);
+		var scaledSpeed = ScaleFloatValuesToIntVector2(global.InstancePlayer.hSpeed, global.InstancePlayer.vSpeed);
 		
 		var playerData = {
 			player_data: new PlayerData(
@@ -69,12 +69,12 @@ function Client(_hostAddress = undefined, _hostPort = undefined) constructor
 				new Vector2(scaledPosition.X, scaledPosition.Y),
 				new Vector2(scaledSpeed.X, scaledSpeed.Y),
 				new InputMap(
-					global.ObjPlayer.key_up,
-					global.ObjPlayer.key_down,
-					global.ObjPlayer.key_left,
-					global.ObjPlayer.key_right
+					global.InstancePlayer.key_up,
+					global.InstancePlayer.key_down,
+					global.InstancePlayer.key_left,
+					global.InstancePlayer.key_right
 				),
-				global.ObjWeapon.primaryWeapon ?? EMPTY_STRUCT
+				global.InstanceWeapon.primaryWeapon ?? EMPTY_STRUCT
 			)
 		};
 		var jsonData = json_stringify(playerData);

@@ -46,9 +46,9 @@ function HUDElementHealth(_position) : HUDElement(_position) constructor
 	
 	static Draw = function()
 	{
-		if (instance_exists(global.ObjPlayer))
+		if (instance_exists(global.InstancePlayer))
 		{
-			if (!is_undefined(global.ObjPlayer.character))
+			if (!is_undefined(global.InstancePlayer.character))
 			{
 				var heartIconPos = new Vector2(position.X, position.Y - 10);
 				draw_sprite_ext(
@@ -95,7 +95,7 @@ function HUDElementHealth(_position) : HUDElement(_position) constructor
 				draw_set_halign(fa_center);
 				
 				// HEALTH VALUE
-				draw_text(position.X, position.Y + 10, string(global.ObjPlayer.character.total_hp_percent) + "%");
+				draw_text(position.X, position.Y + 10, string(global.InstancePlayer.character.total_hp_percent) + "%");
 				
 				// RESET DRAW PROPERTIES
 				ResetDrawProperties();

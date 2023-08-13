@@ -3,16 +3,16 @@ draw_sprite_ext(sprGUIBg, 0, 0, global.GUIH - hudHeight, global.GUIW, hudHeight,
 
 hudElementHealth.Draw();
 
-if (instance_exists(global.ObjPlayer))
+if (instance_exists(global.InstancePlayer))
 {
-	if (!is_undefined(global.ObjPlayer.character))
+	if (!is_undefined(global.InstancePlayer.character))
 	{
 		hudElementFullness.Draw();
 		hudElementHydration.Draw();
 		hudElementEnergy.Draw();
 	}
 	
-	if (instance_exists(global.ObjWeapon))
+	if (instance_exists(global.InstanceWeapon))
 	{
 		hudElementAmmo.Draw();
 	}

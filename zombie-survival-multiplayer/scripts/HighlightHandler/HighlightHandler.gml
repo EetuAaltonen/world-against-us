@@ -5,7 +5,7 @@ function HighlightHandler() constructor
 	
 	static Update = function()
 	{
-		if (instance_exists(global.ObjPlayer))
+		if (instance_exists(global.InstancePlayer))
 		{
 			var newHighlightedInstance = noone;
 			var nearestDistance = undefined;
@@ -18,14 +18,14 @@ function HighlightHandler() constructor
 					if (!is_undefined(instance.interactionFunction))
 					{
 						var offsetToBottomY = (instance.sprite_height - instance.sprite_yoffset);
-						var playerOffsetToBottomY = (global.ObjPlayer.sprite_height - global.ObjPlayer.sprite_yoffset);
-						var distanceToPlayer = point_distance(instance.x, instance.y + offsetToBottomY, global.ObjPlayer.x, global.ObjPlayer.y + playerOffsetToBottomY);
+						var playerOffsetToBottomY = (global.InstancePlayer.sprite_height - global.InstancePlayer.sprite_yoffset);
+						var distanceToPlayer = point_distance(instance.x, instance.y + offsetToBottomY, global.InstancePlayer.x, global.InstancePlayer.y + playerOffsetToBottomY);
 						if (distanceToPlayer <= instance.interactionRange)
 						{
 							var offsetToCenterY = ((instance.sprite_height * 0.5) - instance.sprite_yoffset);
 							var mouseWorldPosition = MouseWorldPosition();
 							var distanceToMouse = point_distance(instance.x, instance.y + offsetToCenterY, mouseWorldPosition.X, mouseWorldPosition.Y);
-							var distanceMouseToPlayer = point_distance(mouse_x, mouse_y, global.ObjPlayer.x, global.ObjPlayer.y + playerOffsetToBottomY);
+							var distanceMouseToPlayer = point_distance(mouse_x, mouse_y, global.InstancePlayer.x, global.InstancePlayer.y + playerOffsetToBottomY);
 							var highlightDistance = min(
 								distanceToPlayer,
 								(distanceMouseToPlayer < instance.interactionRange) ? distanceToMouse : distanceMouseToPlayer

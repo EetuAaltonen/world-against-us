@@ -2,11 +2,11 @@ var mousePosition = MouseGUIPosition();
 
 if (global.GUIStateHandlerRef.IsGUIStateClosed())
 {
-	if (global.ObjWeapon != noone)
+	if (global.InstanceWeapon != noone)
 	{
-		if (!is_undefined(global.ObjWeapon.primaryWeapon))
+		if (!is_undefined(global.InstanceWeapon.primaryWeapon))
 		{
-			var crosshairScale = (global.ObjWeapon.isAiming) ? 0.2 : 0.3;
+			var crosshairScale = (global.InstanceWeapon.isAiming) ? 0.2 : 0.3;
 		
 			// DRAW CROSSHAIR
 			draw_sprite_ext(
@@ -20,16 +20,6 @@ if (global.GUIStateHandlerRef.IsGUIStateClosed())
 		}
 	}
 } else {
-	// DEBUG MODE
-	if (global.DEBUGMODE)
-	{
-		draw_set_color(c_yellow);
-		draw_text(mousePosition.X + 10, mousePosition.Y + 10, string(mousePosition.X) + " : " + string(mousePosition.Y));
-		// RESET DRAW PROPERTIES
-		ResetDrawProperties();
-	}
-	
-	
 	if (!is_undefined(dragItem))
 	{
 		var dragItemData = dragItem.item_data;
@@ -41,5 +31,14 @@ if (global.GUIStateHandlerRef.IsGUIStateClosed())
 				dragItemData.size.h * dragItemIconMaxBaseSize.h
 			)
 		);
+	}
+	
+	// DEBUG MODE
+	if (global.DEBUGMODE)
+	{
+		draw_set_color(c_yellow);
+		draw_text(mousePosition.X + 10, mousePosition.Y + 10, string(mousePosition.X) + " : " + string(mousePosition.Y));
+		// RESET DRAW PROPERTIES
+		ResetDrawProperties();
 	}
 }

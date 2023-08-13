@@ -1,45 +1,45 @@
 function HUDElementAmmo(_position) : HUDElement(_position) constructor
 {
 	size = new Size(100, 0);
-	weapon_reference = undefined;
+	weapon_instance = noone;
 	bullet_animations = [];
 	bullet_animations_step = 0.05;
 	prev_bullet_count = 0;
 	
 	initAmmo = true;
 	
-	static SetWeaponReference = function(_weaponReference)
+	static SetInstanceReference = function(_weaponReference)
 	{
-		weapon_reference = _weaponReference;
+		weapon_instance = _weaponReference;
 	}
 	
 	static InitAmmo = function()
 	{
 		bullet_animations = [];
 		
-		if (!is_undefined(weapon_reference))
+		if (instance_exists(weapon_instance))
 		{
-			if (!is_undefined(weapon_reference.primaryWeapon))
+			if (!is_undefined(weapon_instance.primaryWeapon))
 			{
-				if (weapon_reference.primaryWeapon.type != "Melee")
+				if (weapon_instance.primaryWeapon.type != "Melee")
 				{
-					switch (weapon_reference.primaryWeapon.metadata.chamber_type)
+					switch (weapon_instance.primaryWeapon.metadata.chamber_type)
 					{
 						case "Shell":
 						{
-							var bulletCount = weapon_reference.primaryWeapon.metadata.GetAmmoCount();
+							var bulletCount = weapon_instance.primaryWeapon.metadata.GetAmmoCount();
 							bullet_animations = [];
 							for (var i = 0; i < bulletCount; i++)
 							{
-								array_push(bullet_animations, new HUDBulletAnimation(weapon_reference.primaryWeapon.metadata.shells[i].icon, new Vector2(100, 100), -180));
+								array_push(bullet_animations, new HUDBulletAnimation(weapon_instance.primaryWeapon.metadata.shells[i].icon, new Vector2(100, 100), -180));
 							}
 							prev_bullet_count = bulletCount;
 						} break;
 						default:
 						{
-							if (!is_undefined(weapon_reference.primaryWeapon.metadata.magazine))
+							if (!is_undefined(weapon_instance.primaryWeapon.metadata.magazine))
 							{
-								var magazine = weapon_reference.primaryWeapon.metadata.magazine;
+								var magazine = weapon_instance.primaryWeapon.metadata.magazine;
 								var bulletCount = magazine.metadata.GetAmmoCount();
 								bullet_animations = [];
 								for (var i = 0; i < bulletCount; i++)
@@ -62,16 +62,16 @@ function HUDElementAmmo(_position) : HUDElement(_position) constructor
 			initAmmo = false;
 			InitAmmo();
 		} else {
-			if (!is_undefined(weapon_reference))
+			if (instance_exists(weapon_instance))
 			{
-				if (!is_undefined(weapon_reference.primaryWeapon))
+				if (!is_undefined(weapon_instance.primaryWeapon))
 				{
-					if (weapon_reference.primaryWeapon.type != "Melee")
+					if (weapon_instance.primaryWeapon.type != "Melee")
 					{
-						if (weapon_reference.primaryWeapon.metadata.chamber_type == "Magazine" ||
-							weapon_reference.primaryWeapon.metadata.chamber_type == "Shell")
+						if (weapon_instance.primaryWeapon.metadata.chamber_type == "Magazine" ||
+							weapon_instance.primaryWeapon.metadata.chamber_type == "Shell")
 						{
-							var bulletCount = weapon_reference.primaryWeapon.metadata.GetAmmoCount();
+							var bulletCount = weapon_instance.primaryWeapon.metadata.GetAmmoCount();
 							if (bulletCount < prev_bullet_count)
 							{
 								var animationCount = array_length(bullet_animations);
@@ -102,17 +102,22 @@ function HUDElementAmmo(_position) : HUDElement(_position) constructor
 		}
 	}
 	
+	static ResetInstanceReference = function()
+	{
+		weapon_instance = noone;
+	}
+	
 	static Draw = function()
 	{
 		if (global.GUIStateHandlerRef.IsGUIStateClosed())
 		{
-			if (!is_undefined(weapon_reference))
+			if (instance_exists(weapon_instance))
 			{
-				if (!is_undefined(weapon_reference.primaryWeapon))
+				if (!is_undefined(weapon_instance.primaryWeapon))
 				{
-					if (weapon_reference.primaryWeapon.type != "Melee")
+					if (weapon_instance.primaryWeapon.type != "Melee")
 					{
-						switch (weapon_reference.primaryWeapon.metadata.chamber_type)
+						switch (weapon_instance.primaryWeapon.metadata.chamber_type)
 						{
 							case "Fuel Tank":
 							{
@@ -133,7 +138,7 @@ function HUDElementAmmo(_position) : HUDElement(_position) constructor
 	{
 		var bulletMargin = 10;
 		var magazinePadding = 20;
-		var bgHeightWithCapacity = bulletMargin * weapon_reference.primaryWeapon.metadata.GetAmmoCapacity() + (magazinePadding * 2);
+		var bgHeightWithCapacity = bulletMargin * weapon_instance.primaryWeapon.metadata.GetAmmoCapacity() + (magazinePadding * 2);
 						
 		// DRAW AMMO BACKGROUND
 		draw_sprite_ext(sprGUIBg, 0, position.X, position.Y - bgHeightWithCapacity, size.w, bgHeightWithCapacity, 0, c_dkgray, 1);
@@ -170,7 +175,7 @@ function HUDElementAmmo(_position) : HUDElement(_position) constructor
 	{
 		var bgHeight = 400;
 		var fuelLevelPadding = 20;
-		var fuelLevel = weapon_reference.primaryWeapon.metadata.GetAmmoCapacity() > 0 ? CeilToTwoDecimals(weapon_reference.primaryWeapon.metadata.GetAmmoCount() / weapon_reference.primaryWeapon.metadata.GetAmmoCapacity()) : 0;
+		var fuelLevel = weapon_instance.primaryWeapon.metadata.GetAmmoCapacity() > 0 ? CeilToTwoDecimals(weapon_instance.primaryWeapon.metadata.GetAmmoCount() / weapon_instance.primaryWeapon.metadata.GetAmmoCapacity()) : 0;
 		
 		// DRAW FUEL BACKGROUND
 		draw_sprite_ext(
