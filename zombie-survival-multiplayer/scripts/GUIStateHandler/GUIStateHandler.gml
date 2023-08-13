@@ -99,7 +99,7 @@ function GUIStateHandler() constructor
 	static ResetGUIState = function()
 	{
 		global.GameWindowHandlerRef.CloseAllWindows();
-		array_delete(state_chain, 1, array_length(state_chain));
+		state_chain = [ROOT_GUI_STATE];
 	}
 	
 	static CloseCurrentGUIState = function()

@@ -1,6 +1,8 @@
 if (recenterWindow)
 {
 	recenterWindow = false;
+	// GAMEMAKER STUDIO REQUIRES A SHORT DELAY
+	// BETWEEN WINDOW RESIZING AND WINDOW RECENTER CALLS
 	alarm[0] = 10;
 }
 
@@ -31,8 +33,7 @@ if (keyboard_check_released(ord("P")))
 			// SET APPLICATION SURFACE
 			surface_resize(application_surface, idealDisplayWidth * windowScale, idealDisplayHeight * windowScale);
 			
-			// RECENTER
-			alarm[0] = 10;
+			recenterWindow = true;
 		}
 	}
 }
