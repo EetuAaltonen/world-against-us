@@ -1,4 +1,5 @@
-enum GUI_ACTION {
+enum GUI_ACTION
+{
 	// MAIN MENU
 	Connect,
 	// INVENTORY

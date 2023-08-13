@@ -1,4 +1,5 @@
-enum GUI_VIEW {
+enum GUI_VIEW
+{
 	// MAIN MENU
 	Singleplayer,
 	Multiplayer,

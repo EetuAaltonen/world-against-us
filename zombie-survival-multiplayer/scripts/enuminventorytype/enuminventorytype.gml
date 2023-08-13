@@ -1,4 +1,5 @@
-enum INVENTORY_TYPE {
+enum INVENTORY_TYPE
+{
 	PlayerBackpack,
 	PlayerPrimaryWeaponSlot,
 	MagazinePockets,

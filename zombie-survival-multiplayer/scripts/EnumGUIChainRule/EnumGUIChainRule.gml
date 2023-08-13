@@ -1,4 +1,5 @@
-enum GUI_CHAIN_RULE {
+enum GUI_CHAIN_RULE
+{
 	Append,
 	Overwrite,
 	OverwriteAll

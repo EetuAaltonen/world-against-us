@@ -1,3 +1,4 @@
-enum CHARACTER_RACE {
+enum CHARACTER_RACE
+{
 	humanoid
 }

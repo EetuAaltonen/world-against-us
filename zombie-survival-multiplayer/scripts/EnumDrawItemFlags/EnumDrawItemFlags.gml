@@ -1,4 +1,5 @@
-enum DRAW_ITEM_FLAGS {
+enum DRAW_ITEM_FLAGS
+{
 	Name,
 	NameShort,
 	NameBg,
