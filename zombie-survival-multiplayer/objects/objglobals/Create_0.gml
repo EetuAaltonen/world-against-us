@@ -50,78 +50,63 @@ randomise();
 // WORLD STATE INDICES
 #macro WORLD_STATE_UNLOCK_WALKIE_TALKIE "UnlockWalkieTalkie"
 
-initGlobalVariables = function()
+// DEBUG MODE
+global.DEBUGMODE = false;
+
+// FETCH VIEW PORT PROPERTIES
+global.ViewW = view_wport[0];
+global.ViewH = view_hport[0];
+global.GUIW = display_get_gui_width();
+global.GUIH = display_get_gui_height();
+
+// GLOBAL CONTROLLERS
+global.GameWindowHandlerRef = undefined;
+global.ObjCamera = noone;
+global.GUIStateHandlerRef = undefined;
+global.ObjMouse = noone;
+global.NotificationHandlerRef = undefined;
+global.ObjNetwork = noone;
+global.ObjHud = noone;
+global.WorldStateData = undefined;
+global.ObjJournal = noone;
+global.QuestHandlerRef = undefined;
+global.DialogueHandlerRef = undefined;
+global.ObjMap = noone;
+global.HighlightHandlerRef = undefined;
+global.GameSaveHandlerRef = undefined;
+
+// GLOBAL DATABASE
+global.ItemDatabase = undefined;
+global.BlueprintData = undefined;
+global.LootTableData = undefined;
+global.QuestData = undefined;
+global.DialogueData = undefined;
+global.MapIconStyleData = undefined;
+
+// PLAYER INVENTORY
+global.PlayerBackpack = undefined;
+global.PlayerPrimaryWeaponSlot = undefined;
+global.PlayerAmmoPockets = undefined;
+global.PlayerMedicinePockets = undefined;
+
+// TEMP INVENTORY
+global.ObjTempInventory = noone;
+
+resetDynamicVariables = function()
 {
-	// DEBUG MODE
-	global.DEBUGMODE = false;
+	// PLAYER
+	global.InstancePlayer = noone;
 	
-	// Global controllers
-	global.ObjCamera = noone;
-	global.GUIStateHandlerRef = undefined;
-	global.GameWindowHandlerRef = undefined;
-	global.ObjHud = noone;
-	global.WorldStateData = undefined;
-	global.DialogueHandlerRef = undefined;
+	// WEAPON
+	global.InstanceWeapon = noone;
 
-	// Global Database
-	global.ItemDatabase = undefined;
-	global.BlueprintData = undefined;
-	global.LootTableData = undefined;
-	global.QuestData = undefined;
-	global.DialogueData = undefined;
-	global.MapIconStyleData = undefined;
-
-	global.PlayerBackpack = undefined;
-	global.PlayerPrimaryWeaponSlot = undefined;
-	global.PlayerAmmoPockets = undefined;
-	global.PlayerMedicinePockets = undefined;
-	
-	// Journal
-	global.ObjJournal = noone;
-	
-	// Quest Handler
-	global.QuestHandlerRef = undefined;
-	
-	// Map
-	global.ObjMap = noone;
-
-	// Player
-	global.ObjPlayer = noone;
-	global.ObjSpawner = noone;
-
-	// Network
-	global.ObjNetwork = noone;
-	
-	// Game save
-	global.GameSaveHandlerRef = undefined;
-	
-	// Highlight
-	global.HighlightHandlerRef = undefined;
-
-	// Coop
+	// COOP
+	// TODO: Create handler for co-op player data
 	global.OtherPlayerData = ds_map_create();
 
-	global.ObjWeapon = noone;
-
-	// View variables
-	global.ViewW = 0;
-	global.ViewH = 0;
-
-	// GUI
-	global.GUIW = 0;
-	global.GUIH = 0;
-
-	// Mouse
-	global.ObjMouse = noone;
-
-	// Message log
-	global.MessageLog = undefined;
-	// Notification
-	global.NotificationHandlerRef = undefined;
-
-	// AI Path
+	// AI GRID PATH
 	global.ObjGridPath = undefined;
 }
 
 // INIT GLOBAL VARIABLES
-initGlobalVariables();
+resetDynamicVariables();

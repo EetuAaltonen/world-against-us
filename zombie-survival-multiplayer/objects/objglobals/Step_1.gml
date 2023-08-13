@@ -1,18 +1,18 @@
 if (room != roomLaunch && room != roomMainMenu)
 {
-	if (global.ObjPlayer == noone)
+	if (global.InstancePlayer == noone)
 	{
 		if (instance_exists(objPlayer))
 		{
-			global.ObjPlayer = instance_find(objPlayer, 0);
+			global.InstancePlayer = instance_find(objPlayer, 0);
 		}
 	}
 
-	if (global.ObjWeapon == noone)
+	if (global.InstanceWeapon == noone)
 	{
-		if (global.ObjPlayer != noone)
+		if (global.InstancePlayer != noone)
 		{
-			global.ObjWeapon = global.ObjPlayer.weapon;
+			global.InstanceWeapon = global.InstancePlayer.weapon;
 		}
 	}
 }
