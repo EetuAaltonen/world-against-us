@@ -114,13 +114,27 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 					ds_list_add(items, cloneItem);
 					addedItemGridIndex = cloneItem.grid_index.Clone();
 				} else {
-					// MESSAGE LOG
-					AddMessageLog(string(_item.name) + " doesn't fit!");
+					// LOG NOTIFICATION
+					global.NotificationHandlerRef.AddNotification(
+						new Notification(
+							undefined,
+							string("{0} doesn't fit!", _item.name),
+							undefined,
+							NOTIFICATION_TYPE.Log
+						)
+					);
 				}
 			}
 		} else {
-			// MESSAGE LOG
-			AddMessageLog(string(_item.name) + " category is wrong to fit!");
+			// LOG NOTIFICATION
+			global.NotificationHandlerRef.AddNotification(
+				new Notification(
+					undefined,
+					string("{0} is not whitelisted!", _item.name),
+					undefined,
+					NOTIFICATION_TYPE.Log
+				)
+			);
 		}
 		return addedItemGridIndex;
     }

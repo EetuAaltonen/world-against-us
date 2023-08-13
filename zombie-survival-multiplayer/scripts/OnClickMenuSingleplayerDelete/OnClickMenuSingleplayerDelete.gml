@@ -12,6 +12,13 @@ function OnClickMenuSingleplayerDelete()
 			self, OnClickMenuSingleplayerDeleteConfirmCallback
 		);
 	} else {
-		ds_list_add(global.MessageLog, "No save file selected");
+		global.NotificationHandlerRef.AddNotification(
+			new Notification(
+				undefined,
+				"No save file selected",
+				undefined,
+				NOTIFICATION_TYPE.Log
+			)
+		);
 	}
 }

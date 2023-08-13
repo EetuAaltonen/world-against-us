@@ -19,8 +19,15 @@ if (character.type == CHARACTER_TYPE.PLAYER)
 				medicine.sourceInventory.RemoveItemByGridIndex(medicine.grid_index);
 			}
 		} else {
-			// MESSAGE LOG
-			AddMessageLog(string("Quick healing failed, missing healing items"));
+			// LOG NOTIFICATION
+			global.NotificationHandlerRef.AddNotification(
+				new Notification(
+					undefined,
+					"Quick healing failed, missing healing items",
+					undefined,
+					NOTIFICATION_TYPE.Log
+				)
+			);
 		}
 	}
 }

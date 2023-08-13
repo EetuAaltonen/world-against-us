@@ -9,8 +9,15 @@ function ItemActionUnloadMagazine(_item)
 		{
 			// REVERSE UNLOAD IF DOESN'T FIT
 			_item.metadata.ReloadAmmo(bullet.Clone());
-			// MESSAGE LOG
-			AddMessageLog(string("Couldn't unload {0}", _item.name));
+			// LOG NOTIFICATION
+			global.NotificationHandlerRef.AddNotification(
+				new Notification(
+					undefined,
+					string("Couldn't unload {0}", _item.name),
+					undefined,
+					NOTIFICATION_TYPE.Log
+				)
+			);
 			break;
 		}
 	}

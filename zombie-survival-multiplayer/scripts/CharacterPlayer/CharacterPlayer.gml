@@ -35,11 +35,25 @@ function CharacterPlayer(_name, _type, _race) : Character(_name, _type, _race) c
 					bodyPart.Heal(healAmount);
 					_item.metadata.healing_left -= healAmount;
 					
-					// MESSAGE LOG
-					AddMessageLog(string("{0} healed to {1} / {2}", bodyPart.name, bodyPart.condition, bodyPart.max_condition));
+					// LOG NOTIFICATION
+					global.NotificationHandlerRef.AddNotification(
+						new Notification(
+							undefined,
+							string("{0} healed to {1} / {2}", bodyPart.name, bodyPart.condition, bodyPart.max_condition),
+							undefined,
+							NOTIFICATION_TYPE.Log
+						)
+					);
 				} else {
-					// MESSAGE LOG
-					AddMessageLog(string("{0} is already fully healed", bodyPart.name));
+					// LOG NOTIFICATION
+					global.NotificationHandlerRef.AddNotification(
+						new Notification(
+							undefined,
+							string("{0} is already fully healed", bodyPart.name),
+							undefined,
+							NOTIFICATION_TYPE.Log
+						)
+					);
 				}
 			} else {
 				while (true)
@@ -51,13 +65,27 @@ function CharacterPlayer(_name, _type, _race) : Character(_name, _type, _race) c
 					mostDamagedBodyPart.condition += healAmount;
 					_item.metadata.healing_left -= healAmount;
 					
-					// MESSAGE LOG
-					AddMessageLog(string("{0} healed to {1} / {2}", mostDamagedBodyPart.name, mostDamagedBodyPart.condition, mostDamagedBodyPart.max_condition));
+					// LOG NOTIFICATION
+					global.NotificationHandlerRef.AddNotification(
+						new Notification(
+							undefined,
+							string("{0} healed to {1} / {2}", mostDamagedBodyPart.name, mostDamagedBodyPart.condition, mostDamagedBodyPart.max_condition),
+							undefined,
+							NOTIFICATION_TYPE.Log
+						)
+					);
 				}
 			}
 		} else {
-			// MESSAGE LOG
-			AddMessageLog("You are already fully healed");	
+			// LOG NOTIFICATION
+			global.NotificationHandlerRef.AddNotification(
+				new Notification(
+					undefined,
+					"You are already fully healed",
+					undefined,
+					NOTIFICATION_TYPE.Log
+				)
+			);
 		}
 		
 		UpdateTotalHp();
@@ -70,8 +98,15 @@ function CharacterPlayer(_name, _type, _race) : Character(_name, _type, _race) c
 			// TODO: Code is still just a stump
 			show_message(string(_item));
 		} else {
-			// MESSAGE LOG
-			AddMessageLog("You don't feel hungry");	
+			// LOG NOTIFICATION
+			global.NotificationHandlerRef.AddNotification(
+				new Notification(
+					undefined,
+					"You don't feel hungry",
+					undefined,
+					NOTIFICATION_TYPE.Log
+				)
+			);
 		}
 	}
 	
@@ -82,8 +117,15 @@ function CharacterPlayer(_name, _type, _race) : Character(_name, _type, _race) c
 			// TODO: Code is still just a stump
 			show_message(string(_item));
 		} else {
-			// MESSAGE LOG
-			AddMessageLog("You feel already well hydrated");
+			// LOG NOTIFICATION
+			global.NotificationHandlerRef.AddNotification(
+				new Notification(
+					undefined,
+					"You feel already well hydrated",
+					undefined,
+					NOTIFICATION_TYPE.Log
+				)
+			);
 		}
 	}
 }

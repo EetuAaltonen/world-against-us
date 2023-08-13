@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Message",
-    "path": "folders/Scripts/Game/Message.yy",
+    "name": "Notification",
+    "path": "folders/Scripts/Game/GUI/Notification.yy",
   },
 }

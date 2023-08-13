@@ -5,8 +5,12 @@ function OnClickEscMenuReset()
 		// TODO: Reseting save doesn't clear inventory items etc.
 		// Make sure to perform full clean up
 		global.NotificationHandlerRef.AddNotification(
-			new Notification(sprFloppyDiskBroken, "Save reseted", string("-->X {0}", global.GameSaveHandlerRef.saveName))
+			new Notification(
+				sprFloppyDiskBroken, "Save reseted",
+				string("-->X {0}", global.GameSaveHandlerRef.saveName),
+				NOTIFICATION_TYPE.Popup
+			)
 		);
-		room_goto(roomLoadSave);
+		room_goto(roomLoadResources);
 	}
 }

@@ -6,12 +6,25 @@ function OnClickMenuSingleplayerPlay()
 		if (string_length(saveInput.input) > 3)
 		{
 			global.GameSaveHandlerRef.SetSaveFileName(saveInput.input);
-			room_goto(roomLoadSave);
-			//room_goto(roomPrologue);
+			room_goto(roomLoadResources);
 		} else {
-			ds_list_add(global.MessageLog, "Save file name is too short (min 4)");
+			global.NotificationHandlerRef.AddNotification(
+				new Notification(
+					undefined,
+					"Save file name is too short (min 4)",
+					undefined,
+					NOTIFICATION_TYPE.Log
+				)
+			);
 		}
 	} else {
-		ds_list_add(global.MessageLog, "Save file name can't be empty");
+		global.NotificationHandlerRef.AddNotification(
+			new Notification(
+				undefined,
+				"Save file name can't be empty",
+				undefined,
+				NOTIFICATION_TYPE.Log
+			)
+		);
 	}
 }

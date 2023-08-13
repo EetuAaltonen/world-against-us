@@ -21,7 +21,14 @@ function OnClickMenuSingleplayerDeleteConfirmCallback(callerWindowElement)
 					saveFileList.UpdateDataCollection(saveFiles);
 				}
 			} else {
-				ds_list_add(global.MessageLog, "Save file not found");
+				global.NotificationHandlerRef.AddNotification(
+					new Notification(
+						undefined,
+						"Save file not found",
+						undefined,
+						NOTIFICATION_TYPE.Log
+					)
+				);
 			}
 		} catch (error)
 		{

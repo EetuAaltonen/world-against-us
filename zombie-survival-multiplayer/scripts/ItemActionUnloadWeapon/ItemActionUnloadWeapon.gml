@@ -24,8 +24,15 @@ function ItemActionUnloadWeapon(_weapon)
 					{
 						// REVERSE UNLOAD IF DOESN'T FIT
 						_weapon.metadata.ReloadAmmo(shell);
-						// MESSAGE LOG
-						AddMessageLog(string("Couldn't unload {0}", _weapon.name));
+						// LOG NOTIFICATION
+						global.NotificationHandlerRef.AddNotification(
+							new Notification(
+								undefined,
+								string("Couldn't unload {0}", _weapon.name),
+								undefined,
+								NOTIFICATION_TYPE.Log
+							)
+						);
 						break;
 					}
 				}

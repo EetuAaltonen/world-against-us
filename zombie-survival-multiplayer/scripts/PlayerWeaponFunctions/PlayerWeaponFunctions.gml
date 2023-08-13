@@ -41,8 +41,15 @@ function PlayerWeaponFunctions()
 					
 					if (shellStackCount <= 0)
 					{
-						// MESSAGE LOG
-						AddMessageLog(string("Reloading failed, missing ammo for {0}", primaryWeapon.name));
+						// LOG NOTIFICATION
+						global.NotificationHandlerRef.AddNotification(
+							new Notification(
+								undefined,
+								string("Reloading failed, missing ammo for {0}", primaryWeapon.name),
+								undefined,
+								NOTIFICATION_TYPE.Log
+							)
+						);
 					}
 				} break;
 				case "Fuel Tank":
@@ -59,8 +66,15 @@ function PlayerWeaponFunctions()
 							fuelTank.sourceInventory.AddItem(fuelTank, fuelTank.grid_index, fuelTank.is_rotated, fuelTank.is_known);
 						}
 					} else {
-						// MESSAGE LOG
-						AddMessageLog(string("Reloading failed, missing ammo for {0}", primaryWeapon.name));	
+						// LOG NOTIFICATION
+						global.NotificationHandlerRef.AddNotification(
+							new Notification(
+								undefined,
+								string("Reloading failed, missing ammo for {0}", primaryWeapon.name),
+								undefined,
+								NOTIFICATION_TYPE.Log
+							)
+						);
 					}
 				} break;
 				default:
@@ -77,8 +91,15 @@ function PlayerWeaponFunctions()
 							magazine.sourceInventory.AddItem(magazine, magazine.grid_index, magazine.is_rotated, magazine.is_known);
 						}
 					} else {
-						// MESSAGE LOG
-						AddMessageLog(string("Reloading failed, missing ammo for {0}", primaryWeapon.name));	
+						// LOG NOTIFICATION
+						global.NotificationHandlerRef.AddNotification(
+							new Notification(
+								undefined,
+								string("Reloading failed, missing ammo for {0}", primaryWeapon.name),
+								undefined,
+								NOTIFICATION_TYPE.Log
+							)
+						);
 					}
 				}
 			}
