@@ -1,10 +1,11 @@
 function ItemActionUnloadMagazine(_item)
 {
+	var targetInventory = (_item.sourceInventory.type == INVENTORY_TYPE.PlayerBackpack) ? _item.sourceInventory : global.PlayerBackpack;
 	var bulletCountToUnload = _item.metadata.GetAmmoCount();
 	repeat(bulletCountToUnload)
 	{
 		var bullet = _item.metadata.UnloadAmmo();
-		var unloadedBulletGridIndex = _item.sourceInventory.AddItem(bullet.Clone(), undefined, true, true);
+		var unloadedBulletGridIndex = targetInventory.AddItem(bullet.Clone(), undefined, true, true);
 		if (is_undefined(unloadedBulletGridIndex))
 		{
 			// REVERSE UNLOAD IF DOESN'T FIT

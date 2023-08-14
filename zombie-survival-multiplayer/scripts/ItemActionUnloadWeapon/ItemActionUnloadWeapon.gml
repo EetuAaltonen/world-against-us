@@ -2,12 +2,13 @@ function ItemActionUnloadWeapon(_weapon)
 {
 	if (_weapon.type != "Melee")
 	{
+		var targetInventory = (_weapon.sourceInventory.type == INVENTORY_TYPE.PlayerBackpack) ? _weapon.sourceInventory : global.PlayerBackpack;
 		switch (_weapon.metadata.chamber_type)
 		{
 			case "Fuel Tank": {
 				if (!is_undefined(_weapon.metadata.fuel_tank))
 				{
-					var unloadedFuelGridIndex = _weapon.sourceInventory.AddItem(_weapon.metadata.fuel_tank, undefined, false);
+					var unloadedFuelGridIndex = targetInventory.AddItem(_weapon.metadata.fuel_tank, undefined, false);
 					if (!is_undefined(unloadedFuelGridIndex))
 					{
 						_weapon.metadata.fuel_tank = undefined;
@@ -19,7 +20,7 @@ function ItemActionUnloadWeapon(_weapon)
 				repeat (shellCountToUnload)
 				{
 					var shell = _weapon.metadata.UnloadAmmo();
-					var unloadedShellGridIndex = _weapon.sourceInventory.AddItem(shell, undefined, false);
+					var unloadedShellGridIndex = targetInventory.AddItem(shell, undefined, false);
 					if (is_undefined(unloadedShellGridIndex))
 					{
 						// REVERSE UNLOAD IF DOESN'T FIT
@@ -40,7 +41,7 @@ function ItemActionUnloadWeapon(_weapon)
 			default: {
 				if (!is_undefined(_weapon.metadata.magazine))
 				{
-					var unloadedMagazineGridIndex = _weapon.sourceInventory.AddItem(_weapon.metadata.magazine, undefined, false);
+					var unloadedMagazineGridIndex = targetInventory.AddItem(_weapon.metadata.magazine, undefined, false);
 					if (!is_undefined(unloadedMagazineGridIndex))
 					{
 						_weapon.metadata.magazine = undefined;
@@ -48,5 +49,8 @@ function ItemActionUnloadWeapon(_weapon)
 				}
 			} break;
 		}
+		
+		// UPDATE HUD ELEMENT FOR AMMO
+		global.ObjHud.hudElementAmmo.initAmmo = true;
 	}
 }

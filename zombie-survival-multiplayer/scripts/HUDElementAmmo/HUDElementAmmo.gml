@@ -16,6 +16,7 @@ function HUDElementAmmo(_position) : HUDElement(_position) constructor
 	static InitAmmo = function()
 	{
 		bullet_animations = [];
+		prev_bullet_count = 0;
 		
 		if (instance_exists(weapon_instance))
 		{
@@ -28,7 +29,6 @@ function HUDElementAmmo(_position) : HUDElement(_position) constructor
 						case "Shell":
 						{
 							var bulletCount = weapon_instance.primaryWeapon.metadata.GetAmmoCount();
-							bullet_animations = [];
 							for (var i = 0; i < bulletCount; i++)
 							{
 								array_push(bullet_animations, new HUDBulletAnimation(weapon_instance.primaryWeapon.metadata.shells[i].icon, new Vector2(100, 100), -180));
@@ -41,7 +41,6 @@ function HUDElementAmmo(_position) : HUDElement(_position) constructor
 							{
 								var magazine = weapon_instance.primaryWeapon.metadata.magazine;
 								var bulletCount = magazine.metadata.GetAmmoCount();
-								bullet_animations = [];
 								for (var i = 0; i < bulletCount; i++)
 								{
 									array_push(bullet_animations, new HUDBulletAnimation(magazine.metadata.bullets[i].icon, new Vector2(100, 100), -180));
@@ -71,27 +70,31 @@ function HUDElementAmmo(_position) : HUDElement(_position) constructor
 						if (weapon_instance.primaryWeapon.metadata.chamber_type == "Magazine" ||
 							weapon_instance.primaryWeapon.metadata.chamber_type == "Shell")
 						{
-							var bulletCount = weapon_instance.primaryWeapon.metadata.GetAmmoCount();
-							if (bulletCount < prev_bullet_count)
+							var bulletAnimationCount = array_length(bullet_animations);
+							if (bulletAnimationCount > 0)
 							{
-								var animationCount = array_length(bullet_animations);
-								bullet_animations[@ bulletCount].animation_step = 0;
-								prev_bullet_count = bulletCount;
-							}
-					
-							var animationCount = array_length(bullet_animations);
-							if (animationCount > 0)
-							{
-								for (var i = 0; i < animationCount; i++)
+								var bulletCount = weapon_instance.primaryWeapon.metadata.GetAmmoCount();
+								if (bulletCount < prev_bullet_count)
 								{
-									var animationStep = bullet_animations[@ i];
-									if (animationStep.animation_step >= 0 && animationStep.animation_step < 1)
+									var animationCount = array_length(bullet_animations);
+									bullet_animations[@ bulletCount].animation_step = 0;
+									prev_bullet_count = bulletCount;
+								}
+					
+								var animationCount = array_length(bullet_animations);
+								if (animationCount > 0)
+								{
+									for (var i = 0; i < animationCount; i++)
 									{
-										animationStep.animation_step += bullet_animations_step;
-									} else if (animationStep.animation_step >= 1)
-									{
-										// REMOVE ELEMENT WHEN ANIMATION ENDS
-										array_pop(bullet_animations);
+										var animationStep = bullet_animations[@ i];
+										if (animationStep.animation_step >= 0 && animationStep.animation_step < 1)
+										{
+											animationStep.animation_step += bullet_animations_step;
+										} else if (animationStep.animation_step >= 1)
+										{
+											// REMOVE ELEMENT WHEN ANIMATION ENDS
+											array_pop(bullet_animations);
+										}
 									}
 								}
 							}
