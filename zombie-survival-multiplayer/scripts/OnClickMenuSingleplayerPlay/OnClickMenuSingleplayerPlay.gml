@@ -5,8 +5,19 @@ function OnClickMenuSingleplayerPlay()
 	{
 		if (string_length(saveInput.input) > 3)
 		{
-			global.GameSaveHandlerRef.SetSaveFileName(saveInput.input);
-			room_goto(roomLoadResources);
+			if (global.GameSaveHandlerRef.InitGameSave(saveInput.input))
+			{
+				room_goto(roomLoadResources);
+			} else {
+				global.NotificationHandlerRef.AddNotification(
+					new Notification(
+						undefined,
+						"Failed to initialize game save",
+						undefined,
+						NOTIFICATION_TYPE.Log
+					)
+				);
+			}
 		} else {
 			global.NotificationHandlerRef.AddNotification(
 				new Notification(

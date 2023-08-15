@@ -63,6 +63,7 @@ function NotificationHandler() constructor
 		}
 	}
 	
+	// TODO: Call this when RequestRoomChange function is implemented
 	static ClearNotifications = function()
 	{
 		log_notifications = [];

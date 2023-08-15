@@ -1,11 +1,11 @@
 function OnClickEscMenuSave()
 {
-	if (global.GameSaveHandlerRef.SaveToFile())
+	if (global.GameSaveHandlerRef.SaveGame())
 	{
 		global.NotificationHandlerRef.AddNotification(
 			new Notification(
 				sprFloppyDisk, "Game saved",
-				string("--> {0}", global.GameSaveHandlerRef.saveName),
+				string("Save: '{0}'", global.GameSaveHandlerRef.game_save_data.save_name),
 				NOTIFICATION_TYPE.Popup
 			)
 		);
@@ -13,7 +13,7 @@ function OnClickEscMenuSave()
 		global.NotificationHandlerRef.AddNotification(
 			new Notification(
 				sprFloppyDiskBroken, "Error while saving the game",
-				string("-->X {0}", global.GameSaveHandlerRef.saveName),
+				string("Save: '{0}'", global.GameSaveHandlerRef.game_save_data.save_name),
 				NOTIFICATION_TYPE.Popup
 			)
 		);	
