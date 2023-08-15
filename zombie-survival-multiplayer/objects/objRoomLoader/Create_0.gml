@@ -63,10 +63,10 @@ controllers = [
 	// TEMP INVENTORY
 	new GameController(objTempInventory, [], [roomLaunch, roomMainMenu, roomLoadResources]),
 	
-	/*
+
 	// LOAD THE GAME SAVE OBJECT LAST
 	// TO SET THE WORLD STATE AFTER EVERYTHING IS LOADED
-	new GameController(objGameSave, [], [roomLaunch])*/
+	new GameController(objGameSave, [], [roomLaunch])
 ];
 
 // CONTROLLER LAYERS

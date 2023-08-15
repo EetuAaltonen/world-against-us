@@ -1,177 +1,158 @@
 function GameSave(_save_name) constructor
 {
-	save_name = _save_name;
-	player = {
-		backpack_items: [],
-		magazine_pockets_items: [],
-		medicine_pockets_items: [],
-		quests_progress: []
-	}
+	save_name = FormatSaveName(_save_name);
+	save_file_name = ConcatSaveFileSuffix(save_name);
+	player_data = undefined;
+	room_data = undefined;
 	
-	world = {
-		rooms: []
-	}
+	ResetSaveData();
+	isSaveLoadingFirstTime = true;
 	
 	static ToJSONStruct = function()
 	{
-		var gameSaveStruct = EMPTY_STRUCT
-		variable_struct_set(gameSaveStruct, save_name, {
-			player: player,
-			world: world,
-		});
-		return gameSaveStruct;
+		var formatRoomName = room_get_name(player_data.last_location.room_index);
+		var formatPosition = player_data.last_location.position.ToJSONStruct();
+		var formatBackpack = player_data.inventory.backpack.ToJSONStruct();
+		
+		return {
+			player_data: {
+				last_location:
+				{
+					room_name: formatRoomName,
+					position: formatPosition
+				},
+				inventory:
+				{
+					backpack: formatBackpack,
+					ammo_pockets: undefined,
+					medicine_pockets: undefined
+				}
+			} 
+		}
+	}
+	
+	static RoomToJSONStruct = function()
+	{
+		var formatRoomName = room_get_name(player_data.last_location.room_index);
+		return {
+			room_data: {
+				name: formatRoomName
+			} 
+		}
 	}
 	
 	static FetchSaveData = function()
 	{
-		// PLAYER - BACKPACK ITEMS
-		player.backpack_items = global.PlayerBackpack.ToJSONStruct().items;
+		var isSaveDataFetched = false;
 		
-		// PLAYER - MAGAZINE POCKETS ITEMS
-		player.magazine_pockets_items = global.PlayerAmmoPockets.ToJSONStruct().items;
-		
-		// PLAYER - MEDICINE POCKETS ITEMS
-		player.medicine_pockets_items = global.PlayerMedicinePockets.ToJSONStruct().items;
-		
-		// PLAYER - QUESTS
-		var quests_progress = [];
-		var questIndices = ds_map_keys_to_array(global.QuestHandlerRef.questsProgress);
-		var questCount = array_length(questIndices);
-		for (var i = 0; i < questCount; i++)
+		if (!is_undefined(save_name))
 		{
-			var questKey = questIndices[@ i];
-			var questProgress = global.QuestHandlerRef.questsProgress[? questKey];
-			array_push(quests_progress, questProgress.ToJSONStruct());
-		}
-		player.quests_progress = quests_progress;
-		
-		// WORLD - FACILITIES
-		var roomName = room_get_name(room);
-		var roomData = new RoomData(roomName);
-		array_push(
-			world.rooms,
-			roomData.ToJSONStruct()
-		);
-	}
-	
-	static ParseGameSavePlayerDataStruct = function(_gameSaveStruct)
-	{
-		var saveDataStruct = _gameSaveStruct[$ save_name];
-		var playerDataStruct = saveDataStruct[$ "player"];
-		
-		// PARSE INVENTORY ITEMS
-		var inventoryStruct = playerDataStruct[$ "backpack_items"];
-		if (!is_undefined(inventoryStruct))
-		{
-			// CLEAR BACKPACK
-			global.PlayerBackpack.ClearItems();
-			// ADD NEW ITEMS
-			var itemCount = array_length(inventoryStruct);
-			for (var i = 0; i < itemCount; i++)
+			// PLAYER DATA
+			if (!is_undefined(player_data))
 			{
-				var itemStruct = inventoryStruct[@ i];
-				var item = ParseJSONStructToItem(itemStruct);
-				global.PlayerBackpack.AddItem(item, item.grid_index, item.is_rotated, item.is_known, true);
-			}
-		}
-		
-		// PARSE MAGAZINE POCKETS ITEMS
-		var magazinePocketsStruct = playerDataStruct[$ "magazine_pockets_items"];
-		if (!is_undefined(magazinePocketsStruct))
-		{
-			// CLEAR MAGAZINE POCKETS
-			global.PlayerAmmoPockets.ClearItems();
-			// ADD NEW ITEMS
-			var itemCount = array_length(magazinePocketsStruct);
-			for (var i = 0; i < itemCount; i++)
-			{
-				var itemStruct = magazinePocketsStruct[@ i];
-				var item = ParseJSONStructToItem(itemStruct);
-				global.PlayerAmmoPockets.AddItem(item, item.grid_index, item.is_rotated, item.is_known, true);
-			}
-		}
-		
-		// PARSE MEDICINE POCKETS ITEMS
-		var medicinePocketsStruct = playerDataStruct[$ "medicine_pockets_items"];
-		if (!is_undefined(medicinePocketsStruct))
-		{
-			// CLEAR MEDICINE POCKETS
-			global.PlayerMedicinePockets.ClearItems();
-			// ADD NEW ITEMS
-			var itemCount = array_length(medicinePocketsStruct);
-			for (var i = 0; i < itemCount; i++)
-			{
-				var itemStruct = medicinePocketsStruct[@ i];
-				var item = ParseJSONStructToItem(itemStruct);
-				global.PlayerMedicinePockets.AddItem(item, item.grid_index, item.is_rotated, item.is_known, true);
-			}
-		}
-		
-		// PARSE QUESTS
-		var questsStruct = playerDataStruct[$ "quests_progress"];
-		if (!is_undefined(questsStruct))
-		{
-			var questsProgressMap = ParseJSONStructArrayToMap(questsStruct, "quest_id", ParseJSONStructToQuestProgress);
-			global.QuestHandlerRef.questsProgress = questsProgressMap;
-		}
-	}
-	
-	static ParseGameSaveRoomDataStruct = function(_gameSaveStruct)
-	{
-		// PARSE WORLD ROOMS
-		var saveDataStruct = _gameSaveStruct[$ save_name];
-		var worldDataStruct = saveDataStruct[$ "world"];
-		if (!is_undefined(worldDataStruct))
-		{
-			var roomsDataStruct = worldDataStruct[$ "rooms"];
-			if (!is_undefined(roomsDataStruct))
-			{
-				var roomCount = array_length(roomsDataStruct);
-				for (var i = 0; i < roomCount; i++)
+				player_data.last_location.room_index = room;
+				var scaledPosition = ScaleFloatValuesToIntVector2(
+					global.InstancePlayer.x,
+					global.InstancePlayer.y
+				);
+				player_data.last_location.position = scaledPosition;
+				player_data.inventory.backpack = global.PlayerBackpack;
+				
+				// ROOM DATA
+				if (!is_undefined(room_data))
 				{
-					var roomDataStruct = roomsDataStruct[@ i];
-					var roomName = variable_struct_get_names(roomDataStruct)[0];
-					if (room_get_name(room) = roomName)
+					room_data.index = room;
+					
+					isSaveDataFetched = true;	
+				}
+			}
+		}
+		
+		return isSaveDataFetched;
+	}
+	
+	static ResetSaveData = function()
+	{
+		player_data = {
+			last_location:
+			{
+				room_index: undefined,
+				position: undefined
+			},
+			inventory:
+			{
+				backpack: undefined,
+				ammo_pockets: undefined,
+				medicine_pockets: undefined
+			}
+		}
+		
+		room_data = {
+			index: undefined
+		}
+	}
+	
+	static ParseGameSaveStruct = function(_gameSaveStruct)
+	{
+		var isSaveLoaded = false;
+		try
+		{
+			var playerDataStruct = _gameSaveStruct[$ "player_data"];
+			if (!is_undefined(playerDataStruct))
+			{
+				var lastLocationStruct = playerDataStruct[$ "last_location"];
+				if (!is_undefined(lastLocationStruct))
+				{
+					var roomName = lastLocationStruct[$ "room_name"];
+					if (!is_undefined(roomName))
 					{
-						var roomData = roomDataStruct[$ roomName];
-						var facilityCount = array_length(roomData.facilities);
-						for (var j = 0; j < facilityCount; j++)
+						var roomIndex = asset_get_index(roomName);
+						player_data.last_location.room_index = (room_exists(roomIndex)) ? roomIndex : undefined;
+						
+						var positionStruct = lastLocationStruct[$ "position"];
+						if (!is_undefined(positionStruct))
 						{
-							var facilityStruct = roomData.facilities[j];
-							var facility = ParseJSONStructToFacility(facilityStruct);
-							var inventoryStruct = facilityStruct[$ "inventory"] ?? undefined;
-							var itemArray = (!is_undefined(inventoryStruct)) ? ParseJSONStructToArray(inventoryStruct[$ "items"], ParseJSONStructToItem) : [];
-							var instanceCount = instance_number(objFacilityParent);
-							for (var k = 0; k < instanceCount; k++)
-							{
-								var instance = instance_find(objFacilityParent, k);
-								if (instance_exists(instance))
-								{
-									if (instance.facilityId == facility.facility_id)
-									{
-										if (!is_undefined(instance.facility))
-										{
-											instance.facility.metadata = facility.metadata;
-											if (!is_undefined(instance.facility.inventory))
-											{
-												// CLEAR FACILITY INVENTORY
-												instance.facility.inventory.ClearItems();
-												// ADD NEW ITEMS
-												var itemCount = array_length(itemArray);
-												for (var l = 0; l < itemCount; l++)
-												{
-													var item = itemArray[l];
-													instance.facility.inventory.AddItem(item, item.grid_index, item.is_rotated, item.is_known);
-												}
-											}
-										}
-									}
-								}
-							}
+							var scaledPosition = ScaleIntValuesToFloatVector2(
+								positionStruct[$ "X"],
+								positionStruct[$ "Y"]
+							);
+							player_data.last_location.position = scaledPosition;
+						}
+					}
+				}
+				
+				var inventoryStruct = playerDataStruct[$ "inventory"];
+				if (!is_undefined(inventoryStruct))
+				{
+					var backpackStruct = inventoryStruct[$ "backpack"];
+					if (!is_undefined(backpackStruct))
+					{
+						player_data.inventory.backpack = {
+							inventory_id: "PlayerBackpack",
+							items: []
+						};
+						
+						var itemsArrayStruct = backpackStruct[$ "items"] ?? [];
+						var itemCount = array_length(itemsArrayStruct);
+						for (var i = 0; i < itemCount; i++)
+						{
+							var itemStruct = itemsArrayStruct[@ i];
+							var item = ParseJSONStructToItem(itemStruct);
+							array_push(player_data.inventory.backpack.items, item);
 						}
 					}
 				}
 			}
+			
+			isSaveLoadingFirstTime = true;
+			isSaveLoaded = true;
+				
+		} catch (error)
+		{
+			show_debug_message(error);
+			show_message(error);
 		}
+		
+		return isSaveLoaded;
 	}
 }

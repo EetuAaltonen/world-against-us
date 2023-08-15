@@ -16,7 +16,7 @@ function ListDrawSaveFile(_position, _size, _fileName)
 	);
 	
 	draw_set_valign(fa_middle);
-	var parsedSaveName = string_replace(_fileName, SAVE_FILE_SUFFIX, "");
+	var parsedSaveName = string_replace(_fileName, SAVE_FILE_SUFFIX_PLAYER_DATA, "");
 	draw_text(_position.X + 10, _position.Y + (_size.h * 0.5), string("{0}", parsedSaveName));
 	
 	// RESET DRAW PROPERTIES

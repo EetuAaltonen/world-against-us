@@ -79,4 +79,48 @@ if (room == roomLaunch) { room_goto(roomMainMenu); }
 roomFadeAlpha = roomFadeAlphaStart;
 
 // GO TO MAIN MENU AFTER LAUNCH
-if (room == roomLoadResources) { room_goto(roomCamp); }
+if (room == roomLoadResources)
+{
+	var gotoLastLocationRoom = false;
+	if (global.GameSaveHandlerRef.ReadFromFile())
+	{
+		var gameSaveData = global.GameSaveHandlerRef.game_save_data;
+		if (!is_undefined(gameSaveData))
+		{
+			if (!is_undefined(gameSaveData.player_data))
+			{
+				if (!is_undefined(gameSaveData.player_data.last_location))
+				{
+					var roomIndex = gameSaveData.player_data.last_location.room_index;
+					if (!is_undefined(roomIndex))
+					{
+						global.NotificationHandlerRef.AddNotification(
+							new Notification(
+								sprFloppyDisk, "Game save loaded",
+								string("Save: '{0}'", global.GameSaveHandlerRef.game_save_data.save_name),
+								NOTIFICATION_TYPE.Popup
+							)
+						);
+						
+						room_goto(roomIndex);
+						gotoLastLocationRoom = true;
+					}
+				}
+			}
+		}
+	}
+	
+	// GOTO DEFAULT ROOM
+	if (!gotoLastLocationRoom)
+	{
+		global.NotificationHandlerRef.AddNotification(
+			new Notification(
+				sprFloppyDisk, "New game save started",
+				string("Save: '{0}'", global.GameSaveHandlerRef.game_save_data.save_name),
+				NOTIFICATION_TYPE.Popup
+			)
+		);
+		
+		room_goto(roomCamp);
+	}
+}

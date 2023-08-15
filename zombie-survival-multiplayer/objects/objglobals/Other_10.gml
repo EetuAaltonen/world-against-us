@@ -1,37 +1,33 @@
 /// @description Custom RoomStartEvent
 
 // FETCH GLOBAL CONTROLLERS AND INSTANCES
-if (is_undefined(global.GameWindowHandlerRef)) if (instance_exists(objGameWindow)) global.GameWindowHandlerRef = instance_find(objGameWindow, 0).gameWindowHandler;
-if (global.ObjCamera == noone) if (instance_exists(objCamera)) global.ObjCamera = instance_find(objCamera, 0);
-if (is_undefined(global.GUIStateHandlerRef)) if (instance_exists(objGUI)) global.GUIStateHandlerRef = instance_find(objGUI, 0).guiStateHandler;
-if (global.ObjMouse == noone) if (instance_exists(objMouse)) global.ObjMouse = instance_find(objMouse, 0);
-if (is_undefined(global.NotificationHandlerRef)) if (instance_exists(objNotification)) global.NotificationHandlerRef = instance_find(objNotification, 0).notificationHandler;
-if (global.ObjNetwork == noone) if (instance_exists(objNetwork)) global.ObjNetwork = instance_find(objNetwork, 0);
-if (instance_exists(objDatabase))
-{
-	var databaseInstance = instance_find(objDatabase, 0);
-	if (is_undefined(global.ItemDatabase)) global.ItemDatabase = databaseInstance.itemDatabase;
-	if (is_undefined(global.BlueprintData)) global.BlueprintData = databaseInstance.blueprintData;
-	if (is_undefined(global.LootTableData)) global.LootTableData = databaseInstance.lootTableData;
-	if (is_undefined(global.QuestData)) global.QuestData = databaseInstance.questData;
-	if (is_undefined(global.DialogueData)) global.DialogueData = databaseInstance.dialogueData;
-	if (is_undefined(global.MapIconStyleData)) global.MapIconStyleData = databaseInstance.mapIconStyleData;
-}
-if (global.ObjHud == noone) if (instance_exists(objHud)) global.ObjHud = instance_find(objHud, 0);
-if (is_undefined(global.WorldStateData)) if (instance_exists(objWorldState)) global.WorldStateData = instance_find(objWorldState, 0).worldStateHandler.world_states;
-if (is_undefined(global.QuestHandlerRef)) if (instance_exists(objQuest)) global.QuestHandlerRef = instance_find(objQuest, 0).questHandler;
-if (global.ObjJournal == noone) if (instance_exists(objJournal)) global.ObjJournal = instance_find(objJournal, 0);
-if (is_undefined(global.DialogueHandlerRef)) if (instance_exists(objDialogue)) global.DialogueHandlerRef = instance_find(objDialogue, 0).dialogueHandler;
-if (global.ObjMap == noone) if (instance_exists(objMap)) global.ObjMap = instance_find(objMap, 0);
-if (instance_exists(objInventory))
-{
-	var inventoryInstance = instance_find(objInventory, 0);
-	if (is_undefined(global.PlayerBackpack)) global.PlayerBackpack = inventoryInstance.inventory;
-	if (is_undefined(global.PlayerPrimaryWeaponSlot)) global.PlayerPrimaryWeaponSlot = inventoryInstance.playerPrimaryWeaponSlot;
-	if (is_undefined(global.PlayerAmmoPockets)) global.PlayerAmmoPockets = inventoryInstance.magazinePockets;
-	if (is_undefined(global.PlayerMedicinePockets)) global.PlayerMedicinePockets = inventoryInstance.medicinePockets;
-}
-if (is_undefined(global.HighlightHandlerRef)) if (instance_exists(objInstanceHighlighter)) global.HighlightHandlerRef = instance_find(objInstanceHighlighter, 0).highlightHandler;
-if (global.ObjGridPath == noone) if (instance_exists(objGridPath)) global.ObjGridPath = instance_find(objGridPath, 0);
-if (global.ObjTempInventory == noone) if (instance_exists(objTempInventory)) global.ObjTempInventory = instance_find(objTempInventory, 0);
-if (is_undefined(global.GameSaveHandlerRef)) if (instance_exists(objGameSave)) global.GameSaveHandlerRef = instance_find(objGameSave, 0).gameSaveHandler;
+global.GameWindowHandlerRef = instance_exists(objGameWindow) ? instance_find(objGameWindow, 0).gameWindowHandler : undefined;
+global.ObjCamera = instance_exists(objCamera) ? instance_find(objCamera, 0) : noone;
+global.GUIStateHandlerRef = instance_exists(objGUI) ? instance_find(objGUI, 0).guiStateHandler : undefined;
+global.ObjMouse = instance_exists(objMouse) ? instance_find(objMouse, 0) : noone;
+global.NotificationHandlerRef = instance_exists(objNotification) ? instance_find(objNotification, 0).notificationHandler : undefined;
+global.ObjNetwork = instance_exists(objNetwork) ? instance_find(objNetwork, 0) : noone;
+
+global.ItemDatabase = instance_exists(objDatabase) ? instance_find(objDatabase, 0).itemDatabase : undefined;
+global.BlueprintData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).blueprintData : undefined;
+global.LootTableData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).lootTableData : undefined;
+global.QuestData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).questData : undefined;
+global.DialogueData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).dialogueData : undefined;
+global.MapIconStyleData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).mapIconStyleData : undefined;
+
+global.ObjHud = instance_exists(objHud) ? instance_find(objHud, 0) : noone;
+global.WorldStateData = instance_exists(objWorldState) ? instance_find(objWorldState, 0).worldStateHandler.world_states : undefined;
+global.QuestHandlerRef = instance_exists(objQuest) ? instance_find(objQuest, 0).questHandler : undefined;
+global.ObjJournal = instance_exists(objJournal) ? instance_find(objJournal, 0) : noone;
+global.DialogueHandlerRef = instance_exists(objDialogue) ? instance_find(objDialogue, 0).dialogueHandler : undefined;
+global.ObjMap = instance_exists(objMap) ? instance_find(objMap, 0) : noone;
+
+global.PlayerBackpack = instance_exists(objInventory) ? instance_find(objInventory, 0).inventory : undefined;
+global.PlayerPrimaryWeaponSlot = instance_exists(objInventory) ? instance_find(objInventory, 0).playerPrimaryWeaponSlot : undefined;
+global.PlayerAmmoPockets = instance_exists(objInventory) ? instance_find(objInventory, 0).magazinePockets : undefined;
+global.PlayerMedicinePockets = instance_exists(objInventory) ? instance_find(objInventory, 0).medicinePockets : undefined;
+
+global.HighlightHandlerRef = instance_exists(objInstanceHighlighter) ? instance_find(objInstanceHighlighter, 0).highlightHandler : undefined;
+global.ObjGridPath = instance_exists(objGridPath) ? instance_find(objGridPath, 0) : noone;
+global.ObjTempInventory = instance_exists(objTempInventory) ? instance_find(objTempInventory, 0) : noone;
+global.GameSaveHandlerRef = instance_exists(objGameSave) ? instance_find(objGameSave, 0).gameSaveHandler : undefined;

@@ -11,7 +11,8 @@ randomise();
 #macro UNDEFINED_UUID "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined"
 
 // SAVE FILES
-#macro SAVE_FILE_SUFFIX "_save.json"
+#macro SAVE_FILE_SUFFIX_PLAYER_DATA "_save_player_data.json"
+#macro SAVE_FILE_SUFFIX_ROOM "_save_{0}.json"
 #macro EMPTY_SAVE_DATA "{ }"
 
 // STRUCT
