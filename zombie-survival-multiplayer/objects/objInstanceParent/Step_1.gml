@@ -37,6 +37,7 @@ if (isInCameraView)
 	depth = floor(cameraViewSize.h - drawPriority);
 }
 
+// TODO: Optimize this code
 if (!is_undefined(global.HighlightHandlerRef))
 {
 	var highlightedInteractableLayer = layer_get_id(LAYER_HIGHLIGHT_INTERACTABLE);
@@ -49,6 +50,6 @@ if (!is_undefined(global.HighlightHandlerRef))
 		(self != global.HighlightHandlerRef.highlightedTarget && depth == layer_get_depth(highlightedTargetLayer))
 	)
 	{
-		depth = depth + 1;
+		depth += 1;
 	}
 }

@@ -47,7 +47,6 @@ function HighlightHandler() constructor
 			if (newHighlightedInstance != noone)
 			{
 				SetHighlightedInstance(newHighlightedInstance, LAYER_HIGHLIGHT_INTERACTABLE);
-				highlightedInteractable = newHighlightedInstance;
 			}
 		}
 	}
@@ -76,28 +75,28 @@ function HighlightHandler() constructor
 	
 	static ResetHighlightedInstance = function(_highlightLayerName)
 	{
-			switch (_highlightLayerName)
+		switch (_highlightLayerName)
+		{
+			case LAYER_HIGHLIGHT_INTERACTABLE:
 			{
-				case LAYER_HIGHLIGHT_INTERACTABLE:
+				if (instance_exists(highlightedInteractable))
 				{
-					if (instance_exists(highlightedInteractable))
-					{
-						var highlightLayerId = layer_get_id(_highlightLayerName);
-						highlightedInteractable.depth = highlightedInteractable.depth - 1;
-						layer_depth(highlightLayerId, -1);
-					}
-					highlightedInteractable = noone;
-				} break;
-				case LAYER_HIGHLIGHT_TARGET:
+					var highlightLayerId = layer_get_id(_highlightLayerName);
+					highlightedInteractable.depth = highlightedInteractable.depth - 1;
+					layer_depth(highlightLayerId, -1);
+				}
+				highlightedInteractable = noone;
+			} break;
+			case LAYER_HIGHLIGHT_TARGET:
+			{
+				if (instance_exists(highlightedTarget))
 				{
-					if (instance_exists(highlightedTarget))
-					{
-						var highlightLayerId = layer_get_id(_highlightLayerName);
-						highlightedTarget.depth = highlightedTarget.depth - 1;
-						layer_depth(highlightLayerId, -1);
-					}
-					highlightedTarget = noone;
-				} break;
-			}
+					var highlightLayerId = layer_get_id(_highlightLayerName);
+					highlightedTarget.depth = highlightedTarget.depth - 1;
+					layer_depth(highlightLayerId, -1);
+				}
+				highlightedTarget = noone;
+			} break;
+		}
 	}
 }
