@@ -87,6 +87,13 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 				{
 					OnPressedGUIDragItemStart(itemData);
 				}
+			} else if (mouse_check_button_released(mb_right))
+			{
+				var itemData = inventory.GetItemByIndex(0);
+				if (!is_undefined(itemData))
+				{
+					GUIOpenItemActionMenu(itemData);
+				}
 			}
 		}
 	}
