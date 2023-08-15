@@ -4,9 +4,9 @@ function MetadataItemWeaponGunFlamethrower(_fire_rate, _range, _kickback, _weapo
 	
 	static ToJSONStruct = function()
 	{
-		// TODO: Fix ToJSONStruct
+		var formatFuelTank = (!is_undefined(fuel_tank)) ? fuel_tank.ToJSONStruct() : fuel_tank;
 		return {
-			fuel_tank: fuel_tank
+			fuel_tank: formatFuelTank
 		}
 	}
 	

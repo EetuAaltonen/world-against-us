@@ -7,8 +7,6 @@ function MetadataItemFuelAmmo(_caliber, _capacity) : Metadata() constructor
 	static ToJSONStruct = function()
 	{
 		return {
-			caliber: caliber,
-			capacity: capacity,
 			fuel_level: fuel_level
 		}
 	}

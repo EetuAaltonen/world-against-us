@@ -1,4 +1,4 @@
-function ParseMetadataItem(_metadata, _itemCategory, _itemType)
+function ParseJSONStructToMetadataItem(_metadata, _itemCategory, _itemType)
 {
 	var parsedMetadata = new Metadata();
 	if (!is_undefined(_metadata) && !is_undefined(_itemCategory))
@@ -40,6 +40,7 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 							_metadata[$ "shell_capacity"]
 						);
 						
+						// VARYING METADATA
 						if (!is_undefined(_metadata[$ "shells"]))
 						{
 							var shells = ParseJSONStructToArray(_metadata[$ "shells"], ParseJSONStructToItem);
@@ -61,6 +62,8 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 							_metadata[$ "recoil"],
 							_metadata[$ "attachment_slots"]
 						);
+						
+						// VARYING METADATA
 						if (!is_undefined(_metadata[$ "fuel_tank"] ?? undefined)) { variable_struct_set(parsedMetadata, "fuel_tank", _metadata[$ "fuel_tank"]); }
 					} else {
 						parsedMetadata = new MetadataItemWeaponGun(
@@ -77,6 +80,8 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 							_metadata[$ "recoil"],
 							_metadata[$ "attachment_slots"]
 						);
+						
+						// VARYING METADATA
 						if (!is_undefined(_metadata[$ "magazine"] ?? undefined)) { variable_struct_set(parsedMetadata, "magazine", _metadata[$ "magazine"]); }
 					}
 				} break;
@@ -86,6 +91,8 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 						_metadata[$ "caliber"],
 						_metadata[$ "capacity"]
 					);
+					
+					// VARYING METADATA
 					if (!is_undefined(_metadata[$ "bullets"]))
 					{
 						var bullets = ParseJSONStructToArray(_metadata[$ "bullets"], ParseJSONStructToItem);
@@ -98,6 +105,8 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 						_metadata[$ "caliber"],
 						_metadata[$ "capacity"]
 					);
+					
+					// VARYING METADATA
 					if (!is_undefined(_metadata[$ "fuel_level"]))
 					{
 						parsedMetadata.fuel_level = _metadata[$ "fuel_level"];
@@ -112,7 +121,7 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 						trailRGBAColorStruct[$ "blue"] ?? 255,
 						trailRGBAColorStruct[$ "alpha"] ?? 0
 					);
-				
+					
 					parsedMetadata = new MetadataItemBullet(
 						_metadata[$ "base_damage"],
 						_metadata[$ "caliber"],
@@ -126,6 +135,8 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 					parsedMetadata = new MetadataItemMedicine(
 						_metadata[$ "healing_value"]
 					);
+					
+					// VARYING METADATA
 					if (!is_undefined(_metadata[$ "healing_left"])) { variable_struct_set(parsedMetadata, "healing_left", _metadata[$ "healing_left"]); }
 				} break;
 				case "Fuel":
@@ -133,6 +144,8 @@ function ParseMetadataItem(_metadata, _itemCategory, _itemType)
 					parsedMetadata = new MetadataItemFuel(
 						_metadata[$ "fuel_value"]
 					);
+					
+					// VARYING METADATA
 					if (!is_undefined(_metadata[$ "fuel_left"])) { variable_struct_set(parsedMetadata, "fuel_left", _metadata[$ "fuel_left"]); }
 				} break;
 				case "Consumable":

@@ -6,7 +6,6 @@ function MetadataItemMedicine(_healing_value) : Metadata() constructor
 	static ToJSONStruct = function()
 	{
 		return {
-			healing_value: healing_value,
 			healing_left: healing_left
 		}
 	}

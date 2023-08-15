@@ -6,18 +6,16 @@ function MetadataItemMagazine(_caliber, _capacity) : Metadata() constructor
 	
 	static ToJSONStruct = function()
 	{
-		var bulletArray = [];
+		var formatBulletArray = [];
 		var bulletCount = GetAmmoCount();
 		for (var i = 0; i < bulletCount; i++)
 		{
 			var bullet = bullets[@ i];
-			array_push(bulletArray, bullet.ToJSONStruct());
+			array_push(formatBulletArray, bullet.ToJSONStruct());
 		}
 		
 		return {
-			caliber: caliber,
-			capacity: capacity,
-			bullets: bullets
+			bullets: formatBulletArray
 		}
 	}
 	

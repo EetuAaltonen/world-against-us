@@ -20,11 +20,10 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 	
 	static ToJSONStruct = function()
 	{
-		var formatMetadata = !is_undefined(metadata) ? metadata.ToJSONStruct(metadata) : metadata;
-		var formatGridIndex = grid_index.ToJSONStruct();
+		var formatMetadata = (!is_undefined(metadata)) ? metadata.ToJSONStruct(metadata) : metadata;
+		var formatGridIndex = (!is_undefined(grid_index)) ? grid_index.ToJSONStruct() : grid_index;
 		return {
 			name: name,
-			short_name: short_name,
 			quantity: quantity,
 			metadata: formatMetadata,
 			is_rotated: is_rotated,
@@ -35,11 +34,12 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 	
 	static Clone = function(_newQuantity = undefined, _ignoreSourceInventory = false)
 	{
+		var parsedMetadata = (!is_undefined(metadata)) ? ParseJSONStructToMetadataItem(metadata, category, type) : undefined;
 		var cloneItem = new Item(
 			name, short_name, icon, size, category, type,
 			weight, max_stack, base_price, description,
 			_newQuantity ?? quantity,
-			ParseMetadataItem(metadata, category, type),
+			parsedMetadata,
 			is_rotated, is_known,
 			undefined
 		);

@@ -15,9 +15,7 @@ function MetadataItemWeaponGunShotgun(_fire_rate, _range, _kickback, _weapon_off
 		}
 		
 		return {
-			caliber: caliber,
-			capacity: capacity,
-			shells: shells
+			shells: shellArray
 		}
 	}
 	

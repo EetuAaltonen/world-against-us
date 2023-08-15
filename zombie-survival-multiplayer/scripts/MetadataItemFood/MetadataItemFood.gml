@@ -5,7 +5,7 @@ function MetadataItemFood(_nutrition) : Metadata() constructor
 	static ToJSONStruct = function()
 	{
 		return {
-			nutrition: nutrition
+			// NO DYNAMIC METADATA
 		}
 	}
 }

@@ -8,8 +8,9 @@ function MetadataItemWeaponGun(_fire_rate, _range, _kickback, _weapon_offset, _c
 	
 	static ToJSONStruct = function()
 	{
+		var formatMagazine = (!is_undefined(magazine)) ? magazine.ToJSONStruct() : magazine;
 		return {
-			// TODO: Fix ToJSONStruct
+			magazine: formatMagazine
 		}
 	}
 	

@@ -12,20 +12,8 @@ function MetadataItemWeapon(_fire_rate, _range, _kickback, _weapon_offset, _cham
 	
 	static ToJSONStruct = function()
 	{
-		// TODO: Fix ToJSONStruct function in subweapon metadata
-		var formatWeaponOffset = weapon_offset.ToJSONStruct();
-		var formatChamberPos = chamber_pos.ToJSONStruct();
-		var formatBarrelPos = barrel_pos.ToJSONStruct();
-		var formatRightHandPos = right_hand_position.ToJSONStruct();
-		var formatLeftHandPos = left_hand_position.ToJSONStruct();
 		return {
-			fire_rate: fire_rate,
-			range: range,
-			weapon_offset: formatWeaponOffset,
-			chamber_pos: formatChamberPos,
-			barrel_pos: formatBarrelPos,
-			right_hand_position: formatRightHandPos,
-			left_hand_position: formatLeftHandPos
+			// NO DYNAMIC METADATA
 		}
 	}
 }

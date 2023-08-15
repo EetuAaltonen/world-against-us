@@ -6,7 +6,6 @@ function MetadataItemFuel(_fuel_value) : Metadata() constructor
 	static ToJSONStruct = function()
 	{
 		return {
-			fuel_value: fuel_value,
 			fuel_left: fuel_left
 		}
 	}

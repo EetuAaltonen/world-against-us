@@ -5,7 +5,7 @@ function MetadataItemLiquid(_hydration) : Metadata() constructor
 	static ToJSONStruct = function()
 	{
 		return {
-			hydration: hydration
+			// NO DYNAMIC METADATA
 		}
 	}
 }
