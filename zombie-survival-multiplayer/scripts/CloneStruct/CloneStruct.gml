@@ -4,12 +4,12 @@ function CloneStruct(struct)
     var cloneStruct = EMPTY_STRUCT;
 	if (!is_undefined(struct))
 	{
-	    var keys = variable_struct_get_names(struct);
-		var keyCount = array_length(keys);
-	    for (var i = 0; i < keyCount; ++i) {
-			var key = keys[i];
-			var value = struct[$ key];
-			variable_struct_set(cloneStruct, key, !is_struct(value) ? value : CloneStruct(value));
+	    var variableNames = variable_struct_get_names(struct);
+		var variableNameCount = array_length(variableNames);
+	    for (var i = 0; i < variableNameCount; ++i) {
+			var variableName = variableNames[i];
+			var value = struct[$ variableName];
+			variable_struct_set(cloneStruct, variableName, !is_struct(value) ? value : CloneStruct(value));
 	    }
 	}
     return cloneStruct;
