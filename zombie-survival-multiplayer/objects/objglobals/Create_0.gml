@@ -39,6 +39,12 @@ randomise();
 // GUI STATE
 #macro ROOT_GUI_STATE new GUIState(GUI_STATE.GameRoot, undefined, undefined, [], GUI_CHAIN_RULE.OverwriteAll, CallbackGUIStateInputRoot, undefined)
 
+// ROOM
+#macro ROOM_DEFAULT roomCamp
+
+// 
+#macro OBJECT_PARENTS_WITH_EVENT_0 [objInteractableParent, objCharacterParent]
+
 // DIALOGUE
 #macro DIALOGUE_DEFAULT_INDEX "default"
 

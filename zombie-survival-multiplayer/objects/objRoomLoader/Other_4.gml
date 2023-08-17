@@ -73,14 +73,12 @@ for (var i = 0; i < controllerCount; i++)
 }
 
 // GO TO MAIN MENU AFTER LAUNCH
-if (room == roomLaunch) { room_goto(roomMainMenu); }
-
-// START ROOM FADE-IN EFFECT
-roomFadeAlpha = roomFadeAlphaStart;
-
-// GO TO MAIN MENU AFTER LAUNCH
-if (room == roomLoadResources)
-{
+if (room == roomLaunch) {
+	room_goto(roomMainMenu);
+}
+// GO TO THE LAST KNOWN PLAYER LOCATION
+else if (room == roomLoadResources)
+{	
 	var gotoLastLocationRoom = false;
 	if (global.GameSaveHandlerRef.ReadFromFile())
 	{
@@ -121,6 +119,35 @@ if (room == roomLoadResources)
 			)
 		);
 		
-		room_goto(roomCamp);
+		room_goto(ROOM_DEFAULT);
+	}
+} else {
+	if (room != roomMainMenu)
+	{
+		// START ROOM FADE-IN EFFECT
+		roomFadeAlpha = roomFadeAlphaStart;
+		
+		// READ ROOM SAVE DATA FROM FILE
+		global.GameSaveHandlerRef.ReadRoomDataFromFile()
+		
+		// EXECUTE CUSTOM USER EVENT 0 OF OTHER OBJECTS ON ROOM START
+		var objectParentsWithEvent = OBJECT_PARENTS_WITH_EVENT_0;
+		var objectParentCount = array_length(objectParentsWithEvent);
+		for (var i = 0; i < objectParentCount; i++)
+		{
+			var objectIndex = objectParentsWithEvent[@ i];
+			var instanceCount = instance_number(objectIndex);
+			for (var j = 0; j < instanceCount; j++)
+			{
+				var instance = instance_find(objectIndex, j);
+				if (instance_exists(instance))
+				{
+					with (instance)
+					{
+						event_perform(ev_other, ev_user0);
+					}
+				}
+			}
+		}
 	}
 }
