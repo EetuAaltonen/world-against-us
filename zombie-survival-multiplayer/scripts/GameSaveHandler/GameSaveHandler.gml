@@ -126,10 +126,12 @@ function GameSaveHandler() constructor
 	static SaveToFile = function()
 	{
 		var isSaveDataWritten = false;
+		
 		if (!is_undefined(game_save_data))
 		{
 			try
 			{
+				// PLAYER DATA
 				var playerDataString = json_stringify(game_save_data.ToJSONStruct());
 				var buffer = buffer_create(
 					string_byte_length(playerDataString) + 1,
@@ -139,6 +141,7 @@ function GameSaveHandler() constructor
 				buffer_save(buffer, game_save_data.save_file_name);
 				buffer_delete(buffer);
 				
+				// ROOM DATA
 				var roomDataString = json_stringify(game_save_data.RoomToJSONStruct());
 				var roomName = room_get_name(game_save_data.room_data.index);
 				var roomDataFileName = ConcatRoomSaveFileSuffix(game_save_data.save_name, roomName);
@@ -156,33 +159,14 @@ function GameSaveHandler() constructor
 				show_debug_message(error);
 				show_message(error);
 			}
-			
-			/*var game_save_data = new GameSave(saveName);
-			game_save_data.FetchSaveData();
-			var gameSaveString = json_stringify(game_save_data.ToJSONStruct());
-			try
-			{
-				var buffer = buffer_create(
-					string_byte_length(gameSaveString) + 1,
-					buffer_fixed, 1
-				);
-				buffer_write(buffer, buffer_text, gameSaveString);
-				buffer_save(buffer, saveFileName);
-				buffer_delete(buffer);
-			
-				isFileSaved = true;
-			} catch (error)
-			{
-				show_debug_message(error);
-				show_message(error);
-			}*/
 		}
+		
 		return isSaveDataWritten;
 	}
 	
 	static ClearSaveCache = function()
 	{
-		game_save_data.ResetSaveData();	
+		game_save_data.ResetSavePlayerData();
 	}
 	
 	static ReadFromFile = function()
@@ -230,61 +214,77 @@ function GameSaveHandler() constructor
 		return isSaveDataReaded;
 	}
 	
-	static LoadPlayerDataFromFile = function()
+	static ReadRoomDataFromFile = function()
 	{
-		var isPlayerDataLoaded = false;
-		/*try
+		var isRoomSaveReaded = false;
+		if (!is_undefined(game_save_data))
 		{
-			if (file_exists(saveFileName))
+			if (!is_undefined(game_save_data.save_name))
 			{
-				var buffer = buffer_load(saveFileName);
-				if (buffer_get_size(buffer) > 0)
+				try
 				{
-					var gameSaveString = buffer_read(buffer, buffer_text);
-					buffer_delete(buffer);
-					if (string_length(gameSaveString) > 0 && gameSaveString != EMPTY_SAVE_DATA)
+					var roomName = room_get_name(room);
+					var roomDataFileName = ConcatRoomSaveFileSuffix(game_save_data.save_name, roomName);
+					if (file_exists(roomDataFileName))
 					{
-						var gameSaveStruct = json_parse(gameSaveString);
-						var game_save_data = new GameSave(saveName);
-						game_save_data.ParseGameSavePlayerDataStruct(gameSaveStruct);
+						var buffer = buffer_load(roomDataFileName);
+						if (buffer_get_size(buffer) > 0)
+						{
+							var gameRoomSaveString = buffer_read(buffer, buffer_text);
+							buffer_delete(buffer);
+							if (string_length(gameRoomSaveString) > 0 && gameRoomSaveString != EMPTY_SAVE_DATA)
+							{
+								var gameRoomSaveStruct = json_parse(gameRoomSaveString);
+								if (game_save_data.ParseGameSaveRoomStruct(gameRoomSaveStruct))
+								{
+									isRoomSaveReaded = true;
+								}
+							}
+						}
 					}
+				} catch (error)
+				{
+					show_message(error);
+					show_debug_message(error);
+					
+					global.NotificationHandlerRef.AddNotification(
+						new Notification(
+							sprFloppyDiskBroken, "Failed to load room data",
+							string("Save: '{0}'", global.GameSaveHandlerRef.game_save_data.save_name),
+							NOTIFICATION_TYPE.Popup
+						)
+					);
 				}
-				isPlayerDataLoaded = true;
 			}
-		} catch (error)
-		{
-			show_debug_message(error);
-			show_message(error);
-		}*/
-		return isPlayerDataLoaded;
+		}
+		
+		return isRoomSaveReaded;
 	}
 	
-	static LoadRoomDataFromFile = function()
+	static GetContainerContentById = function(_containerId)
 	{
-		var isRoomDataLoaded = false;
-		/*try
+		var containerContent = undefined;
+		
+		if (!is_undefined(game_save_data))
 		{
-			if (file_exists(saveFileName))
+			if (!is_undefined(game_save_data.room_data))
 			{
-				var buffer = buffer_load(saveFileName);
-				if (buffer_get_size(buffer) > 0)
+				var containers = game_save_data.room_data.containers;
+				var containerCount = array_length(containers);
+				for (var i = 0; i < containerCount; i++)
 				{
-					var gameSaveString = buffer_read(buffer, buffer_text);
-					buffer_delete(buffer);
-					if (string_length(gameSaveString) > 0 && gameSaveString != EMPTY_SAVE_DATA)
+					var container = containers[@ i];
+					if (container.container_id == _containerId)
 					{
-						var gameSaveStruct = json_parse(gameSaveString);
-						var game_save_data = new GameSave(saveName);
-						game_save_data.ParseGameSaveRoomDataStruct(gameSaveStruct);
+						if (!is_undefined(container.inventory))
+						{
+							containerContent = container.inventory.items;
+						}
 					}
 				}
-				isRoomDataLoaded = true;
 			}
-		} catch (error)
-		{
-			show_debug_message(error);
-			show_message(error);
-		}*/
-		return isRoomDataLoaded;
+		}
+		
+		return containerContent;
 	}
 }

@@ -5,7 +5,8 @@ function GameSave(_save_name) constructor
 	player_data = undefined;
 	room_data = undefined;
 	
-	ResetSaveData();
+	ResetSavePlayerData();
+	ResetSaveRoomData();
 	isSaveLoadingFirstTime = true;
 	
 	static ToJSONStruct = function()
@@ -13,6 +14,8 @@ function GameSave(_save_name) constructor
 		var formatRoomName = room_get_name(player_data.last_location.room_index);
 		var formatPosition = player_data.last_location.position.ToJSONStruct();
 		var formatBackpack = player_data.inventory.backpack.ToJSONStruct();
+		var formatMagazinePockets = player_data.inventory.magazine_pockets.ToJSONStruct();
+		var formatMedicinePockets = player_data.inventory.medicine_pockets.ToJSONStruct();
 		
 		return {
 			player_data: {
@@ -24,8 +27,8 @@ function GameSave(_save_name) constructor
 				inventory:
 				{
 					backpack: formatBackpack,
-					ammo_pockets: undefined,
-					medicine_pockets: undefined
+					magazine_pockets: formatMagazinePockets,
+					medicine_pockets: formatMedicinePockets
 				}
 			} 
 		}
@@ -33,10 +36,11 @@ function GameSave(_save_name) constructor
 	
 	static RoomToJSONStruct = function()
 	{
-		var formatRoomName = room_get_name(player_data.last_location.room_index);
+		var formatRoomName = room_get_name(room);
 		return {
 			room_data: {
-				name: formatRoomName
+				name: formatRoomName,
+				containers: room_data.containers
 			} 
 		}
 	}
@@ -57,11 +61,32 @@ function GameSave(_save_name) constructor
 				);
 				player_data.last_location.position = scaledPosition;
 				player_data.inventory.backpack = global.PlayerBackpack;
+				player_data.inventory.magazine_pockets = global.PlayerMagazinePockets;
+				player_data.inventory.medicine_pockets = global.PlayerMedicinePockets;
 				
 				// ROOM DATA
 				if (!is_undefined(room_data))
 				{
 					room_data.index = room;
+					
+					// CONTAINERS
+					var containerInstanceCount = instance_number(objContainerParent);
+					for (var i = 0; i < containerInstanceCount; i++)
+					{
+						var containerInstance = instance_find(objContainerParent, i);
+						if (instance_exists(containerInstance))
+						{
+							if (containerInstance.isContainerSearched)
+							{
+								var formatInventory = (!is_undefined(containerInstance.inventory)) ? containerInstance.inventory.ToJSONStruct() : undefined;
+								var containerStruct = {
+									container_id: containerInstance.containerId,
+									inventory: formatInventory
+								}
+								array_push(room_data.containers, containerStruct);
+							}
+						}
+					}
 					
 					isSaveDataFetched = true;	
 				}
@@ -71,7 +96,7 @@ function GameSave(_save_name) constructor
 		return isSaveDataFetched;
 	}
 	
-	static ResetSaveData = function()
+	static ResetSavePlayerData = function()
 	{
 		player_data = {
 			last_location:
@@ -82,13 +107,17 @@ function GameSave(_save_name) constructor
 			inventory:
 			{
 				backpack: undefined,
-				ammo_pockets: undefined,
+				magazine_pockets: undefined,
 				medicine_pockets: undefined
 			}
 		}
-		
+	}
+	
+	static ResetSaveRoomData = function()
+	{
 		room_data = {
-			index: undefined
+			index: undefined,
+			containers: []
 		}
 	}
 	
@@ -97,19 +126,19 @@ function GameSave(_save_name) constructor
 		var isSaveLoaded = false;
 		try
 		{
-			var playerDataStruct = _gameSaveStruct[$ "player_data"];
+			var playerDataStruct = _gameSaveStruct[$ "player_data"] ?? undefined;
 			if (!is_undefined(playerDataStruct))
 			{
-				var lastLocationStruct = playerDataStruct[$ "last_location"];
+				var lastLocationStruct = playerDataStruct[$ "last_location"] ?? undefined;
 				if (!is_undefined(lastLocationStruct))
 				{
-					var roomName = lastLocationStruct[$ "room_name"];
+					var roomName = lastLocationStruct[$ "room_name"] ?? undefined;
 					if (!is_undefined(roomName))
 					{
 						var roomIndex = asset_get_index(roomName);
 						player_data.last_location.room_index = (room_exists(roomIndex)) ? roomIndex : undefined;
 						
-						var positionStruct = lastLocationStruct[$ "position"];
+						var positionStruct = lastLocationStruct[$ "position"] ?? undefined;
 						if (!is_undefined(positionStruct))
 						{
 							var scaledPosition = ScaleIntValuesToFloatVector2(
@@ -121,30 +150,73 @@ function GameSave(_save_name) constructor
 					}
 				}
 				
-				var inventoryStruct = playerDataStruct[$ "inventory"];
+				var inventoryStruct = playerDataStruct[$ "inventory"] ?? undefined;
 				if (!is_undefined(inventoryStruct))
 				{
-					var backpackStruct = inventoryStruct[$ "backpack"];
-					if (!is_undefined(backpackStruct))
+					var backpackInventoryStruct = inventoryStruct[$ "backpack"] ?? undefined;
+					if (!is_undefined(backpackInventoryStruct))
 					{
-						player_data.inventory.backpack = {
-							inventory_id: "PlayerBackpack",
-							items: []
-						};
-						
-						var itemsArrayStruct = backpackStruct[$ "items"] ?? [];
-						var itemCount = array_length(itemsArrayStruct);
-						for (var i = 0; i < itemCount; i++)
-						{
-							var itemStruct = itemsArrayStruct[@ i];
-							var item = ParseJSONStructToItem(itemStruct);
-							array_push(player_data.inventory.backpack.items, item);
-						}
+						player_data.inventory.backpack = ParseJSONStructToInventory(backpackInventoryStruct);
+					}
+					
+					var ammoInventoryStruct = inventoryStruct[$ "magazine_pockets"] ?? undefined;
+					if (!is_undefined(ammoInventoryStruct))
+					{
+						player_data.inventory.magazine_pockets = ParseJSONStructToInventory(ammoInventoryStruct);
+					}
+					
+					var medicineInventoryStruct = inventoryStruct[$ "medicine_pockets"] ?? undefined;
+					if (!is_undefined(medicineInventoryStruct))
+					{
+						player_data.inventory.medicine_pockets = ParseJSONStructToInventory(medicineInventoryStruct);
 					}
 				}
 			}
 			
 			isSaveLoadingFirstTime = true;
+			isSaveLoaded = true;
+			
+		} catch (error)
+		{
+			show_debug_message(error);
+			show_message(error);
+		}
+		
+		return isSaveLoaded;
+	}
+	
+	static ParseGameSaveRoomStruct = function(_gameSaveRoomStruct)
+	{
+		var isSaveLoaded = false;
+		try
+		{
+			var roomDataStruct = _gameSaveRoomStruct[$ "room_data"] ?? undefined;
+			if (!is_undefined(roomDataStruct))
+			{
+				var containers = roomDataStruct[$ "containers"] ?? undefined;
+				if (!is_undefined(containers))
+				{
+					var containerCount = array_length(containers);
+					for (var i = 0; i < containerCount; i++)
+					{
+						var containerStruct = containers[@ i];
+						if (!is_undefined(containerStruct))
+						{
+							var container = {
+								container_id: containerStruct[$ "container_id"] ?? undefined,
+								inventory: undefined
+							}
+							var inventoryStruct = containerStruct[$ "inventory"] ?? undefined;
+							if (!is_undefined(inventoryStruct))
+							{
+								container.inventory = ParseJSONStructToInventory(inventoryStruct);
+							}
+							array_push(room_data.containers, container);
+						}
+					}
+				}
+			}
+			
 			isSaveLoaded = true;
 				
 		} catch (error)

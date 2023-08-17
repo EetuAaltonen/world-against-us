@@ -10,14 +10,21 @@ if (room != roomLoadResources)
 			// CLEAR ITEMS BEFORE LOADING THE SAVE
 			inventory.ClearItems();
 			
-			var backpack = gameSaveData.player_data.inventory.backpack;
-			if (!is_undefined(backpack))
+			var saveDataBackpack = gameSaveData.player_data.inventory.backpack;
+			if (!is_undefined(saveDataBackpack))
 			{
-				var itemCount = array_length(backpack.items);
-				for (var i = 0; i < itemCount; i++)
+				inventory.AddMultipleItems(saveDataBackpack.items);
+				
+				var saveDataMagazinePockets = gameSaveData.player_data.inventory.magazine_pockets
+				if (!is_undefined(saveDataMagazinePockets))
 				{
-					var item = backpack.items[@ i];
-					inventory.AddItem(item, item.grid_index, item.is_rotated, item.is_known, true);
+					magazinePockets.AddMultipleItems(saveDataMagazinePockets.items);
+				}
+				
+				var saveDataMedicinePockets = gameSaveData.player_data.inventory.medicine_pockets
+				if (!is_undefined(saveDataMedicinePockets))
+				{
+					medicinePockets.AddMultipleItems(saveDataMedicinePockets.items);
 				}
 			} else {
 				if (ds_list_size(inventory.items) <= 0)
