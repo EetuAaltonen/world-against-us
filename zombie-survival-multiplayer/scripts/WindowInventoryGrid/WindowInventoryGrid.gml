@@ -202,9 +202,14 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 				
 			// DRAW ITEM
 			var imageAlpha = 1;
-			// TODO: Fix shader while identifying
-			/*if (!item.is_known)
+			if (item.is_known)
 			{
+				if (!is_undefined(global.ObjMouse.dragItem))
+				{
+					imageAlpha = CombineItems(global.ObjMouse.dragItem.item_data, item, true) ? imageAlpha : 0.2;
+				}
+			} else {
+				// TODO: Fix shader while identifying
 				shader_set(shdrFogSprite);
 				if (!is_undefined(inventory.identify_index))
 				{
@@ -216,14 +221,6 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 				}
 			}
 			
-			// RESET SHADER
-			shader_reset();
-			*/
-			if (!is_undefined(global.ObjMouse.dragItem))
-			{
-				imageAlpha = CombineItems(global.ObjMouse.dragItem.item_data, item, true) ? imageAlpha : 0.2;
-			}
-			
 			DrawItem(
 				item, 0, iconBaseScale, imageAlpha,
 				new Vector2(xPos + ((gridCellSize.w * 0.5) * item.size.w), yPos + ((gridCellSize.h * 0.5) * item.size.h)),
@@ -231,6 +228,9 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 				[DRAW_ITEM_FLAGS.NameBg, DRAW_ITEM_FLAGS.NameShort,
 				DRAW_ITEM_FLAGS.AltTextBg, DRAW_ITEM_FLAGS.AltText]
 			);
+			
+			// RESET SHADER
+			shader_reset();
 		}
 		
 		// DRAW DRAG ITEM INDICATOR
