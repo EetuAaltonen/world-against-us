@@ -87,7 +87,7 @@ global.MapIconStyleData = undefined;
 // PLAYER INVENTORY
 global.PlayerBackpack = undefined;
 global.PlayerPrimaryWeaponSlot = undefined;
-global.PlayerAmmoPockets = undefined;
+global.PlayerMagazinePockets = undefined;
 global.PlayerMedicinePockets = undefined;
 
 // TEMP INVENTORY

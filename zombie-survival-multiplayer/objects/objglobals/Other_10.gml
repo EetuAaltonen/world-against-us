@@ -24,7 +24,7 @@ global.ObjMap = instance_exists(objMap) ? instance_find(objMap, 0) : noone;
 
 global.PlayerBackpack = instance_exists(objInventory) ? instance_find(objInventory, 0).inventory : undefined;
 global.PlayerPrimaryWeaponSlot = instance_exists(objInventory) ? instance_find(objInventory, 0).playerPrimaryWeaponSlot : undefined;
-global.PlayerAmmoPockets = instance_exists(objInventory) ? instance_find(objInventory, 0).magazinePockets : undefined;
+global.PlayerMagazinePockets = instance_exists(objInventory) ? instance_find(objInventory, 0).magazinePockets : undefined;
 global.PlayerMedicinePockets = instance_exists(objInventory) ? instance_find(objInventory, 0).medicinePockets : undefined;
 
 global.HighlightHandlerRef = instance_exists(objInstanceHighlighter) ? instance_find(objInstanceHighlighter, 0).highlightHandler : undefined;

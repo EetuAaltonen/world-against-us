@@ -49,7 +49,7 @@ function CreateWindowPlayerBackpack(_zIndex)
 		new Vector2(windowSize.w - magazinePocketGridSize.w - 10, 550),
 		magazinePocketGridSize,
 		undefined,
-		global.PlayerAmmoPockets
+		global.PlayerMagazinePockets
 	);
 	// MEDICINE POCKETS
 	var medicinePocketTitle = new WindowText(

@@ -20,9 +20,9 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 					if (sourceItem.category == "Magazine" || sourceItem.category == "Bullet" ||
 						sourceItem.category == "Fuel Ammo")
 					{
-						if (!is_undefined(global.PlayerAmmoPockets))
+						if (!is_undefined(global.PlayerMagazinePockets))
 						{
-							var transferItemGridIndex = global.PlayerAmmoPockets.AddItem(sourceItem, undefined, false, sourceItem.is_known);
+							var transferItemGridIndex = global.PlayerMagazinePockets.AddItem(sourceItem, undefined, false, sourceItem.is_known);
 							if (!is_undefined(transferItemGridIndex))
 							{
 								_inventory.RemoveItemByGridIndex(itemGridIndex);
