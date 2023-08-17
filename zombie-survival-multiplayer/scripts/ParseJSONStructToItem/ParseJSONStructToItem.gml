@@ -13,6 +13,7 @@ function ParseJSONStructToItem(_jsonStruct)
 		if (is_undefined(parsedItem)) return parsedItem;
 		
 		if (bool(itemStruct[$ "is_rotated"] ?? false)) { parsedItem.Rotate(); }
+		
 		parsedItem.is_known = bool(itemStruct[$ "is_known"] ?? true);
 		
 		if (!is_undefined(itemStruct[$ "grid_index"] ?? undefined)) {
@@ -20,7 +21,7 @@ function ParseJSONStructToItem(_jsonStruct)
 		}
 		
 		// COMBINE METADATA WITH DATABASE METADATA
-		var metadataStruct = itemStruct[$ "metadata"];
+		var metadataStruct = itemStruct[$ "metadata"] ?? undefined;
 		if (!is_undefined(metadataStruct))
 		{
 			var metadataStructNames = variable_struct_get_names(metadataStruct);

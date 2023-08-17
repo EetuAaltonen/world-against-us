@@ -16,7 +16,7 @@ function OnClickConstructionWindowBuild()
 						if (!is_undefined(metadata.material_slots))
 						{
 							// CHECK IF RECIPE IS FULFILLED
-							var requiredMaterialsClone = CloneArrayWithClonedValues(blueprint.materials);
+							var requiredMaterialsClone = CloneArrayMaterialsWithClonedValues(blueprint.materials);
 							if (array_length(requiredMaterialsClone) > 0)
 							{
 								var materialSlotCount = array_length(metadata.material_slots);
@@ -50,7 +50,7 @@ function OnClickConstructionWindowBuild()
 								if (array_length(requiredMaterialsClone) <= 0)
 								{
 									// DELETE USED MATERIALS FROM ITEM SLOTS
-									var originalRequiredMaterialsClone = CloneArrayWithClonedValues(blueprint.materials);
+									var originalRequiredMaterialsClone = CloneArrayMaterialsWithClonedValues(blueprint.materials);
 									var materialSlotCount = array_length(metadata.material_slots);
 									for (var i = 0; i < materialSlotCount; i++)
 									{
