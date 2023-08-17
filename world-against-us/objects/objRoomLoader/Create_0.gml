@@ -81,5 +81,5 @@ ds_map_add(controllerLayers, LAYER_HIGHLIGHT_INTERACTABLE, depth); // DEPTH CHAN
 
 // ROOM FADE-IN EFFECT
 roomFadeAlphaStart = 1;
-roomFadeAlpha = roomFadeAlphaStart;
+roomFadeAlpha = 0;
 roomFadeAlphaStep = 0.015;
