@@ -1,22 +1,28 @@
-if (
-	toolsInventory.GetItemCount() == 1 &&
-	fertilizeInventory.GetItemCount() == 1 &&
-	waterInventory.GetItemCount() == 1 &&
-	seedInventory.GetItemCount() == 1
-)
+if (!is_undefined(structure))
 {
-	var outputFood = global.ItemDatabase.GetItemByName("Tomato");
-	if (!is_undefined(outputFood))
+	if (!is_undefined(structure.metadata))
 	{
-		var seedPack = seedInventory.GetItemByIndex(0);
-		if (!is_undefined(seedPack))
+		if (
+			structure.metadata.tools_inventory.GetItemCount() == 1 &&
+			structure.metadata.fertilizer_inventory.GetItemCount() == 1 &&
+			structure.metadata.water_inventory.GetItemCount() == 1 &&
+			structure.metadata.seed_inventory.GetItemCount() == 1
+		)
 		{
-			repeat(seedPack.quantity)
+			var outputFood = global.ItemDatabase.GetItemByName("Tomato");
+			if (!is_undefined(outputFood))
 			{
-				var outputItemGridIndex = outputInventory.AddItem(outputFood.Clone());
-				if (is_undefined(outputItemGridIndex)) break;
+				var seedPack = structure.metadata.seed_inventory.GetItemByIndex(0);
+				if (!is_undefined(seedPack))
+				{
+					repeat(seedPack.quantity)
+					{
+						var outputItemGridIndex = structure.metadata.output_inventory.AddItem(outputFood.Clone());
+						if (is_undefined(outputItemGridIndex)) break;
+					}
+					structure.metadata.seed_inventory.RemoveItemByGridIndex(seedPack.grid_index);
+				}
 			}
-			seedInventory.RemoveItemByGridIndex(seedPack.grid_index);
 		}
 	}
 }

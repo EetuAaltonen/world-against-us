@@ -12,15 +12,9 @@ interactionFunction = function()
 	{
 		global.GameWindowHandlerRef.OpenWindowGroup([
 			CreateWindowPlayerBackpack(-1),
-			CreateWindowConstructionSite(-1, materialSlotInventories, self)
+			CreateWindowConstructionSite(-1, structure.metadata.material_slots, self)
 		]);
 	}
 }
 
-materialSlotInventories = [];
-var materialSlotCount = 3;
-for (var i = 0; i < materialSlotCount; i++)
-{
-	var materialSlotInventory = new Inventory(string("MaterialSlot{0}", i), INVENTORY_TYPE.ConstructionSite, { columns: 4, rows: 4 }, ["Material"]);
-	array_push(materialSlotInventories, materialSlotInventory);
-}
+structure = undefined;

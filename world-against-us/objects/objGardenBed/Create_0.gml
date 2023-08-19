@@ -12,13 +12,13 @@ interactionFunction = function()
 	{
 		global.GameWindowHandlerRef.OpenWindowGroup([
 			CreateWindowPlayerBackpack(-1),
-			CreateWindowGardenBed(-1, toolsInventory, fertilizeInventory, waterInventory, seedInventory, outputInventory)
+			CreateWindowGardenBed(-1, 
+				structure.metadata.tools_inventory, structure.metadata.fertilizer_inventory,
+				structure.metadata.water_inventory, structure.metadata.seed_inventory,
+				structure.metadata.output_inventory
+			)
 		]);
 	}
 }
 
-toolsInventory = new Inventory("GardenBedTools", INVENTORY_TYPE.Garden, { columns: 2, rows: 2 }, ["Garden Tools"]);
-fertilizeInventory = new Inventory("GardenBedFertilizer", INVENTORY_TYPE.Garden, { columns: 2, rows: 3 }, ["Fertilizer Sack"]);
-waterInventory = new Inventory("GardenBedWater", INVENTORY_TYPE.Garden, { columns: 2, rows: 3 }, ["Watering Can"]);
-seedInventory = new Inventory("GardenBedSeed", INVENTORY_TYPE.Garden, { columns: 1, rows: 1 }, ["Tomato Seed Pack"]);
-outputInventory = new Inventory("GardenBedOutput", INVENTORY_TYPE.Garden, { columns: 10, rows: 4 }, ["Consumable"]);
+structure = undefined;

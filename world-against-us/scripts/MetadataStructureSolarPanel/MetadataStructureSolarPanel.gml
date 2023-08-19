@@ -1,0 +1,3 @@
+function MetadataStructureSolarPanel() : Metadata() constructor
+{
+}
