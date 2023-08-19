@@ -31,6 +31,50 @@
       "base_price": 80
     },
     {
+      "name": "School Backpack",
+      "short_name": "School Bag",
+      "icon": "sprSchoolBackpack",
+      "category": "Backpack",
+      "type": "Backpack",
+      "size": {
+        "w": 2,
+        "h": 3
+      },
+      "description": "A small school backpack",
+      "weight": 400,
+      "max_stack": 1,
+      "base_price": 10,
+      "metadata": {
+        "inventory_size": {
+          "columns": 10,
+          "rows": 4
+        },
+        "max_weight_capacity": 30
+      }
+    },
+    {
+      "name": "Hiking Backpack",
+      "short_name": "Hiking Bag",
+      "icon": "sprHikingBackpack",
+      "category": "Backpack",
+      "type": "Backpack",
+      "size": {
+        "w": 2,
+        "h": 4
+      },
+      "description": "A hiking backpack",
+      "weight": 400,
+      "max_stack": 1,
+      "base_price": 10,
+      "metadata": {
+        "inventory_size": {
+          "columns": 10,
+          "rows": 8
+        },
+        "max_weight_capacity": 60
+      }
+    },
+    {
       "name": "Water Bottle",
       "short_name": "Water",
       "icon": "sprWaterBottle",
