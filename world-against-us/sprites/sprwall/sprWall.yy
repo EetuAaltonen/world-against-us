@@ -48,8 +48,8 @@
   },
   "origin": 4,
   "parent": {
-    "name": "Structure",
-    "path": "folders/Sprites/World/Structure.yy",
+    "name": "Building",
+    "path": "folders/Sprites/World/Building.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

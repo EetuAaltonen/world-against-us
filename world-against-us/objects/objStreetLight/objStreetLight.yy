@@ -10,8 +10,8 @@
     "path": "folders/Objects/World/Structures.yy",
   },
   "parentObjectId": {
-    "name": "objStructureParent",
-    "path": "objects/objStructureParent/objStructureParent.yy",
+    "name": "objBlockParent",
+    "path": "objects/objBlockParent/objBlockParent.yy",
   },
   "persistent": false,
   "physicsAngularDamping": 0.1,

@@ -6,12 +6,12 @@
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "Structures",
-    "path": "folders/Objects/World/Structures.yy",
+    "name": "Building",
+    "path": "folders/Objects/World/Building.yy",
   },
   "parentObjectId": {
-    "name": "objStructureParent",
-    "path": "objects/objStructureParent/objStructureParent.yy",
+    "name": "objBuildingParent",
+    "path": "objects/objBuildingParent/objBuildingParent.yy",
   },
   "persistent": false,
   "physicsAngularDamping": 0.1,

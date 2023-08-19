@@ -13,8 +13,8 @@
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "Facility",
-    "path": "folders/Objects/World/Facility.yy",
+    "name": "Functional Structure",
+    "path": "folders/Objects/World/Structures/Functional Structure.yy",
   },
   "parentObjectId": {
     "name": "objInteractableParent",
