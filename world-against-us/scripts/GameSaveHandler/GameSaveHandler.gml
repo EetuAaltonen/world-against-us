@@ -9,7 +9,7 @@ function GameSaveHandler() constructor
 		
 		if (!file_exists(game_save_data.save_file_name))
 		{
-			if (CreateEmptySaveFile())
+			if (CreateEmptySaveFile(_saveName))
 			{
 				isGameSaveInitialized = true;
 			}
@@ -25,9 +25,10 @@ function GameSaveHandler() constructor
 		var isGameSaveReseted = false;
 		if (InitGameSave(_saveName))
 		{
-			if (CreateEmptySaveFile())
+			// OVERWRITE EXISTING SAVE FILE
+			if (CreateEmptySaveFile(_saveName))
 			{
-				if (DeleteRoomSaveFiles())
+				if (DeleteRoomSaveFiles(_saveName))
 				{
 					isGameSaveReseted = true;
 				}
@@ -37,18 +38,19 @@ function GameSaveHandler() constructor
 		return isGameSaveReseted;
 	}
 	
-	static CreateEmptySaveFile = function()
+	static CreateEmptySaveFile = function(_saveName)
 	{
 		var isEmptyFileCreated = false;
 		try
 		{
+			var saveFileName = ConcatSaveFileSuffix(_saveName);
 			var emptySaveString = EMPTY_SAVE_DATA;
 			var buffer = buffer_create(
 				string_byte_length(emptySaveString) + 1,
 				buffer_fixed, 1
 			);
 			buffer_write(buffer, buffer_text, emptySaveString);
-			buffer_save(buffer, game_save_data.save_file_name);
+			buffer_save(buffer, saveFileName);
 			buffer_delete(buffer);
 			
 			isEmptyFileCreated = true;
@@ -60,12 +62,30 @@ function GameSaveHandler() constructor
 		return isEmptyFileCreated;
 	}
 	
-	static DeleteRoomSaveFiles = function()
+	static DeletePlayerSaveFile = function(_saveFileName)
+	{
+		var isSaveFileDeleted = false;
+		try
+		{
+			if (file_exists(_saveFileName))
+			{
+				file_delete(_saveFileName);
+				isSaveFileDeleted = true;
+			}
+		} catch (error)
+		{
+			show_debug_message(error);
+			show_message(error);
+		}
+		return isSaveFileDeleted;
+	}
+	
+	static DeleteRoomSaveFiles = function(_saveName)
 	{
 		var isSaveFilesDeleted = false;
 		try
 		{
-			var fileNamePrefix = string("{0}_save_room*", game_save_data.save_name);
+			var fileNamePrefix = string("{0}_save_room*", _saveName);
 			var fileName = file_find_first(fileNamePrefix, fa_directory);
 		
 			while(fileName != "")

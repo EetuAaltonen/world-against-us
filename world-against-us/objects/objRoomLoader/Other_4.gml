@@ -78,7 +78,7 @@ if (room == roomLaunch) {
 }
 // GO TO THE LAST KNOWN PLAYER LOCATION
 else if (room == roomLoadResources)
-{	
+{
 	var gotoLastLocationRoom = false;
 	if (global.GameSaveHandlerRef.ReadFromFile())
 	{
@@ -128,7 +128,7 @@ else if (room == roomLoadResources)
 		roomFadeAlpha = roomFadeAlphaStart;
 		
 		// READ ROOM SAVE DATA FROM FILE
-		global.GameSaveHandlerRef.ReadRoomDataFromFile()
+		global.GameSaveHandlerRef.ReadRoomDataFromFile();
 		
 		// EXECUTE CUSTOM USER EVENT 0 OF OTHER OBJECTS ON ROOM START
 		var objectParentsWithEvent = OBJECT_PARENTS_WITH_EVENT_0;
@@ -147,6 +147,19 @@ else if (room == roomLoadResources)
 						event_perform(ev_other, ev_user0);
 					}
 				}
+			}
+		}
+		
+		// CLEAR SAVE DATA CACHE AFTER EVERYTHING IS LOADED IN THE ROOM
+		global.GameSaveHandlerRef.ClearSaveCache();
+		
+		// CHECK IF GAME SAVE IS LOADED FOR THE FIRST TIME
+		var gameSaveData = global.GameSaveHandlerRef.game_save_data;
+		if (!is_undefined(gameSaveData))
+		{
+			if (gameSaveData.isSaveLoadingFirstTime)
+			{
+				gameSaveData.isSaveLoadingFirstTime = false;
 			}
 		}
 	}

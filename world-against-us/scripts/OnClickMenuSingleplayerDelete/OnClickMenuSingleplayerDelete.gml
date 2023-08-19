@@ -14,10 +14,10 @@ function OnClickMenuSingleplayerDelete()
 	} else {
 		global.NotificationHandlerRef.AddNotification(
 			new Notification(
-				undefined,
+				sprFloppyDiskBroken,
 				"No save file selected",
 				undefined,
-				NOTIFICATION_TYPE.Log
+				NOTIFICATION_TYPE.Popup
 			)
 		);
 	}

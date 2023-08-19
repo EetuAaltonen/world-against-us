@@ -6,34 +6,27 @@ function OnClickMenuSingleplayerDeleteConfirmCallback(callerWindowElement)
 		var saveName = FormatSaveName(saveInput.input);
 		var saveFileName = ConcatSaveFileSuffix(saveName);
 		
-		try
+		if (global.GameSaveHandlerRef.DeletePlayerSaveFile(saveFileName))
 		{
-			if (file_exists(saveFileName))
+			if (global.GameSaveHandlerRef.DeleteRoomSaveFiles(saveName))
 			{
-				file_delete(saveFileName);
-				saveInput.input = saveInput.placeholder;
-				
-				// UPDATE SAVE FILE LIST
-				var saveFiles = global.GameSaveHandlerRef.FetchSaveFileNames();
-				var saveFileList = callerWindowElement.parentWindow.GetChildElementById("SaveFileList");
-				if (!is_undefined(saveFileList))
-				{
-					saveFileList.UpdateDataCollection(saveFiles);
-				}
-			} else {
 				global.NotificationHandlerRef.AddNotification(
 					new Notification(
-						undefined,
-						"Save file not found",
-						undefined,
-						NOTIFICATION_TYPE.Log
+						sprFloppyDiskBroken,
+						"Game save deleted",
+						string("Save: '{0}'", saveName),
+						NOTIFICATION_TYPE.Popup
 					)
 				);
 			}
-		} catch (error)
+		}
+		
+		// UPDATE SAVE FILE LIST
+		var saveFiles = global.GameSaveHandlerRef.FetchSaveFileNames();
+		var saveFileList = callerWindowElement.parentWindow.GetChildElementById("SaveFileList");
+		if (!is_undefined(saveFileList))
 		{
-			show_debug_message(error);
-			show_message(error);
+			saveFileList.UpdateDataCollection(saveFiles);
 		}
 	}
 }
