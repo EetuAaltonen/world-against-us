@@ -19,7 +19,7 @@ if (owner != noone)
 		y += primaryWeapon.metadata.weapon_offset.Y + rotatedWeaponOffset.Y;
 		
 		 if (!initWeapon) {
-			if (owner.character.type == CHARACTER_TYPE.PLAYER)
+			if (owner.character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 			{
 				// AIM WITH WEAPON
 				var aimButton = mb_right;
@@ -41,7 +41,7 @@ if (owner != noone)
 			// CALCULATE BARREL LOCATION
 			CalculateChamberPos();
 			
-			if (owner.character.type == CHARACTER_TYPE.PLAYER)
+			if (owner.character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 			{
 				// CHECK GUI STATE
 				if (global.GUIStateHandlerRef.IsGUIStateClosed())

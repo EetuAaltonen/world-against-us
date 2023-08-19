@@ -1,4 +1,4 @@
-function CharacterPlayer(_name, _type, _race) : Character(_name, _type, _race) constructor
+function CharacterHuman(_name, _type, _race, _behaviour) : Character(_name, _type, _race, _behaviour) constructor
 {
 	max_fullness = 100;
 	fullness = max_fullness;
@@ -14,6 +14,41 @@ function CharacterPlayer(_name, _type, _race) : Character(_name, _type, _race) c
 	energy = max_energy;
 	fatigue_base_rate = 0.0001;
 	fatigue_rate = fatigue_base_rate;
+	
+	backpack_slot = new Inventory(string("{0}_Inventory", _name), INVENTORY_TYPE.BackpackSlot, { columns: 3, rows: 4 }, ["Backpack"]);
+	
+	static ToJSONStruct = function()
+	{
+		
+		var scaledStamina = ScaleFloatValueToInt(stamina);
+		
+		// TODO: Fix body part ToJSONStruct logic
+		//var formatBodyParts = (!is_undefined(body_parts)) ? body_parts[@ 0].ToJSONStruct() : undefined;
+		
+		var scaledFullness = ScaleFloatValueToInt(fullness);
+		var scaledHydration = ScaleFloatValueToInt(hydration);
+		var scaledEnergy = ScaleFloatValueToInt(energy);
+		
+		var backpack = backpack_slot.GetItemByIndex(0);
+		var formatBackpack = (!is_undefined(backpack)) ? backpack.ToJSONStruct() : undefined;
+		
+		return {
+			name: name,
+			uuid: uuid,
+			type: type,
+			race: race,
+			stamina: scaledStamina,
+			
+			body_parts: undefined,
+			is_dead: is_dead,
+			
+			fullness: scaledFullness,
+			hydration: scaledHydration,
+			energy: scaledEnergy,
+			
+			backpack: formatBackpack
+		}
+	}
 	
 	static UpdateStats = function()
 	{

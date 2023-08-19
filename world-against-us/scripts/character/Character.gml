@@ -1,16 +1,17 @@
-function Character(_name, _type, _race) constructor
+function Character(_name, _type, _race, _behaviour) constructor
 {
 	name = _name;
 	uuid = undefined;
 	type = _type;
 	race = _race;
+	behaviour = _behaviour;
 	
-	total_hp_percent = 0;
+	total_hp_percent = 100;
 	stamina = 100;
 	body_parts = undefined;
 	InitBodyParts();
 	
-	isDead = false;
+	is_dead = false;
 	
 	static InitBodyParts = function()
 	{
@@ -23,10 +24,12 @@ function Character(_name, _type, _race) constructor
 	
 	static Clone = function()
 	{
+		// TODO: Fix clone body parts, is_dead and other statistics
 		return new Character(
 			name,
 			type,
-			race
+			race,
+			behaviour
 		);
 	}
 	
@@ -50,11 +53,11 @@ function Character(_name, _type, _race) constructor
 	
 	static Update = function()
 	{
-		if (!isDead)
+		if (!is_dead)
 		{
 			if (total_hp_percent <= 0)
 			{
-				isDead = true;
+				is_dead = true;
 				// TODO: Disable until loot tables are implemented correctly
 				//other.sprite_index = sprGraveStone;
 				//other.mask_index = SPRITE_NO_MASK;

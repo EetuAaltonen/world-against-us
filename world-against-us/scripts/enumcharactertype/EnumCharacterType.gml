@@ -1,8 +1,5 @@
 enum CHARACTER_TYPE
 {
-	PLAYER,
-	COOP_PLAYER,
-	HOSTILE,
-	NEUTRAL,
-	NPC
+	Human,
+	Zombie
 }

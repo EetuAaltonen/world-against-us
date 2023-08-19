@@ -1,7 +1,7 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
-character = new CharacterPlayer("Player", CHARACTER_TYPE.PLAYER, CHARACTER_RACE.humanoid);
+character = undefined;
 
 image_index = 0;
 image_speed = 0;

@@ -1,7 +1,7 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
-if (character.type == CHARACTER_TYPE.PLAYER)
+if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 {
 	// CHECK GUI STATE
 	if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;
@@ -89,7 +89,7 @@ var spriteDirection = CalculateSpriteDirectionToAim(new Vector2(x, y), MouseWorl
 image_xscale = spriteDirection.image_x_scale;
 
 // SEND MOVEMENT NETWORK DATA
-if (character.type == CHARACTER_TYPE.PLAYER)
+if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 {
 	if (!is_undefined(global.ObjNetwork.client.clientId))
 	{
