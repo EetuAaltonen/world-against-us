@@ -13,6 +13,9 @@ function GameSave(_save_name) constructor
 	{
 		var formatRoomName = room_get_name(player_data.last_location.room_index);
 		var formatPosition = player_data.last_location.position.ToJSONStruct();
+		
+		var formatCharacter = player_data.character.ToJSONStruct();
+		
 		var formatBackpack = player_data.inventory.backpack.ToJSONStruct();
 		var formatMagazinePockets = player_data.inventory.magazine_pockets.ToJSONStruct();
 		var formatMedicinePockets = player_data.inventory.medicine_pockets.ToJSONStruct();
@@ -24,6 +27,7 @@ function GameSave(_save_name) constructor
 					room_name: formatRoomName,
 					position: formatPosition
 				},
+				character: formatCharacter,
 				inventory:
 				{
 					backpack: formatBackpack,
@@ -51,6 +55,10 @@ function GameSave(_save_name) constructor
 		
 		if (!is_undefined(save_name))
 		{
+			// RESET GAME SAVE DATA CACHE
+			ResetSavePlayerData();
+			ResetSaveRoomData();
+			
 			// PLAYER DATA
 			if (!is_undefined(player_data))
 			{
@@ -60,7 +68,11 @@ function GameSave(_save_name) constructor
 					global.InstancePlayer.y
 				);
 				player_data.last_location.position = scaledPosition;
-				player_data.inventory.backpack = global.PlayerBackpack;
+				
+				player_data.character = global.PlayerCharacter;
+				
+				var equippedBackpack = global.InstancePlayer.character.backpack_slot.GetItemByIndex(0);
+				player_data.inventory.backpack = equippedBackpack;
 				player_data.inventory.magazine_pockets = global.PlayerMagazinePockets;
 				player_data.inventory.medicine_pockets = global.PlayerMedicinePockets;
 				
@@ -104,6 +116,7 @@ function GameSave(_save_name) constructor
 				room_index: undefined,
 				position: undefined
 			},
+			character: undefined,
 			inventory:
 			{
 				backpack: undefined,
@@ -150,13 +163,19 @@ function GameSave(_save_name) constructor
 					}
 				}
 				
+				var characterStruct = playerDataStruct[$ "character"] ?? undefined;
+				if (!is_undefined(characterStruct))
+				{
+					player_data.character = ParseJSONStructToCharacter(characterStruct);
+				}
+				
 				var inventoryStruct = playerDataStruct[$ "inventory"] ?? undefined;
 				if (!is_undefined(inventoryStruct))
 				{
-					var backpackInventoryStruct = inventoryStruct[$ "backpack"] ?? undefined;
-					if (!is_undefined(backpackInventoryStruct))
+					var backpackStruct = inventoryStruct[$ "backpack"] ?? undefined;
+					if (!is_undefined(backpackStruct))
 					{
-						player_data.inventory.backpack = ParseJSONStructToInventory(backpackInventoryStruct);
+						player_data.inventory.backpack = ParseJSONStructToItem(backpackStruct);
 					}
 					
 					var ammoInventoryStruct = inventoryStruct[$ "magazine_pockets"] ?? undefined;

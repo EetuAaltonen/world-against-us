@@ -8,7 +8,8 @@ function ParseJSONStructToInventory(_jsonStruct)
 		if (variable_struct_names_count(inventoryStruct) <= 0) return parsedInventory;
 		
 		parsedInventory = {
-			inventory_id: inventoryStruct[$ "inventory_id"],
+			inventory_id: inventoryStruct[$ "inventory_id"] ?? undefined,
+			inventory_type: inventoryStruct[$ "inventory_type"] ?? undefined,
 			items: []
 		};
 						

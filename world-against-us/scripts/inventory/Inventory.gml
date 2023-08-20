@@ -33,6 +33,7 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 		}
 		return {
 			inventory_id: inventory_id,
+			inventory_type: type,
 			items: itemArray
 		}
 	}
@@ -149,8 +150,11 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 			for (var i = 0; i < itemCount; i++)
 			{
 				var item = array_pop(_itemArray);
-				var addedItemGridIndex = AddItem(item, item.grid_index, item.is_rotated, item.is_known);
-				if (is_undefined(addedItemGridIndex)) break;
+				if (!is_undefined(item))
+				{
+					var addedItemGridIndex = AddItem(item, item.grid_index, item.is_rotated, item.is_known);
+					if (is_undefined(addedItemGridIndex)) break;
+				}
 			}
 			isAddingCompleted = (array_length(_itemArray) <= 0);
 		}
