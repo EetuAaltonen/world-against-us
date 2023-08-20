@@ -5,5 +5,6 @@ function Metadata() constructor
 	static ToJSONStruct = function()
 	{
 		// OVERRIDE THIS FUNCTION
+		return EMPTY_STRUCT;
 	}
 }

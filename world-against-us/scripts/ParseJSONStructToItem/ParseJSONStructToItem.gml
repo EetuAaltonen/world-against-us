@@ -6,8 +6,8 @@ function ParseJSONStructToItem(_jsonStruct)
 		var itemStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 		if (variable_struct_names_count(itemStruct) <= 0) return parsedItem;
 		
-		var parsedItem = global.ItemDatabase.GetItemByName(
-			itemStruct[$ "name"],
+		parsedItem = global.ItemDatabase.GetItemByName(
+			itemStruct[$ "name"] ?? undefined,
 			itemStruct[$ "quantity"] ?? 1
 		);
 		if (is_undefined(parsedItem)) return parsedItem;
