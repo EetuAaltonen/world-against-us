@@ -24,6 +24,9 @@ randomise();
 #macro ITEM_DEFAULT_ANGLE 0
 #macro ITEM_ROTATED_ANGLE 90
 
+// OBJECT
+#macro UNDEFINED_OBJECT_NAME "<undefined>"
+
 // COLLISION
 #macro OBJECTS_TO_HIT [objHitbox]
 
@@ -42,7 +45,7 @@ randomise();
 // ROOM
 #macro ROOM_DEFAULT roomCamp
 
-// 
+// PARENT OBJECT EVENT 0
 #macro OBJECT_PARENTS_WITH_EVENT_0 [objInteractableParent, objCharacterParent]
 
 // DIALOGUE

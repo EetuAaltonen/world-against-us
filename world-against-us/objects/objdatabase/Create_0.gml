@@ -186,5 +186,5 @@ try {
 }
 
 // MAP ICON STYLE DATA
-var jsonMapIconStyleStruct = ReadJSONFile("map_icon_style_data.json") ?? {};
+var jsonMapIconStyleStruct = ReadJSONFile("map_icon_style_data.json") ?? EMPTY_STRUCT;
 mapIconStyleData = ParseJSONStructArrayToMap(jsonMapIconStyleStruct[$ "map_icon_style_data"], "obj_index", ParseJSONStructToDatabaseMapIconStyleData);

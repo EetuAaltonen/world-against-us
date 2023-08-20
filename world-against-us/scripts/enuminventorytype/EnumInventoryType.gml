@@ -4,6 +4,7 @@ enum INVENTORY_TYPE
 	PlayerPrimaryWeaponSlot,
 	MagazinePockets,
 	MedicinePockets,
+	BackpackSlot,
 	LootContainer,
 	Facility,
 	ConstructionSite,
