@@ -44,7 +44,8 @@ function GameSave(_save_name) constructor
 		return {
 			room_data: {
 				name: formatRoomName,
-				containers: room_data.containers
+				containers: room_data.containers,
+				structures_interactable: room_data.structures_interactable
 			} 
 		}
 	}
@@ -100,6 +101,40 @@ function GameSave(_save_name) constructor
 						}
 					}
 					
+					// CONTAINERS
+					var containerInstanceCount = instance_number(objContainerParent);
+					for (var i = 0; i < containerInstanceCount; i++)
+					{
+						var containerInstance = instance_find(objContainerParent, i);
+						if (instance_exists(containerInstance))
+						{
+							if (containerInstance.isContainerSearched)
+							{
+								var formatInventory = (!is_undefined(containerInstance.inventory)) ? containerInstance.inventory.ToJSONStruct() : undefined;
+								var containerStruct = {
+									container_id: containerInstance.containerId,
+									inventory: formatInventory
+								}
+								array_push(room_data.containers, containerStruct);
+							}
+						}
+					}
+					
+					// INTERACTABLE STRUCTURES
+					var structureInstanceCount = instance_number(objStructureInteractableParent);
+					for (var i = 0; i < structureInstanceCount; i++)
+					{
+						var structureInstance = instance_find(objStructureInteractableParent, i);
+						if (instance_exists(structureInstance))
+						{
+							if (!is_undefined(structureInstance.structure))
+							{
+								var structureStruct = structureInstance.structure.ToJSONStruct();
+								array_push(room_data.structures_interactable, structureStruct);
+							}
+						}
+					}
+					
 					isSaveDataFetched = true;	
 				}
 			}
@@ -130,7 +165,8 @@ function GameSave(_save_name) constructor
 	{
 		room_data = {
 			index: undefined,
-			containers: []
+			containers: [],
+			structures_interactable: []
 		}
 	}
 	
@@ -212,6 +248,7 @@ function GameSave(_save_name) constructor
 			var roomDataStruct = _gameSaveRoomStruct[$ "room_data"] ?? undefined;
 			if (!is_undefined(roomDataStruct))
 			{
+				// CONTAINERS
 				var containers = roomDataStruct[$ "containers"] ?? undefined;
 				if (!is_undefined(containers))
 				{
@@ -234,8 +271,54 @@ function GameSave(_save_name) constructor
 						}
 					}
 				}
+				
+				// STRUCTURES INTERACTABLE
+				var structures = roomDataStruct[$ "structures_interactable"] ?? undefined;
+				if (!is_undefined(structures))
+				{
+					var structureCount = array_length(structures);
+					for (var i = 0; i < structureCount; i++)
+					{
+						var structureStruct = structures[@ i];
+						if (!is_undefined(structureStruct))
+						{
+							var structureId = structureStruct[$ "structure_id"] ?? undefined
+							if (!is_undefined(structureId))
+							{
+								var structureMetadataStruct = structureStruct[$ "metadata"] ?? undefined;
+								if (!is_undefined(structureMetadataStruct))
+								{
+									var structureCategory = structureStruct[$ "category"] ?? undefined;
+									if (!is_undefined(structureCategory))
+									{
+										var structure = undefined;
+										
+										switch (structureCategory)
+										{
+											case STRUCTURE_CATEGORY.Garden:
+											{
+												var structureMetadata = ParseJSONStructToMetadataStructureGarden(structureMetadataStruct);
+												structure = new Structure(structureId, INTERACTABLE_TYPE.Structure, STRUCTURE_CATEGORY.Garden, structureMetadata);
+											} break;
+											
+											case STRUCTURE_CATEGORY.ConstructionSite:
+											{
+												var structureMetadata = ParseJSONStructToMetadataStructureConstructionSite(structureMetadataStruct);
+												structure = new Structure(structureId, INTERACTABLE_TYPE.Structure, STRUCTURE_CATEGORY.ConstructionSite, structureMetadata);
+											} break;
+										}
+										
+										if (!is_undefined(structure))
+										{
+											array_push(room_data.structures_interactable, structure);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
-			
 			isSaveLoaded = true;
 				
 		} catch (error)

@@ -307,4 +307,28 @@ function GameSaveHandler() constructor
 		
 		return containerContent;
 	}
+	
+	static GetStructureInteractableContentById = function(_structureId)
+	{
+		var structureContent = undefined;
+		
+		if (!is_undefined(game_save_data))
+		{
+			if (!is_undefined(game_save_data.room_data))
+			{
+				var interactableStructures = game_save_data.room_data.structures_interactable;
+				var structureCount = array_length(interactableStructures);
+				for (var i = 0; i < structureCount; i++)
+				{
+					var structure = interactableStructures[@ i];
+					if (structure.structure_id == _structureId)
+					{
+						structureContent = structure;
+					}
+				}
+			}
+		}
+		
+		return structureContent;
+	}
 }
