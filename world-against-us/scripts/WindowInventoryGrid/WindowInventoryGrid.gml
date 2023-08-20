@@ -29,8 +29,34 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 		{
 			if (is_undefined(inventory.identify_index))
 			{
-				if (is_undefined(global.ObjMouse.dragItem))
+				if (!is_undefined(global.ObjMouse.dragItem))
 				{
+					// DROP DRAG ITEM
+					if (mouse_check_button_released(mb_left))
+					{
+						if (!OnReleasedGUIDragItem(inventory, mouseHoverIndex))
+						{
+							// RESTORE ITEM IF DROPPING IS INTERRUPTED
+							global.ObjMouse.dragItem.RestoreOriginalItem();
+						}
+						
+						global.ObjMouse.dragItem = undefined;
+					}
+					// SPLIT DRAG ITEM
+					else if (mouse_check_button_released(mb_right))
+					{
+						if (OnReleasedGUIDragItemSplit(inventory, mouseHoverIndex))
+						{
+							// REMOVE ITEM IF STACK IS EMPTY AFTER SPLIT ACTION
+							global.ObjMouse.dragItem = undefined;
+						}
+					}
+					// ROTATE DRAG ITEM
+					else if (keyboard_check_released(ord("R")))
+					{
+						global.ObjMouse.dragItem.item_data.Rotate();
+					}
+				} else {
 					// ROTATE
 					if (keyboard_check_released(ord("R")))
 					{
@@ -89,32 +115,6 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 								OnPressedGUIDragItemStart(item);
 							}
 						}
-					}
-				} else {
-					// DROP DRAG ITEM
-					if (mouse_check_button_released(mb_left))
-					{
-						if (!OnReleasedGUIDragItem(inventory, mouseHoverIndex))
-						{
-							// RESTORE ITEM IF DROPPING IS INTERRUPTED
-							global.ObjMouse.dragItem.RestoreOriginalItem();
-						}
-						
-						global.ObjMouse.dragItem = undefined;
-					}
-					// SPLIT DRAG ITEM
-					else if (mouse_check_button_released(mb_right))
-					{
-						if (OnReleasedGUIDragItemSplit(inventory, mouseHoverIndex))
-						{
-							// REMOVE ITEM IF STACK IS EMPTY AFTER SPLIT ACTION
-							global.ObjMouse.dragItem = undefined;
-						}
-					}
-					// ROTATE DRAG ITEM
-					else if (keyboard_check_released(ord("R")))
-					{
-						global.ObjMouse.dragItem.item_data.Rotate();
 					}
 				}
 			}

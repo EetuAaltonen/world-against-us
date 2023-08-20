@@ -79,6 +79,15 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 				}
 				global.ObjMouse.dragItem = undefined;
 			}
+			// SPLIT DRAG ITEM
+			else if (mouse_check_button_released(mb_right))
+			{
+				if (OnReleasedGUIDragItemSplit(inventory, new GridIndex(0, 0)))
+				{
+					// REMOVE ITEM IF STACK IS EMPTY AFTER SPLIT ACTION
+					global.ObjMouse.dragItem = undefined;
+				}
+			}
 		} else {
 			if (mouse_check_button_pressed(mb_left))
 			{

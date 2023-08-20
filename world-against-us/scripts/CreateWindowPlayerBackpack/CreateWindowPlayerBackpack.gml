@@ -25,15 +25,34 @@ function CreateWindowPlayerBackpack(_zIndex)
 		global.PlayerBackpack
 	);
 	
+	// BACKPACK SLOT
+	var backpackSlotSize = new Size(150, 200);
+	var backpackSlotPosition = new Vector2((windowSize.w - 20) - backpackSlotSize.w, 60);
+	
+	var backpackSlotTitle = new WindowText(
+		"BackpackSlotTitle",
+		new Vector2(backpackSlotPosition.X, backpackSlotPosition.Y - 10),
+		undefined, undefined,
+		"Backpack", font_small, fa_left, fa_middle, c_white, 1
+	);
+	
+	var backpackSlot = new WindowItemSlot(
+		"BackpackSlot",
+		backpackSlotPosition,
+		backpackSlotSize,
+		c_gray, global.PlayerCharacter.backpack_slot,
+		CallbackItemSlotPlayerBackpack
+	);
+	
 	// EQUIPPED PRIMARY WEAPON
-	var primaryWeaponSlotSize = new Size(200, 100)
+	/*var primaryWeaponSlotSize = new Size(200, 100)
 	var primaryWeaponSlot = new WindowItemSlot(
 		"PrimaryWeaponSlot",
 		new Vector2((windowSize.w - 20) - primaryWeaponSlotSize.w, 60),
 		primaryWeaponSlotSize,
 		c_gray, global.PlayerPrimaryWeaponSlot,
-		CallbackItemSlotPrimaryWeapon
-	);
+		CallbackItemSlotPlayerPrimaryWeapon
+	);*/
 	
 	// MAGAZINE POCKETS
 	var magazinePocketTitle = new WindowText(
@@ -71,11 +90,13 @@ function CreateWindowPlayerBackpack(_zIndex)
 	ds_list_add(backpackElements,
 		backpackTitle,
 		inventoryGrid,
-		primaryWeaponSlot,
+		backpackSlotTitle,
+		backpackSlot
+		/*primaryWeaponSlot,
 		magazinePocketTitle,
 		magazinePocketGrid,
 		medicinePocketTitle,
-		medicinePocketGrid
+		medicinePocketGrid*/
 	);
 	
 	backpackWindow.AddChildElements(backpackElements);
