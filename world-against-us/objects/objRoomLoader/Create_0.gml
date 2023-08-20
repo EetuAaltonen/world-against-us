@@ -1,7 +1,7 @@
 depth = -9000;
 
 var systemTimeStart = string(current_hour) + ":" + string(current_minute) + "." + string(current_second);
-show_debug_message("");
+show_debug_message(EMPTY_STRING);
 show_debug_message(string("------------ Game Launching {0} ------------", systemTimeStart));
 
 controllers = [

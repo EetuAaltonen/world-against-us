@@ -15,6 +15,10 @@ randomise();
 #macro SAVE_FILE_SUFFIX_ROOM "_save_{0}.json"
 #macro EMPTY_SAVE_DATA "{ }"
 
+// STRING
+#macro EMPTY_STRING ""
+#macro STRING_LINE_BREAK "\n"
+
 // STRUCT
 #macro EMPTY_STRUCT {}
 

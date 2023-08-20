@@ -3,7 +3,7 @@ function Dialogue(_dialogue_story_title, _dialogue_index) constructor
 	dialogue_story_title = _dialogue_story_title;
 	dialogue_index = _dialogue_index;
 	character_icon = undefined;
-	chat = "";
+	chat = EMPTY_STRING;
 	dialogue_options = [];
 	trigger_function = undefined;
 	

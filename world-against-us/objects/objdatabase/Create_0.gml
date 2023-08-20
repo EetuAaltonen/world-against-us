@@ -18,7 +18,7 @@ try {
 		var filePath = string("{0}{1}", working_directory, "/dialogues/");
 		var fileName = file_find_first(filePath + "*dialogue.twee", fa_none);
 
-		while (fileName != "")
+		while (fileName != EMPTY_STRING)
 		{
 			var dialogueStoryTitle = undefined;
 			var storyDialogues = ds_map_create();
@@ -27,14 +27,14 @@ try {
 			while (!file_text_eof(dialogueFile))
 			{
 			    var textLine = file_text_readln(dialogueFile);
-				if (textLine != "\n")
+				if (textLine != STRING_LINE_BREAK)
 				{
 					switch (textLine)
 					{
 						case ":: StoryTitle\n":
 						{
 							// FETCH DIALOGUE ID
-							dialogueStoryTitle = string_replace(file_text_readln(dialogueFile), "\n", "");
+							dialogueStoryTitle = string_replace(file_text_readln(dialogueFile), STRING_LINE_BREAK, EMPTY_STRING);
 						} break;
 						case ":: StoryData\n":
 						{
@@ -51,7 +51,7 @@ try {
 								if (string_starts_with(textLine, "::"))
 								{
 									var textLineParts = string_split(textLine, " {", true, 1);
-									var dialogueId = string_replace(array_first(textLineParts), ":: ", "");
+									var dialogueId = string_replace(array_first(textLineParts), ":: ", EMPTY_STRING);
 									var dialogue = new Dialogue(dialogueStoryTitle, dialogueId);
 								
 									textLine = file_text_readln(dialogueFile);
@@ -59,7 +59,7 @@ try {
 									{
 										if (string_starts_with(textLine, "[["))
 										{
-											textLine = string_replace(string_replace(textLine, "[[", ""), "]]\n", "");
+											textLine = string_replace(string_replace(textLine, "[[", EMPTY_STRING), "]]\n", EMPTY_STRING);
 											var dialogueOptionParts = string_split(textLine, "->", true, 1);
 											dialogue.AddDialogueOption(
 												new DialogueOption(
@@ -72,7 +72,7 @@ try {
 										} else if (string_starts_with(textLine, ";;character"))
 										{
 											var characterParts = string_split(textLine, ":", true, 1);
-											var characterIcon = string_replace(array_last(characterParts), "\n", "");
+											var characterIcon = string_replace(array_last(characterParts), STRING_LINE_BREAK, EMPTY_STRING);
 											var characterIconIndex = asset_get_index(characterIcon);
 											if (characterIconIndex != -1)
 											{
@@ -83,7 +83,7 @@ try {
 										} else if (string_starts_with(textLine, ";;trigger"))
 										{
 											var triggerParts = string_split(textLine, ":", true, 1);
-											var triggerFunctionName = string_replace(array_last(triggerParts), "\n", "");
+											var triggerFunctionName = string_replace(array_last(triggerParts), STRING_LINE_BREAK, EMPTY_STRING);
 											var triggerFunctioIndex = asset_get_index(triggerFunctionName);
 											if (triggerFunctioIndex != -1)
 											{
@@ -136,7 +136,7 @@ try {
 		var filePath = string("{0}{1}", working_directory, "/loot_tables/");
 		var fileName = file_find_first(filePath + "*loot_table.json", fa_none);
 
-		while (fileName != "")
+		while (fileName != EMPTY_STRING)
 		{
 		    var jsonLootTableStruct = ReadJSONFile(string("{0}{1}", "/loot_tables/", fileName)) ?? EMPTY_STRUCT;
 			var lootTableTag = jsonLootTableStruct[$ "tag"];
@@ -168,7 +168,7 @@ try {
 		var filePath = string("{0}{1}", working_directory, "/construction_blueprints/");
 		var fileName = file_find_first(filePath + "*blueprint.json", fa_none);
 
-		while (fileName != "")
+		while (fileName != EMPTY_STRING)
 		{
 		    var jsonblueprintStruct = ReadJSONFile(string("{0}{1}", "/construction_blueprints/", fileName)) ?? EMPTY_STRUCT;
 			var blueprintTag = jsonblueprintStruct[$ "tag"];

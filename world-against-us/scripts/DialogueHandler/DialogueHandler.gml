@@ -34,7 +34,7 @@ function DialogueHandler() constructor
 	{
 		active_dialogue = _newDialogue;
 		
-		if (active_dialogue.chat != "")
+		if (active_dialogue.chat != EMPTY_STRING)
 		{
 			if (!is_undefined(active_dialogue.character_icon))
 			{

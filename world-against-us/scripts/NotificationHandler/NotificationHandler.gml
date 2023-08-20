@@ -126,10 +126,10 @@ function NotificationHandler() constructor
 					notificationIconScale, notificationIconScale, 0, c_white, 1
 				)
 				// NOTIFICATION TITLE
-				draw_text(notificationBoxPos.X + 200, notificationBoxPos.Y + 30, string("{0}", notification.title));
+				draw_text(notificationBoxPos.X + 200, notificationBoxPos.Y + 30, string("{0}", notification.title ?? EMPTY_STRING));
 				// NOTIFICATION DESCRIPTION
 				draw_set_font(font_small);
-				draw_text(notificationBoxPos.X + 200, notificationBoxPos.Y + 60, string("{0}", notification.description));
+				draw_text(notificationBoxPos.X + 200, notificationBoxPos.Y + 60, string("{0}", notification.description ?? EMPTY_STRING));
 				
 				// RESET DRAW PROPERTIES
 				ResetDrawProperties();

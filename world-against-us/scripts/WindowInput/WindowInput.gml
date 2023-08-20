@@ -11,7 +11,7 @@ function WindowInput(_elementId, _relativePosition, _size, _backgroundColor, _pl
 		{
 			if (isHovered && !isTyping)
 			{
-				if (input == placeholder) { input = ""; }
+				if (input == placeholder) { input = EMPTY_STRING; }
 				keyboard_string = input;
 				isTyping = true;
 			}
@@ -19,15 +19,15 @@ function WindowInput(_elementId, _relativePosition, _size, _backgroundColor, _pl
 		{
 			if (!isHovered && isTyping)
 			{
-				if (input == "") { input = placeholder; }
-				keyboard_string = "";
+				if (input == EMPTY_STRING) { input = placeholder; }
+				keyboard_string = EMPTY_STRING;
 				isTyping = false;
 			}
 		} else if (mouse_check_button_released(mb_right))
 		{
 			if (isHovered && isTyping)
 			{
-				input = "";
+				input = EMPTY_STRING;
 				keyboard_string = input;
 			}
 		}

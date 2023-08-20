@@ -1,7 +1,7 @@
 // LOAD CONTROLLERS TO A ROOM
 var controllerCount = array_length(controllers);
 
-show_debug_message("");
+show_debug_message(EMPTY_STRING);
 show_debug_message(string("**Loading controllers for '{0}'**", room_get_name(room)));
 
 for (var i = 0; i < controllerCount; i++)

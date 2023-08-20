@@ -88,7 +88,7 @@ function GameSaveHandler() constructor
 			var fileNamePrefix = string("{0}_save_room*", _saveName);
 			var fileName = file_find_first(fileNamePrefix, fa_directory);
 		
-			while(fileName != "")
+			while(fileName != EMPTY_STRING)
 			{
 				if (file_exists(fileName))
 				{
@@ -115,7 +115,7 @@ function GameSaveHandler() constructor
 		{
 			var fileName = file_find_first(string("*{0}", SAVE_FILE_SUFFIX_PLAYER_DATA), fa_directory);
 		
-			while(fileName != "")
+			while(fileName != EMPTY_STRING)
 			{
 				ds_list_add(saveFileNames, fileName);
 				fileName = file_find_next();

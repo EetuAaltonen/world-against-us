@@ -6,7 +6,7 @@ function ReadJSONFile(_fileName)
 		var filePath = string("{0}{1}", working_directory, _fileName);
 		if (file_exists(filePath))
 		{
-			var json = "";
+			var json = EMPTY_STRING;
 			var file = file_text_open_read(filePath);
 			while (file_text_eof(file) == false)
 			{
