@@ -15,7 +15,7 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 				// SET EQUIPPED WEAPON TO UNDEFINED
 				if (dragItemData.sourceInventory.inventory_id == "PlayerPrimaryWeaponSlot" && _inventory.inventory_id != dragItemData.sourceInventory.inventory_id)
 				{
-					CallbackItemSlotPrimaryWeapon(undefined);
+					CallbackItemSlotPlayerPrimaryWeapon(undefined);
 					var playerBackpackWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.PlayerBackpack);
 					if (!is_undefined(playerBackpackWindow))
 					{
