@@ -20,5 +20,5 @@ interactionFunction = function()
 	}
 }
 
-var inventory = new Inventory(undefined, INVENTORY_TYPE.Facility, { columns: 10, rows: 3 }, []);
+var inventory = new Inventory(undefined, INVENTORY_TYPE.Facility, { columns: 10, rows: 3 });
 facility = new Facility(undefined, inventory, "Vending_Machine", undefined);

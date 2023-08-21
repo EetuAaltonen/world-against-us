@@ -15,6 +15,6 @@ function MetadataItemBackpack(_inventory_size, _max_weight_capacity) : Metadata(
 	
 	static InitInventory = function(_inventoryId, _inventoryType = INVENTORY_TYPE.BackpackSlot)
 	{
-		inventory = new Inventory(_inventoryId, _inventoryType, inventory_size, []);
+		inventory = new Inventory(_inventoryId, _inventoryType, inventory_size);
 	}
 }

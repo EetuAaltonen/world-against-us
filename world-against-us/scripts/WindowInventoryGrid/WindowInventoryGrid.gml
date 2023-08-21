@@ -246,7 +246,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					mouseHoverIndex.col, mouseHoverIndex.row,
 					dragItemData, dragItemData.sourceInventory, dragItemData.grid_index
 				);
-				var gridAreaColor = (inventory.IsItemWhiteListed(dragItemData) && isGridAreaEmpty) ? #0fb80f : #b80f0f;
+				var gridAreaColor = (inventory.IsItemWhitelisted(dragItemData) && isGridAreaEmpty) ? #0fb80f : #b80f0f;
 				var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
 				if (!is_undefined(itemGridIndex))
 				{

@@ -20,5 +20,6 @@ interactionFunction = function()
 	}
 }
 
-var inventory = new Inventory(undefined, INVENTORY_TYPE.Facility, { columns: 10, rows: 3 }, ["Magazine", "Bullet"]);
+var inventoryFilter = new InventoryFilter([], ["Magazine", "Bullet"], []);
+var inventory = new Inventory(undefined, INVENTORY_TYPE.Facility, { columns: 10, rows: 3 }, inventoryFilter);
 facility = new Facility(undefined, inventory, "Ammunition_Sorting_Machine", undefined);

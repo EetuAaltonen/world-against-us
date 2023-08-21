@@ -1,10 +1,10 @@
-function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _filter_array = []) constructor
+function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _inventory_filter = undefined) constructor
 {
 	inventory_id = _inventory_id
     items = ds_list_create();
 	type = _type;
 	size = _size;
-	filter_array = _filter_array;
+	inventory_filter = _inventory_filter ?? new InventoryFilter([], [], []);
 	
 	grid_data = [];
 	grid = {
@@ -24,6 +24,7 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 	
 	static ToJSONStruct = function()
 	{
+		var formatInventoryFilter = (!is_undefined(inventory_filter)) ? inventory_filter.ToJSONStruct() : inventory_filter;
 		var itemArray = [];
 		var itemCount = GetItemCount();
 		for (var i = 0; i < itemCount; i++)
@@ -34,7 +35,8 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 		return {
 			inventory_id: inventory_id,
 			inventory_type: type,
-			items: itemArray
+			items: itemArray,
+			formatInventoryFilter
 		}
 	}
 	
@@ -59,13 +61,18 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 		ds_list_clear(items);
 		InitGridData();
 	}
+	
+	static IsItemWhitelisted = function(_item)
+    {
+		return inventory_filter.IsItemWhitelisted(_item);
+    }
 
     static AddItem = function(_item, _new_grid_index = undefined, _new_is_rotated = false, _new_is_known = true, _ignore_network = false)
     {
 		var addedItemGridIndex = undefined;
 		var isItemStacked = false;
 		
-		if (IsItemWhiteListed(_item))
+		if (IsItemWhitelisted(_item))
 		{
 			var cloneItem = _item.Clone();
 			if (cloneItem.is_rotated != _new_is_rotated)
@@ -291,14 +298,6 @@ function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _fil
 			FillGridArea(item.grid_index.col, item.grid_index.row, item.size, item.grid_index.Clone());
 		}
 	}
-	
-	static IsItemWhiteListed = function(_item)
-    {
-		return (array_length(filter_array) == 0) || (
-			ArrayContainsValue(filter_array, _item.category) ||
-			ArrayContainsValue(filter_array, _item.name)
-		);
-    }
 	
 	static RemoveItemByIndex = function(_index)
     {

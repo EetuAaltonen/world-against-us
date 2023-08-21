@@ -40,7 +40,7 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 				// CHECK IF ITEM IS WHITELISTED
 				if (inventory.GetItemCount() <= 0)
 				{
-					if (inventory.IsItemWhiteListed(dragItemData))
+					if (inventory.IsItemWhitelisted(dragItemData))
 					{
 						var addedItemGridIndex = inventory.AddItem(dragItemData, undefined, false);
 						if (!is_undefined(addedItemGridIndex))
@@ -63,7 +63,7 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 						{
 							initItem = true;
 						} else {
-							if (inventory.IsItemWhiteListed(dragItemData))
+							if (inventory.IsItemWhitelisted(dragItemData))
 							{
 								// SWAP EQUIPPED ITEM WITH ROLLBACK
 								if (dragItemData.sourceInventory.SwapWithRollback(dragItemData, slottedItem))
@@ -129,7 +129,7 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 			if (!is_undefined(global.ObjMouse.dragItem))
 			{
 				var dragItemData = global.ObjMouse.dragItem.item_data;
-				var gridAreaColor = inventory.IsItemWhiteListed(dragItemData) ? #0fb80f : #b80f0f;
+				var gridAreaColor = inventory.IsItemWhitelisted(dragItemData) ? #0fb80f : #b80f0f;
 				
 				if (!is_undefined(itemData))
 				{
