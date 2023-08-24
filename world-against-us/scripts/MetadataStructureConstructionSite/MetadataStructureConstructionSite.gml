@@ -26,11 +26,12 @@ function MetadataStructureConstructionSite() : Metadata() constructor
 	
 	static InitMaterialSlots = function()
 	{
+		var inventorySize = new InventorySize(4, 4);
+		var inventoryFilter = new InventoryFilter([], ["Material"], []);
 		var materialSlotCount = 3;
 		for (var i = 0; i < materialSlotCount; i++)
 		{
-			var inventoryFilter = new InventoryFilter([], ["Material"], []);
-			var materialSlotInventory = new Inventory(string("MaterialSlot{0}", i), INVENTORY_TYPE.ConstructionSite, { columns: 4, rows: 4 }, inventoryFilter);
+			var materialSlotInventory = new Inventory(string("MaterialSlot{0}", i), INVENTORY_TYPE.ConstructionSite, inventorySize, inventoryFilter);
 			array_push(material_slots, materialSlotInventory);
 		}
 	}

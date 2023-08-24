@@ -4,7 +4,8 @@ if (is_undefined(inventory))
 	if (!is_undefined(containerId))
 	{
 		// INITIALIZE INVENTORY
-		inventory = new Inventory(containerId, INVENTORY_TYPE.LootContainer);
+		var inventorySize = new InventorySize(10, 6);
+		inventory = new Inventory(containerId, INVENTORY_TYPE.LootContainer, inventorySize);
 		
 		// CHECK IF CONTAINER HAS ROOM SAVE RECORD
 		var items = global.GameSaveHandlerRef.GetContainerContentById(containerId);

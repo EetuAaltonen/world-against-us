@@ -17,6 +17,7 @@ interactionFunction = function()
 	}
 }
 
+var inventorySize = new InventorySize(2, 3);
 var inventoryFilter = new InventoryFilter([], ["Fuel"], []);
-var inventory = new Inventory(undefined, INVENTORY_TYPE.Facility, { columns: 2, rows: 3 }, inventoryFilter);
+var inventory = new Inventory(undefined, INVENTORY_TYPE.Facility, inventorySize, inventoryFilter);
 facility = new Facility(undefined, inventory, "Generator", new MetadataFacilityGenerator(15, 0));

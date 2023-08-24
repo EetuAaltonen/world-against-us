@@ -15,7 +15,7 @@ function CharacterHuman(_name, _type, _race, _behaviour) : Character(_name, _typ
 	fatigue_base_rate = 0.0001;
 	fatigue_rate = fatigue_base_rate;
 	
-	backpack_slot = new Inventory(string("{0}_Inventory", _name), INVENTORY_TYPE.BackpackSlot, { columns: 3, rows: 4 }, new InventoryFilter([], ["Backpack"], []));
+	backpack_slot = new Inventory(string("{0}_Inventory", _name), INVENTORY_TYPE.BackpackSlot, new InventorySize(3, 4), new InventoryFilter([], ["Backpack"], []));
 	
 	static ToJSONStruct = function()
 	{

@@ -1,9 +1,9 @@
-function Inventory(_inventory_id, _type, _size = { columns: 10, rows: 10 }, _inventory_filter = undefined) constructor
+function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = undefined) constructor
 {
 	inventory_id = _inventory_id
     items = ds_list_create();
 	type = _type;
-	size = _size;
+	size = _size ?? new InventorySize(0, 0);
 	inventory_filter = _inventory_filter ?? new InventoryFilter([], [], []);
 	
 	grid_data = [];

@@ -1,10 +1,10 @@
 function MetadataStructureGarden() : Metadata() constructor
 {
-	tools_inventory = new Inventory("GardenBedTools", INVENTORY_TYPE.Garden, { columns: 2, rows: 2 }, new InventoryFilter(["Garden Tools"], [], []));
-	fertilizer_inventory = new Inventory("GardenBedFertilizer", INVENTORY_TYPE.Garden, { columns: 2, rows: 3 }, new InventoryFilter(["Fertilizer Sack"], [], []));
-	water_inventory = new Inventory("GardenBedWater", INVENTORY_TYPE.Garden, { columns: 2, rows: 3 }, new InventoryFilter(["Watering Can"], [], []));
-	seed_inventory = new Inventory("GardenBedSeed", INVENTORY_TYPE.Garden, { columns: 1, rows: 1 }, new InventoryFilter(["Tomato Seed Pack"], [], []));
-	output_inventory = new Inventory("GardenBedOutput", INVENTORY_TYPE.Garden, { columns: 10, rows: 4 }, new InventoryFilter([], ["Consumable"], []));
+	tools_inventory = new Inventory("GardenBedTools", INVENTORY_TYPE.Garden, new InventorySize(2, 2), new InventoryFilter(["Garden Tools"], [], []));
+	fertilizer_inventory = new Inventory("GardenBedFertilizer", INVENTORY_TYPE.Garden, new InventorySize(2, 3), new InventoryFilter(["Fertilizer Sack"], [], []));
+	water_inventory = new Inventory("GardenBedWater", INVENTORY_TYPE.Garden, new InventorySize(2, 3), new InventoryFilter(["Watering Can"], [], []));
+	seed_inventory = new Inventory("GardenBedSeed", INVENTORY_TYPE.Garden, new InventorySize(1, 1), new InventoryFilter(["Tomato Seed Pack"], [], []));
+	output_inventory = new Inventory("GardenBedOutput", INVENTORY_TYPE.Garden, new InventorySize(10, 4), new InventoryFilter([], ["Consumable"], []));
 	
 	static ToJSONStruct = function()
 	{
