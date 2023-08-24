@@ -16,7 +16,6 @@ function GameSave(_save_name) constructor
 		
 		var formatCharacter = player_data.character.ToJSONStruct();
 		
-		var formatBackpack = player_data.inventory.backpack.ToJSONStruct();
 		var formatMagazinePockets = player_data.inventory.magazine_pockets.ToJSONStruct();
 		var formatMedicinePockets = player_data.inventory.medicine_pockets.ToJSONStruct();
 		
@@ -30,7 +29,6 @@ function GameSave(_save_name) constructor
 				character: formatCharacter,
 				inventory:
 				{
-					backpack: formatBackpack,
 					magazine_pockets: formatMagazinePockets,
 					medicine_pockets: formatMedicinePockets
 				}
@@ -72,8 +70,6 @@ function GameSave(_save_name) constructor
 				
 				player_data.character = global.PlayerCharacter;
 				
-				var equippedBackpack = global.InstancePlayer.character.backpack_slot.GetItemByIndex(0);
-				player_data.inventory.backpack = equippedBackpack;
 				player_data.inventory.magazine_pockets = global.PlayerMagazinePockets;
 				player_data.inventory.medicine_pockets = global.PlayerMedicinePockets;
 				
@@ -154,7 +150,6 @@ function GameSave(_save_name) constructor
 			character: undefined,
 			inventory:
 			{
-				backpack: undefined,
 				magazine_pockets: undefined,
 				medicine_pockets: undefined
 			}
@@ -208,12 +203,6 @@ function GameSave(_save_name) constructor
 				var inventoryStruct = playerDataStruct[$ "inventory"] ?? undefined;
 				if (!is_undefined(inventoryStruct))
 				{
-					var backpackStruct = inventoryStruct[$ "backpack"] ?? undefined;
-					if (!is_undefined(backpackStruct))
-					{
-						player_data.inventory.backpack = ParseJSONStructToItem(backpackStruct);
-					}
-					
 					var ammoInventoryStruct = inventoryStruct[$ "magazine_pockets"] ?? undefined;
 					if (!is_undefined(ammoInventoryStruct))
 					{

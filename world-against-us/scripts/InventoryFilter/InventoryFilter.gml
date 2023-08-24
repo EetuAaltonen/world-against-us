@@ -9,7 +9,7 @@ function InventoryFilter(_whitelisted_names, _whitelisted_categories, _whitelist
 		return {
 			whitelisted_names: whitelisted_names,
 			whitelisted_categories: whitelisted_categories,
-			whitelisted_type: whitelisted_type,
+			whitelisted_types: whitelisted_types,
 		};
 	}
 	
