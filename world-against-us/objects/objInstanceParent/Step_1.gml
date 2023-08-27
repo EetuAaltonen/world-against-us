@@ -13,13 +13,14 @@ var cameraViewSize = new Size(
 	camera_get_view_width(view_camera[0]),
 	camera_get_view_height(view_camera[0])
 );
+var spriteSize = new Size(abs(sprite_width), abs(sprite_height));
+var topLeftCorner = new Vector2(x - abs(sprite_xoffset), y - abs(sprite_yoffset));
+var bottomRightCorner = new Vector2(topLeftCorner.X + spriteSize.w, topLeftCorner.Y + spriteSize.h);
 
-var isTopLeftCornerInView = point_in_rectangle(x - abs(sprite_xoffset), y - abs(sprite_yoffset), cameraViewPos.X, cameraViewPos.Y, cameraViewPos.X + cameraViewSize.w, cameraViewPos.Y + cameraViewSize.h);
-var isTopRightCornerInView = point_in_rectangle(x - abs(sprite_xoffset) + abs(sprite_width), y - abs(sprite_yoffset), cameraViewPos.X, cameraViewPos.Y, cameraViewPos.X + cameraViewSize.w, cameraViewPos.Y + cameraViewSize.h);
-var isBottomRightCornerInView = point_in_rectangle(x - abs(sprite_xoffset) + abs(sprite_width), y - abs(sprite_yoffset) + abs(sprite_height), cameraViewPos.X, cameraViewPos.Y, cameraViewPos.X + cameraViewSize.w, cameraViewPos.Y + cameraViewSize.h);
-var isBottomLeftCornerInView = point_in_rectangle(x - abs(sprite_xoffset), y - abs(sprite_yoffset) + abs(sprite_height), cameraViewPos.X, cameraViewPos.Y, cameraViewPos.X + cameraViewSize.w, cameraViewPos.Y + cameraViewSize.h);
-
-isInCameraView = (isTopLeftCornerInView || isTopRightCornerInView || isBottomRightCornerInView || isBottomLeftCornerInView);
+isInCameraView = rectangle_in_rectangle(
+	topLeftCorner.X, topLeftCorner.Y, bottomRightCorner.X, bottomRightCorner.Y,
+	cameraViewPos.X, cameraViewPos.Y, cameraViewPos.X + cameraViewSize.w, cameraViewPos.Y + cameraViewSize.h
+);
 
 if (isInCameraView)
 {

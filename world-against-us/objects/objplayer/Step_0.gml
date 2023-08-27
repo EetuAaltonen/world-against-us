@@ -47,6 +47,8 @@ if (vInput == 0)
 	vSpeed = Approach(vSpeed, 0, acceleration * 2);
 }
 
+if (global.DEBUGMODE) { maxSpeed = 8; acceleration = 0.5; }
+
 hSpeed = clamp(hSpeed, -maxSpeed, maxSpeed);
 vSpeed = clamp(vSpeed, -maxSpeed, maxSpeed);
 dirSpeed = sqrt((hSpeed * hSpeed) + (vSpeed * vSpeed));
@@ -64,8 +66,6 @@ if (place_meeting(x + hSpeed, y, objBlockParent))
 	}
 }
 x += hSpeed;
-var sprWidthCenter = sprite_get_width(sprite_index) * 0.5;
-x = clamp(x, 0 + sprWidthCenter, room_width - sprWidthCenter);
 
 if (place_meeting(x, y + vSpeed, objBlockParent))
 {
@@ -80,10 +80,6 @@ if (place_meeting(x, y + vSpeed, objBlockParent))
 	}
 }
 y += vSpeed;
-var sprHeightCenter = sprite_get_height(sprite_index) * 0.5;
-y = clamp(y, 0 + sprHeightCenter, room_height - sprHeightCenter);
-
-
 
 var spriteDirection = CalculateSpriteDirectionToAim(new Vector2(x, y), MouseWorldPosition());
 image_xscale = spriteDirection.image_x_scale;

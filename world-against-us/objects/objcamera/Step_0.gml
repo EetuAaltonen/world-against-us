@@ -11,6 +11,8 @@ if (cameraTarget != noone)
 			var mouseScrollInput = mousScrollDown - mousScrollUp;
 			if (mouseScrollInput != 0)
 			{
+				if (global.DEBUGMODE) { maxZoom = 8; }
+				
 				zoom = clamp(zoom + (mouseScrollInput * zoomInputStep), minZoom, maxZoom);
 			}
 		}
