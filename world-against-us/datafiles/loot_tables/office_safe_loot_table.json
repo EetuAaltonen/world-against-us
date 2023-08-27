@@ -1,0 +1,19 @@
+{
+  "tag": "office_safe",
+  "pools": [
+    {
+      "roll_chance": 100,
+      "rolls": {
+        "min": 1,
+        "max": 9
+      },
+      "entries": [
+        {
+          "name": "Money",
+          "count": 100,
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

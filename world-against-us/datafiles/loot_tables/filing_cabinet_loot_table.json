@@ -1,0 +1,33 @@
+{
+  "tag": "filing_cabinet",
+  "pools": [
+    {
+      "roll_chance": 100,
+      "rolls": {
+        "min": 0,
+        "max": 0
+      },
+      "entries": [
+        {
+          "name": "Crowbar",
+          "count": 1,
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "roll_chance": 100,
+      "rolls": {
+        "min": 1,
+        "max": 2
+      },
+      "entries": [
+        {
+          "name": "Snickers Bar",
+          "count": 1,
+          "weight": 2
+        }
+      ]
+    }
+  ]
+}
