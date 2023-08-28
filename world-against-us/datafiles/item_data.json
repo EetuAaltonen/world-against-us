@@ -165,6 +165,150 @@
       }
     },
     {
+      "name": "Blueprint",
+      "short_name": "Blueprint",
+      "icon": "sprBlueprint",
+      "category": "Blueprint",
+      "type": "Blueprint",
+      "size": {
+        "w": 2,
+        "h": 2
+      },
+      "description": "An architect drawing of some architectural building",
+      "weight": 500,
+      "max_stack": 1,
+      "base_price": 500,
+      "metadata": {}
+    },
+    {
+      "name": "Rope",
+      "short_name": "Rope",
+      "icon": "sprRope",
+      "category": "Material",
+      "type": "Rope",
+      "size": {
+        "w": 1,
+        "h": 2
+      },
+      "description": "A rope",
+      "weight": 800,
+      "max_stack": 1,
+      "base_price": 10,
+      "metadata": {}
+    },
+    {
+      "name": "Needle and Thread",
+      "short_name": "Needle",
+      "icon": "sprNeedleNTthread",
+      "category": "Material",
+      "type": "Sewing",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "A needle and thread",
+      "weight": 200,
+      "max_stack": 64,
+      "base_price": 10,
+      "metadata": {}
+    },
+    {
+      "name": "Tent Stake",
+      "short_name": "Stake",
+      "icon": "sprTentStake",
+      "category": "Material",
+      "type": "Camping",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "A tent stake",
+      "weight": 50,
+      "max_stack": 64,
+      "base_price": 5,
+      "metadata": {}
+    },
+    {
+      "name": "Paint Brush",
+      "short_name": "Brush",
+      "icon": "sprPaintBrush",
+      "category": "Material",
+      "type": "Painting",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "A clean paint brush",
+      "weight": 100,
+      "max_stack": 1,
+      "base_price": 10,
+      "metadata": {}
+    },
+    {
+      "name": "Paint Can",
+      "short_name": "Paint",
+      "icon": "sprPaintCan",
+      "category": "Material",
+      "type": "Painting",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "An unopened paint can",
+      "weight": 100,
+      "max_stack": 1,
+      "base_price": 10,
+      "metadata": {}
+    },
+    {
+      "name": "Paint Scalper",
+      "short_name": "Scalper",
+      "icon": "sprPaintScalper",
+      "category": "Material",
+      "type": "Painting",
+      "size": {
+        "w": 1,
+        "h": 1
+      },
+      "description": "A paint scalper",
+      "weight": 100,
+      "max_stack": 1,
+      "base_price": 10,
+      "metadata": {}
+    },
+    {
+      "name": "Clay Block",
+      "short_name": "Clay",
+      "icon": "sprClayBlock",
+      "category": "Material",
+      "type": "Sculpting",
+      "size": {
+        "w": 2,
+        "h": 2
+      },
+      "description": "A block of clay",
+      "weight": 1000,
+      "max_stack": 1,
+      "base_price": 15,
+      "metadata": {}
+    },
+    {
+      "name": "Book",
+      "short_name": "Book",
+      "icon": "sprBook",
+      "category": "Misc",
+      "type": "Book",
+      "size": {
+        "w": 1,
+        "h": 2
+      },
+      "description": "A random book",
+      "weight": 300,
+      "max_stack": 1,
+      "base_price": 25,
+      "metadata": {}
+    },
+    {
       "name": "Knife",
       "short_name": "Knife",
       "icon": "sprKnife",
