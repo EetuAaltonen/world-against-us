@@ -9,32 +9,45 @@ function CreateWindowMap(_zIndex)
 	);
 	
 	var mapElements = ds_list_create();
-	var mapPanelSize = new Size(windowSize.w - 100, windowSize.h - 140);
 	
-	var worldMapElement = new WindowWorldMap(
-		"worldMapElement",
-		new Vector2(windowSize.w * 0.5 - (mapPanelSize.w * 0.5), 20),
-		mapPanelSize, undefined
+
+	var mapSize = new Size(windowSize.w - 100, windowSize.h - 140);
+	var mapElement = new WindowMap(
+		"MapElement",
+		new Vector2(windowSize.w * 0.5 - (mapSize.w * 0.5), 20),
+		mapSize, undefined
 	);
+	
+	var mapInfoPanelElements = ds_list_create();
+	
+	// INFO PANEL
+	var mapInfoPanel = new WindowPanel(
+		"MapTitle",
+		new Vector2(0, 0),
+		new Size(windowSize.w, 40),
+		c_black
+	);
+	
+	// INFO PANEL TITLE
+	var mapTitle = new WindowText(
+		"MapTitle",
+		new Vector2(10, 20),
+		undefined, undefined,
+		string("Map: {0}", room_get_name(room)),
+		font_default, fa_left, fa_middle, c_white, 1
+	);
+	
+	ds_list_add(mapInfoPanelElements,
+		mapTitle
+	);
+	
 	
 	ds_list_add(mapElements,
-		worldMapElement
-	);
-	
-	var mapPanelElements = ds_list_create();
-	// PANEL TITLE
-	var mapPanelTitle = new WindowText(
-		"mapPanelTitle",
-		new Vector2(mapPanelSize.w * 0.5, 50),
-		undefined, undefined,
-		"Map", font_large, fa_center, fa_middle, c_black, 1
-	);
-	
-	ds_list_add(mapPanelElements,
-		mapPanelTitle
+		mapElement,
+		mapInfoPanel // Render after map
 	);
 	
 	mapWindow.AddChildElements(mapElements);
-	worldMapElement.AddChildElements(mapPanelElements);
+	mapInfoPanel.AddChildElements(mapInfoPanelElements);
 	return mapWindow;
 }
