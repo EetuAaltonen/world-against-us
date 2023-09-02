@@ -17,7 +17,8 @@ function ParseJSONStructToMapDataEntry(_jsonStruct)
 				parsedObjectName,
 				parsedPosition,
 				parsedSize,
-				mapIconStyle
+				mapIconStyle,
+				entryStruct[$ "icon_alpha"] ?? undefined
 			);
 		} else {
 			show_message("ParseMapDataEntry: Map data entry parse error");

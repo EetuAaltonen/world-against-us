@@ -1,6 +1,7 @@
-function MapIconStyle(_obj_index, _rgb_color, _constant_alpha) constructor
+function MapIconStyle(_object_name, _rgb_color, _constant_alpha, _is_dynamic) constructor
 {
-	obj_index = _obj_index;
+	object_name = _object_name;
 	rgb_color = _rgb_color;
 	constant_alpha = _constant_alpha;
+	is_dynamic = _is_dynamic;
 }
