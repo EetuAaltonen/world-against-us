@@ -10,8 +10,8 @@
     "path": "folders/Objects/World/FastTravel.yy",
   },
   "parentObjectId": {
-    "name": "objInteractableParent",
-    "path": "objects/objInteractableParent/objInteractableParent.yy",
+    "name": "objFastTravelParent",
+    "path": "objects/objFastTravelParent/objFastTravelParent.yy",
   },
   "persistent": false,
   "physicsAngularDamping": 0.1,
@@ -29,8 +29,8 @@
   "properties": [],
   "solid": false,
   "spriteId": {
-    "name": "sprCrashedCar",
-    "path": "sprites/sprCrashedCar/sprCrashedCar.yy",
+    "name": "sprBicycle",
+    "path": "sprites/sprBicycle/sprBicycle.yy",
   },
   "spriteMaskId": null,
   "visible": true,

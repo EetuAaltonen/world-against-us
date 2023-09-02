@@ -1,7 +1,7 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "objModernFrontDoor",
+  "name": "objFastTravelParent",
   "eventList": [],
   "managed": true,
   "overriddenProperties": [],
@@ -10,8 +10,8 @@
     "path": "folders/Objects/World/FastTravel.yy",
   },
   "parentObjectId": {
-    "name": "objFastTravelParent",
-    "path": "objects/objFastTravelParent/objFastTravelParent.yy",
+    "name": "objInteractableParent",
+    "path": "objects/objInteractableParent/objInteractableParent.yy",
   },
   "persistent": false,
   "physicsAngularDamping": 0.1,
@@ -28,10 +28,7 @@
   "physicsStartAwake": true,
   "properties": [],
   "solid": false,
-  "spriteId": {
-    "name": "sprModernFrontDoor",
-    "path": "sprites/sprModernFrontDoor/sprModernFrontDoor.yy",
-  },
+  "spriteId": null,
   "spriteMaskId": null,
   "visible": true,
 }
