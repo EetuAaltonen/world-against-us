@@ -1,4 +1,4 @@
-function WindowWorldMap(_elementId, _relativePosition, _size, _backgroundColor) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
+function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	mapZoomBase = 1;
 	mapZoomStep = 0.25;
@@ -83,6 +83,20 @@ function WindowWorldMap(_elementId, _relativePosition, _size, _backgroundColor) 
 					0, mapIcon.icon_style.rgb_color,
 					mapIcon.icon_alpha
 				);
+				
+				if (global.DEBUGMODE)
+				{
+					draw_set_font(font_small);
+					draw_text_color(
+						positionOnGUI.X + 10,
+						positionOnGUI.Y + 10,
+						string(i),
+						c_red, c_red, c_red, c_red,
+						1
+					);
+					// RESET DRAW PROPERTIES
+					ResetDrawProperties();
+				}
 			}
 		}
 	}

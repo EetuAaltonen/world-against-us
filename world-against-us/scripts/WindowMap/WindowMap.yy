@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "WindowWorldMap",
+  "name": "WindowMap",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
