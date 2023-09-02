@@ -22,6 +22,11 @@ function MapData() constructor
 		ds_list_add(icons, _mapIcon);
 	}
 	
+	static SortIcons = function()
+	{
+		SortList(icons, CompareMapIcons);
+	}
+	
 	static GetMapIconByIndex = function(_index)
 	{
 		return icons[| _index];

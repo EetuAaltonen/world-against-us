@@ -84,6 +84,8 @@ function MapDataHandler() constructor
 		if (ds_list_size(parsedMapData) > 0)
 		{
 			static_map_data.icons = parsedMapData
+			static_map_data.SortIcons();
+			
 			isMapDataReaded = true;
 		}
 		
