@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "GetMapIconStyleByObjectIndex",
+  "name": "GetMapIconStyleByObjectName",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
