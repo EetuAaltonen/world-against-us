@@ -1,4 +1,4 @@
-if (!global.GUIStateHandlerRef.IsGUIStateClosed())
+/*if (!global.GUIStateHandlerRef.IsGUIStateClosed())
 {
 	var currentGUIState = global.GUIStateHandlerRef.GetGUIState();
 	if (currentGUIState.index == GUI_STATE.Map)
@@ -23,7 +23,7 @@ if (!global.GUIStateHandlerRef.IsGUIStateClosed())
 								instance.sprite_height
 							),
 							new Vector2(instance.sprite_xoffset, instance.sprite_yoffset),
-							GetMapIconStyleByObjectIndex(instance.object_index)
+							GetMapIconStyleByObjectName(object_get_name(instance.object_index))
 						));
 					}
 				}
@@ -32,4 +32,4 @@ if (!global.GUIStateHandlerRef.IsGUIStateClosed())
 			mapUpdateTimer = mapUpdateInterval;
 		}
 	}
-}
+}*/

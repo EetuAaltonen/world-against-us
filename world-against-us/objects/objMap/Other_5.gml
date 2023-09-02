@@ -1,1 +1,1 @@
-ds_list_clear(mapEntryRegistry);
+mapDataHandler.ClearStaticMapData();

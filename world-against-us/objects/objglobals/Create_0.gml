@@ -64,6 +64,10 @@ randomise();
 // WORLD STATE INDICES
 #macro WORLD_STATE_UNLOCK_WALKIE_TALKIE "UnlockWalkieTalkie"
 
+// MAP ICON TYPE
+#macro STATIC_MAP_ICON "static_icon"
+#macro DYNAMIC_MAP_ICON "dynamic_icon"
+
 // DEBUG MODE
 global.DEBUGMODE = false;
 
@@ -85,7 +89,7 @@ global.WorldStateData = undefined;
 global.ObjJournal = noone;
 global.QuestHandlerRef = undefined;
 global.DialogueHandlerRef = undefined;
-global.ObjMap = noone;
+global.MapDataHandlerRef = undefined;
 global.HighlightHandlerRef = undefined;
 global.GameSaveHandlerRef = undefined;
 
