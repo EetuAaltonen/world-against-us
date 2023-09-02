@@ -46,7 +46,7 @@ function ParseJSONStructToMetadataItem(_jsonStruct, _itemCategory, _itemType)
 						// VARYING METADATA
 						if (!is_undefined(metadataStruct[$ "shells"] ?? undefined))
 						{
-							var shells = ParseJSONStructToArray(metadataStruct[$ "shells"], ParseJSONStructToItem);
+							var shells = ParseJSONStructToArray(metadataStruct[$ "shells"] ?? undefined, ParseJSONStructToItem);
 							variable_struct_set(parsedMetadata, "shells", shells);
 						}
 					} else if (_itemType == "Flamethrower")
@@ -98,7 +98,7 @@ function ParseJSONStructToMetadataItem(_jsonStruct, _itemCategory, _itemType)
 					// VARYING METADATA
 					if (!is_undefined(metadataStruct[$ "bullets"] ?? undefined))
 					{
-						var bullets = ParseJSONStructToArray(metadataStruct[$ "bullets"], ParseJSONStructToItem);
+						var bullets = ParseJSONStructToArray(metadataStruct[$ "bullets"] ?? undefined, ParseJSONStructToItem);
 						variable_struct_set(parsedMetadata, "bullets", bullets);
 					}
 				} break;
@@ -184,7 +184,7 @@ function ParseJSONStructToMetadataItem(_jsonStruct, _itemCategory, _itemType)
 							parsedMetadata.InitInventory(inventoryId, inventoryContent[$ "inventory_type"] ?? INVENTORY_TYPE.BackpackSlot);
 							
 							var itemsStruct = inventoryContent[$ "items"] ?? [];
-							var parsedItems = ParseJSONStructToArray(itemsStruct, ParseJSONStructToItem);
+							var parsedItems = ParseJSONStructToArray(itemsStruct ?? undefined, ParseJSONStructToItem);
 							parsedMetadata.inventory.AddMultipleItems(parsedItems);
 						}
 					}
@@ -194,7 +194,7 @@ function ParseJSONStructToMetadataItem(_jsonStruct, _itemCategory, _itemType)
 			if (is_undefined(parsedMetadata))
 			{
 				show_message("ParseMetadataItem : Metadata parse error");
-				throw (string(metadataStruct))
+				throw (string(metadataStruct));
 			}
 		} catch (error) {
 			show_debug_message(error);

@@ -7,9 +7,9 @@ function ParseJSONStructToDatabaseQuest(_jsonStruct)
 		{
 			if (variable_struct_names_count(_jsonStruct) <= 0) return quest;
 	
-			var icon = GetSpriteByName(_jsonStruct[$ "icon"]);
-			var questSteps = ParseJSONStructArrayToMap(_jsonStruct[$ "steps"], "quest_step_id", ParseJSONStructToDatabaseQuestStep);
-			var rewards = ParseJSONStructToArray(_jsonStruct[$ "rewards"], ParseJSONStructToDatabaseQuestReward);
+			var icon = GetSpriteByName(_jsonStruct[$ "icon"] ?? undefined);
+			var questSteps = ParseJSONStructArrayToMap(_jsonStruct[$ "steps"] ?? undefined, "quest_step_id", ParseJSONStructToDatabaseQuestStep);
+			var rewards = ParseJSONStructToArray(_jsonStruct[$ "rewards"] ?? undefined, ParseJSONStructToDatabaseQuestReward);
 	
 			quest = new Quest(
 				_jsonStruct[$ "quest_id"],

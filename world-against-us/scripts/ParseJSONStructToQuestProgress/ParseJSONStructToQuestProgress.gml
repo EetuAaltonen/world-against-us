@@ -5,7 +5,7 @@ function ParseJSONStructToQuestProgress(_jsonStruct)
 	{
 		if (variable_struct_names_count(_jsonStruct) <= 0) return questProgress;
 		
-		var questStepsProgress = ParseJSONStructToArray(_jsonStruct[$ "steps_progress"], ParseJSONStructToQuestStepProgress)
+		var questStepsProgress = ParseJSONStructToArray(_jsonStruct[$ "steps_progress"] ?? undefined, ParseJSONStructToQuestStepProgress)
 		questProgress = new QuestProgress(
 			_jsonStruct[$ "quest_id"],
 			questStepsProgress,

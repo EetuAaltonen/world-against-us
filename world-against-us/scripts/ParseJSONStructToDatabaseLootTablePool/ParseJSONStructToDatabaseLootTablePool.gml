@@ -7,8 +7,8 @@ function ParseJSONStructToDatabaseLootTablePool(_jsonStruct)
 		{
 			if (variable_struct_names_count(_jsonStruct) <= 0) return lootTablePool;
 			
-			var poolRolls = ParseJSONStructToDatabaseLootTablePoolRoll(_jsonStruct[$ "rolls"]);
-			var poolEntries = ParseJSONStructToArray(_jsonStruct[$ "entries"], ParseJSONStructToDatabaseLootTablePoolEntry);
+			var poolRolls = ParseJSONStructToDatabaseLootTablePoolRoll(_jsonStruct[$ "rolls"] ?? undefined);
+			var poolEntries = ParseJSONStructToArray(_jsonStruct[$ "entries"] ?? undefined, ParseJSONStructToDatabaseLootTablePoolEntry);
 			
 			lootTablePool = new LootTablePool(
 				_jsonStruct[$ "roll_chance"],

@@ -7,24 +7,31 @@ function ParseJSONStructToDatabaseMapIconStyleData(_jsonStruct)
 		{
 			if (variable_struct_names_count(_jsonStruct) <= 0) return mapIconStyleData;
 			
-			var objectIndex = asset_get_index(_jsonStruct[$ "obj_index"] ?? noone);
-			if (objectIndex > -1)
+			var objectName = _jsonStruct[$ "object_name"] ?? undefined;
+			if (!is_undefined(objectName))
 			{
-				// TODO: Use RGBA struct
-				var colorStruct = _jsonStruct[$ "color"];
-				var rgbColor = make_color_rgb(
-					colorStruct[$ "red"] ?? 0,
-					colorStruct[$ "green"] ?? 0,
-					colorStruct[$ "blue"] ?? 0
-				);
+				var objectIndex = asset_get_index(objectName);
+				if (objectIndex > -1)
+				{
+					// TODO: Use RGBA struct
+					var colorStruct = _jsonStruct[$ "color"];
+					var rgbColor = make_color_rgb(
+						colorStruct[$ "red"] ?? 0,
+						colorStruct[$ "green"] ?? 0,
+						colorStruct[$ "blue"] ?? 0
+					);
 				
-				mapIconStyleData = new MapIconStyle(
-					objectIndex,
-					rgbColor,
-					_jsonStruct[$ "constant_alpha"] ?? true
-				);
+					mapIconStyleData = new MapIconStyle(
+						objectName,
+						rgbColor,
+						bool(_jsonStruct[$ "constant_alpha"] ?? true),
+						bool(_jsonStruct[$ "is_dynamic"] ?? false)
+					);
+				} else {
+					throw (string("Unable to find object index for {0} in map icon style parsing", objectName));
+				}
 			} else {
-				throw (string("Unable to load a map icon color for {0}", _jsonStruct[$ "obj_index"])); 
+				throw (string("Trying to parse a map icon style with 'undefined' object name", objectName));
 			}
 		} catch (error)
 		{

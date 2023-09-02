@@ -1,11 +1,11 @@
 // ITEM DATABASE
 itemDatabase = new DatabaseItem();
 var jsonItemStruct = ReadJSONFile("item_data.json") ?? EMPTY_STRUCT;
-itemDatabase.itemData = ParseJSONStructArrayToMap(jsonItemStruct[$ "item_data"], "name", ParseJSONStructToDatabaseItem);
+itemDatabase.itemData = ParseJSONStructArrayToMap(jsonItemStruct[$ "item_data"] ?? undefined, "name", ParseJSONStructToDatabaseItem);
 
 // QUEST DATA
 var jsonQuestStruct = ReadJSONFile("quest_data.json") ?? EMPTY_STRUCT;
-questData = ParseJSONStructArrayToMap(jsonQuestStruct[$ "quest_data"], "quest_id", ParseJSONStructToDatabaseQuest);
+questData = ParseJSONStructArrayToMap(jsonQuestStruct[$ "quest_data"] ?? undefined, "quest_id", ParseJSONStructToDatabaseQuest);
 
 // DIALOGUE DATA
 dialogueData = ds_map_create();
@@ -140,7 +140,7 @@ try {
 		{
 		    var jsonLootTableStruct = ReadJSONFile(string("{0}{1}", "/loot_tables/", fileName)) ?? EMPTY_STRUCT;
 			var lootTableTag = jsonLootTableStruct[$ "tag"];
-			var lootTablePoolData = ParseJSONStructToArray(jsonLootTableStruct[$ "pools"], ParseJSONStructToDatabaseLootTablePool);
+			var lootTablePoolData = ParseJSONStructToArray(jsonLootTableStruct[$ "pools"] ?? undefined, ParseJSONStructToDatabaseLootTablePool);
 			var lootTable = new LootTable(
 				lootTableTag,
 				lootTablePoolData
@@ -172,7 +172,7 @@ try {
 		{
 		    var jsonblueprintStruct = ReadJSONFile(string("{0}{1}", "/construction_blueprints/", fileName)) ?? EMPTY_STRUCT;
 			var blueprintTag = jsonblueprintStruct[$ "tag"];
-			var blueprintMaterials = ParseJSONStructToArray(jsonblueprintStruct[$ "blueprints"], ParseJSONStructToDatabaseConstructionBlueprint);
+			var blueprintMaterials = ParseJSONStructToArray(jsonblueprintStruct[$ "blueprints"] ?? undefined, ParseJSONStructToDatabaseConstructionBlueprint);
 
 			ds_map_add(blueprintData, blueprintTag, blueprintMaterials);
 		    fileName = file_find_next();
@@ -186,5 +186,5 @@ try {
 }
 
 // MAP ICON STYLE DATA
-var jsonMapIconStyleStruct = ReadJSONFile("map_icon_style_data.json") ?? EMPTY_STRUCT;
-mapIconStyleData = ParseJSONStructArrayToMap(jsonMapIconStyleStruct[$ "map_icon_style_data"], "obj_index", ParseJSONStructToDatabaseMapIconStyleData);
+var jsonMapIconStyleStruct = ReadJSONFile("/map_data/map_icon_style_data.json") ?? EMPTY_STRUCT;
+mapIconStyleData = ParseJSONStructArrayToMap(jsonMapIconStyleStruct[$ "map_icon_style_data"] ?? undefined, "object_name", ParseJSONStructToDatabaseMapIconStyleData);
