@@ -8,6 +8,11 @@ function Timer(_setting_time) constructor
 		running_time = setting_time;
 	}
 	
+	static TriggerTimer = function()
+	{
+		running_time = 0;
+	}
+	
 	static Update = function()
 	{
 		if (running_time > 0)

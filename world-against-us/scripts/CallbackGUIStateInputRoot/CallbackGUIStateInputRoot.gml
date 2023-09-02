@@ -46,6 +46,11 @@ function CallbackGUIStateInputRoot()
 			}
 		} else if (keyboard_check_released(KEY_MAP))
 		{
+			// LOAD STATIC MAP DATA
+			var targetRoomName = room_get_name(room);
+			var fileName = global.MapDataHandlerRef.GetMapDataFileName(targetRoomName);
+			global.MapDataHandlerRef.ReadStaticMapDataFile(fileName);
+			
 			// OPEN MAP
 			var guiState = new GUIState(
 				GUI_STATE.Map, undefined, undefined,
@@ -57,8 +62,8 @@ function CallbackGUIStateInputRoot()
 				global.GameWindowHandlerRef.OpenWindowGroup([
 					CreateWindowMap(-1)
 				]);
-				// RESET MAP UPDATE TIMER
-				global.ObjMap.mapUpdateTimer = 0;
+				// TRIGGER MAP UPDATE TIMER
+				global.MapDataHandlerRef.map_update_timer.TriggerTimer();
 				
 			}
 		}

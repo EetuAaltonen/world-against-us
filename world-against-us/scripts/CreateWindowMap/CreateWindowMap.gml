@@ -14,7 +14,7 @@ function CreateWindowMap(_zIndex)
 	var worldMapElement = new WindowWorldMap(
 		"worldMapElement",
 		new Vector2(windowSize.w * 0.5 - (mapPanelSize.w * 0.5), 20),
-		mapPanelSize, undefined, global.ObjMap.mapEntryRegistry
+		mapPanelSize, undefined
 	);
 	
 	ds_list_add(mapElements,

@@ -1,6 +1,5 @@
-function WindowWorldMap(_elementId, _relativePosition, _size, _backgroundColor, _mapEntryRegistry) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
+function WindowWorldMap(_elementId, _relativePosition, _size, _backgroundColor) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
-	mapEntryRegistry = _mapEntryRegistry;
 	mapZoomBase = 1;
 	mapZoomStep = 0.25;
 	mapZoom = mapZoomBase;
@@ -60,33 +59,30 @@ function WindowWorldMap(_elementId, _relativePosition, _size, _backgroundColor, 
 			sprGUIBg, 0,
 			calculatedPosition.X, calculatedPosition.Y,
 			backgroundScale.X, backgroundScale.Y,
-			0, c_white, 1
+			0, c_dkgray, 1
 		);
 		
-		var entryCount = ds_list_size(mapEntryRegistry);
-		for (var i = 0; i < entryCount; i++)
+		var staticMapData = global.MapDataHandlerRef.static_map_data;
+		var mapDataEntryCount = staticMapData.GetEntryCount();
+		for (var i = 0; i < mapDataEntryCount; i++)
 		{
-			var mapEntry = mapEntryRegistry[| i];
-			if (!is_undefined(mapEntry))
+			var mapDataEntry = staticMapData.GetEntryByIndex(i);
+			if (!is_undefined(mapDataEntry))
 			{
-				if (instance_exists(mapEntry.instance))
-				{
-					var positionOnGUI = new Vector2(
-						calculatedPosition.X + ((mapEntry.instance.x * mapScale) * mapZoom),
-						calculatedPosition.Y + ((mapEntry.instance.y * mapScale) * mapZoom)
-					);
-				
-					var iconScale = mapScale * mapZoom;
-					var iconSize = new Size(mapEntry.icon_size.w * iconScale, mapEntry.icon_size.h * iconScale);
-					var iconAlpha = (!mapEntry.icon_style.constant_alpha && mapEntry.instance.mask_index == SPRITE_NO_MASK) ? 0.3 : 1;
-					draw_sprite_ext(
-						sprGUIBg, 0,
-						positionOnGUI.X - (mapEntry.icon_offset.X * iconScale),
-						positionOnGUI.Y - (mapEntry.icon_offset.Y * iconScale),
-						iconSize.w, iconSize.h,
-						0, mapEntry.icon_style.rgb_color, iconAlpha
-					);
-				}
+				var positionOnGUI = new Vector2(
+					calculatedPosition.X + ((mapDataEntry.position.X * mapScale) * mapZoom),
+					calculatedPosition.Y + ((mapDataEntry.position.Y * mapScale) * mapZoom)
+				);
+				var iconScale = mapScale * mapZoom;
+				var iconSize = new Size(mapDataEntry.size.w * iconScale, mapDataEntry.size.h * iconScale);
+				draw_sprite_ext(
+					sprGUIBg, 0,
+					positionOnGUI.X,
+					positionOnGUI.Y,
+					iconSize.w, iconSize.h,
+					0, mapDataEntry.icon_style.rgb_color,
+					mapDataEntry.icon_alpha
+				);
 			}
 		}
 	}
