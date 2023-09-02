@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "ParseJSONStructToMapDataEntry",
+  "name": "MapIcon",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

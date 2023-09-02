@@ -1,4 +1,4 @@
-function MapDataEntry(_object_name, _position, _size, _icon_style = undefined, _icon_alpha = 1) constructor
+function MapIcon(_object_name, _position, _size, _icon_style = undefined, _icon_alpha = 1) constructor
 {
 	object_name = _object_name;
 	position = _position;

@@ -32,7 +32,7 @@ function MapDataHandler() constructor
 							{
 								var objectName = object_get_name(instance.object_index);
 								var mapIconStyle = GetMapIconStyleByObjectName(objectName);
-								var mapDataEntry = new MapDataEntry(
+								var mapIcon = new MapIcon(
 									objectName,
 									// TOP-LEFT CORNER TO DRAW RECTANGLE
 									new Vector2(
@@ -46,7 +46,7 @@ function MapDataHandler() constructor
 									mapIconStyle,
 									(instance.mask_index != SPRITE_NO_MASK) ? 1 : 0.3
 								);
-								mapData.AddEntry(mapDataEntry);
+								mapData.AddMapIcon(mapIcon);
 							}
 						}
 					}
@@ -79,11 +79,11 @@ function MapDataHandler() constructor
 		
 		var formatFileName = string("{0}{1}", "/map_data/", _fileName);
 		var staticMapDataStruct = ReadJSONFile(formatFileName) ?? EMPTY_STRUCT;
-		var parsedMapData = ParseJSONStructToList(staticMapDataStruct[$ "entries"] ?? undefined, ParseJSONStructToMapDataEntry);
+		var parsedMapData = ParseJSONStructToList(staticMapDataStruct[$ "icons"] ?? undefined, ParseJSONStructToMapIcon);
 		
 		if (ds_list_size(parsedMapData) > 0)
 		{
-			static_map_data.entries = parsedMapData
+			static_map_data.icons = parsedMapData
 			isMapDataReaded = true;
 		}
 		

@@ -63,25 +63,25 @@ function WindowWorldMap(_elementId, _relativePosition, _size, _backgroundColor) 
 		);
 		
 		var staticMapData = global.MapDataHandlerRef.static_map_data;
-		var mapDataEntryCount = staticMapData.GetEntryCount();
-		for (var i = 0; i < mapDataEntryCount; i++)
+		var mapIconCount = staticMapData.GetMapIconCount();
+		for (var i = 0; i < mapIconCount; i++)
 		{
-			var mapDataEntry = staticMapData.GetEntryByIndex(i);
-			if (!is_undefined(mapDataEntry))
+			var mapIcon = staticMapData.GetMapIconByIndex(i);
+			if (!is_undefined(mapIcon))
 			{
 				var positionOnGUI = new Vector2(
-					calculatedPosition.X + ((mapDataEntry.position.X * mapScale) * mapZoom),
-					calculatedPosition.Y + ((mapDataEntry.position.Y * mapScale) * mapZoom)
+					calculatedPosition.X + ((mapIcon.position.X * mapScale) * mapZoom),
+					calculatedPosition.Y + ((mapIcon.position.Y * mapScale) * mapZoom)
 				);
 				var iconScale = mapScale * mapZoom;
-				var iconSize = new Size(mapDataEntry.size.w * iconScale, mapDataEntry.size.h * iconScale);
+				var iconSize = new Size(mapIcon.size.w * iconScale, mapIcon.size.h * iconScale);
 				draw_sprite_ext(
 					sprGUIBg, 0,
 					positionOnGUI.X,
 					positionOnGUI.Y,
 					iconSize.w, iconSize.h,
-					0, mapDataEntry.icon_style.rgb_color,
-					mapDataEntry.icon_alpha
+					0, mapIcon.icon_style.rgb_color,
+					mapIcon.icon_alpha
 				);
 			}
 		}
