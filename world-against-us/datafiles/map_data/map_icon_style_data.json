@@ -1,0 +1,94 @@
+{
+  "map_icon_style_data": [
+    {
+      "object_name": "objPlayer",
+      "color": {
+        "red": 16,
+        "green": 128,
+        "blue": 230
+      },
+      "constant_alpha": true,
+      "is_dynamic": true
+    },
+    {
+      "object_name": "objEnemy",
+      "color": {
+        "red": 190,
+        "green": 0,
+        "blue": 0
+      },
+      "constant_alpha": true,
+      "is_dynamic": true
+    },
+    {
+      "object_name": "objStructureParent",
+      "color": {
+        "red": 40,
+        "green": 40,
+        "blue": 40
+      },
+      "constant_alpha": true,
+      "is_dynamic": false
+    },
+    {
+      "object_name": "objFacilityParent",
+      "color": {
+        "red": 225,
+        "green": 100,
+        "blue": 0
+      },
+      "constant_alpha": false,
+      "is_dynamic": false
+    },
+    {
+      "object_name": "objContainerParent",
+      "color": {
+        "red": 225,
+        "green": 225,
+        "blue": 0
+      },
+      "constant_alpha": true,
+      "is_dynamic": false
+    },
+    {
+      "object_name": "objPickable",
+      "color": {
+        "red": 10,
+        "green": 225,
+        "blue": 0
+      },
+      "constant_alpha": true,
+      "is_dynamic": true
+    },
+    {
+      "object_name": "objDecorationParent",
+      "color": {
+        "red": 170,
+        "green": 255,
+        "blue": 244
+      },
+      "constant_alpha": true,
+      "is_dynamic": false
+    },
+    {
+      "object_name": "objBuildingParent",
+      "color": {
+        "red": 75,
+        "green": 30,
+        "blue": 30
+      },
+      "constant_alpha": true,
+      "is_dynamic": false
+    },
+    {
+      "object_name": "objFastTravelParent",
+      "color": {
+        "red": 255,
+        "green": 190,
+        "blue": 0
+      },
+      "constant_alpha": true,
+      "is_dynamic": false
+    }
+  ]
+}
