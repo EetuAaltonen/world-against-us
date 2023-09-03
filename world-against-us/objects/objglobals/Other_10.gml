@@ -22,10 +22,11 @@ global.ObjJournal = instance_exists(objJournal) ? instance_find(objJournal, 0) :
 global.DialogueHandlerRef = instance_exists(objDialogue) ? instance_find(objDialogue, 0).dialogueHandler : undefined;
 global.MapDataHandlerRef = instance_exists(objMap) ? instance_find(objMap, 0).mapDataHandler : undefined;
 
-//global.PlayerBackpack = instance_exists(objInventory) ? instance_find(objInventory, 0).inventory : undefined;
 global.PlayerPrimaryWeaponSlot = instance_exists(objInventory) ? instance_find(objInventory, 0).playerPrimaryWeaponSlot : undefined;
 global.PlayerMagazinePockets = instance_exists(objInventory) ? instance_find(objInventory, 0).magazinePockets : undefined;
 global.PlayerMedicinePockets = instance_exists(objInventory) ? instance_find(objInventory, 0).medicinePockets : undefined;
+
+global.InstanceDrone = instance_exists(objDrone) ? instance_find(objDrone, 0) : noone;
 
 global.HighlightHandlerRef = instance_exists(objInstanceHighlighter) ? instance_find(objInstanceHighlighter, 0).highlightHandler : undefined;
 global.ObjGridPath = instance_exists(objGridPath) ? instance_find(objGridPath, 0) : noone;

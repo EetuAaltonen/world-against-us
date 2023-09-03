@@ -111,6 +111,9 @@ global.PlayerMedicinePockets = undefined;
 // TEMP INVENTORY
 global.ObjTempInventory = noone;
 
+// DRONE
+global.InstanceDrone = noone;
+
 resetDynamicVariables = function()
 {
 	// PLAYER
@@ -122,6 +125,9 @@ resetDynamicVariables = function()
 	// COOP
 	// TODO: Create handler for co-op player data
 	global.OtherPlayerData = ds_map_create();
+	
+	// DRONE
+	global.InstanceDrone = noone;
 
 	// AI GRID PATH
 	global.ObjGridPath = undefined;

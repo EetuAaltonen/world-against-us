@@ -9,23 +9,22 @@ function CreateWindowMap(_zIndex)
 	);
 	
 	var mapElements = ds_list_create();
-	
-
-	var mapSize = new Size(windowSize.w - 100, windowSize.h - 140);
-	var mapElement = new WindowMap(
-		"MapElement",
-		new Vector2(windowSize.w * 0.5 - (mapSize.w * 0.5), 20),
-		mapSize, undefined
-	);
-	
 	var mapInfoPanelElements = ds_list_create();
 	
 	// INFO PANEL
+	var infoPanelSize = new Size(windowSize.w, 40);
 	var mapInfoPanel = new WindowPanel(
 		"MapTitle",
 		new Vector2(0, 0),
-		new Size(windowSize.w, 40),
+		infoPanelSize,
 		c_black
+	);
+
+	var mapSize = new Size(windowSize.w - 100, windowSize.h - 140 - infoPanelSize.h);
+	var mapElement = new WindowMap(
+		"MapElement",
+		new Vector2(windowSize.w * 0.5 - (mapSize.w * 0.5), infoPanelSize.h),
+		mapSize, undefined
 	);
 	
 	// INFO PANEL TITLE
