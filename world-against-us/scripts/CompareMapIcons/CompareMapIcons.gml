@@ -2,12 +2,12 @@ function CompareMapIcons(sourceMapIcon, compareMapIcon)
 {
 	var isRenderedFirst = false;
 	
-	if (sourceMapIcon.position.Y < compareMapIcon.position.Y)
+	if (sourceMapIcon.origin.Y < compareMapIcon.origin.Y)
 	{
 		isRenderedFirst = true;
-	} else if (sourceMapIcon.position.Y == compareMapIcon.position.Y)
+	} else if (sourceMapIcon.origin.Y == compareMapIcon.origin.Y)
 	{
-		if (sourceMapIcon.position.X <= compareMapIcon.position.X)
+		if (sourceMapIcon.origin.X <= compareMapIcon.origin.X)
 		{
 			isRenderedFirst = true;
 		}

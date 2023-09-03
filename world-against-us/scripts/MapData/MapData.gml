@@ -17,11 +17,6 @@ function MapData() constructor
 		}
 	}
 	
-	static AddMapIcon = function(_mapIcon)
-	{
-		ds_list_add(icons, _mapIcon);
-	}
-	
 	static SortIcons = function()
 	{
 		SortList(icons, CompareMapIcons);
@@ -37,7 +32,7 @@ function MapData() constructor
 		return ds_list_size(icons);
 	}
 	
-	static Clear = function()
+	static ClearIcons = function()
 	{
 		ds_list_clear(icons);
 	}
