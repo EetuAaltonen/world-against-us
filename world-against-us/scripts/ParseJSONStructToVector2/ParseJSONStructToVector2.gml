@@ -3,6 +3,7 @@ function ParseJSONStructToVector2(_jsonStruct)
 	var parsedVector2 = undefined;
 	try
 	{
+		if (is_undefined(_jsonStruct)) return parsedVector2;
 		var vector2Struct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 		if (variable_struct_names_count(vector2Struct) <= 0) return parsedVector2;
 		

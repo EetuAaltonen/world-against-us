@@ -3,6 +3,7 @@ function ParseJSONStructToMetadataItem(_jsonStruct, _itemCategory, _itemType)
 	var parsedMetadata = undefined;
 	if (!is_undefined(_jsonStruct) && !is_undefined(_itemCategory))
 	{
+		if (is_undefined(_jsonStruct)) return parsedMetadata;
 		var metadataStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 		if (variable_struct_names_count(metadataStruct) <= 0) return parsedMetadata;
 		

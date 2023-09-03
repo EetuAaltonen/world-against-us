@@ -4,6 +4,7 @@ function ParseJSONStructToCharacter(_jsonStruct)
 	
 	try
 	{
+		if (is_undefined(_jsonStruct)) return parsedCharacter;
 		var characterStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 		if (variable_struct_names_count(characterStruct) <= 0) return parsedCharacter;
 		

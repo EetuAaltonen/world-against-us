@@ -3,6 +3,7 @@ function ParseJSONStructToItem(_jsonStruct)
 	var parsedItem = undefined;
 	try
 	{
+		if (is_undefined(_jsonStruct)) return parsedItem;
 		var itemStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 		if (variable_struct_names_count(itemStruct) <= 0) return parsedItem;
 		

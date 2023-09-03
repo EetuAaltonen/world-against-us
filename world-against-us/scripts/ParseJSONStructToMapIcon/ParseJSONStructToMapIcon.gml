@@ -3,6 +3,7 @@ function ParseJSONStructToMapIcon(_jsonStruct)
 	var parsedMapIcon = undefined;
 	try
 	{
+		if (is_undefined(_jsonStruct)) return parsedMapIcon;
 		var mapIconStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 		if (variable_struct_names_count(mapIconStruct) <= 0) return parsedMapIcon;
 		

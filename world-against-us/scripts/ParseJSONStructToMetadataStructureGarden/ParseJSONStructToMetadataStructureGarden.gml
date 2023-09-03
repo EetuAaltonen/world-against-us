@@ -4,6 +4,7 @@ function ParseJSONStructToMetadataStructureGarden(_jsonStruct)
 	
 	if (!is_undefined(_jsonStruct))
 	{
+		if (is_undefined(_jsonStruct)) return parsedMetadata;
 		var structureMetadataStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 		if (variable_struct_names_count(structureMetadataStruct) <= 0) return parsedMetadata;
 		

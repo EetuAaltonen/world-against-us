@@ -4,6 +4,7 @@ function ParseJSONStructToInventory(_jsonStruct)
 	
 	try
 	{
+		if (is_undefined(_jsonStruct)) return parsedInventory;
 		var inventoryStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 		if (variable_struct_names_count(inventoryStruct) <= 0) return parsedInventory;
 		

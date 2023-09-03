@@ -3,6 +3,7 @@ function ParseJSONStructToSize(_jsonStruct)
 	var parsedSize = undefined;
 	try
 	{
+		if (is_undefined(_jsonStruct)) return parsedSize;
 		var sizeStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 		if (variable_struct_names_count(sizeStruct) <= 0) return parsedSize;
 		
