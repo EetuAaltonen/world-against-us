@@ -1,11 +1,34 @@
 function MapDataHandler() constructor
 {
 	static_map_data = new MapData();
-	map_update_timer = new Timer(TimerFromSeconds(6));
+	dynamic_map_data = new MapData();
+	
+	is_dynamic_data_updating = false;
+	map_update_timer = new Timer(TimerFromSeconds(5));
 	
 	static GetMapDataFileName = function(roomName)
 	{
 		return string("{0}_static_map.json", roomName);
+	}
+	
+	static Update = function()
+	{
+		if (is_dynamic_data_updating)
+		{
+			if (map_update_timer.IsTimerStopped())
+			{
+				UpdateDynamicMapData();
+				map_update_timer.StartTimer();
+			} else {
+				map_update_timer.Update();
+			}
+		}
+	}
+	
+	static UpdateDynamicMapData = function()
+	{
+		dynamic_map_data.icons = GenerateMapIcons(DYNAMIC_MAP_ICON);
+		dynamic_map_data.SortIcons();
 	}
 	
 	static GenerateStaticMapData = function()
@@ -13,47 +36,11 @@ function MapDataHandler() constructor
 		var isMapDataGenerated = false;
 		var roomName = room_get_name(room);
 		var fileName = string("{0}{1}", "DEBUG/map_data/", GetMapDataFileName(roomName));
-		var mapData = new MapData();
+		
+		static_map_data.icons = GenerateMapIcons(STATIC_MAP_ICON);
 		try
 		{
-			for (var key = ds_map_find_first(global.MapIconStyleData); !is_undefined(key); key = ds_map_find_next(global.MapIconStyleData, key))
-			{
-				var iconStyle = global.MapIconStyleData[? key];
-				if (!is_undefined(iconStyle))
-				{
-					if (!iconStyle.is_dynamic)
-					{
-						var styleObjectIndex = asset_get_index(iconStyle.object_name);
-						var instanceCount = instance_number(styleObjectIndex);
-						for (var i = 0; i < instanceCount; i++)
-						{
-							var instance = instance_find(styleObjectIndex, i);
-							if (instance_exists(instance))
-							{
-								var objectName = object_get_name(instance.object_index);
-								var mapIconStyle = GetMapIconStyleByObjectName(objectName);
-								var mapIcon = new MapIcon(
-									objectName,
-									// TOP-LEFT CORNER TO DRAW RECTANGLE
-									new Vector2(
-										instance.x - instance.sprite_xoffset,
-										instance.y - instance.sprite_yoffset
-									),
-									new Size(
-										instance.sprite_width,
-										instance.sprite_height
-									),
-									mapIconStyle,
-									(instance.mask_index != SPRITE_NO_MASK) ? 1 : 0.3
-								);
-								mapData.AddMapIcon(mapIcon);
-							}
-						}
-					}
-				}
-			}
-			
-			var mapDataString = json_stringify(mapData.ToJSONStruct());
+			var mapDataString = json_stringify(static_map_data.ToJSONStruct());
 			var buffer = buffer_create(
 				string_byte_length(mapDataString) + 1,
 				buffer_fixed, 1
@@ -68,13 +55,65 @@ function MapDataHandler() constructor
 			show_message(error);
 			show_debug_message(error);
 		}
+		
+		static_map_data.ClearIcons();
 		return isMapDataGenerated;
+	}
+	
+	static GenerateMapIcons = function(_mapIconType)
+	{
+		var mapIcons = ds_list_create();
+		var isIconDynamic = (_mapIconType == DYNAMIC_MAP_ICON) ? true : false;
+		
+		for (var key = ds_map_find_first(global.MapIconStyleData); !is_undefined(key); key = ds_map_find_next(global.MapIconStyleData, key))
+		{
+			var iconStyle = global.MapIconStyleData[? key];
+			if (!is_undefined(iconStyle))
+			{
+				if (iconStyle.is_dynamic == isIconDynamic)
+				{
+					var styleObjectIndex = asset_get_index(iconStyle.object_name);
+					var instanceCount = instance_number(styleObjectIndex);
+					for (var i = 0; i < instanceCount; i++)
+					{
+						var instance = instance_find(styleObjectIndex, i);
+						if (instance_exists(instance))
+						{
+							var objectName = object_get_name(instance.object_index);
+							var mapIconStyle = GetMapIconStyleByObjectName(objectName);
+							var mapIcon = new MapIcon(
+								objectName,
+								// TOP-LEFT CORNER TO DRAW RECTANGLE
+								new Vector2(
+									instance.x - instance.sprite_xoffset,
+									instance.y - instance.sprite_yoffset
+								),
+								new Vector2(
+									instance.x,
+									instance.y
+								),
+								new Size(
+									instance.sprite_width,
+									instance.sprite_height
+								),
+								mapIconStyle,
+								(instance.mask_index != SPRITE_NO_MASK) ? 1 : 0.3
+							);
+							ds_list_add(mapIcons, mapIcon);
+						}
+					}
+				}
+			}
+		}
+		
+		return mapIcons;
 	}
 	
 	static ReadStaticMapDataFile = function(_fileName)
 	{
 		var isMapDataReaded = false;
 		
+		// CLEAR STATIC MAP DATA
 		ClearStaticMapData();
 		
 		var formatFileName = string("{0}{1}", "/map_data/", _fileName);
@@ -94,6 +133,11 @@ function MapDataHandler() constructor
 	
 	static ClearStaticMapData = function()
 	{
-		static_map_data.Clear();
+		static_map_data.ClearIcons();
+	}
+	
+	static ClearDynamicMapData = function()
+	{
+		dynamic_map_data.ClearIcons();
 	}
 }

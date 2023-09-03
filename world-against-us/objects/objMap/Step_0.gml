@@ -27,3 +27,5 @@ if (global.GUIStateHandlerRef.IsGUIStateClosed())
 		}
 	}
 }
+
+mapDataHandler.Update();
