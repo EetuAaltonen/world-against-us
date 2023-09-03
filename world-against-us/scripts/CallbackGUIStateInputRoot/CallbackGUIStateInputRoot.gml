@@ -62,9 +62,6 @@ function CallbackGUIStateInputRoot()
 				global.GameWindowHandlerRef.OpenWindowGroup([
 					CreateWindowMap(-1)
 				]);
-				// TRIGGER MAP UPDATE TIMER
-				global.MapDataHandlerRef.map_update_timer.TriggerTimer();
-				
 			}
 		}
 	}

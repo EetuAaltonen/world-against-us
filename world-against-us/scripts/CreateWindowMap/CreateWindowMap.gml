@@ -48,5 +48,21 @@ function CreateWindowMap(_zIndex)
 	
 	mapWindow.AddChildElements(mapElements);
 	mapInfoPanel.AddChildElements(mapInfoPanelElements);
+	
+	// OVERRIDE WINDOW ONOPEN FUNCTION
+	var overrideOnOpen = function()
+	{
+		// TRIGGER MAP UPDATE
+		global.MapDataHandlerRef.is_dynamic_data_updating = true;
+		global.MapDataHandlerRef.map_update_timer.TriggerTimer();
+	}
+	mapWindow.OnOpen = overrideOnOpen;
+	// OVERRIDE WINDOW ONCLOSE FUNCTION
+	var overrideOnClose = function()
+	{
+		// SUSPEND MAP UPDATE
+		global.MapDataHandlerRef.is_dynamic_data_updating = true;
+	}
+	mapWindow.OnClose = overrideOnClose;
 	return mapWindow;
 }
