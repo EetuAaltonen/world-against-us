@@ -3,8 +3,6 @@ event_inherited();
 
 if (targetInstance == noone)
 {
-	targetSeekTimer.Update();
-	
 	if (targetSeekTimer.IsTimerStopped())
 	{
 		var nearestTarget = instance_nearest(x, y, objPlayer);
@@ -15,6 +13,8 @@ if (targetInstance == noone)
 		} else {
 			targetSeekTimer.StartTimer();
 		}
+	} else {
+		targetSeekTimer.Update();
 	}
 } else {
 	if (!is_undefined(global.ObjGridPath.roomGrid))
@@ -56,10 +56,9 @@ if (targetInstance == noone)
 				
 				// RESET TIMER
 				pathUpdateTimer.StartTimer();
+			} else {
+				pathUpdateTimer.Update();
 			}
-				
-			// UPDATE TIMER
-			pathUpdateTimer.Update();
 		}
 	}
 }
