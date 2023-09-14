@@ -37,6 +37,7 @@ function GUIStateHandler() constructor
 				var newGUIState = currentGUIState.Clone();
 				newGUIState.view = _guiView;
 				newGUIState.windowIndexGroup = _windowIndexGroup;
+				newGUIState.chainRule = GUI_CHAIN_RULE.OverwriteAll;
 			
 				isViewChanged = RequestGUIState(newGUIState);
 			}
@@ -55,6 +56,7 @@ function GUIStateHandler() constructor
 			var newGUIState = currentGUIState.Clone();
 			newGUIState.action = _guiAction;
 			newGUIState.windowIndexGroup = _windowIndexGroup;
+			newGUIState.chainRule = GUI_CHAIN_RULE.Append;
 			
 			isActionChanged = RequestGUIState(newGUIState);
 		}

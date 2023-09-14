@@ -2,12 +2,7 @@ function OnClickMenuConnect()
 {
 	if (!is_undefined(global.ObjNetwork))
 	{
-		var currentGUIState = global.GUIStateHandlerRef.GetGUIState();
-		var guiState = new GUIState(
-			currentGUIState.index, currentGUIState.view, GUI_ACTION.Connect,
-			[GAME_WINDOW.MainMenuConnect]
-		);
-		if (global.GUIStateHandlerRef.RequestGUIState(guiState))
+		if (global.GUIStateHandlerRef.RequestGUIAction(GUI_ACTION.Connect, [GAME_WINDOW.MainMenuConnect]))
 		{
 			var addressInputElement = parentElement.GetChildElementById("MultiplayerAddressInput");
 			var address = global.ObjNetwork.defaultHost;
@@ -35,7 +30,7 @@ function OnClickMenuConnect()
 			client.ConnectToHost();
 		
 			global.GameWindowHandlerRef.OpenWindowGroup([
-				CreateWindowMainMenuConnect(parentWindow.zIndex - 1, address, port)
+				CreateWindowMainMenuConnect(GAME_WINDOW.MainMenuConnect, parentWindow.zIndex - 1, address, port)
 			]);
 		}
 	}
