@@ -13,6 +13,7 @@ global.BlueprintData = instance_exists(objDatabase) ? instance_find(objDatabase,
 global.LootTableData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).lootTableData : undefined;
 global.QuestData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).questData : undefined;
 global.DialogueData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).dialogueData : undefined;
+global.ObjectExamineData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).objectExamineData : undefined;
 global.MapIconStyleData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).mapIconStyleData : undefined;
 
 global.ObjHud = instance_exists(objHud) ? instance_find(objHud, 0) : noone;

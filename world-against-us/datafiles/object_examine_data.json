@@ -1,0 +1,28 @@
+{
+  "object_examine_data": [
+    {
+      "object_name": "objPlayer",
+      "display_name": "Player",
+      "icon": "sprSoldier",
+      "description": "A player character"
+    },
+    {
+      "object_name": "objDrone",
+      "display_name": "Drone",
+      "icon": "sprDrone",
+      "description": "A scouting drone"
+    },
+    {
+      "object_name": "objBookBox",
+      "display_name": "Book Box",
+      "icon": "sprBookBox",
+      "description": "A box of books"
+    },
+    {
+      "object_name": "objArtTable",
+      "display_name": "Art Table",
+      "icon": "sprArtTable",
+      "description": "A table full of art tools and materials"
+    }
+  ]
+}

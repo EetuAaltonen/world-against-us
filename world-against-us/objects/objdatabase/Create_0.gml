@@ -185,6 +185,10 @@ try {
 	show_message(error);
 }
 
+// OBJECT EXAMINE DATA
+var jsonObjectExamineStruct = ReadJSONFile("object_examine_data.json") ?? EMPTY_STRUCT;
+objectExamineData = ParseJSONStructArrayToMap(jsonObjectExamineStruct[$ "object_examine_data"] ?? undefined, "object_name", ParseJSONStructToDatabaseObjectExamine);
+
 // MAP ICON STYLE DATA
 var jsonMapIconStyleStruct = ReadJSONFile("/map_data/map_icon_style_data.json") ?? EMPTY_STRUCT;
 mapIconStyleData = ParseJSONStructArrayToMap(jsonMapIconStyleStruct[$ "map_icon_style_data"] ?? undefined, "object_name", ParseJSONStructToDatabaseMapIconStyleData);
