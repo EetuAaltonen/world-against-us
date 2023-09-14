@@ -27,6 +27,5 @@ function SortList(sourceList, compareFunction)
 		}
 	    ds_list_delete(sourceList, 0);
 	}
-	
 	ds_list_copy(sourceList, sortedList);
 }

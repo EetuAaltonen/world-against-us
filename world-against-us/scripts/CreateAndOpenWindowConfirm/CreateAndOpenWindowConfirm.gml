@@ -56,8 +56,6 @@ function CreateAndOpenWindowConfirm(_title, _description, _callerWindowElement, 
 		fa_center, fa_middle
 	);
 	
-	var 
-	
 	var confirmButton = new WindowButton(
 		"ConfirmButton",
 		buttonPosition, buttonSize,

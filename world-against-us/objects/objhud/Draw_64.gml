@@ -35,12 +35,12 @@ if (global.DEBUGMODE)
 						var targetHUDElementPadding = 10;
 						var targetHUDElementScale = 2;
 						var spriteOffset = new Vector2(
-							highlightedInstance.sprite_xoffset / highlightedInstance.image_xscale,
-							highlightedInstance.sprite_yoffset / highlightedInstance.image_yscale
+							sprite_get_xoffset(highlightedInstance.sprite_index),
+							sprite_get_yoffset(highlightedInstance.sprite_index)
 						);
 						var spriteSize = new Size(
-							highlightedInstance.sprite_width / highlightedInstance.image_xscale,
-							highlightedInstance.sprite_height / highlightedInstance.image_yscale
+							sprite_get_width(highlightedInstance.sprite_index),
+							sprite_get_height(highlightedInstance.sprite_index)
 						);
 				
 						draw_sprite_ext(
