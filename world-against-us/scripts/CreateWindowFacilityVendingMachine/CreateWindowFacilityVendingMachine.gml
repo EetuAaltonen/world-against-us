@@ -1,9 +1,9 @@
-function CreateWindowFacilityVendingMachine(_zIndex, _facility)
+function CreateWindowFacilityVendingMachine(_gameWindowId, _zIndex, _facility)
 {
 	var windowSize = new Size(global.GUIW * 0.4, global.GUIH - global.ObjHud.hudHeight);
 	var windowStyle = new GameWindowStyle(c_black, 0.9);
 	var facilityWindow = new GameWindow(
-		GAME_WINDOW.FacilityVendingMachine,
+		_gameWindowId,
 		new Vector2(global.GUIW - windowSize.w, 0),
 		windowSize, windowStyle, _zIndex
 	);

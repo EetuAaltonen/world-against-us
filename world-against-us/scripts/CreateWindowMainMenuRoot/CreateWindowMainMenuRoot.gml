@@ -1,9 +1,9 @@
-function CreateWindowMainMenuRoot(_zIndex)
+function CreateWindowMainMenuRoot(_gameWindowId, _zIndex)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH);
 	var windowStyle = new GameWindowStyle(undefined, 0);
 	var mainMenuWindow = new GameWindow(
-		GAME_WINDOW.MainMenuRoot,
+		_gameWindowId,
 		new Vector2(0, 0),
 		windowSize, windowStyle, _zIndex
 	);

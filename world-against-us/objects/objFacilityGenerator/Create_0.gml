@@ -11,8 +11,8 @@ interactionFunction = function()
 	if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 	{
 		global.GameWindowHandlerRef.OpenWindowGroup([
-			CreateWindowPlayerBackpack(-1),
-			CreateWindowFacilityGenerator(-1, facility)
+			CreateWindowPlayerBackpack(GAME_WINDOW.PlayerBackpack, -1),
+			CreateWindowFacilityGenerator(GAME_WINDOW.FacilityGenerator, -1, facility)
 		]);
 	}
 }

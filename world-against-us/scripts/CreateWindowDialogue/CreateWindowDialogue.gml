@@ -1,10 +1,10 @@
-function CreateWindowDialogue(_zIndex, _characterIcon)
+function CreateWindowDialogue(_gameWindowId, _zIndex, _characterIcon)
 {
 	var windowSize = new Size(global.GUIW, global.ObjHud.hudHeight + 300);
 	var windowPosition = new Vector2(0, global.GUIH - windowSize.h - global.ObjHud.hudHeight);
 	var windowStyle = new GameWindowStyle(c_black, 0.8);
 	var dialogueWindow = new GameWindow(
-		GAME_WINDOW.Dialogue,
+		_gameWindowId,
 		windowPosition,
 		windowSize, windowStyle, _zIndex
 	);

@@ -20,7 +20,7 @@ function DialogueHandler() constructor
 				);
 				if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 				{
-					dialogue_window = CreateWindowDialogue(-1, active_character_icon);
+					dialogue_window = CreateWindowDialogue(GAME_WINDOW.Dialogue, -1, active_character_icon);
 					global.GameWindowHandlerRef.OpenWindowGroup([
 						dialogue_window
 					]);

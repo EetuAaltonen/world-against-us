@@ -1,9 +1,9 @@
-function CreateWindowGardenBed(_zIndex, _toolsInventory, _fertilizeInventory, _waterInventory, _seedInventory, _outputInventory)
+function CreateWindowGardenBed(_gameWindowId, _zIndex, _toolsInventory, _fertilizeInventory, _waterInventory, _seedInventory, _outputInventory)
 {
 	var windowSize = new Size(global.GUIW * 0.4, global.GUIH - global.ObjHud.hudHeight);
 	var windowStyle = new GameWindowStyle(c_black, 0.9);
 	var gardenWindow = new GameWindow(
-		GAME_WINDOW.GardenBed,
+		_gameWindowId,
 		new Vector2(global.GUIW - windowSize.w, 0),
 		windowSize, windowStyle, _zIndex
 	);

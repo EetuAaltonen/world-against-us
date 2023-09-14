@@ -7,7 +7,7 @@ function OnClickMenuMultiplayer()
 	if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 	{
 		global.GameWindowHandlerRef.OpenWindowGroup([
-			CreateWindowMainMenuMultiplayer(parentWindow.zIndex - 1)
+			CreateWindowMainMenuMultiplayer(GAME_WINDOW.MainMenuMultiplayer, parentWindow.zIndex - 1)
 		]);
 	}
 }

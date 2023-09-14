@@ -1,9 +1,9 @@
-function CreateWindowLootContainer(_zIndex, _containerInventory)
+function CreateWindowLootContainer(_gameWindowId, _zIndex, _containerInventory)
 {
 	var windowSize = new Size(global.GUIW * 0.4, global.GUIH - global.ObjHud.hudHeight);
 	var windowStyle = new GameWindowStyle(c_black, 0.9);
 	var containerWindow = new GameWindow(
-		GAME_WINDOW.LootContainer,
+		_gameWindowId,
 		new Vector2(global.GUIW - windowSize.w, 0),
 		windowSize, windowStyle, _zIndex
 	);

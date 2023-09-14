@@ -13,7 +13,7 @@ function CallbackGUIStateInputRoot()
 			if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 			{
 				global.GameWindowHandlerRef.OpenWindowGroup([
-					CreateWindowEscMenu(-1)
+					CreateWindowEscMenu(GAME_WINDOW.EscMenu, -1)
 				]);
 			}
 		} else if (keyboard_check_released(KEY_PLAYER_OVERVIEW))
@@ -27,7 +27,7 @@ function CallbackGUIStateInputRoot()
 			if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 			{
 				global.GameWindowHandlerRef.OpenWindowGroup([
-					CreateWindowPlayerBackpack(-1)
+					CreateWindowPlayerBackpack(GAME_WINDOW.PlayerBackpack, -1)
 				]);
 			}
 		} else if (keyboard_check_released(KEY_JOURNAL))
@@ -41,7 +41,7 @@ function CallbackGUIStateInputRoot()
 			if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 			{
 				global.GameWindowHandlerRef.OpenWindowGroup([
-					CreateWindowJournal(-1)
+					CreateWindowJournal(GAME_WINDOW.JournalEntries, -1)
 				]);
 			}
 		} else if (keyboard_check_released(KEY_MAP))
@@ -60,7 +60,7 @@ function CallbackGUIStateInputRoot()
 			if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 			{
 				global.GameWindowHandlerRef.OpenWindowGroup([
-					CreateWindowMap(-1)
+					CreateWindowMap(GAME_WINDOW.Map, -1)
 				]);
 			}
 		}

@@ -11,7 +11,7 @@ function CallbackGUIStateInputJournal()
 				if (global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.JournalEntries, [GAME_WINDOW.JournalEntries]))
 				{
 					global.GameWindowHandlerRef.OpenWindowGroup([
-						CreateWindowJournal(-1)
+						CreateWindowJournal(GAME_WINDOW.JournalEntries, -1)
 					]);
 				}
 			} else if (keyboard_check_released(ord("2")))
@@ -20,7 +20,7 @@ function CallbackGUIStateInputJournal()
 				if (global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.JournalQuests, [GAME_WINDOW.JournalQuests]))
 				{
 					global.GameWindowHandlerRef.OpenWindowGroup([
-						CreateWindowJournalQuest(-1)
+						CreateWindowJournalQuest(GAME_WINDOW.JournalQuests, -1)
 					]);
 				}
 			}

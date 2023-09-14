@@ -1,9 +1,9 @@
-function CreateWindowMainMenuConnect(_zIndex, _address, _port)
+function CreateWindowMainMenuConnect(_gameWindowId, _zIndex, _address, _port)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH);
 	var windowStyle = new GameWindowStyle(#217fb5, 1);
 	var multiplayerConnectWindow = new GameWindow(
-		GAME_WINDOW.MainMenuConnect,
+		_gameWindowId,
 		new Vector2(0, 0),
 		windowSize, windowStyle, _zIndex
 	);	

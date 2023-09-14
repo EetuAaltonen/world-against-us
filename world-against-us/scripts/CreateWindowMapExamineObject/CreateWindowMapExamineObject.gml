@@ -1,4 +1,4 @@
-function CreateWindowMapExamineObject(_zIndex, _examineObjectData)
+function CreateWindowMapExamineObject(_gameWindowId, _zIndex, _examineObjectData)
 {
 	var mapWindowElement = parentWindow.GetChildElementById("MapElement");
 	if (!is_undefined(mapWindowElement))
@@ -6,7 +6,7 @@ function CreateWindowMapExamineObject(_zIndex, _examineObjectData)
 		var windowSize = new Size(500, mapWindowElement.size.h);
 		var windowStyle = new GameWindowStyle(c_black, 0.9);
 		var examineObjectWindow = new GameWindow(
-			GAME_WINDOW.MapExamineObject,
+			_gameWindowId,
 			new Vector2(0, mapWindowElement.position.Y),
 			windowSize, windowStyle, _zIndex
 		);

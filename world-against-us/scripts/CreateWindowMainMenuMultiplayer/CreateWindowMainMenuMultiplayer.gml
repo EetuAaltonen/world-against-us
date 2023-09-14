@@ -1,9 +1,9 @@
-function CreateWindowMainMenuMultiplayer(_zIndex)
+function CreateWindowMainMenuMultiplayer(_gameWindowId, _zIndex)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH);
 	var windowStyle = new GameWindowStyle(c_black, 0.8);
 	var multiplayerWindow = new GameWindow(
-		GAME_WINDOW.MainMenuMultiplayer,
+		_gameWindowId,
 		new Vector2(0, 0),
 		windowSize, windowStyle, _zIndex
 	);

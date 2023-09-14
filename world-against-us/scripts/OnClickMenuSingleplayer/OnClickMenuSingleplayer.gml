@@ -7,7 +7,7 @@ function OnClickMenuSingleplayer()
 	if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 	{
 		global.GameWindowHandlerRef.OpenWindowGroup([
-			CreateWindowMainMenuSingleplayer(parentWindow.zIndex - 1)
+			CreateWindowMainMenuSingleplayer(GAME_WINDOW.MainMenuSingleplayer, parentWindow.zIndex - 1)
 		]);
 	}
 }

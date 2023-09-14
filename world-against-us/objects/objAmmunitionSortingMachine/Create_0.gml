@@ -13,8 +13,8 @@ interactionFunction = function()
 		if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 		{
 			global.GameWindowHandlerRef.OpenWindowGroup([
-				CreateWindowPlayerBackpack(-1),
-				CreateWindowFacilityAmmunitionSortingMachine(-1, facility)
+				CreateWindowPlayerBackpack(GAME_WINDOW.PlayerBackpack, -1),
+				CreateWindowFacilityAmmunitionSortingMachine(GAME_WINDOW.FacilityAmmunitionSortingMachine, -1, facility)
 			]);
 		}
 	}

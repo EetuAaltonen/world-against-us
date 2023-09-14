@@ -1,9 +1,9 @@
-function CreateWindowJournalQuest(_zIndex)
+function CreateWindowJournalQuest(_gameWindowId, _zIndex)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH - global.ObjHud.hudHeight);
 	var windowStyle = new GameWindowStyle(c_black, 0.9);
 	var questWindow = new GameWindow(
-		GAME_WINDOW.JournalQuests,
+		_gameWindowId,
 		new Vector2(0, 0),
 		windowSize, windowStyle, _zIndex
 	);

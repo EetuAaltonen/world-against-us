@@ -11,8 +11,8 @@ interactionFunction = function()
 	if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 	{
 		global.GameWindowHandlerRef.OpenWindowGroup([
-			CreateWindowPlayerBackpack(-1),
-			CreateWindowGardenBed(-1, 
+			CreateWindowPlayerBackpack(GAME_WINDOW.PlayerBackpack, -1),
+			CreateWindowGardenBed(GAME_WINDOW.GardenBed, -1, 
 				structure.metadata.tools_inventory, structure.metadata.fertilizer_inventory,
 				structure.metadata.water_inventory, structure.metadata.seed_inventory,
 				structure.metadata.output_inventory

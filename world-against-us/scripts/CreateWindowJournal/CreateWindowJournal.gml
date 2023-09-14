@@ -1,9 +1,9 @@
-function CreateWindowJournal(_zIndex)
+function CreateWindowJournal(_gameWindowId, _zIndex)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH - global.ObjHud.hudHeight);
 	var windowStyle = new GameWindowStyle(c_black, 0.9);
 	var journalWindow = new GameWindow(
-		GAME_WINDOW.JournalEntries,
+		_gameWindowId,
 		new Vector2(0, 0),
 		windowSize, windowStyle, _zIndex
 	);

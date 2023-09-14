@@ -1,9 +1,9 @@
-function CreateAndOpenWindowConfirm(_title, _description, _callerWindowElement, _confirmCallbackFunction)
+function CreateAndOpenWindowConfirm(_gameWindowId, _title, _description, _callerWindowElement, _confirmCallbackFunction)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH);
 	var windowStyle = new GameWindowStyle(c_black, 0.9);
 	var confrimWindow = new GameWindow(
-		GAME_WINDOW.Confirm,
+		_gameWindowId,
 		new Vector2(0, 0),
 		windowSize, windowStyle, _callerWindowElement.parentWindow.zIndex - 1
 	);

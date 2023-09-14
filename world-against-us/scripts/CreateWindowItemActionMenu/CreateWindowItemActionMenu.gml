@@ -1,9 +1,9 @@
-function CreateWindowItemActionMenu(_zIndex, _targetItem)
+function CreateWindowItemActionMenu(_gameWindowId, _zIndex, _targetItem)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH);
 	var windowStyle = new GameWindowStyle(c_black, 0);
 	var actionMenuWindow = new GameWindow(
-		GAME_WINDOW.ItemActionMenu,
+		_gameWindowId,
 		new Vector2(0, 0),
 		windowSize, windowStyle, _zIndex
 	);
