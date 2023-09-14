@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Loot Table",
-    "path": "folders/Scripts/Game/Data/Loot Table.yy",
+    "name": "LootTable",
+    "path": "folders/Scripts/Game/Data/LootTable.yy",
   },
 }

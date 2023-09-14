@@ -1,3 +1,5 @@
+/// @description Custom RoomStartEvent
+
 // RESET CAMERA PROPERTIES
 zoom = baseZoom;
 viewSize = viewBaseSize.Clone();
