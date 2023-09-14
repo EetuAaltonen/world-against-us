@@ -20,7 +20,7 @@ function CreateWindowMap(_zIndex)
 		c_black
 	);
 
-	var mapSize = new Size(windowSize.w - 100, windowSize.h - 140 - infoPanelSize.h);
+	var mapSize = new Size(windowSize.w - 100, windowSize.h - global.ObjHud.hudHeight - infoPanelSize.h);
 	var mapElement = new WindowMap(
 		"MapElement",
 		new Vector2(windowSize.w * 0.5 - (mapSize.w * 0.5), infoPanelSize.h),

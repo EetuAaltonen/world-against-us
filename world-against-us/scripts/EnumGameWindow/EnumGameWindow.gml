@@ -22,6 +22,7 @@ enum GAME_WINDOW
 	ItemActionMenu,
 	// MAP
 	Map,
+	MapExamineObject,
 	// LOOT CONTAINER
 	LootContainer,
 	// WORLD
