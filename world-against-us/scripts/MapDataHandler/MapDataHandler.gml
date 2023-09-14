@@ -4,7 +4,7 @@ function MapDataHandler() constructor
 	dynamic_map_data = new MapData();
 	
 	is_dynamic_data_updating = false;
-	map_update_timer = new Timer(TimerFromSeconds(5));
+	map_update_timer = new Timer(TimerFromMilliseconds(300));
 	
 	static GetMapDataFileName = function(roomName)
 	{
@@ -80,7 +80,7 @@ function MapDataHandler() constructor
 						if (instance_exists(instance))
 						{
 							var objectName = object_get_name(instance.object_index);
-							var mapIconStyle = GetMapIconStyleByObjectName(objectName);
+							var mapIconStyle = GetDataByObjectNameOrRelationFromMap(objectName, global.MapIconStyleData);
 							var mapIcon = new MapIcon(
 								objectName,
 								// TOP-LEFT CORNER TO DRAW RECTANGLE
