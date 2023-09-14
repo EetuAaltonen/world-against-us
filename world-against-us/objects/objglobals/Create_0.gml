@@ -19,6 +19,9 @@ randomise();
 #macro EMPTY_STRING ""
 #macro STRING_LINE_BREAK "\n"
 
+// NUMERIC
+#macro FIXED_POINT_PRECISION 10
+
 // STRUCT
 #macro EMPTY_STRUCT {}
 
