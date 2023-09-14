@@ -21,6 +21,16 @@
       "is_dynamic": true
     },
     {
+      "object_name": "objDrone",
+      "color": {
+        "red": 16,
+        "green": 200,
+        "blue": 230
+      },
+      "constant_alpha": true,
+      "is_dynamic": true
+    },
+    {
       "object_name": "objStructureParent",
       "color": {
         "red": 40,

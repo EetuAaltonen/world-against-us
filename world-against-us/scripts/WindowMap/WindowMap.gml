@@ -15,44 +15,83 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 	is_following = true;
 	vision_radius = 0;
 	
+	highlighted_icon = undefined;
+	highlighted_position = undefined;
+	highlighted_size = undefined;
+	highlighted_examine_data = undefined;
+	
 	UpdateFollowTarget();
 	
 	static OnUpdate = function()
 	{
-		if (mouse_check_button_pressed(mb_left))
+		if (parentWindow.isFocused)
 		{
-			var mouseGUIPosition = MouseGUIPosition();
-			prevMousePos = mouseGUIPosition;
-			if (is_following)
+			if (keyboard_check(vk_alt))
 			{
-				if (instance_exists(follow_target))
+				if (mouse_check_button_pressed(mb_left))
 				{
-					// RECENTER MAP
-					ResetPositionOffset();
+					if (!is_undefined(highlighted_icon))
+					{
+						if (!is_undefined(highlighted_examine_data))
+						{
+							var currentGUIState = global.GUIStateHandlerRef.GetGUIState();
+							
+							if (currentGUIState.action == GUI_ACTION.ExamineObject)
+							{
+								global.GUIStateHandlerRef.CloseCurrentGUIState();
+							}
+							
+							var guiState = new GUIState(
+								currentGUIState.index, currentGUIState.view, GUI_ACTION.ExamineObject,
+								[GAME_WINDOW.MapExamineObject]
+							);
+							if (global.GUIStateHandlerRef.RequestGUIState(guiState))
+							{
+								global.GameWindowHandlerRef.OpenWindowGroup([
+									CreateWindowMapExamineObject(parentWindow.zIndex - 1, highlighted_examine_data)
+								]);
+							}
+						}
+					}
 				}
-			}
-			is_following = false;
-		} else if (mouse_check_button(mb_left))
-		{
-			var mouseGUIPosition = MouseGUIPosition();
-			positionOffset.X += (mouseGUIPosition.X - prevMousePos.X) * min(3, max(1.5, (mapZoomBase / mapZoom)));
-			positionOffset.Y += (mouseGUIPosition.Y - prevMousePos.Y) * min(3, max(1.5, (mapZoomBase / mapZoom)));
+			} else if (mouse_check_button_pressed(mb_left))
+			{
+				var mouseGUIPosition = MouseGUIPosition();
+				prevMousePos = mouseGUIPosition;
+				if (is_following)
+				{
+					if (instance_exists(follow_target))
+					{
+						// RECENTER MAP
+						ResetPositionOffset();
+					}
+				}
+				is_following = false;
+			} else if (mouse_check_button(mb_left))
+			{
+				if (!is_undefined(prevMousePos))
+				{
+					var mouseGUIPosition = MouseGUIPosition();
+					positionOffset.X += (mouseGUIPosition.X - prevMousePos.X) * min(3, max(1.5, (mapZoomBase / mapZoom)));
+					positionOffset.Y += (mouseGUIPosition.Y - prevMousePos.Y) * min(3, max(1.5, (mapZoomBase / mapZoom)));
 			
-			prevMousePos = mouseGUIPosition;
-		} else if (mouse_check_button_released(mb_right))
-		{
-			ResetPositionOffset();
-			mapZoom = mapZoomBase;
-			UpdateFollowTarget();
-		} else {
-			if (mouse_wheel_up())
+					prevMousePos = mouseGUIPosition;
+				}
+			} else if (mouse_check_button_released(mb_right))
 			{
-				mapZoom += mapZoomStep;
-			} else if (mouse_wheel_down())
-			{
-				mapZoom -= mapZoomStep;
+				ResetPositionOffset();
+				mapZoom = mapZoomBase;
+				UpdateFollowTarget();
+			} else {
+				if (mouse_wheel_up())
+				{
+					mapZoom += mapZoomStep;
+				} else if (mouse_wheel_down())
+				{
+					mapZoom -= mapZoomStep;
+				}
+				mapZoom = min(mapMaxZoom, max(mapZoomStep, mapZoom));
 			}
-			mapZoom = min(mapMaxZoom, max(mapZoomStep, mapZoom));
 		}
 
 		mapScale = floor(((size.w * mapZoom) / room_width) * 1000) / 1000;
@@ -118,6 +157,12 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 		// TODO: Fix world map background
 		/*var backgroundSprite = sprMapPrologueBg;*/
 		
+		var mousePosition = MouseGUIPosition();
+		highlighted_icon = undefined;
+		highlighted_position = undefined;
+		highlighted_size = undefined;
+		highlighted_examine_data = undefined;
+		
 		var backgroundScale = new Vector2(
 			sizeZoomed.w,
 			sizeZoomed.h
@@ -147,7 +192,7 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 				} else if (is_undefined(dynamicMapIcon))
 				{
 					mapIconToDraw = staticMapIcon;
-					i++;	
+					i++;
 				} else {
 					if (staticMapIcon.position.Y == dynamicMapIcon.position.Y)
 					{
@@ -178,6 +223,25 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 							calculatedPosition.Y + (mapIconToDraw.position.Y * iconScale)
 						);
 						var iconSize = new Size(mapIconToDraw.size.w * iconScale, mapIconToDraw.size.h * iconScale);
+						
+						// CHECK HIGHLIGHTED
+						if (point_in_rectangle(mousePosition.X, mousePosition.Y, positionOnGUI.X, positionOnGUI.Y, positionOnGUI.X + iconSize.w, positionOnGUI.Y + iconSize.h))
+						{
+							if (is_undefined(highlighted_icon))
+							{
+								highlighted_icon = mapIconToDraw;
+								highlighted_position = positionOnGUI;
+								highlighted_size = iconSize;
+							} else {
+								if (mapIconToDraw.origin.Y <= highlighted_icon.origin.Y)
+								{
+									highlighted_icon = mapIconToDraw;
+									highlighted_position = positionOnGUI;
+									highlighted_size = iconSize;
+								}
+							}
+						}
+						
 						draw_sprite_ext(
 							sprGUIBg, 0,
 							positionOnGUI.X,
@@ -215,24 +279,50 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 				}
 			}
 			
-			var positionOnGUI = new Vector2(
-				calculatedPosition.X + (follow_target.x * iconScale),
-				calculatedPosition.Y + (follow_target.y * iconScale)
-			);
+			if (!is_undefined(highlighted_icon))
+			{
+				var objectExamineData = GetDataByObjectNameOrRelationFromMap(highlighted_icon.object_name, global.ObjectExamineData);
+				if (!is_undefined(objectExamineData))
+				{
+					highlighted_examine_data = objectExamineData;
+					
+					draw_set_font(font_small);
+					draw_set_color(c_black);
+					draw_set_valign(fa_middle);
+					draw_set_halign(fa_center);
+					
+					draw_text(
+						highlighted_position.X + (highlighted_size.w * 0.5),
+						highlighted_position.Y + highlighted_size.h + 10,
+						objectExamineData.display_name
+					);
+					
+					// RESET DRAW PROPERTIES
+					ResetDrawProperties();
+				}
+			}
+			
+			if (follow_target != noone)
+			{
+				var positionOnGUI = new Vector2(
+					calculatedPosition.X + (follow_target.x * iconScale),
+					calculatedPosition.Y + (follow_target.y * iconScale)
+				);
 		
-			draw_sprite_ext(
-				follow_target.sprite_index, 0,
-				positionOnGUI.X,
-				positionOnGUI.Y,
-				iconScale, iconScale, 1, c_white, 1
-			);
+				draw_sprite_ext(
+					follow_target.sprite_index, 0,
+					positionOnGUI.X,
+					positionOnGUI.Y,
+					iconScale, iconScale, 1, c_white, 1
+				);
 		
-			draw_circle_color(
-				positionOnGUI.X,
-				positionOnGUI.Y,
-				vision_radius * iconScale,
-				c_red, c_red, true
-			);
+				draw_circle_color(
+					positionOnGUI.X,
+					positionOnGUI.Y,
+					vision_radius * iconScale,
+					c_red, c_red, true
+				);
+			}
 		}
 	}
 }
