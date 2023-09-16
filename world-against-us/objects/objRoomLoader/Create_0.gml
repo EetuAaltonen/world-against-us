@@ -6,7 +6,7 @@ show_debug_message(string("------------ Game Launching {0} ------------", system
 
 controllers = [
 	// LAUNCH ROOM
-	new GameController(objDisplay, [], []),
+	new GameController(objDisplay, [], [], LAYER_CONTROLLERS_FRONT),
 	new GameController(objGameWindow, [], []),
 	
 	// GLOBAL VARIABLES

@@ -1,16 +1,16 @@
-function ParseJSONStructArrayToMap(_structArray, _mapKeyIndicator, _elementParseFunction)
+function ParseJSONStructToMap(_jsonStruct, _mapKeyIndicator, _elementParseFunction)
 {
 	var dataMap = ds_map_create();
-	if (!is_undefined(_structArray))
+	try
 	{
-		try
+		if (is_array(_jsonStruct))
 		{
 			if (script_exists(_elementParseFunction))
 			{
-				var arrayLength = array_length(_structArray);
+				var arrayLength = array_length(_jsonStruct);
 				for (var i = 0; i < arrayLength; i++)
 				{
-					var parsedData = script_execute(_elementParseFunction, _structArray[i]);
+					var parsedData = script_execute(_elementParseFunction, _jsonStruct[i]);
 					if (!is_undefined(parsedData[$ _mapKeyIndicator]))
 					{
 						ds_map_add(dataMap, parsedData[$ _mapKeyIndicator], parsedData);
@@ -19,11 +19,11 @@ function ParseJSONStructArrayToMap(_structArray, _mapKeyIndicator, _elementParse
 					}
 				}
 			}
-		} catch (error)
-		{
-			show_debug_message(error);
-			show_message(error);
 		}
+	} catch (error)
+	{
+		show_debug_message(error);
+		show_message(error);
 	}
 	return dataMap;
 }

@@ -1,11 +1,11 @@
 // ITEM DATABASE
 itemDatabase = new DatabaseItem();
 var jsonItemStruct = ReadJSONFile("item_data.json") ?? EMPTY_STRUCT;
-itemDatabase.itemData = ParseJSONStructArrayToMap(jsonItemStruct[$ "item_data"] ?? undefined, "name", ParseJSONStructToDatabaseItem);
+itemDatabase.itemData = ParseJSONStructToMap(jsonItemStruct[$ "item_data"] ?? undefined, "name", ParseJSONStructToDatabaseItem);
 
 // QUEST DATA
 var jsonQuestStruct = ReadJSONFile("quest_data.json") ?? EMPTY_STRUCT;
-questData = ParseJSONStructArrayToMap(jsonQuestStruct[$ "quest_data"] ?? undefined, "quest_id", ParseJSONStructToDatabaseQuest);
+questData = ParseJSONStructToMap(jsonQuestStruct[$ "quest_data"] ?? undefined, "quest_id", ParseJSONStructToDatabaseQuest);
 
 // DIALOGUE DATA
 dialogueData = ds_map_create();
@@ -187,8 +187,8 @@ try {
 
 // OBJECT EXAMINE DATA
 var jsonObjectExamineStruct = ReadJSONFile("object_examine_data.json") ?? EMPTY_STRUCT;
-objectExamineData = ParseJSONStructArrayToMap(jsonObjectExamineStruct[$ "object_examine_data"] ?? undefined, "object_name", ParseJSONStructToDatabaseObjectExamine);
+objectExamineData = ParseJSONStructToMap(jsonObjectExamineStruct[$ "object_examine_data"] ?? undefined, "object_name", ParseJSONStructToDatabaseObjectExamine);
 
 // MAP ICON STYLE DATA
 var jsonMapIconStyleStruct = ReadJSONFile("/map_data/map_icon_style_data.json") ?? EMPTY_STRUCT;
-mapIconStyleData = ParseJSONStructArrayToMap(jsonMapIconStyleStruct[$ "map_icon_style_data"] ?? undefined, "object_name", ParseJSONStructToDatabaseMapIconStyleData);
+mapIconStyleData = ParseJSONStructToMap(jsonMapIconStyleStruct[$ "map_icon_style_data"] ?? undefined, "object_name", ParseJSONStructToDatabaseMapIconStyleData);
