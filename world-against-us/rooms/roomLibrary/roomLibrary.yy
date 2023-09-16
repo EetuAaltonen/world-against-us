@@ -84,6 +84,7 @@
     {"name":"inst_75CD8F05","path":"rooms/roomLibrary/roomLibrary.yy",},
     {"name":"inst_63BFCF1B","path":"rooms/roomLibrary/roomLibrary.yy",},
     {"name":"inst_18E1DC64","path":"rooms/roomLibrary/roomLibrary.yy",},
+    {"name":"inst_56E795B8","path":"rooms/roomLibrary/roomLibrary.yy",},
   ],
   "isDnd": false,
   "layers": [
@@ -118,6 +119,7 @@
       ],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Characters","depth":500,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_30CA4A82_1","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objSpawner","path":"objects/objSpawner/objSpawner.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":704.0,"y":2368.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_56E795B8","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objDrone","path":"objects/objDrone/objDrone.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":352.0,"y":544.0,},
       ],"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Containers","depth":600,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_3DE7EF5","colour":4294967295,"frozen":false,"hasCreationCode":true,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objBookBox","path":"objects/objBookBox/objBookBox.yy",},"properties":[],"rotation":0.0,"scaleX":0.8,"scaleY":0.8,"x":128.0,"y":512.0,},
