@@ -1,18 +1,20 @@
 function ParseJSONStructToQuestStepProgress(_jsonStruct)
 {
-	var questStepProgress = undefined;
+	var parsedQuestStepProgress = undefined;
 	try
 	{
-		if (variable_struct_names_count(_jsonStruct) <= 0) return questStepProgress;
+		if (is_undefined(_jsonStruct)) return parsedQuestStepProgress;
+		var questStepProgressStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
+		if (variable_struct_names_count(questStepProgressStruct) <= 0) return parsedQuestStepProgress;
 		
-		questStepProgress = new QuestStepProgress(
-			_jsonStruct[$ "quest_step_id"],
-			bool(_jsonStruct[$ "is_completed"] ?? false)
+		parsedQuestStepProgress = new QuestStepProgress(
+			questStepProgressStruct[$ "quest_step_id"] ?? undefined,
+			bool(questStepProgressStruct[$ "is_completed"] ?? false)
 		);
 	} catch (error)
 	{
 		show_debug_message(error);
 		show_message(error);
 	}
-	return questStepProgress;
+	return parsedQuestStepProgress;
 }

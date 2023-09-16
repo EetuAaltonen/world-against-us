@@ -1,13 +1,13 @@
 function ParseJSONStructToMetadataItem(_jsonStruct, _itemCategory, _itemType)
 {
-	var parsedMetadata = undefined;
-	if (!is_undefined(_jsonStruct) && !is_undefined(_itemCategory))
+	var parsedMetadata = undefined;	
+	try
 	{
 		if (is_undefined(_jsonStruct)) return parsedMetadata;
 		var metadataStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 		if (variable_struct_names_count(metadataStruct) <= 0) return parsedMetadata;
 		
-		try
+		if (!is_undefined(_itemCategory))
 		{
 			switch (_itemCategory)
 			{
@@ -197,10 +197,10 @@ function ParseJSONStructToMetadataItem(_jsonStruct, _itemCategory, _itemType)
 				show_message("ParseMetadataItem : Metadata parse error");
 				throw (string(metadataStruct));
 			}
-		} catch (error) {
-			show_debug_message(error);
-			show_message(error);
 		}
+	} catch (error) {
+		show_debug_message(error);
+		show_message(error);
 	}
 	return parsedMetadata;
 }

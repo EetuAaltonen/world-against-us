@@ -1,21 +1,20 @@
 function ParseJSONStructToDatabaseBlueprintMateria(_jsonStruct)
 {
-	var blueprintMaterial = undefined;
-	if (!is_undefined(_jsonStruct))
+	var parsedBlueprintMaterial = undefined;
+	try
 	{
-		try
-		{
-			if (variable_struct_names_count(_jsonStruct) <= 0) return blueprintMaterial;
+		if (is_undefined(_jsonStruct)) return parsedBlueprintMaterial;
+		var blueprintMaterialStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
+		if (variable_struct_names_count(blueprintMaterialStruct) <= 0) return parsedBlueprintMaterial;
 			
-			blueprintMaterial = new BlueprintMaterial(
-				_jsonStruct[$ "name"],
-				_jsonStruct[$ "quantity"]
-			);
-		} catch (error)
-		{
-			show_debug_message(error);
-			show_message(error);
-		}
+		parsedBlueprintMaterial = new BlueprintMaterial(
+			blueprintMaterialStruct[$ "name"] ?? undefined,
+			blueprintMaterialStruct[$ "quantity"] ?? 1
+		);
+	} catch (error)
+	{
+		show_debug_message(error);
+		show_message(error);
 	}
-	return blueprintMaterial;
+	return parsedBlueprintMaterial;
 }

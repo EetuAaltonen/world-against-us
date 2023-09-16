@@ -1,28 +1,27 @@
 function ParseJSONStructToDatabaseQuestStep(_jsonStruct)
 {
-	var questStep = undefined;
-	if (!is_undefined(_jsonStruct))
+	var parsedQuestStep = undefined;
+	try
 	{
-		try
-		{
-			if (variable_struct_names_count(_jsonStruct) <= 0) return questStep;
+		if (is_undefined(_jsonStruct)) return parsedQuestStep;
+		var questStepStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
+		if (variable_struct_names_count(questStepStruct) <= 0) return parsedQuestStep;
 			
-			var icon = GetSpriteByName(_jsonStruct[$ "icon"]);
-			var completionCheckFunction =  GetScriptByName(_jsonStruct[$ "completion_check_function_name"]);
+		var icon = GetSpriteByName(questStepStruct[$ "icon"] ?? undefined);
+		var completionCheckFunction = GetScriptByName(questStepStruct[$ "completion_check_function_name"] ?? undefined);
 			
-			questStep = new QuestStep(
-				_jsonStruct[$ "quest_step_id"],
-				_jsonStruct[$ "name"],
-				_jsonStruct[$ "description"],
-				icon,
-				_jsonStruct[$ "type"],
-				completionCheckFunction
-			);
-		} catch (error)
-		{
-			show_debug_message(error);
-			show_message(error);
-		}
+		parsedQuestStep = new QuestStep(
+			questStepStruct[$ "quest_step_id"] ?? undefined,
+			questStepStruct[$ "name"] ?? EMPTY_STRING,
+			questStepStruct[$ "description"] ?? EMPTY_STRING,
+			icon,
+			questStepStruct[$ "type"] ?? undefined,
+			completionCheckFunction
+		);
+	} catch (error)
+	{
+		show_debug_message(error);
+		show_message(error);
 	}
-	return questStep;
+	return parsedQuestStep;
 }

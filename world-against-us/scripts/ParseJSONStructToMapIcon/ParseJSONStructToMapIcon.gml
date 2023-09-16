@@ -12,7 +12,7 @@ function ParseJSONStructToMapIcon(_jsonStruct)
 		{
 			var parsedPosition = ParseJSONStructToVector2(mapIconStruct[$ "position"] ?? undefined);
 			var parsedOrigin = ParseJSONStructToVector2(mapIconStruct[$ "origin"] ?? undefined);
-			var parsedSize = ParseJSONStructToSize(mapIconStruct[$ "size"] ?? undefined);
+			var parsedSize = ParseJSONStructToSize(mapIconStruct[$ "size"] ?? undefined, true);
 			var mapIconStyle = GetDataByObjectNameOrRelationFromMap(parsedObjectName, global.MapIconStyleData);
 		
 			parsedMapIcon = new MapIcon(

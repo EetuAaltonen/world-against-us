@@ -1,25 +1,24 @@
 function ParseJSONStructToDatabaseLootTablePool(_jsonStruct)
 {
-	var lootTablePool = undefined;
-	if (!is_undefined(_jsonStruct))
+	var parsedLootTablePool = undefined;
+	try
 	{
-		try
-		{
-			if (variable_struct_names_count(_jsonStruct) <= 0) return lootTablePool;
+		if (is_undefined(_jsonStruct)) return parsedLootTablePool;
+		var lootTablePoolStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
+		if (variable_struct_names_count(lootTablePoolStruct) <= 0) return parsedLootTablePool;
 			
-			var poolRolls = ParseJSONStructToDatabaseLootTablePoolRoll(_jsonStruct[$ "rolls"] ?? undefined);
-			var poolEntries = ParseJSONStructToArray(_jsonStruct[$ "entries"] ?? undefined, ParseJSONStructToDatabaseLootTablePoolEntry);
+		var poolRolls = ParseJSONStructToDatabaseLootTablePoolRoll(lootTablePoolStruct[$ "rolls"] ?? undefined);
+		var poolEntries = ParseJSONStructToArray(lootTablePoolStruct[$ "entries"] ?? undefined, ParseJSONStructToDatabaseLootTablePoolEntry);
 			
-			lootTablePool = new LootTablePool(
-				_jsonStruct[$ "roll_chance"],
-				poolRolls,
-				poolEntries
-			);
-		} catch (error)
-		{
-			show_debug_message(error);
-			show_message(error);
-		}
+		parsedLootTablePool = new LootTablePool(
+			lootTablePoolStruct[$ "roll_chance"] ?? undefined,
+			poolRolls,
+			poolEntries
+		);
+	} catch (error)
+	{
+		show_debug_message(error);
+		show_message(error);
 	}
-	return lootTablePool;
+	return parsedLootTablePool;
 }

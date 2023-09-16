@@ -1,21 +1,20 @@
 function ParseJSONStructToDatabaseLootTablePoolRoll(_jsonStruct)
 {
-	var lootTablePoolRoll = undefined;
-	if (!is_undefined(_jsonStruct))
+	var parsedLootTablePoolRoll = undefined;
+	try
 	{
-		try
-		{
-			if (variable_struct_names_count(_jsonStruct) <= 0) return lootTablePoolRoll;
+		if (is_undefined(_jsonStruct)) return parsedLootTablePoolRoll;
+		var lootTablePoolRollStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
+		if (variable_struct_names_count(lootTablePoolRollStruct) <= 0) return parsedLootTablePoolRoll;
 			
-			lootTablePoolRoll = new LootTablePoolRoll(
-				_jsonStruct[$ "min"],
-				_jsonStruct[$ "max"]
-			);
-		} catch (error)
-		{
-			show_debug_message(error);
-			show_message(error);
-		}
+		parsedLootTablePoolRoll = new LootTablePoolRoll(
+			lootTablePoolRollStruct[$ "min"] ?? 0,
+			lootTablePoolRollStruct[$ "max"] ?? 0
+		);
+	} catch (error)
+	{
+		show_debug_message(error);
+		show_message(error);
 	}
-	return lootTablePoolRoll;
+	return parsedLootTablePoolRoll;
 }

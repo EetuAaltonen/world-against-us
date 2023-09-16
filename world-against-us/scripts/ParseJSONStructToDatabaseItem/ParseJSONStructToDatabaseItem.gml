@@ -1,44 +1,39 @@
 function ParseJSONStructToDatabaseItem(_jsonStruct)
 {
-	var item = undefined;
-	if (!is_undefined(_jsonStruct))
+	var parsedItem = undefined;
+	try
 	{
-		try
-		{
-			if (variable_struct_names_count(_jsonStruct) <= 0) return item;
+		if (is_undefined(_jsonStruct)) return parsedItem;
+		var itemStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
+		if (variable_struct_names_count(itemStruct) <= 0) return parsedItem;
 	
-			var icon = GetSpriteByName(_jsonStruct[$ "icon"]);
-			var size = new Size(
-				_jsonStruct[$ "size"].w,
-				_jsonStruct[$ "size"].h
-			);
-			var quantity = 1;
-			var itemCategory = _jsonStruct[$ "category"];
-			var itemType = _jsonStruct[$ "type"];
-			var metadata = ParseJSONStructToMetadataItem(_jsonStruct[$ "metadata"], itemCategory, itemType);
-	
-			item = new Item(
-				_jsonStruct[$ "name"],
-				_jsonStruct[$ "short_name"],
-				icon,
-				size,
-				itemCategory,
-				itemType,
-				_jsonStruct[$ "weight"],
-				_jsonStruct[$ "max_stack"],
-				_jsonStruct[$ "base_price"],
-				_jsonStruct[$ "description"],
-				quantity,
-				metadata,
-				false,		// IS ROTATED
-				true,		// IS KNOWN
-				undefined	// GRID INDEX
-			);
-		} catch (error)
-		{
-			show_debug_message(error);
-			show_message(error);
-		}
+		var icon = GetSpriteByName(itemStruct[$ "icon"] ?? undefined);
+		var size = ParseJSONStructToSize(itemStruct[$ "size"] ?? undefined, false);
+		var itemCategory = itemStruct[$ "category"] ?? undefined;
+		var itemType = itemStruct[$ "type"] ?? undefined;
+		var metadata = ParseJSONStructToMetadataItem(itemStruct[$ "metadata"] ?? undefined, itemCategory, itemType);
+		
+		parsedItem = new Item(
+			itemStruct[$ "name"] ?? undefined,
+			itemStruct[$ "short_name"] ?? EMPTY_STRING,
+			icon,
+			size,
+			itemCategory,
+			itemType,
+			itemStruct[$ "weight"] ?? 0,
+			itemStruct[$ "max_stack"] ?? 1,
+			itemStruct[$ "base_price"] ?? 0,
+			itemStruct[$ "description"] ?? EMPTY_STRING,
+			1,			// DEFAULT QUANTITY
+			metadata,
+			false,		// DEFAULT IS ROTATED
+			true,		// DEFAULT IS KNOWN
+			undefined	// DEFAULT GRID INDEX
+		);
+	} catch (error)
+	{
+		show_debug_message(error);
+		show_message(error);
 	}
-	return item;
+	return parsedItem;
 }

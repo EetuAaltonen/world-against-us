@@ -1,30 +1,29 @@
 function ParseJSONStructToDatabaseQuest(_jsonStruct)
 {
-	var quest = undefined;
-	if (!is_undefined(_jsonStruct))
+	var parsedQuest = undefined;
+	try
 	{
-		try
-		{
-			if (variable_struct_names_count(_jsonStruct) <= 0) return quest;
+		if (is_undefined(_jsonStruct)) return parsedQuest;
+		var questStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
+		if (variable_struct_names_count(questStruct) <= 0) return parsedQuest;
 	
-			var icon = GetSpriteByName(_jsonStruct[$ "icon"] ?? undefined);
-			var questSteps = ParseJSONStructArrayToMap(_jsonStruct[$ "steps"] ?? undefined, "quest_step_id", ParseJSONStructToDatabaseQuestStep);
-			var rewards = ParseJSONStructToArray(_jsonStruct[$ "rewards"] ?? undefined, ParseJSONStructToDatabaseQuestReward);
+		var icon = GetSpriteByName(questStruct[$ "icon"] ?? undefined);
+		var questSteps = ParseJSONStructToMap(questStruct[$ "steps"] ?? undefined, "quest_step_id", ParseJSONStructToDatabaseQuestStep);
+		var rewards = ParseJSONStructToArray(questStruct[$ "rewards"] ?? undefined, ParseJSONStructToDatabaseQuestReward);
 	
-			quest = new Quest(
-				_jsonStruct[$ "quest_id"],
-				_jsonStruct[$ "name"],
-				_jsonStruct[$ "description"],
-				icon,
-				_jsonStruct[$ "type"],
-				questSteps,
-				rewards
-			);
-		} catch (error)
-		{
-			show_debug_message(error);
-			show_message(error);
-		}
+		parsedQuest = new Quest(
+			questStruct[$ "quest_id"] ?? undefined,
+			questStruct[$ "name"] ?? undefined,
+			questStruct[$ "description"] ?? EMPTY_STRING,
+			icon,
+			questStruct[$ "type"] ?? undefined,
+			questSteps,
+			rewards
+		);
+	} catch (error)
+	{
+		show_debug_message(error);
+		show_message(error);
 	}
-	return quest;
+	return parsedQuest;
 }
