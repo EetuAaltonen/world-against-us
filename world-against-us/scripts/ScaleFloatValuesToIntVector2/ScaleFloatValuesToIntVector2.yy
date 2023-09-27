@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Network",
-    "path": "folders/Scripts/Game/Network.yy",
+    "name": "FixedPoint",
+    "path": "folders/Scripts/Game/Data/FixedPoint.yy",
   },
 }

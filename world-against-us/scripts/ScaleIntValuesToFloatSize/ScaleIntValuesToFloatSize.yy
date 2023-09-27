@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "JSON",
-    "path": "folders/Scripts/Game/Data/JSON.yy",
+    "name": "FixedPoint",
+    "path": "folders/Scripts/Game/Data/FixedPoint.yy",
   },
 }
