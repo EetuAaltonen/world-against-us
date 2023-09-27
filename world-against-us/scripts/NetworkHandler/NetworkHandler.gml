@@ -164,17 +164,13 @@ function NetworkHandler() constructor
 							network_status = NETWORK_STATUS.CONNECTED;
 							
 							// OPEN SAVE SELECTION
-							var guiState = new GUIState(
-								GUI_STATE.MainMenu, GUI_VIEW.Multiplayer, GUI_ACTION.SaveSelection,
-								[GAME_WINDOW.MainMenuSingleplayer], GUI_CHAIN_RULE.Overwrite
-							);
 							var mainMenuMultiplayerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.MainMenuMultiplayer);
 							if (!is_undefined(mainMenuMultiplayerWindow))
 							{
-								if (global.GUIStateHandlerRef.RequestGUIState(guiState))
+								if (global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.SaveSelection, [GAME_WINDOW.MainMenuSaveSelection]))
 								{
 									global.GameWindowHandlerRef.OpenWindowGroup([
-										CreateWindowMainMenuSaveSelection(GAME_WINDOW.MainMenuSingleplayer, mainMenuMultiplayerWindow.zIndex - 1, OnClickMenuMultiplayerPlay)
+										CreateWindowMainMenuSaveSelection(GAME_WINDOW.MainMenuSaveSelection, mainMenuMultiplayerWindow.zIndex - 1, OnClickMenuMultiplayerPlay)
 									]);
 								}
 							}

@@ -1,37 +1,23 @@
 function OnClickMenuConnect()
 {
-	if (!is_undefined(global.ObjNetwork))
+	if (!is_undefined(global.NetworkHandlerRef))
 	{
-		if (global.GUIStateHandlerRef.RequestGUIAction(GUI_ACTION.Connect, [GAME_WINDOW.MainMenuConnect]))
+		if (global.NetworkHandlerRef.CreateSocket())
 		{
-			var addressInputElement = parentElement.GetChildElementById("MultiplayerAddressInput");
-			var address = global.ObjNetwork.defaultHost;
-			if (!is_undefined(addressInputElement))
+			var address = DEFAULT_HOST_ADDRESS;
+			var port = DEFAULT_HOST_PORT;
+			if (global.NetworkHandlerRef.ConnectSocket(address, port))
 			{
-				if (addressInputElement.input != addressInputElement.placeholder)
+				if (global.GUIStateHandlerRef.RequestGUIAction(GUI_ACTION.Connect, [GAME_WINDOW.MainMenuConnect]))
 				{
-					address = addressInputElement.input;
+					global.GameWindowHandlerRef.OpenWindowGroup([
+						CreateWindowMainMenuConnect(GAME_WINDOW.MainMenuConnect, parentWindow.zIndex - 1, address, port)
+					]);
 				}
 			}
-			var portInputElement = parentElement.GetChildElementById("MultiplayerPortInput");
-			var port = global.ObjNetwork.defaultPort;
-			if (!is_undefined(portInputElement))
-			{
-				if (portInputElement.input != portInputElement.placeholder)
-				{
-					port = portInputElement.input;
-				}
-			}
-			
-			var client = global.ObjNetwork.client;
-			client.CreateSocket();
-			client.hostAddress = address;
-			client.hostPort = port;
-			client.ConnectToHost();
-		
-			global.GameWindowHandlerRef.OpenWindowGroup([
-				CreateWindowMainMenuConnect(GAME_WINDOW.MainMenuConnect, parentWindow.zIndex - 1, address, port)
-			]);
+		} else {
+			// TODO: Generic error handling
+			show_message("Failed to create a socket!");
 		}
 	}
 }
