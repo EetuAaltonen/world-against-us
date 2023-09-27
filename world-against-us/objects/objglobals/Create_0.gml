@@ -87,6 +87,7 @@ global.GUIStateHandlerRef = undefined;
 global.ObjMouse = noone;
 global.NotificationHandlerRef = undefined;
 global.ObjNetwork = noone;
+global.NetworkHandlerRef = undefined;
 global.ObjHud = noone;
 global.WorldStateData = undefined;
 global.ObjJournal = noone;
