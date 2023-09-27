@@ -1,3 +1,9 @@
+if (async_load[? "size"] > 0)
+{
+	var networkBuffer = async_load[? "buffer"];
+	networkHandler.HandlePacket(networkBuffer);
+}
+
 /*if (async_load[? "size"] > 0)
 {
 	var networkBuffer = async_load[? "buffer"];

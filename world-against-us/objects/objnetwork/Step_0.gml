@@ -1,3 +1,5 @@
+networkHandler.Update();
+
 /*if (isLatencyTimerRunning)
 {
 	latencyTimer += delta_time * 0.001;

@@ -1,5 +1,7 @@
-/*if (!is_undefined(client.clientId))
+if (networkHandler.network_status != NETWORK_STATUS.OFFLINE)
 {
-	client.DisconnectFromHost();
-	client.DeleteSocket();
-}*/
+	if (networkHandler.client_id != UNDEFINED_UUID)
+	{
+		networkHandler.DisconnectSocket();
+	}
+}
