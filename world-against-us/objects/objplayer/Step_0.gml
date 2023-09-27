@@ -85,7 +85,8 @@ var spriteDirection = CalculateSpriteDirectionToAim(new Vector2(x, y), MouseWorl
 image_xscale = spriteDirection.image_x_scale;
 
 // SEND MOVEMENT NETWORK DATA
-if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
+// TODO: Disable networking for now
+/*if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 {
 	if (!is_undefined(global.ObjNetwork.client.clientId))
 	{
@@ -133,4 +134,4 @@ if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 			ResetPlayerInputValues();
 		}
 	}
-}
+}*/
