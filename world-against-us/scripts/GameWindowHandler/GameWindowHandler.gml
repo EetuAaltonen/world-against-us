@@ -110,11 +110,14 @@ function GameWindowHandler() constructor
 	
 	static CloseWindowGroupByIndexGroup = function(_windowIndexGroup)
 	{
+		var isWindowGroupClosed = false;
 		var windowCount = array_length(_windowIndexGroup);
 		for (var i = 0; i < windowCount; i++)
 		{ 
 			CloseWindowById(_windowIndexGroup[@ i]);
+			isWindowGroupClosed = true;
 		}
+		return isWindowGroupClosed;
 	}
 	
 	static CloseAllWindows = function()

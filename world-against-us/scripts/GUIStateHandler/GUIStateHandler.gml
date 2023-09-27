@@ -37,7 +37,7 @@ function GUIStateHandler() constructor
 				var newGUIState = currentGUIState.Clone();
 				newGUIState.view = _guiView;
 				newGUIState.windowIndexGroup = _windowIndexGroup;
-				newGUIState.chainRule = GUI_CHAIN_RULE.OverwriteAll;
+				newGUIState.chainRule = GUI_CHAIN_RULE.Overwrite;
 			
 				isViewChanged = RequestGUIState(newGUIState);
 			}
@@ -106,14 +106,20 @@ function GUIStateHandler() constructor
 	
 	static CloseCurrentGUIState = function()
 	{
+		var isGUIStateClosed = false;
 		if (array_length(state_chain) > 1)
 		{
 			var currentGUIState = array_pop(state_chain);
 			// CLOSE CURRENT WINDOW
-			global.GameWindowHandlerRef.CloseWindowGroupByIndexGroup(currentGUIState.windowIndexGroup);
+			if (global.GameWindowHandlerRef.CloseWindowGroupByIndexGroup(currentGUIState.windowIndexGroup))
+			{
+				isGUIStateClosed = true;
+			}
 		} else {
+			// TODO: Generic error handling
 			show_message("Invalid 'CloseCurrentGUIState' call. GUI state already closed!");
 		}
+		return isGUIStateClosed;
 	}
 	
 	static IsGUIStateClosed = function()

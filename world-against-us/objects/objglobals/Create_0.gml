@@ -9,6 +9,8 @@ randomise();
 
 // NETWORKING
 #macro UNDEFINED_UUID "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined"
+#macro DEFAULT_HOST_ADDRESS "127.0.0.1"
+#macro DEFAULT_HOST_PORT 54544
 
 // SAVE FILES
 #macro SAVE_FILE_SUFFIX_PLAYER_DATA "_save_player_data.json"
