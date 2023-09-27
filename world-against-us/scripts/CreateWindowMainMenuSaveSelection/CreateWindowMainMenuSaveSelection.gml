@@ -1,4 +1,4 @@
-function CreateWindowMainMenuSingleplayer(_gameWindowId, _zIndex)
+function CreateWindowMainMenuSaveSelection(_gameWindowId, _zIndex, playCallbackFunction)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH);
 	var windowStyle = new GameWindowStyle(c_black, 0.8);
@@ -77,7 +77,7 @@ function CreateWindowMainMenuSingleplayer(_gameWindowId, _zIndex)
 	var savePlayButton = new WindowButton(
 		"SavePlayButton",
 		buttonPosition, buttonSize,
-		buttonStyle.button_background_color, "Play", buttonStyle, OnClickMenuSingleplayerPlay
+		buttonStyle.button_background_color, "Play", buttonStyle, playCallbackFunction
 	);
 	
 	// DELETE BUTTON

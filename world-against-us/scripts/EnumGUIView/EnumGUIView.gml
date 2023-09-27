@@ -4,6 +4,7 @@ enum GUI_VIEW
 	Singleplayer,
 	Multiplayer,
 	Settings,
+	SaveSelection,
 	// PLAYER OVERVIEW
 	PlayerBackpack,
 	PlayerHealthStatus,
