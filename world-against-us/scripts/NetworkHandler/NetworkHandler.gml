@@ -113,6 +113,8 @@ function NetworkHandler() constructor
 					{
 						show_message("Connecting timed out :(");
 					}
+					// RESET TIMEOUT TIMER
+					timeout_timer.running_time = 0;
 				} else {
 					timeout_timer.Update();
 					
@@ -129,18 +131,75 @@ function NetworkHandler() constructor
 					}
 				}
 			} break;
+			case NETWORK_STATUS.JOINING_TO_GAME:
+			{
+				if (timeout_timer.IsTimerStopped())
+				{
+					network_status = NETWORK_STATUS.TIMED_OUT;
+					DisconnectSocket();
+					room_goto(roomMainMenu);
+				} else {
+					timeout_timer.Update();
+				}
+			} break;
+			case NETWORK_STATUS.SYNC_DATA:
+			{
+				if (timeout_timer.IsTimerStopped())
+				{
+					network_status = NETWORK_STATUS.TIMED_OUT;
+					DisconnectSocket();
+					room_goto(roomMainMenu);
+				} else {
+					timeout_timer.Update();
+				}
+			} break;
 			case NETWORK_STATUS.PINGING:
 			{
 				if (timeout_timer.IsTimerStopped())
 				{
 					// TODO: Time out pinging
 					network_status = NETWORK_STATUS.TIMED_OUT;
-					show_message("Connecting timed out :(");
+					DisconnectSocket();
+					room_goto(roomMainMenu);
 				} else {
 					timeout_timer.Update();
 				}
 			} break;
 		}
+	}
+	
+	static RequestJoinGame = function()
+	{
+		var isJoining = false;
+		if (!is_undefined(socket)) {
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_JOIN_GAME, client_id);
+			var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
+			AddPacketToQueue(networkPacket);
+			
+			network_status = NETWORK_STATUS.JOINING_TO_GAME;
+			timeout_timer.StartTimer();
+			isJoining = true;
+		}
+		return isJoining;
+	}
+	
+	static SyncPlayerData = function(_playerCharacterData)
+	{
+		var isSyncing = false;
+		if (!is_undefined(socket)) {
+			// TODO: If there is some data to be syncronized
+			//var jsonPlayerData = _playerCharacterData.ToJSONStruct();
+			//var jsonPlayerBackpackData = _playerCharacterData.backpack.ToJSONStruct();
+			
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DATA_PLAYER_SYNC, client_id);
+			var networkPacket = new NetworkPacket(networkPacketHeader, undefined/*jsonPlayerData / jsonPlayerBackpackData*/);
+			AddPacketToQueue(networkPacket);
+			
+			network_status = NETWORK_STATUS.SYNC_DATA;
+			timeout_timer.StartTimer();
+			isSyncing = true;
+		}
+		return isSyncing;
 	}
 	
 	static HandlePacket = function(_msg)
@@ -175,14 +234,48 @@ function NetworkHandler() constructor
 								}
 							}
 						}
+						// RESET TIMEOUT TIMER
+						timeout_timer.running_time = 0;
+						
+						isPacketHandled = true;
 					}
 				} break;
+				case MESSAGE_TYPE.REQUEST_JOIN_GAME:
+				{
+					if (network_status == NETWORK_STATUS.JOINING_TO_GAME)
+					{
+						var gameSaveData = global.GameSaveHandlerRef.game_save_data;
+						if (!is_undefined(gameSaveData))
+						{
+							if (gameSaveData.isSaveLoadingFirstTime)
+							{
+								if (!is_undefined(gameSaveData.player_data))
+								{
+									if (!is_undefined(gameSaveData.player_data.character))
+									{
+										SyncPlayerData(gameSaveData.player_data.character);
+									}
+								}
+							}
+						}
+						isPacketHandled = true;
+					}
+				}
+				case MESSAGE_TYPE.DATA_PLAYER_SYNC:
+				{
+					if (network_status == NETWORK_STATUS.SYNC_DATA)
+					{
+						network_status = NETWORK_STATUS.SESSION_IN_PROGRESS;
+						room_goto(roomCamp);
+						isPacketHandled = true;
+					}
+				}
 				default:
 				{
-					// NO KNOWN ACTION FOR A UNKNOWN MESSAGE TYPE
+					// AN UNKNOWN MESSAGE TYPE
+					show_debug_message(string("Received network packet with unknown message type: {0}", messageType));
 				}
 			}
-			isPacketHandled = true;
 		}
 		return isPacketHandled;
 	}

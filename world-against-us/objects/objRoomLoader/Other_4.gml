@@ -79,9 +79,16 @@ if (room == roomLaunch) {
 // GO TO THE LAST KNOWN PLAYER LOCATION
 else if (room == roomLoadResources)
 {
-	var gotoLastLocationRoom = false;
-	if (global.GameSaveHandlerRef.ReadFromFile())
+	// READ GAME SAVE DATA
+	if (!global.GameSaveHandlerRef.ReadFromFile())
 	{
+		show_debug_message("Save file doesn't exist");
+	}
+	
+	
+	if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.OFFLINE)
+	{
+		var gotoLastLocationRoom = false;
 		var gameSaveData = global.GameSaveHandlerRef.game_save_data;
 		if (!is_undefined(gameSaveData))
 		{
@@ -106,20 +113,20 @@ else if (room == roomLoadResources)
 				}
 			}
 		}
-	}
 	
-	// GOTO DEFAULT ROOM
-	if (!gotoLastLocationRoom)
-	{
-		global.NotificationHandlerRef.AddNotification(
-			new Notification(
-				sprFloppyDisk, "New game save started",
-				string("Save: '{0}'", global.GameSaveHandlerRef.game_save_data.save_name),
-				NOTIFICATION_TYPE.Popup
-			)
-		);
-		
-		room_goto(ROOM_DEFAULT);
+		// GOTO DEFAULT ROOM
+		if (!gotoLastLocationRoom)
+		{
+			global.NotificationHandlerRef.AddNotification(
+				new Notification(
+					sprFloppyDisk, "New game save started",
+					string("Save: '{0}'", global.GameSaveHandlerRef.game_save_data.save_name),
+					NOTIFICATION_TYPE.Popup
+				)
+			);
+			
+			room_goto(ROOM_DEFAULT);
+		}
 	}
 } else {
 	if (room != roomMainMenu)
