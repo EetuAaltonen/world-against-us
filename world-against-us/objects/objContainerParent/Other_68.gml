@@ -1,4 +1,5 @@
-if (async_load[? "size"] > 0)
+// TODO: Implement this logic routed through NetworkHandler
+/*if (async_load[? "size"] > 0)
 {
 	var networkBuffer = async_load[? "buffer"];
 	var packetHeader = PacketDecodeHeader(networkBuffer);

@@ -1,4 +1,4 @@
-// TODO: Disable networking for now
+// TODO: Implement this logic routed through NetworkHandler
 /*if (async_load[? "size"] > 0)
 {
 	var networkBuffer = async_load[? "buffer"];

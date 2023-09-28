@@ -12,7 +12,6 @@ function NetworkPacketParser() constructor
 			buffer_seek(_msg, buffer_seek_relative, 0);
 			
 			var parsedHeader = new NetworkPacketHeader(messageType, clientId);
-			show_message(string(parsedHeader));
 			parsedNetworkPacket = new NetworkPacket(parsedHeader, undefined);
 		} catch (error)
 		{
