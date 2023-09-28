@@ -20,9 +20,21 @@ function CreateWindowEscMenu(_gameWindowId, _zIndex)
 	
 	var escMenuButtons = ds_list_create();
 	ds_list_add(escMenuButtons,
-		{ title: "Continue", onClick: OnClickEscMenuContinue, metadata: undefined },
-		{ title: "Save game", onClick: OnClickEscMenuSave, metadata: undefined },
-		{ title: "Reset save", onClick: OnClickEscMenuReset, metadata: undefined },
+		{ title: "Continue", onClick: OnClickEscMenuContinue, metadata: undefined }
+	);
+	
+	if (room != roomLoadResources)
+	{
+		if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.OFFLINE)
+		{
+			ds_list_add(escMenuButtons,
+				{ title: "Save game", onClick: OnClickEscMenuSave, metadata: undefined },
+				{ title: "Reset save", onClick: OnClickEscMenuReset, metadata: undefined }
+			);
+		}
+	}
+	
+	ds_list_add(escMenuButtons,
 		{ title: "Main menu", onClick: OnClickEscMenuQuit, metadata: undefined }
 	);
 

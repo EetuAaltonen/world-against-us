@@ -32,15 +32,6 @@ function CreateWindowMainMenuConnect(_gameWindowId, _zIndex, _address, _port)
 		timeoutTimerTitle
 	);
 	
-	// OVERRIDE WINDOW ONCLOSE FUNCTION
-	var overrideOnClose = function()
-	{
-		// FORCE STOP CONNECTING
-		global.NetworkHandlerRef.network_status = NETWORK_STATUS.OFFLINE;
-		global.NetworkHandlerRef.timeout_timer.running_time = 0;
-	}
-	multiplayerConnectWindow.OnClose = overrideOnClose;
-	
 	multiplayerConnectWindow.AddChildElements(multiplayerConnectElements);
 	return multiplayerConnectWindow;
 }

@@ -1,10 +1,28 @@
 /// @description Custom RoomStartEvent
-// DISCONNECT FROM THE SERVERWHEN RETURNING TO MAINMENU
-/*if (room == roomMainMenu)
+// DISCONNECT FROM THE SERVER WHEN RETURNING TO MAINMENU
+if (room == roomMainMenu)
 {
-	if (!is_undefined(client.clientId))
+	if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.TIMED_OUT)
 	{
-		client.DisconnectFromHost();
-		client.DeleteSocket();
+		global.NetworkHandlerRef.network_status = NETWORK_STATUS.OFFLINE;
+		if (networkHandler.client_id != UNDEFINED_UUID)
+		{
+			networkHandler.DisconnectSocket();
+		}
+		show_message("Connection timed out :(");
+	} else if (networkHandler.network_status != NETWORK_STATUS.OFFLINE)
+	{
+		if (networkHandler.client_id != UNDEFINED_UUID)
+		{
+			networkHandler.DisconnectSocket();
+		}
 	}
-}*/
+} else {
+	if (room == roomLoadResources)
+	{
+		if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.CONNECTED)
+		{
+			global.NetworkHandlerRef.RequestJoinGame();
+		}
+	}
+}
