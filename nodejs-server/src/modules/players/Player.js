@@ -1,0 +1,13 @@
+import Vector2 from "../../math/vector2";
+
+export default class Player {
+  constructor(name) {
+    this.name = name;
+    this.position = new Vector2(0, 0);
+  }
+
+  move(x, y) {
+    this.position.x = x;
+    this.position.y = y;
+  }
+}
