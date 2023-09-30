@@ -17,6 +17,10 @@ maxSpeed = 2.5;
 weapon = instance_create_depth(x, y, depth - 1, objWeapon);
 weapon.owner = self;
 
+// NETWORKING
+// TODO: Move this under objPlayerManager
+syncTimer = new Timer(TimerFromMilliseconds(100));
+
 // COOP PLAYER
 startLocation = new Vector2(x, y);
 targetLocation = undefined;

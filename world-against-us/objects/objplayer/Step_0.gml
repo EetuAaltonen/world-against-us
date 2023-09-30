@@ -85,6 +85,23 @@ var spriteDirection = CalculateSpriteDirectionToAim(new Vector2(x, y), MouseWorl
 image_xscale = spriteDirection.image_x_scale;
 
 // SEND MOVEMENT NETWORK DATA
+if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.SESSION_IN_PROGRESS)
+{
+	if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
+	{
+		if (syncTimer.IsTimerStopped())
+		{
+			var scaledPosition = ScaleFloatValuesToIntVector2(x, y);
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DATA_PLAYER_POSITION, global.NetworkHandlerRef.client_id);
+			var networkPacket = new NetworkPacket(networkPacketHeader, scaledPosition);
+			
+			global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
+			syncTimer.StartTimer();
+		} else {
+			syncTimer.Update();	
+		}
+	}
+}
 // TODO: Disable networking for now
 /*if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 {

@@ -43,3 +43,6 @@ if (!is_undefined(gameSaveData))
 		character = global.PlayerCharacter;
 	}
 }
+
+// NETWORKING
+syncTimer.StartTimer();

@@ -11,7 +11,7 @@ function ParseJSONStructToCharacter(_jsonStruct)
 		var characterTypeStruct = characterStruct[$ "type"] ?? undefined;
 		if (!is_undefined(characterTypeStruct))
 		{
-			switch(characterTypeStruct)
+			switch (characterTypeStruct)
 			{
 				case CHARACTER_TYPE.Human:
 				{
