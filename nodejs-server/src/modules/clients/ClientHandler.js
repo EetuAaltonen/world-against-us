@@ -11,18 +11,22 @@ export default class ClientHandler {
     const client = new Client(newUuid, rinfo.address, rinfo.port);
 
     this.clients.push(client);
+    console.log("this.clients");
     console.log(this.clients);
     return newUuid;
   }
 
   disconnectClient(clientId, rinfo) {
-    let isDeleted = false;
-    const index = this.clients.findIndex((client) => client.uuid === clientId);
+    let isDisconnected = false;
+    const index = this.clients.findIndex(
+      (client) => client.uuid === clientId && client.address === rinfo.address
+    );
     if (index > -1) {
       this.clients.splice(index, 1);
-      console.log(this.clients);
-      isDeleted = true;
+      isDisconnected = true;
     }
-    return isDeleted;
+    console.log("this.clients");
+    console.log(this.clients);
+    return isDisconnected;
   }
 }

@@ -1,28 +1,13 @@
-import BITWISE from "./Bitwise.js";
-import MESSAGE_TYPE from "./MessageType.js";
+import BITWISE from "../constants/Bitwise.js";
 
-import NetworkPacket from "./NetworkPacket.js";
-
-const NULL_TERMINATION = "\0";
+const NULL_TERMINATOR = "\0";
 
 export default class NetworkPacketBuilder {
   constructor() {
     this.headerBuffer = Buffer.alloc(
-      BITWISE.ID_LENGTH + // UUID
-        BITWISE.BIT8 + // Null Termination
-        BITWISE.BIT8 // Message Type
-    );
-  }
-
-  writePacketHeader(messageType, clientId) {
-    // Response with a new Uuid and all player data
-    this.headerBuffer.writeUInt8(messageType, 0, BITWISE.BIT8);
-
-    this.headerBuffer.fill(
-      clientId + NULL_TERMINATION,
-      BITWISE.BIT8,
-      this.headerBuffer.length,
-      "utf8"
+      BITWISE.BIT8 + // Message Type
+        BITWISE.ID_LENGTH + // UUID
+        BITWISE.BIT8 // Null Termination
     );
   }
 
@@ -34,5 +19,16 @@ export default class NetworkPacketBuilder {
 
     packet = Buffer.concat([this.headerBuffer /*+payloadBuffer*/]);
     return packet;
+  }
+
+  writePacketHeader(messageType, clientId) {
+    // Response with a new Uuid and all player data
+    this.headerBuffer.writeUInt8(messageType, 0, BITWISE.BIT8);
+    this.headerBuffer.fill(
+      clientId + NULL_TERMINATOR,
+      BITWISE.BIT8,
+      this.headerBuffer.length,
+      "utf8"
+    );
   }
 }
