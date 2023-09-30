@@ -1,4 +1,4 @@
-import Vector2 from "../../math/vector2";
+import Vector2 from "../math/Vector2.js";
 
 export default class Player {
   constructor(name) {
