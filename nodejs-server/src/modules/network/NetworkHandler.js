@@ -87,7 +87,15 @@ export default class NetworkHandler {
       case MESSAGE_TYPE.DISCONNECT_FROM_HOST:
         {
           if (this.clientHandler.disconnectClient(clientId, rinfo)) {
-            this.instanceHandler.removePlayerFromInstance(clientId);
+            if (!this.instanceHandler.removePlayerFromInstance(clientId)) {
+              // TODO: Proper error handling
+              console.log(
+                `Failed to remove a client with ID: ${clientId} from any instance`
+              );
+            }
+          } else {
+            // TODO: Proper error handling
+            console.log(`Failed to disconnect a client with ID: ${clientId}`);
           }
         }
         break;

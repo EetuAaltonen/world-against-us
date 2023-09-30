@@ -1,6 +1,7 @@
 export default class Instance {
   constructor(roomIndex) {
     this.roomIndex = roomIndex;
+    this.ownerClient = undefined;
     this.localPlayers = {};
   }
 
@@ -8,6 +9,9 @@ export default class Instance {
     let isPlayerAdded = false;
     if (this.getPlayer(clientId) === undefined) {
       this.localPlayers[clientId] = player;
+      if (this.ownerClient === undefined) {
+        this.ownerClient = clientId;
+      }
       isPlayerAdded = true;
     }
     return isPlayerAdded;
@@ -17,8 +21,40 @@ export default class Instance {
     return this.localPlayers[clientId];
   }
 
+  getPlayerIdFirst() {
+    let foundPlayerId = undefined;
+    if (this.getPlayerCount > 0) {
+      foundPlayerId = Object.keys(this.localPlayers)[0];
+    }
+    return foundPlayerId;
+  }
+
+  getAllPlayerIds(ignoreClientIds = []) {
+    return Object.keys(this.localPlayers).filter(
+      (clientId) => !ignoreClientIds.includes(clientId)
+    );
+  }
+
   getPlayerCount() {
     return Object.keys(this.localPlayers).length;
+  }
+
+  resetOwner() {
+    let isOwnerReset = false;
+    if (this.getPlayerCount() > 0) {
+      const playerId = this.getPlayerIdFirst();
+      if (playerId !== undefined) {
+        this.ownerClient = playerId;
+        isOwnerReset = true;
+      } else {
+        this.ownerClient = undefined;
+        isOwnerReset = true;
+      }
+    } else {
+      this.ownerClient = undefined;
+      isOwnerReset = true;
+    }
+    return isOwnerReset;
   }
 
   removePlayer(clientId) {

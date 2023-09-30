@@ -63,12 +63,14 @@ export default class InstanceHandler {
       }
     } else {
       const createdInstanceId = this.createInstance(roomIndex);
-      if (this.getInstance(createdInstanceId).addPlayer(clientId, player)) {
+      const createdInstance = this.instances[createdInstanceId];
+      if (createdInstance.addPlayer(clientId, player)) {
+        createdInstance.setOwner(clientId);
         instanceId = createdInstanceId;
       }
     }
-    console.log("this.instances");
-    console.log(this.instances);
+    console.log("this.instances playerIds");
+    console.log(this.instances[instanceId].getAllPlayerIds());
     return instanceId;
   }
 
@@ -79,7 +81,16 @@ export default class InstanceHandler {
       if (instance !== undefined) {
         if (instance.removePlayer(clientId)) {
           isPlayerRemoved = true;
-          this.checkInstanceRelease(instance);
+          if (!this.checkInstanceRelease(instanceId)) {
+            if (instance.ownerClient == clientId) {
+              if (!instance.resetOwner()) {
+                // TODO: Proper error handling
+                console.log(
+                  `Failed to reset owner for an instance with ID: ${instanceId}`
+                );
+              }
+            }
+          }
         }
       }
     } else {
@@ -91,7 +102,16 @@ export default class InstanceHandler {
         if (instance.getPlayer(clientId) !== undefined) {
           if (instance.removePlayer(clientId)) {
             isPlayerRemoved = true;
-            this.checkInstanceRelease(instance);
+            if (!this.checkInstanceRelease(instanceId)) {
+              if (instance.ownerClient == clientId) {
+                if (!instance.resetOwner()) {
+                  // TODO: Proper error handling
+                  console.log(
+                    `Failed to reset owner for an instance with ID: ${instanceId}`
+                  );
+                }
+              }
+            }
           }
           break;
         }
@@ -102,16 +122,27 @@ export default class InstanceHandler {
     return isPlayerRemoved;
   }
 
-  checkInstanceRelease(instance) {
-    if (
-      instance.getPlayerCount() <= 0 &&
-      instance.roomIndex !== ROOM_INDEX.ROOM_CAMP
-    ) {
-      if (!this.deleteInstance(instanceId)) {
-        // TODO: Proper error handling
-        console.log("Failed to delete instance with ID: " + instanceId);
+  checkInstanceRelease(instanceId) {
+    let isInstanceReleased = false;
+    const instance = this.getInstance(instanceId);
+    if (instance !== undefined) {
+      if (
+        instance.getPlayerCount() <= 0 &&
+        instance.roomIndex !== ROOM_INDEX.ROOM_CAMP
+      ) {
+        if (this.deleteInstance(instanceId)) {
+          isInstanceReleased = true;
+        } else {
+          // TODO: Proper error handling
+          console.log("Failed to delete instance with ID: " + instanceId);
+        }
       }
     }
+    return isInstanceReleased;
+  }
+
+  resetInstanceOwner(instance) {
+    return instance.resetOwner();
   }
 
   deleteInstance(instanceId) {
