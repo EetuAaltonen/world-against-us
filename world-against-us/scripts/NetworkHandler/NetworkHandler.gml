@@ -7,6 +7,9 @@ function NetworkHandler() constructor
 	host_address = undefined;
 	host_port = undefined;
 	
+	preAllocNetworkBuffer = undefined;
+	
+	network_packet_builder = new NetworkPacketBuilder();
 	network_packet_parser = new NetworkPacketParser();
 	network_packet_queue = ds_priority_create();
 	timeout_timer = new Timer(TimerFromSeconds(8));
@@ -18,6 +21,7 @@ function NetworkHandler() constructor
 		{
 			if (!is_undefined(socket)) { DeleteSocket(); }
 			socket = network_create_socket(network_socket_udp);
+			preAllocNetworkBuffer = buffer_create(256, buffer_grow, 1);
 			isSocketCreated = true;
 		} else {
 			// TODO: Generic error handler
@@ -48,9 +52,11 @@ function NetworkHandler() constructor
 		// FORCE DISCONNECT MESSAGE
 		var packetHeader = new NetworkPacketHeader(MESSAGE_TYPE.DISCONNECT_FROM_HOST, client_id);
 		var networkPacket = new NetworkPacket(packetHeader, undefined);
-		var networkBuffer = WriteNetworkBuffer(networkPacket);
 		
-		SendPacketOverUDP(networkBuffer);
+		if (network_packet_builder.CreatePacket(preAllocNetworkBuffer, networkPacket))
+		{
+			SendPacketOverUDP();
+		}
 		DeleteSocket();
 		
 		// RESET NETWORK PROPERTIES
@@ -62,6 +68,7 @@ function NetworkHandler() constructor
 	
 	static DeleteSocket = function()
 	{
+		buffer_delete(preAllocNetworkBuffer);
 		network_destroy(socket);
 	}
 	
@@ -73,20 +80,6 @@ function NetworkHandler() constructor
 		}
 	}
 	
-	static WriteNetworkBuffer = function(_networkPacket)
-	{
-		var networkBuffer = buffer_create(32, buffer_grow, 1);
-		var messageType = _networkPacket.header.message_type;
-		var jsonString = json_stringify(_networkPacket.payload ?? {});
-		
-		buffer_seek(networkBuffer, buffer_seek_start, 0);
-		buffer_write(networkBuffer, buffer_u8, messageType);
-		buffer_write(networkBuffer, buffer_text, client_id ?? UNDEFINED_UUID);
-		buffer_write(networkBuffer, buffer_string, jsonString);
-		
-		return networkBuffer;
-	}
-	
 	static Update = function()
 	{
 		if (ds_priority_size(network_packet_queue) > 0)
@@ -94,15 +87,15 @@ function NetworkHandler() constructor
 			var networkPacket = ds_priority_find_max(network_packet_queue);
 			if (!is_undefined(networkPacket))
 			{
-				var networkBuffer = WriteNetworkBuffer(networkPacket);
-				// TODO: Calculate kbps and limit packet rate
-				show_debug_message(string("Buffer size: {0}kb", buffer_get_size(networkBuffer) * 0.001));
-				SendPacketOverUDP(networkBuffer);
+				if (network_packet_builder.CreatePacket(preAllocNetworkBuffer, networkPacket))
+				{
+					SendPacketOverUDP();
+				}
 			}
 			ds_priority_delete_max(network_packet_queue);
 		}
 		
-		switch(network_status)
+		switch (network_status)
 		{
 			case NETWORK_STATUS.CONNECTING:
 			{
@@ -209,7 +202,7 @@ function NetworkHandler() constructor
 		if (!is_undefined(networkPacket))
 		{
 			var messageType = networkPacket.header.message_type;
-			switch(messageType)
+			switch (messageType)
 			{
 				case MESSAGE_TYPE.CONNECT_TO_HOST:
 				{
@@ -280,12 +273,11 @@ function NetworkHandler() constructor
 		return isPacketHandled;
 	}
 	
-	static SendPacketOverUDP = function(_networkBuffer)
+	static SendPacketOverUDP = function()
 	{
 		if (!is_undefined(socket))
 		{
-			network_send_udp_raw(socket, host_address, host_port, _networkBuffer, buffer_tell(_networkBuffer));
-			buffer_delete(_networkBuffer);
+			network_send_udp_raw(socket, host_address, host_port, preAllocNetworkBuffer, buffer_tell(preAllocNetworkBuffer));
 		}
 	}
 }
