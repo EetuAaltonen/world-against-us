@@ -1,8 +1,10 @@
-import MESSAGE_TYPE from "./MessageType.js";
+import MESSAGE_TYPE from "../constants/MessageType.js";
 
 import ClientHandler from "../clients/ClientHandler.js";
 import NetworkPacketParser from "./NetworkPacketParser.js";
 import NetworkPacketBuilder from "./NetworkPacketBuilder.js";
+import InstanceHandler from "../instances/InstanceHandler.js";
+import Player from "../players/Player.js";
 
 const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
 
@@ -11,6 +13,7 @@ export default class NetworkHandler {
     this.packetParser = new NetworkPacketParser();
     this.packetBuilder = new NetworkPacketBuilder();
     this.clientHandler = new ClientHandler();
+    this.instanceHandler = new InstanceHandler();
   }
 
   handlePacket(msg, rinfo, socket) {
@@ -38,12 +41,16 @@ export default class NetworkHandler {
       case MESSAGE_TYPE.REQUEST_JOIN_GAME:
         {
           if (clientId !== UNDEFINED_UUID) {
-            // TODO: Assign player to existent instance or create one
+            const player = new Player(`Player_${clientId}`);
+            const instanceId = this.instanceHandler.addPlayerToDefaultInstance(
+              clientId,
+              player
+            );
 
             const networkBuffer = this.packetBuilder.createPacket(
               MESSAGE_TYPE.REQUEST_JOIN_GAME,
               clientId,
-              undefined
+              undefined /*instanceId*/
             );
             socket.send(networkBuffer, rinfo.port, rinfo.address);
 
@@ -67,9 +74,21 @@ export default class NetworkHandler {
           }
         }
         break;
+      case MESSAGE_TYPE.DATA_PLAYER_POSITION:
+        {
+          if (clientId !== UNDEFINED_UUID) {
+            if (networkPacket.payload !== undefined) {
+            }
+
+            isPacketHandled = true;
+          }
+        }
+        break;
       case MESSAGE_TYPE.DISCONNECT_FROM_HOST:
         {
-          this.clientHandler.disconnectClient(clientId, rinfo);
+          if (this.clientHandler.disconnectClient(clientId, rinfo)) {
+            this.instanceHandler.removePlayerFromInstance(clientId);
+          }
         }
         break;
     }
