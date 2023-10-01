@@ -1,5 +1,6 @@
 import BITWISE from "../constants/Bitwise.js";
 import MESSAGE_TYPE from "../constants/MessageType.js";
+
 import Vector2 from "../math/Vector2.js";
 
 import NetworkPacket from "./NetworkPacket.js";
@@ -7,6 +8,7 @@ import NetworkPacketHeader from "./NetworkPacketHeader.js";
 
 export default class NetworkPacketParser {
   constructor() {}
+
   parsePacket(msg) {
     const messageType = msg.readUInt8(0);
     const clientId = msg.toString(
@@ -37,9 +39,7 @@ export default class NetworkPacketParser {
               const xPos = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;
               const yPos = msg.readUInt32LE(offset);
-              const position = new Vector2(xPos, yPos);
-
-              // TODO: Update player position
+              return new Vector2(xPos, yPos);
             }
             break;
           default: {
