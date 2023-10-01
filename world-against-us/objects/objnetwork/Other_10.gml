@@ -20,7 +20,7 @@ if (room == roomMainMenu)
 } else {
 	if (room == roomLoadResources)
 	{
-		if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.CONNECTED)
+		if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.CONNECTED_SAVE_SELECTED)
 		{
 			global.NetworkHandlerRef.RequestJoinGame();
 		}

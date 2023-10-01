@@ -85,7 +85,6 @@ else if (room == roomLoadResources)
 		show_debug_message("Save file doesn't exist");
 	}
 	
-	
 	if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.OFFLINE)
 	{
 		var gotoLastLocationRoom = false;

@@ -2,7 +2,7 @@ function CreateWindowMainMenuSaveSelection(_gameWindowId, _zIndex, playCallbackF
 {
 	var windowSize = new Size(global.GUIW, global.GUIH);
 	var windowStyle = new GameWindowStyle(c_black, 0.8);
-	var singleplayerWindow = new GameWindow(
+	var saveSelectionWindow = new GameWindow(
 		_gameWindowId,
 		new Vector2(0, 0),
 		windowSize, windowStyle, _zIndex
@@ -96,7 +96,7 @@ function CreateWindowMainMenuSaveSelection(_gameWindowId, _zIndex, playCallbackF
 	var deletePlayButton = new WindowButton(
 		"DeletePlayButton",
 		buttonPosition,	buttonSize,
-		buttonStyle.button_background_color, "Delete", buttonStyle, OnClickMenuSingleplayerDelete
+		buttonStyle.button_background_color, "Delete", buttonStyle, OnClickMenuSaveSelectionDelete
 	);
 	
 	ds_list_add(saveFilePanelElements,
@@ -106,7 +106,18 @@ function CreateWindowMainMenuSaveSelection(_gameWindowId, _zIndex, playCallbackF
 		deletePlayButton
 	);
 	
-	singleplayerWindow.AddChildElements(saveFileElements);
+	// OVERRIDE WINDOW ONCLOSE FUNCTION
+	var overrideOnClose = function()
+	{
+		// DISCONNECT FROM A HOST IF SAVE SELECTION INTERRUPTED
+		if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.CONNECTED)
+		{
+			global.NetworkHandlerRef.DisconnectSocket();
+		}
+	}
+	saveSelectionWindow.OnClose = overrideOnClose;
+	
+	saveSelectionWindow.AddChildElements(saveFileElements);
 	saveFilePanel.AddChildElements(saveFilePanelElements);
-	return singleplayerWindow;
+	return saveSelectionWindow;
 }
