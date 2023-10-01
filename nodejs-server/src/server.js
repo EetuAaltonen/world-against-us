@@ -3,22 +3,39 @@ import "dotenv/config";
 
 import NetworkHandler from "./modules/network/NetworkHandler.js";
 
-const networkHandler = new NetworkHandler();
-
 const server = Dgram.createSocket("udp4");
+const networkHandler = new NetworkHandler(server);
 
-server.on("error", (err) => {
-  console.log(`server error:\n${err.stack}`);
-  server.close();
-});
+async function init() {
+  server.on("error", (error) => {
+    console.log(`server error:\n${error.stack}`);
+    server.close();
+  });
 
-server.on("message", (msg, rinfo) => {
-  networkHandler.handlePacket(msg, rinfo, server);
-});
+  server.on("message", (msg, rinfo) => {
+    try {
+      if (!networkHandler.handleMessage(msg, rinfo)) {
+        console.log(`Failed to handle a message from a client`);
+      }
+    } catch (error) {
+      networkHandler.onError(error);
+      setTimeout(() => {
+        console.log(`server error:\n${error.stack}`);
+        server.close();
+      }, 2000);
+    }
+  });
 
-server.on("listening", () => {
-  const address = server.address();
-  console.log(`Server listening ${address.address}:${address.port}`);
-});
+  server.on("listening", () => {
+    const address = server.address();
+    console.log(`Server listening ${address.address}:${address.port}`);
+  });
 
-server.bind(process.env.PORT || 8080, process.env.ADDRESS || "127.0.0.1");
+  server.bind(process.env.PORT || 8080, process.env.ADDRESS || "127.0.0.1");
+
+  while (true) {
+    await networkHandler.update();
+  }
+}
+
+init();
