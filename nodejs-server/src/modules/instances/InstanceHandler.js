@@ -69,8 +69,6 @@ export default class InstanceHandler {
         instanceId = createdInstanceId;
       }
     }
-    console.log("this.instances playerIds");
-    console.log(this.instances[instanceId].getAllPlayerIds());
     return instanceId;
   }
 
@@ -117,8 +115,6 @@ export default class InstanceHandler {
         }
       }
     }
-    console.log("this.instances");
-    console.log(this.instances);
     return isPlayerRemoved;
   }
 

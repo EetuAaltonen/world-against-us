@@ -11,8 +11,6 @@ export default class ClientHandler {
     const client = new Client(newUuid, rinfo.address, rinfo.port);
 
     this.clients.push(client);
-    console.log("this.clients");
-    console.log(this.clients);
     return newUuid;
   }
 
@@ -33,8 +31,6 @@ export default class ClientHandler {
       this.clients.splice(index, 1);
       isDisconnected = true;
     }
-    console.log("this.clients");
-    console.log(this.clients);
     return isDisconnected;
   }
 }
