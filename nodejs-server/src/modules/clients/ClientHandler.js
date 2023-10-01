@@ -16,6 +16,14 @@ export default class ClientHandler {
     return newUuid;
   }
 
+  getClient(clientId) {
+    return this.clients.find((client) => client.uuid === clientId);
+  }
+
+  getAllClients() {
+    return Object.values(this.clients);
+  }
+
   disconnectClient(clientId, rinfo) {
     let isDisconnected = false;
     const index = this.clients.findIndex(
