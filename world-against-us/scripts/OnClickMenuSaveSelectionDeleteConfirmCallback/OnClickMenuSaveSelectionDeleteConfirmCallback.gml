@@ -1,4 +1,4 @@
-function OnClickMenuSingleplayerDeleteConfirmCallback(callerWindowElement)
+function OnClickMenuSaveSelectionDeleteConfirmCallback(callerWindowElement)
 {
 	if (!is_undefined(callerWindowElement))
 	{

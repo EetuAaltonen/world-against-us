@@ -1,4 +1,4 @@
-function OnClickMenuSingleplayerDelete()
+function OnClickMenuSaveSelectionDelete()
 {
 	var saveInput = parentElement.GetChildElementById("SaveInput");
 	if (saveInput.input != saveInput.placeholder)
@@ -10,7 +10,7 @@ function OnClickMenuSingleplayerDelete()
 			GAME_WINDOW.Confirm,
 			"Delete Save",
 			string("Are you sure you want to delete '{0}'?", saveFileName),
-			self, OnClickMenuSingleplayerDeleteConfirmCallback
+			self, OnClickMenuSaveSelectionDeleteConfirmCallback
 		);
 	} else {
 		global.NotificationHandlerRef.AddNotification(

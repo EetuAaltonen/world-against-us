@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "OnClickMenuSingleplayerDeleteConfirmCallback",
+  "name": "OnClickMenuSaveSelectionDeleteConfirmCallback",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
