@@ -14,6 +14,7 @@ function NetworkPacketBuilder() constructor
 					if (networkPacketSize <= 0) throw ("Failed to write the packet header")
 					networkPacketSize += WritePacketPayload(_networkBuffer, _networkPacket.header.message_type, _networkPacket.payload);
 					
+					// TODO: MOVE THIS UNDER SEND FUNCTION AND CALCULATE kbs
 					show_debug_message(string("Network packet size: {0}kb", networkPacketSize * 0.001));
 					isPacketCreated = true;
 				}

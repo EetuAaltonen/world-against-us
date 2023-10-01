@@ -253,7 +253,7 @@ function NetworkHandler() constructor
 						}
 						isPacketHandled = true;
 					}
-				}
+				} break;
 				case MESSAGE_TYPE.DATA_PLAYER_SYNC:
 				{
 					if (network_status == NETWORK_STATUS.SYNC_DATA)
@@ -262,7 +262,23 @@ function NetworkHandler() constructor
 						room_goto(roomCamp);
 						isPacketHandled = true;
 					}
-				}
+				} break;
+				case MESSAGE_TYPE.SERVER_ERROR:
+				{
+					show_message(string("SERVER ERROR. Disconnecting..."));
+					DisconnectSocket();
+					if (room != roomMainMenu)
+					{
+						room_goto(roomMainMenu);
+					} else {
+						// OPEN MAIN MENU ROOT WINDOW
+						global.GUIStateHandlerRef.ResetGUIState();
+						with (objMainMenu)
+						{
+							event_perform(ev_other, ev_user0);
+						}
+					}
+				} break;
 				default:
 				{
 					// AN UNKNOWN MESSAGE TYPE
