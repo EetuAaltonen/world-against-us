@@ -69,6 +69,8 @@ export default class NetworkHandler {
       let isMessageHandled = false;
       const networkPacket = this.networkPacketParser.parsePacket(msg, rinfo);
       const clientId = networkPacket.header.clientId;
+      const acknowledgmentId = networkPacket.header.acknowledgmentId;
+
       switch (networkPacket.header.messageType) {
         case MESSAGE_TYPE.CONNECT_TO_HOST:
           {
@@ -79,6 +81,7 @@ export default class NetworkHandler {
               const networkBuffer = this.networkPacketBuilder.createPacket(
                 MESSAGE_TYPE.CONNECT_TO_HOST,
                 newClientId,
+                acknowledgmentId,
                 undefined
               );
 
@@ -106,6 +109,7 @@ export default class NetworkHandler {
               const networkBuffer = this.networkPacketBuilder.createPacket(
                 MESSAGE_TYPE.REQUEST_JOIN_GAME,
                 clientId,
+                acknowledgmentId,
                 undefined /*instanceId*/
               );
 
@@ -171,6 +175,7 @@ export default class NetworkHandler {
       const allClients = this.clientHandler.getAllClients();
       const networkBuffer = this.networkPacketBuilder.createPacket(
         MESSAGE_TYPE.SERVER_ERROR,
+        -1,
         undefined,
         {
           error: "Internal Server Error. Disconnecting...",

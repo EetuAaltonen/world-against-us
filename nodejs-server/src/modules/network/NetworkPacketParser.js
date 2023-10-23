@@ -14,13 +14,19 @@ export default class NetworkPacketParser {
     const clientId = msg.toString(
       "utf8",
       BITWISE.BIT8,
-      BITWISE.ID_LENGTH + BITWISE.BIT8
+      BITWISE.BIT8 + BITWISE.ID_LENGTH
     );
-    const header = new NetworkPacketHeader(messageType, clientId);
+    const acknowledgmentId = msg.readInt8(BITWISE.BIT8 + BITWISE.ID_LENGTH);
+    const header = new NetworkPacketHeader(
+      messageType,
+      clientId,
+      acknowledgmentId
+    );
     // Slice header from buffer
     msg = msg.slice(
       BITWISE.ID_LENGTH + // Client ID
-        BITWISE.BIT8 // Message type
+        BITWISE.BIT8 + // Message type
+        BITWISE.BIT8 // Acknowledgement ID
     );
     const payload = this.parsePayload(messageType, msg);
     const networkPacket = new NetworkPacket(header, payload);

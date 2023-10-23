@@ -12,6 +12,7 @@ export default class NetworkPacketHandler {
   handlePacket(clientId, networkPacket) {
     let isPacketHandled = false;
     if (networkPacket !== undefined) {
+      const acknowledgmentId = networkPacket.header.acknowledgmentId;
       switch (networkPacket.header.messageType) {
         case MESSAGE_TYPE.DATA_PLAYER_SYNC:
           {
@@ -22,6 +23,7 @@ export default class NetworkPacketHandler {
             const networkBuffer = this.networkPacketBuilder.createPacket(
               MESSAGE_TYPE.DATA_PLAYER_SYNC,
               clientId,
+              acknowledgmentId,
               undefined
             );
             this.networkHandler.packetQueue.enqueue(
