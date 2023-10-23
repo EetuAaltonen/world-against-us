@@ -10,6 +10,7 @@ import NetworkPacketBuilder from "./NetworkPacketBuilder.js";
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
 import InstanceHandler from "../instances/InstanceHandler.js";
 import Player from "../players/Player.js";
+import Client from "../clients/Client.js";
 
 // TODO: Try adjust server send rate to near 50hz
 const PERFECT_TICK_TIME = 1000 / 50;
@@ -141,10 +142,32 @@ export default class NetworkHandler {
           }
           break;
         default: {
-          isMessageHandled = this.networkPacketHandler.handlePacket(
-            clientId,
-            networkPacket
-          );
+          if (clientId !== UNDEFINED_UUID) {
+            const existentClient = this.clientHandler.getClient(clientId);
+            if (existentClient !== undefined) {
+              isMessageHandled = this.networkPacketHandler.handlePacket(
+                clientId,
+                networkPacket
+              );
+            } else {
+              const networkBuffer = this.networkPacketBuilder.createPacket(
+                MESSAGE_TYPE.SERVER_ERROR,
+                UNDEFINED_UUID,
+                -1,
+                {
+                  error: "Unknown client. Disconnecting...",
+                }
+              );
+              this.packetQueue.enqueue(
+                new NetworkQueueEntry(
+                  networkBuffer,
+                  [new Client(UNDEFINED_UUID, rinfo.address, rinfo.port)],
+                  PACKET_PRIORITY.CRITICAL
+                )
+              );
+              isMessageHandled = true;
+            }
+          }
         }
       }
       return isMessageHandled;
