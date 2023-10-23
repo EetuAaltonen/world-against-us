@@ -8,6 +8,10 @@ function NetworkHandler() constructor
 	host_port = undefined;
 	
 	preAllocNetworkBuffer = undefined;
+	acknowledgment_id = -1;
+	last_acknowledgment_id = 100;
+	acknowledgment_timeout_timer = new Timer(TimerFromSeconds(3));
+	in_flight_packets = ds_map_create();
 	
 	network_packet_builder = new NetworkPacketBuilder();
 	network_packet_parser = new NetworkPacketParser();
@@ -38,7 +42,7 @@ function NetworkHandler() constructor
 			host_port = _port;
 			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONNECT_TO_HOST, client_id);
 			var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-			AddPacketToQueue(networkPacket);
+			AddPacketToQueue(networkPacket, true);
 			
 			isConnecting = true;
 			network_status = NETWORK_STATUS.CONNECTING;
@@ -64,6 +68,10 @@ function NetworkHandler() constructor
 		network_status = NETWORK_STATUS.OFFLINE;
 		host_address = undefined;
 		host_port = undefined;
+		
+		acknowledgment_id = -1;
+		acknowledgment_timeout_timer.running_time = 0;
+		ds_map_clear(in_flight_packets);
 	}
 	
 	static DeleteSocket = function()
@@ -72,11 +80,32 @@ function NetworkHandler() constructor
 		network_destroy(socket);
 	}
 	
-	static AddPacketToQueue = function(_networkPacket, _priority)
+	static AddPacketToQueue = function(_networkPacket, _setAcknowledgment = false, _priority = 0)
 	{
 		if (!is_undefined(_networkPacket))
 		{
-			ds_priority_add(network_packet_queue, _networkPacket, _priority);
+			if (_setAcknowledgment)
+			{
+				show_debug_message("Pre in_flight_packets count {0}", ds_map_size(in_flight_packets));
+				
+				var nextAcknowledgmentId = acknowledgment_id + 1;
+				if (nextAcknowledgmentId > last_acknowledgment_id) { nextAcknowledgmentId = 0; }
+				if (is_undefined(in_flight_packets[? nextAcknowledgmentId]))
+				{
+					acknowledgment_id = nextAcknowledgmentId;
+					if (ds_map_add(in_flight_packets, acknowledgment_id, _networkPacket))
+					{
+						_networkPacket.header.SetAcknowledgmentId(acknowledgment_id);
+						ds_priority_add(network_packet_queue, _networkPacket, _priority);
+						
+						acknowledgment_timeout_timer.StartTimer();
+					}
+				} else {
+					show_debug_message("Failed to add {0} to in_flight_packets, already exists", acknowledgment_id);
+				}
+			} else {
+				ds_priority_add(network_packet_queue, _networkPacket, _priority);
+			}
 		}
 	}
 	
@@ -93,6 +122,25 @@ function NetworkHandler() constructor
 				}
 			}
 			ds_priority_delete_max(network_packet_queue);
+		}
+		
+		// RESEND ACKNOWLEDGE PACKET ON TIMEOUT
+		if (acknowledgment_timeout_timer.IsTimerStopped())
+		{
+			var lastAcknowledgmentNetworkPacket = in_flight_packets[? acknowledgment_id];
+			if (!is_undefined(lastAcknowledgmentNetworkPacket))
+			{
+				AddPacketToQueue(
+					lastAcknowledgmentNetworkPacket,
+					false /*DON'T SET ACKNOWLEDGE TWICE*/,
+					lastAcknowledgmentNetworkPacket.priority
+				);
+				
+				show_debug_message("Resending acknowledgment {0}", lastAcknowledgmentNetworkPacket.header.acknowledgment_id);
+				acknowledgment_timeout_timer.StartTimer();
+			}
+		} else {
+			acknowledgment_timeout_timer.Update();	
 		}
 		
 		switch (network_status)
@@ -167,7 +215,7 @@ function NetworkHandler() constructor
 		if (!is_undefined(socket)) {
 			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_JOIN_GAME, client_id);
 			var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-			AddPacketToQueue(networkPacket);
+			AddPacketToQueue(networkPacket, true);
 			
 			network_status = NETWORK_STATUS.JOINING_TO_GAME;
 			timeout_timer.StartTimer();
@@ -186,7 +234,7 @@ function NetworkHandler() constructor
 			
 			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DATA_PLAYER_SYNC, client_id);
 			var networkPacket = new NetworkPacket(networkPacketHeader, undefined/*jsonPlayerData / jsonPlayerBackpackData*/);
-			AddPacketToQueue(networkPacket);
+			AddPacketToQueue(networkPacket, true);
 			
 			network_status = NETWORK_STATUS.SYNC_DATA;
 			timeout_timer.StartTimer();
@@ -199,6 +247,25 @@ function NetworkHandler() constructor
 	{
 		var isPacketHandled = false;
 		var networkPacket = network_packet_parser.ParsePacket(_msg);
+		var acknowledgmentId = networkPacket.header.acknowledgment_id;
+		if (acknowledgmentId != -1)
+		{
+			if (!is_undefined(in_flight_packets[? acknowledgmentId]))
+			{
+				if (acknowledgmentId < acknowledgment_id)
+				{
+					show_debug_message("Old acknowledgment received {0}", acknowledgmentId);
+					return isPacketHandled;
+				} else {
+					show_debug_message("The latest acknowledgment succesfully received {0}", acknowledgmentId);
+				}
+				ds_map_delete(in_flight_packets, acknowledgmentId);
+			} else {
+				show_debug_message("Unknown acknowledgment received {0}", acknowledgmentId);
+				return isPacketHandled;
+			}
+		}
+		
 		if (!is_undefined(networkPacket))
 		{
 			var messageType = networkPacket.header.message_type;
