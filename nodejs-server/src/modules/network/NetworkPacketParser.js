@@ -26,7 +26,7 @@ export default class NetworkPacketParser {
     msg = msg.slice(
       BITWISE.ID_LENGTH + // Client ID
         BITWISE.BIT8 + // Message type
-        BITWISE.BIT8 // Acknowledgement ID
+        BITWISE.BIT8 // Acknowledgment ID
     );
     const payload = this.parsePayload(messageType, msg);
     const networkPacket = new NetworkPacket(header, payload);
