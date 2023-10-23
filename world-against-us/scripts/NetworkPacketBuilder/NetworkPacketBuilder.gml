@@ -1,5 +1,7 @@
 function NetworkPacketBuilder() constructor
 {
+	
+	
 	static CreatePacket = function(_networkBuffer, _networkPacket)
 	{
 		var isPacketCreated = false;
@@ -36,9 +38,11 @@ function NetworkPacketBuilder() constructor
 			{
 				var messageType = _networkPacketHeader.message_type;
 				var clientId = _networkPacketHeader.client_id ?? UNDEFINED_UUID;
+				var acknowledgmentId = _networkPacketHeader.acknowledgment_id;
 				buffer_seek(_networkBuffer, buffer_seek_start, 0);
 				buffer_write(_networkBuffer, buffer_u8, messageType);
 				buffer_write(_networkBuffer, buffer_text, clientId);
+				buffer_write(_networkBuffer, buffer_s8, acknowledgmentId);
 				
 				writtenHeaderSize = 1 /*Message type*/ + string_byte_length(clientId);
 			}
