@@ -360,7 +360,9 @@ function NetworkHandler() constructor
 	{
 		if (!is_undefined(socket))
 		{
-			network_send_udp_raw(socket, host_address, host_port, preAllocNetworkBuffer, buffer_tell(preAllocNetworkBuffer));
+			// TODO: CALCULATE kbs
+			var networkPacketSize = network_send_udp_raw(socket, host_address, host_port, preAllocNetworkBuffer, buffer_tell(preAllocNetworkBuffer));
+			show_debug_message(string("Sent network packet size: {0}kb", networkPacketSize * 0.001));
 		}
 	}
 }

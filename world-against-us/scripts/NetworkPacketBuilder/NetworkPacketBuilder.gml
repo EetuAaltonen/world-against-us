@@ -11,13 +11,14 @@ function NetworkPacketBuilder() constructor
 			{
 				if (!is_undefined(_networkPacket))
 				{
-					var networkPacketSize = 0;
-					networkPacketSize += WritePacketHeader(_networkBuffer, _networkPacket.header);
-					if (networkPacketSize <= 0) throw ("Failed to write the packet header")
-					networkPacketSize += WritePacketPayload(_networkBuffer, _networkPacket.header.message_type, _networkPacket.payload);
-					
-					// TODO: MOVE THIS UNDER SEND FUNCTION AND CALCULATE kbs
-					show_debug_message(string("Network packet size: {0}kb", networkPacketSize * 0.001));
+					if (!WritePacketHeader(_networkBuffer, _networkPacket.header))
+					{
+						throw ("Failed to write the packet header");
+					}
+					if (!WritePacketPayload(_networkBuffer, _networkPacket.header.message_type, _networkPacket.payload))
+					{
+						throw ("Failed to write the packet payload");
+					}
 					isPacketCreated = true;
 				}
 			}
@@ -31,7 +32,7 @@ function NetworkPacketBuilder() constructor
 	
 	static WritePacketHeader = function(_networkBuffer, _networkPacketHeader)
 	{
-		var writtenHeaderSize = 0;
+		var isHeaderWritten = false;
 		try
 		{
 			if (!is_undefined(_networkPacketHeader))
@@ -44,19 +45,19 @@ function NetworkPacketBuilder() constructor
 				buffer_write(_networkBuffer, buffer_text, clientId);
 				buffer_write(_networkBuffer, buffer_s8, acknowledgmentId);
 				
-				writtenHeaderSize = 1 /*Message type*/ + string_byte_length(clientId);
+				isHeaderWritten = true;
 			}
 		} catch (error)
 		{
 			show_debug_message(error);
 			show_message(error);
 		}
-		return writtenHeaderSize;
+		return isHeaderWritten;
 	}
 	
 	static WritePacketPayload = function(_networkBuffer, _networkMessageType, _networkPacketPayload)
 	{
-		var writtenPayloadSize = 0;
+		var isPayloadWritten = false;
 		try
 		{
 			if (!is_undefined(_networkPacketPayload))
@@ -74,7 +75,7 @@ function NetworkPacketBuilder() constructor
 					{
 						var jsonString = json_stringify(_networkPacketPayload);
 						buffer_write(_networkBuffer, buffer_text, jsonString);
-						writtenPayloadSize = string_byte_length(jsonString);
+						isPayloadWritten = true;
 					}
 				}
 			}
@@ -83,6 +84,6 @@ function NetworkPacketBuilder() constructor
 			show_debug_message(error);
 			show_message(error);
 		}
-		return writtenPayloadSize;
+		return isPayloadWritten;
 	}
 }
