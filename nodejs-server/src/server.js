@@ -1,4 +1,4 @@
-import Dgram from "dgram";
+import Dgram from "node:dgram";
 import "dotenv/config";
 
 import NetworkHandler from "./modules/network/NetworkHandler.js";
