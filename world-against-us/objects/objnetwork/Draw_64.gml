@@ -1,3 +1,5 @@
+networkHandler.DrawGUI();
+
 /*draw_set_font(font_small);
 draw_set_halign(fa_right);
 draw_set_color(c_red);

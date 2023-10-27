@@ -15,8 +15,15 @@ function NetworkHandler() constructor
 	
 	network_packet_builder = new NetworkPacketBuilder();
 	network_packet_parser = new NetworkPacketParser();
+	network_packet_handler = new NetworkPacketHandler();
 	network_packet_queue = ds_priority_create();
 	timeout_timer = new Timer(TimerFromSeconds(8));
+	
+	// TODO: Move these under RegionHandler
+	region_id = undefined;
+	room_index = undefined;
+	owner_client = undefined;
+	
 	
 	static CreateSocket = function()
 	{
@@ -243,7 +250,7 @@ function NetworkHandler() constructor
 		return isSyncing;
 	}
 	
-	static HandlePacket = function(_msg)
+	static HandleMessage = function(_msg)
 	{
 		var isPacketHandled = false;
 		var networkPacket = network_packet_parser.ParsePacket(_msg);
@@ -304,21 +311,24 @@ function NetworkHandler() constructor
 				{
 					if (network_status == NETWORK_STATUS.JOINING_TO_GAME)
 					{
-						var gameSaveData = global.GameSaveHandlerRef.game_save_data;
-						if (!is_undefined(gameSaveData))
+						if (network_packet_handler.HandlePacket(networkPacket))
 						{
-							if (gameSaveData.isSaveLoadingFirstTime)
+							var gameSaveData = global.GameSaveHandlerRef.game_save_data;
+							if (!is_undefined(gameSaveData))
 							{
-								if (!is_undefined(gameSaveData.player_data))
+								if (gameSaveData.isSaveLoadingFirstTime)
 								{
-									if (!is_undefined(gameSaveData.player_data.character))
+									if (!is_undefined(gameSaveData.player_data))
 									{
-										SyncPlayerData(gameSaveData.player_data.character);
+										if (!is_undefined(gameSaveData.player_data.character))
+										{
+											SyncPlayerData(gameSaveData.player_data.character);
+										}
 									}
 								}
 							}
+							isPacketHandled = true;
 						}
-						isPacketHandled = true;
 					}
 				} break;
 				case MESSAGE_TYPE.DATA_PLAYER_SYNC:
@@ -363,6 +373,28 @@ function NetworkHandler() constructor
 			// TODO: CALCULATE kbs
 			var networkPacketSize = network_send_udp_raw(socket, host_address, host_port, preAllocNetworkBuffer, buffer_tell(preAllocNetworkBuffer));
 			show_debug_message(string("Sent network packet size: {0}kb", networkPacketSize * 0.001));
+		}
+	}
+	
+	static DrawGUI = function()
+	{
+		if (!is_undefined(socket))
+		{
+			if (client_id != UNDEFINED_UUID)
+			{
+				draw_set_font(font_small_bold);
+				draw_set_color(c_red);
+				draw_set_halign(fa_right);
+		
+				draw_text(global.GUIW - 20, 30, string("{0} :client_id", client_id));
+				draw_text(global.GUIW - 20, 50, string("{0} :Region ID", region_id ?? "Unknown"));
+				draw_text(global.GUIW - 20, 70, string("{0} :Room index", room_index ?? "Unknown"));
+				var ownerClientID = (owner_client ?? "Unknown");
+				draw_text(global.GUIW - 20, 90, string("{0} :Region Owner", (client_id == ownerClientID) ? "Self" : "Other" ));
+		
+				// RESET DRAW PROPERTIES
+				ResetDrawProperties();
+			}
 		}
 	}
 }

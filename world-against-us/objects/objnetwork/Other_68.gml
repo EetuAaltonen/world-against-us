@@ -1,5 +1,5 @@
 if (async_load[? "size"] > 0)
 {
 	var networkBuffer = async_load[? "buffer"];
-	networkHandler.HandlePacket(networkBuffer);
+	networkHandler.HandleMessage(networkBuffer);
 }
