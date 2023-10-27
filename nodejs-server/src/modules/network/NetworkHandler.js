@@ -31,7 +31,8 @@ export default class NetworkHandler {
 
     this.networkPacketHandler = new NetworkPacketHandler(
       this,
-      this.networkPacketBuilder
+      this.networkPacketBuilder,
+      this.instanceHandler
     );
   }
 
@@ -166,7 +167,7 @@ export default class NetworkHandler {
                 UNDEFINED_UUID,
                 -1,
                 {
-                  error: "Unknown client. Disconnecting...",
+                  error: "Unknown client.",
                 }
               );
               if (networkBuffer !== undefined) {
