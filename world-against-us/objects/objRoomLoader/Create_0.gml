@@ -25,7 +25,7 @@ controllers = [
 	new GameController(objNotification, [], [roomLaunch], LAYER_CONTROLLERS_FRONT),
 	
 	// NETWORK
-	new GameController(objNetwork, [], [roomLaunch]),
+	new GameController(objNetwork, [], [roomLaunch], LAYER_CONTROLLERS_FRONT),
 	
 	// MAIN MENU
 	new GameController(objMainMenu, [roomMainMenu], [roomLaunch]),

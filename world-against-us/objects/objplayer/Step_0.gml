@@ -85,7 +85,7 @@ var spriteDirection = CalculateSpriteDirectionToAim(new Vector2(x, y), MouseWorl
 image_xscale = spriteDirection.image_x_scale;
 
 // SEND MOVEMENT NETWORK DATA
-if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.SESSION_IN_PROGRESS)
+if (global.MultiplayerMode)
 {
 	if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 	{

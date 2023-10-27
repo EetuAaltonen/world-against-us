@@ -79,6 +79,8 @@ function NetworkHandler() constructor
 		acknowledgment_id = -1;
 		acknowledgment_timeout_timer.running_time = 0;
 		ds_map_clear(in_flight_packets);
+		
+		global.MultiplayerMode = false;
 	}
 	
 	static DeleteSocket = function()
@@ -313,6 +315,8 @@ function NetworkHandler() constructor
 					{
 						if (network_packet_handler.HandlePacket(networkPacket))
 						{
+							global.MultiplayerMode = true;
+							
 							var gameSaveData = global.GameSaveHandlerRef.game_save_data;
 							if (!is_undefined(gameSaveData))
 							{
@@ -342,7 +346,9 @@ function NetworkHandler() constructor
 				} break;
 				case MESSAGE_TYPE.SERVER_ERROR:
 				{
-					show_message(string("SERVER ERROR. Disconnecting..."));
+					var payloadStruct = json_parse(networkPacket.payload);
+					var errorMessage = payloadStruct[$ "error"] ?? "Unknown";
+					show_message(string("SERVER ERROR: {0} Disconnecting...", errorMessage));
 					DisconnectSocket();
 					if (room != roomMainMenu)
 					{
@@ -355,11 +361,16 @@ function NetworkHandler() constructor
 							event_perform(ev_other, ev_user0);
 						}
 					}
+					isPacketHandled = true;
 				} break;
 				default:
 				{
-					// AN UNKNOWN MESSAGE TYPE
-					show_debug_message(string("Received network packet with unknown message type: {0}", messageType));
+					if (network_packet_handler.HandlePacket(networkPacket))
+					{
+						isPacketHandled = true;
+					} else {
+						show_debug_message(string("Unable to handle message type: {0}", messageType));
+					}
 				}
 			}
 		}
@@ -378,23 +389,25 @@ function NetworkHandler() constructor
 	
 	static DrawGUI = function()
 	{
+		draw_set_font(font_small_bold);
+		draw_set_color(c_red);
+		draw_set_halign(fa_right);
+		
+		draw_text(global.GUIW - 20, 10, string("{0} :Status", global.MultiplayerMode ? "Online" : "Offline"));
+		
 		if (!is_undefined(socket))
 		{
 			if (client_id != UNDEFINED_UUID)
 			{
-				draw_set_font(font_small_bold);
-				draw_set_color(c_red);
-				draw_set_halign(fa_right);
-		
 				draw_text(global.GUIW - 20, 30, string("{0} :client_id", client_id));
 				draw_text(global.GUIW - 20, 50, string("{0} :Region ID", region_id ?? "Unknown"));
 				draw_text(global.GUIW - 20, 70, string("{0} :Room index", room_index ?? "Unknown"));
 				var ownerClientID = (owner_client ?? "Unknown");
-				draw_text(global.GUIW - 20, 90, string("{0} :Region Owner", (client_id == ownerClientID) ? "Self" : "Other" ));
-		
-				// RESET DRAW PROPERTIES
-				ResetDrawProperties();
+				draw_text(global.GUIW - 20, 90, string("{0} :Region Owner", (client_id == ownerClientID) ? "Self" : "Other"));
 			}
 		}
+		
+		// RESET DRAW PROPERTIES
+		ResetDrawProperties();
 	}
 }
