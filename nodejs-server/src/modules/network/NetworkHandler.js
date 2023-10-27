@@ -86,14 +86,16 @@ export default class NetworkHandler {
                 undefined
               );
 
-              this.packetQueue.enqueue(
-                new NetworkQueueEntry(
-                  networkBuffer,
-                  [client],
-                  PACKET_PRIORITY.HIGH
-                )
-              );
-              isMessageHandled = true;
+              if (networkBuffer !== undefined) {
+                this.packetQueue.enqueue(
+                  new NetworkQueueEntry(
+                    networkBuffer,
+                    [client],
+                    PACKET_PRIORITY.HIGH
+                  )
+                );
+                isMessageHandled = true;
+              }
             }
           }
           break;
@@ -107,21 +109,30 @@ export default class NetworkHandler {
                   clientId,
                   player
                 );
-              const networkBuffer = this.networkPacketBuilder.createPacket(
-                MESSAGE_TYPE.REQUEST_JOIN_GAME,
-                clientId,
-                acknowledgmentId,
-                undefined /*instanceId*/
-              );
+              const instance = this.instanceHandler.getInstance(instanceId);
+              if (instance !== undefined) {
+                const networkBuffer = this.networkPacketBuilder.createPacket(
+                  MESSAGE_TYPE.REQUEST_JOIN_GAME,
+                  clientId,
+                  acknowledgmentId,
+                  {
+                    instance_id: instanceId,
+                    room_index: instance.roomIndex,
+                    owner_client: instance.ownerClient,
+                  }
+                );
 
-              this.packetQueue.enqueue(
-                new NetworkQueueEntry(
-                  networkBuffer,
-                  [client],
-                  PACKET_PRIORITY.HIGH
-                )
-              );
-              isMessageHandled = true;
+                if (networkBuffer !== undefined) {
+                  this.packetQueue.enqueue(
+                    new NetworkQueueEntry(
+                      networkBuffer,
+                      [client],
+                      PACKET_PRIORITY.HIGH
+                    )
+                  );
+                  isMessageHandled = true;
+                }
+              }
             }
           }
           break;
@@ -158,14 +169,16 @@ export default class NetworkHandler {
                   error: "Unknown client. Disconnecting...",
                 }
               );
-              this.packetQueue.enqueue(
-                new NetworkQueueEntry(
-                  networkBuffer,
-                  [new Client(UNDEFINED_UUID, rinfo.address, rinfo.port)],
-                  PACKET_PRIORITY.CRITICAL
-                )
-              );
-              isMessageHandled = true;
+              if (networkBuffer !== undefined) {
+                this.packetQueue.enqueue(
+                  new NetworkQueueEntry(
+                    networkBuffer,
+                    [new Client(UNDEFINED_UUID, rinfo.address, rinfo.port)],
+                    PACKET_PRIORITY.CRITICAL
+                  )
+                );
+                isMessageHandled = true;
+              }
             }
           }
         }
@@ -204,13 +217,15 @@ export default class NetworkHandler {
           error: "Internal Server Error. Disconnecting...",
         }
       );
-      this.packetQueue.enqueue(
-        new NetworkQueueEntry(
-          networkBuffer,
-          allClients,
-          PACKET_PRIORITY.CRITICAL
-        )
-      );
+      if (networkBuffer !== undefined) {
+        this.packetQueue.enqueue(
+          new NetworkQueueEntry(
+            networkBuffer,
+            allClients,
+            PACKET_PRIORITY.CRITICAL
+          )
+        );
+      }
     } catch (error) {
       console.log(`server error:\n${error.stack}`);
       setTimeout(() => {
