@@ -14,7 +14,7 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 	// INFO PANEL
 	var infoPanelSize = new Size(windowSize.w, 40);
 	var mapInfoPanel = new WindowPanel(
-		"MapTitle",
+		"MapInfoPanel",
 		new Vector2(0, 0),
 		infoPanelSize,
 		c_black
@@ -34,13 +34,7 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 	);
 	
 	// INSTANCE LIST
-	var instances = ds_list_create();
-	ds_list_add(instances,
-		"Test1",
-		"Test2",
-		"Test3",
-		"Test4"
-	);
+	var emptyInstanceList = ds_list_create();
 	var testFunction = function()
 	{
 		show_message("Hello World!");
@@ -51,8 +45,8 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 		"InstanceList",
 		instanceListPosition,
 		instanceListSize,
-		#555973, instances,
-		ListDrawSaveFile, true, testFunction
+		#555973, emptyInstanceList,
+		ListDrawAvailableInstance, true, testFunction
 	);
 	
 	// INSTANCE LIST TITLE

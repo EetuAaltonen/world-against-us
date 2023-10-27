@@ -14,7 +14,7 @@ function CreateWindowMap(_gameWindowId, _zIndex)
 	// INFO PANEL
 	var infoPanelSize = new Size(windowSize.w, 40);
 	var mapInfoPanel = new WindowPanel(
-		"MapTitle",
+		"MapInfoPanel",
 		new Vector2(0, 0),
 		infoPanelSize,
 		c_black
