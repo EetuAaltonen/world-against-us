@@ -9,15 +9,17 @@ function NetworkPacketParser() constructor
 			var messageType = buffer_read(_msg, buffer_u8);
 			var clientId = buffer_read(_msg, buffer_string);
 			var acknowledgmentId = buffer_read(_msg, buffer_s8);
-			// SET BUFFER TO THE INDEX BEFORE CONTENT
-			buffer_seek(_msg, buffer_seek_relative, 0);
-			
 			var parsedHeader = new NetworkPacketHeader(messageType, clientId);
 			if (acknowledgmentId != -1)
 			{
 				parsedHeader.SetAcknowledgmentId(acknowledgmentId);
 			}
-			parsedNetworkPacket = new NetworkPacket(parsedHeader, undefined);
+			
+			// SET BUFFER TO THE INDEX BEFORE THE PAYLOAD
+			buffer_seek(_msg, buffer_seek_relative, 0);
+			var payload = buffer_read(_msg, buffer_string);
+			
+			parsedNetworkPacket = new NetworkPacket(parsedHeader, payload);
 		} catch (error)
 		{
 			show_debug_message(error);

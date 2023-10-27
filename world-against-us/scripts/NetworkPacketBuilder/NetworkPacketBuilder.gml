@@ -70,6 +70,7 @@ function NetworkPacketBuilder() constructor
 					{
 						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.X);
 						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.Y);
+						isPayloadWritten = true;
 					} break;
 					default:
 					{
@@ -78,6 +79,8 @@ function NetworkPacketBuilder() constructor
 						isPayloadWritten = true;
 					}
 				}
+			} else {
+				isPayloadWritten = true;
 			}
 		} catch (error)
 		{
