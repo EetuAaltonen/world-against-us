@@ -19,13 +19,6 @@ function CreateWindowMap(_gameWindowId, _zIndex)
 		infoPanelSize,
 		c_black
 	);
-
-	var mapSize = new Size(windowSize.w - 100, windowSize.h - global.ObjHud.hudHeight - infoPanelSize.h);
-	var mapElement = new WindowMap(
-		"MapElement",
-		new Vector2(windowSize.w * 0.5 - (mapSize.w * 0.5), infoPanelSize.h),
-		mapSize, undefined
-	);
 	
 	// INFO PANEL TITLE
 	var mapTitle = new WindowText(
@@ -38,6 +31,14 @@ function CreateWindowMap(_gameWindowId, _zIndex)
 	
 	ds_list_add(mapInfoPanelElements,
 		mapTitle
+	);
+
+	// MAP ELEMENT
+	var mapSize = new Size(windowSize.w - 100, windowSize.h - global.ObjHud.hudHeight - infoPanelSize.h);
+	var mapElement = new WindowMap(
+		"MapElement",
+		new Vector2(windowSize.w * 0.5 - (mapSize.w * 0.5), infoPanelSize.h),
+		mapSize, undefined
 	);
 	
 	

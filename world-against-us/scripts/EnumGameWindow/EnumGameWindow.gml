@@ -24,6 +24,7 @@ enum GAME_WINDOW
 	// MAP
 	Map,
 	MapExamineObject,
+	WorldMap,
 	// LOOT CONTAINER
 	LootContainer,
 	// WORLD

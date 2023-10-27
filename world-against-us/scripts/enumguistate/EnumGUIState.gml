@@ -8,6 +8,7 @@ enum GUI_STATE
 	Journal,
 	Dialogue,
 	Map,
+	WorldMap,
 	// WORLD
 	LootContainer,
 	Facility,
