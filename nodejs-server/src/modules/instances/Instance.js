@@ -10,7 +10,7 @@ export default class Instance {
     if (this.getPlayer(clientId) === undefined) {
       this.localPlayers[clientId] = player;
       if (this.ownerClient === undefined) {
-        this.ownerClient = clientId;
+        this.setOwner(clientId);
       }
       isPlayerAdded = true;
     }
@@ -39,19 +39,23 @@ export default class Instance {
     return Object.keys(this.localPlayers).length;
   }
 
+  setOwner(clientId) {
+    this.ownerClient = clientId;
+  }
+
   resetOwner() {
     let isOwnerReset = false;
     if (this.getPlayerCount() > 0) {
       const playerId = this.getPlayerIdFirst();
       if (playerId !== undefined) {
-        this.ownerClient = playerId;
+        this.setOwner(playerId);
         isOwnerReset = true;
       } else {
-        this.ownerClient = undefined;
+        this.setOwner(undefined);
         isOwnerReset = true;
       }
     } else {
-      this.ownerClient = undefined;
+      this.setOwner(undefined);
       isOwnerReset = true;
     }
     return isOwnerReset;

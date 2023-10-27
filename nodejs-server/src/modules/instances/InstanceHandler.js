@@ -23,7 +23,6 @@ export default class InstanceHandler {
       createdInstanceId = this.nextId;
       this.instances[createdInstanceId] = createdInstance;
       this.nextIndex++;
-      console.log("createdInstanceId: " + createdInstanceId);
     }
     return createdInstanceId;
   }
@@ -135,10 +134,6 @@ export default class InstanceHandler {
       }
     }
     return isInstanceReleased;
-  }
-
-  resetInstanceOwner(instance) {
-    return instance.resetOwner();
   }
 
   deleteInstance(instanceId) {
