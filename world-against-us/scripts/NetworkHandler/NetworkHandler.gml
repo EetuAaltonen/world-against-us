@@ -60,13 +60,16 @@ function NetworkHandler() constructor
 	
 	static DisconnectSocket = function()
 	{
-		// FORCE DISCONNECT MESSAGE
-		var packetHeader = new NetworkPacketHeader(MESSAGE_TYPE.DISCONNECT_FROM_HOST, client_id);
-		var networkPacket = new NetworkPacket(packetHeader, undefined);
-		
-		if (network_packet_builder.CreatePacket(preAllocNetworkBuffer, networkPacket))
+		// FORCE DISCONNECT MESSAGE IF ONLINE
+		if (global.MultiplayerMode)
 		{
-			SendPacketOverUDP();
+			var packetHeader = new NetworkPacketHeader(MESSAGE_TYPE.DISCONNECT_FROM_HOST, client_id);
+			var networkPacket = new NetworkPacket(packetHeader, undefined);
+		
+			if (network_packet_builder.CreatePacket(preAllocNetworkBuffer, networkPacket))
+			{
+				SendPacketOverUDP();
+			}
 		}
 		DeleteSocket();
 		
@@ -154,16 +157,15 @@ function NetworkHandler() constructor
 				} else {
 					show_message("Failed to reach the server. Disconnecting...");
 					DisconnectSocket();
-					if (room != roomMainMenu)
+					if (room == roomMainMenu)
 					{
-						room_goto(roomMainMenu);
-					} else {
-						// OPEN MAIN MENU ROOT WINDOW
-						global.GUIStateHandlerRef.ResetGUIState();
-						with (objMainMenu)
+						// RESET GUI STATE MAIN MENU
+						if (!global.GUIStateHandlerRef.ResetGUIStateMainMenu())
 						{
-							event_perform(ev_other, ev_user0);
+							show_debug_message("Failed to reset GUI state Main Menu");
 						}
+					} else {
+						room_goto(roomMainMenu);
 					}
 				}
 			}
@@ -177,13 +179,12 @@ function NetworkHandler() constructor
 			{
 				if (timeout_timer.IsTimerStopped())
 				{
-					network_status = NETWORK_STATUS.OFFLINE;
-					if (global.GUIStateHandlerRef.CloseCurrentGUIState())
+					DisconnectSocket();
+					show_message("Connection timed out :(");
+					if (!global.GUIStateHandlerRef.ResetGUIStateMainMenu())
 					{
-						show_message("Connecting timed out :(");
+						show_debug_message("Failed to reset GUI state Main Menu");
 					}
-					// RESET TIMEOUT TIMER
-					timeout_timer.running_time = 0;
 				} else {
 					timeout_timer.Update();
 					
@@ -293,13 +294,14 @@ function NetworkHandler() constructor
 				{
 					if (network_status == NETWORK_STATUS.CONNECTING)
 					{
+						// SET NETWORK PROPERTIES
+						client_id = networkPacket.header.client_id;
+						network_status = NETWORK_STATUS.CONNECTED;
+						global.MultiplayerMode = true;
+						
 						// CLOSE CONNECT WINDOW
 						if (global.GUIStateHandlerRef.CloseCurrentGUIState())
 						{
-							// SET NEW CLIENT ID AND NETWORK STATUS
-							client_id = networkPacket.header.client_id;
-							network_status = NETWORK_STATUS.CONNECTED;
-							
 							// OPEN SAVE SELECTION
 							var mainMenuMultiplayerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.MainMenuMultiplayer);
 							if (!is_undefined(mainMenuMultiplayerWindow))
@@ -324,8 +326,6 @@ function NetworkHandler() constructor
 					{
 						if (network_packet_handler.HandlePacket(networkPacket))
 						{
-							global.MultiplayerMode = true;
-							
 							var gameSaveData = global.GameSaveHandlerRef.game_save_data;
 							if (!is_undefined(gameSaveData))
 							{
@@ -357,16 +357,17 @@ function NetworkHandler() constructor
 				{
 					var errorMessage = networkPacket.payload[$ "error"] ?? "Unknown";
 					show_message(string("SERVER ERROR: {0} Disconnecting...", errorMessage));
+					// SET MULTIPLAYER MODE FALSE TO AVOID SENDING FURTHER DISCONNECT PACKET
+					global.MultiplayerMode = false;
 					DisconnectSocket();
 					if (room != roomMainMenu)
 					{
 						room_goto(roomMainMenu);
 					} else {
-						// OPEN MAIN MENU ROOT WINDOW
-						global.GUIStateHandlerRef.ResetGUIState();
-						with (objMainMenu)
+						// RESET GUI STATE MAIN MENU
+						if (!global.GUIStateHandlerRef.ResetGUIStateMainMenu())
 						{
-							event_perform(ev_other, ev_user0);
+							show_debug_message("Failed to reset GUI state Main Menu");
 						}
 					}
 					isPacketHandled = true;

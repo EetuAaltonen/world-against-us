@@ -1,12 +1,5 @@
 /// @description Custom RoomStartEvent
-// OPEN MAIN MENU ROOT WINDOW
-var guiState = new GUIState(
-	GUI_STATE.MainMenu, undefined, undefined,
-	[GAME_WINDOW.MainMenuRoot], GUI_CHAIN_RULE.OverwriteAll
-);
-if (global.GUIStateHandlerRef.RequestGUIState(guiState))
+if (!global.GUIStateHandlerRef.ResetGUIStateMainMenu())
 {
-	global.GameWindowHandlerRef.OpenWindowGroup([
-		CreateWindowMainMenuRoot(GAME_WINDOW.MainMenuRoot, 0)
-	]);
+	show_debug_message("Failed to reset GUI state Main Menu");
 }

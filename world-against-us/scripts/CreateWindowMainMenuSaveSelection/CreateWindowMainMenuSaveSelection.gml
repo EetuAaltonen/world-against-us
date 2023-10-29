@@ -113,6 +113,10 @@ function CreateWindowMainMenuSaveSelection(_gameWindowId, _zIndex, playCallbackF
 		if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.CONNECTED)
 		{
 			global.NetworkHandlerRef.DisconnectSocket();
+			if (!global.GUIStateHandlerRef.ResetGUIStateMainMenu())
+			{
+				show_debug_message("Failed to reset GUI state Main Menu");
+			}
 		}
 	}
 	saveSelectionWindow.OnClose = overrideOnClose;

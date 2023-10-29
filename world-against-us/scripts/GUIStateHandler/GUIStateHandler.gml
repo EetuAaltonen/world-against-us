@@ -16,7 +16,10 @@ function GUIStateHandler() constructor
 				CloseCurrentGUIState();
 			} else if (_guiState.chainRule == GUI_CHAIN_RULE.OverwriteAll)
 			{
-				ResetGUIState();
+				if (!ResetGUIState())
+				{
+					show_debug_message("Failed to reset GUI state");	
+				}
 			}
 			
 			// PUSH NEW GUI STATE TO CHAIN
@@ -100,8 +103,28 @@ function GUIStateHandler() constructor
 	
 	static ResetGUIState = function()
 	{
+		var isGUIStateReseted = true;
 		global.GameWindowHandlerRef.CloseAllWindows();
 		state_chain = [ROOT_GUI_STATE];
+		return isGUIStateReseted;
+	}
+	
+	static ResetGUIStateMainMenu = function()
+	{
+		var isGUIStateMainMenuReseted = false;
+		// OPEN MAIN MENU ROOT WINDOW
+		var guiState = new GUIState(
+			GUI_STATE.MainMenu, undefined, undefined,
+			[GAME_WINDOW.MainMenuRoot], GUI_CHAIN_RULE.OverwriteAll
+		);
+		if (RequestGUIState(guiState))
+		{
+			global.GameWindowHandlerRef.OpenWindowGroup([
+				CreateWindowMainMenuRoot(GAME_WINDOW.MainMenuRoot, 0)
+			]);
+			isGUIStateMainMenuReseted = true;
+		}
+		return isGUIStateMainMenuReseted;
 	}
 	
 	static CloseCurrentGUIState = function()

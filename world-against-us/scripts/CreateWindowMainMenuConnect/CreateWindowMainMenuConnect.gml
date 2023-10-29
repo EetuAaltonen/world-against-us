@@ -1,7 +1,7 @@
 function CreateWindowMainMenuConnect(_gameWindowId, _zIndex, _address, _port)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH);
-	var windowStyle = new GameWindowStyle(#217fb5, 1);
+	var windowStyle = new GameWindowStyle(#7d9ac7, 1);
 	var multiplayerConnectWindow = new GameWindow(
 		_gameWindowId,
 		new Vector2(0, 0),
@@ -31,6 +31,21 @@ function CreateWindowMainMenuConnect(_gameWindowId, _zIndex, _address, _port)
 		connectingTitle,
 		timeoutTimerTitle
 	);
+	
+	// OVERRIDE WINDOW ONOPEN FUNCTION
+	var overrideOnClose = function()
+	{
+		// DISCONNECT FROM A HOST IF CONNECTING INTERRUPTED
+		if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.CONNECTING)
+		{
+			global.NetworkHandlerRef.DisconnectSocket();
+			if (!global.GUIStateHandlerRef.ResetGUIStateMainMenu())
+			{
+				show_debug_message("Failed to reset GUI state Main Menu");
+			}
+		}
+	}
+	multiplayerConnectWindow.OnClose = overrideOnClose;
 	
 	multiplayerConnectWindow.AddChildElements(multiplayerConnectElements);
 	return multiplayerConnectWindow;
