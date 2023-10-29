@@ -10,4 +10,8 @@ export default class Player {
     this.position.x = x;
     this.position.y = y;
   }
+
+  resetPosition() {
+    this.position = new Vector2(0, 0);
+  }
 }

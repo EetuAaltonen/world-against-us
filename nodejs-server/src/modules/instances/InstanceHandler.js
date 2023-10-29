@@ -5,7 +5,7 @@ export default class InstanceHandler {
   constructor() {
     this.instances = {};
     this.campId = 0;
-    this.nextId = 1;
+    this.nextInstanceId = 1;
 
     if (this.getInstance(this.campId) === undefined) {
       this.createDefaultCampInstance();
@@ -18,11 +18,11 @@ export default class InstanceHandler {
 
   createInstance(roomIndex) {
     let createdInstanceId;
-    if (Object.keys(this.instances).includes(roomIndex)) {
+    if (Object.values(ROOM_INDEX).includes(roomIndex)) {
       const createdInstance = new Instance(roomIndex);
-      createdInstanceId = this.nextId;
+      createdInstanceId = this.nextInstanceId;
       this.instances[createdInstanceId] = createdInstance;
-      this.nextIndex++;
+      this.nextInstanceId++;
     }
     return createdInstanceId;
   }
@@ -33,6 +33,37 @@ export default class InstanceHandler {
 
   getInstanceIds() {
     return Object.keys(this.instances);
+  }
+
+  fastTravelPlayer(
+    clientId,
+    sourceInstanceId,
+    destinationRoomIndex,
+    destinationInstanceId
+  ) {
+    let newInstanceId;
+    const sourceInstance = this.instances[sourceInstanceId];
+    if (sourceInstance !== undefined) {
+      const player = sourceInstance.getPlayer(clientId);
+      if (this.removePlayerFromInstance(clientId, sourceInstanceId)) {
+        if (destinationInstanceId === undefined) {
+          if (destinationRoomIndex === ROOM_INDEX.ROOM_CAMP) {
+            newInstanceId = this.addPlayerToDefaultInstance(clientId, player);
+          } else {
+            newInstanceId = this.addPlayerToInstance(
+              clientId,
+              destinationRoomIndex,
+              player,
+              undefined
+            );
+          }
+          if (newInstanceId !== undefined) {
+            player.resetPosition();
+          }
+        }
+      }
+    }
+    return newInstanceId;
   }
 
   addPlayerToDefaultInstance(clientId, player) {
@@ -62,10 +93,12 @@ export default class InstanceHandler {
       }
     } else {
       const createdInstanceId = this.createInstance(roomIndex);
-      const createdInstance = this.instances[createdInstanceId];
-      if (createdInstance.addPlayer(clientId, player)) {
-        createdInstance.setOwner(clientId);
-        instanceId = createdInstanceId;
+      if (createdInstanceId !== undefined) {
+        const createdInstance = this.instances[createdInstanceId];
+        if (createdInstance.addPlayer(clientId, player)) {
+          createdInstance.setOwner(clientId);
+          instanceId = createdInstanceId;
+        }
       }
     }
     return instanceId;
