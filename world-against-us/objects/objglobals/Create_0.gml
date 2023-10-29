@@ -126,8 +126,9 @@ global.PlayerMedicinePockets = undefined;
 // TEMP INVENTORY
 global.ObjTempInventory = noone;
 
-// GAME MODE
+// NETWORKING
 global.MultiplayerMode = false;
+global.NetworkRegionHandlerRef = undefined;
 
 // DRONE
 global.InstanceDrone = noone;

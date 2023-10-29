@@ -19,11 +19,7 @@ function NetworkHandler() constructor
 	network_packet_queue = ds_priority_create();
 	timeout_timer = new Timer(TimerFromSeconds(8));
 	
-	// TODO: Move these under RegionHandler
-	region_id = undefined;
-	room_index = undefined;
-	owner_client = undefined;
-	
+	network_region_handler = new NetworkRegionHandler();
 	
 	static CreateSocket = function()
 	{
@@ -82,6 +78,9 @@ function NetworkHandler() constructor
 		acknowledgment_id = -1;
 		acknowledgment_timeout_timer.running_time = 0;
 		ds_map_clear(in_flight_packets);
+		
+		// RESET REGION DATA
+		network_region_handler.ResetRegionData();
 		
 		global.MultiplayerMode = false;
 	}
@@ -409,9 +408,9 @@ function NetworkHandler() constructor
 			if (client_id != UNDEFINED_UUID)
 			{
 				draw_text(global.GUIW - 20, 30, string("{0} :client_id", client_id));
-				draw_text(global.GUIW - 20, 50, string("{0} :Region ID", region_id ?? "Unknown"));
-				draw_text(global.GUIW - 20, 70, string("{0} :Room index", room_index ?? "Unknown"));
-				var ownerClientID = (owner_client ?? "Unknown");
+				draw_text(global.GUIW - 20, 50, string("{0} :Region ID", network_region_handler.region_id ?? "Unknown"));
+				draw_text(global.GUIW - 20, 70, string("{0} :Room index", network_region_handler.room_index ?? "Unknown"));
+				var ownerClientID = (network_region_handler.owner_client ?? "Unknown");
 				draw_text(global.GUIW - 20, 90, string("{0} :Region Owner", (client_id == ownerClientID) ? "Self" : "Other"));
 			}
 		}

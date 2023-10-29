@@ -21,9 +21,9 @@ function NetworkPacketHandler() constructor
 								var roomIndex = payload[$ "room_index"] ?? undefined;
 								var ownerClient = payload[$ "owner_client"] ?? undefined;
 							
-								global.NetworkHandlerRef.region_id = regionId;
-								global.NetworkHandlerRef.room_index = roomIndex;
-								global.NetworkHandlerRef.owner_client = ownerClient;
+								global.NetworkRegionHandlerRef.region_id = regionId;
+								global.NetworkRegionHandlerRef.room_index = roomIndex;
+								global.NetworkRegionHandlerRef.owner_client = ownerClient;
 
 								isPacketHandled = true;
 							} break;
@@ -50,9 +50,9 @@ function NetworkPacketHandler() constructor
 									var destinationRoomIndex = payload.destination_room_index;
 									if (!is_undefined(destinationRoomIndex))
 									{
-										global.NetworkHandlerRef.region_id = destinationRegionId;
-										global.NetworkHandlerRef.room_index = destinationRoomIndex;
-										global.NetworkHandlerRef.owner_client = undefined;
+										global.NetworkRegionHandlerRef.region_id = destinationRegionId;
+										global.NetworkRegionHandlerRef.room_index = destinationRoomIndex;
+										global.NetworkRegionHandlerRef.owner_client = undefined;
 										switch(destinationRoomIndex)
 										{
 											// TODO: Request room change from objRoomLoader
