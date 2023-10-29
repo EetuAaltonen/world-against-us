@@ -102,6 +102,7 @@ function NetworkHandler() constructor
 				if (is_undefined(in_flight_packets[? nextAcknowledgmentId]))
 				{
 					acknowledgment_id = nextAcknowledgmentId;
+					_networkPacket.acknowledgment_attemp = 1;
 					if (ds_map_add(in_flight_packets, acknowledgment_id, _networkPacket))
 					{
 						_networkPacket.header.SetAcknowledgmentId(acknowledgment_id);
@@ -139,14 +140,32 @@ function NetworkHandler() constructor
 			var lastAcknowledgmentNetworkPacket = in_flight_packets[? acknowledgment_id];
 			if (!is_undefined(lastAcknowledgmentNetworkPacket))
 			{
-				AddPacketToQueue(
-					lastAcknowledgmentNetworkPacket,
-					false /*DON'T SET ACKNOWLEDGE TWICE*/,
-					lastAcknowledgmentNetworkPacket.priority
-				);
+				if (lastAcknowledgmentNetworkPacket.acknowledgment_attemp < lastAcknowledgmentNetworkPacket.max_acknowledgment_attemps)
+				{
+					lastAcknowledgmentNetworkPacket.acknowledgment_attemp++;
+					AddPacketToQueue(
+						lastAcknowledgmentNetworkPacket,
+						false /*DON'T SET ACKNOWLEDGE TWICE*/,
+						lastAcknowledgmentNetworkPacket.priority
+					);
 				
-				show_debug_message("Resending acknowledgment {0}", lastAcknowledgmentNetworkPacket.header.acknowledgment_id);
-				acknowledgment_timeout_timer.StartTimer();
+					show_debug_message("Resending acknowledgment {0}", lastAcknowledgmentNetworkPacket.header.acknowledgment_id);
+					acknowledgment_timeout_timer.StartTimer();
+				} else {
+					show_message("Failed to reach the server. Disconnecting...");
+					DisconnectSocket();
+					if (room != roomMainMenu)
+					{
+						room_goto(roomMainMenu);
+					} else {
+						// OPEN MAIN MENU ROOT WINDOW
+						global.GUIStateHandlerRef.ResetGUIState();
+						with (objMainMenu)
+						{
+							event_perform(ev_other, ev_user0);
+						}
+					}
+				}
 			}
 		} else {
 			acknowledgment_timeout_timer.Update();	
@@ -203,18 +222,8 @@ function NetworkHandler() constructor
 					timeout_timer.Update();
 				}
 			} break;
-			case NETWORK_STATUS.PINGING:
-			{
-				if (timeout_timer.IsTimerStopped())
-				{
-					// TODO: Time out pinging
-					network_status = NETWORK_STATUS.TIMED_OUT;
-					DisconnectSocket();
-					room_goto(roomMainMenu);
-				} else {
-					timeout_timer.Update();
-				}
-			} break;
+			
+			// TODO: Time out pinging
 		}
 	}
 	
