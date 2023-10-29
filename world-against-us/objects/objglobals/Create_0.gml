@@ -69,6 +69,14 @@ randomise();
 // WORLD STATE INDICES
 #macro WORLD_STATE_UNLOCK_WALKIE_TALKIE "UnlockWalkieTalkie"
 
+// ROOMS
+// TODO: Move these inside a map locations data file to read
+#macro ROOM_INDEX_CAMP "roomCamp"
+#macro ROOM_INDEX_TOWN "roomTown"
+#macro ROOM_INDEX_OFFICE "roomOffice"
+#macro ROOM_INDEX_LIBRARY "roomLibrary"
+#macro ROOM_INDEX_FOREST "roomForest"
+
 // MAP ICON TYPE
 #macro STATIC_MAP_ICON "static_icon"
 #macro DYNAMIC_MAP_ICON "dynamic_icon"
