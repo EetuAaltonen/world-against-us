@@ -47,9 +47,6 @@ function CreateWindowMap(_gameWindowId, _zIndex)
 		mapInfoPanel // Render after map
 	);
 	
-	mapWindow.AddChildElements(mapElements);
-	mapInfoPanel.AddChildElements(mapInfoPanelElements);
-	
 	// OVERRIDE WINDOW ONOPEN FUNCTION
 	var overrideOnOpen = function()
 	{
@@ -65,5 +62,8 @@ function CreateWindowMap(_gameWindowId, _zIndex)
 		global.MapDataHandlerRef.is_dynamic_data_updating = true;
 	}
 	mapWindow.OnClose = overrideOnClose;
+	
+	mapWindow.AddChildElements(mapElements);
+	mapInfoPanel.AddChildElements(mapInfoPanelElements);
 	return mapWindow;
 }

@@ -46,7 +46,7 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 		instanceListPosition,
 		instanceListSize,
 		#555973, emptyInstanceList,
-		ListDrawAvailableInstance, true, testFunction
+		ListDrawAvailableInstance, true, OnClickWorldMapAvailableInstance
 	);
 	
 	// INSTANCE LIST TITLE
@@ -81,21 +81,25 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 	var fastTravelCampButton = new WindowButton(
 		"FastTravelCampButton",
 		buttonPositionCamp, buttonSize,
-		buttonStyle.button_background_color, "Camp", buttonStyle, testFunction
+		buttonStyle.button_background_color, "Camp", buttonStyle, testFunction,
+		new WorldMapLocation(roomCamp, ROOM_INDEX_CAMP, "Camp")
 	);
 	
 	var buttonPositionTown = new Vector2(1388, 408);
 	var fastTravelTownButton = new WindowButton(
 		"FastTravelTownButton",
 		buttonPositionTown, buttonSize,
-		buttonStyle.button_background_color, "Town", buttonStyle, testFunction
+		buttonStyle.button_background_color, "Town", buttonStyle, OnClickWorldMapFastTravel,
+		new WorldMapLocation(roomTown, ROOM_INDEX_TOWN, "Town")
 	);
 	
 	var buttonPositionForest = new Vector2(1038, 753);
 	var fastTravelForestButton = new WindowButton(
 		"FastTravelForestButton",
 		buttonPositionForest, buttonSize,
-		buttonStyle.button_background_color, "Forest", buttonStyle, testFunction
+		buttonStyle.button_background_color, "Forest", buttonStyle, testFunction,
+		new WorldMapLocation(undefined, ROOM_INDEX_FOREST, "Forest")
+		// TODO: Room forest
 	);
 	
 	ds_list_add(mapElements,
@@ -109,23 +113,21 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 		mapInfoPanel
 	);
 	
-	mapWindow.AddChildElements(mapElements);
-	mapInfoPanel.AddChildElements(mapInfoPanelElements);
-	
 	// OVERRIDE WINDOW ONOPEN FUNCTION
 	var overrideOnOpen = function()
 	{
-		// TRIGGER MAP UPDATE
-		global.MapDataHandlerRef.is_dynamic_data_updating = true;
-		global.MapDataHandlerRef.map_update_timer.TriggerTimer();
+		// REQUEST INSTANCE LIST
+		if (global.MultiplayerMode)
+		{
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_INSTANCE_LIST, global.NetworkHandlerRef.client_id);
+			var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
+			
+			global.NetworkHandlerRef.AddPacketToQueue(networkPacket, true);
+		}
 	}
 	mapWindow.OnOpen = overrideOnOpen;
-	// OVERRIDE WINDOW ONCLOSE FUNCTION
-	var overrideOnClose = function()
-	{
-		// SUSPEND MAP UPDATE
-		global.MapDataHandlerRef.is_dynamic_data_updating = true;
-	}
-	mapWindow.OnClose = overrideOnClose;
+	
+	mapWindow.AddChildElements(mapElements);
+	mapInfoPanel.AddChildElements(mapInfoPanelElements);
 	return mapWindow;
 }
