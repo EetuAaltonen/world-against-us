@@ -45,20 +45,24 @@ export default class InstanceHandler {
     const sourceInstance = this.instances[sourceInstanceId];
     if (sourceInstance !== undefined) {
       const player = sourceInstance.getPlayer(clientId);
-      if (this.removePlayerFromInstance(clientId, sourceInstanceId)) {
-        if (destinationInstanceId === undefined) {
+      if (player !== undefined) {
+        if (this.removePlayerFromInstance(clientId, sourceInstanceId)) {
           if (destinationRoomIndex === ROOM_INDEX.ROOM_CAMP) {
             newInstanceId = this.addPlayerToDefaultInstance(clientId, player);
           } else {
+            const priorityInstanceId =
+              sourceInstanceId === destinationInstanceId
+                ? undefined
+                : destinationInstanceId;
             newInstanceId = this.addPlayerToInstance(
               clientId,
               destinationRoomIndex,
               player,
-              undefined
+              priorityInstanceId
             );
-          }
-          if (newInstanceId !== undefined) {
-            player.resetPosition();
+            if (newInstanceId !== undefined) {
+              player.resetPosition();
+            }
           }
         }
       }
@@ -127,11 +131,10 @@ export default class InstanceHandler {
       const instanceIds = this.getInstanceIds();
       const instanceCount = instanceIds.length;
       for (var i = 0; i < instanceCount; i++) {
-        const instanceId = instanceIds[0];
+        const instanceId = instanceIds[i];
         const instance = this.getInstance(instanceId);
         if (instance.getPlayer(clientId) !== undefined) {
           if (instance.removePlayer(clientId)) {
-            isPlayerRemoved = true;
             if (!this.checkInstanceRelease(instanceId)) {
               if (instance.ownerClient == clientId) {
                 if (!instance.resetOwner()) {
@@ -142,8 +145,9 @@ export default class InstanceHandler {
                 }
               }
             }
+            isPlayerRemoved = true;
+            break;
           }
-          break;
         }
       }
     }

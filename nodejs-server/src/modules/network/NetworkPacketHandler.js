@@ -86,10 +86,7 @@ export default class NetworkPacketHandler {
                     clientId,
                     fastTravelInfo.sourceInstanceId,
                     fastTravelInfo.destinationRoomIndex,
-                    fastTravelInfo.sourceInstanceId ===
-                      fastTravelInfo.destinationInstanceId
-                      ? undefined
-                      : fastTravelInfo.destinationInstanceId
+                    fastTravelInfo.destinationInstanceId
                   );
                 const destinationInstance = this.instanceHandler.getInstance(
                   destinationInstanceId
