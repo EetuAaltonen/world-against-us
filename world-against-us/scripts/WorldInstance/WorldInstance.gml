@@ -1,4 +1,4 @@
-function AvailableInstance(_region_id, _room_index, _player_count) constructor
+function WorldInstance(_region_id, _room_index, _player_count) constructor
 {
 	region_id = _region_id;
 	room_index = _room_index;

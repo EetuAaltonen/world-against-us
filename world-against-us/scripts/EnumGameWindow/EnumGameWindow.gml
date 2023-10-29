@@ -25,6 +25,7 @@ enum GAME_WINDOW
 	Map,
 	MapExamineObject,
 	WorldMap,
+	WorldMapFastTravelQueue,
 	// LOOT CONTAINER
 	LootContainer,
 	// WORLD

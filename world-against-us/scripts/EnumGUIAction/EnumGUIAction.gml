@@ -5,5 +5,6 @@ enum GUI_ACTION
 	// INVENTORY
 	ItemActionMenu,
 	// MAP
-	ExamineObject
+	ExamineObject,
+	WorldMapFastTravelQueue,
 }
