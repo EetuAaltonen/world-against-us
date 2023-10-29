@@ -355,8 +355,7 @@ function NetworkHandler() constructor
 				} break;
 				case MESSAGE_TYPE.SERVER_ERROR:
 				{
-					var payloadStruct = json_parse(networkPacket.payload);
-					var errorMessage = payloadStruct[$ "error"] ?? "Unknown";
+					var errorMessage = networkPacket.payload[$ "error"] ?? "Unknown";
 					show_message(string("SERVER ERROR: {0} Disconnecting...", errorMessage));
 					DisconnectSocket();
 					if (room != roomMainMenu)

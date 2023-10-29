@@ -11,39 +11,76 @@ function NetworkPacketHandler() constructor
 				var payload = _networkPacket.payload;
 				if (!is_undefined(payload))
 				{
-					var payloadStruct = json_parse(payload);
-					switch (messageType)
+					if (payload != EMPTY_STRUCT)
 					{
-						case MESSAGE_TYPE.REQUEST_JOIN_GAME:
+						switch (messageType)
 						{
-							var regionId = payloadStruct[$ "instance_id"] ?? undefined;
-							var roomIndex = payloadStruct[$ "room_index"] ?? undefined;
-							var ownerClient = payloadStruct[$ "owner_client"] ?? undefined;
-							
-							global.NetworkHandlerRef.region_id = regionId;
-							global.NetworkHandlerRef.room_index = roomIndex;
-							global.NetworkHandlerRef.owner_client = ownerClient;
-
-							isPacketHandled = true;
-						} break;
-						case MESSAGE_TYPE.REQUEST_INSTANCE_LIST:
-						{
-							var instanceStructArray = payloadStruct[$ "available_instances"] ?? [];
-							var worldMapWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.WorldMap);
-							if (!is_undefined(worldMapWindow))
+							case MESSAGE_TYPE.REQUEST_JOIN_GAME:
 							{
-								var instanceListElement = worldMapWindow.GetChildElementById("InstanceList");
-								if (!is_undefined(instanceListElement))
+								var regionId = payload[$ "instance_id"] ?? undefined;
+								var roomIndex = payload[$ "room_index"] ?? undefined;
+								var ownerClient = payload[$ "owner_client"] ?? undefined;
+							
+								global.NetworkHandlerRef.region_id = regionId;
+								global.NetworkHandlerRef.room_index = roomIndex;
+								global.NetworkHandlerRef.owner_client = ownerClient;
+
+								isPacketHandled = true;
+							} break;
+							case MESSAGE_TYPE.REQUEST_INSTANCE_LIST:
+							{
+								var instanceStructArray = payload[$ "available_instances"] ?? [];
+								var worldMapWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.WorldMap);
+								if (!is_undefined(worldMapWindow))
 								{
-									var parsedInstances = ParseJSONStructToList(instanceStructArray, ParseJSONStructToAvailableInstance);
-									instanceListElement.UpdateDataCollection(parsedInstances);
+									var instanceListElement = worldMapWindow.GetChildElementById("InstanceList");
+									if (!is_undefined(instanceListElement))
+									{
+										var parsedInstances = ParseJSONStructToList(instanceStructArray, ParseJSONStructToWorldInstance);
+										instanceListElement.UpdateDataCollection(parsedInstances);
+										isPacketHandled = true;
+									}
 								}
+							} break;
+							case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
+							{
+								var destinationRegionId = payload.destination_region_id;
+								if (!is_undefined(destinationRegionId))
+								{
+									var destinationRoomIndex = payload.destination_room_index;
+									if (!is_undefined(destinationRoomIndex))
+									{
+										global.NetworkHandlerRef.region_id = destinationRegionId;
+										global.NetworkHandlerRef.room_index = destinationRoomIndex;
+										global.NetworkHandlerRef.owner_client = undefined;
+										switch(destinationRoomIndex)
+										{
+											// TODO: Request room change from objRoomLoader
+											case ROOM_INDEX_CAMP:
+											{
+												isPacketHandled = true;
+												room_goto(roomCamp);
+											} break;
+											case ROOM_INDEX_TOWN:
+											{
+												isPacketHandled = true;
+												room_goto(roomTown);
+											} break;
+											default:
+											{
+												show_debug_message(string("Unknown destination room index to fast travel: {0}", destinationRoomIndex));
+											}
+										}
+									}
+								}
+							} break;
+							default:
+							{
+								show_debug_message(string("Unknown message type {0} to handle", messageType));
 							}
 						}
-						default:
-						{
-							show_debug_message(string("Unknown message type {0} to handle", messageType));
-						}
+					} else {
+						throw (string("Failed to handle network packet with messageType {0} with empty payload", messageType));
 					}
 				}
 			} catch (error)

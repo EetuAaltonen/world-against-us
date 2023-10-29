@@ -72,6 +72,14 @@ function NetworkPacketBuilder() constructor
 						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.Y);
 						isPayloadWritten = true;
 					} break;
+					case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
+					{
+						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.source_region_id);
+						// SET SAME SOURCE AND DESTINATION IF NEW INSTANCE IS REQUESTED
+						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.destination_region_id ?? _networkPacketPayload.source_region_id);
+						buffer_write(_networkBuffer, buffer_text, _networkPacketPayload.destination_room_index);
+						isPayloadWritten = true;
+					} break;
 					default:
 					{
 						var jsonString = json_stringify(_networkPacketPayload);
