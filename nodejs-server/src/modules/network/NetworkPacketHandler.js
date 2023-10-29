@@ -1,5 +1,6 @@
 import MESSAGE_TYPE from "../constants/MessageType.js";
 import PACKET_PRIORITY from "../constants/PacketPriority.js";
+import WorldMapFastTravelInfo from "../world_map/WorldMapFastTravelInfo.js";
 
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
 
@@ -42,14 +43,14 @@ export default class NetworkPacketHandler {
               isPacketHandled = true;
             }
             break;
-          case MESSAGE_TYPE.REQUEST_INSTANCE_LIST: {
-            const instanceIds = this.instanceHandler
-              .getInstanceIds()
-              .filter(function (instanceId) {
-                return parseInt(instanceId) !== 0;
-              });
-            const instances = instanceIds.map((instanceId) => {
-              if (parseInt(instanceId) !== this.instanceHandler.campId) {
+          case MESSAGE_TYPE.REQUEST_INSTANCE_LIST:
+            {
+              const instanceIds = this.instanceHandler
+                .getInstanceIds()
+                .filter(function (instanceId) {
+                  return parseInt(instanceId) !== 0;
+                });
+              const instances = instanceIds.map((instanceId) => {
                 let instance = this.instanceHandler.getInstance(instanceId);
                 if (instance !== undefined) {
                   return {
@@ -58,24 +59,64 @@ export default class NetworkPacketHandler {
                     player_count: instance.getPlayerCount(),
                   };
                 }
-              }
-            });
-            const networkBuffer = this.networkPacketBuilder.createPacket(
-              MESSAGE_TYPE.REQUEST_INSTANCE_LIST,
-              clientId,
-              acknowledgmentId,
-              { available_instances: instances }
-            );
+              });
+              const networkBuffer = this.networkPacketBuilder.createPacket(
+                MESSAGE_TYPE.REQUEST_INSTANCE_LIST,
+                clientId,
+                acknowledgmentId,
+                { available_instances: instances }
+              );
 
-            this.networkHandler.packetQueue.enqueue(
-              new NetworkQueueEntry(
-                networkBuffer,
-                [client],
-                PACKET_PRIORITY.DEFAULT
-              )
-            );
-            isPacketHandled = true;
-          }
+              this.networkHandler.packetQueue.enqueue(
+                new NetworkQueueEntry(
+                  networkBuffer,
+                  [client],
+                  PACKET_PRIORITY.DEFAULT
+                )
+              );
+              isPacketHandled = true;
+            }
+            break;
+          case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
+            {
+              const fastTravelInfo = networkPacket.payload;
+              if (fastTravelInfo !== undefined) {
+                const destinationInstanceId =
+                  this.instanceHandler.fastTravelPlayer(
+                    clientId,
+                    fastTravelInfo.sourceInstanceId,
+                    fastTravelInfo.destinationRoomIndex,
+                    fastTravelInfo.sourceInstanceId ===
+                      fastTravelInfo.destinationInstanceId
+                      ? undefined
+                      : fastTravelInfo.destinationInstanceId
+                  );
+                const destinationInstance = this.instanceHandler.getInstance(
+                  destinationInstanceId
+                );
+                const payloadFastTravelInfo = new WorldMapFastTravelInfo(
+                  fastTravelInfo.sourceInstanceId,
+                  destinationInstanceId,
+                  destinationInstance.roomIndex
+                );
+                const networkBuffer = this.networkPacketBuilder.createPacket(
+                  MESSAGE_TYPE.REQUEST_FAST_TRAVEL,
+                  clientId,
+                  acknowledgmentId,
+                  payloadFastTravelInfo
+                );
+
+                this.networkHandler.packetQueue.enqueue(
+                  new NetworkQueueEntry(
+                    networkBuffer,
+                    [client],
+                    PACKET_PRIORITY.DEFAULT
+                  )
+                );
+                isPacketHandled = true;
+              }
+            }
+            break;
         }
       }
     }

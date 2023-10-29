@@ -5,6 +5,7 @@ import Vector2 from "../math/Vector2.js";
 
 import NetworkPacket from "./NetworkPacket.js";
 import NetworkPacketHeader from "./NetworkPacketHeader.js";
+import WorldMapFastTravelPoint from "../world_map/WorldMapFastTravelInfo.js";
 
 export default class NetworkPacketParser {
   constructor() {}
@@ -42,10 +43,25 @@ export default class NetworkPacketParser {
           case MESSAGE_TYPE.DATA_PLAYER_POSITION:
             {
               let offset = 0;
-              const xPos = msg.readUInt32LE(offset);
+              const parsedXPos = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;
-              const yPos = msg.readUInt32LE(offset);
-              return new Vector2(xPos, yPos);
+              const parsedYPos = msg.readUInt32LE(offset);
+              payload = new Vector2(parsedXPos, parsedYPos);
+            }
+            break;
+          case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
+            {
+              let offset = 0;
+              const parsedSourceInstanceId = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedDestinationInstanceId = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedRoomIndex = msg.toString("utf8", offset);
+              payload = new WorldMapFastTravelPoint(
+                parsedSourceInstanceId,
+                parsedDestinationInstanceId,
+                parsedRoomIndex
+              );
             }
             break;
           default: {

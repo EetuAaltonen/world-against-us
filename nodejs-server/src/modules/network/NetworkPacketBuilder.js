@@ -1,4 +1,5 @@
 import BITWISE from "../constants/Bitwise.js";
+import MESSAGE_TYPE from "../constants/MessageType.js";
 
 const NULL_TERMINATOR = "\0";
 
@@ -16,7 +17,7 @@ export default class NetworkPacketBuilder {
   createPacket(messageType, clientId, acknowledgmentId, payload) {
     let packet;
     if (this.writePacketHeader(messageType, clientId, acknowledgmentId)) {
-      if (this.writePacketPayload(payload)) {
+      if (this.writePacketPayload(messageType, payload)) {
         if (this.payloadBuffer !== undefined) {
           packet = Buffer.concat([this.headerBuffer, this.payloadBuffer]);
         }
@@ -49,12 +50,41 @@ export default class NetworkPacketBuilder {
     return isPacketHeaderWritten;
   }
 
-  writePacketPayload(payload) {
+  writePacketPayload(messageType, payload) {
     let isPacketPayloadWritten = false;
     try {
-      this.payloadBuffer = Buffer.from(JSON.stringify(payload ?? {}), "utf8");
-      isPacketPayloadWritten = true;
+      switch (messageType) {
+        case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
+          {
+            const bufferInstanceIndices = Buffer.allocUnsafe(
+              BITWISE.BIT32 + BITWISE.BIT32
+            );
+            bufferInstanceIndices.writeUInt32LE(payload.sourceInstanceId, 0);
+            bufferInstanceIndices.writeUInt32LE(
+              payload.destinationInstanceId,
+              BITWISE.BIT32
+            );
+            const bufferDestinationRoomIndex = Buffer.from(
+              payload.destinationRoomIndex,
+              "utf8"
+            );
+            this.payloadBuffer = Buffer.concat([
+              bufferInstanceIndices,
+              bufferDestinationRoomIndex,
+            ]);
+            isPacketPayloadWritten = true;
+          }
+          break;
+        default: {
+          this.payloadBuffer = Buffer.from(
+            JSON.stringify(payload ?? {}),
+            "utf8"
+          );
+          isPacketPayloadWritten = true;
+        }
+      }
     } catch (error) {
+      console.log(error);
       throw error;
     }
     return isPacketPayloadWritten;
