@@ -38,6 +38,14 @@ function NetworkPacketHandler() constructor
 									{
 										var parsedInstances = ParseJSONStructToList(instanceStructArray, ParseJSONStructToWorldInstance);
 										instanceListElement.UpdateDataCollection(parsedInstances);
+										
+										// HIDE LOADING ICON
+										var instanceListLoadingElement = worldMapWindow.GetChildElementById("InstanceListLoading");
+										if (!is_undefined(instanceListLoadingElement))
+										{
+											instanceListLoadingElement.isVisible = false;
+										}
+										
 										isPacketHandled = true;
 									}
 								}

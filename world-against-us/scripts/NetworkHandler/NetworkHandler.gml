@@ -121,6 +121,26 @@ function NetworkHandler() constructor
 		}
 	}
 	
+	static ClearInFlightPacketsByMessageType = function(_messageType)
+	{
+		for (var key = ds_map_find_first(in_flight_packets); !is_undefined(key); key = ds_map_find_next(in_flight_packets, key))
+		{
+			var inFlightPacket = in_flight_packets[? key];
+			if (!is_undefined(inFlightPacket))
+			{
+				var networkpacketHeader = inFlightPacket.header;
+				if (!is_undefined(networkpacketHeader))
+				{
+					if (networkpacketHeader.message_type == _messageType)
+					{
+						ds_map_delete(in_flight_packets, key);
+					}
+				}
+			}
+		}
+		acknowledgment_timeout_timer.running_time = 0;
+	}
+	
 	static Update = function()
 	{
 		if (ds_priority_size(network_packet_queue) > 0)
