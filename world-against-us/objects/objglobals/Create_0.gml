@@ -129,6 +129,7 @@ global.ObjTempInventory = noone;
 // NETWORKING
 global.MultiplayerMode = false;
 global.NetworkRegionHandlerRef = undefined;
+global.NetworkPacketTrackerRef = undefined;
 
 // DRONE
 global.InstanceDrone = noone;

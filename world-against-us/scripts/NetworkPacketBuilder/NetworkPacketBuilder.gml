@@ -1,7 +1,5 @@
 function NetworkPacketBuilder() constructor
 {
-	
-	
 	static CreatePacket = function(_networkBuffer, _networkPacket)
 	{
 		var isPacketCreated = false;

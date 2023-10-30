@@ -9,6 +9,7 @@ global.NotificationHandlerRef = instance_exists(objNotification) ? instance_find
 global.ObjNetwork = instance_exists(objNetwork) ? instance_find(objNetwork, 0) : noone;
 global.NetworkHandlerRef = instance_exists(objNetwork) ? instance_find(objNetwork, 0).networkHandler : undefined;
 global.NetworkRegionHandlerRef = (!is_undefined(global.NetworkHandlerRef)) ? global.NetworkHandlerRef.network_region_handler : undefined;
+global.NetworkPacketTrackerRef = (!is_undefined(global.NetworkHandlerRef)) ? global.NetworkHandlerRef.network_packet_tracker : undefined;
 
 global.ItemDatabase = instance_exists(objDatabase) ? instance_find(objDatabase, 0).itemDatabase : undefined;
 global.BlueprintData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).blueprintData : undefined;
