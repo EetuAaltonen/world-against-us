@@ -18,7 +18,7 @@ export default class InstanceHandler {
 
   createInstance(roomIndex) {
     let createdInstanceId;
-    if (Object.values(ROOM_INDEX).includes(roomIndex)) {
+    if (this.isRoomIndexValid(roomIndex)) {
       const createdInstance = new Instance(roomIndex);
       createdInstanceId = this.nextInstanceId;
       this.instances[createdInstanceId] = createdInstance;
@@ -35,6 +35,10 @@ export default class InstanceHandler {
     return Object.keys(this.instances);
   }
 
+  isRoomIndexValid(roomIndex) {
+    return Object.values(ROOM_INDEX).includes(roomIndex);
+  }
+
   fastTravelPlayer(
     clientId,
     sourceInstanceId,
@@ -46,25 +50,26 @@ export default class InstanceHandler {
     if (sourceInstance !== undefined) {
       const player = sourceInstance.getPlayer(clientId);
       if (player !== undefined) {
-        if (this.removePlayerFromInstance(clientId, sourceInstanceId)) {
-          if (destinationRoomIndex === ROOM_INDEX.ROOM_CAMP) {
-            newInstanceId = this.addPlayerToDefaultInstance(clientId, player);
-          } else {
-            const priorityInstanceId =
-              sourceInstanceId === destinationInstanceId
-                ? undefined
-                : destinationInstanceId;
-            newInstanceId = this.addPlayerToInstance(
-              clientId,
-              destinationRoomIndex,
-              player,
-              priorityInstanceId
-            );
-            if (newInstanceId !== undefined) {
-              player.resetPosition();
+        if (this.isRoomIndexValid(destinationRoomIndex))
+          if (this.removePlayerFromInstance(clientId, sourceInstanceId)) {
+            if (destinationRoomIndex === ROOM_INDEX.ROOM_CAMP) {
+              newInstanceId = this.addPlayerToDefaultInstance(clientId, player);
+            } else {
+              const priorityInstanceId =
+                sourceInstanceId === destinationInstanceId
+                  ? undefined
+                  : destinationInstanceId;
+              newInstanceId = this.addPlayerToInstance(
+                clientId,
+                destinationRoomIndex,
+                player,
+                priorityInstanceId
+              );
+              if (newInstanceId !== undefined) {
+                player.resetPosition();
+              }
             }
           }
-        }
       }
     }
     return newInstanceId;
