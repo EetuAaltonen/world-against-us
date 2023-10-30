@@ -12,10 +12,10 @@ function WindowAnimation(_elementId, _relativePosition, _size, _backgroundColor,
 				if (!sprite_exists(spriteIndex)) { spriteIndex = SPRITE_ERROR; }
 				InitImageScale();
 			}
+		} else {
+			var spriteCount = sprite_get_number(spriteIndex);
+			imageIndex += animationSpeed;
+			if (floor(imageIndex) > spriteCount) { imageIndex = 0; }
 		}
-		
-		var spriteCount = sprite_get_number(spriteIndex);
-		imageIndex += animationSpeed;
-		if (floor(imageIndex) > spriteCount) { imageIndex = 0; }
 	}
 }

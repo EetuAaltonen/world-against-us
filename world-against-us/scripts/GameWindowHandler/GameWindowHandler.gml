@@ -9,8 +9,8 @@ function GameWindowHandler() constructor
 		for (var i = 0; i < windowCount; i++)
 		{
 			var gameWindow = _windowGroup[@ i];
-			gameWindow.OnOpen();
 			ds_list_add(gameWindows, gameWindow);
+			gameWindow.OnOpen();
 		}
 	}
 	

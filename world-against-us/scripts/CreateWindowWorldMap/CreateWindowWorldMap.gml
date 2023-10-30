@@ -58,6 +58,15 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 		"--Available instances--", font_default, fa_center, fa_top, c_white, 1
 	);
 	
+	// LOADING ICON
+	var instanceListLoading = new WindowLoading(
+		"InstanceListLoading",
+		instanceListPosition,
+		instanceListSize,
+		undefined
+	);
+	instanceListLoading.isVisible = false;
+	
 	// MAP BACKGROUND IMAGE
 	var mapBackgroundImageSize = new Size(windowSize.w - instanceListSize.w - 30, windowSize.h - infoPanelSize.h - global.ObjHud.hudHeight);
 	var mapBackgroundImage = new WindowImage(
@@ -110,6 +119,7 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 		fastTravelForestButton,
 		instanceListTitle,
 		instanceList,
+		instanceListLoading,
 		mapInfoPanel
 	);
 	
@@ -123,9 +133,31 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 			var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 			
 			global.NetworkHandlerRef.AddPacketToQueue(networkPacket, true);
+			
+			// SHOW INSTANCE LIST LOADING ICON
+			var worldMapWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.WorldMap);
+			if (!is_undefined(worldMapWindow))
+			{
+				var instanceListLoadingElement = worldMapWindow.GetChildElementById("InstanceListLoading");
+				if (!is_undefined(instanceListLoadingElement))
+				{
+					instanceListLoadingElement.isVisible = true;
+				}
+			}
 		}
 	}
 	mapWindow.OnOpen = overrideOnOpen;
+	
+	// OVERRIDE WINDOW ONOPEN FUNCTION
+	var overrideOnClose = function()
+	{
+		// REQUEST INSTANCE LIST
+		if (global.MultiplayerMode)
+		{
+			global.NetworkHandlerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.REQUEST_INSTANCE_LIST);
+		}
+	}
+	mapWindow.OnClose = overrideOnClose;
 	
 	mapWindow.AddChildElements(mapElements);
 	mapInfoPanel.AddChildElements(mapInfoPanelElements);
