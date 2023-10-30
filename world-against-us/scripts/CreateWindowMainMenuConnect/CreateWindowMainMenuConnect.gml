@@ -18,18 +18,9 @@ function CreateWindowMainMenuConnect(_gameWindowId, _zIndex, _address, _port)
 		font_default, fa_center, fa_middle, c_black, 1
 	);
 	
-	var timeoutTimerTitle = new WindowText(
-		"TimeoutTimerTitle",
-		new Vector2(windowSize.w * 0.5, 600),
-		undefined, undefined,
-		EMPTY_STRING,
-		font_default, fa_center, fa_middle, c_black, 1
-	);
-	
 	// CONNECTING TITLE
 	ds_list_add(multiplayerConnectElements,
-		connectingTitle,
-		timeoutTimerTitle
+		connectingTitle
 	);
 	
 	// OVERRIDE WINDOW ONOPEN FUNCTION

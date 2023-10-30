@@ -132,29 +132,35 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_INSTANCE_LIST, global.NetworkHandlerRef.client_id);
 			var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 			
-			global.NetworkHandlerRef.AddPacketToQueue(networkPacket, true);
-			
-			// SHOW INSTANCE LIST LOADING ICON
-			var worldMapWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.WorldMap);
-			if (!is_undefined(worldMapWindow))
+			if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 			{
-				var instanceListLoadingElement = worldMapWindow.GetChildElementById("InstanceListLoading");
-				if (!is_undefined(instanceListLoadingElement))
+				if (global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 				{
-					instanceListLoadingElement.isVisible = true;
+					// SHOW INSTANCE LIST LOADING ICON
+					var worldMapWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.WorldMap);
+					if (!is_undefined(worldMapWindow))
+					{
+						var instanceListLoadingElement = worldMapWindow.GetChildElementById("InstanceListLoading");
+						if (!is_undefined(instanceListLoadingElement))
+						{
+							instanceListLoadingElement.isVisible = true;
+						}
+					}
+				} else {
+					show_debug_message("Failed to request instance list");
 				}
 			}
 		}
 	}
 	mapWindow.OnOpen = overrideOnOpen;
 	
-	// OVERRIDE WINDOW ONOPEN FUNCTION
+	// OVERRIDE WINDOW ONCLOSE FUNCTION
 	var overrideOnClose = function()
 	{
-		// REQUEST INSTANCE LIST
+		// CLEAR IN-FLIGHT INSTANCE LIST REQUESTS
 		if (global.MultiplayerMode)
 		{
-			global.NetworkHandlerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.REQUEST_INSTANCE_LIST);
+			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.REQUEST_INSTANCE_LIST);
 		}
 	}
 	mapWindow.OnClose = overrideOnClose;

@@ -12,7 +12,13 @@ function OnClickWorldMapAvailableInstance()
 			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_FAST_TRAVEL, global.NetworkHandlerRef.client_id);
 			var fastTravelInfo = new WorldMapFastTravelInfo(global.NetworkRegionHandlerRef.region_id, elementData.region_id, elementData.room_index);
 			var networkPacket = new NetworkPacket(networkPacketHeader, fastTravelInfo);
-			global.NetworkHandlerRef.AddPacketToQueue(networkPacket, true);
+			if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+			{
+				if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+				{
+					show_debug_message("Failed to request fast travel");
+				}
+			}
 		}
 	}
 }

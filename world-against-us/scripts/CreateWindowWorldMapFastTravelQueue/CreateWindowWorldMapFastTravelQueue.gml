@@ -18,24 +18,19 @@ function CreateWindowWorldMapFastTravelQueue(_gameWindowId, _zIndex)
 		font_default, fa_center, fa_middle, c_black, 1
 	);
 	
-	var timeoutTimerTitle = new WindowText(
-		"TimeoutTimerTitle",
-		new Vector2(windowSize.w * 0.5, 600),
-		undefined, undefined,
-		EMPTY_STRING,
-		font_default, fa_center, fa_middle, c_black, 1
-	);
-	
 	// FAST TRAVEL TITLE
 	ds_list_add(fastTravelQueueElements,
-		fastTravelTitle,
-		timeoutTimerTitle
+		fastTravelTitle
 	);
 	
 	// OVERRIDE WINDOW ONCLOSE FUNCTION
 	var overrideOnClose = function()
 	{
-		// TODO: Cancel fast travel request
+		// CLEAR IN-FLIGHT FAST TRAVEL REQUESTS
+		if (global.MultiplayerMode)
+		{
+			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.REQUEST_FAST_TRAVEL);
+		}
 	}
 	fastTravelQueueWindow.OnClose = overrideOnClose;
 	
