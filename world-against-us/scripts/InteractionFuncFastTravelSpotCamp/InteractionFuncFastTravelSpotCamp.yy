@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "FastTravel",
-    "path": "folders/Scripts/World/FastTravel.yy",
+    "path": "folders/Scripts/World/Interactable/FastTravel.yy",
   },
 }
