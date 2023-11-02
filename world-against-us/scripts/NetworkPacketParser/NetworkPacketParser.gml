@@ -45,6 +45,17 @@ function NetworkPacketParser() constructor
 						parsedDestinationRoomIndex
 					);
 				} break;
+				case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
+				{
+					// TODO: Remove region id when server can fetch it by the clint ID
+					var parsedRegionId = buffer_read(_msg, buffer_u32);
+					var parsedContentCount = buffer_read(_msg, buffer_s32);
+					var parsedContainerId = buffer_read(_msg, buffer_string);
+					parsedPayload = new ContainerContentInfo(
+						parsedContainerId,
+						parsedContentCount
+					);
+				} break;
 				default:
 				{
 					var payloadString = buffer_read(_msg, buffer_string);
@@ -55,6 +66,7 @@ function NetworkPacketParser() constructor
 		{
 			show_debug_message(error);
 			show_message(error);
+			parsedPayload = undefined;
 		}
 		return parsedPayload;
 	}

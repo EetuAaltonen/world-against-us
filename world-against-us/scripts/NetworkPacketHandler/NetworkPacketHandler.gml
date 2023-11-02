@@ -82,6 +82,219 @@ function NetworkPacketHandler() constructor
 									}
 								}
 							} break;
+							case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
+							{
+								var containerContentInfo = payload;
+								var targetContainer = undefined;
+								var containerCount = instance_number(objContainerParent);
+								for (var i = 0; i < containerCount; ++i;)
+								{
+									var container = instance_find(objContainerParent, i);
+									if (!is_undefined(container))
+									{
+										if (container.containerId == containerContentInfo.container_id)
+										{
+											targetContainer = container;
+											break;
+										}
+									}
+								}
+								if (instance_exists(targetContainer))
+								{
+									if (!is_undefined(targetContainer.lootTableTag))
+									{
+										if (!is_undefined(targetContainer.inventory))
+										{
+											var containerPosition = new Vector2(targetContainer.x, targetContainer.y);
+											var activeInventoryStream = new NetworkInventoryStream(
+												targetContainer.containerId,
+												containerPosition,
+												targetContainer.inventory,
+												4, true, 
+												targetContainer.inventory.GetItemCount()
+											);
+											// CLEAR INVENTORY
+											targetContainer.inventory.ClearItems();
+											// CHECK IF SERVER HAS CONTAINER CONTENT
+											if (containerContentInfo.content_count == -1)
+											{
+												// GENERATE LOOT
+												RollContainerLoot(targetContainer.lootTableTag, targetContainer.inventory);
+											} else {
+												activeInventoryStream.is_stream_sending = false;
+											}
+											// SET ACTIVE INVENTORY STREAM
+											global.NetworkRegionObjectHandlerRef.active_inventory_stream = activeInventoryStream;
+											
+											// REQUEST CONTAINER INVENTORY DATA STREAM
+											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+											var networkPacket = new NetworkPacket(networkPacketHeader, activeInventoryStream);
+											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+											{
+												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+												{
+													show_debug_message("Failed to start container inventory data stream");
+												}
+											}
+										}
+									}
+								}
+							} break;
+							case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
+							{
+								var activeInventoryStream = global.NetworkRegionObjectHandlerRef.active_inventory_stream;
+								if (!is_undefined(activeInventoryStream))
+								{
+									if (activeInventoryStream.is_stream_sending)
+									{
+										var itemsStructArray = activeInventoryStream.FetchItemsToStream();
+										var itemStructCount = array_length(itemsStructArray);
+										if (itemStructCount > 0)
+										{
+											// CONTAINER INVENTORY STREAM
+											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+											var networkPacket = new NetworkPacket(networkPacketHeader, {
+												// TODO: Create own struct for inventory data stream
+												region_id: global.NetworkRegionHandlerRef.region_id,
+												items: itemsStructArray
+											});
+											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+											{
+												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+												{
+													show_debug_message("Failed to continue container inventory data stream");
+												}
+											}
+										} else {
+											// CONTAINER INVENTORY STREAM
+											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+											var networkPacket = new NetworkPacket(networkPacketHeader, {
+												// TODO: Create own struct for inventory data stream
+												region_id: global.NetworkRegionHandlerRef.region_id
+											});
+											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+											{
+												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+												{
+													show_debug_message("Failed to end container inventory stream");
+												}
+											}
+										}
+									} else {
+										// CONTAINER INVENTORY STREAM
+										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+										var networkPacket = new NetworkPacket(networkPacketHeader, {
+											// TODO: Create own struct for inventory data stream
+											region_id: global.NetworkRegionHandlerRef.region_id
+										});
+										if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+										{
+											show_debug_message("Failed to continue container inventory stream");
+										}
+									}
+									isPacketHandled = true;
+								}
+							}break;
+							case MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM:
+							{
+								var activeInventoryStream = global.NetworkRegionObjectHandlerRef.active_inventory_stream;
+								if (!is_undefined(activeInventoryStream))
+								{
+									if (activeInventoryStream.is_stream_sending)
+									{
+										var itemsStructArray = activeInventoryStream.FetchItemsToStream();
+										var itemStructCount = array_length(itemsStructArray);
+										if (itemStructCount > 0)
+										{
+											// CONTAINER INVENTORY STREAM
+											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+											var networkPacket = new NetworkPacket(networkPacketHeader, {
+												// TODO: Create own struct for inventory data stream
+												region_id: global.NetworkRegionHandlerRef.region_id,
+												items: itemsStructArray
+											});
+											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+											{
+												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+												{
+													show_debug_message("Failed to continue container inventory stream");
+												}
+											}
+										} else {
+											// CONTAINER INVENTORY STREAM
+											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+											var networkPacket = new NetworkPacket(networkPacketHeader, {
+												// TODO: Create own struct for inventory data stream
+												region_id: global.NetworkRegionHandlerRef.region_id
+											});
+											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+											{
+												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+												{
+													show_debug_message("Failed to end container inventory stream");
+												}
+											}
+										}
+									} else {
+										// TODO: Parse items elsewhere
+										var itemsStructArray = payload[$ "items"] ?? undefined;
+										if (!is_undefined(itemsStructArray))
+										{
+											var parsedItems = ParseJSONStructToArray(itemsStructArray, ParseJSONStructToItem);
+											if (array_length(parsedItems) > 0)
+											{
+												activeInventoryStream.target_inventory.AddMultipleItems(parsedItems);
+												
+												// CONTAINER INVENTORY STREAM
+												var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+												var networkPacket = new NetworkPacket(networkPacketHeader, {
+													// TODO: Create own struct for inventory data stream
+													region_id: global.NetworkRegionHandlerRef.region_id
+												});
+												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+												{
+													show_debug_message("Failed to continue container inventory stream");
+												}
+											}
+										}
+									}
+									isPacketHandled = true;
+								}
+							} break;
+							case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
+							{
+								var activeInventoryStream = global.NetworkRegionObjectHandlerRef.active_inventory_stream;
+								if (!is_undefined(activeInventoryStream))
+								{
+									global.NetworkRegionObjectHandlerRef.ResetRegionObjectData();
+								
+									// HIDE CONTAINER INVENTORY LOADING ICON
+									var lootContainerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.LootContainer);
+									if (!is_undefined(lootContainerWindow))
+									{
+										var containerInventoryLoadingElement = lootContainerWindow.GetChildElementById("ContainerInventoryLoading");
+										if (!is_undefined(containerInventoryLoadingElement))
+										{
+											containerInventoryLoadingElement.isVisible = false;
+										}
+									}
+									
+									if (!activeInventoryStream.is_stream_sending)
+									{
+										// CONTAINER INVENTORY STREAM
+										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+										var networkPacket = new NetworkPacket(networkPacketHeader, {
+											// TODO: Create own struct for inventory data stream
+											region_id: global.NetworkRegionHandlerRef.region_id
+										});
+										if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+										{
+											show_debug_message("Failed to end container inventory stream");
+										}
+									}
+									isPacketHandled = true;
+								}
+							} break;
 							default:
 							{
 								show_debug_message(string("Unknown message type {0} to handle", messageType));

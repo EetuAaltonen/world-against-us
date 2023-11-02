@@ -78,6 +78,31 @@ function NetworkPacketBuilder() constructor
 						buffer_write(_networkBuffer, buffer_text, _networkPacketPayload.destination_room_index);
 						isPayloadWritten = true;
 					} break;
+					case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
+					{
+						var formatRegionId = global.NetworkRegionHandlerRef.region_id;
+						buffer_write(_networkBuffer, buffer_u32, formatRegionId);
+						buffer_write(_networkBuffer, buffer_s32, _networkPacketPayload.content_count);
+						buffer_write(_networkBuffer, buffer_text, _networkPacketPayload.container_id);
+						isPayloadWritten = true;
+					} break;
+					case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
+					{
+						var formatRegionId = global.NetworkRegionHandlerRef.region_id;
+						var scaledInstancePosition = ScaleFloatValuesToIntVector2(
+							_networkPacketPayload.target_instance_position.X,
+							_networkPacketPayload.target_instance_position.Y
+						);
+						buffer_write(_networkBuffer, buffer_u32, formatRegionId);
+						buffer_write(_networkBuffer, buffer_u32, scaledInstancePosition.X);
+						buffer_write(_networkBuffer, buffer_u32, scaledInstancePosition.Y);
+						buffer_write(_networkBuffer, buffer_u8, _networkPacketPayload.stream_item_limit);
+						buffer_write(_networkBuffer, buffer_bool, _networkPacketPayload.is_stream_sending);
+						buffer_write(_networkBuffer, buffer_u16, _networkPacketPayload.stream_current_index);
+						buffer_write(_networkBuffer, buffer_u16, _networkPacketPayload.stream_end_index);
+						buffer_write(_networkBuffer, buffer_text, _networkPacketPayload.target_container_id);
+						isPayloadWritten = true;
+					} break;
 					default:
 					{
 						var jsonString = json_stringify(_networkPacketPayload);
