@@ -1,8 +1,12 @@
+import InstanceObjectHandler from "./InstanceObjectHandler.js";
+
 export default class Instance {
   constructor(roomIndex) {
     this.roomIndex = roomIndex;
     this.ownerClient = undefined;
     this.localPlayers = {};
+
+    this.objectHandler = new InstanceObjectHandler();
   }
 
   addPlayer(clientId, player) {
@@ -68,5 +72,54 @@ export default class Instance {
       isPlayerRemoved = true;
     }
     return isPlayerRemoved;
+  }
+
+  initContainer() {
+    let isContainerInitialized = true;
+    this.objectHandler.container = {};
+    return isContainerInitialized;
+  }
+
+  addContainerItem(item) {
+    let isItemAdded = false;
+    if (item !== undefined) {
+      const gridIndexKey = `${item.grid_index.col}-${item.grid_index.row}`;
+      if (!Object.keys(this.objectHandler.container).includes(gridIndexKey)) {
+        this.objectHandler.container[gridIndexKey] = item;
+        isItemAdded = true;
+      }
+    }
+    return isItemAdded;
+  }
+
+  addContainerItems(items) {
+    let isItemsAdded = true;
+    if (items !== undefined) {
+      items.forEach((item) => {
+        if (isItemsAdded) {
+          if (!this.addContainerItem(item)) {
+            isItemsAdded = false;
+            console.log(`Unable to add item ${item.name} to container`);
+          }
+        }
+      });
+    }
+    return isItemsAdded;
+  }
+
+  getContainerContentByGridIndex(gridIndex) {
+    this.objectHandler.container;
+  }
+
+  getContainerContentCount() {
+    let contentCount;
+    if (this.objectHandler.container !== undefined) {
+      contentCount = Object.keys(this.objectHandler.container).length;
+    }
+    return contentCount;
+  }
+
+  clearContainerContent() {
+    this.objectHandler.container = undefined;
   }
 }
