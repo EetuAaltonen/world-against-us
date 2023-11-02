@@ -19,17 +19,46 @@ function CreateWindowLootContainer(_gameWindowId, _zIndex, _containerInventory)
 	);
 	
 	// LOOT INVENTORY
+	var containerInventoryPosition = new Vector2(10, 70);
+	var containerInventorySize = new Size(windowSize.w - 20, 0);
 	var containerInventoryGrid = new WindowInventoryGrid(
 		"ContainerInventoryGrid",
-		new Vector2(10, 70),
-		new Size(windowSize.w - 20, 0),
+		containerInventoryPosition,
+		containerInventorySize,
 		undefined, _containerInventory
 	);
 	
+	// LOADING ICON
+	var containerInventoryLoadingSize = new Size(containerInventorySize.w, 220);
+	var containerInventoryLoading = new WindowLoading(
+		"ContainerInventoryLoading",
+		containerInventoryPosition,
+		containerInventoryLoadingSize,
+		undefined
+	);
+	containerInventoryLoading.isVisible = false;
+	
 	ds_list_add(containerElements,
 		containerTitle,
-		containerInventoryGrid
+		containerInventoryGrid,
+		containerInventoryLoading
 	);
+	
+	// OVERRIDE WINDOW ONCLOSE FUNCTION
+	var overrideOnClose = function()
+	{
+		// CLEAR IN-FLIGHT CONTAINER CONTENT REQUESTS
+		if (global.MultiplayerMode)
+		{
+			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT);
+			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM);
+			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
+			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM);
+			
+			global.NetworkRegionObjectHandlerRef.ResetRegionObjectData();
+		}
+	}
+	containerWindow.OnClose = overrideOnClose;
 	
 	containerWindow.AddChildElements(containerElements);
 	return containerWindow;

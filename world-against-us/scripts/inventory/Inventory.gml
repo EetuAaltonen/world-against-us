@@ -236,6 +236,21 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 		return items[| _index];
     }
 	
+	static GetItemsByIndexRange = function(_startIndex, _endIndex)
+    {
+		var itemsByRange = ds_list_create();
+		var validEndIndex = min(GetItemCount(), _endIndex);
+		for (var i = _startIndex; i < validEndIndex; i++)
+		{
+			var item = GetItemByIndex(i);
+			if (!is_undefined(item))
+			{
+				ds_list_add(itemsByRange, item);
+			}
+		}
+		return itemsByRange;
+    }
+	
 	static GetItemByGridIndex = function(_gridIndex)
     {
 		var foundItem = undefined;
