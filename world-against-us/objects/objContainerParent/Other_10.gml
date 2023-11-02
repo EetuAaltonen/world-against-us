@@ -7,19 +7,22 @@ if (is_undefined(inventory))
 		var inventorySize = new InventorySize(10, 6);
 		inventory = new Inventory(containerId, INVENTORY_TYPE.LootContainer, inventorySize);
 		
-		// CHECK IF CONTAINER HAS ROOM SAVE RECORD
-		var items = global.GameSaveHandlerRef.GetContainerContentById(containerId);
-		if (!is_undefined(items))
+		if (!global.MultiplayerMode)
 		{
-			var itemCount = array_length(items);
-			for (var i = 0; i < itemCount; i++)
+			// CHECK IF CONTAINER HAS ROOM SAVE RECORD
+			var items = global.GameSaveHandlerRef.GetContainerContentById(containerId);
+			if (!is_undefined(items))
 			{
-				var item = items[@ i];
-				var addedItemGridIndex = inventory.AddItem(item, item.grid_index, item.is_rotated, item.is_known);
-				if (is_undefined(addedItemGridIndex)) break;
-			}
+				var itemCount = array_length(items);
+				for (var i = 0; i < itemCount; i++)
+				{
+					var item = items[@ i];
+					var addedItemGridIndex = inventory.AddItem(item, item.grid_index, item.is_rotated, item.is_known);
+					if (is_undefined(addedItemGridIndex)) break;
+				}
 		
-			isContainerSearched = true;
+				isContainerSearched = true;
+			}
 		}
 	} else {
 		throw (string("Object {0} with instance ID {1} is missing 'containerId'", object_get_name(object_index), id));	
