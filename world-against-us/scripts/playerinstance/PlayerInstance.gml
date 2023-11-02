@@ -1,5 +1,6 @@
 function SpawnerCreatePlayerInstance(_playerUuid, _playerData)
 {
+	// TODO: Don't parse player data here!
 	var position = _playerData[$ "position"];
 	var scaledPosition = ScaleIntValuesToFloatVector2(position[$ "x"], position[$ "y"]);
 	var vectorSpeed = _playerData[$ "vector_speed"];
