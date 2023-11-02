@@ -6,6 +6,8 @@ import Vector2 from "../math/Vector2.js";
 import NetworkPacket from "./NetworkPacket.js";
 import NetworkPacketHeader from "./NetworkPacketHeader.js";
 import WorldMapFastTravelPoint from "../world_map/WorldMapFastTravelInfo.js";
+import NetworkInventoryStream from "../inventory/NetworkInventoryStream.js";
+import ContainerContentInfo from "../containers/ContainerContentInfo.js";
 
 export default class NetworkPacketParser {
   constructor() {}
@@ -64,11 +66,54 @@ export default class NetworkPacketParser {
               );
             }
             break;
+          case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
+            {
+              let offset = 0;
+              const parsedInstanceId = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedContentCount = msg.readInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedContainerId = msg.toString("utf8", offset);
+              payload = new ContainerContentInfo(
+                parsedInstanceId,
+                parsedContainerId,
+                parsedContentCount
+              );
+            }
+            break;
+          case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
+            {
+              let offset = 0;
+              const parsedInstanceId = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedInstancePosX = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedInstancePosY = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedStreamItemLimit = msg.readUInt8(offset);
+              offset += BITWISE.BIT8;
+              const parsedIsStreamSending = Boolean(msg.readUInt8(offset));
+              offset += BITWISE.BIT8;
+              const parsedStreamCurrentIndex = msg.readUInt16LE(offset);
+              offset += BITWISE.BIT16;
+              const parsedStreamEndIndex = msg.readUInt16LE(offset);
+              offset += BITWISE.BIT16;
+              const parsedContainerId = msg.toString("utf8", offset);
+              payload = new NetworkInventoryStream(
+                parsedInstanceId,
+                parsedContainerId,
+                new Vector2(parsedInstancePosX, parsedInstancePosY),
+                parsedStreamItemLimit,
+                parsedIsStreamSending,
+                parsedStreamCurrentIndex,
+                parsedStreamEndIndex
+              );
+            }
+            break;
           default: {
-            // Default payload is JSON
+            // Default JSON payload parsing
             const jsonString = msg.toString("utf8", 0, msg.length);
             payload = JSON.parse(jsonString);
-            console.log(payload);
           }
         }
       }

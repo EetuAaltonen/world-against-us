@@ -75,6 +75,24 @@ export default class NetworkPacketBuilder {
             isPacketPayloadWritten = true;
           }
           break;
+        case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
+          {
+            const bufferContainerInfo = Buffer.allocUnsafe(
+              BITWISE.BIT32 + BITWISE.BIT32
+            );
+            bufferContainerInfo.writeUInt32LE(payload.instanceId, 0);
+            bufferContainerInfo.writeInt32LE(
+              payload.contentCount,
+              BITWISE.BIT32
+            );
+            const bufferContainerId = Buffer.from(payload.containerId, "utf8");
+            this.payloadBuffer = Buffer.concat([
+              bufferContainerInfo,
+              bufferContainerId,
+            ]);
+            isPacketPayloadWritten = true;
+          }
+          break;
         default: {
           this.payloadBuffer = Buffer.from(
             JSON.stringify(payload ?? {}),
