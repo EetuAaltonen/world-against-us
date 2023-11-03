@@ -106,7 +106,8 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 				
 					FillGridArea(cloneItem.grid_index.col, cloneItem.grid_index.row, cloneItem.size, cloneItem.grid_index.Clone());
 			
-					if (!_ignore_network)
+					// TODO: Disable networking, for now
+					/*if (!_ignore_network)
 					{
 						if (type == INVENTORY_TYPE.LootContainer)
 						{
@@ -118,7 +119,7 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 							buffer_write(networkBuffer, buffer_text, jsonData);
 							global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
 						}
-					}
+					}*/
 					ds_list_add(items, cloneItem);
 					addedItemGridIndex = cloneItem.grid_index.Clone();
 				} else {
@@ -287,7 +288,8 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 			
 			if (IsGridAreaEmpty(_newGridIndex.col, _newGridIndex.row, item, item.sourceInventory, item.grid_index))
 			{
-				if (type == INVENTORY_TYPE.LootContainer)
+				// TODO: Disable networking, for now
+				/*if (type == INVENTORY_TYPE.LootContainer)
 				{
 					// NETWORKING CONTAINER DELETE ITEM
 					var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_MOVE_AND_ROTATE_ITEM);
@@ -299,7 +301,7 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 					buffer_write(networkBuffer, buffer_bool, item.is_rotated);
 					buffer_write(networkBuffer, buffer_text, jsonData);
 					global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
-				}
+				}*/
 				
 				item.grid_index = _newGridIndex;
 			} else {
@@ -319,7 +321,8 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 		var item = GetItemByIndex(_index);
 		if (!is_undefined(item))
 		{
-			if (type == INVENTORY_TYPE.LootContainer)
+			// TODO: Disable networking, for now
+			/*if (type == INVENTORY_TYPE.LootContainer)
 			{
 				// NETWORKING CONTAINER DELETE ITEM
 				var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_DELETE_ITEM);
@@ -328,7 +331,7 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 				buffer_write(networkBuffer, buffer_text , inventory_id);
 				buffer_write(networkBuffer, buffer_text, jsonData);
 				global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
-			}
+			}*/
 		
 			FillGridArea(item.grid_index.col, item.grid_index.row, item.size, undefined);
 			ds_list_delete(items, _index);
@@ -443,7 +446,8 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 				var item = GetItemByGridIndex(identify_index);
 				item.is_known = true;
 				
-				if (type == INVENTORY_TYPE.LootContainer)
+				// TODO: Disable networking, for now
+				/*if (type == INVENTORY_TYPE.LootContainer)
 				{
 					// NETWORKING CONTAINER DELETE ITEM
 					var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_IDENTIFY_ITEM);
@@ -452,7 +456,7 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 					buffer_write(networkBuffer, buffer_text , inventory_id);
 					buffer_write(networkBuffer, buffer_text, jsonData);
 					global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
-				}
+				}*/
 				
 				// RESET INDENTIFY TARGET AND TIMER
 				identify_index = undefined;

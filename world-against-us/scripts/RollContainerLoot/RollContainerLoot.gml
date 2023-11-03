@@ -7,8 +7,7 @@ function RollContainerLoot(_lootTableTag, _inventory)
 	{
 		var lootEntry = lootData[@ i];
 		var item = global.ItemDatabase.GetItemByName(lootEntry.name);
-		// TODO: Disabled for debugging
-		//item.is_known = false;
+		item.is_known = false;
 		repeat(lootEntry.count)
 		{
 			var lootItemGridIndex = _inventory.AddItem(item, undefined, false, item.is_known);
