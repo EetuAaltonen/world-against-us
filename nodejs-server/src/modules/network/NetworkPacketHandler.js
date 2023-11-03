@@ -17,121 +17,119 @@ export default class NetworkPacketHandler {
     let isPacketHandled = false;
     if (networkPacket !== undefined) {
       const acknowledgmentId = networkPacket.header.acknowledgmentId;
-      switch (networkPacket.header.messageType) {
-        case MESSAGE_TYPE.DATA_PLAYER_SYNC:
-          {
-            // TODO: Sync player data within the instance
+      const instance = this.instanceHandler.getInstance(client.instanceId);
+      if (instance !== undefined) {
+        switch (networkPacket.header.messageType) {
+          case MESSAGE_TYPE.DATA_PLAYER_SYNC:
+            {
+              // TODO: Sync player data within the instance
 
-            const networkBuffer = this.networkPacketBuilder.createPacket(
-              MESSAGE_TYPE.DATA_PLAYER_SYNC,
-              client.uuid,
-              acknowledgmentId,
-              undefined
-            );
-            if (networkBuffer !== undefined) {
-              this.networkHandler.packetQueue.enqueue(
-                new NetworkQueueEntry(
-                  networkBuffer,
-                  [client],
-                  PACKET_PRIORITY.HIGH
-                )
+              const networkBuffer = this.networkPacketBuilder.createPacket(
+                MESSAGE_TYPE.DATA_PLAYER_SYNC,
+                client.uuid,
+                acknowledgmentId,
+                undefined
               );
-              isPacketHandled = true;
-            }
-          }
-          break;
-        case MESSAGE_TYPE.DATA_PLAYER_POSITION:
-          {
-            isPacketHandled = true;
-          }
-          break;
-        case MESSAGE_TYPE.REQUEST_INSTANCE_LIST:
-          {
-            const instanceIds = this.instanceHandler
-              .getInstanceIds()
-              .filter(function (instanceId) {
-                return parseInt(instanceId) !== 0;
-              });
-            const instances = instanceIds.map((instanceId) => {
-              let instance = this.instanceHandler.getInstance(instanceId);
-              if (instance !== undefined) {
-                return {
-                  instance_id: instanceId,
-                  room_index: instance.roomIndex,
-                  player_count: instance.getPlayerCount(),
-                };
+              if (networkBuffer !== undefined) {
+                this.networkHandler.packetQueue.enqueue(
+                  new NetworkQueueEntry(
+                    networkBuffer,
+                    [client],
+                    PACKET_PRIORITY.HIGH
+                  )
+                );
+                isPacketHandled = true;
               }
-            });
-
-            const networkBuffer = this.networkPacketBuilder.createPacket(
-              MESSAGE_TYPE.REQUEST_INSTANCE_LIST,
-              client.uuid,
-              acknowledgmentId,
-              { available_instances: instances }
-            );
-            if (networkBuffer !== undefined) {
-              this.networkHandler.packetQueue.enqueue(
-                new NetworkQueueEntry(
-                  networkBuffer,
-                  [client],
-                  PACKET_PRIORITY.DEFAULT
-                )
-              );
+            }
+            break;
+          case MESSAGE_TYPE.DATA_PLAYER_POSITION:
+            {
               isPacketHandled = true;
             }
-          }
-          break;
-        case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
-          {
-            const fastTravelInfo = networkPacket.payload;
-            if (fastTravelInfo !== undefined) {
-              const destinationInstanceId =
-                this.instanceHandler.fastTravelPlayer(
-                  client.uuid,
-                  fastTravelInfo.sourceInstanceId,
-                  fastTravelInfo.destinationRoomIndex,
-                  fastTravelInfo.destinationInstanceId
-                );
-              const destinationInstance = this.instanceHandler.getInstance(
-                destinationInstanceId
-              );
-              if (destinationInstance !== undefined) {
-                // Set new instance
-                client.setInstanceId(destinationInstanceId);
+            break;
+          case MESSAGE_TYPE.REQUEST_INSTANCE_LIST:
+            {
+              const instanceIds = this.instanceHandler
+                .getInstanceIds()
+                .filter(function (instanceId) {
+                  return parseInt(instanceId) !== 0;
+                });
+              const instances = instanceIds.map((instanceId) => {
+                let instance = this.instanceHandler.getInstance(instanceId);
+                if (instance !== undefined) {
+                  return {
+                    instance_id: instanceId,
+                    room_index: instance.roomIndex,
+                    player_count: instance.getPlayerCount(),
+                  };
+                }
+              });
 
-                const payloadFastTravelInfo = new WorldMapFastTravelInfo(
-                  fastTravelInfo.sourceInstanceId,
-                  destinationInstanceId,
-                  destinationInstance.roomIndex
+              const networkBuffer = this.networkPacketBuilder.createPacket(
+                MESSAGE_TYPE.REQUEST_INSTANCE_LIST,
+                client.uuid,
+                acknowledgmentId,
+                { available_instances: instances }
+              );
+              if (networkBuffer !== undefined) {
+                this.networkHandler.packetQueue.enqueue(
+                  new NetworkQueueEntry(
+                    networkBuffer,
+                    [client],
+                    PACKET_PRIORITY.DEFAULT
+                  )
                 );
-                const networkBuffer = this.networkPacketBuilder.createPacket(
-                  MESSAGE_TYPE.REQUEST_FAST_TRAVEL,
-                  client.uuid,
-                  acknowledgmentId,
-                  payloadFastTravelInfo
-                );
-                if (networkBuffer !== undefined) {
-                  this.networkHandler.packetQueue.enqueue(
-                    new NetworkQueueEntry(
-                      networkBuffer,
-                      [client],
-                      PACKET_PRIORITY.DEFAULT
-                    )
+                isPacketHandled = true;
+              }
+            }
+            break;
+          case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
+            {
+              const fastTravelInfo = networkPacket.payload;
+              if (fastTravelInfo !== undefined) {
+                const destinationInstanceId =
+                  this.instanceHandler.fastTravelPlayer(
+                    client.uuid,
+                    fastTravelInfo.sourceInstanceId,
+                    fastTravelInfo.destinationRoomIndex,
+                    fastTravelInfo.destinationInstanceId
                   );
-                  isPacketHandled = true;
+                const destinationInstance = this.instanceHandler.getInstance(
+                  destinationInstanceId
+                );
+                if (destinationInstance !== undefined) {
+                  // Set new instance
+                  client.setInstanceId(destinationInstanceId);
+
+                  const payloadFastTravelInfo = new WorldMapFastTravelInfo(
+                    fastTravelInfo.sourceInstanceId,
+                    destinationInstanceId,
+                    destinationInstance.roomIndex
+                  );
+                  const networkBuffer = this.networkPacketBuilder.createPacket(
+                    MESSAGE_TYPE.REQUEST_FAST_TRAVEL,
+                    client.uuid,
+                    acknowledgmentId,
+                    payloadFastTravelInfo
+                  );
+                  if (networkBuffer !== undefined) {
+                    this.networkHandler.packetQueue.enqueue(
+                      new NetworkQueueEntry(
+                        networkBuffer,
+                        [client],
+                        PACKET_PRIORITY.DEFAULT
+                      )
+                    );
+                    isPacketHandled = true;
+                  }
                 }
               }
             }
-          }
-          break;
-        case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
-          {
-            // TODO: Return a flag if container is already in-use by a player
-            const containerContentInfo = networkPacket.payload;
-            const instance = this.instanceHandler.getInstance(
-              client.instanceId
-            );
-            if (instance !== undefined) {
+            break;
+          case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
+            {
+              // TODO: Return a flag if container is already in-use by a player
+              const containerContentInfo = networkPacket.payload;
               const container = instance.objectHandler.container;
               if (container === undefined) {
                 instance.initContainer();
@@ -142,33 +140,28 @@ export default class NetworkPacketHandler {
                   containerContentInfo.contentCount = contentCount;
                 }
               }
-            }
 
-            const networkBuffer = this.networkPacketBuilder.createPacket(
-              MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT,
-              client.uuid,
-              acknowledgmentId,
-              containerContentInfo
-            );
-            if (networkBuffer !== undefined) {
-              this.networkHandler.packetQueue.enqueue(
-                new NetworkQueueEntry(
-                  networkBuffer,
-                  [client],
-                  PACKET_PRIORITY.DEFAULT
-                )
+              const networkBuffer = this.networkPacketBuilder.createPacket(
+                MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT,
+                client.uuid,
+                acknowledgmentId,
+                containerContentInfo
               );
-              isPacketHandled = true;
+              if (networkBuffer !== undefined) {
+                this.networkHandler.packetQueue.enqueue(
+                  new NetworkQueueEntry(
+                    networkBuffer,
+                    [client],
+                    PACKET_PRIORITY.DEFAULT
+                  )
+                );
+                isPacketHandled = true;
+              }
             }
-          }
-          break;
-        case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
-          {
-            const containerInventoryStream = networkPacket.payload;
-            const instance = this.instanceHandler.getInstance(
-              client.instanceId
-            );
-            if (instance !== undefined) {
+            break;
+          case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
+            {
+              const containerInventoryStream = networkPacket.payload;
               containerInventoryStream.targetInventory =
                 instance.objectHandler.container;
               instance.objectHandler.activeInventoryStream =
@@ -191,15 +184,10 @@ export default class NetworkPacketHandler {
                 isPacketHandled = true;
               }
             }
-          }
-          break;
-        case MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM:
-          {
-            const containerInventoryStream = networkPacket.payload;
-            const instance = this.instanceHandler.getInstance(
-              client.instanceId
-            );
-            if (instance !== undefined) {
+            break;
+          case MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM:
+            {
+              const containerInventoryStream = networkPacket.payload;
               const activeInventoryStream =
                 instance.objectHandler.activeInventoryStream;
               if (activeInventoryStream.isStreamSending) {
@@ -271,14 +259,9 @@ export default class NetworkPacketHandler {
               }
               isPacketHandled = true;
             }
-          }
-          break;
-        case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
-          {
-            const instance = this.instanceHandler.getInstance(
-              client.instanceId
-            );
-            if (instance !== undefined) {
+            break;
+          case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
+            {
               const activeInventoryStream =
                 instance.objectHandler.activeInventoryStream;
 
@@ -303,8 +286,8 @@ export default class NetworkPacketHandler {
                 isPacketHandled = true;
               }
             }
-          }
-          break;
+            break;
+        }
       }
     }
     return isPacketHandled;
