@@ -8,6 +8,8 @@ import NetworkPacketHeader from "./NetworkPacketHeader.js";
 import WorldMapFastTravelPoint from "../world_map/WorldMapFastTravelInfo.js";
 import NetworkInventoryStream from "../inventory/NetworkInventoryStream.js";
 import ContainerContentInfo from "../containers/ContainerContentInfo.js";
+import ContainerInventoryActionInfo from "../containers/ContainerInventoryActionInfo.js";
+import GridIndex from "../inventory/GridIndex.js";
 
 export default class NetworkPacketParser {
   constructor() {}
@@ -101,6 +103,31 @@ export default class NetworkPacketParser {
                 parsedIsStreamSending,
                 parsedStreamCurrentIndex,
                 parsedStreamEndIndex
+              );
+            }
+            break;
+          case MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM:
+            {
+              let offset = 0;
+              const parsedSourceGridIndexCol = msg.readUInt8(offset);
+              offset += BITWISE.BIT8;
+              const parsedSourceGridIndexRow = msg.readUInt8(offset);
+              offset += BITWISE.BIT8;
+              const parsedIsKnown = Boolean(msg.readUInt8(offset));
+              offset += BITWISE.BIT8;
+              const parsedContainerId = msg.toString("utf8", offset);
+
+              const parsedSourceGridIndex = new GridIndex(
+                parsedSourceGridIndexCol,
+                parsedSourceGridIndexRow
+              );
+
+              payload = new ContainerInventoryActionInfo(
+                parsedContainerId,
+                parsedSourceGridIndex,
+                undefined,
+                undefined,
+                parsedIsKnown
               );
             }
             break;

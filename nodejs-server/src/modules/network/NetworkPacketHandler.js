@@ -287,6 +287,36 @@ export default class NetworkPacketHandler {
               }
             }
             break;
+          case MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM:
+            {
+              const containerInventoryActionInfo = networkPacket.payload;
+              const container = instance.objectHandler.container;
+              if (container !== undefined) {
+                const gridIndexKey = `${containerInventoryActionInfo.sourceGridIndex.col}-${containerInventoryActionInfo.sourceGridIndex.row}`;
+                const item = container[gridIndexKey];
+                if (item !== undefined) {
+                  item.is_known = containerInventoryActionInfo.isKnown;
+
+                  const networkBuffer = this.networkPacketBuilder.createPacket(
+                    MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM,
+                    client.uuid,
+                    acknowledgmentId,
+                    undefined
+                  );
+                  if (networkBuffer !== undefined) {
+                    this.networkHandler.packetQueue.enqueue(
+                      new NetworkQueueEntry(
+                        networkBuffer,
+                        [client],
+                        PACKET_PRIORITY.DEFAULT
+                      )
+                    );
+                  }
+                  isPacketHandled = true;
+                }
+              }
+            }
+            break;
         }
       }
     }
