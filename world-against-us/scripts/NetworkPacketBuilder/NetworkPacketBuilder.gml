@@ -72,31 +72,34 @@ function NetworkPacketBuilder() constructor
 					} break;
 					case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
 					{
-						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.source_region_id);
+						var worldMapFastTravelInfo = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u32, worldMapFastTravelInfo.source_region_id);
 						// SET SAME SOURCE AND DESTINATION IF NEW INSTANCE IS REQUESTED
-						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.destination_region_id ?? _networkPacketPayload.source_region_id);
-						buffer_write(_networkBuffer, buffer_text, _networkPacketPayload.destination_room_index);
+						buffer_write(_networkBuffer, buffer_u32, worldMapFastTravelInfo.destination_region_id ?? worldMapFastTravelInfo.source_region_id);
+						buffer_write(_networkBuffer, buffer_text, worldMapFastTravelInfo.destination_room_index);
 						isPayloadWritten = true;
 					} break;
 					case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
 					{
-						buffer_write(_networkBuffer, buffer_s32, _networkPacketPayload.content_count);
-						buffer_write(_networkBuffer, buffer_text, _networkPacketPayload.container_id);
+						var containerContentInfo = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_s32, containerContentInfo.content_count);
+						buffer_write(_networkBuffer, buffer_text, containerContentInfo.container_id);
 						isPayloadWritten = true;
 					} break;
 					case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
 					{
+						var networkInventoryStream = _networkPacketPayload;
 						var scaledInstancePosition = ScaleFloatValuesToIntVector2(
-							_networkPacketPayload.target_instance_position.X,
-							_networkPacketPayload.target_instance_position.Y
+							networkInventoryStream.target_instance_position.X,
+							networkInventoryStream.target_instance_position.Y
 						);
 						buffer_write(_networkBuffer, buffer_u32, scaledInstancePosition.X);
 						buffer_write(_networkBuffer, buffer_u32, scaledInstancePosition.Y);
-						buffer_write(_networkBuffer, buffer_u8, _networkPacketPayload.stream_item_limit);
-						buffer_write(_networkBuffer, buffer_bool, _networkPacketPayload.is_stream_sending);
-						buffer_write(_networkBuffer, buffer_u16, _networkPacketPayload.stream_current_index);
-						buffer_write(_networkBuffer, buffer_u16, _networkPacketPayload.stream_end_index);
-						buffer_write(_networkBuffer, buffer_text, _networkPacketPayload.target_container_id);
+						buffer_write(_networkBuffer, buffer_u8, networkInventoryStream.stream_item_limit);
+						buffer_write(_networkBuffer, buffer_bool, networkInventoryStream.is_stream_sending);
+						buffer_write(_networkBuffer, buffer_u16, networkInventoryStream.stream_current_index);
+						buffer_write(_networkBuffer, buffer_u16, networkInventoryStream.stream_end_index);
+						buffer_write(_networkBuffer, buffer_text, networkInventoryStream.target_container_id);
 						isPayloadWritten = true;
 					} break;
 					default:
