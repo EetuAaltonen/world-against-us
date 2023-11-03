@@ -65,8 +65,7 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 		if (size.w != size.h)
 		{
 			is_rotated = !is_rotated;
-			// Swap width and height
-			size = SwapSize(size);
+			size.Swap();
 		}
 	}
 	

@@ -15,4 +15,11 @@ function Size(_w, _h) constructor
 	{
 		return new Size(w, h);
 	}
+	
+	static Swap = function()
+	{
+		var tempWidth = w;
+		w = h;
+		h = tempWidth;
+	}
 }
