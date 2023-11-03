@@ -69,13 +69,10 @@ export default class NetworkPacketParser {
           case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
             {
               let offset = 0;
-              const parsedInstanceId = msg.readUInt32LE(offset);
-              offset += BITWISE.BIT32;
               const parsedContentCount = msg.readInt32LE(offset);
               offset += BITWISE.BIT32;
               const parsedContainerId = msg.toString("utf8", offset);
               payload = new ContainerContentInfo(
-                parsedInstanceId,
                 parsedContainerId,
                 parsedContentCount
               );
@@ -84,8 +81,6 @@ export default class NetworkPacketParser {
           case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
             {
               let offset = 0;
-              const parsedInstanceId = msg.readUInt32LE(offset);
-              offset += BITWISE.BIT32;
               const parsedInstancePosX = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;
               const parsedInstancePosY = msg.readUInt32LE(offset);
@@ -100,7 +95,6 @@ export default class NetworkPacketParser {
               offset += BITWISE.BIT16;
               const parsedContainerId = msg.toString("utf8", offset);
               payload = new NetworkInventoryStream(
-                parsedInstanceId,
                 parsedContainerId,
                 new Vector2(parsedInstancePosX, parsedInstancePosY),
                 parsedStreamItemLimit,
