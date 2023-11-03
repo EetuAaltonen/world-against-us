@@ -1,6 +1,5 @@
 export default class ContainerContentInfo {
-  constructor(instanceId, containerId, contentCount) {
-    this.instanceId = instanceId;
+  constructor(containerId, contentCount) {
     this.containerId = containerId;
     this.contentCount = contentCount;
   }

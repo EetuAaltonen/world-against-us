@@ -1,6 +1,5 @@
 export default class NetworkInventoryStream {
   constructor(
-    instanceId,
     targetContainerId,
     targetInstancePosition,
     streamItemLimit,
@@ -8,7 +7,6 @@ export default class NetworkInventoryStream {
     streamCurrentIndex,
     streamEndIndex
   ) {
-    this.instanceId = instanceId;
     this.targetContainerId = targetContainerId;
     this.targetInstancePosition = targetInstancePosition;
     this.targetInventory = undefined;

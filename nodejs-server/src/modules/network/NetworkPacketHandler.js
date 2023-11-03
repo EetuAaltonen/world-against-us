@@ -129,7 +129,7 @@ export default class NetworkPacketHandler {
             // TODO: Return a flag if container is already in-use by a player
             const containerContentInfo = networkPacket.payload;
             const instance = this.instanceHandler.getInstance(
-              containerContentInfo.instanceId
+              client.instanceId
             );
             if (instance !== undefined) {
               const container = instance.objectHandler.container;
@@ -166,7 +166,7 @@ export default class NetworkPacketHandler {
           {
             const containerInventoryStream = networkPacket.payload;
             const instance = this.instanceHandler.getInstance(
-              containerInventoryStream.instanceId
+              client.instanceId
             );
             if (instance !== undefined) {
               containerInventoryStream.targetInventory =
@@ -197,7 +197,7 @@ export default class NetworkPacketHandler {
           {
             const containerInventoryStream = networkPacket.payload;
             const instance = this.instanceHandler.getInstance(
-              containerInventoryStream.region_id
+              client.instanceId
             );
             if (instance !== undefined) {
               const activeInventoryStream =
@@ -209,11 +209,6 @@ export default class NetworkPacketHandler {
                       return ParseJSONObjectToItem(jsonItem);
                     });
                   instance.addContainerItems(parsedContainerItems);
-                  console.log(
-                    `Container item count: ${
-                      Object.keys(instance.objectHandler.container).length
-                    }`
-                  );
 
                   const networkBuffer = this.networkPacketBuilder.createPacket(
                     MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM,
@@ -244,8 +239,6 @@ export default class NetworkPacketHandler {
                     client.uuid,
                     acknowledgmentId,
                     {
-                      // TODO: Create own struct for inventory data stream
-                      region_id: containerInventoryStream.instanceId,
                       items: items,
                     }
                   );
@@ -282,9 +275,8 @@ export default class NetworkPacketHandler {
           break;
         case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
           {
-            const containerInventoryStream = networkPacket.payload;
             const instance = this.instanceHandler.getInstance(
-              containerInventoryStream.region_id
+              client.instanceId
             );
             if (instance !== undefined) {
               const activeInventoryStream =
