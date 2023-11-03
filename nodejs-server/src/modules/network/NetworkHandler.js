@@ -40,6 +40,8 @@ export default class NetworkHandler {
     try {
       const startTime = process.hrtime();
 
+      // TODO: Separate packet send for each client to control send rate
+      // Broadcast should add a packet for each client's packet queue
       const queuePacket = this.packetQueue.dequeue();
       if (queuePacket != undefined) {
         console.log(
@@ -112,6 +114,9 @@ export default class NetworkHandler {
                 );
               const instance = this.instanceHandler.getInstance(instanceId);
               if (instance !== undefined) {
+                // Set new instance
+                client.setInstanceId(instanceId);
+
                 const networkBuffer = this.networkPacketBuilder.createPacket(
                   MESSAGE_TYPE.REQUEST_JOIN_GAME,
                   clientId,
@@ -133,15 +138,27 @@ export default class NetworkHandler {
                   );
                   isMessageHandled = true;
                 }
+              } else {
+                client.resetInstanceId();
               }
             }
           }
           break;
         case MESSAGE_TYPE.DISCONNECT_FROM_HOST:
           {
+            let instanceId;
+            const client = this.clientHandler.getClient(clientId);
+            if (client !== undefined) {
+              instanceId = client.instanceId;
+            }
             if (this.clientHandler.disconnectClient(clientId, rinfo)) {
               isMessageHandled = true;
-              if (!this.instanceHandler.removePlayerFromInstance(clientId)) {
+              if (
+                !this.instanceHandler.removePlayerFromInstance(
+                  clientId,
+                  instanceId
+                )
+              ) {
                 // TODO: Proper error handling
                 console.log(
                   `Failed to remove a client with ID: ${clientId} from any instance`
@@ -155,10 +172,10 @@ export default class NetworkHandler {
           break;
         default: {
           if (clientId !== UNDEFINED_UUID) {
-            const existentClient = this.clientHandler.getClient(clientId);
-            if (existentClient !== undefined) {
+            const client = this.clientHandler.getClient(clientId);
+            if (client !== undefined) {
               isMessageHandled = this.networkPacketHandler.handlePacket(
-                clientId,
+                client,
                 networkPacket
               );
             } else {

@@ -119,7 +119,6 @@ export default class InstanceHandler {
       const instance = this.getInstance(instanceId);
       if (instance !== undefined) {
         if (instance.removePlayer(clientId)) {
-          isPlayerRemoved = true;
           if (!this.checkInstanceRelease(instanceId)) {
             if (instance.ownerClient == clientId) {
               if (!instance.resetOwner()) {
@@ -130,6 +129,7 @@ export default class InstanceHandler {
               }
             }
           }
+          isPlayerRemoved = true;
         }
       }
     } else {
