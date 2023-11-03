@@ -80,20 +80,16 @@ function NetworkPacketBuilder() constructor
 					} break;
 					case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
 					{
-						var formatRegionId = global.NetworkRegionHandlerRef.region_id;
-						buffer_write(_networkBuffer, buffer_u32, formatRegionId);
 						buffer_write(_networkBuffer, buffer_s32, _networkPacketPayload.content_count);
 						buffer_write(_networkBuffer, buffer_text, _networkPacketPayload.container_id);
 						isPayloadWritten = true;
 					} break;
 					case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
 					{
-						var formatRegionId = global.NetworkRegionHandlerRef.region_id;
 						var scaledInstancePosition = ScaleFloatValuesToIntVector2(
 							_networkPacketPayload.target_instance_position.X,
 							_networkPacketPayload.target_instance_position.Y
 						);
-						buffer_write(_networkBuffer, buffer_u32, formatRegionId);
 						buffer_write(_networkBuffer, buffer_u32, scaledInstancePosition.X);
 						buffer_write(_networkBuffer, buffer_u32, scaledInstancePosition.Y);
 						buffer_write(_networkBuffer, buffer_u8, _networkPacketPayload.stream_item_limit);

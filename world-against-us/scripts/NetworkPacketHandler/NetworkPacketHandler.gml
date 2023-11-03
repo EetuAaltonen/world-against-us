@@ -153,11 +153,7 @@ function NetworkPacketHandler() constructor
 										{
 											// CONTAINER INVENTORY STREAM
 											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
-											var networkPacket = new NetworkPacket(networkPacketHeader, {
-												// TODO: Create own struct for inventory data stream
-												region_id: global.NetworkRegionHandlerRef.region_id,
-												items: itemsStructArray
-											});
+											var networkPacket = new NetworkPacket(networkPacketHeader, { items: itemsStructArray });
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
 												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
@@ -168,10 +164,7 @@ function NetworkPacketHandler() constructor
 										} else {
 											// CONTAINER INVENTORY STREAM
 											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
-											var networkPacket = new NetworkPacket(networkPacketHeader, {
-												// TODO: Create own struct for inventory data stream
-												region_id: global.NetworkRegionHandlerRef.region_id
-											});
+											var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
 												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
@@ -183,10 +176,7 @@ function NetworkPacketHandler() constructor
 									} else {
 										// CONTAINER INVENTORY STREAM
 										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
-										var networkPacket = new NetworkPacket(networkPacketHeader, {
-											// TODO: Create own struct for inventory data stream
-											region_id: global.NetworkRegionHandlerRef.region_id
-										});
+										var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 										if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 										{
 											show_debug_message("Failed to continue container inventory stream");
@@ -208,11 +198,7 @@ function NetworkPacketHandler() constructor
 										{
 											// CONTAINER INVENTORY STREAM
 											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
-											var networkPacket = new NetworkPacket(networkPacketHeader, {
-												// TODO: Create own struct for inventory data stream
-												region_id: global.NetworkRegionHandlerRef.region_id,
-												items: itemsStructArray
-											});
+											var networkPacket = new NetworkPacket(networkPacketHeader, { items: itemsStructArray });
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
 												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
@@ -223,10 +209,7 @@ function NetworkPacketHandler() constructor
 										} else {
 											// CONTAINER INVENTORY STREAM
 											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
-											var networkPacket = new NetworkPacket(networkPacketHeader, {
-												// TODO: Create own struct for inventory data stream
-												region_id: global.NetworkRegionHandlerRef.region_id
-											});
+											var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
 												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
@@ -247,10 +230,7 @@ function NetworkPacketHandler() constructor
 												
 												// CONTAINER INVENTORY STREAM
 												var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
-												var networkPacket = new NetworkPacket(networkPacketHeader, {
-													// TODO: Create own struct for inventory data stream
-													region_id: global.NetworkRegionHandlerRef.region_id
-												});
+												var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 												{
 													show_debug_message("Failed to continue container inventory stream");
@@ -283,10 +263,7 @@ function NetworkPacketHandler() constructor
 									{
 										// CONTAINER INVENTORY STREAM
 										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
-										var networkPacket = new NetworkPacket(networkPacketHeader, {
-											// TODO: Create own struct for inventory data stream
-											region_id: global.NetworkRegionHandlerRef.region_id
-										});
+										var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 										if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 										{
 											show_debug_message("Failed to end container inventory stream");

@@ -47,8 +47,6 @@ function NetworkPacketParser() constructor
 				} break;
 				case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
 				{
-					// TODO: Remove region id when server can fetch it by the clint ID
-					var parsedRegionId = buffer_read(_msg, buffer_u32);
 					var parsedContentCount = buffer_read(_msg, buffer_s32);
 					var parsedContainerId = buffer_read(_msg, buffer_string);
 					parsedPayload = new ContainerContentInfo(
