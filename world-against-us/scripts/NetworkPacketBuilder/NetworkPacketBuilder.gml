@@ -102,6 +102,15 @@ function NetworkPacketBuilder() constructor
 						buffer_write(_networkBuffer, buffer_text, networkInventoryStream.target_container_id);
 						isPayloadWritten = true;
 					} break;
+					case MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM:
+					{
+						var containerInventoryActionInfo = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u8, containerInventoryActionInfo.source_grid_index.col);
+						buffer_write(_networkBuffer, buffer_u8, containerInventoryActionInfo.source_grid_index.row);
+						buffer_write(_networkBuffer, buffer_bool, containerInventoryActionInfo.is_known);
+						buffer_write(_networkBuffer, buffer_text, containerInventoryActionInfo.container_id);
+						isPayloadWritten = true;
+					} break;
 					default:
 					{
 						var jsonString = json_stringify(_networkPacketPayload);

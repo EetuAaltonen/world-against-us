@@ -446,17 +446,23 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 				var item = GetItemByGridIndex(identify_index);
 				item.is_known = true;
 				
-				// TODO: Disable networking, for now
-				/*if (type == INVENTORY_TYPE.LootContainer)
+				if (global.MultiplayerMode)
 				{
-					// NETWORKING CONTAINER DELETE ITEM
-					var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_IDENTIFY_ITEM);
-					var jsonData = json_stringify(item);
-			
-					buffer_write(networkBuffer, buffer_text , inventory_id);
-					buffer_write(networkBuffer, buffer_text, jsonData);
-					global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
-				}*/
+					if (type == INVENTORY_TYPE.LootContainer)
+					{
+						// REQUEST CONTAINER CONTENT
+						var containerInventoryActionInfo = new ContainerInventoryActionInfo(inventory_id, item.grid_index, undefined, undefined, item.is_known);
+						var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM, global.NetworkHandlerRef.client_id);
+						var networkPacket = new NetworkPacket(networkPacketHeader, containerInventoryActionInfo);
+						if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+						{
+							if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+							{
+								show_debug_message("Failed to start container inventory data stream");
+							}
+						}
+					}
+				}
 				
 				// RESET INDENTIFY TARGET AND TIMER
 				identify_index = undefined;
