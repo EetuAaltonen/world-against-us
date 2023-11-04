@@ -139,6 +139,8 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 		
 		if (!is_undefined(_itemArray))
 		{
+			// TODO: Collect items' grid indices to array
+			// and rollback if any of add process fails
 			var itemCount = array_length(_itemArray);
 			for (var i = 0; i < itemCount; i++)
 			{

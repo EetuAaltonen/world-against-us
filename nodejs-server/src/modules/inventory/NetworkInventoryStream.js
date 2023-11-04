@@ -8,6 +8,7 @@ export default class NetworkInventoryStream {
     streamEndIndex
   ) {
     this.targetContainerId = targetContainerId;
+    // TODO: Remove container location
     this.targetInstancePosition = targetInstancePosition;
     this.targetInventory = undefined;
     this.streamItemLimit = streamItemLimit;
