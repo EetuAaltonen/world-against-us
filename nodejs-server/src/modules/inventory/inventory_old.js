@@ -1,5 +1,5 @@
-const InventorySize = require("../inventory/inventorySize");
-const GridIndex = require("../inventory/gridIndex");
+const InventorySize = require("./inventorySize");
+const GridIndex = require("./gridIndex");
 const Size = require("../math/size");
 
 class Inventory {
