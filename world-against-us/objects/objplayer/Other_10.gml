@@ -13,7 +13,7 @@ if (!is_undefined(gameSaveData))
 			var saveDataBackpack = (!is_undefined(gameSaveData.player_data.character)) ? gameSaveData.player_data.character.backpack : undefined;
 			if (!is_undefined(saveDataBackpack))
 			{
-				character.backpack_slot.AddItem(saveDataBackpack, undefined, false, true, true);
+				character.backpack_slot.AddItem(saveDataBackpack, undefined, false, true);
 				if (!is_undefined(saveDataBackpack.metadata))
 				{
 					global.PlayerBackpack = saveDataBackpack.metadata.inventory;
@@ -23,7 +23,7 @@ if (!is_undefined(gameSaveData))
 				if (!is_undefined(backpack))
 				{
 					backpack.metadata.InitInventory(string("{0}Backpack", character.name), INVENTORY_TYPE.PlayerBackpack);
-					character.backpack_slot.AddItem(backpack, undefined, false, true, true);
+					character.backpack_slot.AddItem(backpack, undefined, false, true);
 					
 					// ADD SOME STARTING SUPPLIES
 					backpack.metadata.inventory.AddMultipleItems([

@@ -67,7 +67,7 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 		return inventory_filter.IsItemWhitelisted(_item);
     }
 
-    static AddItem = function(_item, _new_grid_index = undefined, _new_is_rotated = false, _new_is_known = true, _ignore_network = false)
+    static AddItem = function(_item, _new_grid_index = undefined, _new_is_rotated = false, _new_is_known = true)
     {
 		var addedItemGridIndex = undefined;
 		var isItemStacked = false;
@@ -105,21 +105,6 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 					cloneItem.sourceInventory = self;
 				
 					FillGridArea(cloneItem.grid_index.col, cloneItem.grid_index.row, cloneItem.size, cloneItem.grid_index.Clone());
-			
-					// TODO: Disable networking, for now
-					/*if (!_ignore_network)
-					{
-						if (type == INVENTORY_TYPE.LootContainer)
-						{
-							// NETWORKING CONTAINER DELETE ITEM
-							var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_ADD_ITEM);
-							var jsonData = json_stringify(cloneItem);
-				
-							buffer_write(networkBuffer, buffer_text , inventory_id);
-							buffer_write(networkBuffer, buffer_text, jsonData);
-							global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
-						}
-					}*/
 					ds_list_add(items, cloneItem);
 					addedItemGridIndex = cloneItem.grid_index.Clone();
 				} else {
@@ -270,13 +255,13 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 		return foundItem;
     }
 	
-	static MoveAndRotateItemByGridIndex = function(_gridIndex, _newGridIndex, _isRotated)
+	static RotateItemByGridIndex = function(_gridIndex, _isRotated)
 	{
+		var isItemRotated = false;
 		var item = GetItemByGridIndex(_gridIndex);
-		var originalRotation = item.is_rotated;
-		
 		if (!is_undefined(item))
 		{
+			var originalRotation = item.is_rotated;
 			// Clear previous spot
 			FillGridArea(item.grid_index.col, item.grid_index.row, item.size, undefined);
 			
@@ -286,60 +271,38 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 				item.Rotate();
 			}
 			
-			if (IsGridAreaEmpty(_newGridIndex.col, _newGridIndex.row, item, item.sourceInventory, item.grid_index))
+			if (IsGridAreaEmpty(_gridIndex.col, _gridIndex.row, item, item.sourceInventory, item.grid_index))
 			{
-				// TODO: Disable networking, for now
-				/*if (type == INVENTORY_TYPE.LootContainer)
-				{
-					// NETWORKING CONTAINER DELETE ITEM
-					var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_MOVE_AND_ROTATE_ITEM);
-					var jsonData = json_stringify(item);
-				
-					buffer_write(networkBuffer, buffer_text , inventory_id);
-					buffer_write(networkBuffer, buffer_u16, _newGridIndex.col);
-					buffer_write(networkBuffer, buffer_u16, _newGridIndex.row);
-					buffer_write(networkBuffer, buffer_bool, item.is_rotated);
-					buffer_write(networkBuffer, buffer_text, jsonData);
-					global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
-				}*/
-				
-				item.grid_index = _newGridIndex;
+				isItemRotated = true;
 			} else {
 				// Reverse rotation if item doesn't fit
-			    if (item.is_rotated != originalRotation) {
-			        item.Rotate();
-			    }
+				if (item.is_rotated != originalRotation) {
+				    item.Rotate();
+				}
 			}
 			
 			// Set new spot
 			FillGridArea(item.grid_index.col, item.grid_index.row, item.size, item.grid_index.Clone());
 		}
+		return isItemRotated;
 	}
 	
 	static RemoveItemByIndex = function(_index)
     {
+		var isItemRemoved = false;
 		var item = GetItemByIndex(_index);
 		if (!is_undefined(item))
 		{
-			// TODO: Disable networking, for now
-			/*if (type == INVENTORY_TYPE.LootContainer)
-			{
-				// NETWORKING CONTAINER DELETE ITEM
-				var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.CONTAINER_DELETE_ITEM);
-				var jsonData = json_stringify(item);
-			
-				buffer_write(networkBuffer, buffer_text , inventory_id);
-				buffer_write(networkBuffer, buffer_text, jsonData);
-				global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
-			}*/
-		
 			FillGridArea(item.grid_index.col, item.grid_index.row, item.size, undefined);
 			ds_list_delete(items, _index);
+			isItemRemoved = true;
 		}
+		return isItemRemoved;
     }
 	
 	static RemoveItemByGridIndex = function(_gridIndex)
     {
+		var isItemRemoved = false;
 		var itemCount = GetItemCount();
 		for (var i = 0; i < itemCount; i++)
 		{
@@ -347,10 +310,11 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 			if (item.grid_index.col == _gridIndex.col &&
 				item.grid_index.row == _gridIndex.row)
 			{
-				RemoveItemByIndex(i);
+				isItemRemoved = RemoveItemByIndex(i);
 				break;
 			}
 		}
+		return isItemRemoved;
     }
 	
 	static FindEmptyIndex = function(_item)
@@ -450,15 +414,15 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 				{
 					if (type == INVENTORY_TYPE.LootContainer)
 					{
-						// REQUEST CONTAINER CONTENT
-						var containerInventoryActionInfo = new ContainerInventoryActionInfo(inventory_id, item.grid_index, undefined, undefined, item.is_known);
+						// CONTAINER INVENTORY IDENTIFY ITEM
+						var containerInventoryActionInfo = new ContainerInventoryActionInfo(inventory_id, item.grid_index, undefined, undefined, item.is_known, undefined);
 						var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM, global.NetworkHandlerRef.client_id);
 						var networkPacket = new NetworkPacket(networkPacketHeader, containerInventoryActionInfo);
 						if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 						{
 							if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 							{
-								show_debug_message("Failed to start container inventory data stream");
+								show_debug_message("Failed to identify inventory item in container");
 							}
 						}
 					}
