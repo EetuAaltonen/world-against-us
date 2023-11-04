@@ -35,8 +35,9 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 	static Clone = function(_newQuantity = undefined, _ignoreSourceInventory = false)
 	{
 		var parsedMetadata = (!is_undefined(metadata)) ? ParseJSONStructToMetadataItem(metadata, category, type) : undefined;
+		var cloneSize = !is_undefined(size) ? size.Clone() : undefined;
 		var cloneItem = new Item(
-			name, short_name, icon, size, category, type,
+			name, short_name, icon, cloneSize, category, type,
 			weight, max_stack, base_price, description,
 			_newQuantity ?? quantity,
 			parsedMetadata,
@@ -49,7 +50,7 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 			// RESET ROTATION
 			if (cloneItem.is_rotated)
 			{
-				cloneItem.Rotate();	
+				cloneItem.Rotate();
 			}
 			
 			// RESET SOURCE INVENTORY INFO

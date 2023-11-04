@@ -8,7 +8,7 @@ function NetworkPacketTracker() constructor
 	static SetNetworkPacketAcknowledgment = function(_networkPacket)
 	{
 		var isAcknowledgmentSet = false;
-		show_debug_message("Pre in_flight_packets count {0}", ds_map_size(in_flight_packets));
+		show_debug_message("Pre in-flight packets count {0}", ds_map_size(in_flight_packets));
 		
 		var nextAcknowledgmentId = FetchNextAcknowledgmentId();
 		if (nextAcknowledgmentId != -1)

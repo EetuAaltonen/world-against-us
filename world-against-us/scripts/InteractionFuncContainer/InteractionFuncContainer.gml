@@ -14,7 +14,7 @@ function InteractionFuncContainer()
 				{
 					if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 					{
-						show_debug_message("Failed to start container inventory data stream");
+						show_debug_message("Failed to request container content");
 					}
 				}
 			}
