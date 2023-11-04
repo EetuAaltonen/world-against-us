@@ -1,6 +1,8 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
+// TODO: Fix this code
+/*
 if (facility.inventory.GetItemCount() <= 0)
 {
 	if (!is_undefined(global.ItemDatabase))
@@ -25,4 +27,4 @@ if (facility.inventory.GetItemCount() <= 0)
 		// DISABLE ITEM INPUT
 		facility.inventory.filter_array = ["OutputOnly"];
 	}
-}
+}*/

@@ -63,10 +63,10 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 						var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
 						if (!is_undefined(itemGridIndex))
 						{
-							var itemToRotate = inventory.GetItemByGridIndex(itemGridIndex);
-							if (itemToRotate)
+							var item = inventory.GetItemByGridIndex(itemGridIndex);
+							if (!is_undefined(item))
 							{
-								var newRotation = !itemToRotate.is_rotated;
+								var newRotation = !item.is_rotated;
 								if (inventory.RotateItemByGridIndex(itemGridIndex, newRotation))
 								{
 									// NETWORKING ROTATE ITEM
@@ -113,7 +113,10 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 							var item = inventory.GetItemByGridIndex(itemGridIndex);
 							if (!is_undefined(item))
 							{
-								GUIOpenItemActionMenu(item);
+								if (item.is_known)
+								{
+									GUIOpenItemActionMenu(item);
+								}
 							}
 						}
 					}

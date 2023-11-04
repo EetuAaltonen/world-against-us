@@ -32,7 +32,7 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 		};
 	}
 	
-	static Clone = function(_newQuantity = undefined, _ignoreSourceInventory = false)
+	static Clone = function(_newQuantity = undefined)
 	{
 		var parsedMetadata = (!is_undefined(metadata)) ? ParseJSONStructToMetadataItem(metadata, category, type) : undefined;
 		var cloneSize = !is_undefined(size) ? size.Clone() : undefined;
@@ -45,29 +45,19 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 			undefined
 		);
 		
-		if (!_ignoreSourceInventory)
-		{
-			// RESET ROTATION
-			if (cloneItem.is_rotated)
-			{
-				cloneItem.Rotate();
-			}
-			
-			// RESET SOURCE INVENTORY INFO
-			cloneItem.grid_index = !is_undefined(grid_index) ? grid_index.Clone() : undefined;
-			cloneItem.sourceInventory = sourceInventory;
-		}
-		
 		return cloneItem;
 	}
 	
 	static Rotate = function()
 	{
+		var isRotationToggled = false;
 		if (size.w != size.h)
 		{
 			is_rotated = !is_rotated;
 			size.Swap();
+			isRotationToggled = true;
 		}
+		return isRotationToggled;
 	}
 	
 	static Compare = function(_other)

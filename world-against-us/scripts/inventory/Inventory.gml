@@ -263,28 +263,33 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 		var item = GetItemByGridIndex(_gridIndex);
 		if (!is_undefined(item))
 		{
-			var originalRotation = item.is_rotated;
-			// Clear previous spot
-			FillGridArea(item.grid_index.col, item.grid_index.row, item.size, undefined);
-			
-			// Set rotation
-			if (_isRotated != item.is_rotated)
+			if (item.is_known)
 			{
-				item.Rotate();
-			}
+				if (item.is_rotated != _isRotated)
+				{
+					var originalRotation = item.is_rotated;
+					var originalSize = item.size.Clone();
+					// Set rotation
+					if (item.Rotate())
+					{
+						// Clear previous spot
+						FillGridArea(item.grid_index.col, item.grid_index.row, originalSize, undefined);
 			
-			if (IsGridAreaEmpty(_gridIndex.col, _gridIndex.row, item, item.sourceInventory, item.grid_index))
-			{
-				isItemRotated = true;
-			} else {
-				// Reverse rotation if item doesn't fit
-				if (item.is_rotated != originalRotation) {
-				    item.Rotate();
+						if (IsGridAreaEmpty(_gridIndex.col, _gridIndex.row, item, item.sourceInventory, item.grid_index))
+						{
+							isItemRotated = true;
+						} else {
+							// Reverse rotation if item doesn't fit
+							if (item.is_rotated != originalRotation) {
+							    item.Rotate();
+							}
+						}
+			
+						// Set new spot
+						FillGridArea(item.grid_index.col, item.grid_index.row, item.size, item.grid_index.Clone());
+					}
 				}
 			}
-			
-			// Set new spot
-			FillGridArea(item.grid_index.col, item.grid_index.row, item.size, item.grid_index.Clone());
 		}
 		return isItemRotated;
 	}

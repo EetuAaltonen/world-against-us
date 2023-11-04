@@ -13,7 +13,11 @@ function ParseJSONStructToItem(_jsonStruct)
 		);
 		if (is_undefined(parsedItem)) return parsedItem;
 		
-		if (bool(itemStruct[$ "is_rotated"] ?? false)) { parsedItem.Rotate(); }
+		var parsedIsRotated = bool(itemStruct[$ "is_rotated"]) ?? false;
+		if (parsedItem.is_rotated != parsedIsRotated)
+		{
+			parsedItem.Rotate();
+		}
 		
 		parsedItem.is_known = bool(itemStruct[$ "is_known"] ?? true);
 		

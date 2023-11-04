@@ -3,72 +3,75 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 	var itemGridIndex = _inventory.grid_data[_mouseHoverIndex.row][_mouseHoverIndex.col];
 	if (!is_undefined(itemGridIndex))
 	{
-		var sourceItem = _inventory.GetItemByGridIndex(itemGridIndex).Clone();
-		if (!is_undefined(sourceItem))
+		var item = _inventory.GetItemByGridIndex(itemGridIndex).Clone();
+		if (!is_undefined(item))
 		{
-			if (_inventory.type == INVENTORY_TYPE.PlayerBackpack)
+			if (item.is_known)
 			{
-				var targetInventory = global.ObjTempInventory.inventory;
-				if (!is_undefined(targetInventory))
+				if (_inventory.type == INVENTORY_TYPE.PlayerBackpack)
 				{
-					var transferItemGridIndex = targetInventory.AddItem(sourceItem, undefined, false, sourceItem.is_known);
-					if (!is_undefined(transferItemGridIndex))
+					var targetInventory = global.ObjTempInventory.inventory;
+					if (!is_undefined(targetInventory))
 					{
-						_inventory.RemoveItemByGridIndex(itemGridIndex);	
+						var transferItemGridIndex = targetInventory.AddItem(item, undefined, false, item.is_known);
+						if (!is_undefined(transferItemGridIndex))
+						{
+							_inventory.RemoveItemByGridIndex(itemGridIndex);	
+						}
+					} else {
+						if (item.category == "Magazine" || item.category == "Bullet" ||
+							item.category == "Fuel Ammo")
+						{
+							if (!is_undefined(global.PlayerMagazinePockets))
+							{
+								var transferItemGridIndex = global.PlayerMagazinePockets.AddItem(item, undefined, false, item.is_known);
+								if (!is_undefined(transferItemGridIndex))
+								{
+									_inventory.RemoveItemByGridIndex(itemGridIndex);
+								}
+							}
+						} else if (item.category == "Medicine")
+						{
+							if (!is_undefined(global.PlayerMedicinePockets))
+							{
+								var transferItemGridIndex = global.PlayerMedicinePockets.AddItem(item, undefined, false, item.is_known);
+								if (!is_undefined(transferItemGridIndex))
+								{
+									_inventory.RemoveItemByGridIndex(itemGridIndex);
+								}
+							}
+						}
 					}
 				} else {
-					if (sourceItem.category == "Magazine" || sourceItem.category == "Bullet" ||
-						sourceItem.category == "Fuel Ammo")
+					if (!is_undefined(global.PlayerBackpack))
 					{
-						if (!is_undefined(global.PlayerMagazinePockets))
+						var transferItemGridIndex = global.PlayerBackpack.AddItem(item, undefined, false, item.is_known);
+						if (!is_undefined(transferItemGridIndex))
 						{
-							var transferItemGridIndex = global.PlayerMagazinePockets.AddItem(sourceItem, undefined, false, sourceItem.is_known);
-							if (!is_undefined(transferItemGridIndex))
+							if (_inventory.RemoveItemByGridIndex(itemGridIndex))
 							{
-								_inventory.RemoveItemByGridIndex(itemGridIndex);
-							}
-						}
-					} else if (sourceItem.category == "Medicine")
-					{
-						if (!is_undefined(global.PlayerMedicinePockets))
-						{
-							var transferItemGridIndex = global.PlayerMedicinePockets.AddItem(sourceItem, undefined, false, sourceItem.is_known);
-							if (!is_undefined(transferItemGridIndex))
-							{
-								_inventory.RemoveItemByGridIndex(itemGridIndex);
-							}
-						}
-					}
-				}
-			} else {
-				if (!is_undefined(global.PlayerBackpack))
-				{
-					var transferItemGridIndex = global.PlayerBackpack.AddItem(sourceItem, undefined, false, sourceItem.is_known);
-					if (!is_undefined(transferItemGridIndex))
-					{
-						if (_inventory.RemoveItemByGridIndex(itemGridIndex))
-						{
-							// NETWORKING REMOVE QUICK TRANSFER ITEM
-							if (global.MultiplayerMode)
-							{
-								if (_inventory.type == INVENTORY_TYPE.LootContainer)
+								// NETWORKING REMOVE QUICK TRANSFER ITEM
+								if (global.MultiplayerMode)
 								{
-									var containerInventoryActionInfo = new ContainerInventoryActionInfo(_inventory.inventory_id, itemGridIndex, undefined, undefined, undefined, undefined);
-									var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM, global.NetworkHandlerRef.client_id);
-									var networkPacket = new NetworkPacket(networkPacketHeader, containerInventoryActionInfo);
-									if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+									if (_inventory.type == INVENTORY_TYPE.LootContainer)
 									{
-										if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+										var containerInventoryActionInfo = new ContainerInventoryActionInfo(_inventory.inventory_id, itemGridIndex, undefined, undefined, undefined, undefined);
+										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM, global.NetworkHandlerRef.client_id);
+										var networkPacket = new NetworkPacket(networkPacketHeader, containerInventoryActionInfo);
+										if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 										{
-											show_debug_message("Failed to remove item from container inventory");
+											if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+											{
+												show_debug_message("Failed to remove item from container inventory");
+											}
 										}
 									}
 								}
 							}
 						}
 					}
-				}
-			}	
+				}	
+			}
 		}
 	}
 }
