@@ -81,9 +81,8 @@ function NetworkPacketBuilder() constructor
 					} break;
 					case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
 					{
-						var containerContentInfo = _networkPacketPayload;
-						buffer_write(_networkBuffer, buffer_s32, containerContentInfo.content_count);
-						buffer_write(_networkBuffer, buffer_text, containerContentInfo.container_id);
+						var containerId = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_text, containerId);
 						isPayloadWritten = true;
 					} break;
 					case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:

@@ -7,11 +7,8 @@ import NetworkPacket from "./NetworkPacket.js";
 import NetworkPacketHeader from "./NetworkPacketHeader.js";
 import WorldMapFastTravelPoint from "../world_map/WorldMapFastTravelInfo.js";
 import NetworkInventoryStream from "../inventory/NetworkInventoryStream.js";
-import ContainerContentInfo from "../containers/ContainerContentInfo.js";
 import ContainerInventoryActionInfo from "../containers/ContainerInventoryActionInfo.js";
 import GridIndex from "../inventory/GridIndex.js";
-import ItemReplica from "../items/ItemReplica.js";
-import ParseJSONObjectToItemReplica from "../items/ParseJSONObjectToItemReplica.js";
 
 export default class NetworkPacketParser {
   constructor() {}
@@ -73,13 +70,7 @@ export default class NetworkPacketParser {
           case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
             {
               let offset = 0;
-              const parsedContentCount = msg.readInt32LE(offset);
-              offset += BITWISE.BIT32;
-              const parsedContainerId = msg.toString("utf8", offset);
-              payload = new ContainerContentInfo(
-                parsedContainerId,
-                parsedContentCount
-              );
+              payload = msg.toString("utf8", offset);
             }
             break;
           case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
