@@ -2,9 +2,10 @@ import MESSAGE_TYPE from "../constants/MessageType.js";
 import PACKET_PRIORITY from "../constants/PacketPriority.js";
 
 import WorldMapFastTravelInfo from "../world_map/WorldMapFastTravelInfo.js";
-import ParseJSONObjectToItem from "../items/ParseJSONObjectToItemReplica.js";
+import ParseJSONObjectToItemReplica from "../items/ParseJSONObjectToItemReplica.js";
 
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
+import ParseJSONObjectToContainerAction from "../containers/ParseJSONObjectToContainerAction.js";
 
 export default class NetworkPacketHandler {
   constructor(networkHandler, networkPacketBuilder, instanceHandler) {
@@ -130,88 +131,96 @@ export default class NetworkPacketHandler {
             {
               // TODO: Return a flag if container is already in-use by a player
               const containerContentInfo = networkPacket.payload;
-              const container = instance.objectHandler.container;
-              if (container === undefined) {
-                instance.initContainer();
-                containerContentInfo.contentCount = -1;
-              } else {
-                const contentCount = instance.getContainerContentCount();
-                if (contentCount !== undefined) {
-                  containerContentInfo.contentCount = contentCount;
+              if (containerContentInfo !== undefined) {
+                const container = instance.objectHandler.container;
+                if (container === undefined) {
+                  instance.initContainer();
+                  containerContentInfo.contentCount = -1;
+                } else {
+                  const contentCount = instance.getContainerContentCount();
+                  if (contentCount !== undefined) {
+                    containerContentInfo.contentCount = contentCount;
+                  }
                 }
-              }
 
-              const networkBuffer = this.networkPacketBuilder.createPacket(
-                MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT,
-                client.uuid,
-                acknowledgmentId,
-                containerContentInfo
-              );
-              if (networkBuffer !== undefined) {
-                this.networkHandler.packetQueue.enqueue(
-                  new NetworkQueueEntry(
-                    networkBuffer,
-                    [client],
-                    PACKET_PRIORITY.DEFAULT
-                  )
+                const networkBuffer = this.networkPacketBuilder.createPacket(
+                  MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT,
+                  client.uuid,
+                  acknowledgmentId,
+                  containerContentInfo
                 );
-                isPacketHandled = true;
+                if (networkBuffer !== undefined) {
+                  this.networkHandler.packetQueue.enqueue(
+                    new NetworkQueueEntry(
+                      networkBuffer,
+                      [client],
+                      PACKET_PRIORITY.DEFAULT
+                    )
+                  );
+                  isPacketHandled = true;
+                }
               }
             }
             break;
           case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
             {
               const containerInventoryStream = networkPacket.payload;
-              containerInventoryStream.targetInventory =
-                instance.objectHandler.container;
-              instance.objectHandler.activeInventoryStream =
-                containerInventoryStream;
+              if (containerInventoryStream !== undefined) {
+                containerInventoryStream.targetInventory =
+                  instance.objectHandler.container;
+                instance.objectHandler.activeInventoryStream =
+                  containerInventoryStream;
 
-              const networkBuffer = this.networkPacketBuilder.createPacket(
-                MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM,
-                client.uuid,
-                acknowledgmentId,
-                undefined
-              );
-              if (networkBuffer !== undefined) {
-                this.networkHandler.packetQueue.enqueue(
-                  new NetworkQueueEntry(
-                    networkBuffer,
-                    [client],
-                    PACKET_PRIORITY.DEFAULT
-                  )
+                const networkBuffer = this.networkPacketBuilder.createPacket(
+                  MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM,
+                  client.uuid,
+                  acknowledgmentId,
+                  undefined
                 );
-                isPacketHandled = true;
+                if (networkBuffer !== undefined) {
+                  this.networkHandler.packetQueue.enqueue(
+                    new NetworkQueueEntry(
+                      networkBuffer,
+                      [client],
+                      PACKET_PRIORITY.DEFAULT
+                    )
+                  );
+                  isPacketHandled = true;
+                }
               }
             }
             break;
           case MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM:
             {
-              const containerInventoryStream = networkPacket.payload;
               const activeInventoryStream =
                 instance.objectHandler.activeInventoryStream;
               if (activeInventoryStream.isStreamSending) {
-                if (containerInventoryStream.items !== undefined) {
-                  const parsedContainerItems =
-                    containerInventoryStream.items.map((jsonItem) => {
-                      return ParseJSONObjectToItem(jsonItem);
-                    });
-                  instance.addContainerItems(parsedContainerItems);
-
-                  const networkBuffer = this.networkPacketBuilder.createPacket(
-                    MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM,
-                    client.uuid,
-                    acknowledgmentId,
-                    undefined
-                  );
-                  if (networkBuffer !== undefined) {
-                    this.networkHandler.packetQueue.enqueue(
-                      new NetworkQueueEntry(
-                        networkBuffer,
-                        [client],
-                        PACKET_PRIORITY.DEFAULT
-                      )
-                    );
+                const containerInventoryStream = networkPacket.payload;
+                if (containerInventoryStream !== undefined) {
+                  if (containerInventoryStream.items !== undefined) {
+                    const parsedContainerItems =
+                      containerInventoryStream.items.map((jsonItem) => {
+                        return ParseJSONObjectToItemReplica(jsonItem);
+                      });
+                    if (instance.addContainerItems(parsedContainerItems)) {
+                      const networkBuffer =
+                        this.networkPacketBuilder.createPacket(
+                          MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM,
+                          client.uuid,
+                          acknowledgmentId,
+                          undefined
+                        );
+                      if (networkBuffer !== undefined) {
+                        this.networkHandler.packetQueue.enqueue(
+                          new NetworkQueueEntry(
+                            networkBuffer,
+                            [client],
+                            PACKET_PRIORITY.DEFAULT
+                          )
+                        );
+                        isPacketHandled = true;
+                      }
+                    }
                   }
                 }
               } else {
@@ -238,6 +247,7 @@ export default class NetworkPacketHandler {
                         PACKET_PRIORITY.DEFAULT
                       )
                     );
+                    isPacketHandled = true;
                   }
                 } else {
                   const networkBuffer = this.networkPacketBuilder.createPacket(
@@ -254,10 +264,10 @@ export default class NetworkPacketHandler {
                         PACKET_PRIORITY.DEFAULT
                       )
                     );
+                    isPacketHandled = true;
                   }
                 }
               }
-              isPacketHandled = true;
             }
             break;
           case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
@@ -287,18 +297,81 @@ export default class NetworkPacketHandler {
               }
             }
             break;
+          case MESSAGE_TYPE.CONTAINER_INVENTORY_ADD_ITEM:
+            {
+              const containerInventoryActionInfo =
+                ParseJSONObjectToContainerAction(networkPacket.payload);
+              if (containerInventoryActionInfo !== undefined) {
+                const item = containerInventoryActionInfo.item;
+                if (item !== undefined) {
+                  if (instance.addContainerItem(item)) {
+                    const networkBuffer =
+                      this.networkPacketBuilder.createPacket(
+                        MESSAGE_TYPE.CONTAINER_INVENTORY_ADD_ITEM,
+                        client.uuid,
+                        acknowledgmentId,
+                        undefined
+                      );
+                    if (networkBuffer !== undefined) {
+                      this.networkHandler.packetQueue.enqueue(
+                        new NetworkQueueEntry(
+                          networkBuffer,
+                          [client],
+                          PACKET_PRIORITY.DEFAULT
+                        )
+                      );
+                      isPacketHandled = true;
+                    }
+                  }
+                }
+              }
+            }
+            break;
           case MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM:
             {
               const containerInventoryActionInfo = networkPacket.payload;
-              const container = instance.objectHandler.container;
-              if (container !== undefined) {
-                const gridIndexKey = `${containerInventoryActionInfo.sourceGridIndex.col}-${containerInventoryActionInfo.sourceGridIndex.row}`;
-                const item = container[gridIndexKey];
-                if (item !== undefined) {
-                  item.is_known = containerInventoryActionInfo.isKnown;
+              if (containerInventoryActionInfo !== undefined) {
+                const container = instance.objectHandler.container;
+                if (container !== undefined) {
+                  const item = instance.getContainerItemByGridIndex(
+                    containerInventoryActionInfo.sourceGridIndex
+                  );
+                  if (item !== undefined) {
+                    item.is_known = containerInventoryActionInfo.isKnown;
 
+                    const networkBuffer =
+                      this.networkPacketBuilder.createPacket(
+                        MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM,
+                        client.uuid,
+                        acknowledgmentId,
+                        undefined
+                      );
+                    if (networkBuffer !== undefined) {
+                      this.networkHandler.packetQueue.enqueue(
+                        new NetworkQueueEntry(
+                          networkBuffer,
+                          [client],
+                          PACKET_PRIORITY.DEFAULT
+                        )
+                      );
+                      isPacketHandled = true;
+                    }
+                  }
+                }
+              }
+            }
+            break;
+          case MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM:
+            {
+              const containerInventoryActionInfo = networkPacket.payload;
+              if (containerInventoryActionInfo !== undefined) {
+                if (
+                  instance.rotateContainerItemByGridIndex(
+                    containerInventoryActionInfo.sourceGridIndex
+                  )
+                ) {
                   const networkBuffer = this.networkPacketBuilder.createPacket(
-                    MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM,
+                    MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM,
                     client.uuid,
                     acknowledgmentId,
                     undefined
@@ -311,8 +384,42 @@ export default class NetworkPacketHandler {
                         PACKET_PRIORITY.DEFAULT
                       )
                     );
+                    isPacketHandled = true;
                   }
-                  isPacketHandled = true;
+                }
+              }
+            }
+            break;
+          case MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM:
+            {
+              const containerInventoryActionInfo = networkPacket.payload;
+              console.log(containerInventoryActionInfo);
+              if (containerInventoryActionInfo !== undefined) {
+                const container = instance.objectHandler.container;
+                if (container !== undefined) {
+                  if (
+                    instance.removeContainerItemByGridIndex(
+                      containerInventoryActionInfo.sourceGridIndex
+                    )
+                  ) {
+                    const networkBuffer =
+                      this.networkPacketBuilder.createPacket(
+                        MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM,
+                        client.uuid,
+                        acknowledgmentId,
+                        undefined
+                      );
+                    if (networkBuffer !== undefined) {
+                      this.networkHandler.packetQueue.enqueue(
+                        new NetworkQueueEntry(
+                          networkBuffer,
+                          [client],
+                          PACKET_PRIORITY.DEFAULT
+                        )
+                      );
+                      isPacketHandled = true;
+                    }
+                  }
                 }
               }
             }
