@@ -1,19 +1,21 @@
 import ItemReplica from "./ItemReplica.js";
-import GridIndex from "../inventory/GridIndex.js";
+import ParseJSONObjectToGridIndex from "../inventory/ParseJSONObjectToGridIndex.js";
 
-export default function (jsonStruct) {
-  if (jsonStruct !== undefined) {
-    const parsedGridIndex = new GridIndex(
-      jsonStruct.grid_index.col ?? 0,
-      jsonStruct.grid_index.row ?? 0
+export default function (jsonObject) {
+  let parsedItem;
+  if (jsonObject !== undefined) {
+    const parsedGridIndex = ParseJSONObjectToGridIndex(
+      jsonObject["grid_index"]
     );
-    return new ItemReplica(
-      jsonStruct.name ?? "",
-      jsonStruct.quantity ?? 1,
-      jsonStruct.metadata ?? undefined,
-      jsonStruct.is_rotated ?? false,
-      jsonStruct.is_known ?? false,
+
+    parsedItem = new ItemReplica(
+      jsonObject["name"] ?? "",
+      jsonObject["quantity"] ?? 1,
+      jsonObject["metadata"] ?? undefined,
+      jsonObject["is_rotated"] ?? false,
+      jsonObject["is_known"] ?? false,
       parsedGridIndex
     );
   }
+  return parsedItem;
 }
