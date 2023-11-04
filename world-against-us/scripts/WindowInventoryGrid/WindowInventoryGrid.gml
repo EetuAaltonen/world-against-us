@@ -63,8 +63,31 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 						var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
 						if (!is_undefined(itemGridIndex))
 						{
-							var isItemRotated = inventory.GetItemByGridIndex(itemGridIndex).is_rotated;
-							inventory.MoveAndRotateItemByGridIndex(itemGridIndex, itemGridIndex, !isItemRotated);
+							var itemToRotate = inventory.GetItemByGridIndex(itemGridIndex);
+							if (itemToRotate)
+							{
+								var newRotation = !itemToRotate.is_rotated;
+								if (inventory.RotateItemByGridIndex(itemGridIndex, newRotation))
+								{
+									// NETWORKING ROTATE ITEM
+									if (global.MultiplayerMode)
+									{
+										if (inventory.type == INVENTORY_TYPE.LootContainer)
+										{
+											var containerInventoryActionInfo = new ContainerInventoryActionInfo(inventory.inventory_id, itemGridIndex, undefined, newRotation, undefined, undefined);
+											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM, global.NetworkHandlerRef.client_id);
+											var networkPacket = new NetworkPacket(networkPacketHeader, containerInventoryActionInfo);
+											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+											{
+												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+												{
+													show_debug_message("Failed to rotate item in container inventory");
+												}
+											}
+										}
+									}
+								}
+							}
 						}
 					}
 					// IDENTIFY ITEM
