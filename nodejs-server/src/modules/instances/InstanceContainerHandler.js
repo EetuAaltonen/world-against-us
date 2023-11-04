@@ -25,15 +25,4 @@ export default class InstanceContainerHandler {
     }
     return contentCount;
   }
-
-  addContainerItem(containerId, item) {
-    let isItemAdded = false;
-    if (item !== undefined) {
-      const container = this.getContainerById(containerId);
-      if (container !== undefined) {
-        isItemAdded = container.addItem(item);
-      }
-    }
-    return isItemAdded;
-  }
 }

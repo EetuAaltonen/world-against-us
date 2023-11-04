@@ -18,21 +18,21 @@ export default class NetworkInventoryStream {
   }
 
   FetchItemsToStream() {
-    var items = [];
+    let items = [];
     if (this.targetInventory !== undefined) {
-      let lastItemIndex = this.streamCurrentIndex + this.streamItemLimit;
-      const itemIndices = Object.keys(this.targetInventory).slice(
-        this.streamCurrentIndex,
-        lastItemIndex
-      );
-      itemIndices.forEach((key) => {
-        const item = this.targetInventory[key];
+      const lastItemIndex = this.streamCurrentIndex + this.streamItemLimit;
+      const itemGridIndexKeys =
+        this.targetInventory.getItemGridIndexKeysByRange(
+          this.streamCurrentIndex,
+          lastItemIndex
+        );
+      itemGridIndexKeys.forEach((gridIndexKey) => {
+        const item = this.targetInventory.getItemByGridIndexKey(gridIndexKey);
         if (item !== undefined) {
           items.push(item);
         }
       });
-
-      this.streamCurrentIndex += itemIndices.length;
+      this.streamCurrentIndex += itemGridIndexKeys.length;
     }
     return items;
   }

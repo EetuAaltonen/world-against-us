@@ -135,7 +135,7 @@ export default class InstanceHandler {
     } else {
       const instanceIds = this.getInstanceIds();
       const instanceCount = instanceIds.length;
-      for (var i = 0; i < instanceCount; i++) {
+      for (let i = 0; i < instanceCount; i++) {
         const instanceId = instanceIds[i];
         const instance = this.getInstance(instanceId);
         if (instance.getPlayer(clientId) !== undefined) {

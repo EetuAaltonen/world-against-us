@@ -73,25 +73,4 @@ export default class Instance {
     }
     return isPlayerRemoved;
   }
-
-  rotateContainerItemByGridIndex(gridIndex) {
-    let isItemRotated = false;
-    const item = this.getContainerItemByGridIndex(gridIndex);
-    if (item !== undefined) {
-      item.is_rotated = !item.is_rotated;
-      isItemRotated = true;
-    }
-    return isItemRotated;
-  }
-
-  removeContainerItemByGridIndex(gridIndex) {
-    let isItemRemoved = false;
-    const item = this.getContainerItemByGridIndex(gridIndex);
-    if (item !== undefined) {
-      const gridIndexKey = this.formatGridIndex(gridIndex);
-      delete this.containerHandler.container[gridIndexKey];
-      isItemRemoved = true;
-    }
-    return isItemRemoved;
-  }
 }

@@ -170,7 +170,6 @@ export default class NetworkPacketHandler {
             break;
           case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
             {
-              console.log("MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM");
               const containerInventoryStream = networkPacket.payload;
               if (containerInventoryStream !== undefined) {
                 const container = instance.containerHandler.getContainerById(
@@ -204,7 +203,6 @@ export default class NetworkPacketHandler {
             break;
           case MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM:
             {
-              console.log("MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM");
               const activeInventoryStream =
                 instance.containerHandler.activeInventoryStream;
               if (activeInventoryStream !== undefined) {
@@ -223,9 +221,6 @@ export default class NetworkPacketHandler {
                             parsedItems
                           )
                         ) {
-                          console.log(
-                            `Container content size: ${activeInventoryStream.targetInventory.getItemCount()}`
-                          );
                           const networkBuffer =
                             this.networkPacketBuilder.createPacket(
                               MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM,
@@ -326,26 +321,33 @@ export default class NetworkPacketHandler {
             break;
           case MESSAGE_TYPE.CONTAINER_INVENTORY_ADD_ITEM:
             {
+              // TODO: Move all parse functions under the packet parser
               const containerInventoryActionInfo =
                 ParseJSONObjectToContainerAction(networkPacket.payload);
               if (containerInventoryActionInfo !== undefined) {
                 const item = containerInventoryActionInfo.item;
-                if (instance.addContainerItem(item)) {
-                  const networkBuffer = this.networkPacketBuilder.createPacket(
-                    MESSAGE_TYPE.CONTAINER_INVENTORY_ADD_ITEM,
-                    client.uuid,
-                    acknowledgmentId,
-                    undefined
-                  );
-                  if (networkBuffer !== undefined) {
-                    this.networkHandler.packetQueue.enqueue(
-                      new NetworkQueueEntry(
-                        networkBuffer,
-                        [client],
-                        PACKET_PRIORITY.DEFAULT
-                      )
-                    );
-                    isPacketHandled = true;
+                const container = instance.containerHandler.getContainerById(
+                  containerInventoryActionInfo.containerId
+                );
+                if (container !== undefined) {
+                  if (container.inventory.addItem(item)) {
+                    const networkBuffer =
+                      this.networkPacketBuilder.createPacket(
+                        MESSAGE_TYPE.CONTAINER_INVENTORY_ADD_ITEM,
+                        client.uuid,
+                        acknowledgmentId,
+                        undefined
+                      );
+                    if (networkBuffer !== undefined) {
+                      this.networkHandler.packetQueue.enqueue(
+                        new NetworkQueueEntry(
+                          networkBuffer,
+                          [client],
+                          PACKET_PRIORITY.DEFAULT
+                        )
+                      );
+                      isPacketHandled = true;
+                    }
                   }
                 }
               }
@@ -355,14 +357,15 @@ export default class NetworkPacketHandler {
             {
               const containerInventoryActionInfo = networkPacket.payload;
               if (containerInventoryActionInfo !== undefined) {
-                const container = instance.containerHandler.container;
+                const container = instance.containerHandler.getContainerById(
+                  containerInventoryActionInfo.containerId
+                );
                 if (container !== undefined) {
-                  const item = instance.getContainerItemByGridIndex(
-                    containerInventoryActionInfo.sourceGridIndex
-                  );
-                  if (item !== undefined) {
-                    item.is_known = containerInventoryActionInfo.isKnown;
-
+                  if (
+                    container.inventory.identifyItemByGridIndex(
+                      containerInventoryActionInfo.sourceGridIndex
+                    )
+                  ) {
                     const networkBuffer =
                       this.networkPacketBuilder.createPacket(
                         MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM,
@@ -389,26 +392,33 @@ export default class NetworkPacketHandler {
             {
               const containerInventoryActionInfo = networkPacket.payload;
               if (containerInventoryActionInfo !== undefined) {
-                if (
-                  instance.rotateContainerItemByGridIndex(
-                    containerInventoryActionInfo.sourceGridIndex
-                  )
-                ) {
-                  const networkBuffer = this.networkPacketBuilder.createPacket(
-                    MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM,
-                    client.uuid,
-                    acknowledgmentId,
-                    undefined
-                  );
-                  if (networkBuffer !== undefined) {
-                    this.networkHandler.packetQueue.enqueue(
-                      new NetworkQueueEntry(
-                        networkBuffer,
-                        [client],
-                        PACKET_PRIORITY.DEFAULT
-                      )
-                    );
-                    isPacketHandled = true;
+                const container = instance.containerHandler.getContainerById(
+                  containerInventoryActionInfo.containerId
+                );
+                if (container !== undefined) {
+                  if (
+                    container.inventory.rotateItemByGridIndex(
+                      containerInventoryActionInfo.sourceGridIndex,
+                      containerInventoryActionInfo.isRotated
+                    )
+                  ) {
+                    const networkBuffer =
+                      this.networkPacketBuilder.createPacket(
+                        MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM,
+                        client.uuid,
+                        acknowledgmentId,
+                        undefined
+                      );
+                    if (networkBuffer !== undefined) {
+                      this.networkHandler.packetQueue.enqueue(
+                        new NetworkQueueEntry(
+                          networkBuffer,
+                          [client],
+                          PACKET_PRIORITY.DEFAULT
+                        )
+                      );
+                      isPacketHandled = true;
+                    }
                   }
                 }
               }
@@ -417,12 +427,13 @@ export default class NetworkPacketHandler {
           case MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM:
             {
               const containerInventoryActionInfo = networkPacket.payload;
-              console.log(containerInventoryActionInfo);
               if (containerInventoryActionInfo !== undefined) {
-                const container = instance.containerHandler.container;
+                const container = instance.containerHandler.getContainerById(
+                  containerInventoryActionInfo.containerId
+                );
                 if (container !== undefined) {
                   if (
-                    instance.removeContainerItemByGridIndex(
+                    container.inventory.removeItemByGridIndex(
                       containerInventoryActionInfo.sourceGridIndex
                     )
                   ) {

@@ -42,9 +42,33 @@ export default class Inventory {
     let item;
     const gridIndexKey = this.formatGridIndex(gridIndex);
     if (gridIndexKey !== undefined) {
+      item = this.getItemByGridIndexKey(gridIndexKey);
+    }
+    return item;
+  }
+
+  getItemByGridIndexKey(gridIndexKey) {
+    let item;
+    if (gridIndexKey !== undefined) {
       item = this.items[gridIndexKey];
     }
     return item;
+  }
+
+  getItemByGridIndexKey(gridIndexKey) {
+    let item;
+    if (gridIndexKey !== undefined) {
+      item = this.items[gridIndexKey];
+    }
+    return item;
+  }
+
+  getItemGridIndexKeysByRange(startIndex, endIndex) {
+    let itemGridIndexKeys;
+    if (startIndex !== undefined && endIndex !== undefined) {
+      itemGridIndexKeys = Object.keys(this.items).slice(startIndex, endIndex);
+    }
+    return itemGridIndexKeys;
   }
 
   getItemCount() {
@@ -53,11 +77,19 @@ export default class Inventory {
 
   stackItem() {}
 
-  identifyItemByGridIndex() {}
+  identifyItemByGridIndex(gridIndex) {
+    let isItemIdentified;
+    const item = this.getItemByGridIndex(gridIndex);
+    if (item !== undefined) {
+      item.is_known = true;
+      isItemIdentified = item.is_known;
+    }
+    return isItemIdentified;
+  }
 
   rotateItemByGridIndex(gridIndex, newRotation) {
     let isItemRotated = false;
-    const item = this.getContainerItemByGridIndex(gridIndex);
+    const item = this.getItemByGridIndex(gridIndex);
     if (item !== undefined) {
       item.is_rotated = newRotation;
       isItemRotated = true;
@@ -67,9 +99,9 @@ export default class Inventory {
 
   removeItemByGridIndex(gridIndex) {
     let isItemRemoved = false;
-    if (this.getItemByGridIndex(gridIndex) !== undefined) {
-      const gridIndexKey = this.formatGridIndex(gridIndex);
-      if (gridIndexKey !== undefined) {
+    const gridIndexKey = this.formatGridIndex(gridIndex);
+    if (gridIndexKey !== undefined) {
+      if (this.getItemByGridIndexKey(gridIndexKey) !== undefined) {
         delete this.items[gridIndexKey];
         isItemRemoved = true;
       }
