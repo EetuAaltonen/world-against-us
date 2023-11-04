@@ -46,7 +46,26 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 					var transferItemGridIndex = global.PlayerBackpack.AddItem(sourceItem, undefined, false, sourceItem.is_known);
 					if (!is_undefined(transferItemGridIndex))
 					{
-						_inventory.RemoveItemByGridIndex(itemGridIndex);
+						if (_inventory.RemoveItemByGridIndex(itemGridIndex))
+						{
+							// NETWORKING REMOVE QUICK TRANSFER ITEM
+							if (global.MultiplayerMode)
+							{
+								if (_inventory.type == INVENTORY_TYPE.LootContainer)
+								{
+									var containerInventoryActionInfo = new ContainerInventoryActionInfo(_inventory.inventory_id, itemGridIndex, undefined, undefined, undefined, undefined);
+									var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM, global.NetworkHandlerRef.client_id);
+									var networkPacket = new NetworkPacket(networkPacketHeader, containerInventoryActionInfo);
+									if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+									{
+										if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+										{
+											show_debug_message("Failed to remove item from container inventory");
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}	
