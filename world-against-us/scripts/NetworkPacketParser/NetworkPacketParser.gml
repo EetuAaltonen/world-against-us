@@ -6,16 +6,16 @@ function NetworkPacketParser() constructor
 		try
 		{
 			buffer_seek(_msg, buffer_seek_start, 0);
-			var messageType = buffer_read(_msg, buffer_u8);
-			var clientId = buffer_read(_msg, buffer_string);
-			var acknowledgmentId = buffer_read(_msg, buffer_s8);
-			var parsedHeader = new NetworkPacketHeader(messageType, clientId);
-			if (acknowledgmentId != -1)
-			{
-				parsedHeader.SetAcknowledgmentId(acknowledgmentId);
-			}
+			var parsedMessageType = buffer_read(_msg, buffer_u8);
+			var parsedClientId = buffer_read(_msg, buffer_string);
+			var parsedAcknowledgmentId = buffer_read(_msg, buffer_s8);
+			var parsedHeader = new NetworkPacketHeader(parsedMessageType);
+			// SET CLIENT ID
+			parsedHeader.SetClientId(parsedClientId);
+			// SET ACKNOWLEDGMENT
+			parsedHeader.SetAcknowledgmentId(parsedAcknowledgmentId);
 			
-			var parsedPayload = ParsePayload(messageType, _msg);
+			var parsedPayload = ParsePayload(parsedMessageType, _msg);
 			parsedNetworkPacket = new NetworkPacket(parsedHeader, parsedPayload);
 		} catch (error)
 		{

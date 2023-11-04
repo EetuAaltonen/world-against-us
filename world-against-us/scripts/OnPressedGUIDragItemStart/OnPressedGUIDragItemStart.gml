@@ -12,7 +12,7 @@ function OnPressedGUIDragItemStart(_item)
 		if (_item.sourceInventory.type == INVENTORY_TYPE.LootContainer)
 		{
 			var containerInventoryActionInfo = new ContainerInventoryActionInfo(_item.sourceInventory.inventory_id, _item.grid_index, undefined, undefined, undefined, undefined);
-			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM, global.NetworkHandlerRef.client_id);
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM);
 			var networkPacket = new NetworkPacket(networkPacketHeader, containerInventoryActionInfo);
 			if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 			{

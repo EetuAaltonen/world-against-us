@@ -126,7 +126,7 @@ function NetworkPacketHandler() constructor
 											global.NetworkRegionObjectHandlerRef.active_inventory_stream = activeInventoryStream;
 											
 											// REQUEST CONTAINER INVENTORY DATA STREAM
-											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM);
 											var networkPacket = new NetworkPacket(networkPacketHeader, activeInventoryStream);
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
@@ -148,7 +148,7 @@ function NetworkPacketHandler() constructor
 										if (itemStructCount > 0)
 										{
 											// CONTAINER INVENTORY STREAM
-											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
 											var networkPacket = new NetworkPacket(networkPacketHeader, { items: itemsStructArray });
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
@@ -156,7 +156,7 @@ function NetworkPacketHandler() constructor
 											}
 										} else {
 											// CONTAINER INVENTORY STREAM
-											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM);
 											var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
@@ -165,7 +165,7 @@ function NetworkPacketHandler() constructor
 										}
 									} else {
 										// CONTAINER INVENTORY STREAM
-										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
 										var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 										isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
 									}
@@ -183,7 +183,7 @@ function NetworkPacketHandler() constructor
 										if (itemStructCount > 0)
 										{
 											// CONTAINER INVENTORY STREAM
-											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
 											var networkPacket = new NetworkPacket(networkPacketHeader, { items: itemsStructArray });
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
@@ -191,7 +191,7 @@ function NetworkPacketHandler() constructor
 											}
 										} else {
 											// CONTAINER INVENTORY STREAM
-											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM);
 											var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
@@ -209,7 +209,7 @@ function NetworkPacketHandler() constructor
 												activeInventoryStream.target_inventory.AddMultipleItems(parsedItems);
 												
 												// CONTAINER INVENTORY STREAM
-												var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+												var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
 												var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 												isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
 											}
@@ -238,7 +238,7 @@ function NetworkPacketHandler() constructor
 									if (!activeInventoryStream.is_stream_sending)
 									{
 										// CONTAINER INVENTORY STREAM
-										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
+										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM);
 										var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 										isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
 									} else {

@@ -56,7 +56,7 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 									if (_inventory.type == INVENTORY_TYPE.LootContainer)
 									{
 										var containerInventoryActionInfo = new ContainerInventoryActionInfo(_inventory.inventory_id, itemGridIndex, undefined, undefined, undefined, undefined);
-										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM, global.NetworkHandlerRef.client_id);
+										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM);
 										var networkPacket = new NetworkPacket(networkPacketHeader, containerInventoryActionInfo);
 										if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 										{

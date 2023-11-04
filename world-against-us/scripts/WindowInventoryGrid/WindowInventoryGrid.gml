@@ -75,7 +75,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 										if (inventory.type == INVENTORY_TYPE.LootContainer)
 										{
 											var containerInventoryActionInfo = new ContainerInventoryActionInfo(inventory.inventory_id, itemGridIndex, undefined, newRotation, undefined, undefined);
-											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM, global.NetworkHandlerRef.client_id);
+											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM);
 											var networkPacket = new NetworkPacket(networkPacketHeader, containerInventoryActionInfo);
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{

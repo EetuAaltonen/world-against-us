@@ -93,7 +93,7 @@ image_xscale = spriteDirection.image_x_scale;
 		if (syncTimer.IsTimerStopped())
 		{
 			var scaledPosition = ScaleFloatValuesToIntVector2(x, y);
-			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DATA_PLAYER_POSITION, global.NetworkHandlerRef.client_id);
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DATA_PLAYER_POSITION);
 			var networkPacket = new NetworkPacket(networkPacketHeader, scaledPosition);
 			
 			global.NetworkHandlerRef.AddPacketToQueue(networkPacket);

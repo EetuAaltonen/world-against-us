@@ -7,7 +7,7 @@ function InteractionFuncContainer()
 			if (is_undefined(global.NetworkRegionObjectHandlerRef.active_inventory_stream))
 			{
 				// REQUEST CONTAINER CONTENT
-				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT, global.NetworkHandlerRef.client_id);
+				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT);
 				var networkPacket = new NetworkPacket(networkPacketHeader, containerId);
 				if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 				{

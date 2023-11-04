@@ -15,7 +15,7 @@ function InteractionFuncFastTravelSpotTown()
 			]);
 			
 			// REQUEST FAST TRAVEL
-			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_FAST_TRAVEL, global.NetworkHandlerRef.client_id);
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_FAST_TRAVEL);
 			var fastTravelInfo = new WorldMapFastTravelInfo(global.NetworkRegionHandlerRef.region_id, global.NetworkRegionHandlerRef.region_id, ROOM_INDEX_CAMP);
 			var networkPacket = new NetworkPacket(networkPacketHeader, fastTravelInfo);
 			if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))

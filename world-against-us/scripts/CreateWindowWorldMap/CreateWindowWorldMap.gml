@@ -129,7 +129,7 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 		// REQUEST INSTANCE LIST
 		if (global.MultiplayerMode)
 		{
-			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_INSTANCE_LIST, global.NetworkHandlerRef.client_id);
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_INSTANCE_LIST);
 			var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 			
 			if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))

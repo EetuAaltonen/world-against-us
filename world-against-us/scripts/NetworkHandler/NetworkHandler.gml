@@ -40,7 +40,7 @@ function NetworkHandler() constructor
 		if (!is_undefined(socket)) {
 			host_address = _address;
 			host_port = _port;
-			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONNECT_TO_HOST, client_id);
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONNECT_TO_HOST);
 			var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 			if (network_packet_tracker.SetNetworkPacketAcknowledgment(networkPacket))
 			{
@@ -62,7 +62,7 @@ function NetworkHandler() constructor
 		// FORCE DISCONNECT MESSAGE IF ONLINE
 		if (global.MultiplayerMode)
 		{
-			var packetHeader = new NetworkPacketHeader(MESSAGE_TYPE.DISCONNECT_FROM_HOST, client_id);
+			var packetHeader = new NetworkPacketHeader(MESSAGE_TYPE.DISCONNECT_FROM_HOST);
 			var networkPacket = new NetworkPacket(packetHeader, undefined);
 		
 			if (network_packet_builder.CreatePacket(preAllocNetworkBuffer, networkPacket))
@@ -131,7 +131,7 @@ function NetworkHandler() constructor
 	{
 		var isJoining = false;
 		if (!is_undefined(socket)) {
-			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_JOIN_GAME, client_id);
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_JOIN_GAME);
 			var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 			if (network_packet_tracker.SetNetworkPacketAcknowledgment(networkPacket))
 			{
@@ -154,7 +154,7 @@ function NetworkHandler() constructor
 			//var jsonPlayerData = _playerCharacterData.ToJSONStruct();
 			//var jsonPlayerBackpackData = _playerCharacterData.backpack.ToJSONStruct();
 			
-			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DATA_PLAYER_SYNC, client_id);
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DATA_PLAYER_SYNC);
 			var networkPacket = new NetworkPacket(networkPacketHeader, undefined/*jsonPlayerData / jsonPlayerBackpackData*/);
 			if (network_packet_tracker.SetNetworkPacketAcknowledgment(networkPacket))
 			{
@@ -206,7 +206,6 @@ function NetworkHandler() constructor
 							}
 							// RESET TIMEOUT TIMER
 							timeout_timer.running_time = 0;
-						
 							isPacketHandled = true;
 						}
 					} break;
