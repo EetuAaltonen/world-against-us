@@ -264,10 +264,9 @@ function NetworkHandler() constructor
 					} break;
 					default:
 					{
-						if (network_packet_handler.HandlePacket(networkPacket))
+						isPacketHandled = network_packet_handler.HandlePacket(networkPacket);
+						if (!isPacketHandled)
 						{
-							isPacketHandled = true;
-						} else {
 							show_debug_message(string("Unable to handle message type: {0}", messageType));
 						}
 					}

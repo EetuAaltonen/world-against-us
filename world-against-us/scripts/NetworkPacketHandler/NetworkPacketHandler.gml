@@ -45,7 +45,6 @@ function NetworkPacketHandler() constructor
 										{
 											instanceListLoadingElement.isVisible = false;
 										}
-										
 										isPacketHandled = true;
 									}
 								}
@@ -131,10 +130,7 @@ function NetworkPacketHandler() constructor
 											var networkPacket = new NetworkPacket(networkPacketHeader, activeInventoryStream);
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
-												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-												{
-													show_debug_message("Failed to start container inventory data stream");
-												}
+												isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
 											}
 										}
 									}
@@ -156,10 +152,7 @@ function NetworkPacketHandler() constructor
 											var networkPacket = new NetworkPacket(networkPacketHeader, { items: itemsStructArray });
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
-												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-												{
-													show_debug_message("Failed to continue container inventory data stream");
-												}
+												isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
 											}
 										} else {
 											// CONTAINER INVENTORY STREAM
@@ -167,22 +160,15 @@ function NetworkPacketHandler() constructor
 											var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
-												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-												{
-													show_debug_message("Failed to end container inventory stream");
-												}
+												isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
 											}
 										}
 									} else {
 										// CONTAINER INVENTORY STREAM
 										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
 										var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-										if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-										{
-											show_debug_message("Failed to continue container inventory stream");
-										}
+										isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
 									}
-									isPacketHandled = true;
 								}
 							}break;
 							case MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM:
@@ -201,10 +187,7 @@ function NetworkPacketHandler() constructor
 											var networkPacket = new NetworkPacket(networkPacketHeader, { items: itemsStructArray });
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
-												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-												{
-													show_debug_message("Failed to continue container inventory stream");
-												}
+												isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
 											}
 										} else {
 											// CONTAINER INVENTORY STREAM
@@ -212,10 +195,7 @@ function NetworkPacketHandler() constructor
 											var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
-												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-												{
-													show_debug_message("Failed to end container inventory stream");
-												}
+												isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
 											}
 										}
 									} else {
@@ -231,14 +211,10 @@ function NetworkPacketHandler() constructor
 												// CONTAINER INVENTORY STREAM
 												var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
 												var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-												{
-													show_debug_message("Failed to continue container inventory stream");
-												}
+												isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
 											}
 										}
 									}
-									isPacketHandled = true;
 								}
 							} break;
 							case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
@@ -264,17 +240,21 @@ function NetworkPacketHandler() constructor
 										// CONTAINER INVENTORY STREAM
 										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM, global.NetworkHandlerRef.client_id);
 										var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-										if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-										{
-											show_debug_message("Failed to end container inventory stream");
-										}
+										isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
+									} else {
+										isPacketHandled = true;
 									}
-									isPacketHandled = true;
 								}
 							} break;
 							default:
 							{
-								show_debug_message(string("Unknown message type {0} to handle", messageType));
+								if (messageType < MESSAGE_TYPE.ENUM_LENGTH)
+								{
+									// ACCEPT UNPROCESSED KNOWN MESSAGE TYPES
+									isPacketHandled = true;
+								} else {
+									show_debug_message(string("Unknown message type {0} to handle", messageType));
+								}
 							}
 						}
 					} else {
