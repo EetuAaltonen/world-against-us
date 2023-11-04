@@ -4,12 +4,14 @@ export default class ContainerInventoryActionInfo {
     sourceGridIndex,
     targetGridIndex,
     isRotated,
-    isKnown
+    isKnown,
+    item
   ) {
     this.containerId = containerId;
     this.sourceGridIndex = sourceGridIndex;
     this.targetGridIndex = targetGridIndex;
     this.isRotated = isRotated;
     this.isKnown = isKnown;
+    this.item = item;
   }
 }

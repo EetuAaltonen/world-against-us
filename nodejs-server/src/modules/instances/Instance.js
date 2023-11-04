@@ -83,7 +83,7 @@ export default class Instance {
   addContainerItem(item) {
     let isItemAdded = false;
     if (item !== undefined) {
-      const gridIndexKey = `${item.grid_index.col}-${item.grid_index.row}`;
+      const gridIndexKey = this.formatGridIndex(item.grid_index);
       if (!Object.keys(this.objectHandler.container).includes(gridIndexKey)) {
         this.objectHandler.container[gridIndexKey] = item;
         isItemAdded = true;
@@ -107,8 +107,9 @@ export default class Instance {
     return isItemsAdded;
   }
 
-  getContainerContentByGridIndex(gridIndex) {
-    this.objectHandler.container;
+  getContainerItemByGridIndex(gridIndex) {
+    const gridIndexKey = this.formatGridIndex(gridIndex);
+    return this.objectHandler.container[gridIndexKey];
   }
 
   getContainerContentCount() {
@@ -117,6 +118,31 @@ export default class Instance {
       contentCount = Object.keys(this.objectHandler.container).length;
     }
     return contentCount;
+  }
+
+  rotateContainerItemByGridIndex(gridIndex) {
+    let isItemRotated = false;
+    const item = this.getContainerItemByGridIndex(gridIndex);
+    if (item !== undefined) {
+      item.is_rotated = !item.is_rotated;
+      isItemRotated = true;
+    }
+    return isItemRotated;
+  }
+
+  removeContainerItemByGridIndex(gridIndex) {
+    let isItemRemoved = false;
+    const item = this.getContainerItemByGridIndex(gridIndex);
+    if (item !== undefined) {
+      const gridIndexKey = this.formatGridIndex(gridIndex);
+      delete this.objectHandler.container[gridIndexKey];
+      isItemRemoved = true;
+    }
+    return isItemRemoved;
+  }
+
+  formatGridIndex(gridIndex) {
+    return `${gridIndex.col}-${gridIndex.row}`;
   }
 
   clearContainerContent() {
