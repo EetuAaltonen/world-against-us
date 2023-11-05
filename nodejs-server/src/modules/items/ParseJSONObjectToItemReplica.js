@@ -5,7 +5,7 @@ export default function (jsonObject) {
   let parsedItem;
   if (jsonObject !== undefined) {
     const parsedGridIndex = ParseJSONObjectToGridIndex(
-      jsonObject["grid_index"]
+      jsonObject["grid_index"] ?? undefined
     );
 
     parsedItem = new ItemReplica(

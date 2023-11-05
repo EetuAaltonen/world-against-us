@@ -2,12 +2,12 @@ import MESSAGE_TYPE from "../constants/MessageType.js";
 import PACKET_PRIORITY from "../constants/PacketPriority.js";
 import INVENTORY_TYPE from "../constants/InventoryType.js";
 
-import WorldMapFastTravelInfo from "../world_map/WorldMapFastTravelInfo.js";
-import ParseJSONObjectToItemReplica from "../items/ParseJSONObjectToItemReplica.js";
-
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
-import ParseJSONObjectToContainerAction from "../containers/ParseJSONObjectToContainerAction.js";
+import WorldMapFastTravelInfo from "../world_map/WorldMapFastTravelInfo.js";
 import ContainerContentInfo from "../containers/ContainerContentInfo.js";
+import NetworkInventoryStreamItems from "../network_inventory_stream/NetworkInventoryStreamItems.js";
+
+import ParseJSONObjectToContainerAction from "../containers/ParseJSONObjectToContainerAction.js";
 
 export default class NetworkPacketHandler {
   constructor(networkHandler, networkPacketBuilder, instanceHandler) {
@@ -207,85 +207,79 @@ export default class NetworkPacketHandler {
                 instance.containerHandler.activeInventoryStream;
               if (activeInventoryStream !== undefined) {
                 if (activeInventoryStream.isStreamSending) {
-                  const containerInventoryStream = networkPacket.payload;
-                  if (containerInventoryStream !== undefined) {
-                    if (containerInventoryStream.items !== undefined) {
-                      const parsedItems = containerInventoryStream.items.map(
-                        (jsonItem) => {
-                          return ParseJSONObjectToItemReplica(jsonItem);
-                        }
-                      );
-                      if (activeInventoryStream.targetInventory !== undefined) {
-                        if (
-                          activeInventoryStream.targetInventory.addItems(
-                            parsedItems
-                          )
-                        ) {
-                          const networkBuffer =
-                            this.networkPacketBuilder.createPacket(
-                              MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM,
-                              client.uuid,
-                              acknowledgmentId,
-                              undefined
-                            );
-                          if (networkBuffer !== undefined) {
-                            this.networkHandler.packetQueue.enqueue(
-                              new NetworkQueueEntry(
-                                networkBuffer,
-                                [client],
-                                PACKET_PRIORITY.DEFAULT
-                              )
-                            );
-                            isPacketHandled = true;
-                          }
+                  const containerInventoryStreamItems = networkPacket.payload;
+                  if (containerInventoryStreamItems !== undefined) {
+                    if (activeInventoryStream.targetInventory !== undefined) {
+                      if (
+                        activeInventoryStream.targetInventory.addItems(
+                          containerInventoryStreamItems.items
+                        )
+                      ) {
+                        const networkBuffer =
+                          this.networkPacketBuilder.createPacket(
+                            MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM,
+                            client.uuid,
+                            acknowledgmentId,
+                            undefined
+                          );
+                        if (networkBuffer !== undefined) {
+                          this.networkHandler.packetQueue.enqueue(
+                            new NetworkQueueEntry(
+                              networkBuffer,
+                              [client],
+                              PACKET_PRIORITY.DEFAULT
+                            )
+                          );
+                          isPacketHandled = true;
                         }
                       }
                     }
                   }
                 } else {
-                  let items = [];
                   const activeInventoryStream =
                     instance.containerHandler.activeInventoryStream;
                   if (activeInventoryStream !== undefined) {
-                    items = activeInventoryStream.FetchItemsToStream();
-                  }
-                  if (items.length > 0) {
-                    const networkBuffer =
-                      this.networkPacketBuilder.createPacket(
-                        MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM,
-                        client.uuid,
-                        acknowledgmentId,
-                        {
-                          items: items,
-                        }
-                      );
-                    if (networkBuffer !== undefined) {
-                      this.networkHandler.packetQueue.enqueue(
-                        new NetworkQueueEntry(
-                          networkBuffer,
-                          [client],
-                          PACKET_PRIORITY.DEFAULT
-                        )
-                      );
-                      isPacketHandled = true;
-                    }
-                  } else {
-                    const networkBuffer =
-                      this.networkPacketBuilder.createPacket(
-                        MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM,
-                        client.uuid,
-                        acknowledgmentId,
-                        undefined
-                      );
-                    if (networkBuffer !== undefined) {
-                      this.networkHandler.packetQueue.enqueue(
-                        new NetworkQueueEntry(
-                          networkBuffer,
-                          [client],
-                          PACKET_PRIORITY.DEFAULT
-                        )
-                      );
-                      isPacketHandled = true;
+                    const items = activeInventoryStream.FetchNextItems();
+                    if (items.length > 0) {
+                      const inventoryStreamItems =
+                        new NetworkInventoryStreamItems(items);
+
+                      const networkBuffer =
+                        this.networkPacketBuilder.createPacket(
+                          MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM,
+                          client.uuid,
+                          acknowledgmentId,
+                          inventoryStreamItems
+                        );
+                      if (networkBuffer !== undefined) {
+                        this.networkHandler.packetQueue.enqueue(
+                          new NetworkQueueEntry(
+                            networkBuffer,
+                            [client],
+                            PACKET_PRIORITY.DEFAULT
+                          )
+                        );
+                        isPacketHandled = true;
+                      }
+                    } else {
+                      // TODO: Duplicate code with all MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM responses
+                      const networkBuffer =
+                        this.networkPacketBuilder.createPacket(
+                          MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM,
+                          client.uuid,
+                          acknowledgmentId,
+                          undefined
+                        );
+                      if (networkBuffer !== undefined) {
+                        this.networkHandler.packetQueue.enqueue(
+                          new NetworkQueueEntry(
+                            networkBuffer,
+                            [client],
+                            PACKET_PRIORITY.DEFAULT
+                          )
+                        );
+                        isPacketHandled = true;
+                      }
                     }
                   }
                 }

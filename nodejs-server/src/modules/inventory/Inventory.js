@@ -26,14 +26,18 @@ export default class Inventory {
     // TODO: Collect items' grid indices to array
     // and rollback if any of add process fails
     if (items !== undefined) {
-      items.forEach((item) => {
-        if (isItemsAdded) {
-          if (!this.addItem(item)) {
-            isItemsAdded = false;
-            console.log(`Unable to add item ${item.name} to inventory`);
+      if (Array.isArray(items)) {
+        items.forEach((item) => {
+          if (isItemsAdded) {
+            if (!this.addItem(item)) {
+              isItemsAdded = false;
+              console.log(`Unable to add item ${item.name} to inventory`);
+            }
           }
-        }
-      });
+        });
+      } else {
+        isItemsAdded = false;
+      }
     }
     return isItemsAdded;
   }
