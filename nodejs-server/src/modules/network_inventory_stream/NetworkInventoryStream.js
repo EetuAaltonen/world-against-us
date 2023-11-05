@@ -17,7 +17,7 @@ export default class NetworkInventoryStream {
     this.streamEndIndex = streamEndIndex;
   }
 
-  FetchItemsToStream() {
+  FetchNextItems() {
     let items = [];
     if (this.targetInventory !== undefined) {
       const lastItemIndex = this.streamCurrentIndex + this.streamItemLimit;

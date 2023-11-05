@@ -2,13 +2,16 @@ import BITWISE from "../constants/Bitwise.js";
 import MESSAGE_TYPE from "../constants/MessageType.js";
 
 import Vector2 from "../math/Vector2.js";
-
+import GridIndex from "../inventory/GridIndex.js";
 import NetworkPacket from "./NetworkPacket.js";
 import NetworkPacketHeader from "./NetworkPacketHeader.js";
 import WorldMapFastTravelPoint from "../world_map/WorldMapFastTravelInfo.js";
-import NetworkInventoryStream from "../inventory/NetworkInventoryStream.js";
+import NetworkInventoryStream from "../network_inventory_stream/NetworkInventoryStream.js";
+import NetworkInventoryStreamItems from "../network_inventory_stream/NetworkInventoryStreamItems.js";
 import ContainerInventoryActionInfo from "../containers/ContainerInventoryActionInfo.js";
-import GridIndex from "../inventory/GridIndex.js";
+
+import ParseJSONObjectsToArray from "../json/ParseJSONObjectsToArray.js";
+import ParseJSONObjectToItemReplica from "../items/ParseJSONObjectToItemReplica.js";
 
 export default class NetworkPacketParser {
   constructor() {}
@@ -99,6 +102,22 @@ export default class NetworkPacketParser {
               );
             }
             break;
+          case MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM:
+            {
+              const jsonString = msg.toString("utf8", 0, msg.length);
+              const parsedJSONObject = JSON.parse(jsonString);
+              if (!this.isObjectEmpty(parsedJSONObject)) {
+                const jsonItems = parsedJSONObject["items"] ?? undefined;
+                const parsedItems = ParseJSONObjectsToArray(
+                  jsonItems,
+                  ParseJSONObjectToItemReplica
+                );
+                payload = new NetworkInventoryStreamItems(parsedItems);
+              } else {
+                payload = parsedJSONObject;
+              }
+            }
+            break;
           case MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM:
             {
               let offset = 0;
@@ -186,5 +205,9 @@ export default class NetworkPacketParser {
       console.log(error);
     }
     return payload;
+  }
+
+  isObjectEmpty(object) {
+    return Object.keys(object).length === 0;
   }
 }
