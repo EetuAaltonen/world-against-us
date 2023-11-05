@@ -11,26 +11,17 @@ function NetworkInventoryStream(_target_container_id, _target_instance_position,
 	stream_current_index = stream_start_index;
 	stream_end_index = _stream_end_index;
 	
-	static FetchItemsToStream = function()
+	static FetchNextItems = function()
 	{
-		var items = [];
+		var formatItems = [];
 		if (!is_undefined(target_inventory))
 		{
 			var lastItemIndex = stream_current_index + stream_item_limit;
-			var itemsList = target_inventory.GetItemsByIndexRange(stream_current_index, lastItemIndex);
-			var itemCount = ds_list_size(itemsList);
+			var itemList = target_inventory.GetItemsByIndexRange(stream_current_index, lastItemIndex);
+			formatItems = FormatItemListToJSONArray(itemList);
 			
-			for (var i = 0; i < itemCount; i++)
-			{
-				var item = itemsList[| i];
-				if (!is_undefined(item))
-				{
-					array_push(items, item.ToJSONStruct());
-				}
-			}
-			
-			stream_current_index += array_length(items);
+			stream_current_index += array_length(formatItems);
 		}
-		return items;
+		return formatItems;
 	}
 }

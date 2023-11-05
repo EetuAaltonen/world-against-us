@@ -1,6 +1,6 @@
 function ParseJSONStructToArray(_jsonStruct, _jsonStructParseFunction)
 {
-	var array = [];
+	var parsedElements = [];
 	try
 	{
 		if (is_array(_jsonStruct))
@@ -8,10 +8,10 @@ function ParseJSONStructToArray(_jsonStruct, _jsonStructParseFunction)
 			if (script_exists(_jsonStructParseFunction))
 			{
 				var arrayLength = array_length(_jsonStruct);
-				for (var l = 0; l < arrayLength; l++)
+				for (var i = 0; i < arrayLength; i++)
 				{
-					var jsonStructElement = _jsonStruct[l];
-					array_push(array, script_execute(_jsonStructParseFunction, jsonStructElement));
+					var jsonStructElement = _jsonStruct[i];
+					array_push(parsedElements, script_execute(_jsonStructParseFunction, jsonStructElement));
 				}
 			}
 		}
@@ -20,5 +20,5 @@ function ParseJSONStructToArray(_jsonStruct, _jsonStructParseFunction)
 		show_debug_message(error);
 		show_message(error);
 	}
-	return array;
+	return parsedElements;
 }

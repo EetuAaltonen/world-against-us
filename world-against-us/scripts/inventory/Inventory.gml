@@ -25,17 +25,11 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 	static ToJSONStruct = function()
 	{
 		var formatInventoryFilter = (!is_undefined(inventory_filter)) ? inventory_filter.ToJSONStruct() : inventory_filter;
-		var itemArray = [];
-		var itemCount = GetItemCount();
-		for (var i = 0; i < itemCount; i++)
-		{
-			var item = items[| i];
-			array_push(itemArray, item.ToJSONStruct());
-		}
+		var formatItems = FormatItemListToJSONArray(items);
 		return {
 			inventory_id: inventory_id,
 			inventory_type: type,
-			items: itemArray,
+			items: formatItems,
 			formatInventoryFilter
 		}
 	}
