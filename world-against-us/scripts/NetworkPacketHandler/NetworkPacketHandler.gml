@@ -51,31 +51,35 @@ function NetworkPacketHandler() constructor
 							} break;
 							case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
 							{
-								var destinationRegionId = payload.destination_region_id;
-								if (!is_undefined(destinationRegionId))
+								var worldMapFastTravelInfo = payload;
+								if (!is_undefined(worldMapFastTravelInfo))
 								{
-									var destinationRoomIndex = payload.destination_room_index;
-									if (!is_undefined(destinationRoomIndex))
+									var destinationRegionId = worldMapFastTravelInfo.destination_region_id;
+									if (!is_undefined(destinationRegionId))
 									{
-										global.NetworkRegionHandlerRef.region_id = destinationRegionId;
-										global.NetworkRegionHandlerRef.room_index = destinationRoomIndex;
-										global.NetworkRegionHandlerRef.owner_client = undefined;
-										switch(destinationRoomIndex)
+										var destinationRoomIndex = worldMapFastTravelInfo.destination_room_index;
+										if (!is_undefined(destinationRoomIndex))
 										{
-											// TODO: Request room change from objRoomLoader
-											case ROOM_INDEX_CAMP:
+											global.NetworkRegionHandlerRef.region_id = destinationRegionId;
+											global.NetworkRegionHandlerRef.room_index = destinationRoomIndex;
+											global.NetworkRegionHandlerRef.owner_client = undefined;
+											switch(destinationRoomIndex)
 											{
-												isPacketHandled = true;
-												room_goto(roomCamp);
-											} break;
-											case ROOM_INDEX_TOWN:
-											{
-												isPacketHandled = true;
-												room_goto(roomTown);
-											} break;
-											default:
-											{
-												show_debug_message(string("Unknown destination room index to fast travel: {0}", destinationRoomIndex));
+												// TODO: Request room change from objRoomLoader
+												case ROOM_INDEX_CAMP:
+												{
+													isPacketHandled = true;
+													room_goto(roomCamp);
+												} break;
+												case ROOM_INDEX_TOWN:
+												{
+													isPacketHandled = true;
+													room_goto(roomTown);
+												} break;
+												default:
+												{
+													show_debug_message(string("Unknown destination room index to fast travel: {0}", destinationRoomIndex));
+												}
 											}
 										}
 									}
@@ -84,53 +88,56 @@ function NetworkPacketHandler() constructor
 							case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
 							{
 								var containerContentInfo = payload;
-								var targetContainer = undefined;
-								var containerCount = instance_number(objContainerParent);
-								for (var i = 0; i < containerCount; ++i;)
+								if (!is_undefined(containerContentInfo))
 								{
-									var container = instance_find(objContainerParent, i);
-									if (!is_undefined(container))
+									var targetContainer = undefined;
+									var containerCount = instance_number(objContainerParent);
+									for (var i = 0; i < containerCount; ++i;)
 									{
-										if (container.containerId == containerContentInfo.container_id)
+										var container = instance_find(objContainerParent, i);
+										if (!is_undefined(container))
 										{
-											targetContainer = container;
-											break;
+											if (container.containerId == containerContentInfo.container_id)
+											{
+												targetContainer = container;
+												break;
+											}
 										}
 									}
-								}
-								if (instance_exists(targetContainer))
-								{
-									if (!is_undefined(targetContainer.lootTableTag))
+									if (instance_exists(targetContainer))
 									{
-										if (!is_undefined(targetContainer.inventory))
+										if (!is_undefined(targetContainer.lootTableTag))
 										{
-											var containerPosition = new Vector2(targetContainer.x, targetContainer.y);
-											var activeInventoryStream = new NetworkInventoryStream(
-												targetContainer.containerId,
-												containerPosition,
-												targetContainer.inventory,
-												4, true, 
-												targetContainer.inventory.GetItemCount()
-											);
-											// CLEAR INVENTORY
-											targetContainer.inventory.ClearItems();
-											// CHECK IF SERVER HAS CONTAINER CONTENT
-											if (containerContentInfo.content_count == -1)
+											if (!is_undefined(targetContainer.inventory))
 											{
-												// GENERATE LOOT
-												RollContainerLoot(targetContainer.lootTableTag, targetContainer.inventory);
-											} else {
-												activeInventoryStream.is_stream_sending = false;
-											}
-											// SET ACTIVE INVENTORY STREAM
-											global.NetworkRegionObjectHandlerRef.active_inventory_stream = activeInventoryStream;
+												var containerPosition = new Vector2(targetContainer.x, targetContainer.y);
+												var activeInventoryStream = new NetworkInventoryStream(
+													targetContainer.containerId,
+													containerPosition,
+													targetContainer.inventory,
+													4, true, 
+													targetContainer.inventory.GetItemCount()
+												);
+												// CLEAR INVENTORY
+												targetContainer.inventory.ClearItems();
+												// CHECK IF SERVER HAS CONTAINER CONTENT
+												if (containerContentInfo.content_count == -1)
+												{
+													// GENERATE LOOT
+													RollContainerLoot(targetContainer.lootTableTag, targetContainer.inventory);
+												} else {
+													activeInventoryStream.is_stream_sending = false;
+												}
+												// SET ACTIVE INVENTORY STREAM
+												global.NetworkRegionObjectHandlerRef.active_inventory_stream = activeInventoryStream;
 											
-											// REQUEST CONTAINER INVENTORY DATA STREAM
-											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM);
-											var networkPacket = new NetworkPacket(networkPacketHeader, activeInventoryStream);
-											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
-											{
-												isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
+												// REQUEST CONTAINER INVENTORY DATA STREAM
+												var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM);
+												var networkPacket = new NetworkPacket(networkPacketHeader, activeInventoryStream);
+												if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+												{
+													isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
+												}
 											}
 										}
 									}
@@ -143,18 +150,21 @@ function NetworkPacketHandler() constructor
 								{
 									if (activeInventoryStream.is_stream_sending)
 									{
-										var itemsStructArray = activeInventoryStream.FetchItemsToStream();
+										// TODO: Duplicate code with MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM
+										var itemsStructArray = activeInventoryStream.FetchNextItems();
 										var itemStructCount = array_length(itemsStructArray);
 										if (itemStructCount > 0)
 										{
 											// CONTAINER INVENTORY STREAM
 											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
-											var networkPacket = new NetworkPacket(networkPacketHeader, { items: itemsStructArray });
+											var networkInventoryStreamItems = new NetworkInventoryStreamItems(itemsStructArray);
+											var networkPacket = new NetworkPacket(networkPacketHeader, networkInventoryStreamItems.ToJSONStruct());
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
 												isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
 											}
 										} else {
+											// TODO: Duplicate code with all MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM responses
 											// CONTAINER INVENTORY STREAM
 											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM);
 											var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
@@ -178,13 +188,14 @@ function NetworkPacketHandler() constructor
 								{
 									if (activeInventoryStream.is_stream_sending)
 									{
-										var itemsStructArray = activeInventoryStream.FetchItemsToStream();
+										var itemsStructArray = activeInventoryStream.FetchNextItems();
 										var itemStructCount = array_length(itemsStructArray);
 										if (itemStructCount > 0)
 										{
 											// CONTAINER INVENTORY STREAM
 											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
-											var networkPacket = new NetworkPacket(networkPacketHeader, { items: itemsStructArray });
+											var networkInventoryStreamItems = new NetworkInventoryStreamItems(itemsStructArray);
+											var networkPacket = new NetworkPacket(networkPacketHeader, networkInventoryStreamItems.ToJSONStruct());
 											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 											{
 												isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
@@ -199,20 +210,16 @@ function NetworkPacketHandler() constructor
 											}
 										}
 									} else {
-										// TODO: Parse items elsewhere
-										var itemsStructArray = payload[$ "items"] ?? undefined;
-										if (!is_undefined(itemsStructArray))
+										var networkInventoryStreamItems = payload;
+										if (!is_undefined(networkInventoryStreamItems))
 										{
-											var parsedItems = ParseJSONStructToArray(itemsStructArray, ParseJSONStructToItem);
-											if (array_length(parsedItems) > 0)
-											{
-												activeInventoryStream.target_inventory.AddMultipleItems(parsedItems);
+											var items = networkInventoryStreamItems.items;
+											activeInventoryStream.target_inventory.AddMultipleItems(items);
 												
-												// CONTAINER INVENTORY STREAM
-												var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
-												var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-												isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
-											}
+											// CONTAINER INVENTORY STREAM
+											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
+											var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
+											isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
 										}
 									}
 								}

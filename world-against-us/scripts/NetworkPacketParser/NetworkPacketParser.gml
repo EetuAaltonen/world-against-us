@@ -54,6 +54,17 @@ function NetworkPacketParser() constructor
 						parsedContentCount
 					);
 				} break;
+				case MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM:
+				{
+					var payloadString = buffer_read(_msg, buffer_string);
+					var parsedStruct = json_parse(payloadString);
+					if (parsedStruct != EMPTY_STRUCT)
+					{
+						var parsedItemStructArray = parsedStruct[$ "items"] ?? undefined;
+						var parsedItems = ParseJSONStructToArray(parsedItemStructArray, ParseJSONStructToItem);
+						parsedPayload = new NetworkInventoryStreamItems(parsedItems);
+					}
+				} break;
 				default:
 				{
 					var payloadString = buffer_read(_msg, buffer_string);
