@@ -13,7 +13,7 @@ function CheckCollisionProjectile(_collisionPoint, _projectile)
 			);
 			
 			var objectIndexToCheck = hitboxOwnerInstance.object_index;
-			while (projectileCollisionPosition != undefined && objectIndexToCheck != -1 && objectIndexToCheck != -100)
+			while (!is_undefined(projectileCollisionPosition) && objectIndexToCheck != -1 && objectIndexToCheck != -100)
 			{
 				switch (objectIndexToCheck)
 				{
