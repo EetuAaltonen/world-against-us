@@ -1,7 +1,6 @@
-function NetworkInventoryStream(_target_container_id, _target_instance_position, _target_inventory, _stream_item_limit, _is_stream_sending, _stream_end_index) constructor
+function NetworkInventoryStream(_target_container_id, _target_inventory, _stream_item_limit, _is_stream_sending, _stream_end_index) constructor
 {
 	target_container_id = _target_container_id;
-	target_instance_position = _target_instance_position;
 	target_inventory = _target_inventory;
 	
 	stream_item_limit = _stream_item_limit;

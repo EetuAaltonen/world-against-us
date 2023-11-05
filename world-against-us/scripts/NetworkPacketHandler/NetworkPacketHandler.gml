@@ -110,10 +110,8 @@ function NetworkPacketHandler() constructor
 										{
 											if (!is_undefined(targetContainer.inventory))
 											{
-												var containerPosition = new Vector2(targetContainer.x, targetContainer.y);
 												var activeInventoryStream = new NetworkInventoryStream(
 													targetContainer.containerId,
-													containerPosition,
 													targetContainer.inventory,
 													4, true, 
 													targetContainer.inventory.GetItemCount()

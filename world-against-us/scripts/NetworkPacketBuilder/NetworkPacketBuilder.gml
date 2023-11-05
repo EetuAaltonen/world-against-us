@@ -88,12 +88,6 @@ function NetworkPacketBuilder() constructor
 					case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
 					{
 						var networkInventoryStream = _networkPacketPayload;
-						var scaledInstancePosition = ScaleFloatValuesToIntVector2(
-							networkInventoryStream.target_instance_position.X,
-							networkInventoryStream.target_instance_position.Y
-						);
-						buffer_write(_networkBuffer, buffer_u32, scaledInstancePosition.X);
-						buffer_write(_networkBuffer, buffer_u32, scaledInstancePosition.Y);
 						buffer_write(_networkBuffer, buffer_u8, networkInventoryStream.stream_item_limit);
 						buffer_write(_networkBuffer, buffer_bool, networkInventoryStream.is_stream_sending);
 						buffer_write(_networkBuffer, buffer_u16, networkInventoryStream.stream_current_index);
