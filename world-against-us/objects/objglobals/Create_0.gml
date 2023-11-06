@@ -99,13 +99,16 @@ global.NotificationHandlerRef = undefined;
 global.ObjNetwork = noone;
 global.NetworkHandlerRef = undefined;
 global.ObjHud = noone;
-global.WorldStateData = undefined;
 global.ObjJournal = noone;
 global.QuestHandlerRef = undefined;
 global.DialogueHandlerRef = undefined;
 global.MapDataHandlerRef = undefined;
 global.HighlightHandlerRef = undefined;
 global.GameSaveHandlerRef = undefined;
+
+// GLOBAL WORLD STATE
+global.WorldStateHandlerRef = undefined;
+global.WorldStateData = undefined;
 
 // GLOBAL DATABASE
 global.ItemDatabase = undefined;

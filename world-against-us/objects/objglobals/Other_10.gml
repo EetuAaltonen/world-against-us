@@ -12,6 +12,9 @@ global.NetworkRegionHandlerRef = (!is_undefined(global.NetworkHandlerRef)) ? glo
 global.NetworkRegionObjectHandlerRef = (!is_undefined(global.NetworkRegionHandlerRef)) ? global.NetworkRegionHandlerRef.network_region_object_handler : undefined;
 global.NetworkPacketTrackerRef = (!is_undefined(global.NetworkHandlerRef)) ? global.NetworkHandlerRef.network_packet_tracker : undefined;
 
+global.WorldStateHandlerRef = instance_exists(objWorldState) ? instance_find(objWorldState, 0).worldStateHandler : undefined;
+global.WorldStateData = (!is_undefined(global.WorldStateHandlerRef)) ? global.WorldStateHandlerRef.world_states : undefined;
+
 global.ItemDatabase = instance_exists(objDatabase) ? instance_find(objDatabase, 0).itemDatabase : undefined;
 global.BlueprintData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).blueprintData : undefined;
 global.LootTableData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).lootTableData : undefined;
@@ -21,7 +24,6 @@ global.ObjectExamineData = instance_exists(objDatabase) ? instance_find(objDatab
 global.MapIconStyleData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).mapIconStyleData : undefined;
 
 global.ObjHud = instance_exists(objHud) ? instance_find(objHud, 0) : noone;
-global.WorldStateData = instance_exists(objWorldState) ? instance_find(objWorldState, 0).worldStateHandler.world_states : undefined;
 global.QuestHandlerRef = instance_exists(objQuest) ? instance_find(objQuest, 0).questHandler : undefined;
 global.ObjJournal = instance_exists(objJournal) ? instance_find(objJournal, 0) : noone;
 global.DialogueHandlerRef = instance_exists(objDialogue) ? instance_find(objDialogue, 0).dialogueHandler : undefined;
