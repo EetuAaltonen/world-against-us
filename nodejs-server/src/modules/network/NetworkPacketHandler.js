@@ -8,6 +8,7 @@ import ContainerContentInfo from "../containers/ContainerContentInfo.js";
 import NetworkInventoryStreamItems from "../network_inventory_stream/NetworkInventoryStreamItems.js";
 
 import ParseJSONObjectToContainerAction from "../containers/ParseJSONObjectToContainerAction.js";
+import NetworkWorldStateSync from "../world_state/NetworkWorldStateSync.js";
 
 export default class NetworkPacketHandler {
   constructor(networkHandler, networkPacketBuilder, instanceHandler) {
@@ -23,6 +24,30 @@ export default class NetworkPacketHandler {
       const instance = this.instanceHandler.getInstance(client.instanceId);
       if (instance !== undefined) {
         switch (networkPacket.header.messageType) {
+          case MESSAGE_TYPE.SYNC_WORLD_STATE:
+            {
+              const networkWorldStateSync = new NetworkWorldStateSync(
+                this.networkHandler.worldStateHandler.dateTime,
+                this.networkHandler.worldStateHandler.weather
+              );
+              const networkBuffer = this.networkPacketBuilder.createPacket(
+                MESSAGE_TYPE.SYNC_WORLD_STATE,
+                client.uuid,
+                acknowledgmentId,
+                networkWorldStateSync
+              );
+              if (networkBuffer !== undefined) {
+                this.networkHandler.packetQueue.enqueue(
+                  new NetworkQueueEntry(
+                    networkBuffer,
+                    [client],
+                    PACKET_PRIORITY.HIGH
+                  )
+                );
+                isPacketHandled = true;
+              }
+            }
+            break;
           case MESSAGE_TYPE.DATA_PLAYER_SYNC:
             {
               // TODO: Sync player data within the instance

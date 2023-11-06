@@ -60,6 +60,10 @@ export default class NetworkHandler {
 
       // Update world state
       this.worldStateHandler.update(tickTime);
+
+      return setTimeout(() => {
+        this.tick();
+      }, 0);
     } catch (error) {
       console.log(error);
       this.onError(error);
@@ -68,10 +72,6 @@ export default class NetworkHandler {
       }, 2000);
       return false;
     }
-
-    return setTimeout(() => {
-      this.tick();
-    }, 0);
   }
 
   handleMessage(msg, rinfo) {
@@ -123,15 +123,16 @@ export default class NetworkHandler {
                 // Set new instance
                 client.setInstanceId(instanceId);
 
+                const networkJoinGameRequest = new NetworkJoinGameRequest(
+                  instanceId,
+                  instance.roomIndex,
+                  instance.ownerClient
+                );
                 const networkBuffer = this.networkPacketBuilder.createPacket(
                   MESSAGE_TYPE.REQUEST_JOIN_GAME,
                   clientId,
                   acknowledgmentId,
-                  {
-                    instance_id: instanceId,
-                    room_index: instance.roomIndex,
-                    owner_client: instance.ownerClient,
-                  }
+                  networkJoinGameRequest
                 );
 
                 if (networkBuffer !== undefined) {
