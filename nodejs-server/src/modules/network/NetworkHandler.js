@@ -14,8 +14,6 @@ import InstanceHandler from "../instances/InstanceHandler.js";
 import WorldStateHandler from "../world_state/WorldStateHandler.js";
 import NetworkJoinGameRequest from "./NetworkJoinGameRequest.js";
 
-// TODO: Try adjust server send rate to near 50hz
-const PERFECT_TICK_TIME = 1000 / 50;
 const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
 
 export default class NetworkHandler {
@@ -30,17 +28,23 @@ export default class NetworkHandler {
     this.networkPacketBuilder = new NetworkPacketBuilder();
     this.clientHandler = new ClientHandler();
     this.instanceHandler = new InstanceHandler();
+    this.worldStateHandler = new WorldStateHandler(this);
 
     this.networkPacketHandler = new NetworkPacketHandler(
       this,
       this.networkPacketBuilder,
       this.instanceHandler
     );
+
+    this.lastUpdate = process.hrtime.bigint();
+    this.loopTime = 0;
   }
 
-  async update() {
+  tick() {
     try {
-      const startTime = process.hrtime();
+      const now = process.hrtime.bigint();
+      const tickTime = Number(now - this.lastUpdate) / 1000000;
+      this.lastUpdate = now;
 
       // TODO: Separate packet send for each client to control send rate
       // Broadcast should add a packet for each client's packet queue
@@ -54,20 +58,20 @@ export default class NetworkHandler {
         });
       }
 
-      const endTime = process.hrtime(startTime);
-      const timeInMs = endTime[0] * 1000 + endTime[1] / 1000000;
-      const sleepTime = PERFECT_TICK_TIME - timeInMs;
-      if (sleepTime >= 0) {
-        await sleep(sleepTime);
-      } else {
-        console.log(`Server is lagging behind ${sleepTime}ms`);
-      }
+      // Update world state
+      this.worldStateHandler.update(tickTime);
     } catch (error) {
+      console.log(error);
       this.onError(error);
       setTimeout(() => {
         this.socket.close();
       }, 2000);
+      return false;
     }
+
+    return setTimeout(() => {
+      this.tick();
+    }, 0);
   }
 
   handleMessage(msg, rinfo) {

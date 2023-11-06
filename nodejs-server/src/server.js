@@ -6,7 +6,7 @@ import NetworkHandler from "./modules/network/NetworkHandler.js";
 const server = Dgram.createSocket("udp4");
 const networkHandler = new NetworkHandler(server);
 
-async function init() {
+function init() {
   server.on("error", (error) => {
     console.log(`server error:\n${error.stack}`);
     server.close();
@@ -33,9 +33,7 @@ async function init() {
 
   server.bind(process.env.PORT || 8080, process.env.ADDRESS || "127.0.0.1");
 
-  while (true) {
-    await networkHandler.update();
-  }
+  networkHandler.tick();
 }
 
 init();
