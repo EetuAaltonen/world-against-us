@@ -1,6 +1,6 @@
-import MESSAGE_TYPE from "../constants/MessageType.js";
-import PACKET_PRIORITY from "../constants/PacketPriority.js";
-import INVENTORY_TYPE from "../constants/InventoryType.js";
+import MESSAGE_TYPE from "./MessageType.js";
+import PACKET_PRIORITY from "./PacketPriority.js";
+import INVENTORY_TYPE from "../inventory/InventoryType.js";
 
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
 import WorldMapFastTravelInfo from "../world_map/WorldMapFastTravelInfo.js";

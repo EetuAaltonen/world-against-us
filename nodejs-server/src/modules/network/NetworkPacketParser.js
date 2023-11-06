@@ -1,5 +1,5 @@
-import BITWISE from "../constants/Bitwise.js";
-import MESSAGE_TYPE from "../constants/MessageType.js";
+import BITWISE from "./Bitwise.js";
+import MESSAGE_TYPE from "./MessageType.js";
 
 import Vector2 from "../math/Vector2.js";
 import GridIndex from "../inventory/GridIndex.js";

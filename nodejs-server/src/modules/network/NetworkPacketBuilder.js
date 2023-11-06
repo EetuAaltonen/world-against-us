@@ -1,5 +1,5 @@
-import BITWISE from "../constants/Bitwise.js";
-import MESSAGE_TYPE from "../constants/MessageType.js";
+import BITWISE from "./Bitwise.js";
+import MESSAGE_TYPE from "./MessageType.js";
 
 const NULL_TERMINATOR = "\0";
 

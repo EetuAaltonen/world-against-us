@@ -1,4 +1,4 @@
-import ROOM_INDEX from "../constants/RoomIndex.js";
+import ROOM_INDEX from "./RoomIndex.js";
 import Instance from "./Instance.js";
 
 export default class InstanceHandler {
