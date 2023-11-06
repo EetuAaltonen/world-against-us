@@ -34,6 +34,24 @@ function NetworkPacketParser() constructor
 			buffer_seek(_msg, buffer_seek_relative, 0);
 			switch (_messageType)
 			{
+				case MESSAGE_TYPE.REQUEST_JOIN_GAME:
+				{
+					var payloadString = buffer_read(_msg, buffer_string);
+					var parsedStruct = json_parse(payloadString);
+					if (parsedStruct != EMPTY_STRUCT)
+					{
+						parsedPayload = ParseJSONStructToJoinGameRequest(parsedStruct);
+					}
+				} break;
+				case MESSAGE_TYPE.SYNC_WORLD_STATE:
+				{
+					var payloadString = buffer_read(_msg, buffer_string);
+					var parsedStruct = json_parse(payloadString);
+					if (parsedStruct != EMPTY_STRUCT)
+					{
+						parsedPayload = ParseJSONStructToWorldStateSync(parsedStruct);
+					}
+				} break;
 				case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
 				{
 					var parsedSourceRegionId = buffer_read(_msg, buffer_u32);

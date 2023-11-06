@@ -143,32 +143,9 @@ function NetworkHandler() constructor
 		return isJoining;
 	}
 	
-	static SyncPlayerData = function(_playerCharacterData)
-	{
-		var isSyncing = false;
-		if (!is_undefined(socket)) {
-			// TODO: If there is some data to be syncronized
-			//var jsonPlayerData = _playerCharacterData.ToJSONStruct();
-			//var jsonPlayerBackpackData = _playerCharacterData.backpack.ToJSONStruct();
-			
-			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DATA_PLAYER_SYNC);
-			var networkPacket = new NetworkPacket(networkPacketHeader, undefined/*jsonPlayerData / jsonPlayerBackpackData*/);
-			if (network_packet_tracker.SetNetworkPacketAcknowledgment(networkPacket))
-			{
-				if (AddPacketToQueue(networkPacket))
-				{
-					network_status = NETWORK_STATUS.SYNC_DATA;
-					timeout_timer.StartTimer();
-					isSyncing = true;
-				}
-			}
-		}
-		return isSyncing;
-	}
-	
 	static HandleMessage = function(_msg)
 	{
-		var isPacketHandled = false;
+		var isMessageHandled = false;
 		var networkPacket = network_packet_parser.ParsePacket(_msg);
 		if (network_packet_tracker.CheckNetworkPacketAcknowledgment(networkPacket))
 		{
@@ -210,21 +187,38 @@ function NetworkHandler() constructor
 						{
 							if (network_packet_handler.HandlePacket(networkPacket))
 							{
-								var gameSaveData = global.GameSaveHandlerRef.game_save_data;
-								if (!is_undefined(gameSaveData))
+								if (network_packet_tracker.SetNetworkPacketAcknowledgment(networkPacket))
 								{
-									if (gameSaveData.isSaveLoadingFirstTime)
+									var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.SYNC_WORLD_STATE);
+									var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
+									if (AddPacketToQueue(networkPacket))
 									{
-										if (!is_undefined(gameSaveData.player_data))
+										network_status = NETWORK_STATUS.SYNC_WORLD_STATE;
+										isMessageHandled = true;
+									}
+								}
+							}
+						}
+					} break;
+					case MESSAGE_TYPE.SYNC_WORLD_STATE:
+					{
+						if (network_status == NETWORK_STATUS.SYNC_WORLD_STATE)
+						{
+							if (network_packet_handler.HandlePacket(networkPacket))
+							{
+								if (network_packet_tracker.SetNetworkPacketAcknowledgment(networkPacket))
+								{
+									var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DATA_PLAYER_SYNC);
+									var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
+									if (network_packet_tracker.SetNetworkPacketAcknowledgment(networkPacket))
+									{
+										if (AddPacketToQueue(networkPacket))
 										{
-											if (!is_undefined(gameSaveData.player_data.character))
-											{
-												SyncPlayerData(gameSaveData.player_data.character);
-											}
+											network_status = NETWORK_STATUS.SYNC_DATA;
+											isMessageHandled = true;
 										}
 									}
 								}
-								isPacketHandled = true;
 							}
 						}
 					} break;

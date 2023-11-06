@@ -17,15 +17,32 @@ function NetworkPacketHandler() constructor
 						{
 							case MESSAGE_TYPE.REQUEST_JOIN_GAME:
 							{
-								var regionId = payload[$ "instance_id"] ?? undefined;
-								var roomIndex = payload[$ "room_index"] ?? undefined;
-								var ownerClient = payload[$ "owner_client"] ?? undefined;
-							
-								global.NetworkRegionHandlerRef.region_id = regionId;
-								global.NetworkRegionHandlerRef.room_index = roomIndex;
-								global.NetworkRegionHandlerRef.owner_client = ownerClient;
+								var networkJoinGameRequest = payload;
+								if (!is_undefined(networkJoinGameRequest))
+								{
+									global.NetworkRegionHandlerRef.region_id = networkJoinGameRequest.region_id;
+									global.NetworkRegionHandlerRef.room_index = networkJoinGameRequest.room_index;
+									global.NetworkRegionHandlerRef.owner_client = networkJoinGameRequest.owner_client;
 
-								isPacketHandled = true;
+									isPacketHandled = true;
+								}
+							} break;
+							case MESSAGE_TYPE.SYNC_WORLD_STATE:
+							{
+								var networkWorldStateSync = payload;
+								if (!is_undefined(networkWorldStateSync))
+								{
+									global.WorldStateHandlerRef.date_time.year = networkWorldStateSync.date_time.year;
+									global.WorldStateHandlerRef.date_time.month = networkWorldStateSync.date_time.month;
+									global.WorldStateHandlerRef.date_time.day = networkWorldStateSync.date_time.day;
+									global.WorldStateHandlerRef.date_time.hours = networkWorldStateSync.date_time.hours;
+									global.WorldStateHandlerRef.date_time.minutes = networkWorldStateSync.date_time.minutes;
+									global.WorldStateHandlerRef.date_time.seconds = networkWorldStateSync.date_time.seconds;
+									global.WorldStateHandlerRef.date_time.milliseconds = networkWorldStateSync.date_time.milliseconds;
+									
+									global.WorldStateHandlerRef.weather = networkWorldStateSync.weather;
+									isPacketHandled = true;
+								}
 							} break;
 							case MESSAGE_TYPE.REQUEST_INSTANCE_LIST:
 							{
