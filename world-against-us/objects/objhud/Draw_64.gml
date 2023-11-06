@@ -18,6 +18,25 @@ if (instance_exists(global.InstancePlayer))
 	}
 }
 
+// DRAW WORLD TIME
+draw_set_font(font_date_time);
+draw_set_valign(fa_middle);
+draw_set_color(c_green);
+var timeString = global.WorldStateHandlerRef.date_time.TimeToString();
+var targetStringWidth = string_width("00:00:00");
+var timeStringWidth = string_width(timeString);
+var stringPositionTweak = timeStringWidth - targetStringWidth;
+var timeStringPadding = 10;
+draw_text(global.GUIW - timeStringWidth + stringPositionTweak - timeStringPadding, global.GUIH - (hudHeight * 0.5), timeString);
+
+// DRAW WORLD DATE
+draw_set_halign(fa_right);
+var dateString = global.WorldStateHandlerRef.date_time.DateToString();
+draw_text(global.GUIW - targetStringWidth - timeStringPadding - 50, global.GUIH - (hudHeight * 0.5), dateString);
+
+// RESET DRAW PROPERTIES
+ResetDrawProperties();
+
 if (global.DEBUGMODE)
 {
 	if (global.GUIStateHandlerRef.IsGUIStateClosed())
