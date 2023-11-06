@@ -14,7 +14,6 @@ function NetworkHandler() constructor
 	network_packet_handler = new NetworkPacketHandler();
 	network_packet_tracker = new NetworkPacketTracker();
 	network_packet_queue = ds_priority_create();
-	timeout_timer = new Timer(TimerFromSeconds(8));
 	
 	network_region_handler = new NetworkRegionHandler();
 	
@@ -47,7 +46,6 @@ function NetworkHandler() constructor
 				if (AddPacketToQueue(networkPacket))
 				{
 					network_status = NETWORK_STATUS.CONNECTING;
-					timeout_timer.StartTimer();
 					isConnecting = true;
 				} else {
 					show_debug_message("Failed to connect socket");
@@ -138,7 +136,6 @@ function NetworkHandler() constructor
 				if (AddPacketToQueue(networkPacket))
 				{
 					network_status = NETWORK_STATUS.JOINING_TO_GAME;
-					timeout_timer.StartTimer();
 					isJoining = true;
 				}
 			}
@@ -204,9 +201,7 @@ function NetworkHandler() constructor
 									}
 								}
 							}
-							// RESET TIMEOUT TIMER
-							timeout_timer.running_time = 0;
-							isPacketHandled = true;
+							isMessageHandled = true;
 						}
 					} break;
 					case MESSAGE_TYPE.REQUEST_JOIN_GAME:
@@ -239,7 +234,7 @@ function NetworkHandler() constructor
 						{
 							network_status = NETWORK_STATUS.SESSION_IN_PROGRESS;
 							room_goto(roomCamp);
-							isPacketHandled = true;
+							isMessageHandled = true;
 						}
 					} break;
 					case MESSAGE_TYPE.SERVER_ERROR:
@@ -259,12 +254,12 @@ function NetworkHandler() constructor
 								show_debug_message("Failed to reset GUI state Main Menu");
 							}
 						}
-						isPacketHandled = true;
+						isMessageHandled = true;
 					} break;
 					default:
 					{
-						isPacketHandled = network_packet_handler.HandlePacket(networkPacket);
-						if (!isPacketHandled)
+						isMessageHandled = network_packet_handler.HandlePacket(networkPacket);
+						if (!isMessageHandled)
 						{
 							show_debug_message(string("Unable to handle message type: {0}", messageType));
 						}
@@ -272,7 +267,7 @@ function NetworkHandler() constructor
 				}
 			}
 		}
-		return isPacketHandled;
+		return isMessageHandled;
 	}
 	
 	static SendPacketOverUDP = function()
