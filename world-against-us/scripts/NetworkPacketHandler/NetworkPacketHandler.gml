@@ -40,8 +40,16 @@ function NetworkPacketHandler() constructor
 									global.WorldStateHandlerRef.date_time.seconds = networkWorldStateSync.date_time.seconds;
 									global.WorldStateHandlerRef.date_time.milliseconds = networkWorldStateSync.date_time.milliseconds;
 									
-									global.WorldStateHandlerRef.weather = networkWorldStateSync.weather;
+									global.WorldStateHandlerRef.SetWeather(networkWorldStateSync.weather);
 									isPacketHandled = true;
+								}
+							} break;
+							case MESSAGE_TYPE.SYNC_WORLD_STATE_WEATHER:
+							{
+								var networkWorldStateWeather = payload;
+								if (!is_undefined(networkWorldStateWeather))
+								{
+									isPacketHandled = global.WorldStateHandlerRef.SetWeather(networkWorldStateWeather);
 								}
 							} break;
 							case MESSAGE_TYPE.REQUEST_INSTANCE_LIST:

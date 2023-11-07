@@ -52,6 +52,10 @@ function NetworkPacketParser() constructor
 						parsedPayload = ParseJSONStructToWorldStateSync(parsedStruct);
 					}
 				} break;
+				case MESSAGE_TYPE.SYNC_WORLD_STATE_WEATHER:
+				{
+					parsedPayload = buffer_read(_msg, buffer_u8);
+				} break;
 				case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
 				{
 					var parsedSourceRegionId = buffer_read(_msg, buffer_u32);
