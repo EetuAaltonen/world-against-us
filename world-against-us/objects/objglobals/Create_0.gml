@@ -48,6 +48,9 @@ randomise();
 #macro LAYER_HIGHLIGHT_INTERACTABLE "HighlightedInteractable"
 #macro LAYER_HIGHLIGHT_TARGET "HighlightedTarget"
 
+#macro LAYER_EFFECT_PREFIX "Effect"
+#macro LAYER_EFFECT_LIGHT "EffectLight"
+
 // GUI STATE
 #macro ROOT_GUI_STATE new GUIState(GUI_STATE.GameRoot, undefined, undefined, [], GUI_CHAIN_RULE.OverwriteAll, CallbackGUIStateInputRoot, undefined)
 
@@ -68,6 +71,10 @@ randomise();
 
 // WORLD STATE INDICES
 #macro WORLD_STATE_UNLOCK_WALKIE_TALKIE "UnlockWalkieTalkie"
+
+// WORLD STATE WEATHER NAMES
+#macro WEATHER_TEXT ["Clear", "Windy", "Cloudy", "Foggy", "Rainy"]
+
 
 // ROOMS
 // TODO: Move these inside a map locations data file to read

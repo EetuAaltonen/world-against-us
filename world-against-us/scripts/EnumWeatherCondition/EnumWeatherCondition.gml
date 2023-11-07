@@ -1,0 +1,8 @@
+enum WEATHER_CONDITION
+{
+	CLEAR,
+	WINDY,
+	CLODY,
+	FOGGY,
+	RAINY
+}
