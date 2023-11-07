@@ -50,11 +50,11 @@ export default class NetworkHandler {
       // Broadcast should add a packet for each client's packet queue
       const queuePacket = this.packetQueue.dequeue();
       if (queuePacket != undefined) {
-        console.log(
-          `Network packet size: ${queuePacket.packet.length * 0.001}kb`
-        );
         queuePacket.clients.forEach((client) => {
           this.socket.send(queuePacket.packet, client.port, client.address);
+          console.log(
+            `Network packet ${queuePacket.packet.length * 0.001}kb sent`
+          );
         });
       }
 
@@ -217,17 +217,32 @@ export default class NetworkHandler {
     }
   }
 
-  broadCast(networkBuffer) {
-    throw new Error("Not implemented");
+  broadcastWeather(weatherCondition) {
+    let isWeatherBroadcasted = false;
+    const networkBuffer = this.networkPacketBuilder.createPacket(
+      MESSAGE_TYPE.SYNC_WORLD_STATE_WEATHER,
+      UNDEFINED_UUID,
+      -1,
+      weatherCondition
+    );
+    const clientsInGame = this.clientHandler
+      .getAllClients()
+      .filter((client) => client.instanceId !== undefined);
+    isWeatherBroadcasted = this.broadcast(networkBuffer, clientsInGame);
+    return isWeatherBroadcasted;
+  }
 
-    /*this.packetQueue.enqueue(
-      new NetworkQueueEntry(
-        networkBuffer,
-        rinfo.port,
-        rinfo.address,
-        PACKET_PRIORITY.HIGH
-      )
-    );*/
+  broadcast(networkBuffer, clients) {
+    let isBroadcasted = false;
+    if (networkBuffer !== undefined) {
+      if (clients.length > 0) {
+        this.packetQueue.enqueue(
+          new NetworkQueueEntry(networkBuffer, clients, PACKET_PRIORITY.HIGH)
+        );
+      }
+      isBroadcasted = true;
+    }
+    return isBroadcasted;
   }
 
   onError(error) {

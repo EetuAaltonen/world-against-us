@@ -1,5 +1,6 @@
 export default class WorldStateDateTime {
-  constructor() {
+  constructor(worldStateHandler) {
+    this.worldStateHandler = worldStateHandler;
     this.year = 0;
     this.month = 0; // Constant 30 days
     this.day = 0;
@@ -24,6 +25,7 @@ export default class WorldStateDateTime {
         while (Math.floor(this.minutes) >= 60) {
           this.minutes -= 60;
           this.hours++;
+          isTimeUpdated = this.worldStateHandler.rollWeather();
           while (Math.floor(this.hours) >= 24) {
             this.hours -= 24;
             this.day++;
