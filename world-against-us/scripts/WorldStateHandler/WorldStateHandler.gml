@@ -74,6 +74,43 @@ function WorldStateHandler() constructor
 			}
 		}
 	}
+	
+	static SetWeather = function(_weather)
+	{
+		var isWeatherSet = false;
+		if (weather != _weather)
+		{
+			// CLEAR CURRENT WEATHER
+			var currentFxLayerName = string("{0}{1}", LAYER_EFFECT_PREFIX, array_get(WEATHER_TEXT, weather));
+			var currentFxLayerId = layer_get_id(currentFxLayerName);
+			if (layer_exists(currentFxLayerId))
+			{
+				if (layer_fx_is_enabled(currentFxLayerId)) { layer_enable_fx(currentFxLayerId, false); }
+			}
+		
+			// SET NEW WEATHER
+			weather = _weather;
+			UpdateWeatherEffect();
+			isWeatherSet = true;
+		} else {
+			isWeatherSet = true;
+		}
+		return isWeatherSet;
+	}
+	
+	static UpdateWeatherEffect = function()
+	{
+		if (weather > WEATHER_CONDITION.CLEAR)
+		{
+			var newFxLayerName = string("{0}{1}", LAYER_EFFECT_PREFIX, array_get(WEATHER_TEXT, weather));
+			var newFxLayerId = layer_get_id(newFxLayerName);
+			if (layer_exists(newFxLayerId))
+			{
+				if (!layer_fx_is_enabled(newFxLayerId)) { layer_enable_fx(newFxLayerId, true); }
+			}
+		}
+	}
+	
 	static GetWeatherText = function()
 	{
 		return string("Weather - {0}", array_get(WEATHER_TEXT, weather));

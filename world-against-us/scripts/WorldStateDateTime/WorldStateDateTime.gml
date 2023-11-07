@@ -16,6 +16,7 @@ function WorldStateDateTime() constructor
 	{
 		var isTimeUpdated = true;
 		
+		// TODO: This will make client desync with the server!!
 		time_scale = (global.DEBUGMODE) ? 1000 : base_tim_scale;
 		
 		milliseconds += (delta_time * 0.001) * time_scale;

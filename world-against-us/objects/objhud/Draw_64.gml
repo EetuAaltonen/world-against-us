@@ -29,10 +29,15 @@ var stringPositionTweak = timeStringWidth - targetStringWidth;
 var timeStringPadding = 10;
 draw_text(global.GUIW - timeStringWidth + stringPositionTweak - timeStringPadding, global.GUIH - (hudHeight * 0.5), timeString);
 
-// DRAW WORLD DATE
+// DRAW WORLD WEATHER AND DATE
 draw_set_halign(fa_right);
+var weatherString = global.WorldStateHandlerRef.GetWeatherText();
 var dateString = global.WorldStateHandlerRef.date_time.DateToString();
-draw_text(global.GUIW - targetStringWidth - timeStringPadding - 50, global.GUIH - (hudHeight * 0.5), dateString);
+draw_text(
+	global.GUIW - targetStringWidth - timeStringPadding - 50,
+	global.GUIH - (hudHeight * 0.5),
+	string("{0}       {1}", weatherString, dateString)
+);
 
 // RESET DRAW PROPERTIES
 ResetDrawProperties();
