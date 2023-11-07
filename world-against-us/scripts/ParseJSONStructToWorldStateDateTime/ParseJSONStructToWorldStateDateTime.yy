@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "WorldState",
-    "path": "folders/Scripts/Game/Network/WorldState.yy",
+    "path": "folders/Scripts/Game/Data/WorldState.yy",
   },
 }
