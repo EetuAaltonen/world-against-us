@@ -53,4 +53,17 @@ export default class WorldStateDateTime {
   dateToString() {
     return `${this.year} year ${this.month} month ${this.day} day`;
   }
+
+  toJSONObject() {
+    return {
+      year: this.year,
+      month: this.month,
+      day: this.day,
+      hours: this.hours,
+      minutes: this.minutes,
+      seconds: this.seconds,
+      milliseconds: this.milliseconds,
+      time_scale: this.time_scale,
+    };
+  }
 }

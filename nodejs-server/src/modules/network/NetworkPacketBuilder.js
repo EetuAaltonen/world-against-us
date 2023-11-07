@@ -54,6 +54,14 @@ export default class NetworkPacketBuilder {
     let isPacketPayloadWritten = false;
     try {
       switch (messageType) {
+        case MESSAGE_TYPE.SYNC_WORLD_STATE_WEATHER:
+          {
+            const bufferWeather = Buffer.allocUnsafe(BITWISE.BIT8);
+            bufferWeather.writeInt8(payload);
+            this.payloadBuffer = bufferWeather;
+            isPacketPayloadWritten = true;
+          }
+          break;
         case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
           {
             const bufferInstanceIndices = Buffer.allocUnsafe(

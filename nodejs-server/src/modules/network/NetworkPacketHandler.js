@@ -27,7 +27,7 @@ export default class NetworkPacketHandler {
           case MESSAGE_TYPE.SYNC_WORLD_STATE:
             {
               const networkWorldStateSync = new NetworkWorldStateSync(
-                this.networkHandler.worldStateHandler.dateTime,
+                this.networkHandler.worldStateHandler.dateTime.toJSONObject(),
                 this.networkHandler.worldStateHandler.weather
               );
               const networkBuffer = this.networkPacketBuilder.createPacket(
