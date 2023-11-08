@@ -3,6 +3,7 @@ import PACKET_PRIORITY from "./PacketPriority.js";
 import INVENTORY_TYPE from "../inventory/InventoryType.js";
 
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
+import PlayerListInfo from "../players/PlayerListInfo.js";
 import WorldMapFastTravelInfo from "../world_map/WorldMapFastTravelInfo.js";
 import ContainerContentInfo from "../containers/ContainerContentInfo.js";
 import NetworkInventoryStreamItems from "../network_inventory_stream/NetworkInventoryStreamItems.js";
@@ -11,9 +12,15 @@ import ParseJSONObjectToContainerAction from "../containers/ParseJSONObjectToCon
 import NetworkWorldStateSync from "../world_state/NetworkWorldStateSync.js";
 
 export default class NetworkPacketHandler {
-  constructor(networkHandler, networkPacketBuilder, instanceHandler) {
+  constructor(
+    networkHandler,
+    networkPacketBuilder,
+    clientHandler,
+    instanceHandler
+  ) {
     this.networkHandler = networkHandler;
     this.networkPacketBuilder = networkPacketBuilder;
+    this.clientHandler = clientHandler;
     this.instanceHandler = instanceHandler;
   }
 
@@ -75,6 +82,43 @@ export default class NetworkPacketHandler {
               isPacketHandled = true;
             }
             break;
+          case MESSAGE_TYPE.REQUEST_PLAYER_LIST:
+            {
+              const clients = this.clientHandler.getAllClients();
+              const playerListInfoArray = clients.map((client) => {
+                let playerName = "Player X";
+                let instanceId = client.instanceId;
+                let roomIndex = "";
+                let instance = this.instanceHandler.getInstance(instanceId);
+                console.log;
+                if (instance !== undefined) {
+                  roomIndex = instance.roomIndex;
+                }
+                return new PlayerListInfo(
+                  playerName,
+                  instanceId ?? -1,
+                  roomIndex
+                );
+              });
+
+              const networkBuffer = this.networkPacketBuilder.createPacket(
+                MESSAGE_TYPE.REQUEST_PLAYER_LIST,
+                client.uuid,
+                acknowledgmentId,
+                { player_list: playerListInfoArray }
+              );
+              if (networkBuffer !== undefined) {
+                this.networkHandler.packetQueue.enqueue(
+                  new NetworkQueueEntry(
+                    networkBuffer,
+                    [client],
+                    PACKET_PRIORITY.DEFAULT
+                  )
+                );
+                isPacketHandled = true;
+              }
+            }
+            break;
           case MESSAGE_TYPE.REQUEST_INSTANCE_LIST:
             {
               const instanceIds = this.instanceHandler
@@ -85,6 +129,7 @@ export default class NetworkPacketHandler {
               const instances = instanceIds.map((instanceId) => {
                 let instance = this.instanceHandler.getInstance(instanceId);
                 if (instance !== undefined) {
+                  // TODO: Create object class for this
                   return {
                     instance_id: instanceId,
                     room_index: instance.roomIndex,

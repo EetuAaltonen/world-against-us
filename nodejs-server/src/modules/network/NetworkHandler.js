@@ -33,6 +33,7 @@ export default class NetworkHandler {
     this.networkPacketHandler = new NetworkPacketHandler(
       this,
       this.networkPacketBuilder,
+      this.clientHandler,
       this.instanceHandler
     );
 
