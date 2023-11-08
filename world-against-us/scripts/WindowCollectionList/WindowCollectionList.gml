@@ -22,6 +22,7 @@ function WindowCollectionList(_elementId, _relativePosition, _size, _backgroundC
 			ds_list_clear(childElements);
 			
 			var listElements = ds_list_create();
+			// TODO: Ability to change list element size
 			var listElementSize = new Size(size.w, 60);
 			var listElementMargin = listElementSize.h;
 			var listElementPosition = new Vector2(0, 0);
