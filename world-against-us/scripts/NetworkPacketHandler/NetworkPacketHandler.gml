@@ -52,6 +52,27 @@ function NetworkPacketHandler() constructor
 									isPacketHandled = global.WorldStateHandlerRef.SetWeather(networkWorldStateWeather);
 								}
 							} break;
+							case MESSAGE_TYPE.REQUEST_PLAYER_LIST:
+							{
+								var playerList = payload;
+								var playerListWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.PlayerList);
+								if (!is_undefined(playerListWindow))
+								{
+									var playerListElement = playerListWindow.GetChildElementById("PlayerList");
+									if (!is_undefined(playerListElement))
+									{
+										playerListElement.UpdateDataCollection(playerList);
+										
+										// HIDE LOADING ICON
+										var playerListLoadingElement = playerListWindow.GetChildElementById("PlayerListLoading");
+										if (!is_undefined(playerListLoadingElement))
+										{
+											playerListLoadingElement.isVisible = false;
+										}
+										isPacketHandled = true;
+									}
+								}
+							} break;
 							case MESSAGE_TYPE.REQUEST_INSTANCE_LIST:
 							{
 								var instanceStructArray = payload[$ "available_instances"] ?? [];
@@ -61,6 +82,7 @@ function NetworkPacketHandler() constructor
 									var instanceListElement = worldMapWindow.GetChildElementById("InstanceList");
 									if (!is_undefined(instanceListElement))
 									{
+										// TODO: Parse this elsewhere
 										var parsedInstances = ParseJSONStructToList(instanceStructArray, ParseJSONStructToWorldInstance);
 										instanceListElement.UpdateDataCollection(parsedInstances);
 										
