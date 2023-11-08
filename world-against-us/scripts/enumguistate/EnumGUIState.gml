@@ -9,7 +9,7 @@ enum GUI_STATE
 	Dialogue,
 	Map,
 	WorldMap,
-	// WORLD
+	PlayerList,
 	LootContainer,
 	Facility,
 	ConstructionSite,

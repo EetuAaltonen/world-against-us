@@ -68,6 +68,7 @@ randomise();
 #macro KEY_PLAYER_OVERVIEW vk_tab
 #macro KEY_JOURNAL ord("J")
 #macro KEY_MAP ord("M")
+#macro KEY_PLAYER_LIST ord("O")
 
 // WORLD STATE INDICES
 #macro WORLD_STATE_UNLOCK_WALKIE_TALKIE "UnlockWalkieTalkie"

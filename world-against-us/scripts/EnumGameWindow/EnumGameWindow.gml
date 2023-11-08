@@ -26,6 +26,8 @@ enum GAME_WINDOW
 	MapExamineObject,
 	WorldMap,
 	WorldMapFastTravelQueue,
+	// PLAYER LIST
+	PlayerList,
 	// LOOT CONTAINER
 	LootContainer,
 	// WORLD

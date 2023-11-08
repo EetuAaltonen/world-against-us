@@ -63,6 +63,24 @@ function CallbackGUIStateInputRoot()
 					CreateWindowMap(GAME_WINDOW.Map, -1)
 				]);
 			}
+		} else if (keyboard_check_released(KEY_PLAYER_LIST))
+		{
+			if (global.MultiplayerMode)
+			{
+				// OPEN PLAYER LIST
+				var guiState = new GUIState(
+					GUI_STATE.PlayerList, undefined, undefined,
+					[GAME_WINDOW.PlayerList], GUI_CHAIN_RULE.OverwriteAll,
+					undefined, KEY_PLAYER_LIST
+				);
+				if (global.GUIStateHandlerRef.RequestGUIState(guiState))
+				{
+					global.GameWindowHandlerRef.OpenWindowGroup([
+						CreateWindowPlayerList(GAME_WINDOW.PlayerList, -1)
+					]);
+				
+				}
+			}
 		}
 	}
 }
