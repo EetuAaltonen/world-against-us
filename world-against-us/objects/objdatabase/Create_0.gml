@@ -192,3 +192,11 @@ objectExamineData = ParseJSONStructToMap(jsonObjectExamineStruct[$ "object_exami
 // MAP ICON STYLE DATA
 var jsonMapIconStyleStruct = ReadJSONFile("/map_data/map_icon_style_data.json") ?? EMPTY_STRUCT;
 mapIconStyleData = ParseJSONStructToMap(jsonMapIconStyleStruct[$ "map_icon_style_data"] ?? undefined, "object_name", ParseJSONStructToDatabaseMapIconStyleData);
+
+// WORLD MAP LOCATION DATA
+worldMapLocationData = ds_map_create();
+ds_map_add(worldMapLocationData, "roomCamp", "Camp");
+ds_map_add(worldMapLocationData, "roomTown", "Town");
+ds_map_add(worldMapLocationData, "roomOffice", "Office");
+ds_map_add(worldMapLocationData, "roomLibrary", "Library");
+ds_map_add(worldMapLocationData, "roomForest", "Forest");

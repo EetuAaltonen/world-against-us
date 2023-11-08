@@ -126,6 +126,7 @@ global.QuestData = undefined;
 global.DialogueData = undefined;
 global.ObjectExamineData = undefined;
 global.MapIconStyleData = undefined;
+global.WorldMapLocationData = undefined;
 
 // PLAYER INVENTORY
 global.PlayerCharacter = undefined;

@@ -22,6 +22,7 @@ global.QuestData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).
 global.DialogueData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).dialogueData : undefined;
 global.ObjectExamineData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).objectExamineData : undefined;
 global.MapIconStyleData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).mapIconStyleData : undefined;
+global.WorldMapLocationData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).worldMapLocationData : undefined;
 
 global.ObjHud = instance_exists(objHud) ? instance_find(objHud, 0) : noone;
 global.QuestHandlerRef = instance_exists(objQuest) ? instance_find(objQuest, 0).questHandler : undefined;
