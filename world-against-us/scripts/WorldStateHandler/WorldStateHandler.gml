@@ -8,13 +8,14 @@ function WorldStateHandler() constructor
 	
 	weather = WEATHER_CONDITION.CLEAR;
 	
-	sky_darkness_level = 0;
+	sky_light_max_level = 1;
+	sky_light_level = sky_light_max_level;
 	sky_darkness_max_level = 0.98;
 	sky_darkness_dusk_hours = 19; // When darkness starts
 	sky_darkness_early_night_hours = 22; // When blind darkness starts
 	sky_darkness_early_morning_hours = 4; // When blind darkness ends
 	sky_darkness_dawn_hours = 7; // When darkness ends
-	sky_darkness_last_update_minutes = 0;
+	sky_darkness_last_update_minutes = -1;
 	
 	InitWorldStates();
 	
@@ -55,21 +56,27 @@ function WorldStateHandler() constructor
 								{
 									var totalDuskMinutes = (sky_darkness_early_night_hours - sky_darkness_dusk_hours) * 60;
 									var minutesTillNight = ((sky_darkness_early_night_hours - date_time.hours) * 60) - date_time.minutes;
-									sky_darkness_level = 1 - RoundToTwoDecimals(sky_darkness_max_level - (sky_darkness_max_level * (minutesTillNight / totalDuskMinutes)));
-								} else if (date_time.hours < sky_darkness_dawn_hours && date_time.hours >= sky_darkness_early_morning_hours)
+									sky_light_level = sky_light_max_level - RoundToTwoDecimals(sky_darkness_max_level - (sky_darkness_max_level * (minutesTillNight / totalDuskMinutes)));
+									show_debug_message("Before midnight");
+								} else if (date_time.hours >= sky_darkness_early_morning_hours && date_time.hours < sky_darkness_dawn_hours)
 								{
 									var totalDawnMinutes = (sky_darkness_dawn_hours - sky_darkness_early_morning_hours) * 60;
 									var minutesTillDay = ((sky_darkness_dawn_hours - date_time.hours) * 60) - date_time.minutes;
-									sky_darkness_level = 1 - RoundToTwoDecimals(sky_darkness_max_level * (minutesTillDay / totalDawnMinutes));
+									sky_light_level = sky_light_max_level - RoundToTwoDecimals(sky_darkness_max_level * (minutesTillDay / totalDawnMinutes));
+									show_debug_message("After midnight");
+								} else {
+									// SET SKY LIGHT LEVEL TO BLIND DARK AT DARKEST HOURS
+									sky_light_level = sky_light_max_level - sky_darkness_max_level;
 								}
-								fxParams.g_TintCol = [sky_darkness_level,sky_darkness_level,sky_darkness_level,1];
+								fxParams.g_TintCol = [sky_light_level, sky_light_level, sky_light_level, 1];
 								fx_set_parameters(fxEffect, fxParams);
+								show_debug_message(string("sky_light_level: {0}", sky_light_level));
 							}
 						}
 					}
 				} else {
 					if (layer_fx_is_enabled(fxLayerId)) { layer_enable_fx(fxLayerId, false); }
-					if (sky_darkness_level > 0) { sky_darkness_level = 0; }
+					if (sky_light_level < sky_light_max_level) { sky_light_level = sky_light_max_level; }
 				}
 			}
 		}
