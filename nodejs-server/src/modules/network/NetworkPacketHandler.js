@@ -123,20 +123,26 @@ export default class NetworkPacketHandler {
             {
               const instanceIds = this.instanceHandler
                 .getInstanceIds()
-                .filter(function (instanceId) {
+                .filter((instanceId) => {
                   return parseInt(instanceId) !== 0;
                 });
-              const instances = instanceIds.map((instanceId) => {
-                let instance = this.instanceHandler.getInstance(instanceId);
-                if (instance !== undefined) {
+              const instances = instanceIds
+                .filter((instanceId) => {
+                  let instance = this.instanceHandler.getInstance(instanceId);
+                  if (instance !== undefined) {
+                    return instance.parentInstanceId === undefined;
+                  }
+                  return false;
+                })
+                .map((instanceId) => {
+                  let instance = this.instanceHandler.getInstance(instanceId);
                   // TODO: Create object class for this
                   return {
                     instance_id: instanceId,
                     room_index: instance.roomIndex,
                     player_count: instance.getPlayerCount(),
                   };
-                }
-              });
+                });
 
               const networkBuffer = this.networkPacketBuilder.createPacket(
                 MESSAGE_TYPE.REQUEST_INSTANCE_LIST,
