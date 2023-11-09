@@ -273,28 +273,4 @@ function NetworkHandler() constructor
 			show_debug_message(string("Sent network packet size: {0}kb", networkPacketSize * 0.001));
 		}
 	}
-	
-	static DrawGUI = function()
-	{
-		draw_set_font(font_small_bold);
-		draw_set_color(c_red);
-		draw_set_halign(fa_right);
-		
-		draw_text(global.GUIW - 20, 10, string("{0} :Status", global.MultiplayerMode ? "Online" : "Offline"));
-		
-		if (!is_undefined(socket))
-		{
-			if (client_id != UNDEFINED_UUID)
-			{
-				draw_text(global.GUIW - 20, 30, string("{0} :client_id", client_id));
-				draw_text(global.GUIW - 20, 50, string("{0} :Region ID", network_region_handler.region_id ?? "Unknown"));
-				draw_text(global.GUIW - 20, 70, string("{0} :Room index", network_region_handler.room_index ?? "Unknown"));
-				var ownerClientID = (network_region_handler.owner_client ?? "Unknown");
-				draw_text(global.GUIW - 20, 90, string("{0} :Region Owner", (client_id == ownerClientID) ? "Self" : "Other"));
-			}
-		}
-		
-		// RESET DRAW PROPERTIES
-		ResetDrawProperties();
-	}
 }
