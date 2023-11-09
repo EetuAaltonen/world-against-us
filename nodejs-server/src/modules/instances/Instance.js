@@ -3,6 +3,7 @@ import InstanceContainerHandler from "./InstanceContainerHandler.js";
 export default class Instance {
   constructor(roomIndex) {
     this.roomIndex = roomIndex;
+    this.parentInstanceId = undefined;
     this.ownerClient = undefined;
     this.localPlayers = {};
 
