@@ -49,7 +49,7 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 		return ds_list_size(items);
     }
 	
-	static ClearItems = function()
+	static ClearAllItems = function()
 	{
 		// CLEAR ITEMS
 		ds_list_clear(items);

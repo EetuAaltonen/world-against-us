@@ -200,9 +200,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 			var item = inventory.GetItemByIndex(i);
 			xPos = position.X + (gridCellSize.w * item.grid_index.col);
 			yPos = position.Y + (gridCellSize.h * item.grid_index.row);
-			
 			var iconBaseScale = 0.8;
-				
 			// DRAW ITEM BACKGROUND
 			var gridSpriteIndex = 0;
 			if (!item.is_known) {
