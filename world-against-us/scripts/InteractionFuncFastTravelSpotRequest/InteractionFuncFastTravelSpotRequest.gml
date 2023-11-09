@@ -1,4 +1,4 @@
-function InteractionFuncFastTravelSpotTown()
+function InteractionFuncFastTravelSpotRequest(_sourceRegionId, _destionationRegionId, _roomIndex)
 {
 	// TODO: Fetch destination room from global world data location map by room index
 	if (global.MultiplayerMode)
@@ -16,7 +16,7 @@ function InteractionFuncFastTravelSpotTown()
 			
 			// REQUEST FAST TRAVEL
 			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_FAST_TRAVEL);
-			var fastTravelInfo = new WorldMapFastTravelInfo(global.NetworkRegionHandlerRef.region_id, global.NetworkRegionHandlerRef.region_id, ROOM_INDEX_CAMP);
+			var fastTravelInfo = new WorldMapFastTravelInfo(_sourceRegionId, _destionationRegionId, _roomIndex);
 			var networkPacket = new NetworkPacket(networkPacketHeader, fastTravelInfo);
 			if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
 			{
@@ -26,7 +26,5 @@ function InteractionFuncFastTravelSpotTown()
 				}
 			}
 		}
-	} else {
-		room_goto(roomCamp);
 	}
 }
