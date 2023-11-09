@@ -63,8 +63,19 @@ function CreateWindowLootContainer(_gameWindowId, _zIndex, _containerInventory)
 			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM);
 			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM);
 			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM);
+
+			global.NetworkRegionObjectHandlerRef.active_inventory_stream = undefined;
 			
-			global.NetworkRegionObjectHandlerRef.ResetRegionObjectData();
+			// CLEAR LOOT CONTAINER INVENTORY CACHE
+			var lootContainerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.LootContainer);
+			if (!is_undefined(lootContainerWindow))
+			{
+				var containerInventoryGridElement = lootContainerWindow.GetChildElementById("ContainerInventoryGrid");
+				if (!is_undefined(containerInventoryGridElement))
+				{
+					containerInventoryGridElement.inventory.ClearAllItems();
+				}
+			}
 		}
 	}
 	containerWindow.OnClose = overrideOnClose;

@@ -104,6 +104,19 @@ function NetworkHandler() constructor
 		return isAddedToQueue;
 	}
 	
+	static OnRoomStart = function()
+	{
+		if (!network_region_handler.network_region_object_handler.ValidateRegionContainers())
+		{
+			show_message("Error occured during OnRoomStart");
+			DisconnectSocket();
+			if (room != roomMainMenu)
+			{
+				room_goto(roomMainMenu);
+			}
+		}
+	}
+	
 	static Update = function()
 	{
 		if (ds_priority_size(network_packet_queue) > 0)

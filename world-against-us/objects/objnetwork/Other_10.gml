@@ -24,5 +24,7 @@ if (room == roomMainMenu)
 		{
 			global.NetworkHandlerRef.RequestJoinGame();
 		}
+	} else {
+		networkHandler.OnRoomStart();
 	}
 }

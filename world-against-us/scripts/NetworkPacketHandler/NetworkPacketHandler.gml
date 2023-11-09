@@ -162,8 +162,6 @@ function NetworkPacketHandler() constructor
 													4, true, 
 													targetContainer.inventory.GetItemCount()
 												);
-												// CLEAR INVENTORY
-												targetContainer.inventory.ClearItems();
 												// CHECK IF SERVER HAS CONTAINER CONTENT
 												if (containerContentInfo.content_count == -1)
 												{
@@ -258,12 +256,13 @@ function NetworkPacketHandler() constructor
 										if (!is_undefined(networkInventoryStreamItems))
 										{
 											var items = networkInventoryStreamItems.items;
-											activeInventoryStream.target_inventory.AddMultipleItems(items);
-												
-											// CONTAINER INVENTORY STREAM
-											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
-											var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-											isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
+											if (activeInventoryStream.target_inventory.AddMultipleItems(items))
+											{	
+												// CONTAINER INVENTORY STREAM
+												var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
+												var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
+												isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
+											}
 										}
 									}
 								}
@@ -273,7 +272,7 @@ function NetworkPacketHandler() constructor
 								var activeInventoryStream = global.NetworkRegionObjectHandlerRef.active_inventory_stream;
 								if (!is_undefined(activeInventoryStream))
 								{
-									global.NetworkRegionObjectHandlerRef.ResetRegionObjectData();
+									global.NetworkRegionObjectHandlerRef.active_inventory_stream = undefined;
 								
 									// HIDE CONTAINER INVENTORY LOADING ICON
 									var lootContainerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.LootContainer);

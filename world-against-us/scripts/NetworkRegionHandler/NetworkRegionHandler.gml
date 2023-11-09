@@ -14,6 +14,6 @@ function NetworkRegionHandler() constructor
 		room_index = undefined;
 		owner_client = undefined;
 		
-		network_region_object_handler.ResetRegionObjectData();
+		network_region_object_handler.active_inventory_stream = undefined;
 	}
 }
