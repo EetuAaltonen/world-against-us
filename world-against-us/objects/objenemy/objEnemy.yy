@@ -33,8 +33,8 @@
   "properties": [],
   "solid": false,
   "spriteId": {
-    "name": "sprZombie",
-    "path": "sprites/sprZombie/sprZombie.yy",
+    "name": "sprBandit",
+    "path": "sprites/sprBandit/sprBandit.yy",
   },
   "spriteMaskId": null,
   "visible": true,

@@ -34,8 +34,8 @@
   "properties": [],
   "solid": false,
   "spriteId": {
-    "name": "sprSoldier",
-    "path": "sprites/sprSoldier/sprSoldier.yy",
+    "name": "sprSoldierOriginal",
+    "path": "sprites/sprSoldierOriginal/sprSoldierOriginal.yy",
   },
   "spriteMaskId": null,
   "visible": true,
