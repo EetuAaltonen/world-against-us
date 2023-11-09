@@ -1,6 +1,7 @@
 function NetworkRegionHandler() constructor
 {
 	region_id = undefined;
+	prev_region_id = undefined;
 	room_index = undefined;
 	owner_client = undefined;
 	
@@ -9,6 +10,7 @@ function NetworkRegionHandler() constructor
 	static ResetRegionData = function()
 	{
 		region_id = undefined;
+		prev_region_id = undefined;
 		room_index = undefined;
 		owner_client = undefined;
 		

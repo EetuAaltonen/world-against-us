@@ -107,25 +107,24 @@ function NetworkPacketHandler() constructor
 										var destinationRoomIndex = worldMapFastTravelInfo.destination_room_index;
 										if (!is_undefined(destinationRoomIndex))
 										{
-											global.NetworkRegionHandlerRef.region_id = destinationRegionId;
-											global.NetworkRegionHandlerRef.room_index = destinationRoomIndex;
-											global.NetworkRegionHandlerRef.owner_client = undefined;
-											switch(destinationRoomIndex)
+											var sourceRegionId = worldMapFastTravelInfo.source_region_id;
+											if (!is_undefined(sourceRegionId))
 											{
-												// TODO: Request room change from objRoomLoader
-												case ROOM_INDEX_CAMP:
+												global.NetworkRegionHandlerRef.region_id = destinationRegionId;
+												global.NetworkRegionHandlerRef.prev_region_id = sourceRegionId;
+												global.NetworkRegionHandlerRef.room_index = destinationRoomIndex;
+												global.NetworkRegionHandlerRef.owner_client = undefined;
+												switch(destinationRoomIndex)
 												{
-													isPacketHandled = true;
-													room_goto(roomCamp);
-												} break;
-												case ROOM_INDEX_TOWN:
-												{
-													isPacketHandled = true;
-													room_goto(roomTown);
-												} break;
-												default:
-												{
-													show_debug_message(string("Unknown destination room index to fast travel: {0}", destinationRoomIndex));
+													// TODO: Request room change from objRoomLoader
+													// room_goto will happen on the next frame and this function will return properly isPacketHandler
+													case ROOM_INDEX_CAMP: { isPacketHandled = true; room_goto(roomCamp); } break;
+													case ROOM_INDEX_TOWN: { isPacketHandled = true; room_goto(roomTown); } break;
+													case ROOM_INDEX_OFFICE: { isPacketHandled = true; room_goto(roomOffice); } break;
+													case ROOM_INDEX_LIBRARY: { isPacketHandled = true; room_goto(roomLibrary); } break;
+													// TODO: Add roomForest
+													//case ROOM_INDEX_FOREST: { isPacketHandled = true; room_goto(roomForest); } break;
+													default: { show_debug_message(string("Unknown destination room index to fast travel: {0}", destinationRoomIndex)); }
 												}
 											}
 										}
