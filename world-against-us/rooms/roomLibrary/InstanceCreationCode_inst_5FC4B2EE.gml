@@ -1,2 +1,2 @@
-containerId = "container_3DE7EF5";
+containerId = "container_5FC4B2EE";
 lootTableTag = "book_box";
