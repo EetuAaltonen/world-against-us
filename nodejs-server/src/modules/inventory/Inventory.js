@@ -1,8 +1,6 @@
 export default class Inventory {
   constructor(inventoryId, type) {
     this.inventoryId = inventoryId;
-    this.type = type;
-
     this.items = {};
   }
 

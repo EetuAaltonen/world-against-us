@@ -1,4 +1,4 @@
-import InstanceContainerHandler from "./InstanceContainerHandler.js";
+import ContainerHandler from "../containers/ContainerHandler.js";
 
 export default class Instance {
   constructor(roomIndex) {
@@ -6,8 +6,7 @@ export default class Instance {
     this.parentInstanceId = undefined;
     this.ownerClient = undefined;
     this.localPlayers = {};
-
-    this.containerHandler = new InstanceContainerHandler();
+    this.containerHandler = new ContainerHandler();
   }
 
   addPlayer(clientId, player) {

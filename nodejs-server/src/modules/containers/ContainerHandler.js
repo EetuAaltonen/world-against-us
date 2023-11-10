@@ -1,15 +1,15 @@
-import Container from "../containers/Container.js";
+import Container from "./Container.js";
 
-export default class InstanceContainerHandler {
+export default class ContainerHandler {
   constructor() {
     // TODO: Replace activeInventoryStream with activeInventoryStreams[containerId]
     this.activeInventoryStream = undefined;
     this.containers = {};
   }
 
-  initContainer(containerId, inventoryType) {
+  initContainer(containerId) {
     let isContainerInitialized = true;
-    this.containers[containerId] = new Container(containerId, inventoryType);
+    this.containers[containerId] = new Container(containerId);
     return isContainerInitialized;
   }
 

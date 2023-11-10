@@ -1,6 +1,5 @@
 import MESSAGE_TYPE from "./MessageType.js";
 import PACKET_PRIORITY from "./PacketPriority.js";
-import INVENTORY_TYPE from "../inventory/InventoryType.js";
 
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
 import PlayerListInfo from "../players/PlayerListInfo.js";
@@ -219,10 +218,7 @@ export default class NetworkPacketHandler {
                   contentCount
                 );
                 if (containerContentInfo.contentCount === -1) {
-                  instance.containerHandler.initContainer(
-                    containerId,
-                    INVENTORY_TYPE.LOOT_CONTAINER
-                  );
+                  instance.containerHandler.initContainer(containerId);
                 }
 
                 const networkBuffer = this.networkPacketBuilder.createPacket(
