@@ -28,8 +28,7 @@ export default class NetworkHandler {
     this.networkPacketBuilder = new NetworkPacketBuilder();
     this.clientHandler = new ClientHandler();
     this.instanceHandler = new InstanceHandler();
-    this.worldStateHandler = new WorldStateHandler(this);
-
+    this.worldStateHandler = new WorldStateHandler(this, this.instanceHandler);
     this.networkPacketHandler = new NetworkPacketHandler(
       this,
       this.networkPacketBuilder,
@@ -39,6 +38,18 @@ export default class NetworkHandler {
 
     this.lastUpdate = process.hrtime.bigint();
     this.loopTime = 0;
+
+    this.initWorldState();
+  }
+
+  initWorldState() {
+    let isWorldStateInitialized = false;
+    if (this.worldStateHandler.loadSave()) {
+      isWorldStateInitialized = true;
+    } else {
+      this.onError(new Error("Failed to initialize world state"));
+    }
+    return isWorldStateInitialized;
   }
 
   tick() {
@@ -160,7 +171,6 @@ export default class NetworkHandler {
               instanceId = client.instanceId;
             }
             if (this.clientHandler.disconnectClient(clientId, rinfo)) {
-              isMessageHandled = true;
               if (
                 !this.instanceHandler.removePlayerFromInstance(
                   clientId,
@@ -172,6 +182,14 @@ export default class NetworkHandler {
                   `Failed to remove a client with ID: ${clientId} from any instance`
                 );
               }
+              // Autosave on players disconnect
+              if (this.clientHandler.getClientCount() <= 0) {
+                if (!this.worldStateHandler.autosave()) {
+                  // TODO: Proper error handling
+                  console.log(`Failed to autosave on players disconnect`);
+                }
+              }
+              isMessageHandled = true;
             } else {
               // TODO: Proper error handling
               console.log(`Failed to disconnect a client with ID: ${clientId}`);

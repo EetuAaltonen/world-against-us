@@ -1,21 +1,127 @@
 import WEATHER_CONDITION from "./WeatherCondition.js";
 
+import FileHandler from "../files/FileHandler.js";
 import WorldStateDateTime from "./WorldStateDateTime.js";
+import ParseJSONObjectsToArray from "../json/ParseJSONObjectsToArray.js";
+import ParseJSONObjectToItemReplica from "../items/ParseJSONObjectToItemReplica.js";
+
+const SERVER_APPDATA_PATH = `${process.env.LOCALAPPDATA}/world_against_us/server`;
+const SERVER_SAVE_FILE_PATH = `${SERVER_APPDATA_PATH}/worlds`;
+const GAME_SAVE_NAME = "test";
+const GAME_SAVE_FILE_PATH = `${SERVER_SAVE_FILE_PATH}/${GAME_SAVE_NAME}/`;
+const GAME_SAVE_FILE_NAME = `${GAME_SAVE_NAME}_save.json`;
+const AUTOSAVE_TIME_SECONDS = 99999999999999; // 10 minutes
 
 export default class WorldStateHandler {
-  constructor(networkHandler) {
+  constructor(networkHandler, instanceHandler) {
     this.networkHandler = networkHandler;
+    this.instanceHandler = instanceHandler;
     this.dateTime = new WorldStateDateTime(this);
-    // Set start to Day 1, 8:00 o'clock
-    this.dateTime.day = 1;
-    this.dateTime.hours = 8;
     this.weather = 0;
+
+    this.fileHandler = new FileHandler(
+      GAME_SAVE_FILE_PATH,
+      GAME_SAVE_FILE_NAME
+    );
+    this.autoSaveTimer = 0;
+  }
+
+  toJSONObject() {
+    const formatDateTime = this.dateTime.toJSONObject();
+    let formatCampStorage = {};
+
+    const campStorageContainer =
+      this.instanceHandler.getDefaultCampStorageContainer();
+    if (campStorageContainer !== undefined) {
+      formatCampStorage = campStorageContainer.toJSONObject();
+    }
+
+    return {
+      date_time: formatDateTime,
+      camp_storage: formatCampStorage,
+    };
   }
 
   update(passedTickTime) {
-    let isUpdated = false;
+    let isUpdated = true;
+    // Update date time
     isUpdated = this.dateTime.update(passedTickTime);
+    // Check autosave
+    this.autoSaveTimer += passedTickTime * 0.001;
+    if (this.autoSaveTimer >= AUTOSAVE_TIME_SECONDS) {
+      this.autoSaveTimer -= AUTOSAVE_TIME_SECONDS;
+      if (!this.autosave()) {
+        isUpdated = false;
+      }
+    }
     return isUpdated;
+  }
+
+  autosave() {
+    let isAutoSaveCompleted = false;
+    const worldStateJSONObject = this.toJSONObject();
+    if (worldStateJSONObject !== undefined) {
+      if (this.fileHandler.saveToFile(worldStateJSONObject)) {
+        isAutoSaveCompleted = true;
+      }
+    }
+    return isAutoSaveCompleted;
+  }
+
+  loadSave() {
+    let isSaveLoaded = false;
+    const worldStateJSONObject = this.toJSONObject();
+    if (worldStateJSONObject !== undefined) {
+      const saveData = this.fileHandler.loadFromFile();
+      if (saveData !== undefined) {
+        console.log(saveData);
+        isSaveLoaded = true;
+        const jsonDateTimeObject = saveData["date_time"] ?? undefined;
+        if (jsonDateTimeObject !== undefined) {
+          this.dateTime.year = jsonDateTimeObject["year"] ?? 0;
+          this.dateTime.month = jsonDateTimeObject["month"] ?? 0;
+          this.dateTime.day =
+            jsonDateTimeObject["day"] ?? this.dateTime.defaultDay;
+          this.dateTime.hours =
+            jsonDateTimeObject["hours"] ?? this.dateTime.defaultHours;
+          this.dateTime.minutes = jsonDateTimeObject["minutes"] ?? 0;
+          this.dateTime.seconds = jsonDateTimeObject["seconds"] ?? 0;
+          this.dateTime.timeScale =
+            jsonDateTimeObject["time_scale"] ?? this.dateTime.defaultTimeScale;
+        } else {
+          isSaveLoaded = false;
+        }
+        const jsonCampStorageObject = saveData["camp_storage"] ?? undefined;
+        if (jsonCampStorageObject !== undefined) {
+          const jsonStorageInventory = jsonCampStorageObject["inventory"];
+          if (jsonStorageInventory !== undefined) {
+            const campStorageContainer =
+              this.instanceHandler.getDefaultCampStorageContainer();
+            if (campStorageContainer !== undefined) {
+              console.log(jsonStorageInventory["items"]);
+              const jsonItemArray = jsonStorageInventory["items"] ?? [];
+              const parsedItems = ParseJSONObjectsToArray(
+                jsonItemArray,
+                ParseJSONObjectToItemReplica
+              );
+              if (!campStorageContainer.inventory.addItems(parsedItems)) {
+                isSaveLoaded = false;
+              }
+              console.log(campStorageContainer.inventory.toJSONObject());
+            } else {
+              isSaveLoaded = false;
+            }
+          } else {
+            isSaveLoaded = false;
+          }
+        } else {
+          isSaveLoaded = false;
+        }
+      } else {
+        isSaveLoaded = true;
+      }
+    }
+    return isSaveLoaded;
   }
 
   rollWeather() {
