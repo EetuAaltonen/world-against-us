@@ -28,7 +28,8 @@ enum GAME_WINDOW
 	WorldMapFastTravelQueue,
 	// PLAYER LIST
 	PlayerList,
-	// LOOT CONTAINER
+	// CONTAINER
+	StorageContainer,
 	LootContainer,
 	// WORLD
 	FacilityGenerator,

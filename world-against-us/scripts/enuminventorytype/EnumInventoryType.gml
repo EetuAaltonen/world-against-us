@@ -5,6 +5,7 @@ enum INVENTORY_TYPE
 	MagazinePockets,
 	MedicinePockets,
 	BackpackSlot,
+	StorageContainer,
 	LootContainer,
 	Facility,
 	ConstructionSite,

@@ -10,6 +10,7 @@ enum GUI_STATE
 	Map,
 	WorldMap,
 	PlayerList,
+	StorageContainer,
 	LootContainer,
 	Facility,
 	ConstructionSite,
