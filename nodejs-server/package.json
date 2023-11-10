@@ -13,6 +13,7 @@
   "dependencies": {
     "@datastructures-js/priority-queue": "^6.3.0",
     "dotenv": "^16.3.1",
+    "moment": "^2.29.4",
     "uuid": "^8.3.2"
   },
   "type": "module",
