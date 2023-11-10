@@ -74,7 +74,6 @@ export default class WorldStateHandler {
     if (worldStateJSONObject !== undefined) {
       const saveData = this.fileHandler.loadFromFile();
       if (saveData !== undefined) {
-        console.log(saveData);
         isSaveLoaded = true;
         const jsonDateTimeObject = saveData["date_time"] ?? undefined;
         if (jsonDateTimeObject !== undefined) {
@@ -98,7 +97,6 @@ export default class WorldStateHandler {
             const campStorageContainer =
               this.instanceHandler.getDefaultCampStorageContainer();
             if (campStorageContainer !== undefined) {
-              console.log(jsonStorageInventory["items"]);
               const jsonItemArray = jsonStorageInventory["items"] ?? [];
               const parsedItems = ParseJSONObjectsToArray(
                 jsonItemArray,
@@ -107,7 +105,6 @@ export default class WorldStateHandler {
               if (!campStorageContainer.inventory.addItems(parsedItems)) {
                 isSaveLoaded = false;
               }
-              console.log(campStorageContainer.inventory.toJSONObject());
             } else {
               isSaveLoaded = false;
             }
