@@ -22,6 +22,10 @@ export default class ClientHandler {
     return Object.values(this.clients);
   }
 
+  getClientCount() {
+    return Object.keys(this.clients).length;
+  }
+
   disconnectClient(clientId, rinfo) {
     let isDisconnected = false;
     const index = this.clients.findIndex(

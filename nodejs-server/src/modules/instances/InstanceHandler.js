@@ -2,19 +2,34 @@ import ROOM_INDEX from "./RoomIndex.js";
 import WORLD_MAP_LOCATION_HIERARCHY from "../world_map/WorldMapLocationHierarchy.js";
 import Instance from "./Instance.js";
 
+const CAMP_STORAGE_CONTAINER_ID = "camp_storage_container";
+
 export default class InstanceHandler {
   constructor() {
     this.instances = {};
     this.campId = 0;
     this.nextInstanceId = 1;
 
-    if (this.getInstance(this.campId) === undefined) {
-      this.createDefaultCampInstance();
-    }
+    this.createDefaultCampInstance();
   }
 
   createDefaultCampInstance() {
-    this.instances[this.campId] = new Instance(ROOM_INDEX.ROOM_CAMP);
+    let isInstanceCreated = true;
+    const campInstance = new Instance(ROOM_INDEX.ROOM_CAMP);
+    campInstance.containerHandler.initContainer(CAMP_STORAGE_CONTAINER_ID);
+    this.instances[this.campId] = campInstance;
+    return isInstanceCreated;
+  }
+
+  getDefaultCampStorageContainer() {
+    let campStorageContainer;
+    const campInstance = this.getInstance(this.campId);
+    if (campInstance !== undefined) {
+      campStorageContainer = campInstance.containerHandler.getContainerById(
+        CAMP_STORAGE_CONTAINER_ID
+      );
+    }
+    return campStorageContainer;
   }
 
   createInstance(roomIndex) {
