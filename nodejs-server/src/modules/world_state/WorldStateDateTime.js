@@ -9,13 +9,32 @@ export default class WorldStateDateTime {
     this.seconds = 0;
     this.milliseconds = 0;
 
+    // Set start to Day 1, 8:00 o'clock
+    this.defaultDay = 1;
+    this.defaultHours = 8;
+    this.day = this.defaultDay;
+    this.hours = this.defaultHours;
+
     // 24 in-game hours is 1 real-life hour
-    this.time_scale = 24;
+    this.defaultTimeScale = 24;
+    this.timeScale = this.defaultTimeScale;
+  }
+
+  toJSONObject() {
+    return {
+      year: this.year,
+      month: this.month,
+      day: this.day,
+      hours: this.hours,
+      minutes: this.minutes,
+      seconds: this.seconds,
+      time_scale: this.timeScale,
+    };
   }
 
   update(passedTickTime) {
     let isTimeUpdated = true;
-    this.milliseconds += passedTickTime * this.time_scale;
+    this.milliseconds += passedTickTime * this.timeScale;
     while (Math.floor(this.milliseconds) >= 1000) {
       this.milliseconds -= 1000;
       this.seconds++;
@@ -39,6 +58,8 @@ export default class WorldStateDateTime {
             }
           }
         }
+        // TODO: Console log world time for debugging
+        //console.log(this.timeToString());
       }
     }
     return isTimeUpdated;
@@ -52,18 +73,5 @@ export default class WorldStateDateTime {
 
   dateToString() {
     return `${this.year} year ${this.month} month ${this.day} day`;
-  }
-
-  toJSONObject() {
-    return {
-      year: this.year,
-      month: this.month,
-      day: this.day,
-      hours: this.hours,
-      minutes: this.minutes,
-      seconds: this.seconds,
-      milliseconds: this.milliseconds,
-      time_scale: this.time_scale,
-    };
   }
 }

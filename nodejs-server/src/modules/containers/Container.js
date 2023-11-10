@@ -6,5 +6,11 @@ export default class Container {
     this.inventory = new Inventory(containerId);
   }
 
+  toJSONObject() {
+    const formatInventory = this.inventory.toJSONObject();
+    return {
+      container_id: this.containerId,
+      inventory: formatInventory,
+    };
   }
 }
