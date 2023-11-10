@@ -152,34 +152,37 @@ function NetworkPacketHandler() constructor
 									}
 									if (instance_exists(targetContainer))
 									{
-										if (!is_undefined(targetContainer.lootTableTag))
+										if (!is_undefined(targetContainer.inventory))
 										{
-											if (!is_undefined(targetContainer.inventory))
+											var activeInventoryStream = new NetworkInventoryStream(
+												targetContainer.containerId,
+												targetContainer.inventory,
+												4, true, 
+												targetContainer.inventory.GetItemCount()
+											);
+											// CHECK IF SERVER HAS CONTAINER CONTENT
+											if (containerContentInfo.content_count == -1)
 											{
-												var activeInventoryStream = new NetworkInventoryStream(
-													targetContainer.containerId,
-													targetContainer.inventory,
-													4, true, 
-													targetContainer.inventory.GetItemCount()
-												);
-												// CHECK IF SERVER HAS CONTAINER CONTENT
-												if (containerContentInfo.content_count == -1)
+												if (targetContainer.inventory.type == INVENTORY_TYPE.LootContainer)
 												{
-													// GENERATE LOOT
-													RollContainerLoot(targetContainer.lootTableTag, targetContainer.inventory);
-												} else {
-													activeInventoryStream.is_stream_sending = false;
+													if (!is_undefined(targetContainer.lootTableTag))
+													{
+														// GENERATE LOOT
+														RollContainerLoot(targetContainer.lootTableTag, targetContainer.inventory);
+													}
 												}
-												// SET ACTIVE INVENTORY STREAM
-												global.NetworkRegionObjectHandlerRef.active_inventory_stream = activeInventoryStream;
+											} else {
+												activeInventoryStream.is_stream_sending = false;
+											}
+											// SET ACTIVE INVENTORY STREAM
+											global.NetworkRegionObjectHandlerRef.active_inventory_stream = activeInventoryStream;
 											
-												// REQUEST CONTAINER INVENTORY DATA STREAM
-												var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM);
-												var networkPacket = new NetworkPacket(networkPacketHeader, activeInventoryStream);
-												if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
-												{
-													isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
-												}
+											// REQUEST CONTAINER INVENTORY DATA STREAM
+											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM);
+											var networkPacket = new NetworkPacket(networkPacketHeader, activeInventoryStream);
+											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+											{
+												isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
 											}
 										}
 									}
@@ -273,16 +276,34 @@ function NetworkPacketHandler() constructor
 								if (!is_undefined(activeInventoryStream))
 								{
 									global.NetworkRegionObjectHandlerRef.active_inventory_stream = undefined;
-								
+									
 									// HIDE CONTAINER INVENTORY LOADING ICON
-									var lootContainerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.LootContainer);
-									if (!is_undefined(lootContainerWindow))
+									switch(activeInventoryStream.target_inventory.type)
 									{
-										var containerInventoryLoadingElement = lootContainerWindow.GetChildElementById("ContainerInventoryLoading");
-										if (!is_undefined(containerInventoryLoadingElement))
+										case INVENTORY_TYPE.LootContainer:
 										{
-											containerInventoryLoadingElement.isVisible = false;
-										}
+											var lootContainerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.LootContainer);
+											if (!is_undefined(lootContainerWindow))
+											{
+												var containerInventoryLoadingElement = lootContainerWindow.GetChildElementById("ContainerInventoryLoading");
+												if (!is_undefined(containerInventoryLoadingElement))
+												{
+													containerInventoryLoadingElement.isVisible = false;
+												}
+											}
+										} break;
+										case INVENTORY_TYPE.StorageContainer:
+										{
+											var lootContainerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.StorageContainer);
+											if (!is_undefined(lootContainerWindow))
+											{
+												var containerInventoryLoadingElement = lootContainerWindow.GetChildElementById("ContainerInventoryLoading");
+												if (!is_undefined(containerInventoryLoadingElement))
+												{
+													containerInventoryLoadingElement.isVisible = false;
+												}
+											}
+										} break;
 									}
 									
 									if (!activeInventoryStream.is_stream_sending)

@@ -85,6 +85,9 @@ randomise();
 #macro ROOM_INDEX_LIBRARY "roomLibrary"
 #macro ROOM_INDEX_FOREST "roomForest"
 
+// CONTAINER
+#macro CAMP_STORAGE_CONTAINER_ID "camp_storage_container"
+
 // MAP ICON TYPE
 #macro STATIC_MAP_ICON "static_icon"
 #macro DYNAMIC_MAP_ICON "dynamic_icon"
