@@ -8,9 +8,10 @@ export default class ClientHandler {
 
   connectClient(rinfo) {
     let newUuid = uuidv4();
-    const client = new Client(newUuid, rinfo.address, rinfo.port);
-
-    this.clients.push(client);
+    if (newUuid !== undefined) {
+      const client = new Client(newUuid, rinfo.address, rinfo.port);
+      this.clients.push(client);
+    }
     return newUuid;
   }
 

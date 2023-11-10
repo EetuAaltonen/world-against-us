@@ -99,52 +99,13 @@ export default class NetworkHandler {
             if (clientId === UNDEFINED_UUID) {
               // Generate new Uuid and save client
               const newClientId = this.clientHandler.connectClient(rinfo);
-              const client = this.clientHandler.getClient(newClientId);
-              const networkBuffer = this.networkPacketBuilder.createPacket(
-                MESSAGE_TYPE.CONNECT_TO_HOST,
-                newClientId,
-                acknowledgmentId,
-                undefined
-              );
-
-              if (networkBuffer !== undefined) {
-                this.packetQueue.enqueue(
-                  new NetworkQueueEntry(
-                    networkBuffer,
-                    [client],
-                    PACKET_PRIORITY.HIGH
-                  )
-                );
-                isMessageHandled = true;
-              }
-            }
-          }
-          break;
-        case MESSAGE_TYPE.REQUEST_JOIN_GAME:
-          {
-            if (clientId !== UNDEFINED_UUID) {
-              const client = this.clientHandler.getClient(clientId);
-              const player = new Player(`Player_${clientId}`);
-              const instanceId =
-                this.instanceHandler.addPlayerToDefaultInstance(
-                  clientId,
-                  player
-                );
-              const instance = this.instanceHandler.getInstance(instanceId);
-              if (instance !== undefined) {
-                // Set new instance
-                client.setInstanceId(instanceId);
-
-                const networkJoinGameRequest = new NetworkJoinGameRequest(
-                  instanceId,
-                  instance.roomIndex,
-                  instance.ownerClient
-                );
+              if (newClientId !== undefined) {
+                const client = this.clientHandler.getClient(newClientId);
                 const networkBuffer = this.networkPacketBuilder.createPacket(
-                  MESSAGE_TYPE.REQUEST_JOIN_GAME,
-                  clientId,
+                  MESSAGE_TYPE.CONNECT_TO_HOST,
+                  newClientId,
                   acknowledgmentId,
-                  networkJoinGameRequest
+                  undefined
                 );
 
                 if (networkBuffer !== undefined) {
@@ -157,8 +118,52 @@ export default class NetworkHandler {
                   );
                   isMessageHandled = true;
                 }
-              } else {
-                client.resetInstanceId();
+              }
+            }
+          }
+          break;
+        case MESSAGE_TYPE.REQUEST_JOIN_GAME:
+          {
+            if (clientId !== UNDEFINED_UUID) {
+              const client = this.clientHandler.getClient(clientId);
+              // TODO: Return unknown client error
+              if (client !== undefined) {
+                const player = new Player(`Player_${clientId}`);
+                const instanceId =
+                  this.instanceHandler.addPlayerToDefaultInstance(
+                    clientId,
+                    player
+                  );
+                const instance = this.instanceHandler.getInstance(instanceId);
+                if (instance !== undefined) {
+                  // Set new instance
+                  client.setInstanceId(instanceId);
+
+                  const networkJoinGameRequest = new NetworkJoinGameRequest(
+                    instanceId,
+                    instance.roomIndex,
+                    instance.ownerClient
+                  );
+                  const networkBuffer = this.networkPacketBuilder.createPacket(
+                    MESSAGE_TYPE.REQUEST_JOIN_GAME,
+                    clientId,
+                    acknowledgmentId,
+                    networkJoinGameRequest
+                  );
+
+                  if (networkBuffer !== undefined) {
+                    this.packetQueue.enqueue(
+                      new NetworkQueueEntry(
+                        networkBuffer,
+                        [client],
+                        PACKET_PRIORITY.HIGH
+                      )
+                    );
+                    isMessageHandled = true;
+                  }
+                } else {
+                  client.resetInstanceId();
+                }
               }
             }
           }
