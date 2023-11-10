@@ -50,19 +50,7 @@ function CreateWindowLootContainer(_gameWindowId, _zIndex, _containerInventory)
 		// NETWORKING CLEAR IN-FLIGHT CONTAINER CONTENT REQUESTS
 		if (global.MultiplayerMode)
 		{
-			// CONTAINER INVENTORY STREAM
-			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT);
-			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM);
-			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
-			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM);
-			// TODO: Block window closing, to prevent container inventory action interrupts while exhanging network acknowledgments
-			// How about on disconnect?
-			// CONTAINER INVENTORY ACTIONS
-			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_ADD_ITEM);
-			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_STACK_ITEM);
-			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM);
-			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM);
-			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM);
+			ClearInFlightInventoryStreamPackets();
 
 			global.NetworkRegionObjectHandlerRef.active_inventory_stream = undefined;
 			

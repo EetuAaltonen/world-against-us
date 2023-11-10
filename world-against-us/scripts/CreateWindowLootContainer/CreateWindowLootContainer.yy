@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "LootContainer",
-    "path": "folders/Scripts/Game/GUI/LootContainer.yy",
+    "name": "Container",
+    "path": "folders/Scripts/Game/GUI/Container.yy",
   },
 }
