@@ -6,11 +6,13 @@ character = undefined;
 image_index = 0;
 image_speed = 0;
 
-acceleration = 0.15;
+baseAcceleration = 0.15;
+acceleration = baseAcceleration;
+baseMaxSpeed = 2.5;
+maxSpeed = baseMaxSpeed;
 hSpeed = 0;
 vSpeed = 0;
 dirSpeed = 0;
-maxSpeed = 2.5;
 
 // SPAWN WEAPON
 // TODO: Move the weapon under character struct

@@ -47,7 +47,8 @@ if (vInput == 0)
 	vSpeed = Approach(vSpeed, 0, acceleration * 2);
 }
 
-if (global.DEBUGMODE) { maxSpeed = 8; acceleration = 0.5; }
+maxSpeed = (global.DEBUGMODE) ? 8 : baseMaxSpeed;
+acceleration = (global.DEBUGMODE) ? 0.5 : baseAcceleration;
 
 hSpeed = clamp(hSpeed, -maxSpeed, maxSpeed);
 vSpeed = clamp(vSpeed, -maxSpeed, maxSpeed);

@@ -16,9 +16,9 @@ pathUpdateTimer = new Timer(pathUpdateInterval);
 pathBlockingRadius = 20;
 
 // TARGET
-targetSeekInterval = TimerFromSeconds(2);
-targetSeekTimer = new Timer(targetSeekInterval);
-targetSeekTimer.StartTimer();
+targetSearchInterval = TimerFromSeconds(2);
+targetSearchTimer = new Timer(targetSearchInterval);
+targetSearchTimer.StartTimer();
 
 targetInstance = noone;
 targetPosition = new Vector2(x, y);

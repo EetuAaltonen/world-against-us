@@ -1,9 +1,10 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
-if (targetInstance == noone)
+// TODO: Use improved logic from objBandit, disable for now
+/*if (targetInstance == noone)
 {
-	if (targetSeekTimer.IsTimerStopped())
+	if (targetSearchTimer.IsTimerStopped())
 	{
 		var nearestTarget = instance_nearest(x, y, objPlayer);
 		var distanceToTarget = point_distance(x, y, nearestTarget.x, nearestTarget.y);
@@ -11,10 +12,10 @@ if (targetInstance == noone)
 		{
 			targetInstance = nearestTarget;
 		} else {
-			targetSeekTimer.StartTimer();
+			targetSearchTimer.StartTimer();
 		}
 	} else {
-		targetSeekTimer.Update();
+		targetSearchTimer.Update();
 	}
 } else {
 	if (!is_undefined(global.ObjGridPath.roomGrid))
@@ -61,4 +62,4 @@ if (targetInstance == noone)
 			}
 		}
 	}
-}
+}*/
