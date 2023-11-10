@@ -18,7 +18,7 @@ function DragItem(_item_data) constructor
 			// NETWORKING RESTORE ITEM
 			if (global.MultiplayerMode)
 			{
-				if (item_data.sourceInventory.type == INVENTORY_TYPE.LootContainer)
+				if (IsInventoryContainer(item_data.sourceInventory.type))
 				{
 					var restoredItem = item_data.sourceInventory.GetItemByGridIndex(restoredItemGridIndex);
 					if (!is_undefined(restoredItem))

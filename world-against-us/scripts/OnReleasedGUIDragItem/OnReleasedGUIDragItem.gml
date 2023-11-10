@@ -13,7 +13,7 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 				// NETWORKING ADD ITEM
 				if (global.MultiplayerMode)
 				{
-					if (_inventory.type == INVENTORY_TYPE.LootContainer)
+					if (IsInventoryContainer(_inventory.type))
 					{
 						var droppedItem = _inventory.GetItemByGridIndex(droppedItemGridIndex);
 						if (!is_undefined(droppedItem))

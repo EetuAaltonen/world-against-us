@@ -72,7 +72,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 									// NETWORKING ROTATE ITEM
 									if (global.MultiplayerMode)
 									{
-										if (inventory.type == INVENTORY_TYPE.LootContainer)
+										if (IsInventoryContainer(inventory.type))
 										{
 											var containerInventoryActionInfo = new ContainerInventoryActionInfo(inventory.inventory_id, itemGridIndex, undefined, newRotation, undefined, undefined);
 											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM);

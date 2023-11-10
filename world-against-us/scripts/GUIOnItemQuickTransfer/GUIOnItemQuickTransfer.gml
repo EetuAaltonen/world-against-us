@@ -53,7 +53,7 @@ function GUIOnItemQuickTransfer(_inventory, _mouseHoverIndex)
 								// NETWORKING REMOVE QUICK TRANSFER ITEM
 								if (global.MultiplayerMode)
 								{
-									if (_inventory.type == INVENTORY_TYPE.LootContainer)
+									if (IsInventoryContainer(_inventory.type))
 									{
 										var containerInventoryActionInfo = new ContainerInventoryActionInfo(_inventory.inventory_id, itemGridIndex, undefined, undefined, undefined, undefined);
 										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM);

@@ -413,7 +413,7 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 				
 				if (global.MultiplayerMode)
 				{
-					if (type == INVENTORY_TYPE.LootContainer)
+					if (IsInventoryContainer(type))
 					{
 						// CONTAINER INVENTORY IDENTIFY ITEM
 						var containerInventoryActionInfo = new ContainerInventoryActionInfo(inventory_id, item.grid_index, undefined, undefined, item.is_known, undefined);
