@@ -1,4 +1,4 @@
-function InteractionFuncContainer()
+function InteractionFuncLootContainer()
 {
 	if (!is_undefined(inventory))
 	{
