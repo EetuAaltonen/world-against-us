@@ -5,11 +5,19 @@ character = new Character("Bandit", CHARACTER_TYPE.Human, CHARACTER_RACE.humanoi
 
 maxSpeed = 5;
 
-// PATH FINDING
+// AI
+aiState = AI_STATE.QUEUE;
+
+// PATH
+patrolPath = undefined;
+patrolPathPercent = undefined;
+patrolPathLastPosition = undefined;
 pathToTarget = path_add();
-pathUpdateInterval = TimerFromSeconds(0.25);
-pathUpdateTimer = new Timer(pathUpdateInterval);
+chasePathUpdateInterval = TimerFromSeconds(0.5);
+chasePathUpdateTimer = new Timer(chasePathUpdateInterval);
 pathBlockingRadius = 20;
+
+targetPath = undefined;
 
 // TARGET
 targetSearchInterval = TimerFromSeconds(2);
@@ -18,3 +26,6 @@ targetSearchTimer.StartTimer();
 
 targetInstance = noone;
 targetPosition = new Vector2(x, y);
+
+// VISION
+visionRadius = MetersToPixels(20);

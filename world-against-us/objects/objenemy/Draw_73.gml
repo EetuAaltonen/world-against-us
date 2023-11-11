@@ -14,10 +14,10 @@ if (!is_undefined(character))
 if (global.DEBUGMODE)
 {
 	// DRAW VISION RADIUS
-	draw_circle_color(x, y, visionRadius,c_purple, c_purple, true);
+	draw_circle_color(x, y, visionRadius, c_purple, c_purple, true);
 	
 	// DRAW PATH BLOCKING RADIUS
-	draw_circle_color(x, y, pathBlockingRadius,c_black, c_black, true);
+	draw_circle_color(x, y, pathBlockingRadius, c_black, c_black, true);
 	
 	// DRAW PATH TO TARGET
 	var pathPointCount = path_get_number(pathToTarget);
