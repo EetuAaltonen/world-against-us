@@ -78,22 +78,26 @@ function GUIStateHandler() constructor
 		{
 			if (!IsGUIStateClosed())
 			{
-				if (IsKeyReleasedGUIStateClose() || currentGUIState.IsKeyReleasedAlternateGUIStateClose())
+				// CHECK IF GAME OVER OR FAST TRAVEL QUEUE NOT IN-PROGRESS
+				if (IsGUIStateInterruptible())
 				{
-					// CLOSE CURRENT GUI STATE
-					CloseCurrentGUIState();
-					
-					// RESTORE DRAG ITEM IF GUI FULLY CLOSED
-					if (IsGUIStateClosed())
+					if (IsKeyReleasedGUIStateClose() || currentGUIState.IsKeyReleasedAlternateGUIStateClose())
 					{
-						if (!is_undefined(global.ObjMouse.dragItem))
+						// CLOSE CURRENT GUI STATE
+						CloseCurrentGUIState();
+					
+						// RESTORE DRAG ITEM IF GUI FULLY CLOSED
+						if (IsGUIStateClosed())
 						{
-							global.ObjMouse.dragItem.RestoreOriginalItem();
-							global.ObjMouse.dragItem = undefined;
+							if (!is_undefined(global.ObjMouse.dragItem))
+							{
+								global.ObjMouse.dragItem.RestoreOriginalItem();
+								global.ObjMouse.dragItem = undefined;
+							}
 						}
+					} else {
+						currentGUIState.CallbackInputFunction();
 					}
-				} else {
-					currentGUIState.CallbackInputFunction();
 				}
 			} else {
 				currentGUIState.CallbackInputFunction();

@@ -10,6 +10,7 @@ function CreateWindowWorldMapFastTravelQueue(_gameWindowId, _zIndex)
 	
 	var fastTravelQueueElements = ds_list_create();
 	
+	// FAST TRAVEL TITLE
 	var fastTravelTitle = new WindowText(
 		"ConnectTitle",
 		new Vector2(windowSize.w * 0.5, 500),
@@ -18,7 +19,6 @@ function CreateWindowWorldMapFastTravelQueue(_gameWindowId, _zIndex)
 		font_default, fa_center, fa_middle, c_black, 1
 	);
 	
-	// FAST TRAVEL TITLE
 	ds_list_add(fastTravelQueueElements,
 		fastTravelTitle
 	);

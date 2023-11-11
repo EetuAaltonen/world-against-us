@@ -1,5 +1,6 @@
-// INHERIT THE PARENT EVENT
-event_inherited();
+// OVERRIDE THE PARENT EVENT
+character.Update();
+if (character.is_dead) return;
 
 if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 {
