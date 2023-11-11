@@ -2,9 +2,11 @@ function Timer(_setting_time) constructor
 {
 	setting_time = _setting_time;
 	running_time = 0;
+	is_timer_running = false;
 	
 	static StartTimer = function()
 	{
+		is_timer_running = true;
 		running_time = setting_time;
 	}
 	
@@ -15,9 +17,12 @@ function Timer(_setting_time) constructor
 	
 	static Update = function()
 	{
-		if (running_time > 0)
+		if (is_timer_running)
 		{
-			running_time = max(0, --running_time);
+			if (running_time > 0)
+			{
+				running_time = max(0, --running_time);
+			}
 		}
 	}
 	
@@ -31,8 +36,14 @@ function Timer(_setting_time) constructor
 		return running_time;
 	}
 	
+	 //TODO: Rename to "IsTimerTriggered"
 	static IsTimerStopped = function()
 	{
-		return (running_time <= 0);
+		return (is_timer_running && running_time <= 0);
+	}
+	
+	static StopTimer = function()
+	{
+		is_timer_running = false;
 	}
 }

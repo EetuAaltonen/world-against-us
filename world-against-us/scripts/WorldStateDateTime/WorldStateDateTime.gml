@@ -9,15 +9,14 @@ function WorldStateDateTime() constructor
     milliseconds = 0;
 
     // 24 in-game hours is 1 real-life hour
-	base_tim_scale = 24;
-    time_scale = base_tim_scale;
+	base_time_scale = 24;
+    time_scale = base_time_scale;
 	
 	static Update = function()
 	{
 		var isTimeUpdated = true;
 		
-		// TODO: This will make client desync with the server!!
-		time_scale = (global.DEBUGMODE) ? 1000 : base_tim_scale;
+		time_scale = (global.DEBUGMODE && !global.MultiplayerMode) ? 1000 : base_time_scale;
 		
 		milliseconds += (delta_time * 0.001) * time_scale;
 		while (floor(milliseconds) >= 1000) {
