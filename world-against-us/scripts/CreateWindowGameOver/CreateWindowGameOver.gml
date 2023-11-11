@@ -1,0 +1,66 @@
+function CreateWindowGameOver(_gameWindowId, _zIndex)
+{
+	var windowSize = new Size(global.GUIW, global.GUIH);
+	var windowStyle = new GameWindowStyle(c_black, 1);
+	var gameOverWindow = new GameWindow(
+		_gameWindowId,
+		new Vector2(0, 0),
+		windowSize, windowStyle, _zIndex
+	);	
+	
+	var gameOverElements = ds_list_create();
+	
+	var gameOverTitle = new WindowText(
+		"GameOverTitle",
+		new Vector2(windowSize.w * 0.5, 500),
+		undefined, undefined,
+		"You have been robbed...",
+		font_huge, fa_center, fa_middle, c_white, 1
+	);
+	
+	var gameOverCallbackFunction = function()
+	{
+		InteractionFuncFastTravelSpotRequest(
+			global.NetworkRegionHandlerRef.region_id,
+			global.NetworkRegionHandlerRef.region_id,
+			ROOM_INDEX_CAMP
+		);
+		// RECOVER PLAYER
+		if (!is_undefined(global.PlayerCharacter))
+		{
+			global.PlayerCharacter.total_hp_percent = 100;
+			global.PlayerCharacter.is_dead = false;
+		}
+	}
+	var gameOverTimer = new WindowTimerCallback(
+		"GameOverTimer",
+		new Vector2(0, 0),
+		new Size(0, 0),
+		undefined,
+		5, gameOverCallbackFunction 
+	);
+	
+	ds_list_add(gameOverElements,
+		gameOverTitle,
+		gameOverTimer
+	);
+	
+	// OVERRIDE WINDOW ONOPEN FUNCTION
+	var overrideOnOpen = function()
+	{
+		// SHOW PLAYER LIST LOADING ICON
+		var gameOverWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.GameOver);
+		if (!is_undefined(gameOverWindow))
+		{
+			var gameOverTimerElement = gameOverWindow.GetChildElementById("GameOverTimer");
+			if (!is_undefined(gameOverTimerElement))
+			{
+				gameOverTimerElement.timer.StartTimer();
+			}
+		}
+	}
+	gameOverWindow.OnOpen = overrideOnOpen;
+	
+	gameOverWindow.AddChildElements(gameOverElements);
+	return gameOverWindow;
+}

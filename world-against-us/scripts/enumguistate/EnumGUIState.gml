@@ -14,5 +14,6 @@ enum GUI_STATE
 	LootContainer,
 	Facility,
 	ConstructionSite,
-	Garden
+	Garden,
+	GameOver
 }
