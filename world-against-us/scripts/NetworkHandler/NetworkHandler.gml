@@ -135,6 +135,42 @@ function NetworkHandler() constructor
 		// RESEND ACKNOWLEDGE PACKET ON TIMEOUT
 		network_packet_tracker.UpdateInFlightNetworkPackets();
 		
+		// CHECK GAME OVER WINDOW
+		if (room != roomMainMenu && room != roomCamp && room != roomLoadResources)
+		{
+			if (!is_undefined(global.PlayerCharacter))
+			{
+				if (global.PlayerCharacter.is_dead)
+				{
+					// CHECK IF NOT IN FAST TRAVEL QUEUE
+					var fastTravelQueueWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.WorldMapFastTravelQueue);
+					if (is_undefined(fastTravelQueueWindow))
+					{
+						// CHECK IF NOT GAME OVER WINDOW SHOWING
+						var gameOverWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.GameOver);
+						if (is_undefined(gameOverWindow))
+						{
+							// DELETE ALL ITEMS
+							global.PlayerBackpack.ClearAllItems();
+							
+							// OPEN MAP
+							var guiState = new GUIState(
+								GUI_STATE.GameOver, undefined, undefined,
+								[GAME_WINDOW.GameOver], GUI_CHAIN_RULE.OverwriteAll,
+								undefined, undefined
+							);
+							if (global.GUIStateHandlerRef.RequestGUIState(guiState))
+							{
+								global.GameWindowHandlerRef.OpenWindowGroup([
+									CreateWindowGameOver(GAME_WINDOW.GameOver, -1)
+								]);
+							}
+						}
+					}
+				}
+			}
+		}
+		
 		// TODO: Time out pinging
 	}
 	

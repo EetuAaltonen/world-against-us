@@ -85,6 +85,9 @@ randomise();
 #macro ROOM_INDEX_LIBRARY "roomLibrary"
 #macro ROOM_INDEX_FOREST "roomForest"
 
+// INSTANCES
+#macro CAMP_INSTANCE_ID 0
+
 // CONTAINER
 #macro CAMP_STORAGE_CONTAINER_ID "camp_storage_container"
 
