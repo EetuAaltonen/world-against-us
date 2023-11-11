@@ -62,6 +62,7 @@ export default class WorldStateHandler {
     const worldStateJSONObject = this.toJSONObject();
     if (worldStateJSONObject !== undefined) {
       if (this.fileHandler.saveToFile(worldStateJSONObject)) {
+        this.autoSaveTimer = 0;
         isAutoSaveCompleted = true;
       }
     }
