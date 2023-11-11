@@ -6,7 +6,7 @@ interactionFunction = function()
 	{
 		InteractionFuncFastTravelSpotRequest(
 			global.NetworkRegionHandlerRef.region_id,
-			global.NetworkRegionHandlerRef.prev_region_id,
+			global.NetworkRegionHandlerRef.region_id,
 			ROOM_INDEX_CAMP
 		);
 	} else {

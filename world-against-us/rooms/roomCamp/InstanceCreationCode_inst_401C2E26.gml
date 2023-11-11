@@ -1,2 +1,2 @@
-interactionText = "Fast travel to Town";
+interactionText = "Fast travel";
 interactionFunction = OpenWorldMap;
