@@ -51,6 +51,8 @@ randomise();
 #macro LAYER_EFFECT_PREFIX "Effect"
 #macro LAYER_EFFECT_LIGHT "EffectLight"
 
+#macro LAYER_PATH_PATROL "PathPatrol"
+
 // GUI STATE
 #macro ROOT_GUI_STATE new GUIState(GUI_STATE.GameRoot, undefined, undefined, [], GUI_CHAIN_RULE.OverwriteAll, CallbackGUIStateInputRoot, undefined)
 
