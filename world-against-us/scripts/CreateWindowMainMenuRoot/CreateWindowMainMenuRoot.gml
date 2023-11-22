@@ -45,6 +45,13 @@ function CreateWindowMainMenuRoot(_gameWindowId, _zIndex)
 		undefined, undefined, mainMenuButtons, mainButtonStyle
 	);
 	
+	var mainMenuVersionText = new WindowText(
+		"MainMenuVersionText",
+		new Vector2(10, windowSize.h - 20),
+		undefined, undefined,
+		"v0.0.2", font_small_bold, fa_left, fa_bottom, c_red, 1
+	);
+	
 	var mainMenuTitlePanelElements = ds_list_create();
 	ds_list_add(mainMenuTitlePanelElements,
 		mainMenuTitle
@@ -53,7 +60,8 @@ function CreateWindowMainMenuRoot(_gameWindowId, _zIndex)
 	var mainMenuElements = ds_list_create();
 	ds_list_add(mainMenuElements, 
 		mainMenuTitlePanel,
-		mainMenuButtonMenu
+		mainMenuButtonMenu,
+		mainMenuVersionText
 	);
 	
 	mainMenuWindow.AddChildElements(mainMenuElements);

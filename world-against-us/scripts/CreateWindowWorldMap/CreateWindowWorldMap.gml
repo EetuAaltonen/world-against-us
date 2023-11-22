@@ -93,6 +93,7 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 		buttonStyle.button_background_color, "Camp", buttonStyle, testFunction,
 		new WorldMapLocation(roomCamp, ROOM_INDEX_CAMP, "Camp")
 	);
+	fastTravelCampButton.isActive = false;
 	
 	var buttonPositionTown = new Vector2(1388, 408);
 	var fastTravelTownButton = new WindowButton(
