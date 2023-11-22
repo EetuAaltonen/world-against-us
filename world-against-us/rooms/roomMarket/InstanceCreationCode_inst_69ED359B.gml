@@ -1,2 +1,2 @@
-containerId = "container_7A3B0C4E";
+containerId = "container_69ED359B";
 lootTableTag = "large_wooden_crate";
