@@ -85,6 +85,7 @@ randomise();
 #macro ROOM_INDEX_TOWN "roomTown"
 #macro ROOM_INDEX_OFFICE "roomOffice"
 #macro ROOM_INDEX_LIBRARY "roomLibrary"
+#macro ROOM_INDEX_MARKET "roomMarket"
 #macro ROOM_INDEX_FOREST "roomForest"
 
 // INSTANCES
