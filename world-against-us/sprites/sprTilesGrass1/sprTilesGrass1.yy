@@ -1,8 +1,8 @@
 {
   "resourceType": "GMSprite",
   "resourceVersion": "1.0",
-  "name": "sprTilesAsphalt",
-  "bbox_bottom": 255,
+  "name": "sprTilesGrass1",
+  "bbox_bottom": 511,
   "bbox_left": 0,
   "bbox_right": 511,
   "bbox_top": 0,
@@ -13,14 +13,14 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"ba1daa86-8df8-4048-b4b6-b9c7a353c369",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"0e8be2d7-f230-494c-9499-6222b23a7405",},
   ],
   "gridX": 0,
   "gridY": 0,
   "height": 512,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"a08aabfb-f9f2-47c6-b5ad-be0ce1dada50","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"af044d4d-e191-4c1a-92cd-c229c80e2586","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": null,
   "origin": 0,
@@ -32,7 +32,7 @@
   "sequence": {
     "resourceType": "GMSequence",
     "resourceVersion": "1.4",
-    "name": "sprTilesAsphalt",
+    "name": "sprTilesGrass1",
     "autoRecord": true,
     "backdropHeight": 768,
     "backdropImageOpacity": 0.5,
@@ -54,7 +54,7 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"ba1daa86-8df8-4048-b4b6-b9c7a353c369","path":"sprites/sprTilesAsphalt/sprTilesAsphalt.yy",},},},"Disabled":false,"id":"a852a13c-0d08-491c-8dfa-20afdb1845b4","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"0e8be2d7-f230-494c-9499-6222b23a7405","path":"sprites/sprTilesGrass1/sprTilesGrass1.yy",},},},"Disabled":false,"id":"b2bb890b-7480-42ba-b30b-7c99ff5545bf","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,
