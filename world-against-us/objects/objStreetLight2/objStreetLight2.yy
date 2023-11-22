@@ -1,13 +1,13 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "objTree",
+  "name": "objStreetLight2",
   "eventList": [],
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "Plans",
-    "path": "folders/Objects/World/Decoration/Plans.yy",
+    "name": "Town",
+    "path": "folders/Objects/World/Decoration/Town.yy",
   },
   "parentObjectId": {
     "name": "objDecorationParent",
@@ -29,8 +29,8 @@
   "properties": [],
   "solid": false,
   "spriteId": {
-    "name": "sprTree",
-    "path": "sprites/sprTree/sprTree.yy",
+    "name": "sprStreetLight2",
+    "path": "sprites/sprStreetLight2/sprStreetLight2.yy",
   },
   "spriteMaskId": null,
   "visible": true,

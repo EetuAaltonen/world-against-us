@@ -25,8 +25,8 @@
   "nineSlice": null,
   "origin": 7,
   "parent": {
-    "name": "Structure",
-    "path": "folders/Sprites/World/Structure.yy",
+    "name": "Town",
+    "path": "folders/Sprites/World/Decoration/Town.yy",
   },
   "preMultiplyAlpha": false,
   "sequence": {

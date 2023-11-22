@@ -1,13 +1,13 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "objTree",
+  "name": "objPortalColumns",
   "eventList": [],
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "Plans",
-    "path": "folders/Objects/World/Decoration/Plans.yy",
+    "name": "Town",
+    "path": "folders/Objects/World/Decoration/Town.yy",
   },
   "parentObjectId": {
     "name": "objDecorationParent",
@@ -29,9 +29,12 @@
   "properties": [],
   "solid": false,
   "spriteId": {
-    "name": "sprTree",
-    "path": "sprites/sprTree/sprTree.yy",
+    "name": "sprPortalColumns",
+    "path": "sprites/sprPortalColumns/sprPortalColumns.yy",
   },
-  "spriteMaskId": null,
+  "spriteMaskId": {
+    "name": "sprNoMask",
+    "path": "sprites/sprNoMask/sprNoMask.yy",
+  },
   "visible": true,
 }

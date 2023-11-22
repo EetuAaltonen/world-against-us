@@ -1,17 +1,17 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "objTree",
+  "name": "objHouse2",
   "eventList": [],
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "Plans",
-    "path": "folders/Objects/World/Decoration/Plans.yy",
+    "name": "Building",
+    "path": "folders/Objects/World/Building.yy",
   },
   "parentObjectId": {
-    "name": "objDecorationParent",
-    "path": "objects/objDecorationParent/objDecorationParent.yy",
+    "name": "objBuildingParent",
+    "path": "objects/objBuildingParent/objBuildingParent.yy",
   },
   "persistent": false,
   "physicsAngularDamping": 0.1,
@@ -29,8 +29,8 @@
   "properties": [],
   "solid": false,
   "spriteId": {
-    "name": "sprTree",
-    "path": "sprites/sprTree/sprTree.yy",
+    "name": "sprHouse2",
+    "path": "sprites/sprHouse2/sprHouse2.yy",
   },
   "spriteMaskId": null,
   "visible": true,

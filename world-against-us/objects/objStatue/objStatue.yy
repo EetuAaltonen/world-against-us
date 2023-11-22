@@ -1,13 +1,13 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "objTree",
+  "name": "objStatue",
   "eventList": [],
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "Plans",
-    "path": "folders/Objects/World/Decoration/Plans.yy",
+    "name": "Town",
+    "path": "folders/Objects/World/Decoration/Town.yy",
   },
   "parentObjectId": {
     "name": "objDecorationParent",
@@ -29,8 +29,8 @@
   "properties": [],
   "solid": false,
   "spriteId": {
-    "name": "sprTree",
-    "path": "sprites/sprTree/sprTree.yy",
+    "name": "sprStatue",
+    "path": "sprites/sprStatue/sprStatue.yy",
   },
   "spriteMaskId": null,
   "visible": true,

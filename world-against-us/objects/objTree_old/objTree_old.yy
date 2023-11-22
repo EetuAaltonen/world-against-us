@@ -1,7 +1,7 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "objTree",
+  "name": "objTree_old",
   "eventList": [],
   "managed": true,
   "overriddenProperties": [],
@@ -10,8 +10,8 @@
     "path": "folders/Objects/World/Decoration/Plans.yy",
   },
   "parentObjectId": {
-    "name": "objDecorationParent",
-    "path": "objects/objDecorationParent/objDecorationParent.yy",
+    "name": "objBlockParent",
+    "path": "objects/objBlockParent/objBlockParent.yy",
   },
   "persistent": false,
   "physicsAngularDamping": 0.1,
@@ -29,8 +29,8 @@
   "properties": [],
   "solid": false,
   "spriteId": {
-    "name": "sprTree",
-    "path": "sprites/sprTree/sprTree.yy",
+    "name": "sprTree_old",
+    "path": "sprites/sprTree_old/sprTree_old.yy",
   },
   "spriteMaskId": null,
   "visible": true,
