@@ -121,6 +121,14 @@ function NetworkPacketBuilder() constructor
 						buffer_write(_networkBuffer, buffer_text, containerInventoryActionInfo.container_id);
 						isPayloadWritten = true;
 					} break;
+					case MESSAGE_TYPE.PATROL_STATE:
+					{
+						var patrolState = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u32, patrolState.region_id);
+						buffer_write(_networkBuffer, buffer_u8, patrolState.patrol_id);
+						buffer_write(_networkBuffer, buffer_u8, patrolState.ai_state);
+						isPayloadWritten = true;
+					} break;
 					default:
 					{
 						var jsonString = json_stringify(_networkPacketPayload);

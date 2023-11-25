@@ -98,6 +98,17 @@ function NetworkPacketParser() constructor
 						parsedPayload = new NetworkInventoryStreamItems(parsedItems);
 					}
 				} break;
+				case MESSAGE_TYPE.PATROL_STATE:
+				{
+					var parsedRegionId = buffer_read(_msg, buffer_u32);
+					var parsedPatrolId = buffer_read(_msg, buffer_u8);
+					var parsedAIState = buffer_read(_msg, buffer_u8);
+					parsedPayload = new PatrolState(
+						parsedRegionId,
+						parsedPatrolId,
+						parsedAIState
+					);
+				} break;
 				default:
 				{
 					var payloadString = buffer_read(_msg, buffer_string);
