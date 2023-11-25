@@ -317,6 +317,14 @@ function NetworkPacketHandler() constructor
 									}
 								}
 							} break;
+							case MESSAGE_TYPE.PATROL_STATE:
+							{
+								var patrolState = payload;
+								if (!is_undefined(patrolState))
+								{
+									isPacketHandled = global.NetworkRegionObjectHandlerRef.HandleRegionPatrolState(patrolState);
+								}
+							} break;
 							default:
 							{
 								if (messageType < MESSAGE_TYPE.ENUM_LENGTH)

@@ -1,6 +1,7 @@
 function NetworkRegionObjectHandler() constructor
 {
 	active_inventory_stream = undefined;
+	local_patrols = ds_list_create();
 	
 	static ValidateRegionContainers = function()
 	{
@@ -23,5 +24,78 @@ function NetworkRegionObjectHandler() constructor
 			}
 		}
 		return isContainersValid;
+	}
+	
+	static GetPatrolById = function(_patrolId)
+	{
+		var foundPatrol = undefined;
+		var patrolCount = ds_list_size(local_patrols);
+		for (var i = 0; i < patrolCount; i++)
+		{
+			var patrol = local_patrols[| i];
+			if (!is_undefined(patrol))
+			{
+				// DON'T SPAWN PATROLS ON QUEUE
+				if (patrol.patrol_id == _patrolId)
+				{
+					if (instance_exists(patrol.instance_ref))
+					{
+						foundPatrol = patrol;
+					} else {
+						// DELETE EXPIRED PATROL DATA
+						ds_list_delete(local_patrols, i);
+					}
+					break;
+				}
+			}
+		}
+		return foundPatrol;
+	}
+	
+	static SpawnPatrol = function(_patrol)
+	{
+		var isPatrolSpawned = false;
+		var banditInstance = instance_create_layer(0, 0, LAYER_CHARACTERS, objBandit);
+		banditInstance.patrolId = _patrol.patrol_id;
+		banditInstance.patrolPathPercent = _patrol.route_progress;
+		_patrol.instance_ref = banditInstance;
+		ds_list_add(local_patrols, _patrol);
+		return isPatrolSpawned;
+	}
+	
+	static HandleRegionPatrolState = function(_patrolState)
+	{
+		var isPatrolStateHandled = false;
+		if (_patrolState.region_id == global.NetworkRegionHandlerRef.region_id)
+		{
+			switch (_patrolState.ai_state)
+			{
+				case AI_STATE.PATROL:
+				{
+					var patrol = new Patrol(_patrolState.patrol_id, _patrolState.ai_state, 0, 0);
+					isPatrolStateHandled = SyncRegionPatrols([patrol]);
+				} break;
+				case AI_STATE.PATROL_END:
+				{
+					var patrolCount = ds_list_size(local_patrols);
+					for (var i = 0; i < patrolCount; ++i;)
+					{
+						var patrol = local_patrols[| i];
+						var banditInstance = patrol.instance_ref;
+						if (instance_exists(banditInstance))
+						{
+							if (banditInstance.patrolId == _patrolState.patrol_id)
+							{
+								instance_destroy(banditInstance);
+								ds_list_delete(local_patrols, i);
+								break;
+							}
+						}
+					}
+					isPatrolStateHandled = true;
+				} break;
+			}
+		}
+		return isPatrolStateHandled;
 	}
 }
