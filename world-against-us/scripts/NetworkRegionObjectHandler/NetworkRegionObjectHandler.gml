@@ -26,6 +26,37 @@ function NetworkRegionObjectHandler() constructor
 		return isContainersValid;
 	}
 	
+	static OnRoomEnd = function()
+	{
+		var patrolCount = ds_list_size(local_patrols);
+		for (var i = 0; i < patrolCount; ++i;)
+		{
+			var banditInstance = local_patrols[| i];
+			if (instance_exists(banditInstance))
+			{
+				switch (banditInstance.aiState)
+				{
+					case AI_STATE.CHASE:
+					{
+						// BROADCAST PATROL STATUS RESET IF TARGET IS LOCAL PLAYER
+						if (banditInstance.targetInstance == global.InstancePlayer)
+						{
+							BroadcastPatrolState(banditInstance.patrolId, AI_STATE.PATROL);
+						}
+					} break;
+					case AI_STATE.PATROL_RESUME:
+					{
+						// BROADCAST PATROL STATUS RESET IF PATROL IS RESUMING
+						BroadcastPatrolState(banditInstance.patrolId, AI_STATE.PATROL);
+					} break;
+				}
+			}
+		}
+		
+		// CLEAR LOCAL PATROLS
+		ds_list_clear(local_patrols);
+	}
+	
 	static SyncRegionPatrols = function (_patrols)
 	{
 		// TODO: Check for existing patrols with same ID and sync their state / location

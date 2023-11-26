@@ -115,6 +115,10 @@ function NetworkHandler() constructor
 				room_goto(roomMainMenu);
 			}
 		}
+	
+	static OnRoomEnd = function()
+	{
+		network_region_handler.OnRoomEnd();
 	}
 	
 	static Update = function()

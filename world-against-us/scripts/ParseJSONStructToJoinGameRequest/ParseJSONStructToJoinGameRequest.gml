@@ -10,7 +10,7 @@ function ParseJSONStructToJoinGameRequest(_jsonStruct)
 		parsedJoinGameRequest = new NetworkJoinGameRequest(
 			requestStruct[$ "instance_id"] ?? undefined,
 			requestStruct[$ "room_index"] ?? undefined,
-			requestStruct[$ "owner_client"] ?? undefined
+			requestStruct[$ "owner_client"] ?? UNDEFINED_UUID
 		);
 	} catch (error)
 	{

@@ -26,8 +26,8 @@ if (global.MultiplayerMode)
 			draw_text(global.GUIW - 20, 50, string("{0} :Region ID", global.NetworkRegionHandlerRef.region_id ?? "Unknown"));
 			draw_text(global.GUIW - 20, 70, string("{0} :Prev region ID", global.NetworkRegionHandlerRef.prev_region_id ?? "Unknown"));
 			draw_text(global.GUIW - 20, 90, string("{0} :Room index", global.NetworkRegionHandlerRef.room_index ?? "Unknown"));
-			var ownerClientID = (global.NetworkRegionHandlerRef.owner_client ?? "Unknown");
-			draw_text(global.GUIW - 20, 1100, string("{0} :Region Owner", (global.NetworkHandlerRef.client_id == ownerClientID) ? "Self" : "Other"));
+			var ownerClientID = (global.NetworkRegionHandlerRef.owner_client == UNDEFINED_UUID) ? "Unknown" : global.NetworkRegionHandlerRef.owner_client;
+			draw_text(global.GUIW - 20, 110, string("{0} :Region Owner", (global.NetworkHandlerRef.client_id == ownerClientID) ? "Self" : ownerClientID));
 		}
 	}
 }
