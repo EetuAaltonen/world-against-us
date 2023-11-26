@@ -18,13 +18,17 @@ if (room == roomMainMenu)
 		}
 	}
 } else {
-	if (room == roomLoadResources)
+	if (global.MultiplayerMode)
 	{
-		if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.CONNECTED_SAVE_SELECTED)
+		if (room == roomLoadResources)
 		{
-			global.NetworkHandlerRef.RequestJoinGame();
+			if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.CONNECTED_SAVE_SELECTED)
+			{
+				global.NetworkHandlerRef.RequestJoinGame();
+			}
+		} else {
+			// ON ALL IN-GAME ROOMS
+			networkHandler.OnRoomStart();
 		}
-	} else {
-		networkHandler.OnRoomStart();
 	}
 }

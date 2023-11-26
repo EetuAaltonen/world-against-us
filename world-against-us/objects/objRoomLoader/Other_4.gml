@@ -4,6 +4,9 @@ var controllerCount = array_length(controllers);
 show_debug_message(EMPTY_STRING);
 show_debug_message(string("**Loading controllers for '{0}'**", room_get_name(room)));
 
+// RESET DEBUGMODE ON ROOM START
+global.DEBUGMODE = false;
+
 for (var i = 0; i < controllerCount; i++)
 {
 	var controller = controllers[@ i];
