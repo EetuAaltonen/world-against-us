@@ -52,6 +52,16 @@ function NetworkPacketHandler() constructor
 									isPacketHandled = global.WorldStateHandlerRef.SetWeather(networkWorldStateWeather);
 								}
 							} break;
+							case MESSAGE_TYPE.SYNC_INSTANCE:
+							{
+								var region = payload;
+								if (!is_undefined(region))
+								{
+									global.NetworkRegionHandlerRef.owner_client = region.owner_client;
+									global.NetworkRegionObjectHandlerRef.SyncRegionPatrols(region.arrived_patrols);
+								}
+								isPacketHandled = true;
+							} break;
 							case MESSAGE_TYPE.REQUEST_PLAYER_LIST:
 							{
 								var playerList = payload;

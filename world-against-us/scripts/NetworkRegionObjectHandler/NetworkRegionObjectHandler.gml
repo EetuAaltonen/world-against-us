@@ -26,6 +26,30 @@ function NetworkRegionObjectHandler() constructor
 		return isContainersValid;
 	}
 	
+	static SyncRegionPatrols = function (_patrols)
+	{
+		// TODO: Check for existing patrols with same ID and sync their state / location
+		var patrolCount = array_length(_patrols);
+		for (var i = 0; i < patrolCount; i++)
+		{
+			var patrol = _patrols[@ i];
+			if (!is_undefined(patrol))
+			{
+				// DON'T SPAWN PATROLS ON QUEUE
+				if (patrol.ai_state != AI_STATE.QUEUE && patrol.travel_time <= 0)
+				{
+					var existingPatrol = GetPatrolById(patrol.patrol_id);
+					if (!is_undefined(existingPatrol))
+					{
+						existingPatrol.Sync(patrol);
+					} else {
+						SpawnPatrol(patrol);	
+					}
+				}
+			}
+		}
+	}
+	
 	static GetPatrolById = function(_patrolId)
 	{
 		var foundPatrol = undefined;

@@ -56,6 +56,15 @@ function NetworkPacketParser() constructor
 				{
 					parsedPayload = buffer_read(_msg, buffer_u8);
 				} break;
+				case MESSAGE_TYPE.SYNC_INSTANCE:
+				{
+					var payloadString = buffer_read(_msg, buffer_string);
+					var parsedStruct = json_parse(payloadString);
+					if (parsedStruct != EMPTY_STRUCT)
+					{
+						parsedPayload = ParseJSONStructToRegion(parsedStruct);
+					}
+				} break;
 				case MESSAGE_TYPE.REQUEST_PLAYER_LIST:
 				{
 					var payloadString = buffer_read(_msg, buffer_string);
