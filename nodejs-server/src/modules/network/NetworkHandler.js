@@ -256,6 +256,21 @@ export default class NetworkHandler {
     return isWeatherBroadcasted;
   }
 
+  broadcastPatrolState(instanceId, patrolState) {
+    let isStateBroadcasted = false;
+    const networkBuffer = this.networkPacketBuilder.createPacket(
+      MESSAGE_TYPE.PATROL_STATE,
+      UNDEFINED_UUID,
+      -1,
+      patrolState
+    );
+    const clientsInInstance = this.clientHandler
+      .getAllClients()
+      .filter((client) => client.instanceId === instanceId);
+    isStateBroadcasted = this.broadcast(networkBuffer, clientsInInstance);
+    return isStateBroadcasted;
+  }
+
   broadcast(networkBuffer, clients) {
     let isBroadcasted = false;
     if (networkBuffer !== undefined) {

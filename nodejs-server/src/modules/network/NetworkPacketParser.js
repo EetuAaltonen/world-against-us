@@ -9,6 +9,7 @@ import WorldMapFastTravelPoint from "../world_map/WorldMapFastTravelInfo.js";
 import NetworkInventoryStream from "../network_inventory_stream/NetworkInventoryStream.js";
 import NetworkInventoryStreamItems from "../network_inventory_stream/NetworkInventoryStreamItems.js";
 import ContainerInventoryActionInfo from "../containers/ContainerInventoryActionInfo.js";
+import PatrolState from "../patrols/PatrolState.js";
 
 import ParseJSONObjectsToArray from "../json/ParseJSONObjectsToArray.js";
 import ParseJSONObjectToItemReplica from "../items/ParseJSONObjectToItemReplica.js";
@@ -186,6 +187,21 @@ export default class NetworkPacketParser {
                 undefined,
                 undefined,
                 undefined
+              );
+            }
+            break;
+          case MESSAGE_TYPE.PATROL_STATE:
+            {
+              let offset = 0;
+              const parsedInstanceId = msg.readUInt8(offset);
+              offset += BITWISE.BIT32;
+              const parsedPatrolId = msg.readUInt8(offset);
+              offset += BITWISE.BIT8;
+              const parsedAIState = msg.readUInt8(offset);
+              payload = new PatrolState(
+                parsedInstanceId,
+                parsedPatrolId,
+                parsedAIState
               );
             }
             break;

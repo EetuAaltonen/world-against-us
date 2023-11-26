@@ -57,7 +57,7 @@ export default class NetworkPacketBuilder {
         case MESSAGE_TYPE.SYNC_WORLD_STATE_WEATHER:
           {
             const bufferWeather = Buffer.allocUnsafe(BITWISE.BIT8);
-            bufferWeather.writeInt8(payload);
+            bufferWeather.writeUInt8(payload);
             this.payloadBuffer = bufferWeather;
             isPacketPayloadWritten = true;
           }
@@ -92,6 +92,21 @@ export default class NetworkPacketBuilder {
               bufferContainerInfo,
               bufferContainerId,
             ]);
+            isPacketPayloadWritten = true;
+          }
+          break;
+        case MESSAGE_TYPE.PATROL_STATE:
+          {
+            const bufferPatrol = Buffer.allocUnsafe(
+              BITWISE.BIT32 + BITWISE.BIT8 + BITWISE.BIT8
+            );
+            bufferPatrol.writeUInt32LE(payload.instanceId, 0);
+            bufferPatrol.writeUInt8(payload.patrolId, BITWISE.BIT32);
+            bufferPatrol.writeUInt8(
+              payload.aiState,
+              BITWISE.BIT32 + BITWISE.BIT8
+            );
+            this.payloadBuffer = bufferPatrol;
             isPacketPayloadWritten = true;
           }
           break;
