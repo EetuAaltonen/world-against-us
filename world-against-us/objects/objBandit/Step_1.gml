@@ -1,8 +1,9 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
-if (aiState == AI_STATE.QUEUE)
+if (initPath)
 {
+	initPath = false;
 	if (is_undefined(patrolPath))
 	{
 		var pathLayerId = layer_get_id(LAYER_PATH_PATROL);
@@ -20,18 +21,35 @@ if (aiState == AI_STATE.QUEUE)
 				} break;*/
 			}
 		}
+	}
 	
-		if (!is_undefined(patrolPath))
+	if (!is_undefined(patrolPath))
+	{
+		targetPath = patrolPath;
+		switch (aiState)
 		{
-			// START PATROLLING
-			targetPath = patrolPath;
-			// START PATROLLING
-			path_start(targetPath, maxSpeed, path_action_stop, true);
-			aiState = AI_STATE.PATROL;
-		} else {
-			// TODO: Proper error handling
-			show_message(string("No patrol path found at {0}", room_get_name(room)));
-			instance_destroy();	
+			case AI_STATE.QUEUE:
+			{
+				// NO START PATROLLING
+				aiState = AI_STATE.PATROL;
+				path_start(targetPath, maxSpeed, path_action_stop, true);
+				path_position = max(0, patrolPathPercent);
+			} break;
+			case AI_STATE.PATROL:
+			{
+				path_start(targetPath, maxSpeed, path_action_stop, true);
+				path_position = max(0, patrolPathPercent);
+			} break;
+			case AI_STATE.PATROL_RESUME:
+			{
+				// TODO: Sync current location without path_start call
+				// Because it would teleport him straight onto path
+				// and doesn't keep the resume path
+			} break;
 		}
+	} else {
+		// TODO: Proper error handling
+		show_message(string("No patrol path found at {0}", room_get_name(room)));
+		instance_destroy();	
 	}
 }

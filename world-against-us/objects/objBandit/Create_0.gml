@@ -6,11 +6,13 @@ character = new Character("Bandit", CHARACTER_TYPE.Human, CHARACTER_RACE.humanoi
 maxSpeed = 5;
 
 // AI
+patrolId = undefined;
 aiState = AI_STATE.QUEUE;
+initPath = true;
 
 // PATH
 patrolPath = undefined;
-patrolPathPercent = undefined;
+patrolPathPercent = -1;
 patrolPathLastPosition = undefined;
 pathToTarget = path_add();
 chasePathUpdateInterval = TimerFromSeconds(0.5);

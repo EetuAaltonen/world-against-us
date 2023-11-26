@@ -14,6 +14,10 @@ var checkChaseCondition = function()
 				if (!nearestTarget.character.is_dead)
 				{
 					aiState = AI_STATE.CHASE;
+					
+					// NETWORKING
+					BroadcastPatrolState(patrolId, aiState);
+					
 					// CACHE CURRENT PATROL STEP
 					if (targetPath == patrolPath)
 					{
@@ -41,6 +45,9 @@ var resumePatrolling = function()
 	targetInstance = noone;
 	targetPath = undefined;
 	
+	// NETWORKING
+	BroadcastPatrolState(patrolId, aiState);
+	
 	// CLEAR CHASE PATH POINTS
 	path_clear_points(pathToTarget);
 	
@@ -50,15 +57,17 @@ var resumePatrolling = function()
 
 var continuePatrolling = function()
 {
-	show_debug_message("continuePatrolling");
 	// CONTINUE PATROLLING
 	aiState = AI_STATE.PATROL;
 	targetPath = patrolPath;
 	path_start(targetPath, maxSpeed, path_action_stop, true);
-	if (!is_undefined(patrolPathPercent)) { path_position = patrolPathPercent; }
+	path_position = max(0, patrolPathPercent);
+	
+	// NETWORKING
+	BroadcastPatrolState(patrolId, aiState);
 
 	// CLEAR PATROL CACHE
-	patrolPathPercent = undefined;
+	patrolPathPercent = -1;
 	patrolPathLastPosition = undefined;
 }
 
