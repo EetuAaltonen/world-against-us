@@ -66,7 +66,7 @@ function NetworkPacketTracker() constructor
 						lastAcknowledgmentNetworkPacket.acknowledgment_attempt++;
 						if (global.NetworkHandlerRef.AddPacketToQueue(lastAcknowledgmentNetworkPacket))
 						{
-							show_debug_message("Resending acknowledgment {0}", lastAcknowledgmentNetworkPacket.header.acknowledgment_id);
+							show_debug_message("Resending acknowledgment {0} with message type {1}", lastAcknowledgmentNetworkPacket.header.acknowledgment_id, lastAcknowledgmentNetworkPacket.header.message_type);
 							acknowledgment_timeout_timer.StartTimer();
 						} else {
 							show_debug_message("Failed to resend acknowledgment {0}", lastAcknowledgmentNetworkPacket.header.acknowledgment_id);

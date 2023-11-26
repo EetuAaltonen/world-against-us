@@ -106,6 +106,7 @@ function NetworkHandler() constructor
 	
 	static OnRoomStart = function()
 	{
+		// VALIDATE CONTAINERS
 		if (!network_region_handler.network_region_object_handler.ValidateRegionContainers())
 		{
 			show_message("Error occured during OnRoomStart");
@@ -115,6 +116,18 @@ function NetworkHandler() constructor
 				room_goto(roomMainMenu);
 			}
 		}
+		
+		// REQUEST REGION SYNC
+		var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.SYNC_INSTANCE);
+		var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
+		if (network_packet_tracker.SetNetworkPacketAcknowledgment(networkPacket))
+		{
+			if (!AddPacketToQueue(networkPacket))
+			{
+				show_debug_message("Failed to add 'sync instance' packet to queue");
+			}
+		}
+	}
 	
 	static OnRoomEnd = function()
 	{
@@ -240,10 +253,10 @@ function NetworkHandler() constructor
 						{
 							if (network_packet_handler.HandlePacket(networkPacket))
 							{
+								var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.SYNC_WORLD_STATE);
+								var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 								if (network_packet_tracker.SetNetworkPacketAcknowledgment(networkPacket))
 								{
-									var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.SYNC_WORLD_STATE);
-									var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 									if (AddPacketToQueue(networkPacket))
 									{
 										network_status = NETWORK_STATUS.SYNC_WORLD_STATE;
@@ -259,17 +272,14 @@ function NetworkHandler() constructor
 						{
 							if (network_packet_handler.HandlePacket(networkPacket))
 							{
+								var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DATA_PLAYER_SYNC);
+								var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
 								if (network_packet_tracker.SetNetworkPacketAcknowledgment(networkPacket))
 								{
-									var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DATA_PLAYER_SYNC);
-									var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-									if (network_packet_tracker.SetNetworkPacketAcknowledgment(networkPacket))
+									if (AddPacketToQueue(networkPacket))
 									{
-										if (AddPacketToQueue(networkPacket))
-										{
-											network_status = NETWORK_STATUS.SYNC_DATA;
-											isMessageHandled = true;
-										}
+										network_status = NETWORK_STATUS.SYNC_DATA;
+										isMessageHandled = true;
 									}
 								}
 							}
