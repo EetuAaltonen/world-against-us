@@ -1,7 +1,7 @@
 import FormatItemReplicasToJSONObjectArray from "../items/FormatItemReplicasToJSONObjectArray.js";
 
 export default class Inventory {
-  constructor(inventoryId, type) {
+  constructor(inventoryId) {
     this.inventoryId = inventoryId;
     this.items = {};
   }

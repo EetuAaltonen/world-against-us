@@ -10,7 +10,7 @@ const SERVER_SAVE_FILE_PATH = `${SERVER_APPDATA_PATH}/worlds`;
 const GAME_SAVE_NAME = "test";
 const GAME_SAVE_FILE_PATH = `${SERVER_SAVE_FILE_PATH}/${GAME_SAVE_NAME}/`;
 const GAME_SAVE_FILE_NAME = `${GAME_SAVE_NAME}_save.json`;
-const AUTOSAVE_TIME_SECONDS = 99999999999999; // 10 minutes
+const AUTOSAVE_TIME_SECONDS = 600; // Time in seconds == 10min
 
 export default class WorldStateHandler {
   constructor(networkHandler, instanceHandler) {
@@ -43,15 +43,16 @@ export default class WorldStateHandler {
   }
 
   update(passedTickTime) {
-    let isUpdated = true;
+    let isUpdated = false;
     // Update date time
-    isUpdated = this.dateTime.update(passedTickTime);
-    // Check autosave
-    this.autoSaveTimer += passedTickTime * 0.001;
-    if (this.autoSaveTimer >= AUTOSAVE_TIME_SECONDS) {
-      this.autoSaveTimer -= AUTOSAVE_TIME_SECONDS;
-      if (!this.autosave()) {
-        isUpdated = false;
+    if (this.dateTime.update(passedTickTime)) {
+      // Check autosave
+      this.autoSaveTimer += passedTickTime * 0.001;
+      if (this.autoSaveTimer >= AUTOSAVE_TIME_SECONDS) {
+        this.autoSaveTimer -= AUTOSAVE_TIME_SECONDS;
+        if (!this.autosave()) {
+          isUpdated = false;
+        }
       }
     }
     return isUpdated;

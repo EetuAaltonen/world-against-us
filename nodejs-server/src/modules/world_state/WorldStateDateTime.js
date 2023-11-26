@@ -58,8 +58,6 @@ export default class WorldStateDateTime {
             }
           }
         }
-        // TODO: Console log world time for debugging
-        //console.log(this.timeToString());
       }
     }
     return isTimeUpdated;
