@@ -57,7 +57,6 @@ export default class NetworkPacketHandler {
           case MESSAGE_TYPE.DATA_PLAYER_SYNC:
             {
               // TODO: Sync player data within the instance
-
               const networkBuffer = this.networkPacketBuilder.createPacket(
                 MESSAGE_TYPE.DATA_PLAYER_SYNC,
                 client.uuid,
@@ -76,8 +75,30 @@ export default class NetworkPacketHandler {
               }
             }
             break;
+          case MESSAGE_TYPE.SYNC_INSTANCE:
+            {
+              const formatInstance = instance.toJSONObject();
+              const networkBuffer = this.networkPacketBuilder.createPacket(
+                MESSAGE_TYPE.SYNC_INSTANCE,
+                client.uuid,
+                acknowledgmentId,
+                formatInstance
+              );
+              if (networkBuffer !== undefined) {
+                this.networkHandler.packetQueue.enqueue(
+                  new NetworkQueueEntry(
+                    networkBuffer,
+                    [client],
+                    PACKET_PRIORITY.HIGH
+                  )
+                );
+                isPacketHandled = true;
+              }
+            }
+            break;
           case MESSAGE_TYPE.DATA_PLAYER_POSITION:
             {
+              // TODO: Sync player position
               isPacketHandled = true;
             }
             break;
@@ -521,6 +542,36 @@ export default class NetworkPacketHandler {
                       isPacketHandled = true;
                     }
                   }
+                }
+              }
+            }
+            break;
+          case MESSAGE_TYPE.PATROL_STATE:
+            {
+              const patrolState = networkPacket.payload;
+              if (patrolState !== undefined) {
+                if (patrolState.instanceId === instance.instanceId) {
+                  if (instance.handlePatrolState(patrolState)) {
+                    // TODO: Fix patrol acknowledgments
+                    /*
+                    const networkBuffer = this.networkPacketBuilder.createPacket(
+                      MESSAGE_TYPE.PATROL_STATE,
+                      client.uuid,
+                      acknowledgmentId,
+                      patrolState
+                    );
+                    if (networkBuffer !== undefined) {
+                      this.networkHandler.packetQueue.enqueue(
+                        new NetworkQueueEntry(
+                          networkBuffer,
+                          [client],
+                          PACKET_PRIORITY.DEFAULT
+                        )
+                      );
+                    }
+                    */
+                  }
+                  isPacketHandled = true;
                 }
               }
             }
