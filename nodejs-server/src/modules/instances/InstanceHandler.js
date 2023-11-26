@@ -5,7 +5,8 @@ import Instance from "./Instance.js";
 const CAMP_STORAGE_CONTAINER_ID = "camp_storage_container";
 
 export default class InstanceHandler {
-  constructor() {
+  constructor(networkHandler) {
+    this.networkHandler = networkHandler;
     this.instances = {};
     this.campId = 0;
     this.nextInstanceId = 1;
@@ -15,7 +16,11 @@ export default class InstanceHandler {
 
   createDefaultCampInstance() {
     let isInstanceCreated = true;
-    const campInstance = new Instance(ROOM_INDEX.ROOM_CAMP);
+    const campInstance = new Instance(
+      this.campId,
+      ROOM_INDEX.ROOM_CAMP,
+      this.networkHandler
+    );
     campInstance.containerHandler.initContainer(CAMP_STORAGE_CONTAINER_ID);
     this.instances[this.campId] = campInstance;
     return isInstanceCreated;
@@ -35,7 +40,11 @@ export default class InstanceHandler {
   createInstance(roomIndex) {
     let createdInstanceId;
     if (this.isRoomIndexValid(roomIndex)) {
-      const createdInstance = new Instance(roomIndex);
+      const createdInstance = new Instance(
+        this.nextInstanceId,
+        roomIndex,
+        this.networkHandler
+      );
       createdInstanceId = this.nextInstanceId;
       this.instances[createdInstanceId] = createdInstance;
       this.nextInstanceId++;
@@ -49,6 +58,19 @@ export default class InstanceHandler {
 
   getInstanceIds() {
     return Object.keys(this.instances);
+  }
+
+  update(passedTickTime) {
+    let isUpdated = true;
+    this.getInstanceIds().forEach((instanceId) => {
+      const instance = this.getInstance(instanceId);
+      if (instance !== undefined) {
+        if (!instance.update(passedTickTime)) {
+          isUpdated = false;
+        }
+      }
+    });
+    return isUpdated;
   }
 
   isRoomIndexValid(roomIndex) {

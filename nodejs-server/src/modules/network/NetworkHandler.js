@@ -27,7 +27,7 @@ export default class NetworkHandler {
     this.networkPacketParser = new NetworkPacketParser();
     this.networkPacketBuilder = new NetworkPacketBuilder();
     this.clientHandler = new ClientHandler();
-    this.instanceHandler = new InstanceHandler();
+    this.instanceHandler = new InstanceHandler(this);
     this.worldStateHandler = new WorldStateHandler(this, this.instanceHandler);
     this.networkPacketHandler = new NetworkPacketHandler(
       this,
@@ -72,6 +72,8 @@ export default class NetworkHandler {
 
       // Update world state
       this.worldStateHandler.update(tickTime);
+      // Update instances
+      this.instanceHandler.update(tickTime);
 
       return setTimeout(() => {
         this.tick();
