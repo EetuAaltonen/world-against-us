@@ -45,6 +45,8 @@ randomise();
 #macro LAYER_CONTROLLERS_FRONT "Controllers_Front"
 #macro LAYER_CONTROLLERS_ALL_FRONT "Controllers_All_Front"
 
+#macro LAYER_CHARACTERS "Characters"
+
 #macro LAYER_HIGHLIGHT_INTERACTABLE "HighlightedInteractable"
 #macro LAYER_HIGHLIGHT_TARGET "HighlightedTarget"
 
