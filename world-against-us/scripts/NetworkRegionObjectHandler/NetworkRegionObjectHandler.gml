@@ -59,6 +59,7 @@ function NetworkRegionObjectHandler() constructor
 	
 	static SyncRegionPatrols = function (_patrols)
 	{
+		var isPatrolSync = true;
 		// TODO: Check for existing patrols with same ID and sync their state / location
 		var patrolCount = array_length(_patrols);
 		for (var i = 0; i < patrolCount; i++)
@@ -74,11 +75,12 @@ function NetworkRegionObjectHandler() constructor
 					{
 						existingPatrol.Sync(patrol);
 					} else {
-						SpawnPatrol(patrol);	
+						SpawnPatrol(patrol);
 					}
 				}
 			}
 		}
+		return isPatrolSync;
 	}
 	
 	static GetPatrolById = function(_patrolId)
