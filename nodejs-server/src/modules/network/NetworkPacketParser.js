@@ -3,8 +3,8 @@ import MESSAGE_TYPE from "./MessageType.js";
 
 import Vector2 from "../math/Vector2.js";
 import GridIndex from "../inventory/GridIndex.js";
-import NetworkPacket from "./NetworkPacket.js";
-import NetworkPacketHeader from "./NetworkPacketHeader.js";
+import NetworkPacket from "../network_packets/NetworkPacket.js";
+import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
 import WorldMapFastTravelPoint from "../world_map/WorldMapFastTravelInfo.js";
 import NetworkInventoryStream from "../network_inventory_stream/NetworkInventoryStream.js";
 import NetworkInventoryStreamItems from "../network_inventory_stream/NetworkInventoryStreamItems.js";
@@ -18,27 +18,22 @@ export default class NetworkPacketParser {
   constructor() {}
 
   parsePacket(msg) {
-    const messageType = msg.readUInt8(0);
-    const clientId = msg.toString(
-      "utf8",
-      BITWISE.BIT8,
-      BITWISE.BIT8 + BITWISE.ID_LENGTH
-    );
-    const acknowledgmentId = msg.readInt8(BITWISE.BIT8 + BITWISE.ID_LENGTH);
-    const header = new NetworkPacketHeader(
-      messageType,
-      clientId,
-      acknowledgmentId
-    );
+    let offset = 0;
+    const messageType = msg.readUInt8(offset);
+    offset += BITWISE.BIT8;
+    const clientId = msg.toString("utf8", offset, offset + BITWISE.ID_LENGTH);
+    offset += BITWISE.ID_LENGTH;
+    const sequenceNumber = msg.readInt8(offset);
+    offset += BITWISE.BIT8;
+    const acknowledgmentId = msg.readInt8(offset);
+    offset += BITWISE.BIT8;
+    const header = new NetworkPacketHeader(messageType, clientId);
+    header.sequenceNumber = sequenceNumber;
+    header.acknowledgmentId = acknowledgmentId;
     // Slice header from buffer
-    msg = msg.slice(
-      BITWISE.ID_LENGTH + // Client ID
-        BITWISE.BIT8 + // Message type
-        BITWISE.BIT8 // Acknowledgment ID
-    );
+    msg = msg.slice(offset);
     const payload = this.parsePayload(messageType, msg);
     const networkPacket = new NetworkPacket(header, payload);
-
     return networkPacket;
   }
 
