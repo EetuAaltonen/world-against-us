@@ -14,7 +14,6 @@ export default class Patrol {
   }
 
   toJSONObject() {
-    console.log(1 - this.routeTime / this.totalRouteTime);
     var formatScaledRouteProgress = Math.round(
       (1 - this.routeTime / this.totalRouteTime) * 1000
     );

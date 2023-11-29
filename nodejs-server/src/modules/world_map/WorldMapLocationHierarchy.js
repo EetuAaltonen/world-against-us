@@ -3,6 +3,7 @@ export default {
   roomTown: {
     roomOffice: {},
     roomLibrary: {},
+    roomMarket: {},
   },
   roomForest: {},
 };
