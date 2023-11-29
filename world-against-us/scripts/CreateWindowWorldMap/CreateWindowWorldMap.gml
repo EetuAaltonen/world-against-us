@@ -131,25 +131,25 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 		if (global.MultiplayerMode)
 		{
 			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_INSTANCE_LIST);
-			var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-			
-			if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+			var networkPacket = new NetworkPacket(
+				networkPacketHeader,
+				undefined, PACKET_PRIORITY.DEFAULT,
+				AckTimeoutFuncResend
+			);
+			if (global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 			{
-				if (global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+				// SHOW INSTANCE LIST LOADING ICON
+				var worldMapWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.WorldMap);
+				if (!is_undefined(worldMapWindow))
 				{
-					// SHOW INSTANCE LIST LOADING ICON
-					var worldMapWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.WorldMap);
-					if (!is_undefined(worldMapWindow))
+					var instanceListLoadingElement = worldMapWindow.GetChildElementById("InstanceListLoading");
+					if (!is_undefined(instanceListLoadingElement))
 					{
-						var instanceListLoadingElement = worldMapWindow.GetChildElementById("InstanceListLoading");
-						if (!is_undefined(instanceListLoadingElement))
-						{
-							instanceListLoadingElement.isVisible = true;
-						}
+						instanceListLoadingElement.isVisible = true;
 					}
-				} else {
-					show_debug_message("Failed to request instance list");
 				}
+			} else {
+				show_debug_message("Failed to request instance list");
 			}
 		}
 	}

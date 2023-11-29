@@ -17,13 +17,15 @@ function InteractionFuncFastTravelSpotRequest(_sourceRegionId, _destionationRegi
 			// REQUEST FAST TRAVEL
 			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_FAST_TRAVEL);
 			var fastTravelInfo = new WorldMapFastTravelInfo(_sourceRegionId, _destionationRegionId, _roomIndex);
-			var networkPacket = new NetworkPacket(networkPacketHeader, fastTravelInfo);
-			if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+			var networkPacket = new NetworkPacket(
+				networkPacketHeader,
+				fastTravelInfo,
+				PACKET_PRIORITY.DEFAULT,
+				AckTimeoutFuncResend
+			);
+			if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 			{
-				if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-				{
-					show_debug_message("Failed to request fast travel");
-				}
+				show_debug_message("Failed to request fast travel");
 			}
 		}
 	}

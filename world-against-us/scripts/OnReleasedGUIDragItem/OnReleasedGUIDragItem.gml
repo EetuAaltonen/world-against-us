@@ -20,13 +20,15 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 						{
 							var containerInventoryActionInfo = new ContainerInventoryActionInfo(_inventory.inventory_id, undefined, undefined, undefined, undefined, droppedItem);
 							var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_ADD_ITEM);
-							var networkPacket = new NetworkPacket(networkPacketHeader, containerInventoryActionInfo.ToJSONStruct());
-							if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+							var networkPacket = new NetworkPacket(
+								networkPacketHeader,
+								containerInventoryActionInfo.ToJSONStruct(),
+								PACKET_PRIORITY.DEFAULT,
+								AckTimeoutFuncResend
+							);
+							if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 							{
-								if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-								{
-									show_debug_message("Failed to add item to container inventory");
-								}
+								show_debug_message("Failed to add item to container inventory");
 							}
 						}
 					}

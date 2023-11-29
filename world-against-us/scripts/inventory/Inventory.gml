@@ -418,13 +418,15 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 						// CONTAINER INVENTORY IDENTIFY ITEM
 						var containerInventoryActionInfo = new ContainerInventoryActionInfo(inventory_id, item.grid_index, undefined, undefined, item.is_known, undefined);
 						var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM);
-						var networkPacket = new NetworkPacket(networkPacketHeader, containerInventoryActionInfo);
-						if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+						var networkPacket = new NetworkPacket(
+							networkPacketHeader,
+							containerInventoryActionInfo,
+							PACKET_PRIORITY.DEFAULT,
+							AckTimeoutFuncResend
+						);
+						if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 						{
-							if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-							{
-								show_debug_message("Failed to identify inventory item in container");
-							}
+							show_debug_message("Failed to identify inventory item in container");
 						}
 					}
 				}

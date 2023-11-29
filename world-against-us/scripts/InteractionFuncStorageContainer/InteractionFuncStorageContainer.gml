@@ -8,13 +8,15 @@ function InteractionFuncStorageContainer()
 			{
 				// REQUEST CONTAINER CONTENT
 				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT);
-				var networkPacket = new NetworkPacket(networkPacketHeader, containerId);
-				if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+				var networkPacket = new NetworkPacket(
+					networkPacketHeader,
+					containerId,
+					PACKET_PRIORITY.DEFAULT,
+					AckTimeoutFuncResend
+				);
+				if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 				{
-					if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-					{
-						show_debug_message("Failed to request container content");
-					}
+					show_debug_message("Failed to request container content");
 				}
 			}
 		}

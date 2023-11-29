@@ -11,12 +11,16 @@ function BroadcastPatrolState(_patrolId, _aiState)
 				var regionId = global.NetworkRegionHandlerRef.region_id;
 				var patrolState = new PatrolState(regionId, _patrolId, _aiState);
 				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PATROL_STATE);
-				var networkPacket = new NetworkPacket(networkPacketHeader, patrolState);
-				// TODO: Fix acknowledgments
-				//if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
-				//{
-					global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
-				//}
+				var networkPacket = new NetworkPacket(
+					networkPacketHeader,
+					patrolState,
+					PACKET_PRIORITY.DEFAULT,
+					AckTimeoutFuncResend
+				);
+				if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+				{
+					show_debug_message("Failed to queue patrol state update");
+				}
 			}
 		//}
 	}

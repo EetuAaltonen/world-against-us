@@ -78,23 +78,23 @@ function CreateWindowPlayerList(_gameWindowId, _zIndex)
 		if (global.MultiplayerMode)
 		{
 			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_PLAYER_LIST);
-			var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-			if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+			var networkPacket = new NetworkPacket(
+				networkPacketHeader,
+				undefined,
+				PACKET_PRIORITY.DEFAULT,
+				AckTimeoutFuncResend
+			);
+			if (global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 			{
-				if (global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+				// SHOW PLAYER LIST LOADING ICON
+				var playerListWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.PlayerList);
+				if (!is_undefined(playerListWindow))
 				{
-					// SHOW PLAYER LIST LOADING ICON
-					var playerListWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.PlayerList);
-					if (!is_undefined(playerListWindow))
+					var playerListLoadingElement = playerListWindow.GetChildElementById("PlayerListLoading");
+					if (!is_undefined(playerListLoadingElement))
 					{
-						var playerListLoadingElement = playerListWindow.GetChildElementById("PlayerListLoading");
-						if (!is_undefined(playerListLoadingElement))
-						{
-							playerListLoadingElement.isVisible = true;
-						}
+						playerListLoadingElement.isVisible = true;
 					}
-				} else {
-					show_debug_message("Failed to request player list");
 				}
 			}
 		}

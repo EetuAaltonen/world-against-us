@@ -76,13 +76,15 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 										{
 											var containerInventoryActionInfo = new ContainerInventoryActionInfo(inventory.inventory_id, itemGridIndex, undefined, newRotation, undefined, undefined);
 											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM);
-											var networkPacket = new NetworkPacket(networkPacketHeader, containerInventoryActionInfo);
-											if (global.NetworkPacketTrackerRef.SetNetworkPacketAcknowledgment(networkPacket))
+											var networkPacket = new NetworkPacket(
+												networkPacketHeader,
+												containerInventoryActionInfo,
+												PACKET_PRIORITY.DEFAULT,
+												AckTimeoutFuncResend
+											);
+											if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 											{
-												if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-												{
-													show_debug_message("Failed to rotate item in container inventory");
-												}
+												show_debug_message("Failed to rotate item in container inventory");
 											}
 										}
 									}
