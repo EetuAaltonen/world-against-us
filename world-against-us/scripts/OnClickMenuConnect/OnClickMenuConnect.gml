@@ -6,7 +6,7 @@ function OnClickMenuConnect()
 		{
 			var address = DEFAULT_HOST_ADDRESS;
 			var port = DEFAULT_HOST_PORT;
-			if (global.NetworkHandlerRef.ConnectSocket(address, port))
+			if (global.NetworkHandlerRef.RequestConnectSocket(address, port))
 			{
 				if (global.GUIStateHandlerRef.RequestGUIAction(GUI_ACTION.Connect, [GAME_WINDOW.MainMenuConnect]))
 				{

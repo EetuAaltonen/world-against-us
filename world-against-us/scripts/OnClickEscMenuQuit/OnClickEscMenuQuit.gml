@@ -1,4 +1,9 @@
 function OnClickEscMenuQuit()
 {
-	room_goto(roomMainMenu);
+	if (global.MultiplayerMode)
+	{
+		global.NetworkHandlerRef.RequestDisconnectSocket();
+	} else {
+		room_goto(roomMainMenu);
+	}
 }

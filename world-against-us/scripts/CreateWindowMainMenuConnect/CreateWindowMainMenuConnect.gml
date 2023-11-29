@@ -29,15 +29,10 @@ function CreateWindowMainMenuConnect(_gameWindowId, _zIndex, _address, _port)
 		// DISCONNECT FROM A HOST IF CONNECTING INTERRUPTED
 		if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.CONNECTING)
 		{
-			global.NetworkHandlerRef.DisconnectSocket();
-			if (!global.GUIStateHandlerRef.ResetGUIStateMainMenu())
-			{
-				show_debug_message("Failed to reset GUI state Main Menu");
-			}
+			global.NetworkHandlerRef.RequestDisconnectSocket();
 		}
 	}
 	multiplayerConnectWindow.OnClose = overrideOnClose;
-	
 	multiplayerConnectWindow.AddChildElements(multiplayerConnectElements);
 	return multiplayerConnectWindow;
 }
