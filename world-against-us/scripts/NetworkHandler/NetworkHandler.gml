@@ -8,6 +8,7 @@ function NetworkHandler() constructor
 	host_port = undefined;
 	
 	preAllocNetworkBuffer = undefined;
+	delete_socket_timer = new Timer(TimerFromMilliseconds(1000));
 	
 	network_packet_builder = new NetworkPacketBuilder();
 	network_packet_parser = new NetworkPacketParser();
@@ -17,64 +18,123 @@ function NetworkHandler() constructor
 	
 	network_region_handler = new NetworkRegionHandler();
 	
+	static Update = function()
+	{
+		if (delete_socket_timer.IsTimerStopped())
+		{
+			DeleteSocket();
+		} else {
+			delete_socket_timer.Update();
+			if (network_status == NETWORK_STATUS.CONNECTING || global.MultiplayerMode)
+			{
+				// Update network packet tracker
+				network_packet_tracker.Update();
+				if (ds_priority_size(network_packet_queue) > 0)
+				{
+					var networkPacket = ds_priority_find_min(network_packet_queue);
+					if (!is_undefined(networkPacket))
+					{
+						if (network_packet_tracker.PatchSequenceNumber(networkPacket))
+						{
+							if (network_packet_tracker.PatchAcknowledgmentId(networkPacket))
+							{
+								if (network_packet_builder.CreatePacket(preAllocNetworkBuffer, networkPacket))
+								{
+									var networkPacketSize = SendPacketOverUDP();
+									if (networkPacketSize > 0)
+									{
+										ds_priority_delete_min(network_packet_queue);
+									} else {
+										show_debug_message(string("Failed to send packet with message type {0} to in-flight queue", networkPacket.header.message_type));	
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			/*
+			// TODO: Move this logic elsewhere
+			// CHECK GAME OVER WINDOW
+			if (room != roomMainMenu && room != roomCamp && room != roomLoadResources)
+			{
+				if (!is_undefined(global.PlayerCharacter))
+				{
+					if (global.PlayerCharacter.is_dead)
+					{
+						// CHECK IF NOT IN FAST TRAVEL QUEUE
+						var fastTravelQueueWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.WorldMapFastTravelQueue);
+						if (is_undefined(fastTravelQueueWindow))
+						{
+							// CHECK IF NOT GAME OVER WINDOW SHOWING
+							var gameOverWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.GameOver);
+							if (is_undefined(gameOverWindow))
+							{
+								// DELETE ALL ITEMS
+								global.PlayerBackpack.ClearAllItems();
+							
+								// OPEN MAP
+								var guiState = new GUIState(
+									GUI_STATE.GameOver, undefined, undefined,
+									[GAME_WINDOW.GameOver], GUI_CHAIN_RULE.OverwriteAll,
+									undefined, undefined
+								);
+								if (global.GUIStateHandlerRef.RequestGUIState(guiState))
+								{
+									global.GameWindowHandlerRef.OpenWindowGroup([
+										CreateWindowGameOver(GAME_WINDOW.GameOver, -1)
+									]);
+								}
+							}
+						}
+					}
+				}
+			}*/
+		
+			// TODO: Time out pinging
+		}
+	}
+	
+	static SendPacketOverUDP = function()
+	{
+		var networkPacketSize = 0;
+		if (!is_undefined(socket))
+		{
+			// TODO: CALCULATE kbs
+			networkPacketSize = network_send_udp_raw(socket, host_address, host_port, preAllocNetworkBuffer, buffer_tell(preAllocNetworkBuffer));
+			show_debug_message(string("Sent network packet size: {0}kb", networkPacketSize * 0.001));
+		}
+		return networkPacketSize;
+	}
+	
 	static CreateSocket = function()
 	{
 		var isSocketCreated = false;
-		if (network_status == NETWORK_STATUS.OFFLINE)
+		if (network_status == NETWORK_STATUS.OFFLINE && is_undefined(socket))
 		{
-			if (!is_undefined(socket)) { DeleteSocket(); }
 			socket = network_create_socket(network_socket_udp);
 			preAllocNetworkBuffer = buffer_create(256, buffer_grow, 1);
 			isSocketCreated = true;
 		} else {
 			// TODO: Generic error handler
-			show_message("Client is already connected!");
+			show_message("Client is already connected or socket already exists!");
 		}
 		return isSocketCreated;
 	}
 	
-	static ConnectSocket = function(_address, _port)
+	static DeleteSocket = function()
 	{
-		var isConnecting = false;
-		if (!is_undefined(socket)) {
-			host_address = _address;
-			host_port = _port;
-			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONNECT_TO_HOST);
-			var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-			if (network_packet_tracker.SetNetworkPacketAcknowledgment(networkPacket))
-			{
-				if (AddPacketToQueue(networkPacket))
-				{
-					network_status = NETWORK_STATUS.CONNECTING;
-					isConnecting = true;
-				} else {
-					show_debug_message("Failed to connect socket");
-				}
-			}
-		}
-		return isConnecting;
-	}
-	
-	static DisconnectSocket = function()
-	{
-		// FORCE DISCONNECT MESSAGE IF ONLINE
-		if (global.MultiplayerMode)
-		{
-			var packetHeader = new NetworkPacketHeader(MESSAGE_TYPE.DISCONNECT_FROM_HOST);
-			var networkPacket = new NetworkPacket(packetHeader, undefined);
-		
-			if (network_packet_builder.CreatePacket(preAllocNetworkBuffer, networkPacket))
-			{
-				SendPacketOverUDP();
-			}
-		}
-		DeleteSocket();
+		var isSocketDeleted = true;
+		buffer_delete(preAllocNetworkBuffer);
+		network_destroy(socket);
+		socket = undefined;
 		
 		// RESET NETWORK PROPERTIES
 		client_id = UNDEFINED_UUID;
 		network_status = NETWORK_STATUS.OFFLINE;
 		host_address = undefined;
 		host_port = undefined;
+		delete_socket_timer.StopTimer();
 		
 		// CLEAR IN FLIGHT NETWORK PACKET TRACKING
 		network_packet_tracker.ResetNetworkPacketTracking();
@@ -83,12 +143,77 @@ function NetworkHandler() constructor
 		network_region_handler.ResetRegionData();
 		
 		global.MultiplayerMode = false;
+		
+		// RETURN TO MAIN MENU
+		if (room == roomMainMenu)
+		{
+			// RESET GUI STATE MAIN MENU
+			if (!global.GUIStateHandlerRef.ResetGUIStateMainMenu())
+			{
+				// TODO: Move this check inside the actual ResetGUIStateMainMenu function
+				// with proper error handling
+				show_debug_message("Failed to reset GUI state on Main Menu");
+			}
+		} else {
+			// TODO: Fix with new room change request logic
+			room_goto(roomMainMenu);
+		}
+		return isSocketDeleted;
 	}
 	
-	static DeleteSocket = function()
+	static RequestConnectSocket = function(_address, _port)
 	{
-		buffer_delete(preAllocNetworkBuffer);
-		network_destroy(socket);
+		var isConnecting = false;
+		if (!is_undefined(socket)) {
+			host_address = _address;
+			host_port = _port;
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONNECT_TO_HOST);
+			var networkPacket = new NetworkPacket(
+				networkPacketHeader, undefined,
+				PACKET_PRIORITY.HIGH,
+				AckTimeoutFuncResend
+			);
+			if (AddPacketToQueue(networkPacket))
+			{
+				network_status = NETWORK_STATUS.CONNECTING;
+				isConnecting = true;
+			} else {
+				show_debug_message("Failed to connect socket");
+			}
+		}
+		return isConnecting;
+	}
+	
+	static RequestDisconnectSocket = function()
+	{
+		// FORCE DISCONNECT MESSAGE IF ONLINE
+		if (global.MultiplayerMode)
+		{
+			delete_socket_timer.StartTimer();
+			
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DISCONNECT_FROM_HOST);
+			var networkPacket = new NetworkPacket(
+				networkPacketHeader,
+				undefined,
+				PACKET_PRIORITY.CRITICAL,
+				undefined
+			);
+			if (AddPacketToQueue(networkPacket))
+			{
+				network_status = NETWORK_STATUS.DISCONNECTING;
+			} else {
+				show_debug_message("Failed to queue disconnect socket");
+				DeleteSocket();
+			}
+		} else {
+			DeleteSocket();
+		}
+	}
+	
+	static DisconnectTimeout = function()
+	{
+		show_message("Failed to reach the server. Disconnecting...");
+		RequestDisconnectSocket();
 	}
 	
 	static AddPacketToQueue = function(_networkPacket)
@@ -110,22 +235,19 @@ function NetworkHandler() constructor
 		if (!network_region_handler.network_region_object_handler.ValidateRegionContainers())
 		{
 			show_message("Error occured during OnRoomStart");
-			DisconnectSocket();
-			if (room != roomMainMenu)
-			{
-				room_goto(roomMainMenu);
-			}
+			RequestDisconnectSocket();
 		}
 		
 		// REQUEST REGION SYNC
 		var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.SYNC_INSTANCE);
-		var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-		if (network_packet_tracker.SetNetworkPacketAcknowledgment(networkPacket))
+		var networkPacket = new NetworkPacket(
+			networkPacketHeader, undefined,
+			PACKET_PRIORITY.DEFAULT,
+			AckTimeoutFuncResend
+		);
+		if (!AddPacketToQueue(networkPacket))
 		{
-			if (!AddPacketToQueue(networkPacket))
-			{
-				show_debug_message("Failed to add 'sync instance' packet to queue");
-			}
+			show_debug_message("Failed to add 'sync instance' packet to queue");
 		}
 	}
 	
@@ -134,76 +256,20 @@ function NetworkHandler() constructor
 		network_region_handler.OnRoomEnd();
 	}
 	
-	static Update = function()
-	{
-		if (ds_priority_size(network_packet_queue) > 0)
-		{
-			var networkPacket = ds_priority_find_max(network_packet_queue);
-			if (!is_undefined(networkPacket))
-			{
-				if (network_packet_builder.CreatePacket(preAllocNetworkBuffer, networkPacket))
-				{
-					SendPacketOverUDP();
-				}
-			}
-			ds_priority_delete_max(network_packet_queue);
-		}
-		
-		// RESEND ACKNOWLEDGE PACKET ON TIMEOUT
-		network_packet_tracker.UpdateInFlightNetworkPackets();
-		
-		// CHECK GAME OVER WINDOW
-		if (room != roomMainMenu && room != roomCamp && room != roomLoadResources)
-		{
-			if (!is_undefined(global.PlayerCharacter))
-			{
-				if (global.PlayerCharacter.is_dead)
-				{
-					// CHECK IF NOT IN FAST TRAVEL QUEUE
-					var fastTravelQueueWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.WorldMapFastTravelQueue);
-					if (is_undefined(fastTravelQueueWindow))
-					{
-						// CHECK IF NOT GAME OVER WINDOW SHOWING
-						var gameOverWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.GameOver);
-						if (is_undefined(gameOverWindow))
-						{
-							// DELETE ALL ITEMS
-							global.PlayerBackpack.ClearAllItems();
-							
-							// OPEN MAP
-							var guiState = new GUIState(
-								GUI_STATE.GameOver, undefined, undefined,
-								[GAME_WINDOW.GameOver], GUI_CHAIN_RULE.OverwriteAll,
-								undefined, undefined
-							);
-							if (global.GUIStateHandlerRef.RequestGUIState(guiState))
-							{
-								global.GameWindowHandlerRef.OpenWindowGroup([
-									CreateWindowGameOver(GAME_WINDOW.GameOver, -1)
-								]);
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		// TODO: Time out pinging
-	}
-	
 	static RequestJoinGame = function()
 	{
 		var isJoining = false;
 		if (!is_undefined(socket)) {
 			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_JOIN_GAME);
-			var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-			if (network_packet_tracker.SetNetworkPacketAcknowledgment(networkPacket))
+			var networkPacket = new NetworkPacket(
+				networkPacketHeader,
+				undefined, PACKET_PRIORITY.DEFAULT,
+				AckTimeoutFuncResend
+			);
+			if (AddPacketToQueue(networkPacket))
 			{
-				if (AddPacketToQueue(networkPacket))
-				{
-					network_status = NETWORK_STATUS.JOINING_TO_GAME;
-					isJoining = true;
-				}
+				network_status = NETWORK_STATUS.JOINING_TO_GAME;
+				isJoining = true;
 			}
 		}
 		return isJoining;
