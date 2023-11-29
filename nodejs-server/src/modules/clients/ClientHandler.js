@@ -1,6 +1,8 @@
 import { v4 as uuidv4 } from "uuid";
 import Client from "./Client.js";
 
+const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
+
 export default class ClientHandler {
   constructor() {
     this.clients = [];
@@ -30,7 +32,9 @@ export default class ClientHandler {
   disconnectClient(clientId, rinfo) {
     let isDisconnected = false;
     const index = this.clients.findIndex(
-      (client) => client.uuid === clientId && client.address === rinfo.address
+      (client) =>
+        (client.uuid === clientId || clientId === UNDEFINED_UUID) &&
+        client.address === rinfo.address
     );
     if (index > -1) {
       this.clients.splice(index, 1);

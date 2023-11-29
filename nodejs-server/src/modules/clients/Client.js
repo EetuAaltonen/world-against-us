@@ -3,7 +3,6 @@ export default class Client {
     this.uuid = uuid;
     this.address = address;
     this.port = port;
-
     this.instanceId = undefined;
   }
 
