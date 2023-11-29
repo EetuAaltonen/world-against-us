@@ -1,6 +1,6 @@
 export default class NetworkQueueEntry {
-  constructor(packet, clients, priority) {
-    this.packet = packet;
+  constructor(networkPacket, clients, priority) {
+    this.networkPacket = networkPacket;
     this.clients = clients;
     this.priority = priority;
   }
