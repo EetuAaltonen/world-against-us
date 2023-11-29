@@ -37,10 +37,12 @@ function NetworkPacketBuilder() constructor
 			{
 				var messageType = _networkPacketHeader.message_type;
 				var clientId = _networkPacketHeader.client_id ?? UNDEFINED_UUID;
+				var sequenceNumber = _networkPacketHeader.sequence_number;
 				var acknowledgmentId = _networkPacketHeader.acknowledgment_id;
 				buffer_seek(_networkBuffer, buffer_seek_start, 0);
 				buffer_write(_networkBuffer, buffer_u8, messageType);
 				buffer_write(_networkBuffer, buffer_text, clientId);
+				buffer_write(_networkBuffer, buffer_s8, sequenceNumber);
 				buffer_write(_networkBuffer, buffer_s8, acknowledgmentId);
 				
 				isHeaderWritten = true;
@@ -137,6 +139,7 @@ function NetworkPacketBuilder() constructor
 					}
 				}
 			} else {
+				// RETURN TRUE WHEN PAYLOAD IS LEFT EMPTY WITHOUT AN ERROR
 				isPayloadWritten = true;
 			}
 		} catch (error)
