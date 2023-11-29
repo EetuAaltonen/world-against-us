@@ -1,150 +1,170 @@
 function NetworkPacketTracker() constructor
 {
-	acknowledgment_id = -1;
-	last_acknowledgment_id = 100;
-	acknowledgment_timeout_timer = new Timer(TimerFromSeconds(3));
-	in_flight_packets = ds_map_create();
+	outgoing_sequence_number = -1;
+	max_sequence_number = 127;
+	in_flight_packets = ds_list_create();
+	expected_sequence_number = 0;
+	expected_acknowledgment_id = 0;
+	pending_acknowledgments = ds_list_create();
+	dropped_packet_count = 0;
 	
-	static SetNetworkPacketAcknowledgment = function(_networkPacket)
+	static Update = function()
 	{
-		var isAcknowledgmentSet = false;
-		show_debug_message("Pre in-flight packets count {0}", ds_map_size(in_flight_packets));
-		
-		var nextAcknowledgmentId = FetchNextAcknowledgmentId();
-		if (nextAcknowledgmentId != -1)
+		var inFlightPacketCount = ds_list_size(in_flight_packets);
+		for (var i = 0; i < inFlightPacketCount; i++)
 		{
-			_networkPacket.acknowledgment_attempt = 1;
-			if (ds_map_add(in_flight_packets, acknowledgment_id, _networkPacket))
+			var inFlightPacket = in_flight_packets[| i];
+			if (!is_undefined(inFlightPacket))
 			{
-				_networkPacket.header.SetAcknowledgmentId(acknowledgment_id);	
-				acknowledgment_timeout_timer.StartTimer();
-				isAcknowledgmentSet = true;
-			}
-		}
-		
-		if (!isAcknowledgmentSet) { show_debug_message("Failed to set acknowledgment for network packet with message type {0}", _networkPacket.header.message_type); }
-		return isAcknowledgmentSet;
-	}
-	
-	static FetchNextAcknowledgmentId = function()
-	{
-		var nextAcknowledgmentId = -1;
-		var acknowledgmentId = acknowledgment_id + 1;
-		var idFetchAttempts = 0;
-		var maxIdFetchAttempts = 127;
-		while (idFetchAttempts <= maxIdFetchAttempts)
-		{
-			if (is_undefined(in_flight_packets[? nextAcknowledgmentId]))
-			{
-				nextAcknowledgmentId = acknowledgmentId;
-				acknowledgment_id = acknowledgmentId;
-				break;
-			}
-			acknowledgmentId++;
-			if (acknowledgmentId > last_acknowledgment_id) { acknowledgmentId = 0; }
-			idFetchAttempts++;
-		}
-		
-		if (nextAcknowledgmentId == -1)
-		{
-			show_debug_message("Failed to fetch next actknowledgment id for network packet, in_flight_packets count {0}", ds_map_size(in_flight_packets));
-		}
-		return nextAcknowledgmentId;
-	}
-	
-	static UpdateInFlightNetworkPackets = function(_networkPacket)
-	{
-		if (ds_map_size(in_flight_packets) > 0)
-		{
-			if (acknowledgment_timeout_timer.IsTimerStopped())
-			{
-				var lastAcknowledgmentNetworkPacket = in_flight_packets[? acknowledgment_id];
-				if (!is_undefined(lastAcknowledgmentNetworkPacket))
+				if (inFlightPacket.timeout_timer.IsTimerStopped())
 				{
-					if (lastAcknowledgmentNetworkPacket.acknowledgment_attempt < lastAcknowledgmentNetworkPacket.max_acknowledgment_attempts)
+					if (!is_undefined(inFlightPacket.ack_timeout_callback_func))
 					{
-						lastAcknowledgmentNetworkPacket.acknowledgment_attempt++;
-						if (global.NetworkHandlerRef.AddPacketToQueue(lastAcknowledgmentNetworkPacket))
+						if (script_exists(inFlightPacket.ack_timeout_callback_func) && inFlightPacket.acknowledgment_attempt <= inFlightPacket.max_acknowledgment_attempts)
 						{
-							show_debug_message("Resending acknowledgment {0} with message type {1}", lastAcknowledgmentNetworkPacket.header.acknowledgment_id, lastAcknowledgmentNetworkPacket.header.message_type);
-							acknowledgment_timeout_timer.StartTimer();
+							show_debug_message(string("Acknowledgment timeout attempt {0} with message type {1} and sequence number {2} timedout", inFlightPacket.acknowledgment_attempt, inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
+							inFlightPacket.ack_timeout_callback_func(inFlightPacket);
+							inFlightPacket.acknowledgment_attempt++;
 						} else {
-							show_debug_message("Failed to resend acknowledgment {0}", lastAcknowledgmentNetworkPacket.header.acknowledgment_id);
+							show_message(string("Acknowledgment with message type {0} and sequence number {1} timedout", inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
+							global.NetworkHandlerRef.DisconnectTimeout();
 						}
 					} else {
-						show_message("Failed to reach the server. Disconnecting...");
-						global.NetworkHandlerRef.DisconnectSocket();
-						if (room == roomMainMenu)
-						{
-							// RESET GUI STATE MAIN MENU
-							if (!global.GUIStateHandlerRef.ResetGUIStateMainMenu())
-							{
-								// TODO: Move this check inside the actual ResetGUIStateMainMenu function
-								// with proper error handling
-								show_debug_message("Failed to reset GUI state Main Menu");
-							}
-						} else {
-							room_goto(roomMainMenu);
-						}
+						show_message(string("Acknowledgment with message type {0} and sequence number {1} timedout without a callback", inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
+						ds_list_delete(in_flight_packets, i--);
 					}
+				} else {
+					inFlightPacket.timeout_timer.Update();
 				}
-			} else {
-				acknowledgment_timeout_timer.Update();	
 			}
 		}
 	}
 	
-	static CheckNetworkPacketAcknowledgment = function(_networkPacket)
+	static PatchSequenceNumber = function(_networkPacket)
 	{
-		var isCheckedAndProceed = false;
-		var acknowledgmentId = _networkPacket.header.acknowledgment_id;
-		if (acknowledgmentId != -1)
+		var isSequenceNumberPatched = true;
+		if (++outgoing_sequence_number > max_sequence_number) { outgoing_sequence_number = 0; }
+		_networkPacket.header.sequence_number = outgoing_sequence_number;
+		// DON'T TRACK SEPARATE ACKNOWLEDGMENT RESPONSES
+		if (_networkPacket.header.message_type != MESSAGE_TYPE.ACKNOWLEDGMENT &&
+			_networkPacket.header.message_type != MESSAGE_TYPE.DISCONNECT_FROM_HOST)
 		{
-			if (!is_undefined(in_flight_packets[? acknowledgmentId]))
+			_networkPacket.timeout_timer.StartTimer();
+			ds_list_add(in_flight_packets, _networkPacket);
+		}
+		return isSequenceNumberPatched;
+	}
+	
+	static PatchAcknowledgmentId = function(_networkPacket)
+	{
+		var isAcknowledgmentIdPatched = true;
+		if (ds_list_size(pending_acknowledgments) > 0)
+		{
+			_networkPacket.header.acknowledgment_id = pending_acknowledgments[| 0];
+			ds_list_delete(pending_acknowledgments, 0);
+			if (ds_list_size(pending_acknowledgments) > 0)
 			{
-				if (acknowledgmentId < acknowledgment_id)
-				{
-					show_debug_message("Old acknowledgment received {0}", acknowledgmentId);
-					isCheckedAndProceed = false;
-				} else {
-					show_debug_message("The latest acknowledgment succesfully received {0}", acknowledgmentId);
-					isCheckedAndProceed = true;
-				}
-				ds_map_delete(in_flight_packets, acknowledgmentId);
-			} else {
-				show_debug_message("Unknown acknowledgment received {0}", acknowledgmentId);
-				isCheckedAndProceed = false;
+				show_debug_message("ACKNOWLEDGMENTs lagging behind");
 			}
 		} else {
+			if (_networkPacket.header.message_type == MESSAGE_TYPE.ACKNOWLEDGMENT)
+			{
+				show_debug_message("Useless MESSAGE_TYPE.ACKNOWLEDGMENT sent");
+			}
+		}
+		return isAcknowledgmentIdPatched;
+	}
+	
+	static ProcessSequenceNumber = function(_sequenceNumber, _messageType)
+	{
+		var isCheckedAndProceed = false;
+		// TODO: Verify what happens when sequence number is wrapped back to 0
+		// If incoming packet still has seq number 126 or 127??
+		if (_messageType != MESSAGE_TYPE.DISCONNECT_FROM_HOST)
+		{
+			if (_sequenceNumber == expected_sequence_number)
+			{
+				// SUCCESSFULLY RECEIVED THE EXPECTED
+				expected_sequence_number = _sequenceNumber + 1;
+				if (_messageType != MESSAGE_TYPE.ACKNOWLEDGMENT)
+				{
+					ds_list_add(pending_acknowledgments, _sequenceNumber);
+				}
+			} else if (_sequenceNumber > expected_sequence_number)
+			{
+				// PATCH TO PAST ONE OF MOST RECENT
+				show_debug_message(string("Received sequence number {0} greater than expected {1}", _sequenceNumber, expected_sequence_number));
+				expected_sequence_number = _sequenceNumber + 1;
+				if (_messageType != MESSAGE_TYPE.ACKNOWLEDGMENT)
+				{
+					ds_list_add(pending_acknowledgments, _sequenceNumber);
+				}
+			} else if (_sequenceNumber < expected_sequence_number)
+			{
+				// DROP STALE DATA
+				show_debug_message(string("Received sequence number {0} smaller than expected {1}", _sequenceNumber, expected_sequence_number));
+				isCheckedAndProceed = false;
+			}
+			if (expected_sequence_number > max_sequence_number) { expected_sequence_number = 0; }
 			isCheckedAndProceed = true;
+		} else {
+			// PROCESS ALL DISCONNECT FROM HOST MESSAGES
+			isCheckedAndProceed = true;	
 		}
 		return isCheckedAndProceed;
 	}
 	
-	static ClearInFlightPacketsByMessageType = function(_messageType)
+	static ProcessAcknowledgment = function(_acknowledgmentId)
 	{
-		for (var key = ds_map_find_first(in_flight_packets); !is_undefined(key); key = ds_map_find_next(in_flight_packets, key))
+		var isAcknowledgmentProceed = true;
+		if (_acknowledgmentId > -1)
 		{
-			var inFlightPacket = in_flight_packets[? key];
+			RemoveTrackedInFlightPacket(_acknowledgmentId);
+		}
+		return isAcknowledgmentProceed;
+	}
+	
+	static RemoveTrackedInFlightPacket = function(_sequenceNumber)
+	{
+		var isPacketRemoved = false;
+		var inFlightPacketCount = ds_list_size(in_flight_packets);
+		for (var i = 0; i < inFlightPacketCount; i++)
+		{
+			var inFlightPacket = in_flight_packets[| i];
 			if (!is_undefined(inFlightPacket))
 			{
-				var networkpacketHeader = inFlightPacket.header;
-				if (!is_undefined(networkpacketHeader))
+				if (inFlightPacket.header.sequence_number == _sequenceNumber)
 				{
-					if (networkpacketHeader.message_type == _messageType)
-					{
-						ds_map_delete(in_flight_packets, key);
-					}
+					ds_list_delete(in_flight_packets, i);
+					isPacketRemoved = true;
+					break;
 				}
 			}
 		}
-		acknowledgment_timeout_timer.running_time = 0;
+		return isPacketRemoved;
 	}
 	
 	static ResetNetworkPacketTracking = function()
 	{
-		acknowledgment_id = -1;
-		acknowledgment_timeout_timer.running_time = 0;
-		ds_map_clear(in_flight_packets);
+		outgoing_sequence_number = -1;
+		expected_sequence_number = 0;
+		expected_acknowledgment_id = 0;
+		dropped_packet_count = 0;
+		
+		ds_list_clear(in_flight_packets);
+		ds_list_clear(pending_acknowledgments);
+	}
+	
+	static ClearInFlightPacketsByMessageType = function(_messageType)
+	{
+		var inFlightPacketCount = ds_list_size(in_flight_packets);
+		for (var i = 0; i < inFlightPacketCount; i++)
+		{
+			var inFlightPacket = in_flight_packets[| i];
+			if (inFlightPacket.header.message_type == _messageType)
+			{
+				ds_list_delete(in_flight_packets, i--);
+			}
+		}
 	}
 }

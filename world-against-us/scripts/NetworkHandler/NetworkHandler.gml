@@ -305,8 +305,8 @@ function NetworkHandler() constructor
 				{
 					if (!is_undefined(networkPacket.payload))
 					{
-						var errorMessage = networkPacket.payload[$ "message"] ?? "Invalid request.";
-						show_message(string("{0} Disconnecting...", errorMessage));
+						var errorMessage = networkPacket.payload[$ "message"] ?? "Invalid request";
+						show_message(string("{0}. Disconnecting...", errorMessage));
 					}
 					isMessageHandled = RequestDisconnectSocket();
 				} break;
@@ -320,7 +320,7 @@ function NetworkHandler() constructor
 					if (!is_undefined(networkPacket.payload))
 					{
 						var errorMessage = networkPacket.payload[$ "error"] ?? "Unknown server error.";
-						show_message(string("{0} Disconnecting...", errorMessage));
+						show_message(string("{0}. Disconnecting...", errorMessage));
 					}
 					isMessageHandled = DeleteSocket();
 				} break;
@@ -362,7 +362,7 @@ function NetworkHandler() constructor
 											}
 										}
 								
-										// RESPONCE WITH ACKNOWLEDGMENT
+										// RESPOND WITH ACKNOWLEDGMENT TO END CONNECTING TO HOST
 										isMessageHandled = QueueAcknowledgmentResponse();
 									}
 								} break;
@@ -382,6 +382,7 @@ function NetworkHandler() constructor
 											if (AddPacketToQueue(networkPacket))
 											{
 												network_status = NETWORK_STATUS.SYNC_WORLD_STATE;
+												// ACKNOWLEDGMENT RESPONSE ON NEXT STEP
 												isMessageHandled = true;
 											}
 										}
@@ -403,6 +404,7 @@ function NetworkHandler() constructor
 											if (AddPacketToQueue(networkPacket))
 											{
 												network_status = NETWORK_STATUS.SYNC_DATA;
+												// ACKNOWLEDGMENT RESPONSE ON NEXT STEP
 												isMessageHandled = true;
 											}
 										}
@@ -412,11 +414,11 @@ function NetworkHandler() constructor
 								{
 									if (network_status == NETWORK_STATUS.SYNC_DATA)
 									{
-										// RESPONCE WITH ACKNOWLEDGMENT
-										isMessageHandled = true;
+										// RESPOND WITH ACKNOWLEDGMENT TO END JOIN GAME HANDSHAKE
 										if (QueueAcknowledgmentResponse())
 										{
 											network_status = NETWORK_STATUS.SESSION_IN_PROGRESS;
+											// ACKNOWLEDGMENT RESPONSE ON NEXT STEP
 											isMessageHandled = true;
 											// TODO: Request room change at proper way
 											room_goto(roomCamp);
