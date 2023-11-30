@@ -8,14 +8,19 @@ function NetworkPacketParser() constructor
 			buffer_seek(_msg, buffer_seek_start, 0);
 			var parsedMessageType = buffer_read(_msg, buffer_u8);
 			var parsedClientId = buffer_read(_msg, buffer_string);
-			var parsedSequenceNumber = buffer_read(_msg, buffer_s8);
-			var parsedAcknowledgmentId = buffer_read(_msg, buffer_s8);
+			var parsedSequenceNumber = buffer_read(_msg, buffer_u8);
+			var parsedAckCount = buffer_read(_msg, buffer_u8);
 			
 			var parsedHeader = new NetworkPacketHeader(parsedMessageType);
-			// PATCH PARSED HEADER
-			parsedHeader.client_id = parsedClientId;
+		    parsedHeader.client_id = parsedClientId;
 			parsedHeader.sequence_number = parsedSequenceNumber;
-			parsedHeader.acknowledgment_id = parsedAcknowledgmentId;
+		    parsedHeader.ack_count = parsedAckCount;
+		    ds_list_clear(parsedHeader.ack_range);
+			for (var i = 0; i < parsedAckCount; i++)
+			{
+				var acknowledgmentId = buffer_read(_msg, buffer_u8);
+				ds_list_add(parsedHeader.ack_range, acknowledgmentId);
+			}
 			
 			var parsedPayload = ParsePayload(parsedMessageType, _msg);
 			parsedNetworkPacket = new NetworkPacket(parsedHeader, parsedPayload);

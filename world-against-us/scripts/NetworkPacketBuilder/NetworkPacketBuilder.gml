@@ -38,13 +38,18 @@ function NetworkPacketBuilder() constructor
 				var messageType = _networkPacketHeader.message_type;
 				var clientId = _networkPacketHeader.client_id ?? UNDEFINED_UUID;
 				var sequenceNumber = _networkPacketHeader.sequence_number;
-				var acknowledgmentId = _networkPacketHeader.acknowledgment_id;
+				var ackCount = _networkPacketHeader.ack_count;
+				var ackRange = _networkPacketHeader.ack_range;
 				buffer_seek(_networkBuffer, buffer_seek_start, 0);
 				buffer_write(_networkBuffer, buffer_u8, messageType);
 				buffer_write(_networkBuffer, buffer_text, clientId);
-				buffer_write(_networkBuffer, buffer_s8, sequenceNumber);
-				buffer_write(_networkBuffer, buffer_s8, acknowledgmentId);
-				
+				buffer_write(_networkBuffer, buffer_u8, sequenceNumber);
+				buffer_write(_networkBuffer, buffer_u8, ackCount);
+				for (var i = 0; i < ackCount; i++)
+				{
+					var acknowledgmentId = ackRange[| i] ?? 0;
+					buffer_write(_networkBuffer, buffer_u8, acknowledgmentId);
+				}
 				isHeaderWritten = true;
 			}
 		} catch (error)
@@ -63,7 +68,6 @@ function NetworkPacketBuilder() constructor
 			if (!is_undefined(_networkPacketPayload))
 			{
 				buffer_seek(_networkBuffer, buffer_seek_relative, 0);
-				
 				switch (_networkMessageType)
 				{
 					case MESSAGE_TYPE.DATA_PLAYER_POSITION:
