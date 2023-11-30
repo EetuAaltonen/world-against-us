@@ -27,9 +27,8 @@ export default class NetworkPacketHandler {
 
   handlePacket(client, rinfo, networkPacket) {
     let isPacketHandled = false;
-    const sequenceNumber = networkPacket.header.sequenceNumber;
     const instance = this.instanceHandler.getInstance(client.instanceId);
-    if (sequenceNumber !== undefined && instance !== undefined) {
+    if (instance !== undefined) {
       switch (networkPacket.header.messageType) {
         case MESSAGE_TYPE.SYNC_WORLD_STATE:
           {
