@@ -7,7 +7,7 @@ function NetworkHandler() constructor
 	host_address = undefined;
 	host_port = undefined;
 	
-	preAllocNetworkBuffer = undefined;
+	pre_alloc_network_buffer = undefined;
 	delete_socket_timer = new Timer(TimerFromMilliseconds(1000));
 	
 	network_packet_builder = new NetworkPacketBuilder();
@@ -34,11 +34,11 @@ function NetworkHandler() constructor
 					var networkPacket = ds_priority_find_min(network_packet_queue);
 					if (!is_undefined(networkPacket))
 					{
-						if (network_packet_tracker.PatchSequenceNumber(networkPacket))
+						if (network_packet_tracker.PatchNetworkPacketAckRange(networkPacket))
 						{
-							if (network_packet_tracker.PatchAcknowledgmentId(networkPacket))
+							if (network_packet_tracker.PatchNetworkPacketSequenceNumber(networkPacket))
 							{
-								if (network_packet_builder.CreatePacket(preAllocNetworkBuffer, networkPacket))
+								if (network_packet_builder.CreatePacket(pre_alloc_network_buffer, networkPacket))
 								{
 									var networkPacketSize = SendPacketOverUDP();
 									if (networkPacketSize > 0)
@@ -101,7 +101,7 @@ function NetworkHandler() constructor
 		if (!is_undefined(socket))
 		{
 			// TODO: CALCULATE kbs
-			networkPacketSize = network_send_udp_raw(socket, host_address, host_port, preAllocNetworkBuffer, buffer_tell(preAllocNetworkBuffer));
+			networkPacketSize = network_send_udp_raw(socket, host_address, host_port, pre_alloc_network_buffer, buffer_tell(pre_alloc_network_buffer));
 			show_debug_message(string("Sent network packet size: {0}kb", networkPacketSize * 0.001));
 		}
 		return networkPacketSize;
@@ -113,7 +113,7 @@ function NetworkHandler() constructor
 		if (network_status == NETWORK_STATUS.OFFLINE && is_undefined(socket))
 		{
 			socket = network_create_socket(network_socket_udp);
-			preAllocNetworkBuffer = buffer_create(256, buffer_grow, 1);
+			pre_alloc_network_buffer = buffer_create(256, buffer_grow, 1);
 			isSocketCreated = true;
 		} else {
 			// TODO: Generic error handler
@@ -125,7 +125,7 @@ function NetworkHandler() constructor
 	static DeleteSocket = function()
 	{
 		var isSocketDeleted = true;
-		buffer_delete(preAllocNetworkBuffer);
+		buffer_delete(pre_alloc_network_buffer);
 		network_destroy(socket);
 		socket = undefined;
 		

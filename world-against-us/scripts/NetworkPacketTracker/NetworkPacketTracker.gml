@@ -40,7 +40,28 @@ function NetworkPacketTracker() constructor
 		}
 	}
 	
-	static PatchSequenceNumber = function(_networkPacket)
+	static PatchNetworkPacketAckRange = function(_networkPacket)
+	{
+		var isAckRangePatched = true;
+		if (ds_list_size(pending_ack_range) > 0)
+		{
+			// CLONE ACK RANGE VALUES
+			_networkPacket.header.ack_count = ds_list_size(pending_ack_range);
+			ds_list_copy(_networkPacket.header.ack_range, pending_ack_range);
+			
+			// CLEAR PENDING ACK RANGE
+			ds_list_clear(pending_ack_range);
+		} else {
+			if (_networkPacket.header.message_type == MESSAGE_TYPE.ACKNOWLEDGMENT)
+			{
+				show_debug_message("Useless MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
+				isAckRangePatched = false;
+			}
+		}
+		return isAckRangePatched;
+	}
+	
+	static PatchNetworkPacketSequenceNumber = function(_networkPacket)
 	{
 		var isSequenceNumberPatched = true;
 		if (++outgoing_sequence_number > max_sequence_number) { outgoing_sequence_number = 0; }
@@ -55,24 +76,15 @@ function NetworkPacketTracker() constructor
 		return isSequenceNumberPatched;
 	}
 	
-	static PatchAcknowledgmentId = function(_networkPacket)
+	static ProcessAckRange = function(_ackCount, _ackRange)
 	{
-		var isAcknowledgmentIdPatched = true;
-		if (ds_list_size(pending_acknowledgments) > 0)
+		var isAcknowledgmentProceed = true;
+		for (var i = 0; i < _ackCount; i++)
 		{
-			_networkPacket.header.acknowledgment_id = pending_acknowledgments[| 0];
-			ds_list_delete(pending_acknowledgments, 0);
-			if (ds_list_size(pending_acknowledgments) > 0)
-			{
-				show_debug_message("ACKNOWLEDGMENTs lagging behind");
-			}
-		} else {
-			if (_networkPacket.header.message_type == MESSAGE_TYPE.ACKNOWLEDGMENT)
-			{
-				show_debug_message("Useless MESSAGE_TYPE.ACKNOWLEDGMENT sent");
-			}
+			var acknowledgmentId = _ackRange[| i] ?? 0;
+			RemoveTrackedInFlightPacket(acknowledgmentId);
 		}
-		return isAcknowledgmentIdPatched;
+		return isAcknowledgmentProceed;
 	}
 	
 	static ProcessSequenceNumber = function(_sequenceNumber, _messageType)
@@ -112,16 +124,6 @@ function NetworkPacketTracker() constructor
 			isCheckedAndProceed = true;	
 		}
 		return isCheckedAndProceed;
-	}
-	
-	static ProcessAcknowledgment = function(_acknowledgmentId)
-	{
-		var isAcknowledgmentProceed = true;
-		if (_acknowledgmentId > -1)
-		{
-			RemoveTrackedInFlightPacket(_acknowledgmentId);
-		}
-		return isAcknowledgmentProceed;
 	}
 	
 	static RemoveTrackedInFlightPacket = function(_sequenceNumber)
