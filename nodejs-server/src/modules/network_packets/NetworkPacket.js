@@ -1,5 +1,3 @@
-import PACKET_PRIORITY from "../network/PacketPriority.js";
-
 export default class NetworkPacket {
   constructor(header, payload, priority) {
     this.header = header;

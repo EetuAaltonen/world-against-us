@@ -105,8 +105,8 @@ export default class InstanceHandler {
                 this.getInstanceIds().forEach((instanceId) => {
                   const instance = this.getInstance(instanceId);
                   if (
-                    instance.parentInstanceId == sourceInstanceId &&
-                    instance.roomIndex == destinationRoomIndex
+                    instance.parentInstanceId === sourceInstanceId &&
+                    instance.roomIndex === destinationRoomIndex
                   ) {
                     priorityInstanceId = instanceId;
                   }
@@ -164,7 +164,7 @@ export default class InstanceHandler {
     if (priorityInstanceId !== undefined) {
       const instance = this.getInstance(priorityInstanceId);
       if (instance !== undefined) {
-        if (instance.roomIndex == roomIndex) {
+        if (instance.roomIndex === roomIndex) {
           instance.addPlayer(clientId, player);
           instanceId = priorityInstanceId;
         }
@@ -201,7 +201,7 @@ export default class InstanceHandler {
       if (instance !== undefined) {
         if (instance.removePlayer(clientId)) {
           if (!this.checkInstanceRelease(instanceId)) {
-            if (instance.ownerClient == clientId) {
+            if (instance.ownerClient === clientId) {
               if (!instance.resetOwner()) {
                 // TODO: Proper error handling
                 console.log(
@@ -222,7 +222,7 @@ export default class InstanceHandler {
         if (instance.getPlayer(clientId) !== undefined) {
           if (instance.removePlayer(clientId)) {
             if (!this.checkInstanceRelease(instanceId)) {
-              if (instance.ownerClient == clientId) {
+              if (instance.ownerClient === clientId) {
                 if (!instance.resetOwner()) {
                   // TODO: Proper error handling
                   console.log(
