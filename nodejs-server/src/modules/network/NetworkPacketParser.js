@@ -23,13 +23,21 @@ export default class NetworkPacketParser {
     offset += BITWISE.BIT8;
     const clientId = msg.toString("utf8", offset, offset + BITWISE.ID_LENGTH);
     offset += BITWISE.ID_LENGTH;
-    const sequenceNumber = msg.readInt8(offset);
+    const sequenceNumber = msg.readUInt8(offset);
     offset += BITWISE.BIT8;
-    const acknowledgmentId = msg.readInt8(offset);
+    const ackCount = msg.readUInt8(offset);
     offset += BITWISE.BIT8;
+
     const header = new NetworkPacketHeader(messageType, clientId);
     header.sequenceNumber = sequenceNumber;
-    header.acknowledgmentId = acknowledgmentId;
+    header.ackCount = ackCount;
+    header.ackRange = [];
+    for (let i = 0; i < ackCount; i++) {
+      const acknowledgmentId = msg.readUInt8(offset);
+      offset += BITWISE.BIT8;
+      header.ackRange.push(acknowledgmentId);
+    }
+
     // Slice header from buffer
     msg = msg.slice(offset);
     const payload = this.parsePayload(messageType, msg);

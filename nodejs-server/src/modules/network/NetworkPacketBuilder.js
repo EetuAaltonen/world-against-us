@@ -5,64 +5,71 @@ const NULL_TERMINATOR = "\0";
 
 export default class NetworkPacketBuilder {
   constructor() {
-    this.headerBuffer = Buffer.alloc(
+    this.baseHeaderBuffer = Buffer.alloc(
       BITWISE.BIT8 + // Message Type
         BITWISE.ID_LENGTH + // UUID
         BITWISE.BIT8 + // Null Termination
         BITWISE.BIT8 + // Sequence Number
-        BITWISE.BIT8 // Acknowledgment ID
+        BITWISE.BIT8 // Ack Count
     );
+    this.headerAckRangeBuffer = undefined;
     this.payloadBuffer = undefined;
   }
 
   createNetworkBuffer(networkPacket) {
     let networkBuffer;
-    if (
-      this.writePacketHeader(
-        networkPacket.header.messageType,
-        networkPacket.header.clientId,
-        networkPacket.header.sequenceNumber,
-        networkPacket.header.acknowledgmentId
-      )
-    ) {
-      if (
-        this.writePacketPayload(
-          networkPacket.header.messageType,
-          networkPacket.payload
-        )
-      ) {
-        if (this.payloadBuffer !== undefined) {
+    if (this.writePacketHeader(networkPacket)) {
+      if (this.writePacketPayload(networkPacket)) {
+        networkBuffer = this.baseHeaderBuffer;
+        if (this.headerAckRangeBuffer !== undefined) {
           networkBuffer = Buffer.concat([
-            this.headerBuffer,
-            this.payloadBuffer,
+            networkBuffer,
+            this.headerAckRangeBuffer,
           ]);
-        } else {
-          // Send networkBuffer without a payload
-          networkBuffer = this.headerBuffer;
+        }
+        if (this.payloadBuffer !== undefined) {
+          networkBuffer = Buffer.concat([networkBuffer, this.payloadBuffer]);
         }
       }
     }
     return networkBuffer;
   }
 
-  writePacketHeader(messageType, clientId, sequenceNumber, acknowledgmentId) {
+  writePacketHeader(networkPacket) {
     let isPacketHeaderWritten = false;
+    const messageType = networkPacket.header.messageType;
+    const clientId = networkPacket.header.clientId;
+    const sequenceNumber = networkPacket.header.sequenceNumber;
+    const ackCount = networkPacket.header.ackCount;
+    const ackRange = networkPacket.header.ackRange;
     try {
-      // Response with a new Uuid and all player data
+      // Write message type and client ID
       let offset = 0;
-      this.headerBuffer.writeUInt8(messageType, offset);
+      this.baseHeaderBuffer.writeUInt8(messageType, offset);
       offset += BITWISE.BIT8;
-      this.headerBuffer.fill(
+      this.baseHeaderBuffer.fill(
         clientId + NULL_TERMINATOR,
         offset,
         offset + BITWISE.ID_LENGTH + BITWISE.BIT8,
         "utf8"
       );
       offset += BITWISE.ID_LENGTH + BITWISE.BIT8;
-      this.headerBuffer.writeInt8(sequenceNumber, offset);
+      // Write sequence number and ack count
+      this.baseHeaderBuffer.writeUInt8(sequenceNumber, offset);
       offset += BITWISE.BIT8;
-      this.headerBuffer.writeInt8(acknowledgmentId, offset);
-
+      this.baseHeaderBuffer.writeUInt8(ackCount, offset);
+      // Reset header ack range buffer
+      this.headerAckRangeBuffer = undefined;
+      if (ackCount > 0) {
+        // Allocate ack range buffer
+        this.headerAckRangeBuffer = Buffer.allocUnsafe(BITWISE.BIT8 * ackCount);
+        let ackOffset = 0;
+        for (let i = 0; i < ackCount; i++) {
+          const acknowledgmentId = ackRange[i] ?? 0;
+          this.headerAckRangeBuffer.writeUInt8(acknowledgmentId, ackOffset);
+          ackOffset += BITWISE.BIT8;
+        }
+      }
       isPacketHeaderWritten = true;
     } catch (error) {
       throw error;
@@ -70,8 +77,10 @@ export default class NetworkPacketBuilder {
     return isPacketHeaderWritten;
   }
 
-  writePacketPayload(messageType, payload) {
+  writePacketPayload(networkPacket) {
     let isPayloadWritten = false;
+    const messageType = networkPacket.header.messageType;
+    const payload = networkPacket.payload;
     // Reset payload buffer
     this.payloadBuffer = undefined;
     if (payload !== undefined) {
