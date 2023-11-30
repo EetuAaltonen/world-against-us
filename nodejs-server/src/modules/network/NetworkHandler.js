@@ -94,12 +94,12 @@ export default class NetworkHandler {
                 this.networkPacketTracker.getInFlightPacketTrack(client.uuid);
               if (inFlightPacketTrack !== undefined) {
                 if (
-                  inFlightPacketTrack.patchNetworkPacketSequenceNumber(
-                    networkPacket
-                  )
+                  inFlightPacketTrack.patchNetworkPacketAckRange(networkPacket)
                 ) {
                   if (
-                    inFlightPacketTrack.patchAcknowledgmentId(networkPacket)
+                    inFlightPacketTrack.patchNetworkPacketSequenceNumber(
+                      networkPacket
+                    )
                   ) {
                     this.sendPacketOverUDP(networkPacket, client);
                   }
@@ -151,7 +151,8 @@ export default class NetworkHandler {
         const clientId = networkPacket.header.clientId;
         const messageType = networkPacket.header.messageType;
         const sequenceNumber = networkPacket.header.sequenceNumber;
-        const acknowledgmentId = networkPacket.header.acknowledgmentId;
+        const ackCount = networkPacket.header.ackCount;
+        const ackRange = networkPacket.header.ackRange;
 
         switch (messageType) {
           case MESSAGE_TYPE.CONNECT_TO_HOST:
@@ -167,9 +168,7 @@ export default class NetworkHandler {
                     this.networkPacketTracker.getInFlightPacketTrack(
                       newClientId
                     );
-                  inFlightPacketTrack.pendingAcknowledgments.push(
-                    sequenceNumber
-                  );
+                  inFlightPacketTrack.pendingAckRange.push(sequenceNumber);
                   inFlightPacketTrack.expectedSequenceNumber =
                     sequenceNumber + 1;
 
@@ -222,16 +221,17 @@ export default class NetworkHandler {
               const client = this.clientHandler.getClient(clientId);
               if (client !== undefined) {
                 if (
-                  this.networkPacketTracker.processSequenceNumber(
-                    sequenceNumber,
-                    clientId,
-                    messageType
+                  this.networkPacketTracker.processAckRange(
+                    ackCount,
+                    ackRange,
+                    clientId
                   )
                 ) {
                   if (
-                    this.networkPacketTracker.processAcknowledgment(
-                      acknowledgmentId,
-                      clientId
+                    this.networkPacketTracker.processSequenceNumber(
+                      sequenceNumber,
+                      clientId,
+                      messageType
                     )
                   ) {
                     switch (messageType) {
