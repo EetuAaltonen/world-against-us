@@ -1,11 +1,11 @@
 function NetworkPacketTracker() constructor
 {
 	outgoing_sequence_number = -1;
-	max_sequence_number = 127;
+	max_sequence_number = 255;
 	in_flight_packets = ds_list_create();
 	expected_sequence_number = 0;
 	expected_acknowledgment_id = 0;
-	pending_acknowledgments = ds_list_create();
+	pending_ack_range = ds_list_create();
 	dropped_packet_count = 0;
 	
 	static Update = function()
@@ -100,7 +100,7 @@ function NetworkPacketTracker() constructor
 				expected_sequence_number = _sequenceNumber + 1;
 				if (_messageType != MESSAGE_TYPE.ACKNOWLEDGMENT)
 				{
-					ds_list_add(pending_acknowledgments, _sequenceNumber);
+					ds_list_add(pending_ack_range, _sequenceNumber);
 				}
 			} else if (_sequenceNumber > expected_sequence_number)
 			{
@@ -109,7 +109,7 @@ function NetworkPacketTracker() constructor
 				expected_sequence_number = _sequenceNumber + 1;
 				if (_messageType != MESSAGE_TYPE.ACKNOWLEDGMENT)
 				{
-					ds_list_add(pending_acknowledgments, _sequenceNumber);
+					ds_list_add(pending_ack_range, _sequenceNumber);
 				}
 			} else if (_sequenceNumber < expected_sequence_number)
 			{
@@ -154,7 +154,7 @@ function NetworkPacketTracker() constructor
 		dropped_packet_count = 0;
 		
 		ds_list_clear(in_flight_packets);
-		ds_list_clear(pending_acknowledgments);
+		ds_list_clear(pending_ack_range);
 	}
 	
 	static ClearInFlightPacketsByMessageType = function(_messageType)

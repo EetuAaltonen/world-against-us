@@ -298,7 +298,9 @@ function NetworkHandler() constructor
 		{
 			var messageType = networkPacket.header.message_type;
 			var sequenceNumber = networkPacket.header.sequence_number;
-			var acknowledgmentId = networkPacket.header.acknowledgment_id;
+			var ackCount = networkPacket.header.ack_count;
+			var ackRange = networkPacket.header.ack_range;
+
 			switch (messageType)
 			{
 				case MESSAGE_TYPE.INVALID_REQUEST:
@@ -326,9 +328,9 @@ function NetworkHandler() constructor
 				} break;
 				default:
 				{
-					if (network_packet_tracker.ProcessSequenceNumber(sequenceNumber, messageType))
+					if (network_packet_tracker.ProcessAckRange(ackCount, ackRange))
 					{
-						if (network_packet_tracker.ProcessAcknowledgment(acknowledgmentId))
+						if (network_packet_tracker.ProcessSequenceNumber(sequenceNumber, messageType))
 						{
 							switch (messageType)
 							{
