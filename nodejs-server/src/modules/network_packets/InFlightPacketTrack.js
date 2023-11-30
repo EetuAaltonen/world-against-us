@@ -4,11 +4,28 @@ export default class InFlightPacketTrack {
   constructor() {
     this.inFlightPackets = [];
     this.outgoingSequenceNumber = -1;
-    this.maxSequenceNumber = 127;
+    this.maxSequenceNumber = 255;
     this.expectedSequenceNumber = 0;
     // TODO: Add pending acknowledgment logic
-    this.pendingAcknowledgments = [];
+    this.pendingAckRange = [];
     this.droppedPacketCount = 0;
+  }
+
+  patchNetworkPacketAckRange(networkPacket) {
+    let isAcknowledgmentIdPatched = true;
+    if (this.pendingAckRange.length > 0) {
+      // Clone ack range values
+      networkPacket.header.ackCount = this.pendingAckRange.length;
+      networkPacket.header.ackRange = this.pendingAckRange.slice();
+      // Clear pending ack range
+      this.pendingAckRange = [];
+    } else {
+      if (networkPacket.header.message_type === MESSAGE_TYPE.ACKNOWLEDGMENT) {
+        console.log("Useless MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
+        isAcknowledgmentIdPatched = false;
+      }
+    }
+    return isAcknowledgmentIdPatched;
   }
 
   patchNetworkPacketSequenceNumber(networkPacket) {
@@ -21,22 +38,6 @@ export default class InFlightPacketTrack {
       this.inFlightPackets.push(networkPacket);
     }
     return isSequenceNumberPatched;
-  }
-
-  patchAcknowledgmentId(networkPacket) {
-    let isAcknowledgmentIdPatched = true;
-    if (this.pendingAcknowledgments.length > 0) {
-      networkPacket.header.acknowledgmentId = this.pendingAcknowledgments[0];
-      this.pendingAcknowledgments.splice(0, 1);
-      if (this.pendingAcknowledgments.length > 0) {
-        console.log("ACKNOWLEDGMENTs lagging behind");
-      }
-    } else {
-      if (networkPacket.header.message_type == MESSAGE_TYPE.ACKNOWLEDGMENT) {
-        console.log("Useless MESSAGE_TYPE.ACKNOWLEDGMENT sent");
-      }
-    }
-    return isAcknowledgmentIdPatched;
   }
 
   getInFlightPacket(sequenceNumber) {
@@ -64,7 +65,7 @@ export default class InFlightPacketTrack {
     for (let i = 0; i < inFlightPacketCount; i++) {
       const inFlightPacket = this.inFlightPackets[i];
       if (inFlightPacket !== undefined) {
-        if (inFlightPacket.header.sequenceNumber == sequenceNumber) {
+        if (inFlightPacket.header.sequenceNumber === sequenceNumber) {
           this.inFlightPackets.splice(i, 1);
           isPacketDropped = true;
           break;
