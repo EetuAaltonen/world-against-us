@@ -29,12 +29,13 @@ export default class ClientHandler {
     return Object.keys(this.clients).length;
   }
 
-  disconnectClient(clientId, rinfo) {
+  disconnectClient(clientId, clientAddress, clientPort) {
     let isDisconnected = false;
     const index = this.clients.findIndex(
       (client) =>
         (client.uuid === clientId || clientId === UNDEFINED_UUID) &&
-        client.address === rinfo.address
+        client.address === clientAddress &&
+        client.port === clientPort
     );
     if (index > -1) {
       this.clients.splice(index, 1);

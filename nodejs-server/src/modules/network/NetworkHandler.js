@@ -35,19 +35,21 @@ export default class NetworkHandler {
 
     this.networkPacketParser = new NetworkPacketParser();
     this.networkPacketBuilder = new NetworkPacketBuilder();
-    this.networkPacketTracker = new NetworkPacketTracker(this);
     this.clientHandler = new ClientHandler();
     this.instanceHandler = new InstanceHandler(this);
-    this.worldStateHandler = new WorldStateHandler(this, this.instanceHandler);
     this.networkPacketHandler = new NetworkPacketHandler(
       this,
       this.networkPacketBuilder,
       this.clientHandler,
       this.instanceHandler
     );
-    this.lastUpdate = process.hrtime.bigint();
-    this.loopTime = 0;
+    this.networkPacketTracker = new NetworkPacketTracker(
+      this,
+      this.clientHandler
+    );
+    this.worldStateHandler = new WorldStateHandler(this, this.instanceHandler);
 
+    this.lastUpdate = process.hrtime.bigint();
     this.initWorldState();
   }
 
@@ -202,7 +204,8 @@ export default class NetworkHandler {
             {
               isMessageHandled = this.disconnectClientWithTimeout(
                 clientId,
-                rinfo
+                rinfo.address,
+                rinfo.port
               );
             }
             break;
@@ -212,7 +215,8 @@ export default class NetworkHandler {
               console.log(`CLIENT ERROR: ${errorMessage}. Disconnecting...`);
               isMessageHandled = this.disconnectClientWithTimeout(
                 clientId,
-                rinfo
+                rinfo.address,
+                rinfo.port
               );
             }
             break;
@@ -388,7 +392,7 @@ export default class NetworkHandler {
     return isBroadcasted;
   }
 
-  disconnectClientWithTimeout(clientId, rinfo) {
+  disconnectClientWithTimeout(clientId, clientAddress, clientPort) {
     let isDisconnecting = true;
     let client = this.clientHandler.getClient(clientId);
     if (client !== undefined) {
@@ -400,7 +404,13 @@ export default class NetworkHandler {
         if (client !== undefined) {
           instanceId = client.instanceId;
         }
-        if (this.clientHandler.disconnectClient(clientId, rinfo)) {
+        if (
+          this.clientHandler.disconnectClient(
+            clientId,
+            clientAddress,
+            clientPort
+          )
+        ) {
           this.networkPacketTracker.removeInFlightPacketTrack(clientId);
           if (client.instanceId !== undefined) {
             if (
@@ -421,7 +431,7 @@ export default class NetworkHandler {
         }
       }, 1000);
     } else {
-      client = new Client(UNDEFINED_UUID, rinfo.address, rinfo.port);
+      client = new Client(UNDEFINED_UUID, clientAddress, clientPort);
     }
     const networkPacketHeader = new NetworkPacketHeader(
       MESSAGE_TYPE.DISCONNECT_FROM_HOST,
