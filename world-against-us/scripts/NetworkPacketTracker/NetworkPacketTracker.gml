@@ -22,15 +22,15 @@ function NetworkPacketTracker() constructor
 					{
 						if (script_exists(inFlightPacket.ack_timeout_callback_func) && inFlightPacket.acknowledgment_attempt <= inFlightPacket.max_acknowledgment_attempts)
 						{
-							show_debug_message(string("Acknowledgment timeout attempt {0} with message type {1} and sequence number {2} timedout", inFlightPacket.acknowledgment_attempt, inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
+							show_debug_message(string("Acknowledgment timeout attempt {0} with message type {1} and sequence number {2} timed out", inFlightPacket.acknowledgment_attempt, inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
 							inFlightPacket.ack_timeout_callback_func(inFlightPacket);
 							inFlightPacket.acknowledgment_attempt++;
 						} else {
-							show_message(string("Acknowledgment with message type {0} and sequence number {1} timedout", inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
+							show_message(string("Acknowledgment with message type {0} and sequence number {1} timed out", inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
 							global.NetworkHandlerRef.DisconnectTimeout();
 						}
 					} else {
-						show_message(string("Acknowledgment with message type {0} and sequence number {1} timedout without a callback", inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
+						show_message(string("Acknowledgment with message type {0} and sequence number {1} timed out without a callback", inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
 						ds_list_delete(in_flight_packets, i--);
 					}
 				} else {
