@@ -15,10 +15,9 @@ if (initPath)
 				case roomTown: {
 					patrolPath = pthPatrolTown;
 				} break;
-				// TODO: roomForest
-				/*case roomForest: {
-					patrolPath = pthPatrolTown;
-				} break;*/
+				case roomForest: {
+					patrolPath = pthPatrolForest;
+				} break;
 			}
 		}
 	}

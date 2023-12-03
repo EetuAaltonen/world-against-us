@@ -24,6 +24,7 @@ function OnClickWorldMapFastTravel()
 			}
 		}
 	} else {
+		// TODO: Fix with new room change request logic
 		room_goto(metadata.destination_room);
 	}
 }

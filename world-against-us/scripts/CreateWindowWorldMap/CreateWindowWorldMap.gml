@@ -35,10 +35,6 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 	
 	// INSTANCE LIST
 	var emptyInstanceList = ds_list_create();
-	var testFunction = function()
-	{
-		show_message("Hello World!");
-	}
 	var instanceListSize = new Size(300, windowSize.h - infoPanelSize.h - global.ObjHud.hudHeight - 50);
 	var instanceListPosition = new Vector2(10, infoPanelSize.h + 40);
 	var instanceList = new WindowCollectionList(
@@ -90,7 +86,7 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 	var fastTravelCampButton = new WindowButton(
 		"FastTravelCampButton",
 		buttonPositionCamp, buttonSize,
-		buttonStyle.button_background_color, "Camp", buttonStyle, testFunction,
+		buttonStyle.button_background_color, "Camp", buttonStyle, undefined,
 		new WorldMapLocation(roomCamp, ROOM_INDEX_CAMP, "Camp")
 	);
 	fastTravelCampButton.isActive = false;
@@ -107,9 +103,8 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 	var fastTravelForestButton = new WindowButton(
 		"FastTravelForestButton",
 		buttonPositionForest, buttonSize,
-		buttonStyle.button_background_color, "Forest", buttonStyle, testFunction,
-		new WorldMapLocation(undefined, ROOM_INDEX_FOREST, "Forest")
-		// TODO: Room forest
+		buttonStyle.button_background_color, "Forest", buttonStyle, OnClickWorldMapFastTravel,
+		new WorldMapLocation(roomForest, ROOM_INDEX_FOREST, "Forest")
 	);
 	
 	ds_list_add(mapElements,

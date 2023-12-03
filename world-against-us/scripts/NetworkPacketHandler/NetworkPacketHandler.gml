@@ -140,8 +140,7 @@ function NetworkPacketHandler() constructor
 											case ROOM_INDEX_OFFICE: { room_goto(roomOffice); } break;
 											case ROOM_INDEX_LIBRARY: { room_goto(roomLibrary); } break;
 											case ROOM_INDEX_MARKET: { room_goto(roomMarket); } break;
-											// TODO: Add roomForest
-											//case ROOM_INDEX_FOREST: { isPacketHandled = true; room_goto(roomForest); } break;
+											case ROOM_INDEX_FOREST: { room_goto(roomForest); } break;
 											default: { show_debug_message(string("Unknown destination room index to fast travel: {0}", destinationRoomIndex)); }
 										}
 									}
