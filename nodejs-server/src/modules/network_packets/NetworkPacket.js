@@ -3,10 +3,8 @@ export default class NetworkPacket {
     this.header = header;
     this.payload = payload;
     this.priority = priority;
-    // TODO: Resend dropped in-flight packets
-    /*this.ackTimeoutCallbackFunc = ackTimeoutCallbackFunc;
-    this.maxAcknowledgmentAttempts = 2;
-    this.acknowledgmentAttempt = 1;*/
+    this.maxAcknowledgmentAttempt = 2;
+    this.acknowledgmentAttempt = 1;
     this.acknowledgmentTimeout = 3000; // == 3s
     this.timeoutTimer = this.acknowledgmentTimeout;
   }
@@ -18,9 +16,9 @@ export default class NetworkPacket {
   }
 
   // TODO: Add with acknowledgment attempts
-  /*restartTimeOut() {
+  restartTimeOutTimer() {
     this.timeoutTimer = this.acknowledgmentTimeout;
-  }*/
+  }
 
   isTimedOut() {
     return this.timeoutTimer <= 0;

@@ -16,7 +16,7 @@ function init() {
     try {
       if (!networkHandler.handleMessage(msg, rinfo)) {
         console.log(`Failed to handle a message from a client`);
-        isMessageHandled = this.onInvalidRequest(
+        isMessageHandled = networkHandler.onInvalidRequest(
           "Unable to handle the request",
           rinfo
         );

@@ -1,11 +1,15 @@
 import MESSAGE_TYPE from "./MessageType.js";
+import PACKET_PRIORITY from "./PacketPriority.js";
+
 import InFlightPacketTrack from "../network_packets/InFlightPacketTrack.js";
+import NetworkQueueEntry from "./NetworkQueueEntry.js";
 
 const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
 
 export default class NetworkPacketTracker {
-  constructor(networkHandler) {
+  constructor(networkHandler, clientHandler) {
     this.networkHandler = networkHandler;
+    this.clientHandler = clientHandler;
     this.inFlightPacketTracks = {};
   }
 
@@ -15,17 +19,57 @@ export default class NetworkPacketTracker {
     inFlightPacketTrackIds.forEach((clientId) => {
       const inFlightPacketTrack = this.getInFlightPacketTrack(clientId);
       if (inFlightPacketTrack !== undefined) {
-        inFlightPacketTrack.inFlightPackets.forEach((networkPacket) => {
-          if (networkPacket !== undefined) {
-            networkPacket.timeoutTimer -= passedTickTime;
-            if (networkPacket.timeoutTimer <= 0) {
-              console.log(
-                `Acknowledgment with message type ${networkPacket.header.messageType} and sequence number ${networkPacket.header.sequenceNumber} timed out`
-              );
-              this.handleTimedOutAcknowledgment(
-                inFlightPacketTrack,
-                networkPacket.header.sequenceNumber
-              );
+        inFlightPacketTrack.inFlightPackets.forEach((inFlightPacket) => {
+          if (inFlightPacket !== undefined) {
+            inFlightPacket.timeoutTimer -= passedTickTime;
+            if (inFlightPacket.timeoutTimer <= 0) {
+              if (
+                inFlightPacket.acknowledgmentAttempt <=
+                inFlightPacket.maxAcknowledgmentAttempt
+              ) {
+                console.log(
+                  `Acknowledgment timeout attempt ${inFlightPacket.acknowledgmentAttempt} with message type ${inFlightPacket.header.messageType} and sequence number ${inFlightPacket.header.sequenceNumber} timed out`
+                );
+                inFlightPacket.acknowledgmentAttempt++;
+                inFlightPacket.restartTimeOutTimer();
+                const client = this.clientHandler.getClient(clientId);
+                if (client !== undefined) {
+                  if (
+                    !this.resendNetworkPacket(
+                      inFlightPacket,
+                      inFlightPacketTrack,
+                      client
+                    )
+                  ) {
+                    console.log(
+                      `Failed to resend in-flight network packet with message type ${inFlightPacket.header.messageType} and sequence number ${inFlightPacket.header.sequenceNumber}`
+                    );
+                  }
+                } else {
+                  console.log(
+                    `Failed to resend in-flight network packet to undefined client`
+                  );
+                }
+              } else {
+                // TODO: Safety mechanism for dropped packets?
+                if (
+                  inFlightPacketTrack.removeTrackedInFlightPacket(
+                    inFlightPacket.header.sequenceNumber
+                  )
+                ) {
+                  console.log(
+                    `Acknowledgment with message type ${inFlightPacket.header.messageType} and sequence number ${inFlightPacket.header.sequenceNumber} timed out`
+                  );
+                }
+                const client = this.clientHandler.getClient(clientId);
+                if (client !== undefined) {
+                  this.networkHandler.disconnectClientWithTimeout(
+                    inFlightPacket.header.clientId,
+                    client.address,
+                    client.port
+                  );
+                }
+              }
             }
           }
         });
@@ -110,12 +154,22 @@ export default class NetworkPacketTracker {
     delete this.inFlightPacketTracks[clientId];
   }
 
-  handleTimedOutAcknowledgment(inFlightPacketTrack, sequenceNumber) {
-    // TODO: Safety mechanism for dropped packets?
-    if (inFlightPacketTrack.removeTrackedInFlightPacket(sequenceNumber)) {
-      console.log(
-        `Network packet with sequence number ${sequenceNumber} dropped`
+  resendNetworkPacket(inFlightPacket, inFlightPacketTrack, client) {
+    var isPacketResend = false;
+    if (
+      inFlightPacketTrack.removeTrackedInFlightPacket(
+        inFlightPacket.header.sequenceNumber
+      )
+    ) {
+      inFlightPacket.priority = PACKET_PRIORITY.CRITICAL;
+      this.networkHandler.packetQueue.enqueue(
+        new NetworkQueueEntry(inFlightPacket, [client], inFlightPacket.priority)
       );
+      console.log(
+        `Resending packet with message type ${inFlightPacket.header.messageType}`
+      );
+      isPacketResend = true;
     }
+    return isPacketResend;
   }
 }
