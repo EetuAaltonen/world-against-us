@@ -6,6 +6,8 @@ function MapDataHandler() constructor
 	is_dynamic_data_updating = false;
 	map_update_timer = new Timer(TimerFromMilliseconds(300));
 	
+	scouting_drone = undefined;
+	
 	static GetMapDataFileName = function(roomName)
 	{
 		return string("{0}_static_map.json", roomName);
@@ -27,8 +29,9 @@ function MapDataHandler() constructor
 	
 	static UpdateDynamicMapData = function()
 	{
-		dynamic_map_data.icons = GenerateMapIcons(DYNAMIC_MAP_ICON);
-		dynamic_map_data.SortIcons();
+		// TODO: Disabled during prototyping
+		/*dynamic_map_data.icons = GenerateMapIcons(DYNAMIC_MAP_ICON);
+		dynamic_map_data.SortIcons();*/
 	}
 	
 	static GenerateStaticMapData = function()

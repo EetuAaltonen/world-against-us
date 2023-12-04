@@ -8,13 +8,13 @@ function ParseJSONStructToPlayerListInfo(_jsonStruct)
 		if (variable_struct_names_count(playerInfoStruct) <= 0) return parsedPlayerListInfo;
 		
 		var parsedRoomIndex = playerInfoStruct[$ "room_index"] ?? EMPTY_STRING;
-		var parsedRoomName = global.WorldMapLocationData[? parsedRoomIndex];
+		var parsedWorldMapLocation = global.WorldMapLocationData[? parsedRoomIndex] ?? undefined;
 		parsedPlayerListInfo = new PlayerListInfo(
 			playerInfoStruct[$ "player_name"] ?? EMPTY_STRING,
 			playerInfoStruct[$ "instance_id"] ?? -1,
 			parsedRoomIndex
 		);
-		parsedPlayerListInfo.room_name = parsedRoomName;
+		parsedPlayerListInfo.room_name = (!is_undefined(parsedWorldMapLocation)) ? parsedWorldMapLocation.name : "Unknown";
 	} catch (error)
 	{
 		show_debug_message(error);

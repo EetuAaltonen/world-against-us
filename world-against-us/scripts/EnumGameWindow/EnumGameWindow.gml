@@ -37,6 +37,7 @@ enum GAME_WINDOW
 	FacilityAmmunitionSortingMachine,
 	ConstructionSite,
 	GardenBed,
+	OperationsCenter,
 	// GAME OVER
 	GameOver
 }

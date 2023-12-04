@@ -83,28 +83,31 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 	);
 	
 	var buttonPositionCamp = new Vector2(703, 425);
+	var campWorldMapLocationData = global.WorldMapLocationData[? ROOM_INDEX_CAMP];
 	var fastTravelCampButton = new WindowButton(
 		"FastTravelCampButton",
 		buttonPositionCamp, buttonSize,
-		buttonStyle.button_background_color, "Camp", buttonStyle, undefined,
-		new WorldMapLocation(roomCamp, ROOM_INDEX_CAMP, "Camp")
+		buttonStyle.button_background_color, campWorldMapLocationData.name, buttonStyle, undefined,
+		campWorldMapLocationData
 	);
 	fastTravelCampButton.isActive = false;
 	
 	var buttonPositionTown = new Vector2(1388, 408);
+	var townWorldMapLocationData = global.WorldMapLocationData[? ROOM_INDEX_TOWN];
 	var fastTravelTownButton = new WindowButton(
 		"FastTravelTownButton",
 		buttonPositionTown, buttonSize,
-		buttonStyle.button_background_color, "Town", buttonStyle, OnClickWorldMapFastTravel,
-		new WorldMapLocation(roomTown, ROOM_INDEX_TOWN, "Town")
+		buttonStyle.button_background_color, townWorldMapLocationData.name, buttonStyle, OnClickWorldMapFastTravel,
+		townWorldMapLocationData
 	);
 	
 	var buttonPositionForest = new Vector2(1038, 753);
+	var forestWorldMapLocationData = global.WorldMapLocationData[? ROOM_INDEX_FOREST];
 	var fastTravelForestButton = new WindowButton(
 		"FastTravelForestButton",
 		buttonPositionForest, buttonSize,
-		buttonStyle.button_background_color, "Forest", buttonStyle, OnClickWorldMapFastTravel,
-		new WorldMapLocation(roomForest, ROOM_INDEX_FOREST, "Forest")
+		buttonStyle.button_background_color, forestWorldMapLocationData.name, buttonStyle, OnClickWorldMapFastTravel,
+		forestWorldMapLocationData
 	);
 	
 	ds_list_add(mapElements,

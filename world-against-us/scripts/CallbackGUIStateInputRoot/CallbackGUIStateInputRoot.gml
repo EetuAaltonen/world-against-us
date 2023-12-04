@@ -46,7 +46,8 @@ function CallbackGUIStateInputRoot()
 			}
 		} else if (keyboard_check_released(KEY_MAP))
 		{
-			// LOAD STATIC MAP DATA
+			// TODO: Disable while prototyping
+			/*// LOAD STATIC MAP DATA
 			var targetRoomName = room_get_name(room);
 			var fileName = global.MapDataHandlerRef.GetMapDataFileName(targetRoomName);
 			global.MapDataHandlerRef.ReadStaticMapDataFile(fileName);
@@ -62,7 +63,7 @@ function CallbackGUIStateInputRoot()
 				global.GameWindowHandlerRef.OpenWindowGroup([
 					CreateWindowMap(GAME_WINDOW.Map, -1)
 				]);
-			}
+			}*/
 		} else if (keyboard_check_released(KEY_PLAYER_LIST))
 		{
 			if (global.MultiplayerMode)
