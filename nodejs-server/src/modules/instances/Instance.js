@@ -33,6 +33,7 @@ export default class Instance {
   toJSONObject() {
     const formatParentRegionId = this.parentInstanceId ?? -1;
     const formatOwnerClient = this.ownerClient ?? UNDEFINED_UUID;
+    // TODO: Local players
     const formatPatrols = FormatPatrolsToJSONObjectArray(this.localPatrols);
     const arrivedPatrols = formatPatrols.filter(
       (patrolJSONObject) => patrolJSONObject.travel_time <= 0

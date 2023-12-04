@@ -115,10 +115,13 @@ export default class NetworkHandler {
         });
       }
 
-      // Update world state
-      this.worldStateHandler.update(tickTime);
-      // Update instances
-      this.instanceHandler.update(tickTime);
+      // Pause update calls on empty server
+      if (this.clientHandler.getClientCount() > 0) {
+        // Update world state
+        this.worldStateHandler.update(tickTime);
+        // Update instances
+        this.instanceHandler.update(tickTime);
+      }
 
       return setTimeout(() => {
         this.tick();
