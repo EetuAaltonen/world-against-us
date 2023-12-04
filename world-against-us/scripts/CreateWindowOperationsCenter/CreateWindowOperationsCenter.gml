@@ -1,4 +1,4 @@
-function CreateWindowMap(_gameWindowId, _zIndex)
+function CreateWindowOperationsCenter(_gameWindowId, _zIndex)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH);
 	var windowStyle = new GameWindowStyle(c_black, 0.8);
@@ -40,6 +40,7 @@ function CreateWindowMap(_gameWindowId, _zIndex)
 		new Vector2(windowSize.w * 0.5 - (mapSize.w * 0.5), infoPanelSize.h),
 		mapSize, undefined
 	);
+	mapElement.SetMapLocation(ROOM_INDEX_TOWN);
 	
 	ds_list_add(mapElements,
 		mapElement,
@@ -49,6 +50,17 @@ function CreateWindowMap(_gameWindowId, _zIndex)
 	// OVERRIDE WINDOW ONOPEN FUNCTION
 	var overrideOnOpen = function()
 	{
+		// INIT SCOUTING DRONE
+		global.MapDataHandlerRef.scouting_drone = new InstanceObject(sprDrone, objDrone, new Vector2(0, 0));
+		var operationsCenterWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.OperationsCenter);
+		if (!is_undefined(operationsCenterWindow))
+		{
+			var mapElement = operationsCenterWindow.GetChildElementById("MapElement");
+			if (!is_undefined(mapElement))
+			{
+				mapElement.UpdateFollowTarget();
+			}
+		}
 		// TRIGGER MAP UPDATE
 		global.MapDataHandlerRef.is_dynamic_data_updating = true;
 		global.MapDataHandlerRef.map_update_timer.TriggerTimer();
@@ -57,6 +69,8 @@ function CreateWindowMap(_gameWindowId, _zIndex)
 	// OVERRIDE WINDOW ONCLOSE FUNCTION
 	var overrideOnClose = function()
 	{
+		// REMOVE SCOUTING DRONE
+		global.MapDataHandlerRef.scouting_drone = undefined;
 		// SUSPEND MAP UPDATE
 		global.MapDataHandlerRef.is_dynamic_data_updating = true;
 	}
