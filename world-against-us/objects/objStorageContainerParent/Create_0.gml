@@ -3,3 +3,4 @@ event_inherited();
 
 interactionText = "Open storage";
 interactionFunction = InteractionFuncStorageContainer;
+isContainerSearched = true;
