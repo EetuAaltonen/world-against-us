@@ -160,146 +160,60 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 	
 	static DrawContent = function()
 	{
-		// TODO: Fix world map background
-		/*var backgroundSprite = sprMapPrologueBg;*/
-		
-		var mousePosition = MouseGUIPosition();
-		highlighted_icon = undefined;
-		highlighted_position = undefined;
-		highlighted_size = undefined;
-		highlighted_examine_data = undefined;
-		
-		var backgroundScale = new Vector2(
-			sizeZoomed.w,
-			sizeZoomed.h
-		);
-		draw_sprite_ext(
-			sprGUIBg, 0,
-			calculatedPosition.X, calculatedPosition.Y,
-			backgroundScale.X, backgroundScale.Y,
-			0, c_dkgray, 1
-		);
-		
-		var staticMapData = global.MapDataHandlerRef.static_map_data;
-		var dynamicMapData = global.MapDataHandlerRef.dynamic_map_data;
-		var mapIconCount = staticMapData.GetMapIconCount() + dynamicMapData.GetMapIconCount();
-		for (var i = 0, j = 0; (i + j) < mapIconCount;)
+		if (!is_undefined(target_map_location))
 		{
-			var staticMapIcon = staticMapData.GetMapIconByIndex(i);
-			var dynamicMapIcon = dynamicMapData.GetMapIconByIndex(j);
-			
-			var mapIconToDraw = undefined;
-			if (is_undefined(staticMapIcon))
+			// TODO: Fix world map background
+			/*var backgroundSprite = sprMapPrologueBg;*/
+		
+			var mousePosition = MouseGUIPosition();
+			highlighted_icon = undefined;
+			highlighted_position = undefined;
+			highlighted_size = undefined;
+			highlighted_examine_data = undefined;
+		
+			var backgroundScale = new Vector2(
+				sizeZoomed.w,
+				sizeZoomed.h
+			);
+			draw_sprite_ext(
+				sprGUIBg, 0,
+				calculatedPosition.X, calculatedPosition.Y,
+				backgroundScale.X, backgroundScale.Y,
+				0, c_dkgray, 1
+			);
+		
+			// PATROL
+			if (global.DEBUGMODE)
 			{
-				mapIconToDraw = dynamicMapIcon;
-				j++;
-			} else if (is_undefined(dynamicMapIcon))
-			{
-				mapIconToDraw = staticMapIcon;
-				i++;
-			} else {
-				if (staticMapIcon.position.Y == dynamicMapIcon.position.Y)
+				var patrolPath = target_map_location.patrol_path;
+				if (!is_undefined(patrolPath))
 				{
-					if (staticMapIcon.position.X <= dynamicMapIcon.position.X)
+					var pathPointCount = path_get_number(patrolPath);
+					var prevPathPoint = undefined;
+					for (var i = 0; i < pathPointCount; i++)
 					{
-						mapIconToDraw = staticMapIcon;
-						i++;
-					} else {
-						mapIconToDraw = dynamicMapIcon;
-						j++;
+						var pathPoint = new Vector2(
+							path_get_point_x(patrolPath, i),
+							path_get_point_y(patrolPath, i)
+						);
+						var pathPointOnGUI = CalculateIconPosOnGUI(pathPoint);
+						draw_circle_color(pathPointOnGUI.X, pathPointOnGUI.Y, 4, c_white, c_white, false);
+		
+						if (!is_undefined(prevPathPoint))
+						{
+							var prevPathPointOnGUI = CalculateIconPosOnGUI(prevPathPoint);
+							draw_line_color(
+								pathPointOnGUI.X, pathPointOnGUI.Y,
+								prevPathPointOnGUI.X, prevPathPointOnGUI.Y,
+								c_lime, c_lime
+							);
+						}
+						prevPathPoint = pathPoint;
 					}
-				} else if (staticMapIcon.position.Y < dynamicMapIcon.position.Y)
-				{
-					mapIconToDraw = staticMapIcon;
-					i++;
-				} else {
-					mapIconToDraw = dynamicMapIcon;
-					j++;
 				}
 			}
-			
-			if (!is_undefined(mapIconToDraw))
-			{
-				//if (rectangle_in_circle(mapIconToDraw.position.X, mapIconToDraw.position.Y, mapIconToDraw.position.X + mapIconToDraw.size.w, mapIconToDraw.position.Y + mapIconToDraw.size.h, follow_target.x, follow_target.y, vision_radius))
-				//{
-					var positionOnGUI = CalculateIconPosOnGUI(mapIconToDraw.position);
-					var iconSize = CalculateIconSizeOnGUI(mapIconToDraw.size);
-						
-					// CHECK HIGHLIGHTED
-					if (point_in_rectangle(mousePosition.X, mousePosition.Y, positionOnGUI.X, positionOnGUI.Y, positionOnGUI.X + iconSize.w, positionOnGUI.Y + iconSize.h))
-					{
-						if (is_undefined(highlighted_icon))
-						{
-							highlighted_icon = mapIconToDraw;
-							highlighted_position = positionOnGUI;
-							highlighted_size = iconSize;
-						} else {
-							if (mapIconToDraw.origin.Y <= highlighted_icon.origin.Y)
-							{
-								highlighted_icon = mapIconToDraw;
-								highlighted_position = positionOnGUI;
-								highlighted_size = iconSize;
-							}
-						}
-					}
-					draw_sprite_ext(
-						sprGUIBg, 0,
-						positionOnGUI.X,
-						positionOnGUI.Y,
-						iconSize.w, iconSize.h,
-						0, mapIconToDraw.icon_style.rgb_color,
-						mapIconToDraw.icon_alpha
-					);
-						
-					if (global.DEBUGMODE)
-					{
-						var originOnGUI = new Vector2(
-							calculatedPosition.X + ((mapIconToDraw.origin.X * mapScale) * mapZoom),
-							calculatedPosition.Y + ((mapIconToDraw.origin.Y * mapScale) * mapZoom)
-						);
-						draw_circle_color(
-							originOnGUI.X,
-							originOnGUI.Y,
-							2, c_red, c_red,
-							false
-						);
-					
-						draw_set_font(font_small);
-						draw_text_color(
-							positionOnGUI.X,
-							positionOnGUI.Y,
-							string(i),
-							c_red, c_red, c_red, c_red,
-							1
-						);
-						// RESET DRAW PROPERTIES
-						ResetDrawProperties();
-					}
-				//}
-			}
-		}
 		
-		var scoutingDrone = global.MapDataHandlerRef.scouting_drone;
-		if (!is_undefined(scoutingDrone))
-		{
-			var positionOnGUI = CalculateIconPosOnGUI(scoutingDrone.position);
-			var droneScale = max(0.4, iconScale);
-			draw_sprite_ext(
-				scoutingDrone.spr_index, 0,
-				positionOnGUI.X, positionOnGUI.Y,
-				droneScale, droneScale, 0, c_white, 1
-			);
-			
-			draw_circle_color(
-				positionOnGUI.X,
-				positionOnGUI.Y,
-				vision_radius * iconScale,
-				c_red, c_red, true
-			);
-		}
-		
-		/*if (instance_exists(follow_target))
-		{
+			// STATIC AND DYNAMIC DATA
 			var staticMapData = global.MapDataHandlerRef.static_map_data;
 			var dynamicMapData = global.MapDataHandlerRef.dynamic_map_data;
 			var mapIconCount = staticMapData.GetMapIconCount() + dynamicMapData.GetMapIconCount();
@@ -340,13 +254,10 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 			
 				if (!is_undefined(mapIconToDraw))
 				{
-					if (rectangle_in_circle(mapIconToDraw.position.X, mapIconToDraw.position.Y, mapIconToDraw.position.X + mapIconToDraw.size.w, mapIconToDraw.position.Y + mapIconToDraw.size.h, follow_target.x, follow_target.y, vision_radius))
-					{
-						var positionOnGUI = new Vector2(
-							calculatedPosition.X + (mapIconToDraw.position.X * iconScale),
-							calculatedPosition.Y + (mapIconToDraw.position.Y * iconScale)
-						);
-						var iconSize = new Size(mapIconToDraw.size.w * iconScale, mapIconToDraw.size.h * iconScale);
+					//if (rectangle_in_circle(mapIconToDraw.position.X, mapIconToDraw.position.Y, mapIconToDraw.position.X + mapIconToDraw.size.w, mapIconToDraw.position.Y + mapIconToDraw.size.h, follow_target.x, follow_target.y, vision_radius))
+					//{
+						var positionOnGUI = CalculateIconPosOnGUI(mapIconToDraw.position);
+						var iconSize = CalculateIconSizeOnGUI(mapIconToDraw.size);
 						
 						// CHECK HIGHLIGHTED
 						if (point_in_rectangle(mousePosition.X, mousePosition.Y, positionOnGUI.X, positionOnGUI.Y, positionOnGUI.X + iconSize.w, positionOnGUI.Y + iconSize.h))
@@ -365,7 +276,6 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 								}
 							}
 						}
-						
 						draw_sprite_ext(
 							sprGUIBg, 0,
 							positionOnGUI.X,
@@ -399,48 +309,173 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 							// RESET DRAW PROPERTIES
 							ResetDrawProperties();
 						}
-					}
+					//}
 				}
 			}
-			
-			if (!is_undefined(highlighted_icon))
-			{
-				var objectExamineData = GetDataByObjectNameOrRelationFromMap(highlighted_icon.object_name, global.ObjectExamineData);
-				if (!is_undefined(objectExamineData))
-				{
-					highlighted_examine_data = objectExamineData;
-					
-					draw_set_font(font_small);
-					draw_set_color(c_black);
-					draw_set_valign(fa_middle);
-					draw_set_halign(fa_center);
-					
-					draw_text(
-						highlighted_position.X + (highlighted_size.w * 0.5),
-						highlighted_position.Y + highlighted_size.h + 10,
-						objectExamineData.display_name
-					);
-					
-					// RESET DRAW PROPERTIES
-					ResetDrawProperties();
-				}
-			}
-			
-			if (follow_target != noone)
-			{
-				var positionOnGUI = new Vector2(
-					calculatedPosition.X + (follow_target.x * iconScale),
-					calculatedPosition.Y + (follow_target.y * iconScale)
-				);
 		
+			var scoutingDrone = global.MapDataHandlerRef.scouting_drone;
+			if (!is_undefined(scoutingDrone))
+			{
+				var positionOnGUI = CalculateIconPosOnGUI(scoutingDrone.position);
+				var droneScale = max(0.4, iconScale);
 				draw_sprite_ext(
-					follow_target.sprite_index, 0,
+					scoutingDrone.spr_index, 0,
+					positionOnGUI.X, positionOnGUI.Y,
+					droneScale, droneScale, 0, c_white, 1
+				);
+			
+				draw_circle_color(
 					positionOnGUI.X,
 					positionOnGUI.Y,
-					iconScale, iconScale, 1, c_white, 1
+					vision_radius * iconScale,
+					c_red, c_red, true
 				);
 			}
-		}*/
+		
+			/*if (instance_exists(follow_target))
+			{
+				var staticMapData = global.MapDataHandlerRef.static_map_data;
+				var dynamicMapData = global.MapDataHandlerRef.dynamic_map_data;
+				var mapIconCount = staticMapData.GetMapIconCount() + dynamicMapData.GetMapIconCount();
+				for (var i = 0, j = 0; (i + j) < mapIconCount;)
+				{
+					var staticMapIcon = staticMapData.GetMapIconByIndex(i);
+					var dynamicMapIcon = dynamicMapData.GetMapIconByIndex(j);
+			
+					var mapIconToDraw = undefined;
+					if (is_undefined(staticMapIcon))
+					{
+						mapIconToDraw = dynamicMapIcon;
+						j++;
+					} else if (is_undefined(dynamicMapIcon))
+					{
+						mapIconToDraw = staticMapIcon;
+						i++;
+					} else {
+						if (staticMapIcon.position.Y == dynamicMapIcon.position.Y)
+						{
+							if (staticMapIcon.position.X <= dynamicMapIcon.position.X)
+							{
+								mapIconToDraw = staticMapIcon;
+								i++;
+							} else {
+								mapIconToDraw = dynamicMapIcon;
+								j++;
+							}
+						} else if (staticMapIcon.position.Y < dynamicMapIcon.position.Y)
+						{
+							mapIconToDraw = staticMapIcon;
+							i++;
+						} else {
+							mapIconToDraw = dynamicMapIcon;
+							j++;
+						}
+					}
+			
+					if (!is_undefined(mapIconToDraw))
+					{
+						if (rectangle_in_circle(mapIconToDraw.position.X, mapIconToDraw.position.Y, mapIconToDraw.position.X + mapIconToDraw.size.w, mapIconToDraw.position.Y + mapIconToDraw.size.h, follow_target.x, follow_target.y, vision_radius))
+						{
+							var positionOnGUI = new Vector2(
+								calculatedPosition.X + (mapIconToDraw.position.X * iconScale),
+								calculatedPosition.Y + (mapIconToDraw.position.Y * iconScale)
+							);
+							var iconSize = new Size(mapIconToDraw.size.w * iconScale, mapIconToDraw.size.h * iconScale);
+						
+							// CHECK HIGHLIGHTED
+							if (point_in_rectangle(mousePosition.X, mousePosition.Y, positionOnGUI.X, positionOnGUI.Y, positionOnGUI.X + iconSize.w, positionOnGUI.Y + iconSize.h))
+							{
+								if (is_undefined(highlighted_icon))
+								{
+									highlighted_icon = mapIconToDraw;
+									highlighted_position = positionOnGUI;
+									highlighted_size = iconSize;
+								} else {
+									if (mapIconToDraw.origin.Y <= highlighted_icon.origin.Y)
+									{
+										highlighted_icon = mapIconToDraw;
+										highlighted_position = positionOnGUI;
+										highlighted_size = iconSize;
+									}
+								}
+							}
+						
+							draw_sprite_ext(
+								sprGUIBg, 0,
+								positionOnGUI.X,
+								positionOnGUI.Y,
+								iconSize.w, iconSize.h,
+								0, mapIconToDraw.icon_style.rgb_color,
+								mapIconToDraw.icon_alpha
+							);
+						
+							if (global.DEBUGMODE)
+							{
+								var originOnGUI = new Vector2(
+									calculatedPosition.X + ((mapIconToDraw.origin.X * mapScale) * mapZoom),
+									calculatedPosition.Y + ((mapIconToDraw.origin.Y * mapScale) * mapZoom)
+								);
+								draw_circle_color(
+									originOnGUI.X,
+									originOnGUI.Y,
+									2, c_red, c_red,
+									false
+								);
+					
+								draw_set_font(font_small);
+								draw_text_color(
+									positionOnGUI.X,
+									positionOnGUI.Y,
+									string(i),
+									c_red, c_red, c_red, c_red,
+									1
+								);
+								// RESET DRAW PROPERTIES
+								ResetDrawProperties();
+							}
+						}
+					}
+				}
+			
+				if (!is_undefined(highlighted_icon))
+				{
+					var objectExamineData = GetDataByObjectNameOrRelationFromMap(highlighted_icon.object_name, global.ObjectExamineData);
+					if (!is_undefined(objectExamineData))
+					{
+						highlighted_examine_data = objectExamineData;
+					
+						draw_set_font(font_small);
+						draw_set_color(c_black);
+						draw_set_valign(fa_middle);
+						draw_set_halign(fa_center);
+					
+						draw_text(
+							highlighted_position.X + (highlighted_size.w * 0.5),
+							highlighted_position.Y + highlighted_size.h + 10,
+							objectExamineData.display_name
+						);
+					
+						// RESET DRAW PROPERTIES
+						ResetDrawProperties();
+					}
+				}
+			
+				if (follow_target != noone)
+				{
+					var positionOnGUI = new Vector2(
+						calculatedPosition.X + (follow_target.x * iconScale),
+						calculatedPosition.Y + (follow_target.y * iconScale)
+					);
+		
+					draw_sprite_ext(
+						follow_target.sprite_index, 0,
+						positionOnGUI.X,
+						positionOnGUI.Y,
+						iconScale, iconScale, 1, c_white, 1
+					);
+				}
+			}*/
+		}
 	}
 	
 	static CalculateIconPosOnGUI = function(_iconPosition)

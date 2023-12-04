@@ -75,7 +75,8 @@ function MapDataHandler() constructor
 			{
 				if (iconStyle.is_dynamic == isIconDynamic)
 				{
-					var styleObjectIndex = asset_get_index(iconStyle.object_name);
+					// TODO: Fetch dynamic icons from new 'map_object_instances' list
+					/*var styleObjectIndex = asset_get_index(iconStyle.object_name);
 					var instanceCount = instance_number(styleObjectIndex);
 					for (var i = 0; i < instanceCount; i++)
 					{
@@ -104,7 +105,7 @@ function MapDataHandler() constructor
 							);
 							ds_list_add(mapIcons, mapIcon);
 						}
-					}
+					}*/
 				}
 			}
 		}
