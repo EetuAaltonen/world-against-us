@@ -1,0 +1,52 @@
+{
+  "world_map_location_data": [
+    {
+      "room_index": "roomCamp",
+      "name": "Camp",
+      "size": {
+        "w": 1366,
+        "h": 768
+      }
+    },
+    {
+      "room_index": "roomTown",
+      "name": "Town",
+      "size": {
+        "w": 12800,
+        "h": 12800
+      }
+    },
+    {
+      "room_index": "roomOffice",
+      "name": "Office",
+      "size": {
+        "w": 1280,
+        "h": 1280
+      }
+    },
+    {
+      "room_index": "roomLibrary",
+      "name": "Library",
+      "size": {
+        "w": 2560,
+        "h": 2560
+      }
+    },
+    {
+      "room_index": "roomMarket",
+      "name": "Market",
+      "size": {
+        "w": 2560,
+        "h": 2560
+      }
+    },
+    {
+      "room_index": "roomForest",
+      "name": "Forest",
+      "size": {
+        "w": 8000,
+        "h": 8000
+      }
+    }
+  ]
+}

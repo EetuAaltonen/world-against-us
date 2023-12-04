@@ -136,8 +136,8 @@ global.LootTableData = undefined;
 global.QuestData = undefined;
 global.DialogueData = undefined;
 global.ObjectExamineData = undefined;
-global.MapIconStyleData = undefined;
 global.WorldMapLocationData = undefined;
+global.MapIconStyleData = undefined;
 
 // PLAYER INVENTORY
 global.PlayerCharacter = undefined;

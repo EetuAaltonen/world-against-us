@@ -1,6 +1,8 @@
-function WorldMapLocation(_destination_room, _room_index, _name) constructor
+function WorldMapLocation(_room_ref, _room_index, _name, _size, _patrol_path) constructor
 {
-	destination_room = _destination_room;
+	room_ref = _room_ref;
 	room_index = _room_index;
 	name = _name;
+	size = _size;
+	patrol_path = _patrol_path;
 }
