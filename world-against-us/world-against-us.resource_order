@@ -42,6 +42,7 @@
     {"name":"Dialogue","order":13,"path":"folders/Scripts/Game/Data/Dialogue.yy",},
     {"name":"File","order":3,"path":"folders/Scripts/Game/Data/File.yy",},
     {"name":"FixedPoint","order":17,"path":"folders/Scripts/Game/Data/FixedPoint.yy",},
+    {"name":"InstanceObject","order":24,"path":"folders/Scripts/Game/Data/InstanceObject.yy",},
     {"name":"Inventory","order":2,"path":"folders/Scripts/Game/Data/Inventory.yy",},
     {"name":"Functions","order":3,"path":"folders/Scripts/Game/Data/Inventory/Functions.yy",},
     {"name":"Functions","order":5,"path":"folders/Scripts/Game/Data/Inventory/Item/Functions.yy",},
@@ -173,7 +174,6 @@
     {"name":"Structure","order":5,"path":"folders/Sprites/World/Structure.yy",},
     {"name":"Tile Sets","order":2,"path":"folders/Tile Sets.yy",},
     {"name":"Timelines","order":8,"path":"folders/Timelines.yy",},
-    {"name":"InstanceObject","order":24,"path":"folders/Scripts/Game/Data/InstanceObject.yy",},
   ],
   "ResourceOrderSettings": [
     {"name":"objWall","order":3,"path":"objects/objWall/objWall.yy",},

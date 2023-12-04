@@ -56,6 +56,7 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Dialogue","folderPath":"folders/Scripts/Game/Data/Dialogue.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"File","folderPath":"folders/Scripts/Game/Data/File.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"FixedPoint","folderPath":"folders/Scripts/Game/Data/FixedPoint.yy",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"InstanceObject","folderPath":"folders/Scripts/Game/Data/InstanceObject.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Inventory","folderPath":"folders/Scripts/Game/Data/Inventory.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Functions","folderPath":"folders/Scripts/Game/Data/Inventory/Functions.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Item","folderPath":"folders/Scripts/Game/Data/Inventory/Item.yy",},
@@ -199,7 +200,6 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Structure","folderPath":"folders/Sprites/World/Structure.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Tile Sets","folderPath":"folders/Tile Sets.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Timelines","folderPath":"folders/Timelines.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"InstanceObject","folderPath":"folders/Scripts/Game/Data/InstanceObject.yy",},
   ],
   "IncludedFiles": [
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"construction_site_blueprint.json","CopyToMask":-1,"filePath":"datafiles/construction_blueprints",},
