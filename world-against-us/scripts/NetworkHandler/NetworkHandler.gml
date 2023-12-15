@@ -29,9 +29,16 @@ function NetworkHandler() constructor
 			delete_socket_timer.Update();
 			if (network_status == NETWORK_STATUS.CONNECTING || global.MultiplayerMode)
 			{
-				// Update network packet tracker
+				if (global.MultiplayerMode)
+				{
+					// UPDATE NETWORK CONNECTION SAMPLING
+					network_connection_sampler.Update();
+				}
+				
+				// UPDATE NETWORK PACKET TRACKER
 				network_packet_tracker.Update();
-				if (ds_priority_size(network_packet_queue) > 0)
+				
+				if (!ds_priority_empty(network_packet_queue))
 				{
 					var networkPacket = ds_priority_find_min(network_packet_queue);
 					if (!is_undefined(networkPacket))
@@ -92,8 +99,6 @@ function NetworkHandler() constructor
 					}
 				}
 			}*/
-		
-			// TODO: Time out pinging
 		}
 	}
 	
@@ -136,13 +141,14 @@ function NetworkHandler() constructor
 		network_status = NETWORK_STATUS.OFFLINE;
 		host_address = undefined;
 		host_port = undefined;
+		ds_priority_clear(network_packet_queue);
 		delete_socket_timer.StopTimer();
+		
+		// RESET CONNECTION SAMPLING
+		network_connection_sampler.ResetNetworkConnectionSampling();
 		
 		// CLEAR IN FLIGHT NETWORK PACKET TRACKING
 		network_packet_tracker.ResetNetworkPacketTracking();
-		
-		// RESET REGION DATA
-		network_region_handler.ResetRegionData();
 		
 		global.MultiplayerMode = false;
 		
@@ -191,7 +197,7 @@ function NetworkHandler() constructor
 		// FORCE DISCONNECT MESSAGE IF ONLINE
 		if (global.MultiplayerMode)
 		{
-			delete_socket_timer.StartTimer();
+			OnDisconnect();
 			
 			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DISCONNECT_FROM_HOST);
 			var networkPacket = new NetworkPacket(
@@ -244,6 +250,31 @@ function NetworkHandler() constructor
 			}
 		}
 		return isPacketResend;
+	}
+	
+	static OnConnection = function()
+	{
+		network_status = NETWORK_STATUS.CONNECTED;
+		global.MultiplayerMode = true;
+		
+		// START PINGING
+		network_connection_sampler.StartPinging();
+		// SENT RATE SAMPLING
+		network_connection_sampler.sent_rate_sample_timer.StartTimer();
+	}
+	
+	static OnDisconnect = function()
+	{
+		// STOP PINGING
+		network_connection_sampler.StopPinging(-1);
+		// STOP SENT RATE SAMPLING
+		network_connection_sampler.sent_rate_sample_timer.StopTimer();
+		
+		// RESET REGION DATA
+		network_region_handler.ResetRegionData();
+			
+		// DELETE SOCKET WITH DELAY
+		delete_socket_timer.StartTimer();
 	}
 	
 	static OnRoomStart = function()
@@ -347,8 +378,7 @@ function NetworkHandler() constructor
 									{
 										// SET NETWORK PROPERTIES
 										client_id = networkPacket.header.client_id;
-										network_status = NETWORK_STATUS.CONNECTED;
-										global.MultiplayerMode = true;
+										OnConnection();
 						
 										// CLOSE CONNECT WINDOW
 										if (global.GUIStateHandlerRef.CloseCurrentGUIState())
