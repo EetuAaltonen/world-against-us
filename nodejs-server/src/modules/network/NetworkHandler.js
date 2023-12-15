@@ -10,6 +10,7 @@ import NetworkPacketParser from "./NetworkPacketParser.js";
 import NetworkPacketHandler from "./NetworkPacketHandler.js";
 import NetworkPacketBuilder from "./NetworkPacketBuilder.js";
 import NetworkPacketTracker from "./NetworkPacketTracker.js";
+import NetworkConnectionSampler from "../connection_sampling/NetworkConnectionSampler.js";
 import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
 import NetworkPacket from "../network_packets/NetworkPacket.js";
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
@@ -47,6 +48,10 @@ export default class NetworkHandler {
       this,
       this.clientHandler
     );
+    this.networkConnectionSampler = new NetworkConnectionSampler(
+      this,
+      this.clientHandler
+    );
     this.worldStateHandler = new WorldStateHandler(this, this.instanceHandler);
 
     this.lastUpdate = process.hrtime.bigint();
@@ -69,50 +74,105 @@ export default class NetworkHandler {
       const tickTime = Number(now - this.lastUpdate) / 1000000;
       this.lastUpdate = now;
 
+      this.uptime += tickTime;
+
+      // Update connection sampler
+      this.networkConnectionSampler.update(tickTime);
+
       // Update packet tracker
       this.networkPacketTracker.update(tickTime);
 
-      // TODO: Separate packet send for each client to control send rate
       // Broadcast should add a packet for each client's packet queue
       const networkQueueEntry = this.packetQueue.dequeue();
       if (networkQueueEntry != undefined) {
         const networkPacket = networkQueueEntry.networkPacket;
-        networkQueueEntry.clients.forEach((client) => {
+        if (networkPacket != undefined) {
           const messageType = networkPacket.header.messageType;
-          switch (messageType) {
-            // Allowed message types cases without an in flight packet tracking, excluding the default case
-            case MESSAGE_TYPE.DISCONNECT_FROM_HOST:
-              {
-                this.sendPacketOverUDP(networkPacket, client);
-              }
-              break;
-            case MESSAGE_TYPE.INVALID_REQUEST:
-              {
-                this.sendPacketOverUDP(networkPacket, client);
-              }
-              break;
-            default: {
-              const inFlightPacketTrack =
-                this.networkPacketTracker.getInFlightPacketTrack(client.uuid);
-              if (inFlightPacketTrack !== undefined) {
+          const deliveryPolicy = networkPacket.deliveryPolicy;
+          if (deliveryPolicy != undefined) {
+            networkQueueEntry.clients.forEach((client) => {
+              if (client !== undefined) {
                 if (
-                  inFlightPacketTrack.patchNetworkPacketAckRange(networkPacket)
+                  !deliveryPolicy.patchSequenceNumber &&
+                  !deliveryPolicy.patchAckRange &&
+                  !deliveryPolicy.toInFlightTrack
                 ) {
-                  if (
-                    inFlightPacketTrack.patchNetworkPacketSequenceNumber(
-                      networkPacket
-                    )
-                  ) {
-                    this.sendPacketOverUDP(networkPacket, client);
+                  // Send network packet without delivery policy
+                  this.sendPacketOverUDP(networkPacket, client);
+                } else {
+                  const inFlightPacketTrack =
+                    this.networkPacketTracker.getInFlightPacketTrack(
+                      client.uuid
+                    );
+                  if (inFlightPacketTrack !== undefined) {
+                    // Patch sequence number
+                    if (deliveryPolicy.patchSequenceNumber) {
+                      if (
+                        !inFlightPacketTrack.patchSequenceNumber(networkPacket)
+                      ) {
+                        console.log(
+                          "Failed to patch sequence number to network packet"
+                        );
+                        return;
+                      }
+                    }
+                    // Patch ACK range
+                    if (deliveryPolicy.patchAckRange) {
+                      if (!inFlightPacketTrack.patchAckRange(networkPacket)) {
+                        console.log(
+                          "Failed to patch Ack range to network packet"
+                        );
+                        return;
+                      }
+                    }
+                    // Add to in-flight tracking
+                    if (deliveryPolicy.toInFlightTrack) {
+                      if (
+                        !inFlightPacketTrack.addNetworkPacket(networkPacket)
+                      ) {
+                        console.log(
+                          "Failed to add a network packet to in-flight track"
+                        );
+                        return;
+                      }
+                    }
+
+                    // Check start pinging
+                    if (messageType === MESSAGE_TYPE.PONG) {
+                      if (
+                        this.networkConnectionSampler.startPinging(client.uuid)
+                      ) {
+                        const clientConnectionSample =
+                          this.networkConnectionSampler.getClientConnectionSample(
+                            client.uuid
+                          );
+                        if (clientConnectionSample !== undefined) {
+                          const pingSample = clientConnectionSample.pingSample;
+                          networkPacket.payload = pingSample;
+                        }
+                      }
+                    }
+
+                    // Send patched network packet
+                    const sentPacketSize = this.sendPacketOverUDP(
+                      networkPacket,
+                      client
+                    );
+                    // TODO: Check MTU threshold
+                    // Update client data sent rate
+                    const clientConnectionSample =
+                      this.networkConnectionSampler.getClientConnectionSample(
+                        client.uuid
+                      );
+                    if (clientConnectionSample !== undefined) {
+                      clientConnectionSample.dataSentRate += sentPacketSize;
+                    }
                   }
                 }
-              } else if (MESSAGE_TYPE.SERVER_ERROR) {
-                // Exception on SERVER ERRORS
-                this.sendPacketOverUDP(networkPacket, client);
               }
-            }
+            });
           }
-        });
+        }
       }
 
       // Pause update calls on empty server
@@ -130,22 +190,29 @@ export default class NetworkHandler {
       console.log(error);
       this.onError(error);
       setTimeout(() => {
-        this.socket.close();
+        this.onServerClose();
       }, 2000);
       return false;
     }
   }
 
   sendPacketOverUDP(networkPacket, client) {
+    let sentPacketSize = 0;
     const networkBuffer =
       this.networkPacketBuilder.createNetworkBuffer(networkPacket);
-    if (networkBuffer !== undefined)
+    if (networkBuffer !== undefined) {
       this.socket.send(networkBuffer, client.port, client.address, (err) => {
         if (err ?? undefined !== undefined) {
           console.log(err);
         }
       });
-    console.log(`Network packet ${networkBuffer.length * 0.001}kb sent`);
+      // TODO: Check MTU threshold
+      sentPacketSize = networkBuffer.length * 0.001; // Convert to kb
+    }
+    console.log(
+      `Network packet (${networkPacket.header.messageType}) ${sentPacketSize}kb sent`
+    );
+    return sentPacketSize;
   }
 
   handleMessage(msg, rinfo) {
@@ -166,7 +233,11 @@ export default class NetworkHandler {
                 // Generate new Uuid and save client
                 const newClientId = this.clientHandler.connectClient(rinfo);
                 if (newClientId !== undefined) {
+                  // Add network trackers
                   this.networkPacketTracker.addInFlightPacketTrack(newClientId);
+                  this.networkConnectionSampler.addConnectionSample(
+                    newClientId
+                  );
 
                   // Manually add the first outgoing acknowledgment
                   const inFlightPacketTrack =
@@ -195,6 +266,8 @@ export default class NetworkHandler {
                     )
                   );
                   isMessageHandled = true;
+                } else {
+                  console.log("Failed to connect client");
                 }
               } else {
                 console.log(
@@ -338,8 +411,11 @@ export default class NetworkHandler {
     const networkPacket = new NetworkPacket(
       networkPacketHeader,
       undefined,
-      PACKET_PRIORITY.HIGH
+      PACKET_PRIORITY.DEFAULT
     );
+    // Patch delivery policy
+    networkPacket.deliveryPolicy.toInFlightTrack = false;
+
     this.packetQueue.enqueue(
       new NetworkQueueEntry(networkPacket, [client], networkPacket.priority)
     );
@@ -399,8 +475,11 @@ export default class NetworkHandler {
     let isDisconnecting = true;
     let client = this.clientHandler.getClient(clientId);
     if (client !== undefined) {
+      // Remove connection sampling
+      this.networkConnectionSampler.removeClientConnectionSample(clientId);
+
       // Disconnect client locally after 1 seconds
-      // This provides time window to respond to disconnect
+      // This provides time window to send disconnect respond
       setTimeout(() => {
         let instanceId;
         const client = this.clientHandler.getClient(clientId);
@@ -445,6 +524,11 @@ export default class NetworkHandler {
       undefined,
       PACKET_PRIORITY.CRITICAL
     );
+    // Patch delivery policy
+    networkPacket.deliveryPolicy.patchSequenceNumber = false;
+    networkPacket.deliveryPolicy.patchAckRange = false;
+    networkPacket.deliveryPolicy.toInFlightTrack = false;
+
     this.packetQueue.enqueue(
       new NetworkQueueEntry(networkPacket, [client], networkPacket.priority)
     );
@@ -464,6 +548,11 @@ export default class NetworkHandler {
       },
       PACKET_PRIORITY.CRITICAL
     );
+    // Patch delivery policy
+    networkPacket.deliveryPolicy.patchSequenceNumber = false;
+    networkPacket.deliveryPolicy.patchAckRange = false;
+    networkPacket.deliveryPolicy.toInFlightTrack = false;
+
     this.packetQueue.enqueue(
       new NetworkQueueEntry(
         networkPacket,

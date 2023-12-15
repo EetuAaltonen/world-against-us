@@ -1,3 +1,5 @@
+import NetworkPacketDeliveryPolicy from "./NetworkPacketDeliveryPolicy.js";
+
 export default class NetworkPacket {
   constructor(header, payload, priority) {
     this.header = header;
@@ -7,6 +9,8 @@ export default class NetworkPacket {
     this.acknowledgmentAttempt = 1;
     this.acknowledgmentTimeout = 3000; // == 3s
     this.timeoutTimer = this.acknowledgmentTimeout;
+
+    this.deliveryPolicy = new NetworkPacketDeliveryPolicy();
   }
 
   update(passedTickTime) {
