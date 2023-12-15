@@ -154,6 +154,7 @@ global.MultiplayerMode = false;
 global.NetworkRegionHandlerRef = undefined;
 global.NetworkRegionObjectHandlerRef = undefined;
 global.NetworkPacketTrackerRef = undefined;
+global.NetworkConnectionSamplerRef = undefined;
 
 // DRONE
 global.InstanceDrone = noone;

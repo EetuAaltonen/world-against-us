@@ -11,6 +11,7 @@ global.NetworkHandlerRef = instance_exists(objNetwork) ? instance_find(objNetwor
 global.NetworkRegionHandlerRef = (!is_undefined(global.NetworkHandlerRef)) ? global.NetworkHandlerRef.network_region_handler : undefined;
 global.NetworkRegionObjectHandlerRef = (!is_undefined(global.NetworkRegionHandlerRef)) ? global.NetworkRegionHandlerRef.network_region_object_handler : undefined;
 global.NetworkPacketTrackerRef = (!is_undefined(global.NetworkHandlerRef)) ? global.NetworkHandlerRef.network_packet_tracker : undefined;
+global.NetworkConnectionSamplerRef = (!is_undefined(global.NetworkHandlerRef)) ? global.NetworkHandlerRef.network_connection_sampler : undefined;
 
 global.WorldStateHandlerRef = instance_exists(objWorldState) ? instance_find(objWorldState, 0).worldStateHandler : undefined;
 global.WorldStateData = (!is_undefined(global.WorldStateHandlerRef)) ? global.WorldStateHandlerRef.world_states : undefined;

@@ -16,6 +16,8 @@ function NetworkHandler() constructor
 	network_packet_tracker = new NetworkPacketTracker();
 	network_packet_queue = ds_priority_create();
 	
+	network_connection_sampler = new NetworkConnectionSampler();
+	
 	network_region_handler = new NetworkRegionHandler();
 	
 	static Update = function()
