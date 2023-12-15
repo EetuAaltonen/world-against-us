@@ -53,10 +53,19 @@ function NetworkHandler() constructor
 									if (networkPacketSize > 0)
 									{
 										ds_priority_delete_min(network_packet_queue);
+										show_debug_message(string("Network packet ({0}) {1}kb sent", networkPacket.header.message_type, networkPacketSize * 0.001));
 									} else {
-										show_debug_message(string("Failed to send packet with message type {0} to in-flight queue", networkPacket.header.message_type));	
+										show_debug_message(string("Failed to send packet with message type {0}", networkPacket.header.message_type));	
 									}
+									// UPDATE DATA SENT RATE
+									global.NetworkConnectionSamplerRef.data_sent_rate += networkPacketSize;
 								}
+							}
+						} else {
+							// DELETE UNNECESSARY ACKNOWLEDGMENTS
+							if (networkPacket.header.message_type == MESSAGE_TYPE.ACKNOWLEDGMENT)
+							{
+								ds_priority_delete_min(network_packet_queue);
 							}
 						}
 					}
@@ -107,9 +116,7 @@ function NetworkHandler() constructor
 		var networkPacketSize = 0;
 		if (!is_undefined(socket))
 		{
-			// TODO: CALCULATE kbs
 			networkPacketSize = network_send_udp_raw(socket, host_address, host_port, pre_alloc_network_buffer, buffer_tell(pre_alloc_network_buffer));
-			show_debug_message(string("Sent network packet size: {0}kb", networkPacketSize * 0.001));
 		}
 		return networkPacketSize;
 	}
@@ -483,7 +490,7 @@ function NetworkHandler() constructor
 		var networkPacket = new NetworkPacket(
 			networkPacketHeader,
 			undefined,
-			PACKET_PRIORITY.HIGH
+			PACKET_PRIORITY.DEFAULT
 		);
 		isResponseQueued = AddPacketToQueue(networkPacket);
 		return isResponseQueued;

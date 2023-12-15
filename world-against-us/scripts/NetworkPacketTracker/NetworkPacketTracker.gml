@@ -23,15 +23,28 @@ function NetworkPacketTracker() constructor
 						if (script_exists(inFlightPacket.ack_timeout_callback_func) && inFlightPacket.acknowledgment_attempt <= inFlightPacket.max_acknowledgment_attempts)
 						{
 							show_debug_message(string("Acknowledgment timeout attempt {0} with message type {1} and sequence number {2} timed out", inFlightPacket.acknowledgment_attempt, inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
+							// CALL TIMEOUT CALLBACK FUNCTION
 							inFlightPacket.ack_timeout_callback_func(inFlightPacket);
 							inFlightPacket.acknowledgment_attempt++;
 						} else {
 							show_message(string("Acknowledgment with message type {0} and sequence number {1} timed out", inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
+							// DISCONNECT AFTER FAILED ATTEMPTS
+							ds_list_delete(in_flight_packets, i--);
 							global.NetworkHandlerRef.DisconnectTimeout();
 						}
 					} else {
-						show_message(string("Acknowledgment with message type {0} and sequence number {1} timed out without a callback", inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
-						ds_list_delete(in_flight_packets, i--);
+						if (inFlightPacket.acknowledgment_attempt <= inFlightPacket.max_acknowledgment_attempts)
+						{
+							show_message(string("Acknowledgment timeout attempt {0} with message type {1} and sequence number {2} timed out without a callback", inFlightPacket.acknowledgment_attempt, inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
+							// WAIT WITHOUT TIMEOUT CALLBACK FUNCTION
+							inFlightPacket.acknowledgment_attempt++;
+							inFlightPacket.timeout_timer.StartTimer();
+						} else {
+							show_message(string("Acknowledgment with message type {0} and sequence number {1} timed out without a callback", inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
+							// DISCONNECT AFTER FAILED ATTEMPTS
+							ds_list_delete(in_flight_packets, i--);
+							global.NetworkHandlerRef.DisconnectTimeout();
+						}
 					}
 				} else {
 					inFlightPacket.timeout_timer.Update();
@@ -54,7 +67,7 @@ function NetworkPacketTracker() constructor
 		} else {
 			if (_networkPacket.header.message_type == MESSAGE_TYPE.ACKNOWLEDGMENT)
 			{
-				show_debug_message("Useless MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
+				show_debug_message("Unnecessary MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
 				isAckRangePatched = false;
 			}
 		}
