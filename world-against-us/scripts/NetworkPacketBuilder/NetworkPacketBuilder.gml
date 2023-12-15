@@ -70,6 +70,16 @@ function NetworkPacketBuilder() constructor
 				buffer_seek(_networkBuffer, buffer_seek_relative, 0);
 				switch (_networkMessageType)
 				{
+					case MESSAGE_TYPE.PING:
+					{
+						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.client_time);
+						isPayloadWritten = true;
+					} break;
+					case MESSAGE_TYPE.PONG:
+					{
+						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.server_time);
+						isPayloadWritten = true;
+					} break;
 					case MESSAGE_TYPE.DATA_PLAYER_POSITION:
 					{
 						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.X);

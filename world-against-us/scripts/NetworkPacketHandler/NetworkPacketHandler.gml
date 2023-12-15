@@ -11,6 +11,24 @@ function NetworkPacketHandler() constructor
 				var payload = _networkPacket.payload;
 				switch (messageType)
 				{
+					case MESSAGE_TYPE.PONG:
+					{
+						var pingSample = payload;
+						if (!is_undefined(pingSample))
+						{
+							global.NetworkConnectionSamplerRef.StopPinging(pingSample.client_time);
+							
+							// RESPONSE WITH PONG
+							var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PONG);
+							var networkPacket = new NetworkPacket(
+								networkPacketHeader,
+								pingSample,
+								PACKET_PRIORITY.DEFAULT,
+								undefined
+							);
+							isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
+						}
+					} break;
 					case MESSAGE_TYPE.REQUEST_JOIN_GAME:
 					{
 						var networkJoinGameRequest = payload;
