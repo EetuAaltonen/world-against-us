@@ -44,6 +44,12 @@ function NetworkPacketParser() constructor
 			{
 				switch (_messageType)
 				{
+					case MESSAGE_TYPE.PONG:
+					{
+						var parsedClientTime = buffer_read(_msg, buffer_u32);
+						var parsedServerTime = buffer_read(_msg, buffer_u32);
+						parsedPayload = new NetworkPingSample(parsedClientTime, parsedServerTime);
+					} break;
 					case MESSAGE_TYPE.REQUEST_JOIN_GAME:
 					{
 						var payloadString = buffer_read(_msg, buffer_string);
