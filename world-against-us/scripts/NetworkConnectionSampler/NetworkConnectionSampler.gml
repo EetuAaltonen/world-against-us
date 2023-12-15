@@ -7,7 +7,7 @@ function NetworkConnectionSampler() constructor
 	
 	sent_rate_sample_timer = new Timer(TimerFromSeconds(1));
 	data_sent_rate = 0;
-	last_data_sent_rate = 0;
+	last_data_sent_rate = undefined;
 	
 	static Update = function()
 	{
@@ -49,7 +49,7 @@ function NetworkConnectionSampler() constructor
 			networkPacketHeader,
 			pingSample,
 			PACKET_PRIORITY.HIGH,
-			undefined
+			AckTimeoutFuncPinging
 		);
 		if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 		{
