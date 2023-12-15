@@ -23,6 +23,8 @@ const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
 export default class NetworkHandler {
   constructor(socket) {
     this.socket = socket;
+    this.isServerRunning = true;
+    this.uptime = 0;
 
     this.packetQueue = new PriorityQueuePkg.PriorityQueue((a, b) => {
       if (a.priority >= b.priority) {
@@ -69,6 +71,7 @@ export default class NetworkHandler {
   }
 
   tick() {
+    if (!this.isServerRunning) return;
     try {
       const now = process.hrtime.bigint();
       const tickTime = Number(now - this.lastUpdate) / 1000000;
@@ -321,6 +324,59 @@ export default class NetworkHandler {
                           isMessageHandled = true;
                         }
                         break;
+                      case MESSAGE_TYPE.PING:
+                        {
+                          const pingSample = networkPacket.payload;
+                          if (pingSample !== undefined) {
+                            if (
+                              this.networkConnectionSampler.initPinging(
+                                clientId,
+                                pingSample
+                              )
+                            ) {
+                              const responsePingPong =
+                                this.networkConnectionSampler.getClientConnectionSample(
+                                  clientId
+                                );
+
+                              const networkPacketHeader =
+                                new NetworkPacketHeader(
+                                  MESSAGE_TYPE.PONG,
+                                  client.uuid
+                                );
+                              const networkPacket = new NetworkPacket(
+                                networkPacketHeader,
+                                responsePingPong,
+                                PACKET_PRIORITY.HIGH
+                              );
+                              // Patch delivery policy
+                              networkPacket.deliveryPolicy.toInFlightTrack = false;
+
+                              this.packetQueue.enqueue(
+                                new NetworkQueueEntry(
+                                  networkPacket,
+                                  [client],
+                                  networkPacket.priority
+                                )
+                              );
+                              isMessageHandled = true;
+                            }
+                          }
+                        }
+                        break;
+                      case MESSAGE_TYPE.PONG:
+                        {
+                          const pingSample = networkPacket.payload;
+                          if (pingSample !== undefined) {
+                            this.networkConnectionSampler.stopPinging(
+                              clientId,
+                              pingSample
+                            );
+                            this.queueAcknowledgmentResponse(client);
+                            isMessageHandled = true;
+                          }
+                        }
+                        break;
                       case MESSAGE_TYPE.REQUEST_JOIN_GAME:
                         {
                           const player = new Player(`Player_${clientId}`);
@@ -397,7 +453,7 @@ export default class NetworkHandler {
     } catch (error) {
       this.onError(error);
       setTimeout(() => {
-        this.socket.close();
+        this.onServerClose();
       }, 2000);
     }
   }
@@ -565,7 +621,7 @@ export default class NetworkHandler {
 
   onError(error) {
     try {
-      console.log(`server error:\n${error.stack}`);
+      console.log(`Server error:\n${error.stack}`);
       const allClients = this.clientHandler.getAllClients();
       const networkPacketHeader = new NetworkPacketHeader(
         MESSAGE_TYPE.SERVER_ERROR,
@@ -574,18 +630,32 @@ export default class NetworkHandler {
       const networkPacket = new NetworkPacket(
         networkPacketHeader,
         {
-          error: "Internal Server Error.",
+          error: "Internal Server Error",
         },
         PACKET_PRIORITY.CRITICAL
       );
+      // Patch delivery policy
+      networkPacket.deliveryPolicy.patchSequenceNumber = false;
+      networkPacket.deliveryPolicy.patchAckRange = false;
+      networkPacket.deliveryPolicy.toInFlightTrack = false;
+
       this.packetQueue.enqueue(
         new NetworkQueueEntry(networkPacket, allClients, networkPacket.priority)
       );
     } catch (error) {
-      console.log(`server error:\n${error.stack}`);
+      console.log(`Server error:\n${error.stack}`);
       setTimeout(() => {
-        this.socket.close();
+        this.onServerClose();
       }, 2000);
     }
+  }
+
+  onServerClose() {
+    try {
+      this.socket.close();
+    } catch (error) {
+      console.log("Failed to close the socket");
+    }
+    this.isServerRunning = false;
   }
 }
