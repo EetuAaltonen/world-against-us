@@ -10,6 +10,7 @@ import NetworkInventoryStream from "../network_inventory_stream/NetworkInventory
 import NetworkInventoryStreamItems from "../network_inventory_stream/NetworkInventoryStreamItems.js";
 import ContainerInventoryActionInfo from "../containers/ContainerInventoryActionInfo.js";
 import PatrolState from "../patrols/PatrolState.js";
+import NetworkPingSample from "../connection_sampling/NetworkPingSample.js";
 
 import ParseJSONObjectsToArray from "../json/ParseJSONObjectsToArray.js";
 import ParseJSONObjectToItemReplica from "../items/ParseJSONObjectToItemReplica.js";
@@ -50,6 +51,20 @@ export default class NetworkPacketParser {
     try {
       if (msg.length > 0) {
         switch (messageType) {
+          case MESSAGE_TYPE.PING:
+            {
+              let offset = 0;
+              const parsedClientTime = msg.readUInt32LE(offset);
+              payload = new NetworkPingSample(parsedClientTime, 0);
+            }
+            break;
+          case MESSAGE_TYPE.PONG:
+            {
+              let offset = 0;
+              const parsedServerTime = msg.readUInt32LE(offset);
+              payload = new NetworkPingSample(0, parsedServerTime);
+            }
+            break;
           case MESSAGE_TYPE.DATA_PLAYER_POSITION:
             {
               let offset = 0;

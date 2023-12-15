@@ -11,7 +11,18 @@ export default class InFlightPacketTrack {
     this.droppedPacketCount = 0;
   }
 
-  patchNetworkPacketAckRange(networkPacket) {
+  patchSequenceNumber(networkPacket, inFlightPacketTrack) {
+    let isSequenceNumberPatched = true;
+    if (++this.outgoingSequenceNumber > this.maxSequenceNumber) {
+      this.outgoingSequenceNumber = 0;
+    }
+    networkPacket.header.sequenceNumber = this.outgoingSequenceNumber;
+    if (inFlightPacketTrack) {
+    }
+    return isSequenceNumberPatched;
+  }
+
+  patchAckRange(networkPacket) {
     let isAcknowledgmentIdPatched = true;
     if (this.pendingAckRange.length > 0) {
       // Clone ack range values
@@ -21,23 +32,21 @@ export default class InFlightPacketTrack {
       this.pendingAckRange = [];
     } else {
       if (networkPacket.header.message_type === MESSAGE_TYPE.ACKNOWLEDGMENT) {
-        console.log("Useless MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
+        console.log("Unnecessary MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
+        // Reverse outgoing sequence number
+        if (--this.outgoingSequenceNumber < 0) {
+          this.outgoingSequenceNumber = this.maxSequenceNumber;
+        }
         isAcknowledgmentIdPatched = false;
       }
     }
     return isAcknowledgmentIdPatched;
   }
 
-  patchNetworkPacketSequenceNumber(networkPacket) {
-    let isSequenceNumberPatched = true;
-    if (++this.outgoingSequenceNumber > this.maxSequenceNumber) {
-      this.outgoingSequenceNumber = 0;
-    }
-    networkPacket.header.sequenceNumber = this.outgoingSequenceNumber;
-    if (networkPacket.header.messageType !== MESSAGE_TYPE.ACKNOWLEDGMENT) {
-      this.inFlightPackets.push(networkPacket);
-    }
-    return isSequenceNumberPatched;
+  addNetworkPacket(networkPacket) {
+    let isPacketAdded = true;
+    this.inFlightPackets.push(networkPacket);
+    return isPacketAdded;
   }
 
   getInFlightPacket(sequenceNumber) {

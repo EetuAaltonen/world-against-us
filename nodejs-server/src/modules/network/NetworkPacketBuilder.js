@@ -86,6 +86,19 @@ export default class NetworkPacketBuilder {
     if (payload !== undefined) {
       try {
         switch (messageType) {
+          case MESSAGE_TYPE.PONG:
+            {
+              const bufferPingPong = Buffer.allocUnsafe(
+                BITWISE.BIT32 + BITWISE.BIT32
+              );
+              let offset = 0;
+              bufferPingPong.writeUInt32LE(payload.clientTime, offset);
+              offset += BITWISE.BIT32;
+              bufferPingPong.writeUInt32LE(payload.serverTime, offset);
+              this.payloadBuffer = bufferPingPong;
+              isPayloadWritten = true;
+            }
+            break;
           case MESSAGE_TYPE.SYNC_WORLD_STATE_WEATHER:
             {
               const bufferWeather = Buffer.allocUnsafe(BITWISE.BIT8);
