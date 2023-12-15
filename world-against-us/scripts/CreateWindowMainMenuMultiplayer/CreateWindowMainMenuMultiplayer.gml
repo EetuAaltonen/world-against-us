@@ -40,6 +40,9 @@ function CreateWindowMainMenuMultiplayer(_gameWindowId, _zIndex)
 		new Vector2(panelSize.w * 0.5 - (inputSize.w * 0.5), panelSize.h * 0.5 - (inputSize.h * 0.5) + 20),
 		inputSize, #48a630, "*Port"
 	);
+	// SET DEFAULT SERVER INFO
+	addressInput.input = DEFAULT_HOST_ADDRESS;
+	portInput.input = DEFAULT_HOST_PORT;
 	
 	// CONNECT BUTTON
 	var buttonSize = new Size(100, 30);

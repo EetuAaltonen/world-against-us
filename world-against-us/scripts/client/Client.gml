@@ -1,3 +1,4 @@
+// TODO: Remove this old struct
 function Client(_hostAddress = undefined, _hostPort = undefined) constructor
 {
 	hostAddress = _hostAddress;

@@ -1,9 +1,3 @@
 networkHandler = new NetworkHandler();
-
-defaultHost = "127.0.0.1";
-defaultPort = 8080;
+// TODO: Remove this old variable
 client = new Client(undefined, undefined);
-
-latency = 0;
-latencyTimer = 0;
-isLatencyTimerRunning = false;
