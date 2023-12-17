@@ -4,13 +4,13 @@ import PACKET_PRIORITY from "./PacketPriority.js";
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
 import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
 import NetworkPacket from "../network_packets/NetworkPacket.js";
-import PlayerListInfo from "../players/PlayerListInfo.js";
 import WorldMapFastTravelInfo from "../world_map/WorldMapFastTravelInfo.js";
 import ContainerContentInfo from "../containers/ContainerContentInfo.js";
 import NetworkInventoryStreamItems from "../network_inventory_stream/NetworkInventoryStreamItems.js";
+import PlayerInfo from "../players/PlayerInfo.js";
 
 import ParseJSONObjectToContainerAction from "../containers/ParseJSONObjectToContainerAction.js";
-import NetworkWorldStateSync from "../world_state/NetworkWorldStateSync.js";
+import FormatArrayToJSONStructArray from "../formatting/FormatArrayToJSONStructArray.js";
 
 export default class NetworkPacketHandler {
   constructor(
@@ -108,21 +108,18 @@ export default class NetworkPacketHandler {
         case MESSAGE_TYPE.REQUEST_PLAYER_LIST:
           {
             const clients = this.clientHandler.getAllClients();
-            const playerListInfoArray = clients.map((client) => {
+            const playerInfoArray = clients.map((client) => {
               let playerName = "Player X";
               let instanceId = client.instanceId;
               let roomIndex = "";
               let instance = this.instanceHandler.getInstance(instanceId);
-              console.log;
               if (instance !== undefined) {
                 roomIndex = instance.roomIndex;
               }
-              return new PlayerListInfo(
-                playerName,
-                instanceId ?? -1,
-                roomIndex
-              );
+              return new PlayerInfo(playerName, instanceId ?? -1, roomIndex);
             });
+            const formatPlayerInfoArray =
+              FormatArrayToJSONStructArray(playerInfoArray);
 
             const networkPacketHeader = new NetworkPacketHeader(
               MESSAGE_TYPE.REQUEST_PLAYER_LIST,
@@ -130,7 +127,7 @@ export default class NetworkPacketHandler {
             );
             const networkPacket = new NetworkPacket(
               networkPacketHeader,
-              { player_list: playerListInfoArray },
+              { player_list: formatPlayerInfoArray },
               PACKET_PRIORITY.DEFAULT
             );
             this.networkHandler.packetQueue.enqueue(
