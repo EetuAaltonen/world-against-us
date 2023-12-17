@@ -13,7 +13,7 @@ export default class Patrol {
     this.travelTime = GetRandomInt(MIN_TRAVEL_TIME, MAX_TRAVEL_TIME);
   }
 
-  toJSONObject() {
+  toJSONStruct() {
     var formatScaledRouteProgress = Math.round(
       (1 - this.routeTime / this.totalRouteTime) * 1000
     );

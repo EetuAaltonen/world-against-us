@@ -26,14 +26,14 @@ export default class WorldStateHandler {
     this.autoSaveTimer = 0;
   }
 
-  toJSONObject() {
-    const formatDateTime = this.dateTime.toJSONObject();
+  toJSONStruct() {
+    const formatDateTime = this.dateTime.toJSONStruct();
     let formatCampStorage = {};
 
     const campStorageContainer =
       this.instanceHandler.getDefaultCampStorageContainer();
     if (campStorageContainer !== undefined) {
-      formatCampStorage = campStorageContainer.toJSONObject();
+      formatCampStorage = campStorageContainer.toJSONStruct();
     }
 
     return {
@@ -60,7 +60,7 @@ export default class WorldStateHandler {
 
   autosave() {
     let isAutoSaveCompleted = false;
-    const worldStateJSONObject = this.toJSONObject();
+    const worldStateJSONObject = this.toJSONStruct();
     if (worldStateJSONObject !== undefined) {
       if (this.fileHandler.saveToFile(worldStateJSONObject)) {
         this.autoSaveTimer = 0;
@@ -72,7 +72,7 @@ export default class WorldStateHandler {
 
   loadSave() {
     let isSaveLoaded = false;
-    const worldStateJSONObject = this.toJSONObject();
+    const worldStateJSONObject = this.toJSONStruct();
     if (worldStateJSONObject !== undefined) {
       const saveData = this.fileHandler.loadFromFile();
       if (saveData !== undefined) {

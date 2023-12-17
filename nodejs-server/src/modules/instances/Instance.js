@@ -7,7 +7,7 @@ import Patrol from "../patrols/Patrol.js";
 import GetRandomInt from "../math/GetRandomInt.js";
 import PatrolState from "../patrols/PatrolState.js";
 
-import FormatPatrolsToJSONObjectArray from "../patrols/FormatPatrolsToJSONObjectArray.js";
+import FormatPatrolsToJSONStructArray from "../patrols/FormatPatrolsToJSONStructArray.js";
 
 const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
 
@@ -30,11 +30,11 @@ export default class Instance {
     this.availablePatrolId = 0;
   }
 
-  toJSONObject() {
+  toJSONStruct() {
     const formatParentRegionId = this.parentInstanceId ?? -1;
     const formatOwnerClient = this.ownerClient ?? UNDEFINED_UUID;
     // TODO: Local players
-    const formatPatrols = FormatPatrolsToJSONObjectArray(this.localPatrols);
+    const formatPatrols = FormatPatrolsToJSONStructArray(this.localPatrols);
     const arrivedPatrols = formatPatrols.filter(
       (patrolJSONObject) => patrolJSONObject.travel_time <= 0
     );

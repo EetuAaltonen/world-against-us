@@ -42,7 +42,7 @@ export default class NetworkPacketHandler {
             );
             const networkPacket = new NetworkPacket(
               networkPacketHeader,
-              networkWorldStateSync,
+              worldStateSync.toJSONStruct(),
               PACKET_PRIORITY.HIGH
             );
             this.networkHandler.packetQueue.enqueue(
@@ -79,7 +79,7 @@ export default class NetworkPacketHandler {
           break;
         case MESSAGE_TYPE.SYNC_INSTANCE:
           {
-            const formatInstance = instance.toJSONObject();
+            const formatInstance = instance.toJSONStruct();
             const networkPacketHeader = new NetworkPacketHeader(
               MESSAGE_TYPE.SYNC_INSTANCE,
               client.uuid

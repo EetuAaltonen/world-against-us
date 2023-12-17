@@ -6,7 +6,7 @@ export default class Inventory {
     this.items = {};
   }
 
-  toJSONObject() {
+  toJSONStruct() {
     const formatItems = FormatItemReplicasToJSONObjectArray(this.items);
     return {
       inventory_id: this.inventoryId,

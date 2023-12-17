@@ -6,8 +6,8 @@ export default class Container {
     this.inventory = new Inventory(containerId);
   }
 
-  toJSONObject() {
-    const formatInventory = this.inventory.toJSONObject();
+  toJSONStruct() {
+    const formatInventory = this.inventory.toJSONStruct();
     return {
       container_id: this.containerId,
       inventory: formatInventory,

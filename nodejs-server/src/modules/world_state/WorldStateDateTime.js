@@ -20,7 +20,7 @@ export default class WorldStateDateTime {
     this.timeScale = this.defaultTimeScale;
   }
 
-  toJSONObject() {
+  toJSONStruct() {
     return {
       year: this.year,
       month: this.month,

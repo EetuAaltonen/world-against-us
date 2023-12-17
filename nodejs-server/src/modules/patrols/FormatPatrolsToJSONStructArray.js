@@ -3,7 +3,7 @@ export default function (patrols) {
   if (patrols !== undefined) {
     Object.keys(patrols).forEach((patrolId) => {
       const patrol = patrols[patrolId];
-      formatPatrolArray.push(patrol.toJSONObject());
+      formatPatrolArray.push(patrol.toJSONStruct());
     });
   }
   return formatPatrolArray;
