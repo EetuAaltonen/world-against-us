@@ -7,7 +7,7 @@ function ParseJSONStructToPatrol(_jsonStruct)
 		var patrolStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 		if (variable_struct_names_count(patrolStruct) <= 0) return parsedPatrol;
 		
-		var parsedRouteProgress = (patrolStruct[$ "scaled_route_progress"] ?? 0) * 0.001;
+		var parsedRouteProgress = ScaleIntPercentToFloat(patrolStruct[$ "scaled_route_progress"] ?? 0);
 		parsedPatrol = new Patrol(
 			patrolStruct[$ "patrol_id"] ?? -1,
 			patrolStruct[$ "ai_state"] ?? -1,

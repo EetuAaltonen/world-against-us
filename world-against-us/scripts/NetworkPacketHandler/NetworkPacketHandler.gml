@@ -365,6 +365,64 @@ function NetworkPacketHandler() constructor
 							}
 						}
 					} break;
+					case MESSAGE_TYPE.REQUEST_SCOUT_LIST:
+					{
+						var parsedAvailableInstances = payload;
+						var scoutListWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.OperationsCenterScoutList);
+						if (!is_undefined(scoutListWindow))
+						{
+							var scoutListElement = scoutListWindow.GetChildElementById("ScoutList");
+							if (!is_undefined(scoutListElement))
+							{
+								scoutListElement.UpdateDataCollection(parsedAvailableInstances);
+										
+								// HIDE LOADING ICON
+								var scoutListLoadingElement = scoutListWindow.GetChildElementById("ScoutListLoading");
+								if (!is_undefined(scoutListLoadingElement))
+								{
+									scoutListLoadingElement.isVisible = false;
+								}
+								// RESPOND WITH ACKNOWLEDGMENT TO END INSTANCE LIST REQUEST
+								isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
+							}
+						}
+					} break;
+					case MESSAGE_TYPE.START_OPERATIONS_SCOUT_STREAM:
+					{
+						var operationsCenterWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.OperationsCenter);
+						if (!is_undefined(operationsCenterWindow))
+						{
+							// CLOSE OPERATION SCOUT LIST WINDOW
+							if (global.GUIStateHandlerRef.IsCurrentGUIStateGameWindowOpen(GAME_WINDOW.OperationsCenterScoutList))
+							{
+								global.GUIStateHandlerRef.CloseCurrentGUIState();
+							}
+							// TRIGGER MAP UPDATE
+							global.MapDataHandlerRef.is_dynamic_data_updating = true;
+							global.MapDataHandlerRef.map_update_timer.TriggerTimer();
+							// RESPOND WITH ACKNOWLEDGMENT ON NEXT OPERATION SCOUT STREAM
+							isPacketHandled = true;
+						}
+					} break;
+					case MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM:
+					{
+						var region = payload;
+						if (!is_undefined(region))
+						{
+							// SYNC DYNAMIC REGION MAP DATA
+							global.MapDataHandlerRef.SyncDynamicMapData(region);
+							// RESTART MAP DATA UPDATE TIMER
+							global.MapDataHandlerRef.is_dynamic_data_updating = true;
+							global.MapDataHandlerRef.map_update_timer.StartTimer();
+							// RESPOND WITH ACKNOWLEDGMENT TO OPERATIONS SCOUT STREAM REQUEST
+							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
+						}
+					} break;
+					case MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM:
+					{
+						// RESPOND WITH ACKNOWLEDGMENT TO END OPERATIONS SCOUT STREAM REQUEST
+						isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
+					} break;
 					default:
 					{
 						var errorMessage = string("Implementation missing for message type {0}", messageType);
