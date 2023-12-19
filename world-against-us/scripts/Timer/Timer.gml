@@ -12,6 +12,7 @@ function Timer(_setting_time) constructor
 	
 	static TriggerTimer = function()
 	{
+		is_timer_running = true;
 		running_time = 0;
 	}
 	
