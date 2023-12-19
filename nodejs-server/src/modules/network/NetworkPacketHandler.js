@@ -510,6 +510,135 @@ export default class NetworkPacketHandler {
             }
           }
           break;
+        case MESSAGE_TYPE.REQUEST_SCOUT_LIST:
+          {
+            const availableInstances =
+              this.instanceHandler.getAvailableInstances(true, false);
+            const formatAvailableInstanceArray =
+              FormatArrayToJSONStructArray(availableInstances);
+
+            const networkPacketHeader = new NetworkPacketHeader(
+              MESSAGE_TYPE.REQUEST_SCOUT_LIST,
+              client.uuid
+            );
+            const networkPacket = new NetworkPacket(
+              networkPacketHeader,
+              { available_instances: formatAvailableInstanceArray },
+              PACKET_PRIORITY.DEFAULT
+            );
+            this.networkHandler.packetQueue.enqueue(
+              new NetworkQueueEntry(
+                networkPacket,
+                [client],
+                networkPacket.priority
+              )
+            );
+            isPacketHandled = true;
+          }
+          break;
+        case MESSAGE_TYPE.START_OPERATIONS_SCOUT_STREAM:
+          {
+            const scoutInstanceId = networkPacket.payload;
+            if (scoutInstanceId !== undefined) {
+              const scoutInstance =
+                this.instanceHandler.getInstance(scoutInstanceId);
+              if (scoutInstance !== undefined) {
+                if (
+                  this.instanceHandler.activeOperationsScoutStream === undefined
+                ) {
+                  this.instanceHandler.activeOperationsScoutStream =
+                    scoutInstanceId;
+
+                  // TODO: Initialize scouting drone
+                  // Broad cast scouting drone sync withing scouted instance
+
+                  const networkPacketHeader = new NetworkPacketHeader(
+                    MESSAGE_TYPE.START_OPERATIONS_SCOUT_STREAM,
+                    client.uuid
+                  );
+                  const networkPacket = new NetworkPacket(
+                    networkPacketHeader,
+                    undefined,
+                    PACKET_PRIORITY.DEFAULT
+                  );
+                  this.networkHandler.packetQueue.enqueue(
+                    new NetworkQueueEntry(
+                      networkPacket,
+                      [client],
+                      networkPacket.priority
+                    )
+                  );
+                  isPacketHandled = true;
+                }
+              }
+            }
+          }
+          break;
+        case MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM:
+          {
+            const scoutInstanceId = networkPacket.payload;
+            if (scoutInstanceId !== undefined) {
+              if (
+                this.instanceHandler.activeOperationsScoutStream ===
+                scoutInstanceId
+              ) {
+                const scoutInstance =
+                  this.instanceHandler.getInstance(scoutInstanceId);
+                if (scoutInstance !== undefined) {
+                  const formatScoutInstance = scoutInstance.toJSONStruct();
+
+                  const networkPacketHeader = new NetworkPacketHeader(
+                    MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM,
+                    client.uuid
+                  );
+                  const networkPacket = new NetworkPacket(
+                    networkPacketHeader,
+                    formatScoutInstance,
+                    PACKET_PRIORITY.DEFAULT
+                  );
+                  this.networkHandler.packetQueue.enqueue(
+                    new NetworkQueueEntry(
+                      networkPacket,
+                      [client],
+                      networkPacket.priority
+                    )
+                  );
+                  isPacketHandled = true;
+                }
+              }
+            }
+          }
+          break;
+        case MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM:
+          {
+            const scoutInstanceId = networkPacket.payload;
+            if (scoutInstanceId !== undefined) {
+              if (
+                this.instanceHandler.activeOperationsScoutStream ===
+                scoutInstanceId
+              ) {
+                this.instanceHandler.activeOperationsScoutStream = undefined;
+                const networkPacketHeader = new NetworkPacketHeader(
+                  MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM,
+                  client.uuid
+                );
+                const networkPacket = new NetworkPacket(
+                  networkPacketHeader,
+                  undefined,
+                  PACKET_PRIORITY.DEFAULT
+                );
+                this.networkHandler.packetQueue.enqueue(
+                  new NetworkQueueEntry(
+                    networkPacket,
+                    [client],
+                    networkPacket.priority
+                  )
+                );
+                isPacketHandled = true;
+              }
+            }
+          }
+          break;
       }
     }
     return isPacketHandled;

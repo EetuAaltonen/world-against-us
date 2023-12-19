@@ -223,6 +223,24 @@ export default class NetworkPacketParser {
               );
             }
             break;
+          case MESSAGE_TYPE.START_OPERATIONS_SCOUT_STREAM:
+            {
+              let offset = 0;
+              payload = msg.readUInt32LE(offset);
+            }
+            break;
+          case MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM:
+            {
+              let offset = 0;
+              payload = msg.readUInt32LE(offset);
+            }
+            break;
+          case MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM:
+            {
+              let offset = 0;
+              payload = msg.readUInt32LE(offset);
+            }
+            break;
           default: {
             // Default JSON payload parsing
             const jsonString = msg.toString("utf8", 0, msg.length);
