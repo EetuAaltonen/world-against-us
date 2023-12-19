@@ -40,27 +40,37 @@ function CreateWindowOperationsCenter(_gameWindowId, _zIndex)
 		new Vector2(windowSize.w * 0.5 - (mapSize.w * 0.5), infoPanelSize.h),
 		mapSize, undefined
 	);
-	mapElement.SetMapLocation(ROOM_INDEX_TOWN);
+	
+	// MAP INSTANCE LIST BUTTON
+	var buttonSize = new Size(50, 50);
+	var buttonStyle = new ButtonStyle(
+		buttonSize, 0,
+		#db650f, #9e4d11,
+		fa_left, fa_top,
+		c_black, c_black,
+		font_tiny_bold,
+		fa_right, fa_middle
+	);
+	var buttonPosition = new Vector2(0, (windowSize.h * 0.5) - (buttonSize.h * 0.5));
+	var mapInstanceListButton = new WindowButton(
+		"MapInstanceListButton",
+		buttonPosition, buttonSize,
+		buttonStyle.button_background_color,
+		"Scout-> ",
+		buttonStyle,
+		OnClickOperationsScoutList, undefined
+	);
 	
 	ds_list_add(mapElements,
 		mapElement,
-		mapInfoPanel // Render after map
+		// Render after map
+		mapInfoPanel,
+		mapInstanceListButton,
 	);
 	
 	// OVERRIDE WINDOW ONOPEN FUNCTION
 	var overrideOnOpen = function()
 	{
-		// INIT SCOUTING DRONE
-		global.MapDataHandlerRef.scouting_drone = new InstanceObject(sprDrone, objDrone, new Vector2(0, 0));
-		var operationsCenterWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.OperationsCenter);
-		if (!is_undefined(operationsCenterWindow))
-		{
-			var mapElement = operationsCenterWindow.GetChildElementById("MapElement");
-			if (!is_undefined(mapElement))
-			{
-				mapElement.UpdateFollowTarget();
-			}
-		}
 		// TRIGGER MAP UPDATE
 		global.MapDataHandlerRef.is_dynamic_data_updating = true;
 		global.MapDataHandlerRef.map_update_timer.TriggerTimer();
@@ -69,10 +79,31 @@ function CreateWindowOperationsCenter(_gameWindowId, _zIndex)
 	// OVERRIDE WINDOW ONCLOSE FUNCTION
 	var overrideOnClose = function()
 	{
-		// REMOVE SCOUTING DRONE
-		global.MapDataHandlerRef.scouting_drone = undefined;
-		// SUSPEND MAP UPDATE
-		global.MapDataHandlerRef.is_dynamic_data_updating = true;
+		if (global.MultiplayerMode)
+		{
+			// REQUEST OPERATIONS END SCOURING STREAM
+			var targetScoutRegion = global.MapDataHandlerRef.target_scout_region;
+			if (!is_undefined(targetScoutRegion))
+			{
+				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM);
+				var networkPacket = new NetworkPacket(
+					networkPacketHeader,
+					targetScoutRegion,
+					PACKET_PRIORITY.DEFAULT,
+					AckTimeoutFuncResend
+				);
+				if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+				{
+					show_debug_message("Unable to queue MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM");
+				}
+			}
+			// CLEAR AND CANCEL OPERATIONS SCOUTING STREAM MESSAGES
+			global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.START_OPERATIONS_SCOUT_STREAM);
+			global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM);
+		}
+		
+		// RESET MAP DATA UPDATE
+		global.MapDataHandlerRef.ResetMapDataUpdate();
 	}
 	mapWindow.OnClose = overrideOnClose;
 	

@@ -122,21 +122,6 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 		}
 	}
 	
-	static SetMapLocation = function(_roomIndex)
-	{
-		target_map_location = global.WorldMapLocationData[? _roomIndex];
-		if (!is_undefined(target_map_location))
-		{
-			UpdateStaticMapData(_roomIndex);
-		}
-	}
-	
-	static UpdateStaticMapData = function(_roomIndex)
-	{
-		var fileName = global.MapDataHandlerRef.GetMapDataFileName(_roomIndex);
-		global.MapDataHandlerRef.ReadStaticMapDataFile(fileName);
-	}
-	
 	static UpdateFollowTarget = function()
 	{
 		is_following_target = !is_undefined(global.MapDataHandlerRef.scouting_drone);

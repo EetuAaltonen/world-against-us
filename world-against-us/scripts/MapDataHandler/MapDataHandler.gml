@@ -6,12 +6,8 @@ function MapDataHandler() constructor
 	is_dynamic_data_updating = false;
 	map_update_timer = new Timer(TimerFromMilliseconds(300));
 	
+	target_scout_region = undefined;
 	scouting_drone = undefined;
-	
-	static GetMapDataFileName = function(roomName)
-	{
-		return string("{0}_static_map.json", roomName);
-	}
 	
 	static Update = function()
 	{
@@ -27,11 +23,143 @@ function MapDataHandler() constructor
 		}
 	}
 	
+	static GetMapDataFileName = function(roomName)
+	{
+		return string("{0}_static_map.json", roomName);
+	}
+	
+	static SetTargetScoutInstance = function(_availableInstance)
+	{
+		var isScoutInstanceSet = false;
+		target_scout_region = _availableInstance;
+		if (SetMapLocation(_availableInstance.room_index))
+		{
+			if (global.MultiplayerMode)
+			{
+				// REQUEST OPERATIONS SCOUTING START
+				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.START_OPERATIONS_SCOUT_STREAM);
+				var networkPacket = new NetworkPacket(
+					networkPacketHeader,
+					_availableInstance,
+					PACKET_PRIORITY.DEFAULT,
+					AckTimeoutFuncResend
+				);
+				if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+				{
+					show_debug_message("Unable to queue MESSAGE_TYPE.START_OPERATIONS_SCOUT_STREAM");
+				}
+			} else {
+				isScoutInstanceSet = true;
+			}
+		}
+		return isScoutInstanceSet;
+	}
+	
+	static SetMapLocation = function(_roomIndex)
+	{
+		var isMapLocationSet = false;
+		var worldMapLocation = global.WorldMapLocationData[? _roomIndex];
+		
+		// INITIALIZE SCOUTING DRONE
+		scouting_drone = new InstanceObject(sprDrone, objDrone, new Vector2(0, 0));
+		
+		var operationsCenterWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.OperationsCenter);
+		if (!is_undefined(operationsCenterWindow))
+		{
+			var mapElement = operationsCenterWindow.GetChildElementById("MapElement");
+			if (!is_undefined(mapElement))
+			{
+				// UPDATE STATIC MAP DATA
+				if (UpdateStaticMapData(_roomIndex))
+				{
+					// SET MAP WINDOW ELEMENT LOCATION
+					mapElement.target_map_location = worldMapLocation;
+					// FORCE UPDATE FOLLOW TARGET
+					mapElement.UpdateFollowTarget();
+					
+					isMapLocationSet = true;
+				}
+			}
+		}
+		return isMapLocationSet;
+	}
+	
+	static UpdateStaticMapData = function(_roomIndex)
+	{
+		var isMapDataUpdated = false;
+		// CLEAR STATIC MAP DATA
+		ClearStaticMapData();
+		
+		var fileName = GetMapDataFileName(_roomIndex);
+		isMapDataUpdated = ReadStaticMapDataFromFile(fileName);
+		return isMapDataUpdated;
+	}
+	
 	static UpdateDynamicMapData = function()
 	{
-		// TODO: Disabled during prototyping
-		/*dynamic_map_data.icons = GenerateMapIcons(DYNAMIC_MAP_ICON);
-		dynamic_map_data.SortIcons();*/
+		if (global.MultiplayerMode)
+		{
+			if (!is_undefined(target_scout_region))
+			{
+				// CONTAINER INVENTORY STREAM
+				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM);
+				var networkPacket = new NetworkPacket(
+					networkPacketHeader,
+					target_scout_region,
+					PACKET_PRIORITY.DEFAULT,
+					AckTimeoutFuncResend
+				);
+				global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
+			}
+		} else {
+			// TODO: Disabled during prototyping
+			/*dynamic_map_data.icons = GenerateMapIcons(DYNAMIC_MAP_ICON);*/
+			dynamic_map_data.SortIcons();
+		}
+	}
+	
+	static SyncDynamicMapData = function(_region)
+	{
+		// CLEAR ICONS
+		dynamic_map_data.ClearIcons();
+		
+		var worldMapLocation = global.WorldMapLocationData[? _region.room_index];
+		if (!is_undefined(worldMapLocation))
+		{
+			var var patrolPath = worldMapLocation.patrol_path;
+			var mapIconStyle = global.MapIconStyleData[? "objBandit"];
+			if (!is_undefined(patrolPath))
+			{
+				var patrolCount = array_length(_region.arrived_patrols);
+				var banditSpriteSize = new Size(
+					sprite_get_width(sprBandit),
+					sprite_get_height(sprBandit)
+				);
+				for (var i = 0; i < patrolCount; i++)
+				{
+					var patrol = _region.arrived_patrols[@ i];
+					var patrolPosition = new Vector2(
+						path_get_x(patrolPath, patrol.route_progress),
+						path_get_y(patrolPath, patrol.route_progress)
+					);
+					var positionWithOffset = new Vector2(
+						patrolPosition.X - (banditSpriteSize.w * 0.5),
+						patrolPosition.Y - (banditSpriteSize.h)
+					);
+					var mapIcon = new MapIcon(
+						"objBandit",
+						// TOP-LEFT CORNER TO DRAW RECTANGLE
+						positionWithOffset,
+						patrolPosition,
+						banditSpriteSize,
+						mapIconStyle,
+						1
+					);
+					ds_list_add(dynamic_map_data.icons, mapIcon);
+				}
+				dynamic_map_data.SortIcons();
+			}
+		}
 	}
 	
 	static GenerateStaticMapData = function()
@@ -109,17 +237,12 @@ function MapDataHandler() constructor
 				}
 			}
 		}
-		
 		return mapIcons;
 	}
 	
-	static ReadStaticMapDataFile = function(_fileName)
+	static ReadStaticMapDataFromFile = function(_fileName)
 	{
 		var isMapDataReaded = false;
-		
-		// CLEAR STATIC MAP DATA
-		ClearStaticMapData();
-		
 		var formatFileName = string("{0}{1}", "/map_data/", _fileName);
 		var staticMapDataStruct = ReadJSONFile(formatFileName) ?? EMPTY_STRUCT;
 		var parsedMapData = ParseJSONStructToList(staticMapDataStruct[$ "icons"] ?? undefined, ParseJSONStructToMapIcon);
@@ -128,10 +251,8 @@ function MapDataHandler() constructor
 		{
 			static_map_data.icons = parsedMapData
 			static_map_data.SortIcons();
-			
 			isMapDataReaded = true;
 		}
-		
 		return isMapDataReaded;
 	}
 	
@@ -143,5 +264,13 @@ function MapDataHandler() constructor
 	static ClearDynamicMapData = function()
 	{
 		dynamic_map_data.ClearIcons();
+	}
+	
+	static ResetMapDataUpdate = function()
+	{
+		target_scout_region = undefined;
+		scouting_drone = undefined;
+		is_dynamic_data_updating = false;
+		map_update_timer.StopTimer();	
 	}
 }
