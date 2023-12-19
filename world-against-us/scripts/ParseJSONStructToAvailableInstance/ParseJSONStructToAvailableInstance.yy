@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "WorldInstance",
+  "name": "ParseJSONStructToAvailableInstance",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

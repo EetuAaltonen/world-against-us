@@ -173,7 +173,7 @@ function NetworkPacketHandler() constructor
 						{
 							var targetContainer = undefined;
 							var containerCount = instance_number(objContainerParent);
-							for (var i = 0; i < containerCount; ++i;)
+							for (var i = 0; i < containerCount; i++)
 							{
 								var container = instance_find(objContainerParent, i);
 								if (!is_undefined(container))
