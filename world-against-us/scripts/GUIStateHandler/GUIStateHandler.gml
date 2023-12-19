@@ -71,6 +71,17 @@ function GUIStateHandler() constructor
 		return array_last(state_chain);
 	}
 	
+	static IsCurrentGUIStateGameWindowOpen = function(_gameWindowId)
+	{
+		var isWindowOpen = false;
+		var currentGUIState = GetGUIState();
+		if (!is_undefined(currentGUIState))
+		{
+			isWindowOpen = ArrayContainsValue(currentGUIState.windowIndexGroup, _gameWindowId);
+		}
+		return isWindowOpen;
+	}
+	
 	static CheckKeyboardInputGUIState = function()
 	{
 		var currentGUIState = GetGUIState();

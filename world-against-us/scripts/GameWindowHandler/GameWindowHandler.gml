@@ -84,8 +84,7 @@ function GameWindowHandler() constructor
 			{
 				if (newFocusedWindow.windowId != focusedWindow.windowId)
 				{
-					focusedWindow.isFocused = false;
-					focusedWindow.OnFocusLost();
+					ResetFocusedWindow();
 				}
 			}
 			focusedWindow = newFocusedWindow;
@@ -102,7 +101,8 @@ function GameWindowHandler() constructor
 			{
 				// CLOSE WINDOW
 				gameWindow.OnClose();
-				ds_list_delete(gameWindows, i);
+				ds_list_delete(gameWindows, i++);
+				windowCount = ds_list_size(gameWindows);
 				break;
 			}
 		}
@@ -129,6 +129,19 @@ function GameWindowHandler() constructor
 			gameWindow.OnClose();
 		}
 		ds_list_clear(gameWindows);
+		
+		// RESET FOCUSED
+		if (!is_undefined(focusedWindow))
+		{
+			ResetFocusedWindow();	
+		}
+	}
+	
+	static ResetFocusedWindow = function()
+	{
+		focusedWindow.isFocused = false;
+		focusedWindow.OnFocusLost();
+		focusedWindow = undefined;
 	}
 	
 	static Draw = function()
