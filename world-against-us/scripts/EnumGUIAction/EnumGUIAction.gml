@@ -7,4 +7,6 @@ enum GUI_ACTION
 	// MAP
 	ExamineObject,
 	WorldMapFastTravelQueue,
+	// OPERATIONS CENTER
+	OperationsCenterScoutList
 }
