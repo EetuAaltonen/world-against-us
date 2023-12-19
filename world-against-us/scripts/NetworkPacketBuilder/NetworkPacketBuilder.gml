@@ -145,6 +145,24 @@ function NetworkPacketBuilder() constructor
 						buffer_write(_networkBuffer, buffer_u8, patrolState.ai_state);
 						isPayloadWritten = true;
 					} break;
+					case MESSAGE_TYPE.START_OPERATIONS_SCOUT_STREAM:
+					{
+						var availableInstance = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u32, availableInstance.region_id);
+						isPayloadWritten = true;
+					} break;
+					case MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM:
+					{
+						var availableInstance = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u32, availableInstance.region_id);
+						isPayloadWritten = true;
+					} break;
+					case MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM:
+					{
+						var availableInstance = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u32, availableInstance.region_id);
+						isPayloadWritten = true;
+					} break;
 					default:
 					{
 						var jsonString = json_stringify(_networkPacketPayload);

@@ -134,6 +134,26 @@ function NetworkPacketParser() constructor
 							parsedAIState
 						);
 					} break;
+					case MESSAGE_TYPE.REQUEST_SCOUT_LIST:
+					{
+						var payloadString = buffer_read(_msg, buffer_string);
+						var parsedStruct = json_parse(payloadString);
+						if (parsedStruct != EMPTY_STRUCT)
+						{
+							var parsedAvailableInstanceStructArray = parsedStruct[$ "available_instances"] ?? undefined;
+							var parsedAvailableInstances = ParseJSONStructToList(parsedAvailableInstanceStructArray, ParseJSONStructToAvailableInstance);
+							parsedPayload = parsedAvailableInstances;
+						}
+					} break;
+					case MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM:
+					{
+						var payloadString = buffer_read(_msg, buffer_string);
+						var parsedStruct = json_parse(payloadString);
+						if (parsedStruct != EMPTY_STRUCT)
+						{
+							parsedPayload = ParseJSONStructToRegion(parsedStruct);
+						}
+					} break;
 					default:
 					{
 						var payloadString = buffer_read(_msg, buffer_string);
