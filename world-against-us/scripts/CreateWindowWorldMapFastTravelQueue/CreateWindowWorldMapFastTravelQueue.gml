@@ -29,7 +29,7 @@ function CreateWindowWorldMapFastTravelQueue(_gameWindowId, _zIndex)
 		// CLEAR IN-FLIGHT FAST TRAVEL REQUESTS
 		if (global.MultiplayerMode)
 		{
-			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.REQUEST_FAST_TRAVEL);
+			global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.REQUEST_FAST_TRAVEL);
 		}
 	}
 	fastTravelQueueWindow.OnClose = overrideOnClose;

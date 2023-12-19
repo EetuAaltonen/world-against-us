@@ -495,4 +495,26 @@ function NetworkHandler() constructor
 		isResponseQueued = AddPacketToQueue(networkPacket);
 		return isResponseQueued;
 	}
+	
+	static CancelPacketsSendQueueAndTrackingByMessageType = function(_messageType)
+	{
+		// CLEAR IN-FLIGHT PACKETS
+		network_packet_tracker.ClearInFlightPacketsByMessageType(_messageType);
+		
+		// REMOVE FROM PACKET QUEUE
+		var tempNetworkPacketQueue = ds_priority_create();
+		ds_priority_copy(tempNetworkPacketQueue, network_packet_queue);
+		while (!ds_priority_empty(tempNetworkPacketQueue) && !ds_priority_empty(network_packet_queue))
+		{
+			var networkPacket = ds_priority_find_min(tempNetworkPacketQueue);
+			if (networkPacket.header.message_type == _messageType)
+			{
+				// TODO: For Debugging
+				show_message(string("1. network_packet_queue: {0}", ds_priority_size(network_packet_queue)));
+				ds_priority_delete_value(network_packet_queue, networkPacket);
+				show_message(string("2. network_packet_queue: {0}", ds_priority_size(network_packet_queue)));
+			}
+			ds_priority_delete_min(tempNetworkPacketQueue);
+		}
+	}
 }

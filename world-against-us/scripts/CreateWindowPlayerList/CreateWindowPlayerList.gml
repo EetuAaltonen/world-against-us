@@ -107,7 +107,7 @@ function CreateWindowPlayerList(_gameWindowId, _zIndex)
 		// CLEAR IN-FLIGHT PLAYER LIST REQUESTS
 		if (global.MultiplayerMode)
 		{
-			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.REQUEST_PLAYER_LIST);
+			global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.REQUEST_PLAYER_LIST);
 		}
 	}
 	playerListWindow.OnClose = overrideOnClose;

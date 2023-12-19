@@ -159,7 +159,7 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 		// CLEAR IN-FLIGHT INSTANCE LIST REQUESTS
 		if (global.MultiplayerMode)
 		{
-			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(MESSAGE_TYPE.REQUEST_INSTANCE_LIST);
+			global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.REQUEST_INSTANCE_LIST);
 		}
 	}
 	mapWindow.OnClose = overrideOnClose;
