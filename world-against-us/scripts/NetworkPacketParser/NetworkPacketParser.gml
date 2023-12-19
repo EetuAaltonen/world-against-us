@@ -92,6 +92,17 @@ function NetworkPacketParser() constructor
 							parsedPayload = parsedPlayerList;
 						}
 					} break;
+					case MESSAGE_TYPE.REQUEST_INSTANCE_LIST:
+					{
+						var payloadString = buffer_read(_msg, buffer_string);
+						var parsedStruct = json_parse(payloadString);
+						if (parsedStruct != EMPTY_STRUCT)
+						{
+							var parsedAvailableInstanceStructArray = parsedStruct[$ "available_instances"] ?? undefined;
+							var parsedAvailableInstances = ParseJSONStructToList(parsedAvailableInstanceStructArray, ParseJSONStructToAvailableInstance);
+							parsedPayload = parsedAvailableInstances;
+						}
+					} break;
 					case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
 					{
 						var parsedSourceRegionId = buffer_read(_msg, buffer_u32);

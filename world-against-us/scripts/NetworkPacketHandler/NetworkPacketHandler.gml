@@ -107,16 +107,14 @@ function NetworkPacketHandler() constructor
 					} break;
 					case MESSAGE_TYPE.REQUEST_INSTANCE_LIST:
 					{
-						var instanceStructArray = payload[$ "available_instances"] ?? [];
+						var parsedAvailableInstances = payload;
 						var worldMapWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.WorldMap);
 						if (!is_undefined(worldMapWindow))
 						{
 							var instanceListElement = worldMapWindow.GetChildElementById("InstanceList");
 							if (!is_undefined(instanceListElement))
 							{
-								// TODO: Parse this elsewhere
-								var parsedInstances = ParseJSONStructToList(instanceStructArray, ParseJSONStructToWorldInstance);
-								instanceListElement.UpdateDataCollection(parsedInstances);
+								instanceListElement.UpdateDataCollection(parsedAvailableInstances);
 										
 								// HIDE LOADING ICON
 								var instanceListLoadingElement = worldMapWindow.GetChildElementById("InstanceListLoading");

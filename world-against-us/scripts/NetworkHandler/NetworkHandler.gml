@@ -24,7 +24,10 @@ function NetworkHandler() constructor
 	{
 		if (delete_socket_timer.IsTimerStopped())
 		{
-			DeleteSocket();
+			if (!DeleteSocket())
+			{
+				show_debug_message("Failed to delete socket on delete socket timer stopped");
+			}
 		} else {
 			delete_socket_timer.Update();
 			if (network_status == NETWORK_STATUS.CONNECTING || global.MultiplayerMode)
@@ -138,40 +141,50 @@ function NetworkHandler() constructor
 	
 	static DeleteSocket = function()
 	{
-		var isSocketDeleted = true;
-		buffer_delete(pre_alloc_network_buffer);
-		network_destroy(socket);
-		socket = undefined;
-		
-		// RESET NETWORK PROPERTIES
-		client_id = UNDEFINED_UUID;
-		network_status = NETWORK_STATUS.OFFLINE;
-		host_address = undefined;
-		host_port = undefined;
-		ds_priority_clear(network_packet_queue);
-		delete_socket_timer.StopTimer();
-		
-		// RESET CONNECTION SAMPLING
-		network_connection_sampler.ResetNetworkConnectionSampling();
-		
-		// CLEAR IN FLIGHT NETWORK PACKET TRACKING
-		network_packet_tracker.ResetNetworkPacketTracking();
-		
-		global.MultiplayerMode = false;
-		
-		// RETURN TO MAIN MENU
-		if (room == roomMainMenu)
+		var isSocketDeleted = false;
+		if (!is_undefined(socket))
 		{
-			// RESET GUI STATE MAIN MENU
-			if (!global.GUIStateHandlerRef.ResetGUIStateMainMenu())
+			network_destroy(socket);
+			socket = undefined;
+			
+			buffer_delete(pre_alloc_network_buffer);
+		
+			// RESET NETWORK PROPERTIES
+			client_id = UNDEFINED_UUID;
+			network_status = NETWORK_STATUS.OFFLINE;
+			host_address = undefined;
+			host_port = undefined;
+			ds_priority_clear(network_packet_queue);
+			delete_socket_timer.StopTimer();
+		
+			// RESET CONNECTION SAMPLING
+			network_connection_sampler.ResetNetworkConnectionSampling();
+		
+			// CLEAR IN FLIGHT NETWORK PACKET TRACKING
+			network_packet_tracker.ResetNetworkPacketTracking();
+		
+			global.MultiplayerMode = false;
+
+			// RETURN TO MAIN MENU
+			if (room == roomMainMenu)
 			{
-				// TODO: Move this check inside the actual ResetGUIStateMainMenu function
-				// with proper error handling
-				show_debug_message("Failed to reset GUI state on Main Menu");
+				// RESET GUI STATE MAIN MENU
+				if (!global.GUIStateHandlerRef.ResetGUIStateMainMenu())
+				{
+					// TODO: Move this check inside the actual ResetGUIStateMainMenu function
+					// with proper error handling
+					show_debug_message("Failed to reset GUI state on Main Menu");
+				}
+			} else {
+				// RESET GUI STATE
+				if (!global.GUIStateHandlerRef.ResetGUIState())
+				{
+					show_debug_message("Failed to reset GUI state on disconnect");
+				}
+				// TODO: Fix with new room change request logic
+				room_goto(roomMainMenu);
 			}
-		} else {
-			// TODO: Fix with new room change request logic
-			room_goto(roomMainMenu);
+			isSocketDeleted = true;
 		}
 		return isSocketDeleted;
 	}
@@ -217,11 +230,17 @@ function NetworkHandler() constructor
 			{
 				network_status = NETWORK_STATUS.DISCONNECTING;
 			} else {
-				show_debug_message("Failed to queue disconnect socket");
-				DeleteSocket();
+				show_debug_message("Failed to queue disconnect");
+				if (!DeleteSocket())
+				{
+					show_debug_message("Failed to delete socket on failed disconnect queue");
+				}
 			}
 		} else {
-			DeleteSocket();
+			if (!DeleteSocket())
+			{
+				show_debug_message("Failed to delete socket on request disconnect socket");
+			}
 		}
 	}
 	
@@ -333,145 +352,159 @@ function NetworkHandler() constructor
 	static HandleMessage = function(_msg)
 	{
 		var isMessageHandled = false;
-		var networkPacket = network_packet_parser.ParsePacket(_msg);
-		if (!is_undefined(networkPacket))
+		if (!is_undefined(_msg))
 		{
-			var messageType = networkPacket.header.message_type;
-			var sequenceNumber = networkPacket.header.sequence_number;
-			var ackCount = networkPacket.header.ack_count;
-			var ackRange = networkPacket.header.ack_range;
-
-			switch (messageType)
+			var networkPacket = network_packet_parser.ParsePacket(_msg);
+			if (!is_undefined(networkPacket))
 			{
-				case MESSAGE_TYPE.INVALID_REQUEST:
+				var messageType = networkPacket.header.message_type;
+				var sequenceNumber = networkPacket.header.sequence_number;
+				var ackCount = networkPacket.header.ack_count;
+				var ackRange = networkPacket.header.ack_range;
+
+				switch (messageType)
 				{
-					if (!is_undefined(networkPacket.payload))
+					case MESSAGE_TYPE.INVALID_REQUEST:
 					{
-						var errorMessage = networkPacket.payload[$ "message"] ?? "Invalid request";
-						show_message(string("{0}. Disconnecting...", errorMessage));
-					}
-					isMessageHandled = RequestDisconnectSocket();
-				} break;
-				case MESSAGE_TYPE.DISCONNECT_FROM_HOST:
-				{
-					global.NetworkHandlerRef.network_status = NETWORK_STATUS.DISCONNECTED;
-					isMessageHandled = DeleteSocket();
-				} break;
-				case MESSAGE_TYPE.SERVER_ERROR:
-				{
-					if (!is_undefined(networkPacket.payload))
-					{
-						var errorMessage = networkPacket.payload[$ "error"] ?? "Unknown server error.";
-						show_message(string("{0}. Disconnecting...", errorMessage));
-					}
-					isMessageHandled = DeleteSocket();
-				} break;
-				default:
-				{
-					if (network_packet_tracker.ProcessAckRange(ackCount, ackRange))
-					{
-						if (network_packet_tracker.ProcessSequenceNumber(sequenceNumber, messageType))
+						if (!is_undefined(networkPacket.payload))
 						{
-							switch (messageType)
+							var errorMessage = networkPacket.payload[$ "message"] ?? "Invalid request";
+							show_message(string("{0}. Disconnecting...", errorMessage));
+						}
+						isMessageHandled = RequestDisconnectSocket();
+					} break;
+					case MESSAGE_TYPE.DISCONNECT_FROM_HOST:
+					{
+						global.NetworkHandlerRef.network_status = NETWORK_STATUS.DISCONNECTED;
+						if (DeleteSocket())
+						{
+							isMessageHandled = true;
+							
+						} else {
+							show_debug_message("Failed to delete socket on MESSAGE_TYPE.DISCONNECT_FROM_HOST");
+						}
+					} break;
+					case MESSAGE_TYPE.SERVER_ERROR:
+					{
+						if (!is_undefined(networkPacket.payload))
+						{
+							var errorMessage = networkPacket.payload[$ "error"] ?? "Unknown server error.";
+							show_message(string("{0}. Disconnecting...", errorMessage));
+						}
+						if (DeleteSocket())
+						{
+							isMessageHandled = true;
+						} else {
+							show_debug_message("Failed to delete socket on MESSAGE_TYPE.SERVER_ERROR");
+						}
+					} break;
+					default:
+					{
+						if (network_packet_tracker.ProcessAckRange(ackCount, ackRange))
+						{
+							if (network_packet_tracker.ProcessSequenceNumber(sequenceNumber, messageType))
 							{
-								case MESSAGE_TYPE.ACKNOWLEDGMENT:
+								switch (messageType)
 								{
-									// NO FURTHER ACTIONS
-									isMessageHandled = true;
-								} break;
-								case MESSAGE_TYPE.CONNECT_TO_HOST:
-								{
-									if (network_status == NETWORK_STATUS.CONNECTING)
+									case MESSAGE_TYPE.ACKNOWLEDGMENT:
 									{
-										// SET NETWORK PROPERTIES
-										client_id = networkPacket.header.client_id;
-										OnConnection();
-						
-										// CLOSE CONNECT WINDOW
-										if (global.GUIStateHandlerRef.CloseCurrentGUIState())
+										// NO FURTHER ACTIONS
+										isMessageHandled = true;
+									} break;
+									case MESSAGE_TYPE.CONNECT_TO_HOST:
+									{
+										if (network_status == NETWORK_STATUS.CONNECTING)
 										{
-											// OPEN SAVE SELECTION
-											var mainMenuMultiplayerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.MainMenuMultiplayer);
-											if (!is_undefined(mainMenuMultiplayerWindow))
+											// SET NETWORK PROPERTIES
+											client_id = networkPacket.header.client_id;
+											OnConnection();
+						
+											// CLOSE CONNECT WINDOW
+											if (global.GUIStateHandlerRef.CloseCurrentGUIState())
 											{
-												if (global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.SaveSelection, [GAME_WINDOW.MainMenuSaveSelection]))
+												// OPEN SAVE SELECTION
+												var mainMenuMultiplayerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.MainMenuMultiplayer);
+												if (!is_undefined(mainMenuMultiplayerWindow))
 												{
-													global.GameWindowHandlerRef.OpenWindowGroup([
-														CreateWindowMainMenuSaveSelection(GAME_WINDOW.MainMenuSaveSelection, mainMenuMultiplayerWindow.zIndex - 1, OnClickMenuMultiplayerPlay)
-													]);
+													if (global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.SaveSelection, [GAME_WINDOW.MainMenuSaveSelection]))
+													{
+														global.GameWindowHandlerRef.OpenWindowGroup([
+															CreateWindowMainMenuSaveSelection(GAME_WINDOW.MainMenuSaveSelection, mainMenuMultiplayerWindow.zIndex - 1, OnClickMenuMultiplayerPlay)
+														]);
+													}
+												}
+											}
+								
+											// RESPOND WITH ACKNOWLEDGMENT TO END CONNECTING TO HOST
+											isMessageHandled = QueueAcknowledgmentResponse();
+										}
+									} break;
+									case MESSAGE_TYPE.REQUEST_JOIN_GAME:
+									{
+										if (network_status == NETWORK_STATUS.JOINING_TO_GAME)
+										{
+											if (network_packet_handler.HandlePacket(networkPacket))
+											{
+												var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.SYNC_WORLD_STATE);
+												var networkPacket = new NetworkPacket(
+													networkPacketHeader,
+													undefined,
+													PACKET_PRIORITY.DEFAULT,
+													AckTimeoutFuncResend
+												);
+												if (AddPacketToQueue(networkPacket))
+												{
+													network_status = NETWORK_STATUS.SYNC_WORLD_STATE;
+													// ACKNOWLEDGMENT RESPONSE ON NEXT STEP
+													isMessageHandled = true;
 												}
 											}
 										}
-								
-										// RESPOND WITH ACKNOWLEDGMENT TO END CONNECTING TO HOST
-										isMessageHandled = QueueAcknowledgmentResponse();
-									}
-								} break;
-								case MESSAGE_TYPE.REQUEST_JOIN_GAME:
-								{
-									if (network_status == NETWORK_STATUS.JOINING_TO_GAME)
+									} break;
+									case MESSAGE_TYPE.SYNC_WORLD_STATE:
 									{
-										if (network_packet_handler.HandlePacket(networkPacket))
+										if (network_status == NETWORK_STATUS.SYNC_WORLD_STATE)
 										{
-											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.SYNC_WORLD_STATE);
-											var networkPacket = new NetworkPacket(
-												networkPacketHeader,
-												undefined,
-												PACKET_PRIORITY.DEFAULT,
-												AckTimeoutFuncResend
-											);
-											if (AddPacketToQueue(networkPacket))
+											if (network_packet_handler.HandlePacket(networkPacket))
 											{
-												network_status = NETWORK_STATUS.SYNC_WORLD_STATE;
-												// ACKNOWLEDGMENT RESPONSE ON NEXT STEP
-												isMessageHandled = true;
+												var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DATA_PLAYER_SYNC);
+												var networkPacket = new NetworkPacket(
+													networkPacketHeader,
+													undefined,
+													PACKET_PRIORITY.DEFAULT,
+													AckTimeoutFuncResend
+												);
+												if (AddPacketToQueue(networkPacket))
+												{
+													network_status = NETWORK_STATUS.SYNC_DATA;
+													// ACKNOWLEDGMENT RESPONSE ON NEXT STEP
+													isMessageHandled = true;
+												}
 											}
 										}
-									}
-								} break;
-								case MESSAGE_TYPE.SYNC_WORLD_STATE:
-								{
-									if (network_status == NETWORK_STATUS.SYNC_WORLD_STATE)
+									} break;
+									case MESSAGE_TYPE.DATA_PLAYER_SYNC:
 									{
-										if (network_packet_handler.HandlePacket(networkPacket))
+										if (network_status == NETWORK_STATUS.SYNC_DATA)
 										{
-											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DATA_PLAYER_SYNC);
-											var networkPacket = new NetworkPacket(
-												networkPacketHeader,
-												undefined,
-												PACKET_PRIORITY.DEFAULT,
-												AckTimeoutFuncResend
-											);
-											if (AddPacketToQueue(networkPacket))
+											// RESPOND WITH ACKNOWLEDGMENT TO END JOIN GAME HANDSHAKE
+											if (QueueAcknowledgmentResponse())
 											{
-												network_status = NETWORK_STATUS.SYNC_DATA;
+												network_status = NETWORK_STATUS.SESSION_IN_PROGRESS;
 												// ACKNOWLEDGMENT RESPONSE ON NEXT STEP
 												isMessageHandled = true;
+												// TODO: Request room change at proper way
+												room_goto(roomCamp);
 											}
 										}
-									}
-								} break;
-								case MESSAGE_TYPE.DATA_PLAYER_SYNC:
-								{
-									if (network_status == NETWORK_STATUS.SYNC_DATA)
+									} break;
+									default:
 									{
-										// RESPOND WITH ACKNOWLEDGMENT TO END JOIN GAME HANDSHAKE
-										if (QueueAcknowledgmentResponse())
+										isMessageHandled = network_packet_handler.HandlePacket(networkPacket);
+										if (!isMessageHandled)
 										{
-											network_status = NETWORK_STATUS.SESSION_IN_PROGRESS;
-											// ACKNOWLEDGMENT RESPONSE ON NEXT STEP
-											isMessageHandled = true;
-											// TODO: Request room change at proper way
-											room_goto(roomCamp);
+											show_debug_message(string("Unable to handle message type: {0}", messageType));
 										}
-									}
-								} break;
-								default:
-								{
-									isMessageHandled = network_packet_handler.HandlePacket(networkPacket);
-									if (!isMessageHandled)
-									{
-										show_debug_message(string("Unable to handle message type: {0}", messageType));
 									}
 								}
 							}
@@ -479,6 +512,9 @@ function NetworkHandler() constructor
 					}
 				}
 			}
+		} else {
+			// TODO: Generic error handling
+			show_debug_message("Unable to handle undefined message");
 		}
 		return isMessageHandled;
 	}
