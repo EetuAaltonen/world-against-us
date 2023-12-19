@@ -1,4 +1,3 @@
-import MESSAGE_TYPE from "../network/MessageType.js";
 import ROOM_INDEX from "./RoomIndex.js";
 import AI_STATE from "../patrols/AIState.js";
 
@@ -14,7 +13,7 @@ const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
 const PATROL_ROUTE_TIME_TOWN = 270000; // ~4.5min
 const MAX_PATROL_ID = 100;
 const MIN_PATROL_COUNT = 1;
-const MAX_PATROL_COUNT = 1; //2;
+const MAX_PATROL_COUNT = 2;
 
 export default class Instance {
   constructor(instanceId, roomIndex, networkHandler) {
@@ -183,6 +182,19 @@ export default class Instance {
 
   getAllPatrolIds() {
     return Object.keys(this.localPatrols);
+  }
+
+  getPatrolCount() {
+    const patrolIds = this.getAllPatrolIds();
+    const arrivedPatrols = patrolIds.filter((patrolId) => {
+      let isArrived = false;
+      const patrol = this.getPatrol(patrolId);
+      if (patrol !== undefined) {
+        isArrived = patrol.travelTime <= 0;
+      }
+      return isArrived;
+    });
+    return arrivedPatrols.length;
   }
 
   handlePatrolState(patrolState) {

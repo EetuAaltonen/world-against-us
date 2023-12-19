@@ -1,6 +1,8 @@
 import ROOM_INDEX from "./RoomIndex.js";
 import WORLD_MAP_LOCATION_HIERARCHY from "../world_map/WorldMapLocationHierarchy.js";
+
 import Instance from "./Instance.js";
+import AvailableInstance from "../instances/AvailableInstance.js";
 
 const CAMP_STORAGE_CONTAINER_ID = "camp_storage_container";
 
@@ -12,6 +14,9 @@ export default class InstanceHandler {
     this.nextInstanceId = 1;
 
     this.createDefaultCampInstance();
+
+    // TODO: Move this elsewhere(?)
+    this.activeOperationsScoutStream = undefined;
   }
 
   createDefaultCampInstance() {
@@ -58,6 +63,34 @@ export default class InstanceHandler {
 
   getInstanceIds() {
     return Object.keys(this.instances);
+  }
+
+  getAvailableInstances(excludeCamp, onlyRootHierarchy) {
+    let availableInstances = [];
+    let instanceIds = this.getInstanceIds();
+    if (excludeCamp) {
+      instanceIds = instanceIds.filter((instanceId) => {
+        return parseInt(instanceId) !== this.campId;
+      });
+    }
+    if (onlyRootHierarchy) {
+      instanceIds = instanceIds.filter((instanceId) => {
+        let instance = this.getInstance(instanceId);
+        return instance.parentInstanceId === undefined;
+      });
+    }
+    availableInstances = instanceIds.map((instanceId) => {
+      let instance = this.getInstance(instanceId);
+      const playerCount = instance.getPlayerCount();
+      const patrolCount = instance.getPatrolCount();
+      return new AvailableInstance(
+        instanceId,
+        instance.roomIndex,
+        playerCount,
+        patrolCount
+      );
+    });
+    return availableInstances;
   }
 
   update(passedTickTime) {

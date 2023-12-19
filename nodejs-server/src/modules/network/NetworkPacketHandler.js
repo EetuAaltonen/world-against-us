@@ -4,6 +4,7 @@ import PACKET_PRIORITY from "./PacketPriority.js";
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
 import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
 import NetworkPacket from "../network_packets/NetworkPacket.js";
+import AvailableInstance from "../instances/AvailableInstance.js";
 import WorldMapFastTravelInfo from "../world_map/WorldMapFastTravelInfo.js";
 import ContainerContentInfo from "../containers/ContainerContentInfo.js";
 import NetworkInventoryStreamItems from "../network_inventory_stream/NetworkInventoryStreamItems.js";
@@ -142,28 +143,10 @@ export default class NetworkPacketHandler {
           break;
         case MESSAGE_TYPE.REQUEST_INSTANCE_LIST:
           {
-            const instanceIds = this.instanceHandler
-              .getInstanceIds()
-              .filter((instanceId) => {
-                return parseInt(instanceId) !== 0;
-              });
-            const instances = instanceIds
-              .filter((instanceId) => {
-                let instance = this.instanceHandler.getInstance(instanceId);
-                if (instance !== undefined) {
-                  return instance.parentInstanceId === undefined;
-                }
-                return false;
-              })
-              .map((instanceId) => {
-                let instance = this.instanceHandler.getInstance(instanceId);
-                // TODO: Create object class for this
-                return {
-                  instance_id: instanceId,
-                  room_index: instance.roomIndex,
-                  player_count: instance.getPlayerCount(),
-                };
-              });
+            const availableInstances =
+              this.instanceHandler.getAvailableInstances(true, true);
+            const formatAvailableInstanceArray =
+              FormatArrayToJSONStructArray(availableInstances);
 
             const networkPacketHeader = new NetworkPacketHeader(
               MESSAGE_TYPE.REQUEST_INSTANCE_LIST,
@@ -171,7 +154,7 @@ export default class NetworkPacketHandler {
             );
             const networkPacket = new NetworkPacket(
               networkPacketHeader,
-              { available_instances: instances },
+              { available_instances: formatAvailableInstanceArray },
               PACKET_PRIORITY.DEFAULT
             );
             this.networkHandler.packetQueue.enqueue(
