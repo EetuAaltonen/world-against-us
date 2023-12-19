@@ -30,6 +30,7 @@ function NetworkPacketTracker() constructor
 							show_message(string("Acknowledgment with message type {0} and sequence number {1} timed out", inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
 							// DISCONNECT AFTER FAILED ATTEMPTS
 							ds_list_delete(in_flight_packets, i--);
+							inFlightPacketCount = ds_list_size(in_flight_packets);
 							global.NetworkHandlerRef.DisconnectTimeout();
 						}
 					} else {
@@ -43,6 +44,7 @@ function NetworkPacketTracker() constructor
 							show_message(string("Acknowledgment with message type {0} and sequence number {1} timed out without a callback", inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
 							// DISCONNECT AFTER FAILED ATTEMPTS
 							ds_list_delete(in_flight_packets, i--);
+							inFlightPacketCount = ds_list_size(in_flight_packets);
 							global.NetworkHandlerRef.DisconnectTimeout();
 						}
 					}
@@ -150,7 +152,8 @@ function NetworkPacketTracker() constructor
 			{
 				if (inFlightPacket.header.sequence_number == _sequenceNumber)
 				{
-					ds_list_delete(in_flight_packets, i);
+					ds_list_delete(in_flight_packets, i--);
+					inFlightPacketCount = ds_list_size(in_flight_packets);
 					isPacketRemoved = true;
 					break;
 				}
@@ -179,6 +182,7 @@ function NetworkPacketTracker() constructor
 			if (inFlightPacket.header.message_type == _messageType)
 			{
 				ds_list_delete(in_flight_packets, i--);
+				inFlightPacketCount = ds_list_size(in_flight_packets);
 			}
 		}
 	}

@@ -8,7 +8,7 @@ function NetworkRegionObjectHandler() constructor
 		var isContainersValid = true;
 		var existContainerIds = [];
 		var containerCount = instance_number(objContainerParent);
-		for (var i = 0; i < containerCount; ++i;)
+		for (var i = 0; i < containerCount; i++)
 		{
 			var containerInstance = instance_find(objContainerParent, i);
 			if (!is_undefined(containerInstance))
@@ -29,7 +29,7 @@ function NetworkRegionObjectHandler() constructor
 	static OnRoomEnd = function()
 	{
 		var patrolCount = ds_list_size(local_patrols);
-		for (var i = 0; i < patrolCount; ++i;)
+		for (var i = 0; i < patrolCount; i++)
 		{
 			var banditInstance = local_patrols[| i];
 			if (instance_exists(banditInstance))
@@ -100,7 +100,8 @@ function NetworkRegionObjectHandler() constructor
 						foundPatrol = patrol;
 					} else {
 						// DELETE EXPIRED PATROL DATA
-						ds_list_delete(local_patrols, i);
+						ds_list_delete(local_patrols, i--);
+						patrolCount = ds_list_size(local_patrols);
 					}
 					break;
 				}
@@ -135,7 +136,7 @@ function NetworkRegionObjectHandler() constructor
 				case AI_STATE.PATROL_END:
 				{
 					var patrolCount = ds_list_size(local_patrols);
-					for (var i = 0; i < patrolCount; ++i;)
+					for (var i = 0; i < patrolCount; i++)
 					{
 						var patrol = local_patrols[| i];
 						var banditInstance = patrol.instance_ref;
@@ -144,7 +145,8 @@ function NetworkRegionObjectHandler() constructor
 							if (banditInstance.patrolId == _patrolState.patrol_id)
 							{
 								instance_destroy(banditInstance);
-								ds_list_delete(local_patrols, i);
+								ds_list_delete(local_patrols, i--);
+								patrolCount = ds_list_size(local_patrols);
 								break;
 							}
 						}

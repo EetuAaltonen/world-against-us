@@ -8,7 +8,7 @@ function SortList(sourceList, compareFunction)
 		var sortedListSize = ds_list_size(sortedList);
 		if (sortedListSize > 0)
 		{
-			for (var i = 0; i < sortedListSize; ++i)
+			for (var i = 0; i < sortedListSize; i++)
 		    {
 		        var sortedObject = sortedList[| i];
 		        if (compareFunction(sourceObject, sortedObject))

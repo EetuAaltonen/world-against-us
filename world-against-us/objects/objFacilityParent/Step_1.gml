@@ -11,7 +11,7 @@ if (!is_undefined(electricalNetwork))
 			if (!is_undefined(electricalNetwork.targetId))
 			{
 				var instanceCount = instance_number(objFacilityParent);
-				for (var i = 0; i < instanceCount; ++i;)
+				for (var i = 0; i < instanceCount; i++)
 				{
 					var facilityInstance = instance_find(objFacilityParent, i);
 					if (instance_exists(facilityInstance))
