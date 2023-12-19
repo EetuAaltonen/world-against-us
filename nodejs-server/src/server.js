@@ -14,10 +14,7 @@ function init() {
 
   server.on("message", (msg, rinfo) => {
     try {
-      if (!networkHandler.handleMessage(msg, rinfo)) {
-        console.log(`Failed to handle a message from a client`);
-        networkHandler.onInvalidRequest("Unable to handle the request", rinfo);
-      }
+      networkHandler.handleMessage(msg, rinfo);
     } catch (error) {
       networkHandler.onError(error);
       setTimeout(() => {

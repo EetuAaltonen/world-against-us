@@ -443,6 +443,13 @@ export default class NetworkHandler {
             }
           }
         }
+
+        if (!isMessageHandled) {
+          console.log(
+            `Failed to handle a message with type ${networkPacket.header.messageType} from a client`
+          );
+          this.onInvalidRequest("Unable to handle the request", rinfo);
+        }
       } else {
         isMessageHandled = this.onInvalidRequest(
           "Invalid packet format",
