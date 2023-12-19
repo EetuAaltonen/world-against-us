@@ -10,16 +10,19 @@ function ParseJSONStructToDatabaseWorldMapLocationData(_jsonStruct)
 		var roomIndex = mapLocationDataStruct[$ "room_index"] ?? undefined;
 		var parsedName =  mapLocationDataStruct[$ "name"] ?? "Unknown";
 		var parsedSize = ParseJSONStructToSize(mapLocationDataStruct[$ "size"] ?? undefined, false);
+		var parsedPatrolPathIndex = asset_get_index(mapLocationDataStruct[$ "patrol_path"] ?? "Unknown");
+		var parsedPatrolPath = (parsedPatrolPathIndex > -1) ? parsedPatrolPathIndex : undefined;
+		
 		switch (roomIndex)
 		{
-			case ROOM_INDEX_CAMP: { parsedWorldMapLocationData = new WorldMapLocation(roomCamp, roomIndex, parsedName, parsedSize, undefined); } break;
+			case ROOM_INDEX_CAMP: { parsedWorldMapLocationData = new WorldMapLocation(roomCamp, roomIndex, parsedName, parsedSize, parsedPatrolPath); } break;
 			
-			case ROOM_INDEX_TOWN: { parsedWorldMapLocationData = new WorldMapLocation(roomTown, roomIndex, parsedName, parsedSize, pthPatrolTown); } break;
-			case ROOM_INDEX_OFFICE: { parsedWorldMapLocationData = new WorldMapLocation(roomOffice, roomIndex, parsedName, parsedSize, undefined); } break;
-			case ROOM_INDEX_LIBRARY: { parsedWorldMapLocationData = new WorldMapLocation(roomLibrary, roomIndex, parsedName, parsedSize, undefined); } break;
-			case ROOM_INDEX_MARKET: { parsedWorldMapLocationData = new WorldMapLocation(roomMarket, roomIndex, parsedName, parsedSize, undefined); } break;
+			case ROOM_INDEX_TOWN: { parsedWorldMapLocationData = new WorldMapLocation(roomTown, roomIndex, parsedName, parsedSize, parsedPatrolPath); } break;
+			case ROOM_INDEX_OFFICE: { parsedWorldMapLocationData = new WorldMapLocation(roomOffice, roomIndex, parsedName, parsedSize, parsedPatrolPath); } break;
+			case ROOM_INDEX_LIBRARY: { parsedWorldMapLocationData = new WorldMapLocation(roomLibrary, roomIndex, parsedName, parsedSize, parsedPatrolPath); } break;
+			case ROOM_INDEX_MARKET: { parsedWorldMapLocationData = new WorldMapLocation(roomMarket, roomIndex, parsedName, parsedSize, parsedPatrolPath); } break;
 			
-			case ROOM_INDEX_FOREST: { parsedWorldMapLocationData = new WorldMapLocation(roomForest, roomIndex, parsedName, parsedSize, pthPatrolForest); } break;
+			case ROOM_INDEX_FOREST: { parsedWorldMapLocationData = new WorldMapLocation(roomForest, roomIndex, parsedName, parsedSize, parsedPatrolPath); } break;
 			default:
 			{
 				throw (string("Trying to parse an unknown world map location data with room index {0}", roomIndex));	
