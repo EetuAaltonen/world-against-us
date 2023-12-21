@@ -143,6 +143,21 @@ export default class NetworkPacketBuilder {
               isPayloadWritten = true;
             }
             break;
+          case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
+            {
+              const bufferInstanceId = Buffer.allocUnsafe(BITWISE.BIT32);
+              bufferInstanceId.writeUInt32LE(payload.instanceId, 0);
+              const bufferInventoryId = Buffer.from(
+                payload.inventoryId,
+                "utf8"
+              );
+              this.payloadBuffer = Buffer.concat([
+                bufferInstanceId,
+                bufferInventoryId,
+              ]);
+              isPayloadWritten = true;
+            }
+            break;
           case MESSAGE_TYPE.PATROL_STATE:
             {
               const bufferPatrol = Buffer.allocUnsafe(

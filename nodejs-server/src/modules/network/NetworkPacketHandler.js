@@ -4,13 +4,13 @@ import PACKET_PRIORITY from "./PacketPriority.js";
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
 import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
 import NetworkPacket from "../network_packets/NetworkPacket.js";
-import AvailableInstance from "../instances/AvailableInstance.js";
+
+import WorldStateSync from "../world_state/WorldStateSync.js";
+import PlayerInfo from "../players/PlayerInfo.js";
 import WorldMapFastTravelInfo from "../world_map/WorldMapFastTravelInfo.js";
 import ContainerContentInfo from "../containers/ContainerContentInfo.js";
-import NetworkInventoryStreamItems from "../network_inventory_stream/NetworkInventoryStreamItems.js";
-import PlayerInfo from "../players/PlayerInfo.js";
 
-import ParseJSONObjectToContainerAction from "../containers/ParseJSONObjectToContainerAction.js";
+import ParseJSONStructToContainerAction from "../containers/ParseJSONStructToContainerAction.js";
 import FormatArrayToJSONStructArray from "../formatting/FormatArrayToJSONStructArray.js";
 
 export default class NetworkPacketHandler {
@@ -33,17 +33,19 @@ export default class NetworkPacketHandler {
       switch (networkPacket.header.messageType) {
         case MESSAGE_TYPE.SYNC_WORLD_STATE:
           {
-            const networkWorldStateSync = new NetworkWorldStateSync(
-              this.networkHandler.worldStateHandler.dateTime.toJSONObject(),
+            const worldStateSync = new WorldStateSync(
+              this.networkHandler.worldStateHandler.dateTime,
               this.networkHandler.worldStateHandler.weather
             );
+            const formatWorldStateSync = worldStateSync.toJSONStruct();
+
             const networkPacketHeader = new NetworkPacketHeader(
               MESSAGE_TYPE.SYNC_WORLD_STATE,
               client.uuid
             );
             const networkPacket = new NetworkPacket(
               networkPacketHeader,
-              worldStateSync.toJSONStruct(),
+              formatWorldStateSync,
               PACKET_PRIORITY.HIGH
             );
             this.networkHandler.packetQueue.enqueue(

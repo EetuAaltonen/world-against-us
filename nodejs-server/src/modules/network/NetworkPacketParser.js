@@ -6,14 +6,14 @@ import GridIndex from "../inventory/GridIndex.js";
 import NetworkPacket from "../network_packets/NetworkPacket.js";
 import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
 import WorldMapFastTravelPoint from "../world_map/WorldMapFastTravelInfo.js";
-import NetworkInventoryStream from "../network_inventory_stream/NetworkInventoryStream.js";
-import NetworkInventoryStreamItems from "../network_inventory_stream/NetworkInventoryStreamItems.js";
+import InventoryStream from "../inventory/InventoryStream.js";
+import InventoryStreamItems from "../inventory/InventoryStreamItems.js";
 import ContainerInventoryActionInfo from "../containers/ContainerInventoryActionInfo.js";
 import PatrolState from "../patrols/PatrolState.js";
 import NetworkPingSample from "../connection_sampling/NetworkPingSample.js";
+// TODO: Check these data structs (snake cased classes)
 
-import ParseJSONObjectsToArray from "../json/ParseJSONObjectsToArray.js";
-import ParseJSONObjectToItemReplica from "../items/ParseJSONObjectToItemReplica.js";
+import ParseJSONStructToInventoryStreamItems from "../inventory/ParseJSONStructToInventoryStreamItems.js";
 
 export default class NetworkPacketParser {
   constructor() {}
@@ -107,7 +107,7 @@ export default class NetworkPacketParser {
               const parsedStreamEndIndex = msg.readUInt16LE(offset);
               offset += BITWISE.BIT16;
               const parsedContainerId = msg.toString("utf8", offset);
-              payload = new NetworkInventoryStream(
+              payload = new InventoryStream(
                 parsedContainerId,
                 parsedStreamItemLimit,
                 parsedIsStreamSending,
@@ -119,17 +119,21 @@ export default class NetworkPacketParser {
           case MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM:
             {
               const jsonString = msg.toString("utf8", 0, msg.length);
-              const parsedJSONObject = JSON.parse(jsonString);
-              if (!this.isObjectEmpty(parsedJSONObject)) {
-                const jsonItems = parsedJSONObject["items"] ?? undefined;
-                const parsedItems = ParseJSONObjectsToArray(
-                  jsonItems,
-                  ParseJSONObjectToItemReplica
-                );
-                payload = new NetworkInventoryStreamItems(parsedItems);
-              } else {
-                payload = parsedJSONObject;
-              }
+              const jsonStruct = JSON.parse(jsonString);
+              payload = ParseJSONStructToInventoryStreamItems(jsonStruct);
+            }
+            break;
+          case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
+            {
+              let offset = 0;
+              const parsedInstanceId = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedInventoryId = msg.toString("utf8", offset);
+              payload = new InventoryStreamItems(
+                parsedInstanceId,
+                parsedInventoryId,
+                []
+              );
             }
             break;
           case MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM:
