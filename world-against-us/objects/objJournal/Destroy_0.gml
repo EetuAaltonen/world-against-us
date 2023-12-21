@@ -1,0 +1,2 @@
+DestroyDSListAndDeleteValues(journalEntries);
+journalEntries = undefined;

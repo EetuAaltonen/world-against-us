@@ -34,6 +34,12 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 		}
 	}
 	
+	static OnDestroy = function()
+	{
+		DestroyDSListAndDeleteValues(items);
+		items = undefined;
+	}
+	
 	static InitGridData = function()
 	{
 		// RESET GRID DATA
@@ -295,7 +301,7 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 		if (!is_undefined(item))
 		{
 			FillGridArea(item.grid_index.col, item.grid_index.row, item.size, undefined);
-			ds_list_delete(items, _index);
+			DeleteDSListValueByIndex(items, _index);
 			isItemRemoved = true;
 		}
 		return isItemRemoved;

@@ -100,7 +100,7 @@ function NetworkRegionObjectHandler() constructor
 						foundPatrol = patrol;
 					} else {
 						// DELETE EXPIRED PATROL DATA
-						ds_list_delete(local_patrols, i--);
+						DeleteDSListValueByIndex(local_patrols, i--);
 						patrolCount = ds_list_size(local_patrols);
 					}
 					break;
@@ -145,7 +145,7 @@ function NetworkRegionObjectHandler() constructor
 							if (banditInstance.patrolId == _patrolState.patrol_id)
 							{
 								instance_destroy(banditInstance);
-								ds_list_delete(local_patrols, i--);
+								DeleteDSListValueByIndex(local_patrols, i--);
 								patrolCount = ds_list_size(local_patrols);
 								break;
 							}
