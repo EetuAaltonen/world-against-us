@@ -1,10 +1,12 @@
-function ClearDSListAndDeleteValues(_dsList)
+function ClearDSListAndDeleteValues(_dsList, _valueType = undefined)
 {
 	if (!is_undefined(_dsList))
 	{
 		var listSize = ds_list_size(_dsList);
 		repeat(listSize)
 		{
+			var value = _dsList[| 0];
+			ReleaseVariableFromMemory(value, _valueType);
 			ds_list_delete(_dsList, 0);	
 		}
 		ds_list_clear(_dsList);
