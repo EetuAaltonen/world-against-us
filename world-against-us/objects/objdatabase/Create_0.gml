@@ -1,11 +1,12 @@
 // ITEM DATABASE
 itemDatabase = new DatabaseItem();
 var jsonItemStruct = ReadJSONFile("item_data.json") ?? EMPTY_STRUCT;
-itemDatabase.itemData = ParseJSONStructToMap(jsonItemStruct[$ "item_data"] ?? undefined, "name", ParseJSONStructToDatabaseItem);
+ParseJSONStructToMap(itemDatabase.itemData, jsonItemStruct[$ "item_data"] ?? undefined, "name", ParseJSONStructToDatabaseItem);
 
 // QUEST DATA
+questData = ds_map_create();
 var jsonQuestStruct = ReadJSONFile("quest_data.json") ?? EMPTY_STRUCT;
-questData = ParseJSONStructToMap(jsonQuestStruct[$ "quest_data"] ?? undefined, "quest_id", ParseJSONStructToDatabaseQuest);
+ParseJSONStructToMap(questData, jsonQuestStruct[$ "quest_data"] ?? undefined, "quest_id", ParseJSONStructToDatabaseQuest);
 
 // DIALOGUE DATA
 dialogueData = ds_map_create();
@@ -114,7 +115,7 @@ try {
 				}
 			}
 			file_text_close(dialogueFile);
-			ds_map_add_map(dialogueData, dialogueStoryTitle, storyDialogues);
+			ds_map_add(dialogueData, dialogueStoryTitle, storyDialogues);
 		    fileName = file_find_next();
 		}
 		file_find_close();
@@ -186,13 +187,16 @@ try {
 }
 
 // OBJECT EXAMINE DATA
+objectExamineData = ds_map_create();
 var jsonObjectExamineStruct = ReadJSONFile("object_examine_data.json") ?? EMPTY_STRUCT;
-objectExamineData = ParseJSONStructToMap(jsonObjectExamineStruct[$ "object_examine_data"] ?? undefined, "object_name", ParseJSONStructToDatabaseObjectExamine);
+ParseJSONStructToMap(objectExamineData, jsonObjectExamineStruct[$ "object_examine_data"] ?? undefined, "object_name", ParseJSONStructToDatabaseObjectExamine);
 
 // WORLD MAP DATA
+worldMapLocationData = ds_map_create();
 var jsonMapStruct = ReadJSONFile("/map_data/world_map_location_data.json") ?? EMPTY_STRUCT;
-worldMapLocationData = ParseJSONStructToMap(jsonMapStruct[$ "world_map_location_data"] ?? undefined, "room_index", ParseJSONStructToDatabaseWorldMapLocationData);
+ParseJSONStructToMap(worldMapLocationData, jsonMapStruct[$ "world_map_location_data"] ?? undefined, "room_index", ParseJSONStructToDatabaseWorldMapLocationData);
 
 // MAP ICON STYLE DATA
+mapIconStyleData = ds_map_create();
 var jsonMapIconStyleStruct = ReadJSONFile("/map_data/map_icon_style_data.json") ?? EMPTY_STRUCT;
-mapIconStyleData = ParseJSONStructToMap(jsonMapIconStyleStruct[$ "map_icon_style_data"] ?? undefined, "object_name", ParseJSONStructToDatabaseMapIconStyleData);
+ParseJSONStructToMap(mapIconStyleData, jsonMapIconStyleStruct[$ "map_icon_style_data"] ?? undefined, "object_name", ParseJSONStructToDatabaseMapIconStyleData);

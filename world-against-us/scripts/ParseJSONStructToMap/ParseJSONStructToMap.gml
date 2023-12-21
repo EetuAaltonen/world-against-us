@@ -1,6 +1,5 @@
-function ParseJSONStructToMap(_jsonStruct, _mapKeyIndicator, _elementParseFunction)
+function ParseJSONStructToMap(_mapRef, _jsonStruct, _mapKeyIndicator, _elementParseFunction)
 {
-	var dataMap = ds_map_create();
 	try
 	{
 		if (is_array(_jsonStruct))
@@ -13,7 +12,7 @@ function ParseJSONStructToMap(_jsonStruct, _mapKeyIndicator, _elementParseFuncti
 					var parsedData = script_execute(_elementParseFunction, _jsonStruct[i]);
 					if (!is_undefined(parsedData[$ _mapKeyIndicator]))
 					{
-						ds_map_add(dataMap, parsedData[$ _mapKeyIndicator], parsedData);
+						ds_map_add(_mapRef, parsedData[$ _mapKeyIndicator], parsedData);
 					} else {
 						throw (string("Struct is missing {0} property in some where", _mapKeyIndicator));
 					}
@@ -25,5 +24,4 @@ function ParseJSONStructToMap(_jsonStruct, _mapKeyIndicator, _elementParseFuncti
 		show_debug_message(error);
 		show_message(error);
 	}
-	return dataMap;
 }
