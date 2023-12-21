@@ -1,12 +1,16 @@
-function NetworkInventoryStreamItems(_items) constructor
+function NetworkInventoryStreamItems(_region_id, _inventory_id, _items) constructor
 {
-	// PRIOR FORMATTED JSON ITEMS
-	items = _items;
+	region_id = _region_id;
+    inventory_id = _inventory_id;
+    items = _items;
 	
 	static ToJSONStruct = function()
 	{
+		var formatItems = FormatItemListToJSONArray(items);
 		return {
-			items: items
+			region_id: region_id,
+			inventory_id: inventory_id,
+			items: formatItems,
 		}
 	}
 }

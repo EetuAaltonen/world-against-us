@@ -108,7 +108,14 @@ function NetworkPacketBuilder() constructor
 						buffer_write(_networkBuffer, buffer_bool, networkInventoryStream.is_stream_sending);
 						buffer_write(_networkBuffer, buffer_u16, networkInventoryStream.stream_current_index);
 						buffer_write(_networkBuffer, buffer_u16, networkInventoryStream.stream_end_index);
-						buffer_write(_networkBuffer, buffer_text, networkInventoryStream.target_container_id);
+						buffer_write(_networkBuffer, buffer_text, networkInventoryStream.inventory_id);
+						isPayloadWritten = true;
+					} break;
+					case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
+					{
+						var networkInventoryStreamItems = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u32, networkInventoryStreamItems.region_id);
+						buffer_write(_networkBuffer, buffer_text, networkInventoryStreamItems.inventory_id);
 						isPayloadWritten = true;
 					} break;
 					case MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM:

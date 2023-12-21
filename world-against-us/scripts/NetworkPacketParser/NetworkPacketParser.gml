@@ -131,8 +131,22 @@ function NetworkPacketParser() constructor
 						{
 							var parsedItemStructArray = parsedStruct[$ "items"] ?? undefined;
 							var parsedItems = ParseJSONStructToArray(parsedItemStructArray, ParseJSONStructToItem);
-							parsedPayload = new NetworkInventoryStreamItems(parsedItems);
+							parsedPayload = new NetworkInventoryStreamItems(
+								parsedStruct[$ "instance_id"],
+								parsedStruct[$ "inventory_id"],
+								parsedItems
+							);
 						}
+					} break;
+					case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
+					{
+						var parsedRegionId = buffer_read(_msg, buffer_u32);
+						var parsedInventoryId = buffer_read(_msg, buffer_string);
+						parsedPayload = new NetworkInventoryStreamItems(
+							parsedRegionId,
+							parsedInventoryId,
+							[]
+						);
 					} break;
 					case MESSAGE_TYPE.PATROL_STATE:
 					{
