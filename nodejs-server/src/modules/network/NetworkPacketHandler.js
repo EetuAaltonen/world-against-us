@@ -220,13 +220,14 @@ export default class NetworkPacketHandler {
                 instance.containerHandler.getContainerContentCountById(
                   containerId
                 );
+              // Initialize new container
+              if (contentCount === -1) {
+                instance.containerHandler.initContainer(containerId);
+              }
               const containerContentInfo = new ContainerContentInfo(
                 containerId,
                 contentCount
               );
-              if (containerContentInfo.contentCount === -1) {
-                instance.containerHandler.initContainer(containerId);
-              }
 
               const networkPacketHeader = new NetworkPacketHeader(
                 MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT,

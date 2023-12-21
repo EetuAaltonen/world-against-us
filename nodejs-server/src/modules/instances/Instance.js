@@ -24,7 +24,7 @@ export default class Instance {
     this.ownerClient = undefined;
     this.localPlayers = {};
     this.localPatrols = {}; // TODO: local patrols
-    this.containerHandler = new ContainerHandler();
+    this.containerHandler = new ContainerHandler(this.networkHandler);
 
     this.availablePatrolId = 0;
   }
