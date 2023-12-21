@@ -1,12 +1,24 @@
 import GridIndex from "../inventory/GridIndex.js";
 
 export default class ItemReplica {
-  constructor(name, quantity, metadata, is_rotated, is_known, grid_index) {
+  constructor(name, quantity, metadata, isRotated, isKnown, gridIndex) {
     this.name = name;
     this.quantity = quantity ?? 1;
     this.metadata = metadata ?? undefined;
-    this.is_rotated = is_rotated ?? false;
-    this.is_known = is_known ?? false;
-    this.grid_index = new GridIndex(grid_index.col ?? 0, grid_index.row ?? 0);
+    this.isRotated = isRotated ?? false;
+    this.isKnown = isKnown ?? false;
+    this.gridIndex = new GridIndex(gridIndex.col ?? 0, gridIndex.row ?? 0);
+  }
+
+  toJSONStruct() {
+    const formatGridIndex = this.gridIndex.toJSONStruct(this.gridIndex);
+    return {
+      name: this.name,
+      quantity: this.quantity,
+      metadata: this.metadata,
+      is_rotated: this.isRotated,
+      is_known: this.isKnown,
+      grid_index: formatGridIndex,
+    };
   }
 }

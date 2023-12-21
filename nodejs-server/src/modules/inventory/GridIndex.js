@@ -3,4 +3,11 @@ export default class GridIndex {
     this.col = col;
     this.row = row;
   }
+
+  toJSONStruct() {
+    return {
+      col: this.col,
+      row: this.row,
+    };
+  }
 }

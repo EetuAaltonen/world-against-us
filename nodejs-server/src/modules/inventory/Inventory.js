@@ -17,9 +17,9 @@ export default class Inventory {
   addItem(item) {
     let isItemAdded = false;
     if (item !== undefined) {
-      const existentItem = this.getItemByGridIndex(item.grid_index);
+      const existentItem = this.getItemByGridIndex(item.gridIndex);
       if (existentItem === undefined) {
-        const gridIndexKey = this.formatGridIndex(item.grid_index);
+        const gridIndexKey = this.formatGridIndex(item.gridIndex);
         if (gridIndexKey !== undefined) {
           this.items[gridIndexKey] = item;
           isItemAdded = true;
@@ -87,14 +87,12 @@ export default class Inventory {
     return Object.keys(this.items).length;
   }
 
-  stackItem() {}
-
   identifyItemByGridIndex(gridIndex) {
     let isItemIdentified;
     const item = this.getItemByGridIndex(gridIndex);
     if (item !== undefined) {
-      item.is_known = true;
-      isItemIdentified = item.is_known;
+      item.isKnown = true;
+      isItemIdentified = item.isKnown;
     }
     return isItemIdentified;
   }
@@ -103,7 +101,7 @@ export default class Inventory {
     let isItemRotated = false;
     const item = this.getItemByGridIndex(gridIndex);
     if (item !== undefined) {
-      item.is_rotated = newRotation;
+      item.isRotated = newRotation;
       isItemRotated = true;
     }
     return isItemRotated;
