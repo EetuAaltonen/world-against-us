@@ -14,7 +14,7 @@ function NetworkRegionHandler() constructor
 		room_index = undefined;
 		owner_client = UNDEFINED_UUID;
 		
-		network_region_object_handler.active_inventory_stream = undefined;
+		network_region_object_handler.ResetRegionObjectData();
 	}
 	
 	static OnRoomEnd = function()

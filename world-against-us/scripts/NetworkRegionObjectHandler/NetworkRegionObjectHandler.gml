@@ -157,4 +157,10 @@ function NetworkRegionObjectHandler() constructor
 		}
 		return isPatrolStateHandled;
 	}
+	
+	static ResetRegionObjectData = function()
+	{
+		active_inventory_stream = undefined;
+		ds_list_clear(local_patrols);
+	}
 }

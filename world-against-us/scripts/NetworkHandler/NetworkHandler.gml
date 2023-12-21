@@ -162,6 +162,9 @@ function NetworkHandler() constructor
 		
 			// CLEAR IN FLIGHT NETWORK PACKET TRACKING
 			network_packet_tracker.ResetNetworkPacketTracking();
+			
+			// CLEAR REGION DATA
+			network_region_handler.ResetRegionData();
 		
 			global.MultiplayerMode = false;
 
