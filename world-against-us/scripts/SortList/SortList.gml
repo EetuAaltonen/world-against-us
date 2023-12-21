@@ -25,7 +25,10 @@ function SortList(sourceList, compareFunction)
 		} else {
 			ds_list_add(sortedList, sourceObject);	
 		}
-	    ds_list_delete(sourceList, 0);
+	    // THIS WORKS WITHOUT DeleteDSListValueByIndex BECAUSE VALUE IS DIRECTLY REFERENCED
+		ds_list_delete(sourceList, 0);
 	}
 	ds_list_copy(sourceList, sortedList);
+	// NO DestroyDSListAndDeleteValues FUNCITON CALL BECAUSE IT WOULD TRIGGER OnDestroy in structs
+	ds_list_destroy(sortedList);
 }
