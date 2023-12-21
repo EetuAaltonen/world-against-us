@@ -250,117 +250,83 @@ export default class NetworkPacketHandler {
           break;
         case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
           {
-            const containerInventoryStream = networkPacket.payload;
-            if (containerInventoryStream !== undefined) {
+            const inventoryStream = networkPacket.payload;
+            if (inventoryStream !== undefined) {
               const container = instance.containerHandler.getContainerById(
-                containerInventoryStream.targetContainerId
+                inventoryStream.inventoryId
               );
               if (container !== undefined) {
-                containerInventoryStream.targetInventory = container.inventory;
-                // TODO: Support multiple concurrent inventory streams
-                instance.containerHandler.activeInventoryStream =
-                  containerInventoryStream;
+                inventoryStream.requestingClient = client.uuid;
+                inventoryStream.targetInventory = container.inventory;
 
-                const networkPacketHeader = new NetworkPacketHeader(
-                  MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM,
-                  client.uuid
-                );
-                const networkPacket = new NetworkPacket(
-                  networkPacketHeader,
-                  undefined,
-                  PACKET_PRIORITY.DEFAULT
-                );
-                this.networkHandler.packetQueue.enqueue(
-                  new NetworkQueueEntry(
-                    networkPacket,
-                    [client],
-                    networkPacket.priority
+                if (
+                  instance.containerHandler.addActiveInventoryStream(
+                    inventoryStream
                   )
-                );
-                isPacketHandled = true;
+                ) {
+                  const networkPacketHeader = new NetworkPacketHeader(
+                    MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM,
+                    client.uuid
+                  );
+                  const networkPacket = new NetworkPacket(
+                    networkPacketHeader,
+                    undefined,
+                    PACKET_PRIORITY.DEFAULT
+                  );
+                  this.networkHandler.packetQueue.enqueue(
+                    new NetworkQueueEntry(
+                      networkPacket,
+                      [client],
+                      networkPacket.priority
+                    )
+                  );
+                  isPacketHandled = true;
+                }
               }
             }
           }
           break;
         case MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM:
           {
-            const activeInventoryStream =
-              instance.containerHandler.activeInventoryStream;
-            if (activeInventoryStream !== undefined) {
-              if (activeInventoryStream.isStreamSending) {
-                const containerInventoryStreamItems = networkPacket.payload;
-                if (containerInventoryStreamItems !== undefined) {
-                  if (activeInventoryStream.targetInventory !== undefined) {
+            const inventoryStreamItems = networkPacket.payload;
+            if (inventoryStreamItems !== undefined) {
+              const activeInventoryStream =
+                instance.containerHandler.getActiveInventoryStream(
+                  inventoryStreamItems.inventoryId
+                );
+              if (activeInventoryStream !== undefined) {
+                if (activeInventoryStream.requestingClient === client.uuid) {
+                  if (inventoryStreamItems.instanceId === instance.instanceId) {
                     if (
-                      activeInventoryStream.targetInventory.addItems(
-                        containerInventoryStreamItems.items
-                      )
+                      activeInventoryStream.inventoryId ==
+                      inventoryStreamItems.inventoryId
                     ) {
-                      const networkPacketHeader = new NetworkPacketHeader(
-                        MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM,
-                        client.uuid
-                      );
-                      const networkPacket = new NetworkPacket(
-                        networkPacketHeader,
-                        undefined,
-                        PACKET_PRIORITY.DEFAULT
-                      );
-                      this.networkHandler.packetQueue.enqueue(
-                        new NetworkQueueEntry(
-                          networkPacket,
-                          [client],
-                          networkPacket.priority
-                        )
-                      );
-                      isPacketHandled = true;
+                      if (activeInventoryStream.isStreamSending) {
+                        if (
+                          activeInventoryStream.targetInventory !== undefined
+                        ) {
+                          if (
+                            activeInventoryStream.targetInventory.addItems(
+                              inventoryStreamItems.items
+                            )
+                          ) {
+                            isPacketHandled =
+                              instance.containerHandler.requestNextInventoryStreamItems(
+                                activeInventoryStream.inventoryId,
+                                instance.instanceId,
+                                client
+                              );
+                          }
+                        }
+                      } else {
+                        isPacketHandled =
+                          instance.containerHandler.sendNextInventoryStreamItems(
+                            activeInventoryStream,
+                            instance.instanceId,
+                            client
+                          );
+                      }
                     }
-                  }
-                }
-              } else {
-                const activeInventoryStream =
-                  instance.containerHandler.activeInventoryStream;
-                if (activeInventoryStream !== undefined) {
-                  const items = activeInventoryStream.FetchNextItems();
-                  if (items.length > 0) {
-                    const inventoryStreamItems =
-                      new NetworkInventoryStreamItems(items);
-
-                    const networkPacketHeader = new NetworkPacketHeader(
-                      MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM,
-                      client.uuid
-                    );
-                    const networkPacket = new NetworkPacket(
-                      networkPacketHeader,
-                      inventoryStreamItems,
-                      PACKET_PRIORITY.DEFAULT
-                    );
-                    this.networkHandler.packetQueue.enqueue(
-                      new NetworkQueueEntry(
-                        networkPacket,
-                        [client],
-                        networkPacket.priority
-                      )
-                    );
-                    isPacketHandled = true;
-                  } else {
-                    // TODO: Duplicate code with all MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM responses
-                    const networkPacketHeader = new NetworkPacketHeader(
-                      MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM,
-                      client.uuid
-                    );
-                    const networkPacket = new NetworkPacket(
-                      networkPacketHeader,
-                      undefined,
-                      PACKET_PRIORITY.DEFAULT
-                    );
-                    this.networkHandler.packetQueue.enqueue(
-                      new NetworkQueueEntry(
-                        networkPacket,
-                        [client],
-                        networkPacket.priority
-                      )
-                    );
-                    isPacketHandled = true;
                   }
                 }
               }
@@ -369,42 +335,38 @@ export default class NetworkPacketHandler {
           break;
         case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
           {
-            const activeInventoryStream =
-              instance.containerHandler.activeInventoryStream;
-            if (activeInventoryStream.isStreamSending) {
-              instance.containerHandler.activeInventoryStream = undefined;
-
-              const networkPacketHeader = new NetworkPacketHeader(
-                MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM,
-                client.uuid
-              );
-              const networkPacket = new NetworkPacket(
-                networkPacketHeader,
-                undefined,
-                PACKET_PRIORITY.DEFAULT
-              );
-              this.networkHandler.packetQueue.enqueue(
-                new NetworkQueueEntry(
-                  networkPacket,
-                  [client],
-                  networkPacket.priority
-                )
-              );
-              isPacketHandled = true;
-            } else {
-              this.networkHandler.onInvalidRequest(
-                "Invalid 'end inventory stream' request",
-                rinfo
-              );
-              isPacketHandled = true;
+            const inventoryStreamItems = networkPacket.payload;
+            if (inventoryStreamItems !== undefined) {
+              const activeInventoryStream =
+                instance.containerHandler.getActiveInventoryStream(
+                  inventoryStreamItems.inventoryId
+                );
+              if (activeInventoryStream !== undefined) {
+                if (activeInventoryStream.requestingClient === client.uuid) {
+                  if (inventoryStreamItems.instanceId === instance.instanceId) {
+                    if (
+                      activeInventoryStream.inventoryId ==
+                      inventoryStreamItems.inventoryId
+                    ) {
+                      instance.containerHandler.removeActiveInventoryStream(
+                        activeInventoryStream.inventoryId
+                      );
+                      isPacketHandled =
+                        this.networkHandler.queueAcknowledgmentResponse(client);
+                    }
+                  }
+                }
+              }
             }
           }
           break;
         case MESSAGE_TYPE.CONTAINER_INVENTORY_ADD_ITEM:
           {
+            // TODO: Check that inventory is not streaming actively
             // TODO: Move all parse functions under the packet parser
+            // And rename to InventoryActionInfo
             const containerInventoryActionInfo =
-              ParseJSONObjectToContainerAction(networkPacket.payload);
+              ParseJSONStructToContainerAction(networkPacket.payload);
             if (containerInventoryActionInfo !== undefined) {
               const item = containerInventoryActionInfo.item;
               const container = instance.containerHandler.getContainerById(

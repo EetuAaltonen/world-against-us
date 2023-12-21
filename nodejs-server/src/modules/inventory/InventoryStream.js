@@ -1,20 +1,22 @@
-export default class NetworkInventoryStream {
+export default class InventoryStream {
   constructor(
-    targetContainerId,
+    inventoryId,
     streamItemLimit,
     isStreamSending,
     streamCurrentIndex,
     streamEndIndex
   ) {
-    this.targetContainerId = targetContainerId;
-    this.targetInventory = undefined;
+    this.inventoryId = inventoryId;
     this.streamItemLimit = streamItemLimit;
     this.isStreamSending = isStreamSending;
     this.streamCurrentIndex = streamCurrentIndex;
     this.streamEndIndex = streamEndIndex;
+
+    this.requestingClient = undefined;
+    this.targetInventory = undefined;
   }
 
-  FetchNextItems() {
+  fetchNextInventoryStreamItems() {
     let items = [];
     if (this.targetInventory !== undefined) {
       const lastItemIndex = this.streamCurrentIndex + this.streamItemLimit;
