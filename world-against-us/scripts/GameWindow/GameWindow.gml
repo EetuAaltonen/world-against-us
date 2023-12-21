@@ -13,8 +13,17 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 	isFocused = false;
 	isVisible = true;
 	
+	static OnDestroy = function()
+	{
+		DestroyDSListAndDeleteValues(childElements);
+		childElements = undefined;
+	}
+	
 	static AddChildElements = function(_childElements)
 	{
+		// DELETE OLD CHILD ELEMENTS
+		DestroyDSListAndDeleteValues(childElements);
+		
 		// ASSING THE PARENT ELEMENT TO CHILD ELEMENTS
 		var childElementCount = ds_list_size(_childElements);
 		for (var i = 0; i < childElementCount; i++)
@@ -42,7 +51,6 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 				break;
 			}
 		}
-		
 		return foundChildElement;
 	}
 	

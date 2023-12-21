@@ -3,6 +3,12 @@ function GameWindowHandler() constructor
 	gameWindows = ds_list_create();
 	focusedWindow = undefined;
 	
+	static OnDestroy = function()
+	{
+		DestroyDSListAndDeleteValues(gameWindows);
+		gameWindows = undefined;
+	}
+	
 	static OpenWindowGroup = function(_windowGroup)
 	{
 		var windowCount = array_length(_windowGroup);
@@ -99,9 +105,14 @@ function GameWindowHandler() constructor
 			var gameWindow = gameWindows[| i];
 			if (gameWindow.windowId == _windowId)
 			{
+				// RESET FOCUSED WINDOW
+				if (gameWindow.windowId == focusedWindow.windowId)
+				{
+					ResetFocusedWindow();
+				}
 				// CLOSE WINDOW
 				gameWindow.OnClose();
-				ds_list_delete(gameWindows, i++);
+				DeleteDSListValueByIndex(gameWindows, i++);
 				windowCount = ds_list_size(gameWindows);
 				break;
 			}
@@ -122,26 +133,31 @@ function GameWindowHandler() constructor
 	
 	static CloseAllWindows = function()
 	{
+		var isAllWindowsClosed = true;
 		var windowCount = ds_list_size(gameWindows);
 		for (var i = 0; i < windowCount; i++)
 		{
 			var gameWindow = gameWindows[| i];
+			// RESET FOCUSED WINDOW
+			if (gameWindow.windowId == focusedWindow.windowId)
+			{
+				ResetFocusedWindow();
+			}
+			// CLOSE WINDOW
 			gameWindow.OnClose();
 		}
 		ClearDSListAndDeleteValues(gameWindows);
-		
-		// RESET FOCUSED
-		if (!is_undefined(focusedWindow))
-		{
-			ResetFocusedWindow();	
-		}
+		return isAllWindowsClosed;
 	}
 	
 	static ResetFocusedWindow = function()
 	{
-		focusedWindow.isFocused = false;
-		focusedWindow.OnFocusLost();
-		focusedWindow = undefined;
+		if (!is_undefined(focusedWindow))
+		{
+			focusedWindow.isFocused = false;
+			focusedWindow.OnFocusLost();
+			focusedWindow = undefined;
+		}
 	}
 	
 	static Draw = function()

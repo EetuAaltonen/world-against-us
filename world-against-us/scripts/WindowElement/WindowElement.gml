@@ -16,8 +16,17 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 	isHovered = false;
 	hoverAnimation = isHovered;
 	
+	static OnDestroy = function()
+	{
+		DestroyDSListAndDeleteValues(childElements);
+		childElements = undefined;
+	}
+	
 	static AddChildElements = function(_childElements)
 	{
+		// DELETE OLD CHILD ELEMENTS
+		DestroyDSListAndDeleteValues(childElements);
+		
 		// ASSING THE PARENT ELEMENT TO CHILD ELEMENTS
 		var childElementCount = ds_list_size(_childElements);
 		for (var i = 0; i < childElementCount; i++)
@@ -91,7 +100,7 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 	
 	static DeleteChildElements = function()
 	{
-		childElements = ds_list_create();
+		ClearDSListAndDeleteValues(childElements);
 	}
 	
 	static CheckHovered = function()
