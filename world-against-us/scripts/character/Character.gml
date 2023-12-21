@@ -8,18 +8,15 @@ function Character(_name, _type, _race, _behaviour) constructor
 	
 	total_hp_percent = 100;
 	stamina = 100;
-	body_parts = undefined;
+	body_parts = ds_map_create();
 	InitBodyParts();
 	
 	is_dead = false;
 	
 	static InitBodyParts = function()
 	{
-		body_parts = InitCharacterBodyParts(race);
-		if (!is_undefined(body_parts))
-		{
-			UpdateTotalHp();
-		}
+		InitCharacterBodyParts(body_parts, race);
+		UpdateTotalHp();
 	}
 	
 	static Clone = function()
@@ -33,6 +30,11 @@ function Character(_name, _type, _race, _behaviour) constructor
 		);
 	}
 	
+	static OnDestroy = function()
+	{
+		DestroyDSMapAndDeleteValues(body_parts);
+	}
+	
 	static UpdateTotalHp = function()
 	{
 		var totalBodyPartMaxCondition = 0;
@@ -40,15 +42,18 @@ function Character(_name, _type, _race, _behaviour) constructor
 		var bodyPartIndices = ds_map_keys_to_array(body_parts);
 		var bodyPartCount = array_length(bodyPartIndices);
 		
-		for (var i = 0; i < bodyPartCount; i++)
+		if (bodyPartCount > 0)
 		{
-			var bodyPart = body_parts[? bodyPartIndices[@ i]];
+			for (var i = 0; i < bodyPartCount; i++)
+			{
+				var bodyPart = body_parts[? bodyPartIndices[@ i]];
 			
-			totalBodyPartMaxCondition += bodyPart.max_condition;
-			totalBodyPartCondition += bodyPart.condition;
-		}
+				totalBodyPartMaxCondition += bodyPart.max_condition;
+				totalBodyPartCondition += bodyPart.condition;
+			}
 		
-		total_hp_percent = floor((totalBodyPartCondition / totalBodyPartMaxCondition) * 100);
+			total_hp_percent = floor((totalBodyPartCondition / totalBodyPartMaxCondition) * 100);
+		}
 	}
 	
 	static Update = function()
