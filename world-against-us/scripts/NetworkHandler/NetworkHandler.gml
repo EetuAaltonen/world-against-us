@@ -154,7 +154,7 @@ function NetworkHandler() constructor
 			network_status = NETWORK_STATUS.OFFLINE;
 			host_address = undefined;
 			host_port = undefined;
-			ds_priority_clear(network_packet_queue);
+			ClearDSPriorityAndDeleteValues(network_packet_queue);
 			delete_socket_timer.StopTimer();
 		
 			// RESET CONNECTION SAMPLING

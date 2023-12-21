@@ -12,7 +12,7 @@ function WindowLoading(_elementId, _relativePosition, _size, _backgroundColor) :
 		{
 			initIconElements = false;
 			// CLEAR CHILD ELEMENTS
-			ds_list_clear(childElements);
+			ClearDSListAndDeleteValues(childElements);
 			loading_icon_element = undefined;
 			
 			var loadingIconElements = ds_list_create();

@@ -19,7 +19,7 @@ function WindowCollectionList(_elementId, _relativePosition, _size, _backgroundC
 		{
 			initDataElements = false;
 			// CLEAR CHILD ELEMENTS
-			ds_list_clear(childElements);
+			ClearDSListAndDeleteValues(childElements);
 			
 			var listElements = ds_list_create();
 			// TODO: Ability to change list element size

@@ -52,7 +52,7 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 	static ClearAllItems = function()
 	{
 		// CLEAR ITEMS
-		ds_list_clear(items);
+		ClearDSListAndDeleteValues(items);
 		InitGridData();
 	}
 	

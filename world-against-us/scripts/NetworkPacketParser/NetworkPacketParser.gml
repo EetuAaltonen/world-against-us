@@ -15,7 +15,7 @@ function NetworkPacketParser() constructor
 		    parsedHeader.client_id = parsedClientId;
 			parsedHeader.sequence_number = parsedSequenceNumber;
 		    parsedHeader.ack_count = parsedAckCount;
-		    ds_list_clear(parsedHeader.ack_range);
+		    ClearDSListAndDeleteValues(parsedHeader.ack_range);
 			for (var i = 0; i < parsedAckCount; i++)
 			{
 				var acknowledgmentId = buffer_read(_msg, buffer_u8);

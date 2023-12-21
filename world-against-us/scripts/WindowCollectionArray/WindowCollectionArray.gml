@@ -6,7 +6,7 @@ function WindowCollectionArray(_elementId, _relativePosition, _size, _background
 		{
 			initDataElements = false;
 			// CLEAR CHILD ELEMENTS
-			ds_list_clear(childElements);
+			ClearDSListAndDeleteValues(childElements);
 			
 			var arrayElements = ds_list_create();
 			var arrayElementSize = new Size(size.w, 60);

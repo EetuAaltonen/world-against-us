@@ -6,7 +6,7 @@ function WindowCollectionMap(_elementId, _relativePosition, _size, _backgroundCo
 		{
 			initDataElements = false;
 			// CLEAR CHILD ELEMENTS
-			ds_list_clear(childElements);
+			ClearDSListAndDeleteValues(childElements);
 			
 			var mapElements = ds_list_create();
 			var mapElementSize = new Size(size.w, 60);

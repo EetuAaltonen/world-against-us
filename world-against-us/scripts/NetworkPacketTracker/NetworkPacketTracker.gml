@@ -65,7 +65,7 @@ function NetworkPacketTracker() constructor
 			ds_list_copy(_networkPacket.header.ack_range, pending_ack_range);
 			
 			// CLEAR PENDING ACK RANGE
-			ds_list_clear(pending_ack_range);
+			ClearDSListAndDeleteValues(pending_ack_range);
 		} else {
 			if (_networkPacket.header.message_type == MESSAGE_TYPE.ACKNOWLEDGMENT)
 			{
@@ -169,8 +169,8 @@ function NetworkPacketTracker() constructor
 		expected_acknowledgment_id = 0;
 		dropped_packet_count = 0;
 		
-		ds_list_clear(in_flight_packets);
-		ds_list_clear(pending_ack_range);
+		ClearDSListAndDeleteValues(in_flight_packets);
+		ClearDSListAndDeleteValues(pending_ack_range);
 	}
 	
 	static ClearInFlightPacketsByMessageType = function(_messageType)

@@ -34,6 +34,6 @@ function MapData() constructor
 	
 	static ClearIcons = function()
 	{
-		ds_list_clear(icons);
+		ClearDSListAndDeleteValues(icons);
 	}
 }

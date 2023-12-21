@@ -54,7 +54,7 @@ function NetworkRegionObjectHandler() constructor
 		}
 		
 		// CLEAR LOCAL PATROLS
-		ds_list_clear(local_patrols);
+		ClearDSListAndDeleteValues(local_patrols);
 	}
 	
 	static SyncRegionPatrols = function (_patrols)
@@ -161,6 +161,6 @@ function NetworkRegionObjectHandler() constructor
 	static ResetRegionObjectData = function()
 	{
 		active_inventory_stream = undefined;
-		ds_list_clear(local_patrols);
+		ClearDSListAndDeleteValues(local_patrols);
 	}
 }

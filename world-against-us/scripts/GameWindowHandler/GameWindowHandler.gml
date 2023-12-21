@@ -128,7 +128,7 @@ function GameWindowHandler() constructor
 			var gameWindow = gameWindows[| i];
 			gameWindow.OnClose();
 		}
-		ds_list_clear(gameWindows);
+		ClearDSListAndDeleteValues(gameWindows);
 		
 		// RESET FOCUSED
 		if (!is_undefined(focusedWindow))
