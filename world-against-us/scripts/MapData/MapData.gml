@@ -17,6 +17,12 @@ function MapData() constructor
 		}
 	}
 	
+	static OnDestroy = function()
+	{
+		DestroyDSListAndDeleteValues(icons);
+		icons = undefined;
+	}
+	
 	static SortIcons = function()
 	{
 		SortList(icons, CompareMapIcons);

@@ -23,6 +23,14 @@ function MapDataHandler() constructor
 		}
 	}
 	
+	static OnDestroy = function()
+	{
+		static_map_data.OnDestroy();
+		static_map_data = undefined;
+		dynamic_map_data.OnDestroy();
+		dynamic_map_data = undefined;
+	}
+	
 	static GetMapDataFileName = function(roomName)
 	{
 		return string("{0}_static_map.json", roomName);

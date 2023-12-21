@@ -1,0 +1,2 @@
+mapDataHandler.OnDestroy();
+mapDataHandler = undefined;
