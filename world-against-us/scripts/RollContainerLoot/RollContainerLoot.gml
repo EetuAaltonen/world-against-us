@@ -3,6 +3,10 @@ function RollContainerLoot(_lootTableTag, _inventory)
 	var lootTable = global.LootTableData[? _lootTableTag];
 	var lootData = lootTable.RollLoot();
 	var lootCount = array_length(lootData);
+	
+	// CLEAR OLD ITEMS
+	_inventory.ClearAllItems();
+	
 	for (var i = 0; i < lootCount; i++)
 	{
 		var lootEntry = lootData[@ i];

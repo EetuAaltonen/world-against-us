@@ -190,8 +190,7 @@ function NetworkPacketHandler() constructor
 									var activeInventoryStream = new NetworkInventoryStream(
 										targetContainer.containerId,
 										targetContainer.inventory,
-										4, true, 
-										targetContainer.inventory.GetItemCount()
+										4, true, 0
 									);
 									// CHECK IF SERVER HAS CONTAINER CONTENT
 									if (containerContentInfo.content_count == -1)
@@ -202,6 +201,7 @@ function NetworkPacketHandler() constructor
 											{
 												// GENERATE LOOT
 												RollContainerLoot(targetContainer.lootTableTag, targetContainer.inventory);
+												activeInventoryStream.stream_end_index = targetContainer.inventory.GetItemCount();
 											}
 										}
 									} else {
@@ -230,84 +230,39 @@ function NetworkPacketHandler() constructor
 						{
 							if (activeInventoryStream.is_stream_sending)
 							{
-								// TODO: Duplicate code with MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM
-								var itemsStructArray = activeInventoryStream.FetchNextItems();
-								var itemStructCount = array_length(itemsStructArray);
-								if (itemStructCount > 0)
-								{
-									// CONTAINER INVENTORY STREAM
-									var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
-									var networkInventoryStreamItems = new NetworkInventoryStreamItems(itemsStructArray);
-									var networkPacket = new NetworkPacket(
-										networkPacketHeader,
-										networkInventoryStreamItems.ToJSONStruct(),
-										PACKET_PRIORITY.DEFAULT,
-										AckTimeoutFuncResend
-									);
-									isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
-								} else {
-									// TODO: Duplicate code with all MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM responses
-									// CONTAINER INVENTORY STREAM
-									var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM);
-									var networkPacket = new NetworkPacket(
-										networkPacketHeader,
-										undefined,
-										PACKET_PRIORITY.DEFAULT,
-										AckTimeoutFuncResend
-									);
-									isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
-								}
+								isPacketHandled = activeInventoryStream.SendNextInventoryStreamItems();
 							} else {
-								// CONTAINER INVENTORY STREAM
-								var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
-								var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-								isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
+								isPacketHandled = activeInventoryStream.RequestNextInventoryStreamItems();
 							}
 						}
 					}break;
 					case MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM:
 					{
-						var activeInventoryStream = global.NetworkRegionObjectHandlerRef.active_inventory_stream;
-						if (!is_undefined(activeInventoryStream))
+						var inventoryStreamItems = payload;
+						if (!is_undefined(inventoryStreamItems))
 						{
-							if (activeInventoryStream.is_stream_sending)
+							var activeInventoryStream = global.NetworkRegionObjectHandlerRef.active_inventory_stream;
+							if (!is_undefined(activeInventoryStream))
 							{
-								var itemsStructArray = activeInventoryStream.FetchNextItems();
-								var itemStructCount = array_length(itemsStructArray);
-								if (itemStructCount > 0)
+								var regionId = global.NetworkRegionHandlerRef.region_id;
+								if (inventoryStreamItems.region_id == regionId)
 								{
-									// CONTAINER INVENTORY STREAM
-									var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
-									var networkInventoryStreamItems = new NetworkInventoryStreamItems(itemsStructArray);
-									var networkPacket = new NetworkPacket(
-										networkPacketHeader,
-										networkInventoryStreamItems.ToJSONStruct(),
-										PACKET_PRIORITY.DEFAULT,
-										AckTimeoutFuncResend
-									);
-									isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
-								} else {
-									// CONTAINER INVENTORY STREAM
-									var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM);
-									var networkPacket = new NetworkPacket(
-										networkPacketHeader,
-										undefined,
-										PACKET_PRIORITY.DEFAULT,
-										AckTimeoutFuncResend
-									);
-									isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
-								}
-							} else {
-								var networkInventoryStreamItems = payload;
-								if (!is_undefined(networkInventoryStreamItems))
-								{
-									var items = networkInventoryStreamItems.items;
-									if (activeInventoryStream.target_inventory.AddMultipleItems(items))
-									{	
-										// CONTAINER INVENTORY STREAM
-										var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM);
-										var networkPacket = new NetworkPacket(networkPacketHeader, undefined);
-										isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
+									if (activeInventoryStream.inventory_id == inventoryStreamItems.inventory_id)
+									{
+										if (activeInventoryStream.is_stream_sending)
+										{
+											isPacketHandled = activeInventoryStream.SendNextInventoryStreamItems();
+										} else {
+											var networkInventoryStreamItems = payload;
+											if (!is_undefined(networkInventoryStreamItems))
+											{
+												var items = networkInventoryStreamItems.items;
+												if (activeInventoryStream.target_inventory.AddMultipleItems(items))
+												{	
+													isPacketHandled = activeInventoryStream.RequestNextInventoryStreamItems();
+												}
+											}
+										}
 									}
 								}
 							}
@@ -315,40 +270,24 @@ function NetworkPacketHandler() constructor
 					} break;
 					case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
 					{
-						var activeInventoryStream = global.NetworkRegionObjectHandlerRef.active_inventory_stream;
-						if (!is_undefined(activeInventoryStream))
+						var inventoryStreamItems = payload;
+						if (!is_undefined(inventoryStreamItems))
 						{
-							// HIDE CONTAINER INVENTORY LOADING ICON
-							switch(activeInventoryStream.target_inventory.type)
+							var activeInventoryStream = global.NetworkRegionObjectHandlerRef.active_inventory_stream;
+							if (!is_undefined(activeInventoryStream))
 							{
-								case INVENTORY_TYPE.LootContainer:
+								var regionId = global.NetworkRegionHandlerRef.region_id;
+								if (inventoryStreamItems.region_id == regionId)
 								{
-									var lootContainerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.LootContainer);
-									if (!is_undefined(lootContainerWindow))
+									if (activeInventoryStream.inventory_id == inventoryStreamItems.inventory_id)
 									{
-										var containerInventoryLoadingElement = lootContainerWindow.GetChildElementById("ContainerInventoryLoading");
-										if (!is_undefined(containerInventoryLoadingElement))
-										{
-											containerInventoryLoadingElement.isVisible = false;
-										}
+										activeInventoryStream.EndInventoryStream();
+										
+										// RESPOND WITH ACKNOWLEDGMENT TO END CONTAINER INVENTORY STREAM
+										isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 									}
-								} break;
-								case INVENTORY_TYPE.StorageContainer:
-								{
-									var lootContainerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.StorageContainer);
-									if (!is_undefined(lootContainerWindow))
-									{
-										var containerInventoryLoadingElement = lootContainerWindow.GetChildElementById("ContainerInventoryLoading");
-										if (!is_undefined(containerInventoryLoadingElement))
-										{
-											containerInventoryLoadingElement.isVisible = false;
-										}
-									}
-								} break;
+								}
 							}
-									
-							global.NetworkRegionObjectHandlerRef.active_inventory_stream = undefined;
-							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 						}
 					} break;
 					case MESSAGE_TYPE.PATROL_STATE:
