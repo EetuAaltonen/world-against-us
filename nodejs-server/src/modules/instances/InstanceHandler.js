@@ -16,6 +16,7 @@ export default class InstanceHandler {
     this.createDefaultCampInstance();
 
     // TODO: Move this elsewhere(?)
+    // Add class with requestingClient value to validate source of every request
     this.activeOperationsScoutStream = undefined;
   }
 

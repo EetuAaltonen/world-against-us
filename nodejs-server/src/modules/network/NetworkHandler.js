@@ -544,6 +544,9 @@ export default class NetworkHandler {
       // Disconnect client locally after 1 seconds
       // This provides time window to send disconnect respond
       setTimeout(() => {
+        // TODO: Fix this logic to reset stream when actually operating client disconnect
+        this.instanceHandler.activeOperationsScoutStream = undefined;
+
         let instanceId;
         const client = this.clientHandler.getClient(clientId);
         if (client !== undefined) {

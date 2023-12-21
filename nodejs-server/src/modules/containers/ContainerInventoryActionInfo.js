@@ -1,3 +1,4 @@
+// TODO: Move and rename to InventoryActionInfo
 export default class ContainerInventoryActionInfo {
   constructor(
     containerId,

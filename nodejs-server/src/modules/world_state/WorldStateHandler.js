@@ -2,8 +2,8 @@ import WEATHER_CONDITION from "./WeatherCondition.js";
 
 import FileHandler from "../files/FileHandler.js";
 import WorldStateDateTime from "./WorldStateDateTime.js";
-import ParseJSONObjectsToArray from "../json/ParseJSONObjectsToArray.js";
-import ParseJSONObjectToItemReplica from "../items/ParseJSONObjectToItemReplica.js";
+import ParseJSONStructsToArray from "../json/ParseJSONStructsToArray.js";
+import ParseJSONStructToItemReplica from "../items/ParseJSONStructToItemReplica.js";
 
 const SERVER_APPDATA_PATH = `${process.env.LOCALAPPDATA}/world_against_us/server`;
 const SERVER_SAVE_FILE_PATH = `${SERVER_APPDATA_PATH}/worlds`;
@@ -100,9 +100,9 @@ export default class WorldStateHandler {
               this.instanceHandler.getDefaultCampStorageContainer();
             if (campStorageContainer !== undefined) {
               const jsonItemArray = jsonStorageInventory["items"] ?? [];
-              const parsedItems = ParseJSONObjectsToArray(
+              const parsedItems = ParseJSONStructsToArray(
                 jsonItemArray,
-                ParseJSONObjectToItemReplica
+                ParseJSONStructToItemReplica
               );
               if (!campStorageContainer.inventory.addItems(parsedItems)) {
                 isSaveLoaded = false;
