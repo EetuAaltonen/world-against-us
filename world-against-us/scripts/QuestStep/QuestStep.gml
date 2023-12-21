@@ -18,4 +18,9 @@ function QuestStep(_quest_step_id, _name, _description, _icon, _type, _completio
 			completion_check_function
 		);
 	}
+	
+	static OnDestroy = function()
+	{
+		// NO PROPERTIES TO DESTROY
+	}
 }

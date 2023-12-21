@@ -17,4 +17,11 @@ function DatabaseItem() constructor
 	{
 		return ds_map_keys_to_array(itemData);
 	}
+	
+	static OnDestroy = function()
+	{
+		global.ItemDatabase = undefined;
+		ClearDSMapAndDeleteValues(itemData);
+		ds_map_destroy(itemData);
+	}
 }

@@ -20,6 +20,12 @@ function Quest(_quest_id, _name, _description, _icon, _type, _steps, _rewards) c
 		);
 	}
 	
+	static OnDestroy = function()
+	{
+		ClearDSMapAndDeleteValues(steps);
+		ds_map_destroy(steps);
+	}
+	
 	static CheckCompleted = function()
 	{
 		if (!is_completed)
