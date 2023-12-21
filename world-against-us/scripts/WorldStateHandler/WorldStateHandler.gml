@@ -1,6 +1,6 @@
 function WorldStateHandler() constructor
 {
-	world_states = undefined;
+	world_states = ds_map_create();
 	
 	date_time = new WorldStateDateTime();
 	date_time.day = 1;
@@ -21,13 +21,19 @@ function WorldStateHandler() constructor
 	
 	static InitWorldStates = function()
 	{
-		world_states = ds_map_create();
+		ClearDSMapAndDeleteValues(world_states);
 		world_states[? WORLD_STATE_UNLOCK_WALKIE_TALKIE] = false;
 	}
 	
 	static SetWorldState = function(_worldStateIndex, _new_value)
 	{
 		world_states[? _worldStateIndex] = _new_value;
+	}
+	
+	static OnDestroy = function()
+	{
+		ClearDSMapAndDeleteValues(world_states);
+		ds_map_destroy(world_states);
 	}
 	
 	static Update = function()
