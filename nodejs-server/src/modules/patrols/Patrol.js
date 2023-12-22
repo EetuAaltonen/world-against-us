@@ -14,13 +14,14 @@ export default class Patrol {
   }
 
   toJSONStruct() {
+    var formatTravelTime = Math.max(0, this.travelTime);
     var formatScaledRouteProgress = Math.round(
       (1 - this.routeTime / this.totalRouteTime) * 1000
     );
     return {
       patrol_id: this.patrolId,
       ai_state: this.aiState,
-      travel_time: Math.max(0, this.travelTime),
+      travel_time: formatTravelTime,
       scaled_route_progress: formatScaledRouteProgress,
     };
   }
