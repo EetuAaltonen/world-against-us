@@ -22,11 +22,12 @@ function OnClickMenuSaveSelectionDeleteConfirmCallback(callerWindowElement)
 		}
 		
 		// UPDATE SAVE FILE LIST
-		var saveFiles = global.GameSaveHandlerRef.FetchSaveFileNames();
+		var saveFilesNames = ds_list_create();
+		global.GameSaveHandlerRef.FetchSaveFileNames(saveFilesNames);
 		var saveFileList = callerWindowElement.parentWindow.GetChildElementById("SaveFileList");
 		if (!is_undefined(saveFileList))
 		{
-			saveFileList.UpdateDataCollection(saveFiles);
+			saveFileList.UpdateDataCollection(saveFilesNames);
 		}
 	}
 }

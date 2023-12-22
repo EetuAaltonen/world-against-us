@@ -253,14 +253,15 @@ function MapDataHandler() constructor
 		var isMapDataReaded = false;
 		var formatFileName = string("{0}{1}", "/map_data/", _fileName);
 		var staticMapDataStruct = ReadJSONFile(formatFileName) ?? EMPTY_STRUCT;
-		var parsedMapData = ParseJSONStructToList(staticMapDataStruct[$ "icons"] ?? undefined, ParseJSONStructToMapIcon);
+		var parsedMapData = ds_list_create();
+		ParseJSONStructToList(parsedMapData, staticMapDataStruct[$ "icons"] ?? undefined, ParseJSONStructToMapIcon);
 		
-		if (ds_list_size(parsedMapData) > 0)
-		{
-			static_map_data.icons = parsedMapData
-			static_map_data.SortIcons();
-			isMapDataReaded = true;
-		}
+		// DESTROY PREV ICONS DS LIST
+		DestroyDSMapAndDeleteValues(static_map_data.icons);
+		static_map_data.icons = parsedMapData;
+		static_map_data.SortIcons();
+		
+		isMapDataReaded = true;
 		return isMapDataReaded;
 	}
 	

@@ -1,6 +1,5 @@
-function ParseJSONStructToList(_jsonStruct, _jsonStructParseFunction)
+function ParseJSONStructToList(_listRef, _jsonStruct, _jsonStructParseFunction)
 {
-	var list = ds_list_create();
 	try
 	{
 		if (is_array(_jsonStruct))
@@ -11,7 +10,7 @@ function ParseJSONStructToList(_jsonStruct, _jsonStructParseFunction)
 				for (var l = 0; l < arrayLength; l++)
 				{
 					var jsonStructElement = _jsonStruct[l];
-					ds_list_add(list, script_execute(_jsonStructParseFunction, jsonStructElement));
+					ds_list_add(_listRef, script_execute(_jsonStructParseFunction, jsonStructElement));
 				}
 			}
 		}
@@ -20,5 +19,4 @@ function ParseJSONStructToList(_jsonStruct, _jsonStructParseFunction)
 		show_debug_message(error);
 		show_message(error);
 	}
-	return list;
 }

@@ -9,15 +9,17 @@ function CreateWindowMainMenuSaveSelection(_gameWindowId, _zIndex, playCallbackF
 	);
 	
 	// SAVE FILE LIST
-	var saveFileElements = ds_list_create();
-	var saveFiles = global.GameSaveHandlerRef.FetchSaveFileNames();
+	var saveFileElements = ds_list_create();show_debug_message("CreateWindowMainMenuSaveSelection " + string(saveFileElements));
+	
+	var saveFileNames = ds_list_create();
+	global.GameSaveHandlerRef.FetchSaveFileNames(saveFileNames);
 	var saveFileListSize = new Size(300, windowSize.h - 80);
 	var saveFileListPosition = new Vector2(10, 60);
 	var saveFileList = new WindowCollectionList(
 		"SaveFileList",
 		saveFileListPosition,
 		saveFileListSize,
-		#555973, saveFiles,
+		#555973, saveFileNames,
 		ListDrawSaveFile, true, OnClickListSaveFile
 	);
 	

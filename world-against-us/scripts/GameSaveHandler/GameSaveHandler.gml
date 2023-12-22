@@ -108,26 +108,24 @@ function GameSaveHandler() constructor
 		return isSaveFilesDeleted;
 	}
 	
-	static FetchSaveFileNames = function()
+	static FetchSaveFileNames = function(_saveFileNamesRef)
 	{
-		var saveFileNames = ds_list_create();
 		try
 		{
 			var fileName = file_find_first(string("*{0}", SAVE_FILE_SUFFIX_PLAYER_DATA), fa_directory);
 		
 			while(fileName != EMPTY_STRING)
 			{
-				ds_list_add(saveFileNames, fileName);
+				ds_list_add(_saveFileNamesRef, fileName);
 				fileName = file_find_next();
 			}
 			file_find_close();
-			ds_list_sort(saveFileNames, true);
+			ds_list_sort(_saveFileNamesRef, true);
 		} catch (error)
 		{
 			show_debug_message(error);
 			show_message(error);
 		}
-		return saveFileNames;
 	}
 	
 	static SaveGame = function()
