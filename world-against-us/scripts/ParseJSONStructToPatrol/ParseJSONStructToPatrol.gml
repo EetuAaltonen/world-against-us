@@ -11,7 +11,7 @@ function ParseJSONStructToPatrol(_jsonStruct)
 		parsedPatrol = new Patrol(
 			patrolStruct[$ "patrol_id"] ?? -1,
 			patrolStruct[$ "ai_state"] ?? -1,
-			patrolStruct[$ "travel_time"] ?? -1,
+			patrolStruct[$ "travel_time"] ?? 0,
 			parsedRouteProgress
 		);
 	} catch (error)

@@ -88,7 +88,8 @@ function NetworkPacketParser() constructor
 						if (parsedStruct != EMPTY_STRUCT)
 						{
 							var parsedPlayerListStructArray = parsedStruct[$ "player_list"] ?? undefined;
-							var parsedPlayerList = ParseJSONStructToList(parsedPlayerListStructArray, ParseJSONStructToPlayerListInfo);
+							var parsedPlayerList = ds_list_create();
+							ParseJSONStructToList(parsedPlayerList, parsedPlayerListStructArray, ParseJSONStructToPlayerListInfo);
 							parsedPayload = parsedPlayerList;
 						}
 					} break;
@@ -99,7 +100,8 @@ function NetworkPacketParser() constructor
 						if (parsedStruct != EMPTY_STRUCT)
 						{
 							var parsedAvailableInstanceStructArray = parsedStruct[$ "available_instances"] ?? undefined;
-							var parsedAvailableInstances = ParseJSONStructToList(parsedAvailableInstanceStructArray, ParseJSONStructToAvailableInstance);
+							var parsedAvailableInstances = ds_list_create();
+							ParseJSONStructToList(parsedAvailableInstances, parsedAvailableInstanceStructArray, ParseJSONStructToAvailableInstance);
 							parsedPayload = parsedAvailableInstances;
 						}
 					} break;
@@ -166,7 +168,8 @@ function NetworkPacketParser() constructor
 						if (parsedStruct != EMPTY_STRUCT)
 						{
 							var parsedAvailableInstanceStructArray = parsedStruct[$ "available_instances"] ?? undefined;
-							var parsedAvailableInstances = ParseJSONStructToList(parsedAvailableInstanceStructArray, ParseJSONStructToAvailableInstance);
+							var parsedAvailableInstances = ds_list_create();
+							ParseJSONStructToList(parsedAvailableInstances, parsedAvailableInstanceStructArray, ParseJSONStructToAvailableInstance);
 							parsedPayload = parsedAvailableInstances;
 						}
 					} break;
