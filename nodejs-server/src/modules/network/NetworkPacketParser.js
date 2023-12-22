@@ -11,6 +11,7 @@ import InventoryStreamItems from "../inventory/InventoryStreamItems.js";
 import ContainerInventoryActionInfo from "../containers/ContainerInventoryActionInfo.js";
 import PatrolState from "../patrols/PatrolState.js";
 import NetworkPingSample from "../connection_sampling/NetworkPingSample.js";
+import DeviceInputMovement from "../device_input/DeviceInputMovement.js";
 // TODO: Check these data structs (snake cased classes)
 
 import ParseJSONStructToInventoryStreamItems from "../inventory/ParseJSONStructToInventoryStreamItems.js";
@@ -65,13 +66,32 @@ export default class NetworkPacketParser {
               payload = new NetworkPingSample(0, parsedServerTime);
             }
             break;
-          case MESSAGE_TYPE.DATA_PLAYER_POSITION:
+          case MESSAGE_TYPE.PLAYER_DATA_POSITION:
             {
               let offset = 0;
               const parsedXPos = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;
               const parsedYPos = msg.readUInt32LE(offset);
               payload = new Vector2(parsedXPos, parsedYPos);
+            }
+            break;
+          case MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT:
+            {
+              let offset = 0;
+              const parsedKeyUp = msg.readUInt8(offset);
+              offset += BITWISE.BIT8;
+              const parsedKeyDown = msg.readUInt8(offset);
+              offset += BITWISE.BIT8;
+              const parsedKeyLeft = msg.readUInt8(offset);
+              offset += BITWISE.BIT8;
+              const parsedKeyRight = msg.readUInt8(offset);
+              offset += BITWISE.BIT8;
+              payload = new DeviceInputMovement(
+                parsedKeyUp,
+                parsedKeyDown,
+                parsedKeyLeft,
+                parsedKeyRight
+              );
             }
             break;
           case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:

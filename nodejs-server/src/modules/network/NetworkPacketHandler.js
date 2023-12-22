@@ -102,10 +102,32 @@ export default class NetworkPacketHandler {
             isPacketHandled = true;
           }
           break;
-        case MESSAGE_TYPE.DATA_PLAYER_POSITION:
+        case MESSAGE_TYPE.PLAYER_DATA_POSITION:
           {
-            // TODO: Sync player position
-            isPacketHandled = true;
+            const newPosition = networkPacket.payload;
+            if (newPosition !== undefined) {
+              const player = instance.getPlayer(client.uuid);
+              if (player !== undefined) {
+                player.position = newPosition;
+                // TODO: For debugging
+                //console.log(player.position);
+                isPacketHandled = true;
+              }
+            }
+          }
+          break;
+        case MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT:
+          {
+            const deviceInputMovement = networkPacket.payload;
+            if (deviceInputMovement !== undefined) {
+              const player = instance.getPlayer(client.uuid);
+              if (player !== undefined) {
+                player.inputMovement = deviceInputMovement;
+                // TODO: For debugging
+                //console.log(player.inputMovement);
+                isPacketHandled = true;
+              }
+            }
           }
           break;
         case MESSAGE_TYPE.REQUEST_PLAYER_LIST:
