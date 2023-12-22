@@ -3,4 +3,11 @@ export default class Vector2 {
     this.x = x;
     this.y = y;
   }
+
+  toJSONStruct() {
+    return {
+      X: this.x,
+      Y: this.y,
+    };
+  }
 }

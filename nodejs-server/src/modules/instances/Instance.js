@@ -30,20 +30,21 @@ export default class Instance {
   }
 
   toJSONStruct() {
-    const formatParentRegionId = this.parentInstanceId ?? -1;
     const formatOwnerClient = this.ownerClient ?? UNDEFINED_UUID;
-    // TODO: Local players
-    const formatPatrols = FormatHashMapToJSONStructArray(this.localPatrols);
-    const arrivedPatrols = formatPatrols.filter(
-      (patrolJSONObject) => patrolJSONObject.travel_time <= 0
+    const formatLocalPlayers = FormatHashMapToJSONStructArray(
+      this.localPlayers
     );
+
+    const arrivedPatrols = Object.values(this.localPatrols).filter(
+      (patrolJSONObject) => patrolJSONObject.travelTime <= 0
+    );
+    const formatPatrols = FormatHashMapToJSONStructArray(arrivedPatrols);
     return {
       region_id: this.instanceId,
       room_index: this.roomIndex,
-      parent_region_id: formatParentRegionId,
       owner_client: formatOwnerClient,
-      arrived_patrols: arrivedPatrols,
-      // TODO: Sync players
+      local_players: formatLocalPlayers,
+      arrived_patrols: formatPatrols,
     };
   }
 
