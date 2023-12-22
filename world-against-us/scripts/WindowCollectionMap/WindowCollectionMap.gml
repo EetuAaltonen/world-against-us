@@ -1,5 +1,14 @@
 function WindowCollectionMap(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction = undefined) : WindowCollectionList(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction) constructor
 {
+	static OnDestroy = function()
+	{
+		DestroyDSListAndDeleteValues(childElements);
+		childElements = undefined;
+		
+		DestroyDSMapAndDeleteValues(dataCollection);
+		dataCollection = undefined;
+	}
+	
 	static UpdateContent = function()
 	{
 		if (initDataElements)

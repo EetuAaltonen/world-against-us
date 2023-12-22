@@ -2,3 +2,4 @@
 event_inherited();
 
 character.OnDestroy();
+character = undefined;

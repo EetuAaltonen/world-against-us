@@ -7,8 +7,20 @@ function WindowCollectionList(_elementId, _relativePosition, _size, _backgroundC
 	
 	initDataElements = true;
 	
+	static OnDestroy = function()
+	{
+		DestroyDSListAndDeleteValues(childElements);
+		childElements = undefined;
+		
+		DestroyDSListAndDeleteValues(dataCollection);
+		dataCollection = undefined;
+	}
+	
 	static UpdateDataCollection = function(newDataCollection)
 	{
+		// DESTROY PREV DATA COLLECTION DS LIST
+		DestroyDSListAndDeleteValues(dataCollection);
+		
 		dataCollection = newDataCollection;
 		initDataElements = true;
 	}
