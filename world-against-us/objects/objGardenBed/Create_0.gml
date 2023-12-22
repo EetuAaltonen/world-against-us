@@ -20,5 +20,3 @@ interactionFunction = function()
 		]);
 	}
 }
-
-structure = undefined;

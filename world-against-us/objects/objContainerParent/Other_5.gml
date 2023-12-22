@@ -1,0 +1,2 @@
+inventory.OnDestroy();
+inventory = undefined;

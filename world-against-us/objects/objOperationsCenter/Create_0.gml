@@ -16,5 +16,3 @@ interactionFunction = function()
 		]);
 	}
 }
-
-structure = undefined;

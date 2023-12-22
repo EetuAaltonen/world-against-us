@@ -6,5 +6,3 @@ interactionFunction = function()
 {
 	show_message("Hello solar!");
 }
-
-structure = undefined;
