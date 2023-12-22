@@ -86,6 +86,14 @@ function NetworkPacketBuilder() constructor
 						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.Y);
 						isPayloadWritten = true;
 					} break;
+					case MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT:
+					{
+						buffer_write(_networkBuffer, buffer_s8, _networkPacketPayload.key_up);
+						buffer_write(_networkBuffer, buffer_s8, _networkPacketPayload.key_down);
+						buffer_write(_networkBuffer, buffer_s8, _networkPacketPayload.key_left);
+						buffer_write(_networkBuffer, buffer_s8, _networkPacketPayload.key_right);
+						isPayloadWritten = true;
+					} break;
 					case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
 					{
 						var worldMapFastTravelInfo = _networkPacketPayload;
