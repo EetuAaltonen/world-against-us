@@ -20,8 +20,8 @@ weapon = instance_create_depth(x, y, depth - 1, objWeapon);
 weapon.owner = self;
 
 // NETWORKING
-// TODO: Move this under objPlayerManager
-syncTimer = new Timer(TimerFromMilliseconds(100));
+previousPosition = new Vector2(0, 0);
+positionSyncTImer = new Timer(TimerFromMilliseconds(250));
 
 // COOP PLAYER
 startLocation = new Vector2(x, y);
@@ -36,8 +36,3 @@ key_up = 0;
 key_down = 0;
 key_left = 0;
 key_right = 0;
-
-// NETWORKING VALUE MONITORING
-ResetPlayerPositionValues();
-ResetPlayerVelocityValues();
-ResetPlayerInputValues();

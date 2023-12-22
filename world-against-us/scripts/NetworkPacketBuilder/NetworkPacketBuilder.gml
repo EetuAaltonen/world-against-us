@@ -80,7 +80,7 @@ function NetworkPacketBuilder() constructor
 						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.server_time);
 						isPayloadWritten = true;
 					} break;
-					case MESSAGE_TYPE.DATA_PLAYER_POSITION:
+					case MESSAGE_TYPE.PLAYER_DATA_POSITION:
 					{
 						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.X);
 						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.Y);

@@ -45,4 +45,7 @@ if (!is_undefined(gameSaveData))
 }
 
 // NETWORKING
-syncTimer.StartTimer();
+if (global.MultiplayerMode)
+{
+	positionSyncTImer.StartTimer();
+}
