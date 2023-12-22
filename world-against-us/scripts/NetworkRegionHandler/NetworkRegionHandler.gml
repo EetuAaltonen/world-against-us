@@ -1,5 +1,6 @@
 function NetworkRegionHandler() constructor
 {
+	// TODO: Replace with Region struct
 	region_id = undefined;
 	prev_region_id = undefined;
 	room_index = undefined;

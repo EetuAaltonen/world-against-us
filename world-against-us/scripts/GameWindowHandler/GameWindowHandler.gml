@@ -106,9 +106,12 @@ function GameWindowHandler() constructor
 			if (gameWindow.windowId == _windowId)
 			{
 				// RESET FOCUSED WINDOW
-				if (gameWindow.windowId == focusedWindow.windowId)
+				if (!is_undefined(focusedWindow))
 				{
-					ResetFocusedWindow();
+					if (gameWindow.windowId == focusedWindow.windowId)
+					{
+						ResetFocusedWindow();
+					}
 				}
 				// CLOSE WINDOW
 				gameWindow.OnClose();
@@ -139,9 +142,12 @@ function GameWindowHandler() constructor
 		{
 			var gameWindow = gameWindows[| i];
 			// RESET FOCUSED WINDOW
-			if (gameWindow.windowId == focusedWindow.windowId)
+			if (!is_undefined(focusedWindow))
 			{
-				ResetFocusedWindow();
+				if (gameWindow.windowId == focusedWindow.windowId)
+				{
+					ResetFocusedWindow();
+				}
 			}
 			// CLOSE WINDOW
 			gameWindow.OnClose();
