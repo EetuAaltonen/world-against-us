@@ -6,7 +6,7 @@ if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 {
 	// CHECK GUI STATE
 	if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;
-	GetLocalPlayerMovementInput();
+	GetLocalPlayerMovementInput(movementInput);
 	
 	// QUICK HEAL
 	if (keyboard_check_released(ord("Q")))
@@ -33,8 +33,8 @@ if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 	}
 }
 
-var hInput = key_right - key_left;
-var vInput = key_down - key_up;
+var hInput = movementInput.key_right - movementInput.key_left;
+var vInput = movementInput.key_down - movementInput.key_up;
 var inputDir = point_direction(0, 0, hInput, vInput);
 
 hSpeed += lengthdir_x(acceleration, inputDir);
