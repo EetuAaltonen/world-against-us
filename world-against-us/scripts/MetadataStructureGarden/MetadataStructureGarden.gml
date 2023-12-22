@@ -22,4 +22,23 @@ function MetadataStructureGarden() : Metadata() constructor
 			output_inventory: formatOutputInventory
 		}
 	}
+	
+	static OnDestroy = function()
+	{
+		tools_inventory.OnDestroy();
+		tools_inventory = undefined;
+		
+		fertilizer_inventory.OnDestroy();
+		fertilizer_inventory = undefined;
+		
+		water_inventory.OnDestroy();
+		water_inventory = undefined;
+
+		seed_inventory.OnDestroy();
+		seed_inventory = undefined;
+
+		output_inventory.OnDestroy();
+		output_inventory = undefined;
+		
+	}
 }

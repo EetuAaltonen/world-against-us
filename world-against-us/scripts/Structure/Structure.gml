@@ -16,4 +16,10 @@ function Structure(_structureId, _interactableType, _category, _metadata) constr
 			metadata: formatMetadata
 		}
 	}
+	
+	static OnDestroy = function()
+	{
+		metadata.OnDestroy();
+		metadata = undefined;
+	}
 }

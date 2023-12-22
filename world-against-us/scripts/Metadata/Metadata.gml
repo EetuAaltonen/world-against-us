@@ -7,4 +7,10 @@ function Metadata() constructor
 		// OVERRIDE THIS FUNCTION
 		return EMPTY_STRUCT;
 	}
+	
+	static OnDestroy = function()
+	{
+		// OVERRIDE THIS FUNCTION
+		// NO PROPERTIES TO DESTROY
+	}
 }
