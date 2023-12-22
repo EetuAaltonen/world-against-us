@@ -251,6 +251,7 @@ function NetworkPacketHandler() constructor
 									{
 										if (activeInventoryStream.is_stream_sending)
 										{
+											// NO NEED FOR SEPARATE ACKNOWLEDGMENT WHILE STREAMING
 											isPacketHandled = activeInventoryStream.SendNextInventoryStreamItems();
 										} else {
 											var networkInventoryStreamItems = payload;
@@ -258,7 +259,8 @@ function NetworkPacketHandler() constructor
 											{
 												var items = networkInventoryStreamItems.items;
 												if (activeInventoryStream.target_inventory.AddMultipleItems(items))
-												{	
+												{
+													// NO NEED FOR SEPARATE ACKNOWLEDGMENT WHILE STREAMING
 													isPacketHandled = activeInventoryStream.RequestNextInventoryStreamItems();
 												}
 											}
@@ -351,8 +353,8 @@ function NetworkPacketHandler() constructor
 							// RESTART MAP DATA UPDATE TIMER
 							global.MapDataHandlerRef.is_dynamic_data_updating = true;
 							global.MapDataHandlerRef.map_update_timer.StartTimer();
-							// RESPOND WITH ACKNOWLEDGMENT TO OPERATIONS SCOUT STREAM REQUEST
-							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
+							// NO NEED FOR SEPARATE ACKNOWLEDGMENT WHILE STREAMING
+							isPacketHandled = true;
 						}
 					} break;
 					case MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM:

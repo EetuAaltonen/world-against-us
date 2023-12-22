@@ -134,10 +134,35 @@ function MapDataHandler() constructor
 		var worldMapLocation = global.WorldMapLocationData[? _region.room_index];
 		if (!is_undefined(worldMapLocation))
 		{
-			var var patrolPath = worldMapLocation.patrol_path;
-			var mapIconStyle = global.MapIconStyleData[? "objBandit"];
+			var playerMapIconStyle = global.MapIconStyleData[? "objPlayer"];
+			var patrolCount = array_length(_region.local_players);
+			var playerSpriteSize = new Size(
+				sprite_get_width(sprSoldier),
+				sprite_get_height(sprSoldier)
+			);
+			for (var i = 0; i < patrolCount; i++)
+			{
+				var player = _region.local_players[@ i];
+				var positionWithOffset = new Vector2(
+					player.position.X - (playerSpriteSize.w * 0.5),
+					player.position.Y - (playerSpriteSize.h)
+				);
+				var mapIcon = new MapIcon(
+					"objPlayer",
+					// TOP-LEFT CORNER TO DRAW RECTANGLE
+					positionWithOffset,
+					player.position,
+					playerSpriteSize,
+					playerMapIconStyle,
+					1
+				);
+				ds_list_add(dynamic_map_data.icons, mapIcon);
+			}
+				
+			var patrolPath = worldMapLocation.patrol_path;
 			if (!is_undefined(patrolPath))
 			{
+				var banditMapIconStyle = global.MapIconStyleData[? "objBandit"];
 				var patrolCount = array_length(_region.arrived_patrols);
 				var banditSpriteSize = new Size(
 					sprite_get_width(sprBandit),
@@ -160,7 +185,7 @@ function MapDataHandler() constructor
 						positionWithOffset,
 						patrolPosition,
 						banditSpriteSize,
-						mapIconStyle,
+						banditMapIconStyle,
 						1
 					);
 					ds_list_add(dynamic_map_data.icons, mapIcon);
@@ -257,7 +282,8 @@ function MapDataHandler() constructor
 		ParseJSONStructToList(parsedMapData, staticMapDataStruct[$ "icons"] ?? undefined, ParseJSONStructToMapIcon);
 		
 		// DESTROY PREV ICONS DS LIST
-		DestroyDSMapAndDeleteValues(static_map_data.icons);
+		static_map_data.OnDestroy();
+		
 		static_map_data.icons = parsedMapData;
 		static_map_data.SortIcons();
 		
