@@ -16,6 +16,8 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 	is_following_target = true;
 	vision_radius = 1000;
 	
+	scouting_drone_movement_input = new DeviceInputMovement(0, 0, 0, 0);
+	
 	highlighted_icon = undefined;
 	highlighted_position = undefined;
 	highlighted_size = undefined;
@@ -90,12 +92,9 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 				
 				if (!is_undefined(scoutingDrone))
 				{
-					var key_up = keyboard_check(ord("W"));
-					var key_down = keyboard_check(ord("S"));
-					var key_left = keyboard_check(ord("A"));
-					var key_right = keyboard_check(ord("D"));
-					var hInput = key_right - key_left;
-					var vInput = key_down - key_up;
+					GetLocalPlayerMovementInput(scouting_drone_movement_input);
+					var hInput = scouting_drone_movement_input.key_right - scouting_drone_movement_input.key_left;
+					var vInput = scouting_drone_movement_input.key_down - scouting_drone_movement_input.key_up;
 					var flySpeed = 8;
 					scoutingDrone.position.X += flySpeed * hInput;
 					scoutingDrone.position.Y += flySpeed * vInput;

@@ -110,10 +110,16 @@ function MapDataHandler() constructor
 			if (!is_undefined(target_scout_region))
 			{
 				// CONTAINER INVENTORY STREAM
+				var scoutingDroneData = new ScoutingDroneData(
+					target_scout_region.region_id,
+					scouting_drone.position
+				);
+				var formatScoutingDroneData = scoutingDroneData.ToJSONStruct();
+				
 				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM);
 				var networkPacket = new NetworkPacket(
 					networkPacketHeader,
-					target_scout_region,
+					formatScoutingDroneData,
 					PACKET_PRIORITY.DEFAULT,
 					AckTimeoutFuncResend
 				);

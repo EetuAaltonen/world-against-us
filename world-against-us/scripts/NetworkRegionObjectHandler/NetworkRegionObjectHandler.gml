@@ -1,7 +1,9 @@
 function NetworkRegionObjectHandler() constructor
 {
 	active_inventory_stream = undefined;
+	// TODO: Move under the Region struct
 	local_patrols = ds_list_create();
+	scouting_drone = noone;
 	
 	static ValidateRegionContainers = function()
 	{
@@ -55,6 +57,43 @@ function NetworkRegionObjectHandler() constructor
 		
 		// CLEAR LOCAL PATROLS
 		ClearDSListAndDeleteValues(local_patrols);
+	}
+	
+	static SpawnScoutingDrone = function(_instanceObject, _layerName)
+	{
+		var isDroneSpawned = true;
+		if (scouting_drone != noone)
+		{
+			var existentDrone = instance_find(objDrone, 0);
+			if (existentDrone != noone)
+			{
+				instance_destroy(existentDrone);
+			}
+		}
+		
+		var droneInstance = instance_create_layer(
+			_instanceObject.position.X,
+			_instanceObject.position.Y,
+			LAYER_CHARACTERS,
+			objDrone
+		);
+		scouting_drone = droneInstance;
+		return isDroneSpawned;
+	}
+	
+	static SyncScoutingDrone = function(_scoutingDroneData)
+	{
+		var isDroneSynced = false;
+		if (scouting_drone != noone)
+		{
+			if (instance_exists(scouting_drone))
+			{
+				scouting_drone.x = _scoutingDroneData.position.X;
+				scouting_drone.y = _scoutingDroneData.position.Y;
+				isDroneSynced = true;
+			}
+		}
+		return isDroneSynced
 	}
 	
 	static SyncRegionPatrols = function (_patrols)

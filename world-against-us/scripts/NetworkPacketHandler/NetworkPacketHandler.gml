@@ -362,6 +362,25 @@ function NetworkPacketHandler() constructor
 						// RESPOND WITH ACKNOWLEDGMENT TO END OPERATIONS SCOUT STREAM REQUEST
 						isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 					} break;
+					case MESSAGE_TYPE.SYNC_SCOUTING_DRONE_DATA:
+					{
+						var scoutingDroneInstanceObject = payload;
+						if (!is_undefined(scoutingDroneInstanceObject))
+						{
+							isPacketHandled = global.NetworkRegionObjectHandlerRef.SpawnScoutingDrone(scoutingDroneInstanceObject);
+						}
+					} break;
+					case MESSAGE_TYPE.SCOUTING_DRONE_DATA_POSITION:
+					{
+						var scoutingDroneData = payload;
+						if (!is_undefined(scoutingDroneData))
+						{
+							if (global.NetworkRegionObjectHandlerRef.scouting_drone != noone)
+							{
+								isPacketHandled = global.NetworkRegionObjectHandlerRef.SyncScoutingDrone(scoutingDroneData);
+							}
+						}
+					} break;
 					default:
 					{
 						var errorMessage = string("Implementation missing for message type {0}", messageType);
