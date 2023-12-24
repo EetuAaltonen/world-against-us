@@ -182,6 +182,29 @@ function NetworkPacketParser() constructor
 							parsedPayload = ParseJSONStructToRegion(parsedStruct);
 						}
 					} break;
+					case MESSAGE_TYPE.SYNC_SCOUTING_DRONE_DATA:
+					{
+						var payloadString = buffer_read(_msg, buffer_string);
+						var parsedStruct = json_parse(payloadString);
+						if (parsedStruct != EMPTY_STRUCT)
+						{
+							var parsedPosition = ParseJSONStructToVector2(parsedStruct[$ "position"] ?? undefined);
+							parsedPayload = new InstanceObject(
+								sprDrone,
+								objDrone,
+								parsedPosition
+							);
+						}
+					} break;
+					case MESSAGE_TYPE.SCOUTING_DRONE_DATA_POSITION:
+					{
+						var payloadString = buffer_read(_msg, buffer_string);
+						var parsedStruct = json_parse(payloadString);
+						if (parsedStruct != EMPTY_STRUCT)
+						{
+							parsedPayload = ParseJSONStructToScoutingDroneData(parsedStruct);
+						}
+					} break;
 					default:
 					{
 						var payloadString = buffer_read(_msg, buffer_string);
