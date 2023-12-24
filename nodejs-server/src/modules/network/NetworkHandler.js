@@ -17,8 +17,10 @@ import NetworkQueueEntry from "./NetworkQueueEntry.js";
 import InstanceHandler from "../instances/InstanceHandler.js";
 import WorldStateHandler from "../world_state/WorldStateHandler.js";
 import NetworkJoinGameRequest from "./NetworkJoinGameRequest.js";
+// TODO: Check these data structs (snake cased classes)
 
 const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
+// TODO: Add UUID for server broadcasting
 
 export default class NetworkHandler {
   constructor(socket) {

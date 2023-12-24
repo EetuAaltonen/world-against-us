@@ -9,6 +9,8 @@ import WorldStateSync from "../world_state/WorldStateSync.js";
 import PlayerInfo from "../players/PlayerInfo.js";
 import WorldMapFastTravelInfo from "../world_map/WorldMapFastTravelInfo.js";
 import ContainerContentInfo from "../containers/ContainerContentInfo.js";
+import OperationsScoutStream from "../operations_center/OperationsScoutStream.js";
+import ScoutingDrone from "../operations_center/ScoutingDrone.js";
 
 import ParseJSONStructToContainerAction from "../containers/ParseJSONStructToContainerAction.js";
 import FormatArrayToJSONStructArray from "../formatting/FormatArrayToJSONStructArray.js";
@@ -516,12 +518,30 @@ export default class NetworkPacketHandler {
                 if (
                   this.instanceHandler.activeOperationsScoutStream === undefined
                 ) {
+                  const scoutingDrone = new ScoutingDrone(scoutInstanceId);
                   this.instanceHandler.activeOperationsScoutStream =
-                    scoutInstanceId;
+                    new OperationsScoutStream(
+                      scoutInstanceId,
+                      scoutingDrone,
+                      client.uuid
+                    );
 
-                  // TODO: Initialize scouting drone
-                  // Broad cast scouting drone sync withing scouted instance
+                  // Broadcast scouting drone sync withing scouted instance
+                  const formatScoutingDrone = scoutingDrone.toJSONStruct();
+                  const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+                    MESSAGE_TYPE.SYNC_SCOUTING_DRONE_DATA,
+                    client.uuid
+                  );
+                  const broadcastNetworkPacket = new NetworkPacket(
+                    broadcastNetworkPacketHeader,
+                    formatScoutingDrone,
+                    PACKET_PRIORITY.DEFAULT
+                  );
+                  this.networkHandler.broadcast(broadcastNetworkPacket, [
+                    client,
+                  ]);
 
+                  // Response with start operations scout stream
                   const networkPacketHeader = new NetworkPacketHeader(
                     MESSAGE_TYPE.START_OPERATIONS_SCOUT_STREAM,
                     client.uuid
@@ -546,17 +566,43 @@ export default class NetworkPacketHandler {
           break;
         case MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM:
           {
-            const scoutInstanceId = networkPacket.payload;
-            if (scoutInstanceId !== undefined) {
+            const scoutingDrone = networkPacket.payload;
+            if (scoutingDrone !== undefined) {
+              const activeOperationsScoutStream =
+                this.instanceHandler.activeOperationsScoutStream;
               if (
-                this.instanceHandler.activeOperationsScoutStream ===
-                scoutInstanceId
+                activeOperationsScoutStream.instanceId ===
+                scoutingDrone.instanceId
               ) {
-                const scoutInstance =
-                  this.instanceHandler.getInstance(scoutInstanceId);
+                const scoutInstance = this.instanceHandler.getInstance(
+                  scoutingDrone.instanceId
+                );
                 if (scoutInstance !== undefined) {
-                  const formatScoutInstance = scoutInstance.toJSONStruct();
+                  activeOperationsScoutStream.scoutingDrone.position.x =
+                    scoutingDrone.position.x;
+                  activeOperationsScoutStream.scoutingDrone.position.y =
+                    scoutingDrone.position.y;
 
+                  console.log(scoutingDrone);
+
+                  // Broadcast scouting drone position withing scouted instance
+                  const formatScoutingDrone =
+                    activeOperationsScoutStream.scoutingDrone.toJSONStruct();
+                  const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+                    MESSAGE_TYPE.SCOUTING_DRONE_DATA_POSITION,
+                    client.uuid
+                  );
+                  const broadcastNetworkPacket = new NetworkPacket(
+                    broadcastNetworkPacketHeader,
+                    formatScoutingDrone,
+                    PACKET_PRIORITY.DEFAULT
+                  );
+                  this.networkHandler.broadcast(broadcastNetworkPacket, [
+                    client,
+                  ]);
+
+                  // Response with scouted instance data
+                  const formatScoutInstance = scoutInstance.toJSONStruct();
                   const networkPacketHeader = new NetworkPacketHeader(
                     MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM,
                     client.uuid
@@ -584,7 +630,7 @@ export default class NetworkPacketHandler {
             const scoutInstanceId = networkPacket.payload;
             if (scoutInstanceId !== undefined) {
               if (
-                this.instanceHandler.activeOperationsScoutStream ===
+                this.instanceHandler.activeOperationsScoutStream.instanceId ===
                 scoutInstanceId
               ) {
                 this.instanceHandler.activeOperationsScoutStream = undefined;

@@ -12,6 +12,7 @@ import ContainerInventoryActionInfo from "../containers/ContainerInventoryAction
 import PatrolState from "../patrols/PatrolState.js";
 import NetworkPingSample from "../connection_sampling/NetworkPingSample.js";
 import DeviceInputMovement from "../device_input/DeviceInputMovement.js";
+import ScoutingDrone from "../operations_center/ScoutingDrone.js";
 // TODO: Check these data structs (snake cased classes)
 
 import ParseJSONStructToInventoryStreamItems from "../inventory/ParseJSONStructToInventoryStreamItems.js";
@@ -256,7 +257,15 @@ export default class NetworkPacketParser {
           case MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM:
             {
               let offset = 0;
-              payload = msg.readUInt32LE(offset);
+              const parsedInstanceId = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedXPos = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedYPos = msg.readUInt32LE(offset);
+              const parsedScoutingDrone = new ScoutingDrone(parsedInstanceId);
+              parsedScoutingDrone.position.x = parsedXPos;
+              parsedScoutingDrone.position.y = parsedYPos;
+              payload = parsedScoutingDrone;
             }
             break;
           case MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM:
