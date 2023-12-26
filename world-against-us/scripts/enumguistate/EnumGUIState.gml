@@ -2,6 +2,7 @@ enum GUI_STATE
 {
 	GameRoot,
 	MainMenu,
+	Console,
 	Confirm,
 	EscMenu,
 	PlayerOverview,

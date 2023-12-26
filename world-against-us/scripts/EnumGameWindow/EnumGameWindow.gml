@@ -6,6 +6,8 @@ enum GAME_WINDOW
 	MainMenuMultiplayer,
 	MainMenuConnect,
 	MainMenuSaveSelection,
+	// CONSOLE
+	Console,
 	// CONFIRM
 	Confirm,
 	// ESC MENU

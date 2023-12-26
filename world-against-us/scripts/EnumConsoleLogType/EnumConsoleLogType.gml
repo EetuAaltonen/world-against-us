@@ -1,0 +1,6 @@
+enum CONSOLE_LOG_TYPE
+{
+	INFO,
+	WARNING,
+	ERROR
+}
