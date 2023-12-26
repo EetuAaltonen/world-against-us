@@ -115,6 +115,7 @@ global.GameWindowHandlerRef = undefined;
 global.ObjCamera = noone;
 global.GUIStateHandlerRef = undefined;
 global.ObjMouse = noone;
+global.ConsoleHandlerRef = undefined;
 global.NotificationHandlerRef = undefined;
 global.ObjNetwork = noone;
 global.NetworkHandlerRef = undefined;

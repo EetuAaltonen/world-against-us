@@ -21,6 +21,9 @@ controllers = [
 	// MOUSE
 	new GameController(objMouse, [], [roomLaunch], LAYER_CONTROLLERS_ALL_FRONT),
 	
+	// CONSOLE
+	new GameController(objConsole, [], [roomLaunch]),
+	
 	// NOTIFICATION
 	new GameController(objNotification, [], [roomLaunch], LAYER_CONTROLLERS_FRONT),
 	

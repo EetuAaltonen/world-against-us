@@ -6,6 +6,7 @@ global.ObjCamera = instance_exists(objCamera) ? instance_find(objCamera, 0) : no
 global.GUIStateHandlerRef = instance_exists(objGUI) ? instance_find(objGUI, 0).guiStateHandler : undefined;
 global.ObjMouse = instance_exists(objMouse) ? instance_find(objMouse, 0) : noone;
 global.NotificationHandlerRef = instance_exists(objNotification) ? instance_find(objNotification, 0).notificationHandler : undefined;
+global.ConsoleHandlerRef = instance_exists(objConsole) ? instance_find(objConsole, 0).consoleHandler : undefined;
 global.ObjNetwork = instance_exists(objNetwork) ? instance_find(objNetwork, 0) : noone;
 global.NetworkHandlerRef = instance_exists(objNetwork) ? instance_find(objNetwork, 0).networkHandler : undefined;
 global.NetworkRegionHandlerRef = (!is_undefined(global.NetworkHandlerRef)) ? global.NetworkHandlerRef.network_region_handler : undefined;
