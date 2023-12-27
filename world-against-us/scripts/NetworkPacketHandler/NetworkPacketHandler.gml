@@ -375,10 +375,15 @@ function NetworkPacketHandler() constructor
 						var scoutingDroneData = payload;
 						if (!is_undefined(scoutingDroneData))
 						{
-							if (global.NetworkRegionObjectHandlerRef.scouting_drone != noone)
-							{
-								isPacketHandled = global.NetworkRegionObjectHandlerRef.SyncScoutingDrone(scoutingDroneData);
-							}
+							isPacketHandled = global.NetworkRegionObjectHandlerRef.SyncScoutingDrone(scoutingDroneData);
+						}
+					} break;
+					case MESSAGE_TYPE.DESTROY_SCOUTING_DRONE_DATA:
+					{
+						var scoutingDroneData = payload;
+						if (!is_undefined(scoutingDroneData))
+						{
+							isPacketHandled = global.NetworkRegionObjectHandlerRef.DestroyScoutingDrone(scoutingDroneData);
 						}
 					} break;
 					default:

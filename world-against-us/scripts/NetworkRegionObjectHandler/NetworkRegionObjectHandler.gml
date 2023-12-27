@@ -93,7 +93,22 @@ function NetworkRegionObjectHandler() constructor
 				isDroneSynced = true;
 			}
 		}
-		return isDroneSynced
+		return isDroneSynced;
+	}
+	
+	static DestroyScoutingDrone = function(_scoutingDroneData)
+	{
+		var isDroneDestroyed = false;
+		if (scouting_drone != noone)
+		{
+			if (instance_exists(scouting_drone))
+			{
+				instance_destroy(scouting_drone);
+				scouting_drone = noone;
+			}
+			isDroneDestroyed = true;
+		}
+		return isDroneDestroyed;
 	}
 	
 	static SyncRegionPatrols = function (_patrols)
