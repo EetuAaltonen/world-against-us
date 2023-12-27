@@ -205,6 +205,15 @@ function NetworkPacketParser() constructor
 							parsedPayload = ParseJSONStructToScoutingDroneData(parsedStruct);
 						}
 					} break;
+					case MESSAGE_TYPE.DESTROY_SCOUTING_DRONE_DATA:
+					{
+						var payloadString = buffer_read(_msg, buffer_string);
+						var parsedStruct = json_parse(payloadString);
+						if (parsedStruct != EMPTY_STRUCT)
+						{
+							parsedPayload = ParseJSONStructToScoutingDroneData(parsedStruct);
+						}
+					} break;
 					default:
 					{
 						var payloadString = buffer_read(_msg, buffer_string);
