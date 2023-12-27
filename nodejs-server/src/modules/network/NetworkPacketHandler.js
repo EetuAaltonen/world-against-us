@@ -583,8 +583,6 @@ export default class NetworkPacketHandler {
                   activeOperationsScoutStream.scoutingDrone.position.y =
                     scoutingDrone.position.y;
 
-                  console.log(scoutingDrone);
-
                   // Broadcast scouting drone position withing scouted instance
                   const formatScoutingDrone =
                     activeOperationsScoutStream.scoutingDrone.toJSONStruct();
@@ -629,11 +627,26 @@ export default class NetworkPacketHandler {
           {
             const scoutInstanceId = networkPacket.payload;
             if (scoutInstanceId !== undefined) {
-              if (
-                this.instanceHandler.activeOperationsScoutStream.instanceId ===
-                scoutInstanceId
-              ) {
+              const activeOperationsScoutStream =
+                this.instanceHandler.activeOperationsScoutStream;
+              if (activeOperationsScoutStream.instanceId === scoutInstanceId) {
                 this.instanceHandler.activeOperationsScoutStream = undefined;
+
+                // Broadcast scouting drone position withing scouted instance
+                const formatScoutingDrone =
+                  activeOperationsScoutStream.scoutingDrone.toJSONStruct();
+                const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+                  MESSAGE_TYPE.DESTROY_SCOUTING_DRONE_DATA,
+                  client.uuid
+                );
+                const broadcastNetworkPacket = new NetworkPacket(
+                  broadcastNetworkPacketHeader,
+                  formatScoutingDrone,
+                  PACKET_PRIORITY.DEFAULT
+                );
+                this.networkHandler.broadcast(broadcastNetworkPacket, [client]);
+
+                // Response with end operations scout stream
                 const networkPacketHeader = new NetworkPacketHeader(
                   MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM,
                   client.uuid
