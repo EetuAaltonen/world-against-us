@@ -28,9 +28,12 @@ try {
 			while (!file_text_eof(dialogueFile))
 			{
 			    var textLine = file_text_readln(dialogueFile);
-				if (textLine != STRING_LINE_BREAK)
+				// REPLACE WINDOWS UTF8 ENCODING WITH UTF8 UNIX
+				// TODO: Replace every incompatible UTF8 encodings
+				var parsedTextLine = string_replace_all(textLine, STRING_LINE_BREAK_WINDOWS, STRING_LINE_BREAK);
+				if (parsedTextLine != STRING_LINE_BREAK)
 				{
-					switch (textLine)
+					switch (parsedTextLine)
 					{
 						case ":: StoryTitle\n":
 						{
@@ -40,28 +43,28 @@ try {
 						case ":: StoryData\n":
 						{
 							// SKIP WHOLE STORY DATA
-							while (textLine != "}\n")
+							while (parsedTextLine != "}\n")
 							{
-								textLine = file_text_readln(dialogueFile);
+								parsedTextLine = file_text_readln(dialogueFile);
 							}
 						} break;
 						default:
 						{
 							if (!is_undefined(dialogueStoryTitle))
 							{
-								if (string_starts_with(textLine, "::"))
+								if (string_starts_with(parsedTextLine, "::"))
 								{
-									var textLineParts = string_split(textLine, " {", true, 1);
+									var textLineParts = string_split(parsedTextLine, " {", true, 1);
 									var dialogueId = string_replace(array_first(textLineParts), ":: ", EMPTY_STRING);
 									var dialogue = new Dialogue(dialogueStoryTitle, dialogueId);
 								
-									textLine = file_text_readln(dialogueFile);
-									while (!string_starts_with(textLine,";;end"))
+									parsedTextLine = file_text_readln(dialogueFile);
+									while (!string_starts_with(parsedTextLine,";;end"))
 									{
-										if (string_starts_with(textLine, "[["))
+										if (string_starts_with(parsedTextLine, "[["))
 										{
-											textLine = string_replace(string_replace(textLine, "[[", EMPTY_STRING), "]]\n", EMPTY_STRING);
-											var dialogueOptionParts = string_split(textLine, "->", true, 1);
+											parsedTextLine = string_replace(string_replace(parsedTextLine, "[[", EMPTY_STRING), "]]\n", EMPTY_STRING);
+											var dialogueOptionParts = string_split(parsedTextLine, "->", true, 1);
 											dialogue.AddDialogueOption(
 												new DialogueOption(
 													dialogueStoryTitle,
@@ -70,9 +73,9 @@ try {
 													array_last(dialogueOptionParts)
 												)
 											);
-										} else if (string_starts_with(textLine, ";;character"))
+										} else if (string_starts_with(parsedTextLine, ";;character"))
 										{
-											var characterParts = string_split(textLine, ":", true, 1);
+											var characterParts = string_split(parsedTextLine, ":", true, 1);
 											var characterIcon = string_replace(array_last(characterParts), STRING_LINE_BREAK, EMPTY_STRING);
 											var characterIconIndex = asset_get_index(characterIcon);
 											if (characterIconIndex != -1)
@@ -81,9 +84,9 @@ try {
 											} else {
 												throw (string("Missing sprite for character icon '{0}'", characterIcon));
 											}
-										} else if (string_starts_with(textLine, ";;trigger"))
+										} else if (string_starts_with(parsedTextLine, ";;trigger"))
 										{
-											var triggerParts = string_split(textLine, ":", true, 1);
+											var triggerParts = string_split(parsedTextLine, ":", true, 1);
 											var triggerFunctionName = string_replace(array_last(triggerParts), STRING_LINE_BREAK, EMPTY_STRING);
 											var triggerFunctioIndex = asset_get_index(triggerFunctionName);
 											if (triggerFunctioIndex != -1)
@@ -92,18 +95,18 @@ try {
 												{
 													dialogue.trigger_function = triggerFunctioIndex;
 												} else {
-													throw (string("Missing script for trigger function '{0}'", triggerFunctionName));
+													throw (string("Missing script for trigger function '{0}' in {1}", triggerFunctionName, fileName));
 												}
 											} else {
-												throw (string("Missing script for trigger function '{0}'", triggerFunctionName));
+												throw (string("Missing script for trigger function '{0}' in {1}", triggerFunctionName, fileName));
 											}
-										} else if (string_starts_with(textLine, "::"))
+										} else if (string_starts_with(parsedTextLine, "::"))
 										{
-											throw (string("Missing ';;end' flag in {0}->{1}", dialogueStoryTitle, dialogue.dialogue_index));
+											throw (string("Missing ';;end' flag in {0}->{1} in {2}", dialogueStoryTitle, dialogue.dialogue_index, fileName));
 										} else {
-											dialogue.AddChatLine(textLine);
+											dialogue.AddChatLine(parsedTextLine);
 										}
-										textLine = file_text_readln(dialogueFile);
+										parsedTextLine = file_text_readln(dialogueFile);
 									}
 									ds_map_add(storyDialogues, dialogue.dialogue_index, dialogue);
 								}
@@ -122,8 +125,7 @@ try {
 	}
 } catch (error)
 {
-	show_debug_message(error);
-	show_message(error);
+	global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, error);
 }
 
 // LOOT TABLE DATA

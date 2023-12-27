@@ -9,35 +9,6 @@ function GameWindowHandler() constructor
 		gameWindows = undefined;
 	}
 	
-	static OpenWindowGroup = function(_windowGroup)
-	{
-		var windowCount = array_length(_windowGroup);
-		for (var i = 0; i < windowCount; i++)
-		{
-			var gameWindow = _windowGroup[@ i];
-			ds_list_add(gameWindows, gameWindow);
-			gameWindow.OnOpen();
-		}
-	}
-	
-	static GetWindowById = function(_windowId)
-	{
-		var window = undefined;
-		var windowCount = ds_list_size(gameWindows);
-		
-		for (var i = windowCount - 1; i >= 0; i--)
-		{
-			var gameWindow = gameWindows[| i];
-			if (gameWindow.windowId == _windowId)
-			{
-				window = gameWindow;
-				break;
-			}
-		}
-		
-		return window;
-	}
-	
 	static Update = function()
 	{
 		UpdateFocusedWindow();
@@ -95,6 +66,66 @@ function GameWindowHandler() constructor
 			}
 			focusedWindow = newFocusedWindow;
 		}
+	}
+	
+	static OpenWindowGroup = function(_windowGroup)
+	{
+		var windowCount = array_length(_windowGroup);
+		for (var i = 0; i < windowCount; i++)
+		{
+			var gameWindow = _windowGroup[@ i];
+			ds_list_add(gameWindows, gameWindow);
+			gameWindow.OnOpen();
+		}
+	}
+	
+	static GetWindowById = function(_windowId)
+	{
+		var window = undefined;
+		var windowCount = ds_list_size(gameWindows);
+		
+		for (var i = windowCount - 1; i >= 0; i--)
+		{
+			var gameWindow = gameWindows[| i];
+			if (gameWindow.windowId == _windowId)
+			{
+				window = gameWindow;
+				break;
+			}
+		}
+		
+		return window;
+	}
+	
+	static GetTopMostWindow = function()
+	{
+		var topMostWindow = undefined;
+		var currentGUIState = global.GUIStateHandlerRef.GetGUIState();
+		if (!is_undefined(currentGUIState))
+		{
+			var openWindowCount = array_length(currentGUIState.windowIndexGroup);
+			for (var i = 0; i < openWindowCount; i++)
+			{
+				var currentWindowIndex = currentGUIState.windowIndexGroup[@ i];
+				if (!is_undefined(currentWindowIndex))
+				{
+					var openWindow = global.GameWindowHandlerRef.GetWindowById(currentWindowIndex);
+					if (!is_undefined(openWindow))
+					{
+						if (is_undefined(topMostWindow))
+						{
+							topMostWindow = openWindow;
+						} else {
+							if (openWindow.zIndex < topMostWindow.zIndex)
+							{
+								topMostWindow = openWindow;	
+							}
+						}
+					}
+				}
+			}
+		}
+		return topMostWindow;
 	}
 	
 	static CloseWindowById = function(_windowId)

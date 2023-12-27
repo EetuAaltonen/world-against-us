@@ -20,6 +20,7 @@ randomise();
 // STRING
 #macro EMPTY_STRING ""
 #macro STRING_LINE_BREAK "\n"
+#macro STRING_LINE_BREAK_WINDOWS "\r\n"
 
 // NUMERIC
 #macro FIXED_POINT_PRECISION 10
