@@ -70,6 +70,7 @@ randomise();
 
 // DEFAULT KEYBINDINGS
 #macro KEY_ESC_MENU	vk_escape
+#macro KEY_CONSOLE vk_f1
 #macro KEY_PLAYER_OVERVIEW vk_tab
 #macro KEY_JOURNAL ord("J")
 #macro KEY_MAP ord("M")
