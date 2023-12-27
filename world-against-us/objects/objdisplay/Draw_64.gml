@@ -33,6 +33,19 @@ if (global.MultiplayerMode)
 		}
 	}
 }
+
+var iconSize = new Size(30, 30);
+var iconScale = ScaleSpriteToFitSize(sprWarningIcon, iconSize);
+var iconPosition = new Vector2(global.GUIW * 0.5 - iconSize.w, 10);
+draw_sprite_ext(
+	sprWarningIcon, 0,
+	iconPosition.X, iconPosition.Y,
+	iconScale, iconScale,
+	0, c_white, 1
+);
+draw_set_valign(fa_middle);
+var consoleLogCount = global.ConsoleHandlerRef.GetConsoleLogCount();
+draw_text(iconPosition.X + iconSize.w + 10, iconPosition.Y + (iconSize.h * 0.5), consoleLogCount);
 		
 // RESET DRAW PROPERTIES
 ResetDrawProperties();
