@@ -160,6 +160,22 @@ function NetworkPacketBuilder() constructor
 						buffer_write(_networkBuffer, buffer_u8, patrolState.ai_state);
 						isPayloadWritten = true;
 					} break;
+					case MESSAGE_TYPE.PATROLS_DATA_PROGRESS_POSITION:
+					{
+						var patrolsDataProgressPosition = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u32, patrolsDataProgressPosition.region_id);
+						var patrolCount = array_length(patrolsDataProgressPosition.local_patrols);
+						buffer_write(_networkBuffer, buffer_u8, patrolCount);
+						for (var i = 0; i < patrolCount; i++)
+						{
+							var patrolData = patrolsDataProgressPosition.local_patrols[@ i];
+							buffer_write(_networkBuffer, buffer_u8, patrolData.patrol_id);
+							buffer_write(_networkBuffer, buffer_u16, patrolData.route_progress);
+							buffer_write(_networkBuffer, buffer_u32, patrolData.local_position.X);
+							buffer_write(_networkBuffer, buffer_u32, patrolData.local_position.Y);
+						}
+						isPayloadWritten = true;
+					} break;
 					case MESSAGE_TYPE.START_OPERATIONS_SCOUT_STREAM:
 					{
 						var availableInstance = _networkPacketPayload;

@@ -8,6 +8,17 @@ function NetworkRegionHandler() constructor
 	
 	network_region_object_handler = new NetworkRegionObjectHandler();
 	
+	static OnDestroy = function()
+	{
+		network_region_object_handler.OnDestroy();
+		network_region_object_handler = undefined;
+	}
+	
+	static Update = function()
+	{
+		network_region_object_handler.Update();
+	}
+	
 	static ResetRegionData = function()
 	{
 		region_id = undefined;

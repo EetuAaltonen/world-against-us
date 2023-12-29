@@ -5,6 +5,81 @@ function NetworkRegionObjectHandler() constructor
 	local_patrols = ds_list_create();
 	scouting_drone = noone;
 	
+	patrol_update_timer = new Timer(TimerFromMilliseconds(300));
+	patrol_update_timer.StartTimer();
+	
+	static OnDestroy = function()
+	{
+		DestroyDSListAndDeleteValues(local_patrols);
+		local_patrols = undefined;
+	}
+	
+	static Update = function()
+	{
+		var regionOwnerClient = global.NetworkRegionHandlerRef.owner_client;
+		var clientId = global.NetworkHandlerRef.client_id;
+		if (clientId != UNDEFINED_UUID)
+		{
+			if (clientId == regionOwnerClient)
+			{
+				var patrolCount = ds_list_size(local_patrols);
+				if (patrolCount > 0)
+				{
+					// UPDATE PATROL LOCATION
+					if (patrol_update_timer.IsTimerStopped())
+					{
+						var formatPatrols = [];
+						for (var i = 0; i < patrolCount; i++)
+						{
+							var patrol = local_patrols[| i];
+							patrol.Update();
+							var formatPatrol = patrol.ToJSONStruct();
+							var formatPosition = ScaleFloatValuesToIntVector2(patrol.local_position.X, patrol.local_position.Y);
+							array_push(formatPatrols,
+								{
+									patrol_id: formatPatrol.patrol_id,
+									route_progress: formatPatrol.route_progress,
+									local_position: formatPosition
+								}
+							);
+						}
+						
+						var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PATROLS_DATA_PROGRESS_POSITION);
+						var networkPacket = new NetworkPacket(
+							networkPacketHeader,
+							{
+								region_id: global.NetworkRegionHandlerRef.region_id,
+								local_patrols: formatPatrols
+							},
+							PACKET_PRIORITY.DEFAULT,
+							AckTimeoutFuncResend
+						);
+						if (global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+						{
+							// SHOW SCOUT LIST LOADING ICON
+							var scoutListWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.OperationsCenterScoutList);
+							if (!is_undefined(scoutListWindow))
+							{
+								var scoutListLoadingElement = scoutListWindow.GetChildElementById("ScoutListLoading");
+								if (!is_undefined(scoutListLoadingElement))
+								{
+									scoutListLoadingElement.isVisible = true;
+								}
+							}
+						} else {
+							global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Failed to queue patrol position update");
+						}
+						
+						// RESET TIMER
+						patrol_update_timer.StartTimer();
+					} else {
+						patrol_update_timer.Update();
+					}
+				}
+			}
+		}
+	}
+	
 	static ValidateRegionContainers = function()
 	{
 		var isContainersValid = true;
@@ -57,6 +132,9 @@ function NetworkRegionObjectHandler() constructor
 		
 		// CLEAR LOCAL PATROLS
 		ClearDSListAndDeleteValues(local_patrols);
+		
+		// RESET PATROL UPDATE TIMER
+		patrol_update_timer.StartTimer();
 	}
 	
 	static SpawnScoutingDrone = function(_instanceObject, _layerName)
