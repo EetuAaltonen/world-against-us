@@ -19,7 +19,7 @@ function CreateWindowConsole(_gameWindowId, _zIndex, _consoleMessages)
 	);
 	
 	var consoleLogPosition = new Vector2(0, 40);
-	var consoleLogSize = new Size(windowSize.w, windowSize.h - global.ObjHud.hudHeight - consoleLogPosition.Y);
+	var consoleLogSize = new Size(windowSize.w, floor(windowSize.h * 0.75) - consoleLogPosition.Y);
 	var consoleListElementStyle = new WindowElementStyle(
 		new Size(consoleLogSize.w, 12), 0,
 		fa_left, fa_top,
