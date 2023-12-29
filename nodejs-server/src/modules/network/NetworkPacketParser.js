@@ -236,7 +236,7 @@ export default class NetworkPacketParser {
           case MESSAGE_TYPE.PATROL_STATE:
             {
               let offset = 0;
-              const parsedInstanceId = msg.readUInt8(offset);
+              const parsedInstanceId = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;
               const parsedPatrolId = msg.readUInt8(offset);
               offset += BITWISE.BIT8;
@@ -246,6 +246,36 @@ export default class NetworkPacketParser {
                 parsedPatrolId,
                 parsedAIState
               );
+            }
+            break;
+          case MESSAGE_TYPE.PATROLS_DATA_PROGRESS_POSITION:
+            {
+              let offset = 0;
+              const parsedInstanceId = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedPatrolCount = msg.readUInt8(offset);
+              offset += BITWISE.BIT8;
+              const parsedPatrols = [];
+              for (let i = 0; i < parsedPatrolCount; i++) {
+                const parsedPatrolId = msg.readUInt8(offset);
+                offset += BITWISE.BIT8;
+                const parsedRouteProgress = msg.readUInt16LE(offset);
+                offset += BITWISE.BIT16;
+                const parsedPositionX = msg.readUInt32LE(offset);
+                offset += BITWISE.BIT32;
+                const parsedPositionY = msg.readUInt32LE(offset);
+                offset += BITWISE.BIT32;
+                parsedPatrols.push({
+                  patrol_id: parsedPatrolId,
+                  route_progress: parsedRouteProgress,
+                  position_x: parsedPositionX,
+                  position_y: parsedPositionY,
+                });
+              }
+              payload = {
+                instance_id: parsedInstanceId,
+                local_patrols: parsedPatrols,
+              };
             }
             break;
           case MESSAGE_TYPE.START_OPERATIONS_SCOUT_STREAM:

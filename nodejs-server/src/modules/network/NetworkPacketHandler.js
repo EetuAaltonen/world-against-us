@@ -482,6 +482,33 @@ export default class NetworkPacketHandler {
             }
           }
           break;
+        case MESSAGE_TYPE.PATROLS_DATA_PROGRESS_POSITION:
+          {
+            const patrolsProgressPosition = networkPacket.payload;
+            if (patrolsProgressPosition !== undefined) {
+              if (patrolsProgressPosition.instance_id == instance.instanceId) {
+                patrolsProgressPosition.local_patrols.forEach(
+                  (patrolProgressPosition) => {
+                    const patrol = instance.getPatrol(
+                      patrolProgressPosition.patrol_id
+                    );
+                    if (patrol !== undefined) {
+                      patrol.localPosition.X =
+                        patrolProgressPosition.position_x;
+                      patrol.localPosition.Y =
+                        patrolProgressPosition.position_y;
+                      patrol.routeTime =
+                        patrol.totalRouteTime -
+                        patrol.totalRouteTime *
+                          (patrolProgressPosition.route_progress * 0.001);
+                    }
+                  }
+                );
+              }
+              isPacketHandled = true;
+            }
+          }
+          break;
         case MESSAGE_TYPE.REQUEST_SCOUT_LIST:
           {
             const availableInstances =
