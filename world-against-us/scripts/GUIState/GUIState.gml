@@ -1,9 +1,9 @@
-function GUIState(_index, _view, _action, _windowIndexGroup, _chainRule = GUI_CHAIN_RULE.Append, _callback_input_function = undefined, _alternate_close_key = undefined) constructor
+function GUIState(_index, _view, _action, _windowGroup, _chainRule = GUI_CHAIN_RULE.Append, _callback_input_function = undefined, _alternate_close_key = undefined) constructor
 {
 	index = _index;
 	view = _view;
 	action = _action;
-	windowIndexGroup = _windowIndexGroup;
+	windowGroup = _windowGroup;
 	chainRule = _chainRule;
 	callback_input_function = _callback_input_function;
 	alternate_close_key = _alternate_close_key;
@@ -37,7 +37,7 @@ function GUIState(_index, _view, _action, _windowIndexGroup, _chainRule = GUI_CH
 			index,
 			view,
 			action,
-			windowIndexGroup,
+			windowGroup,
 			chainRule,
 			callback_input_function,
 			alternate_close_key

@@ -1,69 +1,92 @@
 function GUIStateHandler() constructor
 {
 	state_chain = [ROOT_GUI_STATE];
+	gui_state_queue = undefined;
 	
 	static RequestGUIState = function(_guiState)
 	{
-		var isStateChanged = false;
+		var isStateQueued = false;
 		var currentGUIState = GetGUIState();
 		// SKIP IF GUI STATE NOT CHANGED
 		if (_guiState.index != currentGUIState.index ||
 			_guiState.view != currentGUIState.view ||
 			_guiState.action != currentGUIState.action)
 		{
+			gui_state_queue = _guiState;
+			isStateQueued = true;
+		}
+		return isStateQueued;
+	}
+	
+	static RequestGUIView = function(_guiView, _windowGroup, _chainRule)
+	{
+		var isViewChanged = false;
+		var currentGUIState = GetGUIState();
+		if (!is_undefined(currentGUIState))
+		{
+			if (currentGUIState.index != GUI_STATE.GameRoot)
+			{
+				var newGUIState = currentGUIState.Clone();
+				newGUIState.view = _guiView;
+				newGUIState.windowGroup = _windowGroup;
+				newGUIState.chainRule = _chainRule;
+			
+				isViewChanged = RequestGUIState(newGUIState);
+			} else {
+				show_debug_message(string("Trying to request GUI view without open GUI state!"));
+			}
+		}
+		return isViewChanged;
+	}
+	
+	static RequestGUIAction = function(_guiAction, _windowGroup, _chainRule)
+	{
+		var isActionChanged = false;
+		var currentGUIState = GetGUIState();
+		if (!is_undefined(currentGUIState))
+		{
+			if (currentGUIState.index != GUI_STATE.GameRoot)
+			{
+				var newGUIState = currentGUIState.Clone();
+				newGUIState.action = _guiAction;
+				newGUIState.windowGroup = _windowGroup;
+				newGUIState.chainRule = _chainRule;
+			
+				isActionChanged = RequestGUIState(newGUIState);
+			} else {
+				show_debug_message(string("Trying to request GUI action without open GUI state!"));
+			}
+		}
+		return isActionChanged;
+	}
+	
+	static CheckGUIStateQueueAndProceed = function()
+	{
+		if (!is_undefined(gui_state_queue))
+		{
 			// OVERWRITE GUI STATE
-			if (_guiState.chainRule == GUI_CHAIN_RULE.Overwrite) {
+			if (gui_state_queue.chainRule == GUI_CHAIN_RULE.Overwrite) {
 				CloseCurrentGUIState();
-			} else if (_guiState.chainRule == GUI_CHAIN_RULE.OverwriteAll)
+			} else if (gui_state_queue.chainRule == GUI_CHAIN_RULE.OverwriteAll)
 			{
 				if (!ResetGUIState())
 				{
 					show_debug_message("Failed to reset GUI state");	
 				}
 			}
-			
 			// PUSH NEW GUI STATE TO CHAIN
-			array_push(state_chain, _guiState);
-			isStateChanged = true;
-		}
-		return isStateChanged;
-	}
-	
-	static RequestGUIView = function(_guiView, _windowIndexGroup)
-	{
-		var isViewChanged = false;
-		if (!IsGUIStateClosed())
-		{
-			var currentGUIState = GetGUIState();
-			if (!is_undefined(currentGUIState))
+			array_push(state_chain, gui_state_queue);
+			
+			// OPEN WINDOW GROUP
+			var windowGroup = gui_state_queue.windowGroup;
+			if (!is_undefined(windowGroup))
 			{
-				var newGUIState = currentGUIState.Clone();
-				newGUIState.view = _guiView;
-				newGUIState.windowIndexGroup = _windowIndexGroup;
-				newGUIState.chainRule = GUI_CHAIN_RULE.Overwrite;
-			
-				isViewChanged = RequestGUIState(newGUIState);
+				global.GameWindowHandlerRef.OpenWindowGroup(windowGroup);
 			}
-		} else {
-			show_debug_message(string("Trying to request GUI view without open GUI state!"));
-		}
-		return isViewChanged;
-	}
-	
-	static RequestGUIAction = function(_guiAction, _windowIndexGroup)
-	{
-		var isActionChanged = false;
-		var currentGUIState = GetGUIState();
-		if (!is_undefined(currentGUIState))
-		{
-			var newGUIState = currentGUIState.Clone();
-			newGUIState.action = _guiAction;
-			newGUIState.windowIndexGroup = _windowIndexGroup;
-			newGUIState.chainRule = GUI_CHAIN_RULE.Append;
 			
-			isActionChanged = RequestGUIState(newGUIState);
+			// RESER GUI STATE AND WINDOW GROUP QUEUE
+			gui_state_queue = undefined;
 		}
-		return isActionChanged;
 	}
 	
 	static GetGUIState = function()
@@ -77,7 +100,16 @@ function GUIStateHandler() constructor
 		var currentGUIState = GetGUIState();
 		if (!is_undefined(currentGUIState))
 		{
-			isWindowOpen = ArrayContainsValue(currentGUIState.windowIndexGroup, _gameWindowId);
+			var windowCount = array_length(currentGUIState.windowGroup);
+			for (var i = 0; i < windowCount; i++)
+			{
+				var gameWindow = currentGUIState.windowGroup[@ i];
+				if (gameWindow.windowId == _gameWindowId)
+				{
+					isWindowOpen = true;
+					break;
+				}
+			}
 		}
 		return isWindowOpen;
 	}
@@ -130,15 +162,12 @@ function GUIStateHandler() constructor
 		// OPEN MAIN MENU ROOT WINDOW
 		var guiState = new GUIState(
 			GUI_STATE.MainMenu, undefined, undefined,
-			[GAME_WINDOW.MainMenuRoot], GUI_CHAIN_RULE.OverwriteAll
-		);
-		if (RequestGUIState(guiState))
-		{
-			global.GameWindowHandlerRef.OpenWindowGroup([
+			[
 				CreateWindowMainMenuRoot(GAME_WINDOW.MainMenuRoot, 0)
-			]);
-			isGUIStateMainMenuReseted = true;
-		}
+			],
+			GUI_CHAIN_RULE.OverwriteAll
+		);
+		isGUIStateMainMenuReseted = RequestGUIState(guiState);
 		return isGUIStateMainMenuReseted;
 	}
 	
@@ -148,8 +177,8 @@ function GUIStateHandler() constructor
 		if (array_length(state_chain) > 1)
 		{
 			var currentGUIState = array_pop(state_chain);
-			// CLOSE CURRENT WINDOW
-			if (global.GameWindowHandlerRef.CloseWindowGroupByIndexGroup(currentGUIState.windowIndexGroup))
+			// CLOSE CURRENT WINDOWS
+			if (global.GameWindowHandlerRef.CloseWindowGroup(currentGUIState.windowGroup))
 			{
 				isGUIStateClosed = true;
 			}
@@ -166,12 +195,10 @@ function GUIStateHandler() constructor
 		var currentGUIState = GetGUIState();
 		if (!is_undefined(currentGUIState))
 		{
-			if (currentGUIState.index != GUI_STATE.GameRoot)
-			{
-				isGUIStateClosed = (
-					currentGUIState.index == GUI_STATE.GameRoot || (currentGUIState.index == GUI_STATE.MainMenu && is_undefined(currentGUIState.view))
-				);
-			}
+			isGUIStateClosed = (
+				currentGUIState.index == GUI_STATE.GameRoot ||
+				(currentGUIState.index == GUI_STATE.MainMenu && is_undefined(currentGUIState.view) && is_undefined(currentGUIState.action))
+			);
 		} else {
 			show_debug_message(string("Current GUI state is undefined!"));
 		}

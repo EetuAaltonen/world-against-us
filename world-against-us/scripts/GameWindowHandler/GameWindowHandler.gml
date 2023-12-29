@@ -103,23 +103,19 @@ function GameWindowHandler() constructor
 		var currentGUIState = global.GUIStateHandlerRef.GetGUIState();
 		if (!is_undefined(currentGUIState))
 		{
-			var openWindowCount = array_length(currentGUIState.windowIndexGroup);
+			var openWindowCount = array_length(currentGUIState.windowGroup);
 			for (var i = 0; i < openWindowCount; i++)
 			{
-				var currentWindowIndex = currentGUIState.windowIndexGroup[@ i];
-				if (!is_undefined(currentWindowIndex))
+				var openWindow = currentGUIState.windowGroup[@ i];
+				if (!is_undefined(openWindow))
 				{
-					var openWindow = global.GameWindowHandlerRef.GetWindowById(currentWindowIndex);
-					if (!is_undefined(openWindow))
+					if (is_undefined(topMostWindow))
 					{
-						if (is_undefined(topMostWindow))
+						topMostWindow = openWindow;
+					} else {
+						if (openWindow.zIndex < topMostWindow.zIndex)
 						{
-							topMostWindow = openWindow;
-						} else {
-							if (openWindow.zIndex < topMostWindow.zIndex)
-							{
-								topMostWindow = openWindow;	
-							}
+							topMostWindow = openWindow;	
 						}
 					}
 				}
@@ -153,14 +149,18 @@ function GameWindowHandler() constructor
 		}
 	}
 	
-	static CloseWindowGroupByIndexGroup = function(_windowIndexGroup)
+	static CloseWindowGroup = function(_windowGroup)
 	{
 		var isWindowGroupClosed = false;
-		var windowCount = array_length(_windowIndexGroup);
+		var windowCount = array_length(_windowGroup);
 		for (var i = 0; i < windowCount; i++)
-		{ 
-			CloseWindowById(_windowIndexGroup[@ i]);
-			isWindowGroupClosed = true;
+		{
+			var gameWindow = _windowGroup[@ i];
+			if (!is_undefined(gameWindow))
+			{
+				CloseWindowById(gameWindow.windowId);
+				isWindowGroupClosed = true;
+			}
 		}
 		return isWindowGroupClosed;
 	}
