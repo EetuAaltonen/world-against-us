@@ -11,6 +11,13 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 	
 	mouseHoverIndex = undefined;
 	
+	static OnDestroy = function()
+	{
+		// DO NOT DESTROY THE INVENTORY
+		// BECAUSE IT'S A REFERENCE
+		return;	
+	}
+	
 	static UpdateContent = function()
 	{
 		if (!is_undefined(inventory.identify_index))

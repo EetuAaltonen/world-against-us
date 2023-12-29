@@ -9,6 +9,8 @@ function NetworkHandler() constructor
 	
 	pre_alloc_network_buffer = undefined;
 	delete_socket_timer = new Timer(TimerFromMilliseconds(1000));
+	packet_send_interval_threshold = 30; // == 30ms
+	last_packet_time = current_time;
 	
 	network_packet_builder = new NetworkPacketBuilder();
 	network_packet_parser = new NetworkPacketParser();
@@ -19,6 +21,12 @@ function NetworkHandler() constructor
 	network_connection_sampler = new NetworkConnectionSampler();
 	
 	network_region_handler = new NetworkRegionHandler();
+	
+	static OnDestroy = function()
+	{
+		network_region_handler.OnDestroy();
+		network_region_handler = undefined;
+	}
 	
 	static Update = function()
 	{
@@ -36,39 +44,53 @@ function NetworkHandler() constructor
 				{
 					// UPDATE NETWORK CONNECTION SAMPLING
 					network_connection_sampler.Update();
+					
+					// UPDATE REGION HANDLER
+					network_region_handler.Update();
 				}
 				
 				// UPDATE NETWORK PACKET TRACKER
 				network_packet_tracker.Update();
 				
-				if (!ds_priority_empty(network_packet_queue))
+				var packetSendInterval = current_time - last_packet_time;
+				if (packetSendInterval >= packet_send_interval_threshold)
 				{
-					var networkPacket = ds_priority_find_min(network_packet_queue);
-					if (!is_undefined(networkPacket))
+					if (!ds_priority_empty(network_packet_queue))
 					{
-						if (network_packet_tracker.PatchNetworkPacketAckRange(networkPacket))
+						var networkPacket = ds_priority_find_min(network_packet_queue);
+						if (!is_undefined(networkPacket))
 						{
-							if (network_packet_tracker.PatchNetworkPacketSequenceNumber(networkPacket))
+							if (network_packet_tracker.PatchNetworkPacketAckRange(networkPacket))
 							{
-								if (network_packet_builder.CreatePacket(pre_alloc_network_buffer, networkPacket))
+								if (network_packet_tracker.PatchNetworkPacketSequenceNumber(networkPacket))
 								{
-									var networkPacketSize = SendPacketOverUDP();
-									if (networkPacketSize > 0)
+									if (network_packet_builder.CreatePacket(pre_alloc_network_buffer, networkPacket))
 									{
-										ds_priority_delete_min(network_packet_queue);
-										show_debug_message(string("Network packet ({0}) {1}kb sent", networkPacket.header.message_type, networkPacketSize * 0.001));
-									} else {
-										show_debug_message(string("Failed to send packet with message type {0}", networkPacket.header.message_type));	
+										var networkPacketSize = SendPacketOverUDP();
+										if (networkPacketSize > 0)
+										{
+											ds_priority_delete_min(network_packet_queue);
+											// TODO: Disable for debugging
+											//show_debug_message(string("Network packet ({0}) {1}kb sent", networkPacket.header.message_type, networkPacketSize * 0.001));
+											//if (networkPacket.header.message_type == MESSAGE_TYPE.PATROLS_DATA_PROGRESS_POSITION)
+											//{
+												global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.INFO, string("Network packet ({0}) {1}kb sent >> Packet send interval {2}ms", networkPacket.header.message_type, networkPacketSize * 0.001, packetSendInterval));
+												last_packet_time = current_time;
+												//global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.INFO, string("DeltaTime {0}ms", delta_time * 0.001));
+											//}
+										} else {
+											show_debug_message(string("Failed to send packet with message type {0}", networkPacket.header.message_type));	
+										}
+										// UPDATE DATA SENT RATE
+										global.NetworkConnectionSamplerRef.data_sent_rate += networkPacketSize;
 									}
-									// UPDATE DATA SENT RATE
-									global.NetworkConnectionSamplerRef.data_sent_rate += networkPacketSize;
 								}
-							}
-						} else {
-							// DELETE UNNECESSARY ACKNOWLEDGMENTS
-							if (networkPacket.header.message_type == MESSAGE_TYPE.ACKNOWLEDGMENT)
-							{
-								ds_priority_delete_min(network_packet_queue);
+							} else {
+								// DELETE UNNECESSARY ACKNOWLEDGMENTS
+								if (networkPacket.header.message_type == MESSAGE_TYPE.ACKNOWLEDGMENT)
+								{
+									ds_priority_delete_min(network_packet_queue);
+								}
 							}
 						}
 					}
@@ -97,15 +119,13 @@ function NetworkHandler() constructor
 								// OPEN MAP
 								var guiState = new GUIState(
 									GUI_STATE.GameOver, undefined, undefined,
-									[GAME_WINDOW.GameOver], GUI_CHAIN_RULE.OverwriteAll,
+									[
+										CreateWindowGameOver(GAME_WINDOW.GameOver, -1)
+									],
+									GUI_CHAIN_RULE.OverwriteAll,
 									undefined, undefined
 								);
-								if (global.GUIStateHandlerRef.RequestGUIState(guiState))
-								{
-									global.GameWindowHandlerRef.OpenWindowGroup([
-										CreateWindowGameOver(GAME_WINDOW.GameOver, -1)
-									]);
-								}
+								global.GUIStateHandlerRef.RequestGUIState(guiState);
 							}
 						}
 					}
@@ -429,12 +449,9 @@ function NetworkHandler() constructor
 												var mainMenuMultiplayerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.MainMenuMultiplayer);
 												if (!is_undefined(mainMenuMultiplayerWindow))
 												{
-													if (global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.SaveSelection, [GAME_WINDOW.MainMenuSaveSelection]))
-													{
-														global.GameWindowHandlerRef.OpenWindowGroup([
-															CreateWindowMainMenuSaveSelection(GAME_WINDOW.MainMenuSaveSelection, mainMenuMultiplayerWindow.zIndex - 1, OnClickMenuMultiplayerPlay)
-														]);
-													}
+													global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.SaveSelection, [
+														CreateWindowMainMenuSaveSelection(GAME_WINDOW.MainMenuSaveSelection, mainMenuMultiplayerWindow.zIndex - 1, OnClickMenuMultiplayerPlay)
+													], GUI_CHAIN_RULE.Overwrite);
 												}
 											}
 								
