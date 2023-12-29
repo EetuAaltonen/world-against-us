@@ -1,7 +1,6 @@
 interactionText = "Enter to Office";
 interactionFunction = function()
 {
-	// TODO: Proper request room change logic
 	if (global.MultiplayerMode)
 	{
 		InteractionFuncFastTravelSpotRequest(
@@ -10,6 +9,6 @@ interactionFunction = function()
 			ROOM_INDEX_OFFICE
 		);
 	} else {
-		room_goto(roomOffice);
+		global.FastTravelHandlerRef.RequestRoomChange(ROOM_INDEX_OFFICE);
 	}
 }

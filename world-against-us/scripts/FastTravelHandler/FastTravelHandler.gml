@@ -69,7 +69,29 @@ function FastTravelHandler() constructor
 	
 	static RequestFastTravel = function(_fastTravelInfo)
 	{
-		// TODO: Use this function to send MESSAGE_TYPE.REQUEST_FAST_TRAVEL messages
+		var guiState = new GUIState(
+			GUI_STATE.WorldMapFastTravelQueue, undefined, undefined,
+			[
+				CreateWindowWorldMapFastTravelQueue(GAME_WINDOW.WorldMapFastTravelQueue, -1)
+			],
+			GUI_CHAIN_RULE.OverwriteAll,
+			undefined, undefined
+		);
+		if (global.GUIStateHandlerRef.RequestGUIState(guiState))
+		{
+			// REQUEST FAST TRAVEL
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_FAST_TRAVEL);
+			var networkPacket = new NetworkPacket(
+				networkPacketHeader,
+				_fastTravelInfo,
+				PACKET_PRIORITY.DEFAULT,
+				AckTimeoutFuncResend
+			);
+			if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+			{
+				show_debug_message("Failed to request fast travel");
+			}
+		}
 	}
 	
 	static AddCacheFastTravelInfo = function(_fastTravelInfo)

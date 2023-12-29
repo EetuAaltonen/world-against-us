@@ -20,17 +20,18 @@ function CreateWindowGameOver(_gameWindowId, _zIndex)
 	
 	var gameOverCallbackFunction = function()
 	{
-		InteractionFuncFastTravelSpotRequest(
-			global.NetworkRegionHandlerRef.region_id,
-			global.NetworkRegionHandlerRef.region_id,
-			ROOM_INDEX_CAMP
-		);
 		// RECOVER PLAYER
 		if (!is_undefined(global.PlayerCharacter))
 		{
 			global.PlayerCharacter.total_hp_percent = 100;
 			global.PlayerCharacter.is_dead = false;
 		}
+		
+		InteractionFuncFastTravelSpotRequest(
+			global.NetworkRegionHandlerRef.region_id,
+			global.NetworkRegionHandlerRef.region_id,
+			ROOM_INDEX_CAMP
+		);
 	}
 	var gameOverTimer = new WindowTimerCallback(
 		"GameOverTimer",

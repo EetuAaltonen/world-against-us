@@ -1,8 +1,6 @@
 interactionText = "Exit the Office";
 interactionFunction = function()
 {
-	// OpenWorldMap();
-	// TODO: Proper request room change logic
 	if (global.MultiplayerMode)
 	{
 		InteractionFuncFastTravelSpotRequest(
@@ -11,6 +9,6 @@ interactionFunction = function()
 			ROOM_INDEX_TOWN
 		);
 	} else {
-		room_goto(roomTown);
+		global.FastTravelHandlerRef.RequestRoomChange(ROOM_INDEX_TOWN);
 	}
 }

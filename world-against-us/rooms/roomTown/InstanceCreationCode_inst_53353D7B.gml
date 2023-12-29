@@ -1,7 +1,6 @@
 interactionText = "Fast travel to Camp";
 interactionFunction = function()
 {
-	// TODO: Proper request room change logic
 	if (global.MultiplayerMode)
 	{
 		InteractionFuncFastTravelSpotRequest(
@@ -10,6 +9,6 @@ interactionFunction = function()
 			ROOM_INDEX_CAMP
 		);
 	} else {
-		room_goto(roomCamp);
+		global.FastTravelHandlerRef.RequestRoomChange(ROOM_INDEX_CAMP);
 	}
 }

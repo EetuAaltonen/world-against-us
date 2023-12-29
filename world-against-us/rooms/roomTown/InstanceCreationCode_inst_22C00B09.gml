@@ -1,7 +1,6 @@
 interactionText = "Enter to Market";
 interactionFunction = function()
 {
-	// TODO: Proper request room change logic
 	if (global.MultiplayerMode)
 	{
 		InteractionFuncFastTravelSpotRequest(
@@ -10,6 +9,6 @@ interactionFunction = function()
 			ROOM_INDEX_MARKET
 		);
 	} else {
-		room_goto(roomMarket);
+		global.FastTravelHandlerRef.RequestRoomChange(ROOM_INDEX_MARKET);
 	}
 }
