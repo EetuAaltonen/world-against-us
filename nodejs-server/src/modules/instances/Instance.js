@@ -10,7 +10,7 @@ import FormatHashMapToJSONStructArray from "../formatting/FormatHashMapToJSONStr
 
 const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
 
-const PATROL_ROUTE_TIME_TOWN = 270000; // ~4.5min
+const PATROL_ROUTE_TIME_TOWN = 255000; // == ~4min 15sec
 const MAX_PATROL_ID = 100;
 const MIN_PATROL_COUNT = 1;
 const MAX_PATROL_COUNT = 2;
@@ -90,24 +90,27 @@ export default class Instance {
                   break;
                 case AI_STATE.PATROL:
                   {
-                    if (patrol.aiState === AI_STATE.PATROL) {
-                      patrol.routeTime -= passedTickTime;
-                    }
-                    if (patrol.routeTime <= 0) {
-                      patrol.aiState = AI_STATE.PATROL_END;
-                      console.log(`Patrol with ID ${patrolId} left the area`);
-                      // Broadcast new state
-                      const patrolState = new PatrolState(
-                        this.instanceId,
-                        patrolId,
-                        patrol.aiState
-                      );
-                      this.networkHandler.broadcastPatrolState(
-                        this.instanceId,
-                        patrolState
-                      );
+                    // Simulate patrol movements when game area is empty
+                    if (this.ownerClient === undefined) {
+                      if (patrol.aiState === AI_STATE.PATROL) {
+                        patrol.routeTime -= passedTickTime;
+                      }
+                      if (patrol.routeTime <= 0) {
+                        patrol.aiState = AI_STATE.PATROL_END;
+                        console.log(`Patrol with ID ${patrolId} left the area`);
+                        // Broadcast new state
+                        const patrolState = new PatrolState(
+                          this.instanceId,
+                          patrolId,
+                          patrol.aiState
+                        );
+                        this.networkHandler.broadcastPatrolState(
+                          this.instanceId,
+                          patrolState
+                        );
 
-                      this.removePatrol(patrolId);
+                        this.removePatrol(patrolId);
+                      }
                     }
                   }
                   break;

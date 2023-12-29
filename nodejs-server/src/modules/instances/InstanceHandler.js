@@ -300,7 +300,7 @@ export default class InstanceHandler {
               // Delete sub-instances
               subInstanceIds.forEach((subInstanceId) => {
                 this.deleteInstance(subInstanceId);
-                console.log(`Sbu-instance deleted: ${subInstanceId}`);
+                console.log(`Sub-instance deleted: ${subInstanceId}`);
               });
               isInstanceReleased = true;
             } else {
