@@ -10,6 +10,7 @@ enum GUI_STATE
 	Dialogue,
 	Map,
 	WorldMap,
+	WorldMapFastTravelQueue,
 	PlayerList,
 	StorageContainer,
 	LootContainer,

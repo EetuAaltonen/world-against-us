@@ -141,23 +141,15 @@ function NetworkPacketHandler() constructor
 									var sourceRegionId = worldMapFastTravelInfo.source_region_id;
 									if (!is_undefined(sourceRegionId))
 									{
-										global.NetworkRegionHandlerRef.region_id = destinationRegionId;
-										global.NetworkRegionHandlerRef.prev_region_id = sourceRegionId;
-										global.NetworkRegionHandlerRef.room_index = destinationRoomIndex;
-										global.NetworkRegionHandlerRef.owner_client = undefined;
 										// RESPOND WITH ACKNOWLEDGMENT TO END FAST TRAVEL REQUEST
-										isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
-										switch(destinationRoomIndex)
+										if (global.FastTravelHandlerRef.RequestRoomChange(destinationRoomIndex, sourceRegionId, destinationRegionId))
 										{
-											// TODO: Request room change from objRoomLoader
-											// room_goto will happen on the next frame and this function will return properly isPacketHandler
-											case ROOM_INDEX_CAMP: { room_goto(roomCamp); } break;
-											case ROOM_INDEX_TOWN: { room_goto(roomTown); } break;
-											case ROOM_INDEX_OFFICE: { room_goto(roomOffice); } break;
-											case ROOM_INDEX_LIBRARY: { room_goto(roomLibrary); } break;
-											case ROOM_INDEX_MARKET: { room_goto(roomMarket); } break;
-											case ROOM_INDEX_FOREST: { room_goto(roomForest); } break;
-											default: { show_debug_message(string("Unknown destination room index to fast travel: {0}", destinationRoomIndex)); }
+											// SET REGION DETAILS
+											global.NetworkRegionHandlerRef.region_id = destinationRegionId;
+											global.NetworkRegionHandlerRef.prev_region_id = sourceRegionId;
+											global.NetworkRegionHandlerRef.room_index = destinationRoomIndex;
+											global.NetworkRegionHandlerRef.owner_client = undefined;
+											isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 										}
 									}
 								}
