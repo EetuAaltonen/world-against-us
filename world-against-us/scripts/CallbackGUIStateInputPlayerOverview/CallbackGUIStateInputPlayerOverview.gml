@@ -8,30 +8,21 @@ function CallbackGUIStateInputPlayerOverview()
 			if (keyboard_check_released(ord("1")))
 			{
 				// OPEN PLAYER BACKPACK
-				if (global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.PlayerBackpack, [GAME_WINDOW.PlayerBackpack]))
-				{
-					global.GameWindowHandlerRef.OpenWindowGroup([
-						CreateWindowPlayerBackpack(GAME_WINDOW.PlayerBackpack, -1)
-					]);
-				}
+				global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.PlayerBackpack, [
+					CreateWindowPlayerBackpack(GAME_WINDOW.PlayerBackpack, -1)
+				], GUI_CHAIN_RULE.Overwrite);
 			} else if (keyboard_check_released(ord("2")))
 			{
 				// OPEN PLAYER HEALTH STATUS
-				if (global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.PlayerHealthStatus, [GAME_WINDOW.PlayerHealthStatus]))
-				{
-					global.GameWindowHandlerRef.OpenWindowGroup([
-						CreateWindowPlayerHealthStatus(GAME_WINDOW.PlayerHealthStatus, -1)
-					]);
-				}
+				global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.PlayerHealthStatus, [
+					CreateWindowPlayerHealthStatus(GAME_WINDOW.PlayerHealthStatus, -1)
+				], GUI_CHAIN_RULE.Overwrite);
 			} else if (keyboard_check_released(ord("3")))
 			{
 				// OPEN PLAYER SKILLS
-				if (global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.PlayerSkills, [GAME_WINDOW.PlayerSkills]))
-				{
-					global.GameWindowHandlerRef.OpenWindowGroup([
-						CreateWindowPlayerSkills(GAME_WINDOW.PlayerSkills, -1)
-					]);
-				}
+				global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.PlayerSkills, [
+					CreateWindowPlayerSkills(GAME_WINDOW.PlayerSkills, -1)
+				], GUI_CHAIN_RULE.Overwrite);
 			}
 		}
 	}

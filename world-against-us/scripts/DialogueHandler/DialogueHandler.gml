@@ -14,16 +14,16 @@ function DialogueHandler() constructor
 				active_dialogue = global.DialogueData[? _dialogueStoryTitle][? dialogueIndex];
 				
 				// OPEN DIALOGUE
+				dialogue_window = CreateWindowDialogue(GAME_WINDOW.Dialogue, -1, active_character_icon);
 				var guiState = new GUIState(
 					GUI_STATE.Dialogue, undefined, undefined,
-					[GAME_WINDOW.Dialogue], GUI_CHAIN_RULE.OverwriteAll
+					[
+						dialogue_window
+					],
+					GUI_CHAIN_RULE.OverwriteAll
 				);
 				if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 				{
-					dialogue_window = CreateWindowDialogue(GAME_WINDOW.Dialogue, -1, active_character_icon);
-					global.GameWindowHandlerRef.OpenWindowGroup([
-						dialogue_window
-					]);
 					SetDialogue(active_dialogue);
 				}
 			}

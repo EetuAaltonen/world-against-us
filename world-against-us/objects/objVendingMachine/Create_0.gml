@@ -8,15 +8,13 @@ interactionFunction = function()
 	{
 		var guiState = new GUIState(
 			GUI_STATE.Facility, undefined, undefined,
-			[GAME_WINDOW.PlayerBackpack, GAME_WINDOW.FacilityVendingMachine], GUI_CHAIN_RULE.OverwriteAll
-		);
-		if (global.GUIStateHandlerRef.RequestGUIState(guiState))
-		{
-			global.GameWindowHandlerRef.OpenWindowGroup([
+			[
 				CreateWindowPlayerBackpack(GAME_WINDOW.PlayerBackpack, -1),
 				CreateWindowFacilityVendingMachine(GAME_WINDOW.FacilityVendingMachine, -1, facility)
-			]);
-		}
+			],
+			GUI_CHAIN_RULE.OverwriteAll
+		);
+		global.GUIStateHandlerRef.RequestGUIState(guiState);
 	}
 }
 

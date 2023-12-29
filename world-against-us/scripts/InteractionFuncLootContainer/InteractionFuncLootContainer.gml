@@ -29,15 +29,14 @@ function InteractionFuncLootContainer()
 	
 		var guiState = new GUIState(
 			GUI_STATE.LootContainer, undefined, undefined,
-			[GAME_WINDOW.PlayerBackpack, GAME_WINDOW.LootContainer], GUI_CHAIN_RULE.OverwriteAll
+			[
+				CreateWindowPlayerBackpack(GAME_WINDOW.PlayerBackpack, -1),
+				CreateWindowLootContainer(GAME_WINDOW.LootContainer, -1, inventory)
+			],
+			GUI_CHAIN_RULE.OverwriteAll
 		);
 		if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 		{
-			global.GameWindowHandlerRef.OpenWindowGroup([
-				CreateWindowPlayerBackpack(GAME_WINDOW.PlayerBackpack, -1),
-				CreateWindowLootContainer(GAME_WINDOW.LootContainer, -1, inventory)
-			]);
-			
 			if (global.MultiplayerMode)
 			{
 				// SHOW CONTAINER INVENTORY LOADING ICON

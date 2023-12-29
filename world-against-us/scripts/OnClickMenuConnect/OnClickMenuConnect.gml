@@ -17,12 +17,9 @@ function OnClickMenuConnect()
 				{
 					if (global.NetworkHandlerRef.RequestConnectSocket(address, port))
 					{
-						if (global.GUIStateHandlerRef.RequestGUIAction(GUI_ACTION.Connect, [GAME_WINDOW.MainMenuConnect]))
-						{
-							global.GameWindowHandlerRef.OpenWindowGroup([
-								CreateWindowMainMenuConnect(GAME_WINDOW.MainMenuConnect, parentWindow.zIndex - 1, address, port)
-							]);
-						}
+						global.GUIStateHandlerRef.RequestGUIAction(GUI_ACTION.Connect, [
+							CreateWindowMainMenuConnect(GAME_WINDOW.MainMenuConnect, parentWindow.zIndex - 1, address, port)
+						], GUI_CHAIN_RULE.Append);
 					}
 				} else {
 					// TODO: Generic error handling

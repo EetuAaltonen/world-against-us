@@ -97,12 +97,10 @@ function CreateAndOpenWindowConfirm(_gameWindowId, _title, _description, _caller
 	// SET GUI STATE AND OPEN CONFIRM WINDOW
 	var guiState = new GUIState(
 		GUI_STATE.Confirm, undefined, undefined,
-		[GAME_WINDOW.Confirm], GUI_CHAIN_RULE.Append
-	);
-	if (global.GUIStateHandlerRef.RequestGUIState(guiState))
-	{
-		global.GameWindowHandlerRef.OpenWindowGroup([
+		[
 			confrimWindow
-		]);
-	}
+		],
+		GUI_CHAIN_RULE.Append
+	);
+	global.GUIStateHandlerRef.RequestGUIState(guiState);
 }

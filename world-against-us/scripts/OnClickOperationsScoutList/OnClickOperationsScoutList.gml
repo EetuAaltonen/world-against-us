@@ -4,11 +4,8 @@ function OnClickOperationsScoutList()
 	var operationsCenterWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.OperationsCenter);
 	if (!is_undefined(operationsCenterWindow))
 	{
-		if (global.GUIStateHandlerRef.RequestGUIAction(GUI_ACTION.OperationsCenterScoutList, [GAME_WINDOW.OperationsCenterScoutList]))
-		{
-			global.GameWindowHandlerRef.OpenWindowGroup([
-				CreateWindowOperationsScoutList(GAME_WINDOW.OperationsCenterScoutList, operationsCenterWindow.zIndex - 1)
-			]);	
-		}
+		global.GUIStateHandlerRef.RequestGUIAction(GUI_ACTION.OperationsCenterScoutList, [
+			CreateWindowOperationsScoutList(GAME_WINDOW.OperationsCenterScoutList, operationsCenterWindow.zIndex - 1)
+		], GUI_CHAIN_RULE.Append);
 	}
 }

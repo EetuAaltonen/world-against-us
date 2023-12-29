@@ -23,15 +23,14 @@ function InteractionFuncStorageContainer()
 	
 		var guiState = new GUIState(
 			GUI_STATE.StorageContainer, undefined, undefined,
-			[GAME_WINDOW.PlayerBackpack, GAME_WINDOW.StorageContainer], GUI_CHAIN_RULE.OverwriteAll
+			[
+				CreateWindowPlayerBackpack(GAME_WINDOW.PlayerBackpack, -1),
+				CreateWindowStorageContainer(GAME_WINDOW.StorageContainer, -1, inventory)
+			],
+			GUI_CHAIN_RULE.OverwriteAll
 		);
 		if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 		{
-			global.GameWindowHandlerRef.OpenWindowGroup([
-				CreateWindowPlayerBackpack(GAME_WINDOW.PlayerBackpack, -1),
-				CreateWindowStorageContainer(GAME_WINDOW.StorageContainer, -1, inventory)
-			]);
-			
 			if (global.MultiplayerMode)
 			{
 				// SHOW CONTAINER INVENTORY LOADING ICON

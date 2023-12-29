@@ -8,15 +8,13 @@ interactionFunction = function()
 	{
 		var guiState = new GUIState(
 			GUI_STATE.Facility, undefined, undefined,
-			[GAME_WINDOW.PlayerBackpack, GAME_WINDOW.FacilityAmmunitionSortingMachine], GUI_CHAIN_RULE.OverwriteAll
-		);
-		if (global.GUIStateHandlerRef.RequestGUIState(guiState))
-		{
-			global.GameWindowHandlerRef.OpenWindowGroup([
+			[
 				CreateWindowPlayerBackpack(GAME_WINDOW.PlayerBackpack, -1),
 				CreateWindowFacilityAmmunitionSortingMachine(GAME_WINDOW.FacilityAmmunitionSortingMachine, -1, facility)
-			]);
-		}
+			],
+			GUI_CHAIN_RULE.OverwriteAll
+		);
+		global.GUIStateHandlerRef.RequestGUIState(guiState);
 	}
 }
 

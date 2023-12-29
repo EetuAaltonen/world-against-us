@@ -8,21 +8,15 @@ function CallbackGUIStateInputJournal()
 			if (keyboard_check_released(ord("1")))
 			{
 				// OPEN JOURNAL
-				if (global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.JournalEntries, [GAME_WINDOW.JournalEntries]))
-				{
-					global.GameWindowHandlerRef.OpenWindowGroup([
-						CreateWindowJournal(GAME_WINDOW.JournalEntries, -1)
-					]);
-				}
+				global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.JournalEntries, [
+					CreateWindowJournal(GAME_WINDOW.JournalEntries, -1)
+				], GUI_CHAIN_RULE.Overwrite);
 			} else if (keyboard_check_released(ord("2")))
 			{
 				// OPEN QUESTS
-				if (global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.JournalQuests, [GAME_WINDOW.JournalQuests]))
-				{
-					global.GameWindowHandlerRef.OpenWindowGroup([
-						CreateWindowJournalQuest(GAME_WINDOW.JournalQuests, -1)
-					]);
-				}
+				global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.JournalQuests, [
+					CreateWindowJournalQuest(GAME_WINDOW.JournalQuests, -1)
+				], GUI_CHAIN_RULE.Overwrite);
 			}
 		}
 	}

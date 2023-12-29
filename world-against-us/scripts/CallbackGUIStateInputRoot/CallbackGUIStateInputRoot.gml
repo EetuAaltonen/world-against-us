@@ -8,42 +8,36 @@ function CallbackGUIStateInputRoot()
 			// OPEN	ESC MENU
 			var guiState = new GUIState(
 				GUI_STATE.EscMenu, undefined, undefined,
-				[GAME_WINDOW.EscMenu], GUI_CHAIN_RULE.OverwriteAll
-			);
-			if (global.GUIStateHandlerRef.RequestGUIState(guiState))
-			{
-				global.GameWindowHandlerRef.OpenWindowGroup([
+				[
 					CreateWindowEscMenu(GAME_WINDOW.EscMenu, -1)
-				]);
-			}
+				],
+				GUI_CHAIN_RULE.OverwriteAll
+			);
+			global.GUIStateHandlerRef.RequestGUIState(guiState);
 		} else if (keyboard_check_released(KEY_PLAYER_OVERVIEW))
 		{
 			// OPEN PLAYER BACKPACK
 			var guiState = new GUIState(
 				GUI_STATE.PlayerOverview, GUI_VIEW.PlayerBackpack, undefined,
-				[GAME_WINDOW.PlayerBackpack], GUI_CHAIN_RULE.OverwriteAll,
+				[
+					CreateWindowPlayerBackpack(GAME_WINDOW.PlayerBackpack, -1)
+				],
+				GUI_CHAIN_RULE.OverwriteAll,
 				CallbackGUIStateInputPlayerOverview, KEY_PLAYER_OVERVIEW
 			);
-			if (global.GUIStateHandlerRef.RequestGUIState(guiState))
-			{
-				global.GameWindowHandlerRef.OpenWindowGroup([
-					CreateWindowPlayerBackpack(GAME_WINDOW.PlayerBackpack, -1)
-				]);
-			}
+			global.GUIStateHandlerRef.RequestGUIState(guiState);
 		} else if (keyboard_check_released(KEY_JOURNAL))
 		{
 			// OPEN JOURNAL
 			var guiState = new GUIState(
 				GUI_STATE.Journal, undefined, undefined,
-				[GAME_WINDOW.JournalEntries], GUI_CHAIN_RULE.OverwriteAll,
+				[
+					CreateWindowJournal(GAME_WINDOW.JournalEntries, -1)
+				],
+				GUI_CHAIN_RULE.OverwriteAll,
 				CallbackGUIStateInputJournal, KEY_JOURNAL
 			);
-			if (global.GUIStateHandlerRef.RequestGUIState(guiState))
-			{
-				global.GameWindowHandlerRef.OpenWindowGroup([
-					CreateWindowJournal(GAME_WINDOW.JournalEntries, -1)
-				]);
-			}
+			global.GUIStateHandlerRef.RequestGUIState(guiState);
 		} else if (keyboard_check_released(KEY_MAP))
 		{
 			// TODO: Disable while prototyping
@@ -55,15 +49,13 @@ function CallbackGUIStateInputRoot()
 			// OPEN MAP
 			var guiState = new GUIState(
 				GUI_STATE.Map, undefined, undefined,
-				[GAME_WINDOW.Map], GUI_CHAIN_RULE.OverwriteAll,
+				[
+					CreateWindowMap(GAME_WINDOW.Map, -1)
+				],
+				GUI_CHAIN_RULE.OverwriteAll,
 				undefined, KEY_MAP
 			);
-			if (global.GUIStateHandlerRef.RequestGUIState(guiState))
-			{
-				global.GameWindowHandlerRef.OpenWindowGroup([
-					CreateWindowMap(GAME_WINDOW.Map, -1)
-				]);
-			}*/
+			global.GUIStateHandlerRef.RequestGUIState(guiState)*/
 		} else if (keyboard_check_released(KEY_PLAYER_LIST))
 		{
 			if (global.MultiplayerMode)
@@ -71,16 +63,13 @@ function CallbackGUIStateInputRoot()
 				// OPEN PLAYER LIST
 				var guiState = new GUIState(
 					GUI_STATE.PlayerList, undefined, undefined,
-					[GAME_WINDOW.PlayerList], GUI_CHAIN_RULE.OverwriteAll,
+					[
+						CreateWindowPlayerList(GAME_WINDOW.PlayerList, -1)
+					],
+					GUI_CHAIN_RULE.OverwriteAll,
 					undefined, KEY_PLAYER_LIST
 				);
-				if (global.GUIStateHandlerRef.RequestGUIState(guiState))
-				{
-					global.GameWindowHandlerRef.OpenWindowGroup([
-						CreateWindowPlayerList(GAME_WINDOW.PlayerList, -1)
-					]);
-				
-				}
+				global.GUIStateHandlerRef.RequestGUIState(guiState);
 			}
 		}
 	}

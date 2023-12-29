@@ -45,12 +45,9 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 									global.GUIStateHandlerRef.CloseCurrentGUIState();
 								}
 							
-								if (global.GUIStateHandlerRef.RequestGUIAction(GUI_ACTION.ExamineObject, [GAME_WINDOW.MapExamineObject]))
-								{
-									global.GameWindowHandlerRef.OpenWindowGroup([
-										CreateWindowMapExamineObject(GAME_WINDOW.MapExamineObject, parentWindow.zIndex - 1, highlighted_examine_data)
-									]);
-								}
+								global.GUIStateHandlerRef.RequestGUIAction(GUI_ACTION.ExamineObject, [
+									CreateWindowMapExamineObject(GAME_WINDOW.MapExamineObject, parentWindow.zIndex - 1, highlighted_examine_data)
+								], GUI_CHAIN_RULE.Append);
 							}
 						}
 					}
