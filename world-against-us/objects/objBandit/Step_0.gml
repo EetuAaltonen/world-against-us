@@ -95,7 +95,12 @@ switch (aiState)
 		{
 			resumePatrolling();
 		} else {
-			var distanceToTarget = point_distance(x, y, targetInstance.x, targetInstance.y);
+			var hitBoxInstance = targetInstance.hitboxInstance;
+			var targetPos = new Vector2(
+				hitBoxInstance.boundingBox.top_left_point.X + (0.5 * (hitBoxInstance.boundingBox.top_right_point.X - hitBoxInstance.boundingBox.top_left_point.X)),
+				hitBoxInstance.boundingBox.top_left_point.Y + (0.5 * (hitBoxInstance.boundingBox.bottom_left_point.Y - hitBoxInstance.boundingBox.top_left_point.Y)),
+			);
+			var distanceToTarget = point_distance(x, y, targetPos.X, targetPos.Y);
 			if (distanceToTarget <= (pathBlockingRadius * 4))
 			{
 				if (!is_undefined(targetInstance.character))
@@ -116,7 +121,7 @@ switch (aiState)
 							{
 								// CALCULATE NEW PATH TO TARGET
 								path_clear_points(pathToTarget);
-								if (mp_grid_path(global.ObjGridPath.roomGrid, pathToTarget, x, y, targetInstance.x, targetInstance.y, true))
+								if (mp_grid_path(global.ObjGridPath.roomGrid, pathToTarget, x, y, targetPos.X, targetPos.Y, true))
 								{
 									targetPath = pathToTarget;
 									// START CHASING PLAYER
