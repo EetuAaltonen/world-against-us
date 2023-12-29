@@ -126,6 +126,7 @@ global.ObjJournal = noone;
 global.QuestHandlerRef = undefined;
 global.DialogueHandlerRef = undefined;
 global.MapDataHandlerRef = undefined;
+global.FastTravelHandlerRef = undefined;
 global.HighlightHandlerRef = undefined;
 global.GameSaveHandlerRef = undefined;
 

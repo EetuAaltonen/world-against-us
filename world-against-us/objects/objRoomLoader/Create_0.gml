@@ -70,6 +70,9 @@ controllers = [
 	// LOAD THE GAME SAVE OBJECT LAST
 	// TO SET THE WORLD STATE AFTER EVERYTHING IS LOADED
 	new GameController(objGameSave, [], [roomLaunch])
+	// FAST TRAVEL
+	// TO PROCEED ROOM GOTO AFTER END OF THE FRAME
+	new GameController(objFastTravel, [], [roomLaunch, roomMainMenu])
 ];
 
 // CONTROLLER LAYERS
