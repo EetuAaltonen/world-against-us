@@ -152,6 +152,13 @@ function NetworkPacketBuilder() constructor
 						buffer_write(_networkBuffer, buffer_text, containerInventoryActionInfo.container_id);
 						isPayloadWritten = true;
 					} break;
+					case MESSAGE_TYPE.RELEASE_CONTAINER_CONTENT:
+					{
+						var networkContainerContentRequest = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u32, networkContainerContentRequest.region_id);
+						buffer_write(_networkBuffer, buffer_text, networkContainerContentRequest.container_id);
+						isPayloadWritten = true;
+					} break;
 					case MESSAGE_TYPE.PATROL_STATE:
 					{
 						var patrolState = _networkPacketPayload;

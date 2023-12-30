@@ -50,10 +50,6 @@ function CreateWindowStorageContainer(_gameWindowId, _zIndex, _containerInventor
 		// NETWORKING CLEAR IN-FLIGHT CONTAINER CONTENT REQUESTS
 		if (global.MultiplayerMode)
 		{
-			ClearInFlightInventoryStreamPackets();
-
-			global.NetworkRegionObjectHandlerRef.active_inventory_stream = undefined;
-			
 			// CLEAR LOOT CONTAINER INVENTORY CACHE
 			var lootContainerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.StorageContainer);
 			if (!is_undefined(lootContainerWindow))
@@ -61,6 +57,9 @@ function CreateWindowStorageContainer(_gameWindowId, _zIndex, _containerInventor
 				var containerInventoryGridElement = lootContainerWindow.GetChildElementById("ContainerInventoryGrid");
 				if (!is_undefined(containerInventoryGridElement))
 				{
+					// RESET CONTAINER ACCESS AND INVENTORY STREAM
+					OnCloseWindowContainerNetwork(containerInventoryGridElement.inventory.inventory_id);
+					
 					containerInventoryGridElement.inventory.ClearAllItems();
 				}
 			}
