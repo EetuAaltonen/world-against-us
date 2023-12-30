@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "FastTravelHandler",
+  "name": "RoomChangeHandler",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "FastTravel",
-    "path": "folders/Scripts/Game/Data/FastTravel.yy",
+    "name": "RoomChange",
+    "path": "folders/Scripts/Game/Data/RoomChange.yy",
   },
 }

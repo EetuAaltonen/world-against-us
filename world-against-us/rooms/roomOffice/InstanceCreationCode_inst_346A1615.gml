@@ -9,6 +9,6 @@ interactionFunction = function()
 			ROOM_INDEX_TOWN
 		);
 	} else {
-		global.FastTravelHandlerRef.RequestRoomChange(ROOM_INDEX_TOWN);
+		global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_TOWN);
 	}
 }

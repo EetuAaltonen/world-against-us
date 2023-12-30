@@ -1,0 +1,1 @@
+roomChangeHandler.OnDestroy();

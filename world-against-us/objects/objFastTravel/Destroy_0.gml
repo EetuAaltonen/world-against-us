@@ -1,1 +1,0 @@
-fastTravelHandler.OnDestroy();

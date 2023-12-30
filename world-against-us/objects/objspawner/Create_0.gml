@@ -1,7 +1,7 @@
 var spawnPoint = new Vector2(x, y);
 
 var roomIndex = room_get_name(room);
-var cacheFastTravelInfo = global.FastTravelHandlerRef.GetCacheFastTravelInfo(roomIndex);
+var cacheFastTravelInfo = global.RoomChangeHandlerRef.GetCacheFastTravelInfo(roomIndex);
 if (!is_undefined(cacheFastTravelInfo))
 {
 	var cacheLocalPosition = cacheFastTravelInfo.local_position;

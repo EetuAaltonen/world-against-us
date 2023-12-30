@@ -7,6 +7,6 @@ function OnClickWorldMapAvailableInstance()
 			elementData.region_id,
 			elementData.room_index
 		);
-		global.FastTravelHandlerRef.RequestFastTravel(fastTravelInfo);
+		global.RoomChangeHandlerRef.RequestFastTravel(fastTravelInfo);
 	}
 }

@@ -1,1 +1,0 @@
-fastTravelHandler = new FastTravelHandler();

@@ -142,7 +142,7 @@ function NetworkPacketHandler() constructor
 									if (!is_undefined(sourceRegionId))
 									{
 										// RESPOND WITH ACKNOWLEDGMENT TO END FAST TRAVEL REQUEST
-										if (global.FastTravelHandlerRef.RequestRoomChange(destinationRoomIndex, sourceRegionId, destinationRegionId))
+										if (global.RoomChangeHandlerRef.RequestRoomChange(destinationRoomIndex, sourceRegionId, destinationRegionId))
 										{
 											// SET REGION DETAILS
 											global.NetworkRegionHandlerRef.region_id = destinationRegionId;

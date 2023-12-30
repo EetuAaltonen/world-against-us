@@ -225,7 +225,7 @@ function GameSaveHandler() constructor
 							NOTIFICATION_TYPE.Popup
 						)
 					);
-					room_goto(roomMainMenu);
+					global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_MAIN_MENU);
 				}
 			}
 		}

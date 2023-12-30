@@ -2,7 +2,7 @@
 var currentRoom = room_get_name(room);
 if (currentRoom == ROOM_INDEX_CAMP)
 {
-	fastTravelHandler.ClearAllCacheFastTravelInfo();
+	roomChangeHandler.ClearAllCacheFastTravelInfo();
 } else {
-	fastTravelHandler.DeleteCacheFastTravelInfo(currentRoom);
+	roomChangeHandler.DeleteCacheFastTravelInfo(currentRoom);
 }

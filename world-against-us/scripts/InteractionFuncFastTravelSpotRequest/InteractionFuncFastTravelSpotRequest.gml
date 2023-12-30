@@ -3,6 +3,6 @@ function InteractionFuncFastTravelSpotRequest(_sourceRegionId, _destionationRegi
 	if (global.MultiplayerMode)
 	{
 		var fastTravelInfo = new WorldMapFastTravelInfo(_sourceRegionId, _destionationRegionId, _roomIndex);
-		global.FastTravelHandlerRef.RequestFastTravel(fastTravelInfo);
+		global.RoomChangeHandlerRef.RequestFastTravel(fastTravelInfo);
 	}
 }

@@ -60,9 +60,6 @@ randomise();
 // GUI STATE
 #macro ROOT_GUI_STATE new GUIState(GUI_STATE.GameRoot, undefined, undefined, [], GUI_CHAIN_RULE.OverwriteAll, CallbackGUIStateInputRoot, undefined)
 
-// ROOM
-#macro ROOM_DEFAULT roomCamp
-
 // PARENT OBJECT EVENT 0
 #macro OBJECT_PARENTS_WITH_EVENT_0 [objInteractableParent, objCharacterParent]
 
@@ -86,12 +83,16 @@ randomise();
 
 // ROOMS
 // TODO: Move these inside a map locations data file to read
+#macro ROOM_INDEX_MAIN_MENU "roomMainMenu"
+#macro ROOM_INDEX_LOAD_RESOURCES "roomLoadResources"
 #macro ROOM_INDEX_CAMP "roomCamp"
 #macro ROOM_INDEX_TOWN "roomTown"
 #macro ROOM_INDEX_OFFICE "roomOffice"
 #macro ROOM_INDEX_LIBRARY "roomLibrary"
 #macro ROOM_INDEX_MARKET "roomMarket"
 #macro ROOM_INDEX_FOREST "roomForest"
+
+#macro ROOM_DEFAULT ROOM_INDEX_CAMP
 
 // INSTANCES
 #macro CAMP_INSTANCE_ID 0
@@ -126,7 +127,7 @@ global.ObjJournal = noone;
 global.QuestHandlerRef = undefined;
 global.DialogueHandlerRef = undefined;
 global.MapDataHandlerRef = undefined;
-global.FastTravelHandlerRef = undefined;
+global.RoomChangeHandlerRef = undefined;
 global.HighlightHandlerRef = undefined;
 global.GameSaveHandlerRef = undefined;
 

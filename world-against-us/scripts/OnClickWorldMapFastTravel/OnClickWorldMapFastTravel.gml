@@ -10,9 +10,9 @@ function OnClickWorldMapFastTravel()
 				global.NetworkRegionHandlerRef.region_id,
 				worldMapLocationData.room_index
 			);
-			global.FastTravelHandlerRef.RequestFastTravel(fastTravelInfo);
+			global.RoomChangeHandlerRef.RequestFastTravel(fastTravelInfo);
 		} else {
-			global.FastTravelHandlerRef.RequestRoomChange(worldMapLocationData.room_index);
+			global.RoomChangeHandlerRef.RequestRoomChange(worldMapLocationData.room_index);
 		}
 	}
 }

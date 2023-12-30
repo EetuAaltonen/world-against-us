@@ -1,4 +1,4 @@
-function FastTravelHandler() constructor
+function RoomChangeHandler() constructor
 {
 	fast_travel_cache = ds_map_create();
 	room_change_queue = undefined;
@@ -16,6 +16,8 @@ function FastTravelHandler() constructor
 		{
 			switch(_destinationRoomIndex)
 			{
+				case ROOM_INDEX_MAIN_MENU: { room_change_queue = roomMainMenu; } break;
+				case ROOM_INDEX_LOAD_RESOURCES: { room_change_queue = roomLoadResources; } break;
 				case ROOM_INDEX_CAMP: { room_change_queue = roomCamp; } break;
 				case ROOM_INDEX_TOWN: { room_change_queue = roomTown; } break;
 				case ROOM_INDEX_OFFICE: { room_change_queue = roomOffice; } break;
