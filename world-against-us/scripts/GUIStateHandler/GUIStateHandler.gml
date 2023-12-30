@@ -2,6 +2,7 @@ function GUIStateHandler() constructor
 {
 	state_chain = [ROOT_GUI_STATE];
 	gui_state_queue = undefined;
+	gui_state_reset = undefined;
 	
 	static RequestGUIState = function(_guiState)
 	{
@@ -84,8 +85,18 @@ function GUIStateHandler() constructor
 				global.GameWindowHandlerRef.OpenWindowGroup(windowGroup);
 			}
 			
-			// RESER GUI STATE AND WINDOW GROUP QUEUE
+			// RESER GUI STATE QUEUE
 			gui_state_queue = undefined;
+		} else if (!is_undefined(gui_state_reset))
+		{
+			if (room == roomMainMenu)
+			{
+				ResetGUIStateMainMenu();
+			} else {
+				ResetGUIState();
+			}
+			// RESER GUI STATE QUEUE
+			gui_state_reset = undefined;
 		}
 	}
 	
@@ -146,6 +157,11 @@ function GUIStateHandler() constructor
 				currentGUIState.CallbackInputFunction();
 			}
 		}
+	}
+	
+	static RequestGUIStateReset = function()
+	{
+		gui_state_reset = true;	
 	}
 	
 	static ResetGUIState = function()

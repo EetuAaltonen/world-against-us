@@ -19,6 +19,7 @@ function NetworkHandler() constructor
 	network_packet_queue = ds_priority_create();
 	
 	network_connection_sampler = new NetworkConnectionSampler();
+	network_error_handler = new NetworkErrorHandler();
 	
 	network_region_handler = new NetworkRegionHandler();
 	
@@ -187,25 +188,14 @@ function NetworkHandler() constructor
 			network_region_handler.ResetRegionData();
 		
 			global.MultiplayerMode = false;
+			
+			// REQUEST GUI STATE RESET
+			global.GUIStateHandlerRef.RequestGUIStateReset();
 
 			// RETURN TO MAIN MENU
-			if (room == roomMainMenu)
+			if (room != roomMainMenu)
 			{
-				// RESET GUI STATE MAIN MENU
-				if (!global.GUIStateHandlerRef.ResetGUIStateMainMenu())
-				{
-					// TODO: Move this check inside the actual ResetGUIStateMainMenu function
-					// with proper error handling
-					show_debug_message("Failed to reset GUI state on Main Menu");
-				}
-			} else {
-				// RESET GUI STATE
-				if (!global.GUIStateHandlerRef.ResetGUIState())
-				{
-					show_debug_message("Failed to reset GUI state on disconnect");
-				}
-				// TODO: Fix with new room change request logic
-				room_goto(roomMainMenu);
+				global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_MAIN_MENU);
 			}
 			isSocketDeleted = true;
 		}
@@ -391,10 +381,8 @@ function NetworkHandler() constructor
 					{
 						if (!is_undefined(networkPacket.payload))
 						{
-							var errorMessage = networkPacket.payload[$ "message"] ?? "Invalid request";
-							show_message(string("{0}. Disconnecting...", errorMessage));
+							isMessageHandled = network_error_handler.HandleInvalidRequest(networkPacket);
 						}
-						isMessageHandled = RequestDisconnectSocket();
 					} break;
 					case MESSAGE_TYPE.DISCONNECT_FROM_HOST:
 					{
@@ -402,7 +390,6 @@ function NetworkHandler() constructor
 						if (DeleteSocket())
 						{
 							isMessageHandled = true;
-							
 						} else {
 							show_debug_message("Failed to delete socket on MESSAGE_TYPE.DISCONNECT_FROM_HOST");
 						}
@@ -512,9 +499,7 @@ function NetworkHandler() constructor
 											{
 												network_status = NETWORK_STATUS.SESSION_IN_PROGRESS;
 												// ACKNOWLEDGMENT RESPONSE ON NEXT STEP
-												isMessageHandled = true;
-												// TODO: Request room change at proper way
-												room_goto(roomCamp);
+												isMessageHandled = global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_CAMP);
 											}
 										}
 									} break;
