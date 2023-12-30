@@ -27,7 +27,7 @@ export default class InstanceHandler {
       ROOM_INDEX.ROOM_CAMP,
       this.networkHandler
     );
-    campInstance.containerHandler.initContainer(CAMP_STORAGE_CONTAINER_ID);
+    campInstance.containerHandler.addContainer(CAMP_STORAGE_CONTAINER_ID);
     this.instances[this.campId] = campInstance;
     return isInstanceCreated;
   }

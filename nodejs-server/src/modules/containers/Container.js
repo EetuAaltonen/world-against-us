@@ -4,8 +4,7 @@ export default class Container {
   constructor(containerId) {
     this.containerId = containerId;
     this.inventory = new Inventory(containerId);
-    // TODO: Restrict access from other clients while container is open
-    //this.requestingClient = undefined;
+    this.requestingClient = undefined;
   }
 
   toJSONStruct() {

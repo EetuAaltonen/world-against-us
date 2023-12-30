@@ -14,7 +14,7 @@ export default class ContainerHandler {
     this.containers = {};
   }
 
-  initContainer(containerId) {
+  addContainer(containerId) {
     let isContainerInitialized = true;
     this.containers[containerId] = new Container(containerId);
     return isContainerInitialized;
@@ -24,13 +24,8 @@ export default class ContainerHandler {
     return this.containers[containerId];
   }
 
-  getContainerContentCountById(containerId) {
-    let contentCount = -1;
-    const container = this.getContainerById(containerId);
-    if (container !== undefined) {
-      contentCount = container.inventory.getItemCount();
-    }
-    return contentCount;
+  removeContainer(containerId) {
+    delete this.containers[containerId];
   }
 
   addActiveInventoryStream(activeInventoryStream) {
