@@ -239,39 +239,64 @@ export default class NetworkPacketHandler {
           break;
         case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
           {
-            // TODO: Return a flag if container is already in-use by a player
-            const containerId = networkPacket.payload;
-            if (containerId !== undefined) {
-              const contentCount =
-                instance.containerHandler.getContainerContentCountById(
-                  containerId
-                );
-              // Initialize new container
-              if (contentCount === -1) {
-                instance.containerHandler.initContainer(containerId);
-              }
-              const containerContentInfo = new ContainerContentInfo(
-                containerId,
-                contentCount
-              );
+            const containerRequestInfo = networkPacket.payload;
+            if (containerRequestInfo !== undefined) {
+              if (containerRequestInfo.instanceId === instance.instanceId) {
+                const containerId = containerRequestInfo.containerId;
+                let container =
+                  instance.containerHandler.getContainerById(containerId);
 
-              const networkPacketHeader = new NetworkPacketHeader(
-                MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT,
-                client.uuid
-              );
-              const networkPacket = new NetworkPacket(
-                networkPacketHeader,
-                containerContentInfo,
-                PACKET_PRIORITY.DEFAULT
-              );
-              this.networkHandler.packetQueue.enqueue(
-                new NetworkQueueEntry(
-                  networkPacket,
-                  [client],
-                  networkPacket.priority
-                )
-              );
-              isPacketHandled = true;
+                let contentCount = -1; // Default content count
+                if (container === undefined) {
+                  // Add new container
+                  instance.containerHandler.addContainer(containerId);
+                  // Fetch added container
+                  container =
+                    instance.containerHandler.getContainerById(containerId);
+                } else {
+                  // Fetch content count
+                  contentCount = container.inventory.getItemCount();
+                }
+
+                if (container.requestingClient === undefined) {
+                  // Set client access
+                  container.requestingClient = client.uuid;
+                  const containerContentInfo = new ContainerContentInfo(
+                    containerId,
+                    contentCount
+                  );
+
+                  const networkPacketHeader = new NetworkPacketHeader(
+                    MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT,
+                    client.uuid
+                  );
+                  const networkPacket = new NetworkPacket(
+                    networkPacketHeader,
+                    containerContentInfo,
+                    PACKET_PRIORITY.DEFAULT
+                  );
+                  this.networkHandler.packetQueue.enqueue(
+                    new NetworkQueueEntry(
+                      networkPacket,
+                      [client],
+                      networkPacket.priority
+                    )
+                  );
+                  isPacketHandled = true;
+                } else {
+                  isPacketHandled = this.networkHandler.onInvalidRequest(
+                    networkPacket.header.messageType,
+                    "Another player already looting the container",
+                    rinfo
+                  );
+                }
+              } else {
+                isPacketHandled = this.networkHandler.onInvalidRequest(
+                  networkPacket.header.messageType,
+                  "Invalid region ID on request container content",
+                  rinfo
+                );
+              }
             }
           }
           break;

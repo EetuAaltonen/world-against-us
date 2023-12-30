@@ -113,7 +113,13 @@ export default class NetworkPacketParser {
           case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
             {
               let offset = 0;
-              payload = msg.toString("utf8", offset);
+              const parsedInstanceId = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedContainerId = msg.toString("utf8", offset);
+              payload = {
+                instanceId: parsedInstanceId,
+                containerId: parsedContainerId,
+              };
             }
             break;
           case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
