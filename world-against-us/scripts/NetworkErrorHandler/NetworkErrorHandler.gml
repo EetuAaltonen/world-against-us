@@ -14,9 +14,10 @@ function NetworkErrorHandler() constructor
 		var consoleLog = string("Invalid request with MessageType {0}: {1}", errorOriginalMessageType, errorMessage);
 		// ADD CONSOLE LOG
 		global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
+		
 		// ADD NOTIFICATION
 		var notification = new Notification(
-			undefined, "Invalid network request, something went wrong",
+			undefined, errorMessage,
 			undefined, NOTIFICATION_TYPE.Log
 		);
 		global.NotificationHandlerRef.AddNotification(notification);
@@ -26,7 +27,6 @@ function NetworkErrorHandler() constructor
 							
 		// REQUEST GUI STATE RESET
 		global.GUIStateHandlerRef.RequestGUIStateReset();
-		//show_message(string("{0}. Disconnecting...", errorMessage));
 		
 		// REQUEST DISCONNECT SOCKET ON SERTAIN MESSAGE TYPES
 		if (errorOriginalMessageType == MESSAGE_TYPE.CONNECT_TO_HOST ||
@@ -45,10 +45,23 @@ function NetworkErrorHandler() constructor
 		return isRequestHandled;
 	}
 	
-	static HandleNetworkError = function(_networkPacket)
+	static HandleServerError = function(_networkPacket)
 	{
-		var isErrorHandled = true;
-		// TODO: Handle network errors
+		var isErrorHandled = false;
+		var errorMessage = _networkPacket.payload[$ "error"] ?? "Unknown server error";
+		var consoleLog = string("{0}. Disconnecting...", errorMessage);
+		// ADD CONSOLE LOG
+		global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
+		
+		// ADD NOTIFICATION
+		var notification = new Notification(
+			undefined, "Internal server error, something went wrong",
+			undefined, NOTIFICATION_TYPE.Log
+		);
+		global.NotificationHandlerRef.AddNotification(notification);
+		
+		// FORCE DELETE SOCKET
+		isErrorHandled = global.NetworkHandlerRef.DeleteSocket();
 		return isErrorHandled;
 	}
 }
