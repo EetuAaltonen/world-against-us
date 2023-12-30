@@ -233,6 +233,18 @@ export default class NetworkPacketParser {
               );
             }
             break;
+          case MESSAGE_TYPE.RELEASE_CONTAINER_CONTENT:
+            {
+              let offset = 0;
+              const parsedInstanceId = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedContainerId = msg.toString("utf8", offset);
+              payload = {
+                instanceId: parsedInstanceId,
+                containerId: parsedContainerId,
+              };
+            }
+            break;
           case MESSAGE_TYPE.PATROL_STATE:
             {
               let offset = 0;

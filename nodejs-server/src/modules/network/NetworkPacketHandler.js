@@ -469,6 +469,41 @@ export default class NetworkPacketHandler {
             }
           }
           break;
+        case MESSAGE_TYPE.RELEASE_CONTAINER_CONTENT:
+          {
+            const containerRequestInfo = networkPacket.payload;
+            if (containerRequestInfo !== undefined) {
+              if (containerRequestInfo.instanceId === instance.instanceId) {
+                const containerId = containerRequestInfo.containerId;
+                const container =
+                  instance.containerHandler.getContainerById(containerId);
+                if (container !== undefined) {
+                  if (container.requestingClient === client.uuid) {
+                    // Reset client access
+                    container.requestingClient = undefined;
+
+                    // Reset active inventory stream if release container content
+                    // arrives before inventory stream end request
+                    if (
+                      instance.containerHandler.getActiveInventoryStream(
+                        containerId
+                      ) !== undefined
+                    ) {
+                      instance.containerHandler.removeActiveInventoryStream(
+                        containerId
+                      );
+                      // Rollback interrupted inventory stream by deleting the container
+                      instance.containerHandler.removeContainer(containerId);
+                    }
+
+                    isPacketHandled =
+                      this.networkHandler.queueAcknowledgmentResponse(client);
+                  }
+                }
+              }
+            }
+          }
+          break;
         case MESSAGE_TYPE.PATROL_STATE:
           {
             const patrolState = networkPacket.payload;
