@@ -433,12 +433,14 @@ export default class NetworkHandler {
                 }
               } else {
                 isMessageHandled = this.onInvalidRequest(
+                  messageType,
                   "Unknown client ID",
                   rinfo
                 );
               }
             } else {
               isMessageHandled = this.onInvalidRequest(
+                messageType,
                 "Invalid client ID",
                 rinfo
               );
@@ -450,10 +452,15 @@ export default class NetworkHandler {
           console.log(
             `Failed to handle a message with type ${networkPacket.header.messageType} from a client`
           );
-          this.onInvalidRequest("Unable to handle the request", rinfo);
+          this.onInvalidRequest(
+            messageType,
+            "Unable to handle the request",
+            rinfo
+          );
         }
       } else {
         isMessageHandled = this.onInvalidRequest(
+          MESSAGE_TYPE.INVALID_REQUEST,
           "Invalid packet format",
           rinfo
         );
@@ -603,7 +610,7 @@ export default class NetworkHandler {
     return isDisconnecting;
   }
 
-  onInvalidRequest(message, rinfo) {
+  onInvalidRequest(originalMessageType, message, rinfo) {
     let isMessageSended = true;
     const networkPacketHeader = new NetworkPacketHeader(
       MESSAGE_TYPE.INVALID_REQUEST,
@@ -612,6 +619,7 @@ export default class NetworkHandler {
     const networkPacket = new NetworkPacket(
       networkPacketHeader,
       {
+        message_type: originalMessageType,
         message: message,
       },
       PACKET_PRIORITY.CRITICAL
