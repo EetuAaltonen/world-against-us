@@ -3,14 +3,14 @@ function OnClickEscMenuReset()
 	var gameSaveName = global.GameSaveHandlerRef.game_save_data.save_name;
 	if (global.GameSaveHandlerRef.ResetGameSave(gameSaveName))
 	{
-		global.NotificationHandlerRef.AddNotification(
-			new Notification(
-				sprFloppyDisk, "Game save reseted",
-				string("Save: '{0}'", gameSaveName),
-				NOTIFICATION_TYPE.Popup
-			)
+		var notification = new Notification(
+			sprFloppyDisk, "Game save reseted",
+			string("Save: '{0}'", gameSaveName),
+			NOTIFICATION_TYPE.Popup
 		);
-		room_goto(roomLoadResources);
+		global.NotificationHandlerRef.AddNotification(notification);
+		// RETURN TO LOAD RESOURCES
+		global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_LOAD_RESOURCES);
 	} else {
 		global.NotificationHandlerRef.AddNotification(
 			new Notification(
@@ -19,6 +19,7 @@ function OnClickEscMenuReset()
 				NOTIFICATION_TYPE.Popup
 			)
 		);
-		room_goto(roomMainMenu);
+		// RETURN TO MAIN MENU
+		global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_MAIN_MENU);
 	}
 }

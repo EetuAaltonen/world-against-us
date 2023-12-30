@@ -8,7 +8,7 @@ function OnClickMenuMultiplayerPlay()
 			if (global.GameSaveHandlerRef.InitGameSave(saveInput.input))
 			{
 				global.NetworkHandlerRef.network_status = NETWORK_STATUS.CONNECTED_SAVE_SELECTED;
-				room_goto(roomLoadResources);
+				global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_LOAD_RESOURCES);
 			} else {
 				global.NotificationHandlerRef.AddNotification(
 					new Notification(

@@ -180,7 +180,8 @@ function GameSave(_save_name) constructor
 					if (!is_undefined(roomName))
 					{
 						var roomIndex = asset_get_index(roomName);
-						player_data.last_location.room_index = (room_exists(roomIndex)) ? roomIndex : undefined;
+						// ROOM CHANGE REQUESTS USES ROOM NAME INSTEAD OF ROOM INDEX
+						player_data.last_location.room_index = (room_exists(roomIndex)) ? roomName : undefined;
 						
 						var positionStruct = lastLocationStruct[$ "position"] ?? undefined;
 						if (!is_undefined(positionStruct))

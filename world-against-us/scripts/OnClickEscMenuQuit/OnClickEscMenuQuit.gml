@@ -4,6 +4,6 @@ function OnClickEscMenuQuit()
 	{
 		global.NetworkHandlerRef.RequestDisconnectSocket();
 	} else {
-		room_goto(roomMainMenu);
+		global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_MAIN_MENU);
 	}
 }

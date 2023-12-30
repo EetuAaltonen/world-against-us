@@ -7,7 +7,7 @@ function OnClickMenuSingleplayerPlay()
 		{
 			if (global.GameSaveHandlerRef.InitGameSave(saveInput.input))
 			{
-				room_goto(roomLoadResources);
+				global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_LOAD_RESOURCES);
 			} else {
 				global.NotificationHandlerRef.AddNotification(
 					new Notification(

@@ -77,6 +77,7 @@ for (var i = 0; i < controllerCount; i++)
 
 // GO TO MAIN MENU AFTER LAUNCH
 if (room == roomLaunch) {
+	// ROOM CHANGE HANDLER YET LOADED
 	room_goto(roomMainMenu);
 }
 // GO TO THE LAST KNOWN PLAYER LOCATION
@@ -88,7 +89,7 @@ else if (room == roomLoadResources)
 		show_debug_message("Save file doesn't exist");
 	}
 	
-	if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.OFFLINE)
+	if (!global.MultiplayerMode)
 	{
 		var gotoLastLocationRoom = false;
 		var gameSaveData = global.GameSaveHandlerRef.game_save_data;
@@ -108,8 +109,7 @@ else if (room == roomLoadResources)
 								NOTIFICATION_TYPE.Popup
 							)
 						);
-						
-						room_goto(roomIndex);
+						global.RoomChangeHandlerRef.RequestRoomChange(roomIndex);
 						gotoLastLocationRoom = true;
 					}
 				}
@@ -126,8 +126,7 @@ else if (room == roomLoadResources)
 					NOTIFICATION_TYPE.Popup
 				)
 			);
-			
-			room_goto(ROOM_DEFAULT);
+			global.RoomChangeHandlerRef.RequestRoomChange(ROOM_DEFAULT);
 		}
 	}
 } else {
