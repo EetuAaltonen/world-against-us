@@ -10,7 +10,11 @@ function InteractionFuncStorageContainer()
 				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT);
 				var networkPacket = new NetworkPacket(
 					networkPacketHeader,
-					containerId,
+					{
+						// TODO: Use struct instead
+						region_id: global.NetworkRegionHandlerRef.region_id,
+						container_id: containerId
+					},
 					PACKET_PRIORITY.DEFAULT,
 					AckTimeoutFuncResend
 				);

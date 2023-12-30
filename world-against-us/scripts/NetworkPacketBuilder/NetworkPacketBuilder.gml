@@ -105,13 +105,16 @@ function NetworkPacketBuilder() constructor
 					} break;
 					case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
 					{
-						var containerId = _networkPacketPayload;
-						buffer_write(_networkBuffer, buffer_text, containerId);
+						var networkContainerContentRequest = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u32, networkContainerContentRequest.region_id);
+						buffer_write(_networkBuffer, buffer_text, networkContainerContentRequest.container_id);
 						isPayloadWritten = true;
 					} break;
 					case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
 					{
 						var networkInventoryStream = _networkPacketPayload;
+						// TODO: Add region ID to validate the request on server
+						// + to CONTAINER_INVENTORY_STREAM
 						buffer_write(_networkBuffer, buffer_u8, networkInventoryStream.stream_item_limit);
 						buffer_write(_networkBuffer, buffer_bool, networkInventoryStream.is_stream_sending);
 						buffer_write(_networkBuffer, buffer_u16, networkInventoryStream.stream_current_index);
@@ -121,6 +124,7 @@ function NetworkPacketBuilder() constructor
 					} break;
 					case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
 					{
+						// TODO: Add region ID to validate the request on server
 						var networkInventoryStreamItems = _networkPacketPayload;
 						buffer_write(_networkBuffer, buffer_u32, networkInventoryStreamItems.region_id);
 						buffer_write(_networkBuffer, buffer_text, networkInventoryStreamItems.inventory_id);
@@ -128,6 +132,7 @@ function NetworkPacketBuilder() constructor
 					} break;
 					case MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM:
 					{
+						// TODO: Add region ID to validate the request on server
 						var containerInventoryActionInfo = _networkPacketPayload;
 						buffer_write(_networkBuffer, buffer_u8, containerInventoryActionInfo.source_grid_index.col);
 						buffer_write(_networkBuffer, buffer_u8, containerInventoryActionInfo.source_grid_index.row);
@@ -137,6 +142,7 @@ function NetworkPacketBuilder() constructor
 					} break;
 					case MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM:
 					{
+						// TODO: Add region ID to validate the request on server
 						var containerInventoryActionInfo = _networkPacketPayload;
 						buffer_write(_networkBuffer, buffer_u8, containerInventoryActionInfo.source_grid_index.col);
 						buffer_write(_networkBuffer, buffer_u8, containerInventoryActionInfo.source_grid_index.row);
@@ -146,6 +152,7 @@ function NetworkPacketBuilder() constructor
 					} break;
 					case MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM:
 					{
+						// TODO: Add region ID to validate the request on server
 						var containerInventoryActionInfo = _networkPacketPayload;
 						buffer_write(_networkBuffer, buffer_u8, containerInventoryActionInfo.source_grid_index.col);
 						buffer_write(_networkBuffer, buffer_u8, containerInventoryActionInfo.source_grid_index.row);
