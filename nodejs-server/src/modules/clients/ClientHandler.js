@@ -8,7 +8,7 @@ export default class ClientHandler {
     this.clients = [];
   }
 
-  connectClient(rinfo) {
+  addClient(rinfo) {
     let newUuid = uuidv4();
     if (newUuid !== undefined) {
       const client = new Client(newUuid, rinfo.address, rinfo.port);
@@ -29,8 +29,8 @@ export default class ClientHandler {
     return Object.keys(this.clients).length;
   }
 
-  disconnectClient(clientId, clientAddress, clientPort) {
-    let isDisconnected = false;
+  removeClient(clientId, clientAddress, clientPort) {
+    let isRemoved = false;
     const index = this.clients.findIndex(
       (client) =>
         (client.uuid === clientId || clientId === UNDEFINED_UUID) &&
@@ -39,8 +39,8 @@ export default class ClientHandler {
     );
     if (index > -1) {
       this.clients.splice(index, 1);
-      isDisconnected = true;
+      isRemoved = true;
     }
-    return isDisconnected;
+    return isRemoved;
   }
 }

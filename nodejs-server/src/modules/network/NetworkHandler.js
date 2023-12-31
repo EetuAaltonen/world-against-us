@@ -236,7 +236,7 @@ export default class NetworkHandler {
             {
               if (clientId === UNDEFINED_UUID) {
                 // Generate new Uuid and save client
-                const newClientId = this.clientHandler.connectClient(rinfo);
+                const newClientId = this.clientHandler.addClient(rinfo);
                 if (newClientId !== undefined) {
                   // Add network trackers
                   this.networkPacketTracker.addInFlightPacketTrack(newClientId);
@@ -434,7 +434,7 @@ export default class NetworkHandler {
               } else {
                 isMessageHandled = this.onInvalidRequest(
                   messageType,
-                  "Unknown client ID",
+                  "Unknown client ID, please reconnect",
                   rinfo
                 );
               }
@@ -562,11 +562,7 @@ export default class NetworkHandler {
           instanceId = client.instanceId;
         }
         if (
-          this.clientHandler.disconnectClient(
-            clientId,
-            clientAddress,
-            clientPort
-          )
+          !this.clientHandler.removeClient(clientId, clientAddress, clientPort)
         ) {
           this.networkPacketTracker.removeInFlightPacketTrack(clientId);
           if (client.instanceId !== undefined) {
