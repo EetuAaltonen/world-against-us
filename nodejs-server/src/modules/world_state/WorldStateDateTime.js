@@ -35,25 +35,26 @@ export default class WorldStateDateTime {
   update(passedTickTime) {
     let isTimeUpdated = true;
     this.milliseconds += passedTickTime * this.timeScale;
-    while (Math.floor(this.milliseconds) >= 1000) {
-      this.milliseconds -= 1000;
-      this.seconds++;
-      while (Math.floor(this.seconds) >= 60) {
-        this.seconds -= 60;
-        this.minutes++;
-        while (Math.floor(this.minutes) >= 60) {
-          this.minutes -= 60;
-          this.hours++;
+    if (this.milliseconds >= 1000) {
+      this.seconds += Math.floor(this.milliseconds / 1000);
+      this.milliseconds = this.milliseconds % 1000;
+      if (this.seconds >= 60) {
+        this.minutes += Math.floor(this.seconds / 60);
+        this.seconds = this.seconds % 60;
+        if (this.minutes >= 60) {
+          this.hours += Math.floor(this.minutes / 60);
+          this.minutes = this.minutes % 60;
+          // Roll weather
           isTimeUpdated = this.worldStateHandler.rollWeather();
-          while (Math.floor(this.hours) >= 24) {
-            this.hours -= 24;
-            this.day++;
-            while (Math.floor(this.day) >= 30) {
-              this.day -= 30;
-              this.month++;
-              while (Math.floor(this.month) >= 12) {
-                this.month -= 12;
-                this.year++;
+          if (this.hours >= 24) {
+            this.day += Math.floor(this.hours / 24);
+            this.hours = this.hours % 24;
+            if (this.day >= 30) {
+              this.month += Math.floor(this.day / 30);
+              this.day = this.day % 30;
+              if (this.month >= 12) {
+                this.year += Math.floor(this.month / 12);
+                this.month = this.month % 12;
               }
             }
           }

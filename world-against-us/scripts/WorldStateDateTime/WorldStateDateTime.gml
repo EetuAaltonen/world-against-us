@@ -15,28 +15,26 @@ function WorldStateDateTime() constructor
 	static Update = function()
 	{
 		var isTimeUpdated = true;
-		
 		time_scale = (global.DEBUGMODE && !global.MultiplayerMode) ? 1000 : base_time_scale;
-		
-		milliseconds += (delta_time * 0.001) * time_scale;
-		while (floor(milliseconds) >= 1000) {
-	      milliseconds -= 1000;
-	      seconds++;
-	      while (floor(seconds) >= 60) {
-	        seconds -= 60;
-	        minutes++;
-	        while (floor(minutes) >= 60) {
-	          minutes -= 60;
-	          hours++;
-	          while (floor(hours) >= 24) {
-	            hours -= 24;
-	            day++;
-	            while (floor(day) >= 30) {
-	              day -= 30;
-	              month++;
-	              while (floor(month) >= 12) {
-	                month -= 12;
-	                year++;
+	    milliseconds += (delta_time * 0.001) * time_scale;
+	    if (milliseconds >= 1000) {
+	      seconds += floor(milliseconds / 1000);
+	      milliseconds = milliseconds % 1000;
+	      if (seconds >= 60) {
+	        minutes += floor(seconds / 60);
+	        seconds = seconds % 60;
+	        if (minutes >= 60) {
+	          hours += floor(minutes / 60);
+	          minutes = minutes % 60;
+	          if (hours >= 24) {
+	            day += floor(hours / 24);
+	            hours = hours % 24;
+	            if (day >= 30) {
+	              month += floor(day / 30);
+	              day = day % 30;
+	              if (month >= 12) {
+	                year += floor(month / 12);
+	                month = month % 12;
 	              }
 	            }
 	          }
