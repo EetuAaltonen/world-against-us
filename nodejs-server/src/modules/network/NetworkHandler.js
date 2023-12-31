@@ -3,6 +3,7 @@ import PriorityQueuePkg from "@datastructures-js/priority-queue";
 import MESSAGE_TYPE from "./MessageType.js";
 import PACKET_PRIORITY from "./PacketPriority.js";
 
+import ConsoleHandler from "../console/ConsoleHandler.js";
 import Player from "../players/Player.js";
 import Client from "../clients/Client.js";
 import ClientHandler from "../clients/ClientHandler.js";
@@ -115,7 +116,7 @@ export default class NetworkHandler {
                       if (
                         !inFlightPacketTrack.patchSequenceNumber(networkPacket)
                       ) {
-                        console.log(
+                        ConsoleHandler.Log(
                           "Failed to patch sequence number to network packet"
                         );
                         return;
@@ -124,7 +125,7 @@ export default class NetworkHandler {
                     // Patch ACK range
                     if (deliveryPolicy.patchAckRange) {
                       if (!inFlightPacketTrack.patchAckRange(networkPacket)) {
-                        console.log(
+                        ConsoleHandler.Log(
                           "Failed to patch Ack range to network packet"
                         );
                         return;
@@ -135,7 +136,7 @@ export default class NetworkHandler {
                       if (
                         !inFlightPacketTrack.addNetworkPacket(networkPacket)
                       ) {
-                        console.log(
+                        ConsoleHandler.Log(
                           "Failed to add a network packet to in-flight track"
                         );
                         return;
@@ -192,7 +193,7 @@ export default class NetworkHandler {
         this.tick();
       }, 0);
     } catch (error) {
-      console.log(error);
+      ConsoleHandler.Log(error);
       this.onError(error);
       setTimeout(() => {
         this.onServerClose();
@@ -208,7 +209,7 @@ export default class NetworkHandler {
     if (networkBuffer !== undefined) {
       this.socket.send(networkBuffer, client.port, client.address, (err) => {
         if (err ?? undefined !== undefined) {
-          console.log(err);
+          ConsoleHandler.Log(err);
         }
       });
       // TODO: Check MTU threshold
@@ -272,10 +273,10 @@ export default class NetworkHandler {
                   );
                   isMessageHandled = true;
                 } else {
-                  console.log("Failed to connect client");
+                  ConsoleHandler.Log("Failed to connect client");
                 }
               } else {
-                console.log(
+                ConsoleHandler.Log(
                   `Client with UUID ${clientId} requested to join game`
                 );
               }
@@ -293,7 +294,9 @@ export default class NetworkHandler {
           case MESSAGE_TYPE.CLIENT_ERROR:
             {
               const errorMessage = networkPacket.payload["error"] ?? "Unknown";
-              console.log(`CLIENT ERROR: ${errorMessage}. Disconnecting...`);
+              ConsoleHandler.Log(
+                `CLIENT ERROR: ${errorMessage}. Disconnecting...`
+              );
               isMessageHandled = this.disconnectClientWithTimeout(
                 clientId,
                 rinfo.address,
@@ -449,7 +452,7 @@ export default class NetworkHandler {
         }
 
         if (!isMessageHandled) {
-          console.log(
+          ConsoleHandler.Log(
             `Failed to handle a message with type ${networkPacket.header.messageType} from a client`
           );
           this.onInvalidRequest(
@@ -563,7 +566,9 @@ export default class NetworkHandler {
           !this.clientHandler.removeClient(clientId, clientAddress, clientPort)
         ) {
           // TODO: Proper error handling
-          console.log(`Failed to disconnect a client with ID: ${clientId}`);
+          ConsoleHandler.Log(
+            `Failed to disconnect a client with ID: ${clientId}`
+          );
         }
       }, 1000);
     } else {
@@ -613,7 +618,7 @@ export default class NetworkHandler {
         )
       ) {
         // TODO: Proper error handling
-        console.log(
+        ConsoleHandler.Log(
           `Failed to remove a client with ID: ${clientId} from any instance`
         );
       }
@@ -651,7 +656,7 @@ export default class NetworkHandler {
 
   onError(error) {
     try {
-      console.log(`Server error:\n${error.stack}`);
+      ConsoleHandler.Log(`Server error:\n${error.stack}`);
       const allClients = this.clientHandler.getAllClients();
       const networkPacketHeader = new NetworkPacketHeader(
         MESSAGE_TYPE.SERVER_ERROR,
@@ -673,7 +678,7 @@ export default class NetworkHandler {
         new NetworkQueueEntry(networkPacket, allClients, networkPacket.priority)
       );
     } catch (error) {
-      console.log(`Server error:\n${error.stack}`);
+      ConsoleHandler.Log(`Server error:\n${error.stack}`);
       setTimeout(() => {
         this.onServerClose();
       }, 2000);
@@ -684,7 +689,7 @@ export default class NetworkHandler {
     try {
       this.socket.close();
     } catch (error) {
-      console.log("Failed to close the socket");
+      ConsoleHandler.Log("Failed to close the socket");
     }
     this.isServerRunning = false;
   }

@@ -1,6 +1,8 @@
 import BITWISE from "./Bitwise.js";
 import MESSAGE_TYPE from "./MessageType.js";
 
+import ConsoleHandler from "../console/ConsoleHandler.js";
+
 const NULL_TERMINATOR = "\0";
 
 export default class NetworkPacketBuilder {
@@ -182,7 +184,7 @@ export default class NetworkPacketBuilder {
           }
         }
       } catch (error) {
-        console.log(error);
+        ConsoleHandler.Log(error);
         throw error;
       }
     } else {

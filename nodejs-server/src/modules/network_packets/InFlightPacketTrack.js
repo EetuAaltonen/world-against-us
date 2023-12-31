@@ -1,5 +1,7 @@
 import MESSAGE_TYPE from "../network/MessageType.js";
 
+import ConsoleHandler from "../console/ConsoleHandler.js";
+
 export default class InFlightPacketTrack {
   constructor() {
     this.inFlightPackets = [];
@@ -32,7 +34,7 @@ export default class InFlightPacketTrack {
       this.pendingAckRange = [];
     } else {
       if (networkPacket.header.message_type === MESSAGE_TYPE.ACKNOWLEDGMENT) {
-        console.log("Unnecessary MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
+        ConsoleHandler.Log("Unnecessary MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
         // Reverse outgoing sequence number
         if (--this.outgoingSequenceNumber < 0) {
           this.outgoingSequenceNumber = this.maxSequenceNumber;

@@ -1,6 +1,7 @@
 import BITWISE from "./Bitwise.js";
 import MESSAGE_TYPE from "./MessageType.js";
 
+import ConsoleHandler from "../console/ConsoleHandler.js";
 import Vector2 from "../math/Vector2.js";
 import GridIndex from "../inventory/GridIndex.js";
 import NetworkPacket from "../network_packets/NetworkPacket.js";
@@ -330,7 +331,7 @@ export default class NetworkPacketParser {
         }
       }
     } catch (error) {
-      console.log(error);
+      ConsoleHandler.Log(error);
     }
     return payload;
   }

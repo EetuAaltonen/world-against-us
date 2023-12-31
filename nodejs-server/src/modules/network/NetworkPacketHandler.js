@@ -1,6 +1,7 @@
 import MESSAGE_TYPE from "./MessageType.js";
 import PACKET_PRIORITY from "./PacketPriority.js";
 
+import ConsoleHandler from "../console/ConsoleHandler.js";
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
 import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
 import NetworkPacket from "../network_packets/NetworkPacket.js";

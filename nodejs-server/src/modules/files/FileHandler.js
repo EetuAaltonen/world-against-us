@@ -1,6 +1,8 @@
 import fs from "fs";
 import moment from "moment/moment.js";
 
+import ConsoleHandler from "../console/ConsoleHandler.js";
+
 export default class FileHandler {
   constructor(saveFilePath, saveFileName) {
     this.saveFilePath = saveFilePath;
@@ -16,12 +18,12 @@ export default class FileHandler {
         fs.writeFile(filePath, json, "utf8", (err) => {
           if (err) throw err;
           const timeStamp = moment().format("YYYY-MM-DD hh:mm:ss");
-          console.log(`${timeStamp} >> Autosave completed`);
+          ConsoleHandler.Log(`${timeStamp} >> Autosave completed`);
         });
         isSaved = true;
       }
     } catch (error) {
-      console.log(error);
+      ConsoleHandler.Log(error);
     }
     return isSaved;
   }
@@ -37,7 +39,7 @@ export default class FileHandler {
         }
       }
     } catch (error) {
-      console.log(error);
+      ConsoleHandler.Log(error);
     }
     return saveData;
   }
@@ -49,7 +51,7 @@ export default class FileHandler {
         fs.mkdirSync(this.saveFilePath, { recursive: true });
       }
     } catch (error) {
-      console.log(error);
+      ConsoleHandler.Log(error);
       isPatchValidated = false;
     }
     return isPatchValidated;

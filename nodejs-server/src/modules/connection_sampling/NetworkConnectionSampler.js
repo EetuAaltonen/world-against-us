@@ -1,3 +1,4 @@
+import ConsoleHandler from "../console/ConsoleHandler.js";
 import NetworkConnectionSample from "./NetworkConnectionSample.js";
 
 export default class NetworkConnectionSampler {
@@ -46,12 +47,12 @@ export default class NetworkConnectionSampler {
       if (clientConnectionSample !== undefined) {
         const pingSample = clientConnectionSample.pingSample;
         if (pingSample.serverTime > 0) {
-          console.log("Client pinging started without prior response");
+          ConsoleHandler.Log("Client pinging started without prior response");
         }
         pingSample.clientTime = pingSampleRequest.clientTime;
         isInitialized = true;
       } else {
-        console.log("Client pinging without connection sampling");
+        ConsoleHandler.Log("Client pinging without connection sampling");
       }
     }
     return isInitialized;
@@ -77,14 +78,16 @@ export default class NetworkConnectionSampler {
           const now = this.networkHandler.uptime;
           clientConnectionSample.ping = now - pingSample.serverTime;
         } else {
-          console.log(
+          ConsoleHandler.Log(
             `${pingSampleResponse.serverTime} === ${pingSample.serverTime}`
           );
-          console.log("Client pinging stopped with inconsistent server time");
+          ConsoleHandler.Log(
+            "Client pinging stopped with inconsistent server time"
+          );
         }
         pingSample.reset();
       } else {
-        console.log(
+        ConsoleHandler.Log(
           "Client pinging stopped without initialized connection sampling"
         );
       }

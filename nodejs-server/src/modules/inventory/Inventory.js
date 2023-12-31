@@ -1,3 +1,5 @@
+import ConsoleHandler from "../console/ConsoleHandler.js";
+
 import FormatItemReplicasToJSONObjectArray from "../items/FormatItemReplicasToJSONObjectArray.js";
 
 export default class Inventory {
@@ -39,7 +41,9 @@ export default class Inventory {
           if (isItemsAdded) {
             if (!this.addItem(item)) {
               isItemsAdded = false;
-              console.log(`Unable to add item ${item.name} to inventory`);
+              ConsoleHandler.Log(
+                `Unable to add item ${item.name} to inventory`
+              );
             }
           }
         });

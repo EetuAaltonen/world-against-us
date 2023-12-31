@@ -1,3 +1,4 @@
+import ConsoleHandler from "../console/ConsoleHandler.js";
 import NetworkPingSample from "./NetworkPingSample.js";
 
 export default class NetworkConnectionSample {

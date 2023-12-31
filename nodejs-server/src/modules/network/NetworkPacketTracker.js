@@ -1,6 +1,7 @@
 import MESSAGE_TYPE from "./MessageType.js";
 import PACKET_PRIORITY from "./PacketPriority.js";
 
+import ConsoleHandler from "../console/ConsoleHandler.js";
 import InFlightPacketTrack from "../network_packets/InFlightPacketTrack.js";
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
 
@@ -27,7 +28,7 @@ export default class NetworkPacketTracker {
                 inFlightPacket.acknowledgmentAttempt <=
                 inFlightPacket.maxAcknowledgmentAttempt
               ) {
-                console.log(
+                ConsoleHandler.Log(
                   `Acknowledgment timeout attempt ${inFlightPacket.acknowledgmentAttempt} with message type ${inFlightPacket.header.messageType} and sequence number ${inFlightPacket.header.sequenceNumber} timed out`
                 );
                 inFlightPacket.acknowledgmentAttempt++;
@@ -41,12 +42,12 @@ export default class NetworkPacketTracker {
                       client
                     )
                   ) {
-                    console.log(
+                    ConsoleHandler.Log(
                       `Failed to resend in-flight network packet with message type ${inFlightPacket.header.messageType} and sequence number ${inFlightPacket.header.sequenceNumber}`
                     );
                   }
                 } else {
-                  console.log(
+                  ConsoleHandler.Log(
                     `Failed to resend in-flight network packet to undefined client`
                   );
                 }
@@ -57,7 +58,7 @@ export default class NetworkPacketTracker {
                     inFlightPacket.header.sequenceNumber
                   )
                 ) {
-                  console.log(
+                  ConsoleHandler.Log(
                     `Acknowledgment with message type ${inFlightPacket.header.messageType} and sequence number ${inFlightPacket.header.sequenceNumber} timed out`
                   );
                 }
@@ -110,7 +111,7 @@ export default class NetworkPacketTracker {
           sequenceNumber > inFlightPacketTrack.expectedSequenceNumber
         ) {
           // Patch to past one of most recent
-          console.log(
+          ConsoleHandler.Log(
             `Received sequence number ${sequenceNumber} greater than expected ${inFlightPacketTrack.expectedSequenceNumber}`
           );
           inFlightPacketTrack.expectedSequenceNumber = sequenceNumber + 1;
@@ -122,7 +123,7 @@ export default class NetworkPacketTracker {
           sequenceNumber < inFlightPacketTrack.expectedSequenceNumber
         ) {
           // Drop stale data
-          console.log(
+          ConsoleHandler.Log(
             `Received sequence number ${sequenceNumber} smaller than expected ${inFlightPacketTrack.expectedSequenceNumber}`
           );
           isSequenceNumberProcessed = false;
@@ -165,7 +166,7 @@ export default class NetworkPacketTracker {
       this.networkHandler.packetQueue.enqueue(
         new NetworkQueueEntry(inFlightPacket, [client], inFlightPacket.priority)
       );
-      console.log(
+      ConsoleHandler.Log(
         `Resending packet with message type ${inFlightPacket.header.messageType}`
       );
       isPacketResend = true;

@@ -1,6 +1,7 @@
 import ROOM_INDEX from "./RoomIndex.js";
 import AI_STATE from "../patrols/AIState.js";
 
+import ConsoleHandler from "../console/ConsoleHandler.js";
 import ContainerHandler from "../containers/ContainerHandler.js";
 import Patrol from "../patrols/Patrol.js";
 import GetRandomInt from "../math/GetRandomInt.js";
@@ -73,7 +74,7 @@ export default class Instance {
                 case AI_STATE.QUEUE:
                   {
                     patrol.aiState = AI_STATE.PATROL;
-                    console.log(
+                    ConsoleHandler.Log(
                       `Patrol with ID ${patrolId} arrived to destination`
                     );
                     // Broadcast new state
@@ -97,7 +98,9 @@ export default class Instance {
                       }
                       if (patrol.routeTime <= 0) {
                         patrol.aiState = AI_STATE.PATROL_END;
-                        console.log(`Patrol with ID ${patrolId} left the area`);
+                        ConsoleHandler.Log(
+                          `Patrol with ID ${patrolId} left the area`
+                        );
                         // Broadcast new state
                         const patrolState = new PatrolState(
                           this.instanceId,
@@ -167,7 +170,7 @@ export default class Instance {
             PATROL_ROUTE_TIME_TOWN
           );
           this.localPatrols[this.availablePatrolId] = newPatrol;
-          console.log(
+          ConsoleHandler.Log(
             `Patrol with ID ${newPatrol.patrolId} started traveling, remaining ${newPatrol.travelTime}`
           );
           isPatrolAdded = true;

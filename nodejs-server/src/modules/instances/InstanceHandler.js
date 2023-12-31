@@ -1,6 +1,7 @@
 import ROOM_INDEX from "./RoomIndex.js";
 import WORLD_MAP_LOCATION_HIERARCHY from "../world_map/WorldMapLocationHierarchy.js";
 
+import ConsoleHandler from "../console/ConsoleHandler.js";
 import Instance from "./Instance.js";
 import AvailableInstance from "../instances/AvailableInstance.js";
 
@@ -166,7 +167,7 @@ export default class InstanceHandler {
                 // Reset player position
                 player.resetPosition();
 
-                console.log(
+                ConsoleHandler.Log(
                   `Player fast-traveled from ${sourceInstanceId} to ${newInstanceId}`
                 );
               }
@@ -238,7 +239,7 @@ export default class InstanceHandler {
             if (instance.ownerClient === clientId) {
               if (!instance.resetOwner()) {
                 // TODO: Proper error handling
-                console.log(
+                ConsoleHandler.Log(
                   `Failed to reset owner for an instance with ID: ${instanceId}`
                 );
               }
@@ -259,7 +260,7 @@ export default class InstanceHandler {
               if (instance.ownerClient === clientId) {
                 if (!instance.resetOwner()) {
                   // TODO: Proper error handling
-                  console.log(
+                  ConsoleHandler.Log(
                     `Failed to reset owner for an instance with ID: ${instanceId}`
                   );
                 }
@@ -296,16 +297,18 @@ export default class InstanceHandler {
 
           if (totalPlayerCount <= 0) {
             if (this.deleteInstance(instanceId)) {
-              console.log(`Instance deleted: ${instanceId}`);
+              ConsoleHandler.Log(`Instance deleted: ${instanceId}`);
               // Delete sub-instances
               subInstanceIds.forEach((subInstanceId) => {
                 this.deleteInstance(subInstanceId);
-                console.log(`Sub-instance deleted: ${subInstanceId}`);
+                ConsoleHandler.Log(`Sub-instance deleted: ${subInstanceId}`);
               });
               isInstanceReleased = true;
             } else {
               // TODO: Proper error handling
-              console.log("Failed to delete instance with ID: " + instanceId);
+              ConsoleHandler.Log(
+                "Failed to delete instance with ID: " + instanceId
+              );
             }
           }
         }
