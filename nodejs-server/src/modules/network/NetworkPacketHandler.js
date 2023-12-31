@@ -621,9 +621,16 @@ export default class NetworkPacketHandler {
               const scoutInstance =
                 this.instanceHandler.getInstance(scoutInstanceId);
               if (scoutInstance !== undefined) {
+                let isStreamInterruptible = true;
                 if (
-                  this.instanceHandler.activeOperationsScoutStream === undefined
+                  this.instanceHandler.activeOperationsScoutStream !== undefined
                 ) {
+                  isStreamInterruptible =
+                    this.instanceHandler.activeOperationsScoutStream
+                      .operatingClient === client.uuid;
+                }
+
+                if (isStreamInterruptible) {
                   const scoutingDrone = new ScoutingDrone(scoutInstanceId);
                   this.instanceHandler.activeOperationsScoutStream =
                     new OperationsScoutStream(
