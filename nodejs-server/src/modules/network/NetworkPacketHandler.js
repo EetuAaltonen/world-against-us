@@ -308,32 +308,50 @@ export default class NetworkPacketHandler {
                 inventoryStream.inventoryId
               );
               if (container !== undefined) {
-                inventoryStream.requestingClient = client.uuid;
-                inventoryStream.targetInventory = container.inventory;
+                const activeInventoryStream =
+                  instance.containerHandler.getActiveInventoryStream(
+                    inventoryStream.inventoryId
+                  );
+                if (activeInventoryStream === undefined) {
+                  inventoryStream.requestingClient = client.uuid;
+                  inventoryStream.targetInventory = container.inventory;
 
-                if (
-                  instance.containerHandler.addActiveInventoryStream(
-                    inventoryStream
-                  )
-                ) {
-                  const networkPacketHeader = new NetworkPacketHeader(
-                    MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM,
-                    client.uuid
-                  );
-                  const networkPacket = new NetworkPacket(
-                    networkPacketHeader,
-                    undefined,
-                    PACKET_PRIORITY.DEFAULT
-                  );
-                  this.networkHandler.packetQueue.enqueue(
-                    new NetworkQueueEntry(
-                      networkPacket,
-                      [client],
-                      networkPacket.priority
+                  if (
+                    instance.containerHandler.addActiveInventoryStream(
+                      inventoryStream
                     )
+                  ) {
+                    const networkPacketHeader = new NetworkPacketHeader(
+                      MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM,
+                      client.uuid
+                    );
+                    const networkPacket = new NetworkPacket(
+                      networkPacketHeader,
+                      undefined,
+                      PACKET_PRIORITY.DEFAULT
+                    );
+                    this.networkHandler.packetQueue.enqueue(
+                      new NetworkQueueEntry(
+                        networkPacket,
+                        [client],
+                        networkPacket.priority
+                      )
+                    );
+                    isPacketHandled = true;
+                  }
+                } else {
+                  isPacketHandled = this.networkHandler.onInvalidRequest(
+                    networkPacket.header.messageType,
+                    "Another player already looting the container",
+                    rinfo
                   );
-                  isPacketHandled = true;
                 }
+              } else {
+                isPacketHandled = this.networkHandler.onInvalidRequest(
+                  networkPacket.header.messageType,
+                  "Unknown container",
+                  rinfo
+                );
               }
             }
           }
@@ -646,7 +664,19 @@ export default class NetworkPacketHandler {
                     )
                   );
                   isPacketHandled = true;
+                } else {
+                  isPacketHandled = this.networkHandler.onInvalidRequest(
+                    networkPacket.header.messageType,
+                    "Another player already operating the scout",
+                    rinfo
+                  );
                 }
+              } else {
+                isPacketHandled = this.networkHandler.onInvalidRequest(
+                  networkPacket.header.messageType,
+                  "Instance to scout is currently unavailable",
+                  rinfo
+                );
               }
             }
           }

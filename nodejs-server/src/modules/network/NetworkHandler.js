@@ -553,32 +553,15 @@ export default class NetworkHandler {
       // Disconnect client locally after 1 seconds
       // This provides time window to send disconnect respond
       setTimeout(() => {
-        // TODO: Fix this logic to reset stream when actually operating client disconnect
-        this.instanceHandler.activeOperationsScoutStream = undefined;
-
-        let instanceId;
+        // Call on client disconnect to clean-up and release ongoing actions
         const client = this.clientHandler.getClient(clientId);
         if (client !== undefined) {
-          instanceId = client.instanceId;
+          this.onClientDisconnect(client);
         }
+
         if (
           !this.clientHandler.removeClient(clientId, clientAddress, clientPort)
         ) {
-          this.networkPacketTracker.removeInFlightPacketTrack(clientId);
-          if (client.instanceId !== undefined) {
-            if (
-              !this.instanceHandler.removePlayerFromInstance(
-                clientId,
-                instanceId
-              )
-            ) {
-              // TODO: Proper error handling
-              console.log(
-                `Failed to remove a client with ID: ${clientId} from any instance`
-              );
-            }
-          }
-        } else {
           // TODO: Proper error handling
           console.log(`Failed to disconnect a client with ID: ${clientId}`);
         }
@@ -604,6 +587,37 @@ export default class NetworkHandler {
       new NetworkQueueEntry(networkPacket, [client], networkPacket.priority)
     );
     return isDisconnecting;
+  }
+
+  onClientDisconnect(client) {
+    const clientId = client.uuid;
+    // Remove in-flight packet track
+    this.networkPacketTracker.removeInFlightPacketTrack(clientId);
+
+    // End operations scout stream
+    if (this.instanceHandler.activeOperationsScoutStream !== undefined) {
+      if (
+        this.instanceHandler.activeOperationsScoutStream.operatingClient ===
+        clientId
+      ) {
+        this.instanceHandler.activeOperationsScoutStream = undefined;
+      }
+    }
+
+    // Remove player from instance
+    if (client.instanceId !== undefined) {
+      if (
+        !this.instanceHandler.removePlayerFromInstance(
+          clientId,
+          client.instanceId
+        )
+      ) {
+        // TODO: Proper error handling
+        console.log(
+          `Failed to remove a client with ID: ${clientId} from any instance`
+        );
+      }
+    }
   }
 
   onInvalidRequest(originalMessageType, message, rinfo) {

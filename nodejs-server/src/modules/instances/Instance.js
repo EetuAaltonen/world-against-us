@@ -245,6 +245,21 @@ export default class Instance {
   removePlayer(clientId) {
     let isPlayerRemoved = false;
     if (this.getPlayer(clientId) !== undefined) {
+      // End active inventory stream
+      const activeInventoryStream =
+        this.containerHandler.getActiveInventoryStreamByClientId(clientId);
+      if (activeInventoryStream !== undefined) {
+        this.containerHandler.removeActiveInventoryStream(
+          activeInventoryStream.inventoryId
+        );
+      }
+      // Release container access
+      const requestedContainer =
+        this.containerHandler.getContainerByRequestingClientId(clientId);
+      if (requestedContainer !== undefined) {
+        requestedContainer.requestingClient = undefined;
+      }
+
       delete this.localPlayers[clientId];
       isPlayerRemoved = true;
     }

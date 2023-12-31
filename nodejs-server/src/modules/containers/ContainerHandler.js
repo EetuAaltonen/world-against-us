@@ -24,6 +24,27 @@ export default class ContainerHandler {
     return this.containers[containerId];
   }
 
+  getAllContainerIds() {
+    return Object.keys(this.containers);
+  }
+
+  getContainerByRequestingClientId(clientId) {
+    let requestedContainer = undefined;
+    const containerIds = this.getAllContainerIds();
+    const streamCount = containerIds.length;
+    for (let i = 0; i < streamCount; i++) {
+      const containerId = containerIds[i];
+      const container = this.getContainerById(containerId);
+      if (container !== undefined) {
+        if (container.requestingClient === clientId) {
+          requestedContainer = container;
+          break;
+        }
+      }
+    }
+    return requestedContainer;
+  }
+
   removeContainer(containerId) {
     delete this.containers[containerId];
   }
@@ -45,6 +66,27 @@ export default class ContainerHandler {
 
   getActiveInventoryStream(inventoryId) {
     return this.activeInventoryStreams[inventoryId];
+  }
+
+  getAllActiveInventoryStreamIds() {
+    return Object.keys(this.activeInventoryStreams);
+  }
+
+  getActiveInventoryStreamByClientId(clientId) {
+    let activeInventoryStream = undefined;
+    const inventoryStreamIds = this.getAllActiveInventoryStreamIds();
+    const streamCount = inventoryStreamIds.length;
+    for (let i = 0; i < streamCount; i++) {
+      const streamKey = inventoryStreamIds[i];
+      const inventoryStream = this.getActiveInventoryStream(streamKey);
+      if (inventoryStream !== undefined) {
+        if (inventoryStream.requestingClient === clientId) {
+          activeInventoryStream = inventoryStream;
+          break;
+        }
+      }
+    }
+    return activeInventoryStream;
   }
 
   removeActiveInventoryStream(inventoryId) {
