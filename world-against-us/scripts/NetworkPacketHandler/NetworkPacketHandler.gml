@@ -199,6 +199,10 @@ function NetworkPacketHandler() constructor
 									} else {
 										activeInventoryStream.is_stream_sending = false;
 									}
+									
+									// SET REQUESTED CONTAINER ACCESS
+									global.NetworkRegionObjectHandlerRef.requested_container_access = containerContentInfo.container_id;
+									
 									// SET ACTIVE INVENTORY STREAM
 									global.NetworkRegionObjectHandlerRef.active_inventory_stream = activeInventoryStream;
 											
@@ -328,6 +332,8 @@ function NetworkPacketHandler() constructor
 							{
 								global.GUIStateHandlerRef.CloseCurrentGUIState();
 							}
+							// SET ACTIVE OPERATIONS SCOUT STREAM
+							global.MapDataHandlerRef.active_operations_scout_stream = global.MapDataHandlerRef.target_scout_region;
 							// TRIGGER MAP UPDATE
 							global.MapDataHandlerRef.is_dynamic_data_updating = true;
 							global.MapDataHandlerRef.map_update_timer.TriggerTimer();

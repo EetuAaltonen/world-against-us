@@ -40,7 +40,7 @@ function NetworkErrorHandler() constructor
 			errorOriginalMessageType == MESSAGE_TYPE.CLIENT_ERROR
 		)
 		{
-			global.NetworkHandler.RequestDisconnectSocket();
+			global.NetworkHandlerRef.RequestDisconnectSocket();
 		}
 		return isRequestHandled;
 	}

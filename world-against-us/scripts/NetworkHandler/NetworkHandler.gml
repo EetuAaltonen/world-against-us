@@ -398,14 +398,7 @@ function NetworkHandler() constructor
 					{
 						if (!is_undefined(networkPacket.payload))
 						{
-							var errorMessage = networkPacket.payload[$ "error"] ?? "Unknown server error.";
-							show_message(string("{0}. Disconnecting...", errorMessage));
-						}
-						if (DeleteSocket())
-						{
-							isMessageHandled = true;
-						} else {
-							show_debug_message("Failed to delete socket on MESSAGE_TYPE.SERVER_ERROR");
+							isMessageHandled = network_error_handler.HandleServerError(networkPacket);
 						}
 					} break;
 					default:

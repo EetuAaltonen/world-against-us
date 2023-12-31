@@ -82,19 +82,28 @@ function CreateWindowOperationsCenter(_gameWindowId, _zIndex)
 		if (global.MultiplayerMode)
 		{
 			// REQUEST OPERATIONS END SCOURING STREAM
-			var targetScoutRegion = global.MapDataHandlerRef.target_scout_region;
-			if (!is_undefined(targetScoutRegion))
+			if (!is_undefined(global.MapDataHandlerRef.active_operations_scout_stream))
 			{
-				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM);
-				var networkPacket = new NetworkPacket(
-					networkPacketHeader,
-					targetScoutRegion,
-					PACKET_PRIORITY.DEFAULT,
-					AckTimeoutFuncResend
-				);
-				if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+				// RESET ACTIVE OPERATIONS SCOUT STREAM
+				global.MapDataHandlerRef.active_operations_scout_stream = undefined;
+				
+				var targetScoutRegion = global.MapDataHandlerRef.target_scout_region;
+				if (!is_undefined(targetScoutRegion))
 				{
-					show_debug_message("Unable to queue MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM");
+					var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM);
+					var networkPacket = new NetworkPacket(
+						networkPacketHeader,
+						targetScoutRegion,
+						PACKET_PRIORITY.DEFAULT,
+						AckTimeoutFuncResend
+					);
+					if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+					{
+						show_debug_message("Unable to queue MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM");
+					}
+					
+					// RESET TARGET SCOUT REGION
+					global.MapDataHandlerRef.target_scout_region = undefined;
 				}
 			}
 			// CLEAR AND CANCEL OPERATIONS SCOUTING STREAM MESSAGES
@@ -102,8 +111,8 @@ function CreateWindowOperationsCenter(_gameWindowId, _zIndex)
 			global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM);
 		}
 		
-		// RESET MAP DATA UPDATE
-		global.MapDataHandlerRef.ResetMapDataUpdate();
+		// RESET MAP DATA
+		global.MapDataHandlerRef.ResetMapData();
 	}
 	mapWindow.OnClose = overrideOnClose;
 	

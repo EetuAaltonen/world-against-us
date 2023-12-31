@@ -18,18 +18,22 @@ function OnCloseWindowContainerNetwork(_containerId)
 	global.NetworkRegionObjectHandlerRef.active_inventory_stream = undefined;
 	
 	// RELEASE CONTAINER CONTENT ACCESS
-	var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.RELEASE_CONTAINER_CONTENT);
-	var networkPacket = new NetworkPacket(
-		networkPacketHeader,
-		{
-			region_id: global.NetworkRegionHandlerRef.region_id,
-			container_id: _containerId
-		},
-		PACKET_PRIORITY.DEFAULT,
-		AckTimeoutFuncResend
-	);
-	if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+	if (global.NetworkRegionObjectHandlerRef.requested_container_access == _containerId)
 	{
-		show_debug_message("Failed to request container content");
+		var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.RELEASE_CONTAINER_CONTENT);
+		var networkPacket = new NetworkPacket(
+			networkPacketHeader,
+			{
+				region_id: global.NetworkRegionHandlerRef.region_id,
+				container_id: _containerId
+			},
+			PACKET_PRIORITY.DEFAULT,
+			AckTimeoutFuncResend
+		);
+		if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+		{
+			show_debug_message("Failed to request container content");
+		}
 	}
+	global.NetworkRegionObjectHandlerRef.requested_container_access = undefined;
 }

@@ -7,6 +7,7 @@ function MapDataHandler() constructor
 	map_update_timer = new Timer(TimerFromMilliseconds(300));
 	
 	target_scout_region = undefined;
+	active_operations_scout_stream = undefined;
 	scouting_drone = undefined;
 	
 	static Update = function()
@@ -134,8 +135,9 @@ function MapDataHandler() constructor
 	
 	static SyncDynamicMapData = function(_region)
 	{
+		// TODO: Is this code useless?
 		// CLEAR ICONS
-		dynamic_map_data.ClearIcons();
+		/*dynamic_map_data.ClearIcons();
 		
 		var worldMapLocation = global.WorldMapLocationData[? _region.room_index];
 		if (!is_undefined(worldMapLocation))
@@ -198,7 +200,7 @@ function MapDataHandler() constructor
 				}
 				dynamic_map_data.SortIcons();
 			}
-		}
+		}*/
 	}
 	
 	static GenerateStaticMapData = function()
@@ -307,10 +309,12 @@ function MapDataHandler() constructor
 		dynamic_map_data.ClearIcons();
 	}
 	
-	static ResetMapDataUpdate = function()
+	static ResetMapData = function()
 	{
 		target_scout_region = undefined;
+		active_operations_scout_stream = undefined;
 		scouting_drone = undefined;
+		
 		is_dynamic_data_updating = false;
 		map_update_timer.StopTimer();	
 	}

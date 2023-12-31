@@ -1,6 +1,7 @@
 function NetworkRegionObjectHandler() constructor
 {
 	active_inventory_stream = undefined;
+	requested_container_access = undefined;
 	// TODO: Move under the Region struct
 	local_patrols = ds_list_create();
 	scouting_drone = noone;
@@ -10,6 +11,9 @@ function NetworkRegionObjectHandler() constructor
 	
 	static OnDestroy = function()
 	{
+		active_inventory_stream = undefined;
+		requested_container_access = undefined;
+		
 		DestroyDSListAndDeleteValues(local_patrols);
 		local_patrols = undefined;
 	}
