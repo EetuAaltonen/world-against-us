@@ -135,9 +135,8 @@ function MapDataHandler() constructor
 	
 	static SyncDynamicMapData = function(_region)
 	{
-		// TODO: Is this code useless?
 		// CLEAR ICONS
-		/*dynamic_map_data.ClearIcons();
+		dynamic_map_data.ClearIcons();
 		
 		var worldMapLocation = global.WorldMapLocationData[? _region.room_index];
 		if (!is_undefined(worldMapLocation))
@@ -200,7 +199,7 @@ function MapDataHandler() constructor
 				}
 				dynamic_map_data.SortIcons();
 			}
-		}*/
+		}
 	}
 	
 	static GenerateStaticMapData = function()

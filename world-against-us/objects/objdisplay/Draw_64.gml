@@ -37,23 +37,44 @@ if (global.MultiplayerMode)
 ResetDrawProperties();
 
 // CONSOLE WARNING/ERROR COUNT
-var iconSize = new Size(30, 30);
-var iconScale = ScaleSpriteToFitSize(sprWarningIcon, iconSize);
-var iconPosition = new Vector2(global.GUIW * 0.5 - iconSize.w, 10);
-draw_sprite_ext(
-	sprWarningIcon, 0,
-	iconPosition.X, iconPosition.Y,
-	iconScale, iconScale,
-	0, c_white, 1
-);
+if (global.ConsoleHandlerRef.GetAllConsoleLogCount() > 0)
+{
+	var consoleLogInfoCount = global.ConsoleHandlerRef.GetConsoleLogInfoCount();
+	var consoleLogWarningCount = global.ConsoleHandlerRef.GetConsoleLogWarningCount();
+	var consoleLogErrorCount = global.ConsoleHandlerRef.GetConsoleLogErrorCount();
+	
+	var consoleTextColor = c_white;
+	var consoleIcon = sprInfoIcon;
+	if (consoleLogErrorCount > 0) {
+		consoleIcon = sprErrorIcon;
+		consoleTextColor = global.ConsoleHandlerRef.GetConsoleTextColor(CONSOLE_LOG_TYPE.ERROR);
+	} else if (consoleLogWarningCount > 0) {
+		consoleIcon = sprWarningIcon;
+		consoleTextColor = global.ConsoleHandlerRef.GetConsoleTextColor(CONSOLE_LOG_TYPE.WARNING);
+	}
+	
+	var iconSize = new Size(30, 30);
+	var iconScale = ScaleSpriteToFitSize(sprWarningIcon, iconSize);
+	var iconPosition = new Vector2(global.GUIW * 0.5 - iconSize.w, 10);
+	draw_sprite_ext(
+		consoleIcon, 0,
+		iconPosition.X, iconPosition.Y,
+		iconScale, iconScale,
+		0, c_white, 1
+	);
 
-draw_set_font(font_small_bold);
-draw_set_color(c_red);
-draw_set_halign(fa_left);
-draw_set_valign(fa_middle);
+	draw_set_font(font_small_bold);
+	draw_set_color(consoleTextColor);
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_middle);
 
-var consoleLogCount = global.ConsoleHandlerRef.GetConsoleLogCount();
-draw_text(iconPosition.X + iconSize.w + 10, iconPosition.Y + (iconSize.h * 0.5), consoleLogCount);
-		
-// RESET DRAW PROPERTIES
-ResetDrawProperties();
+	var consoleLogCountText = string("e:{0} w:{1} i:{2}", consoleLogErrorCount, consoleLogWarningCount, consoleLogInfoCount);
+	draw_text(
+		iconPosition.X + iconSize.w + 10,
+		iconPosition.Y + (iconSize.h * 0.5),
+		consoleLogCountText
+	);
+	
+	// RESET DRAW PROPERTIES
+	ResetDrawProperties();
+}
