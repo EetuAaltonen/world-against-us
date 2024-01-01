@@ -7,13 +7,13 @@
   "inheritCreationOrder": false,
   "inheritLayers": false,
   "instanceCreationOrder": [
-    {"name":"inst_5F0B0B4F","path":"rooms/roomForest/roomForest.yy",},
     {"name":"inst_1724A21","path":"rooms/roomForest/roomForest.yy",},
     {"name":"inst_2F98867E","path":"rooms/roomForest/roomForest.yy",},
     {"name":"inst_37BC87AA","path":"rooms/roomForest/roomForest.yy",},
     {"name":"inst_38A7BBD8","path":"rooms/roomForest/roomForest.yy",},
     {"name":"inst_2D548BEF","path":"rooms/roomForest/roomForest.yy",},
     {"name":"inst_2DE63BE","path":"rooms/roomForest/roomForest.yy",},
+    {"name":"inst_46CEB66","path":"rooms/roomForest/roomForest.yy",},
   ],
   "isDnd": false,
   "layers": [
@@ -140,7 +140,7 @@
         {"name":"g_OutlinePixelScale","type":0,"value":"3",},
       ],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Characters","depth":500,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
-        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_5F0B0B4F","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objSpawner","path":"objects/objSpawner/objSpawner.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":3872.0,"y":7552.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_46CEB66","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objSpawnPoint","path":"objects/objSpawnPoint/objSpawnPoint.yy",},"properties":[],"rotation":0.0,"scaleX":0.5,"scaleY":0.5,"x":3904.0,"y":7648.0,},
       ],"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Facility","depth":600,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[],"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Containers","depth":700,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[],"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},

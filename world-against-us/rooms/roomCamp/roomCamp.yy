@@ -7,7 +7,6 @@
   "inheritCreationOrder": false,
   "inheritLayers": false,
   "instanceCreationOrder": [
-    {"name":"inst_21D8AA70","path":"rooms/roomCamp/roomCamp.yy",},
     {"name":"inst_5BFDF9","path":"rooms/roomCamp/roomCamp.yy",},
     {"name":"inst_4A368121","path":"rooms/roomCamp/roomCamp.yy",},
     {"name":"inst_49547F49","path":"rooms/roomCamp/roomCamp.yy",},
@@ -19,6 +18,7 @@
     {"name":"inst_7066E2D7","path":"rooms/roomCamp/roomCamp.yy",},
     {"name":"inst_401C2E26","path":"rooms/roomCamp/roomCamp.yy",},
     {"name":"inst_2BA26DE8","path":"rooms/roomCamp/roomCamp.yy",},
+    {"name":"inst_4F079EDD","path":"rooms/roomCamp/roomCamp.yy",},
   ],
   "isDnd": false,
   "layers": [
@@ -39,7 +39,7 @@
         {"name":"g_OutlinePixelScale","type":0,"value":"3",},
       ],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Characters","depth":500,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
-        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_21D8AA70","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objSpawner","path":"objects/objSpawner/objSpawner.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":448.0,"y":640.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_4F079EDD","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objSpawnPoint","path":"objects/objSpawnPoint/objSpawnPoint.yy",},"properties":[],"rotation":0.0,"scaleX":0.49999997,"scaleY":0.49999997,"x":512.0,"y":672.0,},
       ],"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"FastTravel","depth":600,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_401C2E26","colour":4294967295,"frozen":false,"hasCreationCode":true,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objFastTravelSpot","path":"objects/objFastTravelSpot/objFastTravelSpot.yy",},"properties":[],"rotation":0.0,"scaleX":1.2,"scaleY":1.2,"x":672.0,"y":768.0,},

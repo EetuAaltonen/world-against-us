@@ -7,7 +7,6 @@
   "inheritCreationOrder": false,
   "inheritLayers": false,
   "instanceCreationOrder": [
-    {"name":"inst_30CA4A82","path":"rooms/roomOffice/roomOffice.yy",},
     {"name":"inst_346A1615","path":"rooms/roomOffice/roomOffice.yy",},
     {"name":"inst_22E3027B","path":"rooms/roomOffice/roomOffice.yy",},
     {"name":"inst_5652DE","path":"rooms/roomOffice/roomOffice.yy",},
@@ -66,6 +65,7 @@
     {"name":"inst_89D402D","path":"rooms/roomOffice/roomOffice.yy",},
     {"name":"inst_7BA72C7D","path":"rooms/roomOffice/roomOffice.yy",},
     {"name":"inst_73141DB7","path":"rooms/roomOffice/roomOffice.yy",},
+    {"name":"inst_786C9666","path":"rooms/roomOffice/roomOffice.yy",},
   ],
   "isDnd": false,
   "layers": [
@@ -93,7 +93,7 @@
         {"name":"g_OutlinePixelScale","type":0,"value":"3",},
       ],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Characters","depth":500,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
-        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_30CA4A82","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objSpawner","path":"objects/objSpawner/objSpawner.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":704.0,"y":1024.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_786C9666","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objSpawnPoint","path":"objects/objSpawnPoint/objSpawnPoint.yy",},"properties":[],"rotation":0.0,"scaleX":0.5,"scaleY":0.5,"x":672.0,"y":1088.0,},
       ],"layers":[],"properties":[],"userdefinedDepth":false,"visible":true,},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Containers","depth":600,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_A8882EC","colour":4294967295,"frozen":false,"hasCreationCode":true,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"objectId":{"name":"objFilingCabinet","path":"objects/objFilingCabinet/objFilingCabinet.yy",},"properties":[],"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":47.0,"y":379.0,},
