@@ -1,4 +1,4 @@
 function OnClickEscMenuContinue()
 {
-	global.GUIStateHandlerRef.CloseCurrentGUIState();
+	global.GUIStateHandlerRef.RequestCloseCurrentGUIState();
 }

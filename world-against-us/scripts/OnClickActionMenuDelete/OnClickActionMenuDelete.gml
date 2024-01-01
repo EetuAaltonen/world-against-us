@@ -6,5 +6,5 @@ function OnClickActionMenuDelete()
 	inventory.RemoveItemByGridIndex(item.grid_index);
 	
 	// CLOSE ACTION MENU
-	global.GUIStateHandlerRef.CloseCurrentGUIState();
+	global.GUIStateHandlerRef.RequestCloseCurrentGUIState();
 }

@@ -103,7 +103,7 @@ function OnClickConstructionWindowBuild()
 											}
 										}
 									}
-									global.GUIStateHandlerRef.CloseCurrentGUIState();
+									global.GUIStateHandlerRef.RequestCloseCurrentGUIState();
 									break;
 								} else {
 									show_message(string(requiredMaterialsClone));

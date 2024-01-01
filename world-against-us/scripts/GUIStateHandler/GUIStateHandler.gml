@@ -2,7 +2,8 @@ function GUIStateHandler() constructor
 {
 	state_chain = [ROOT_GUI_STATE];
 	gui_state_queue = undefined;
-	gui_state_reset = undefined;
+	gui_state_reset = false;
+	gui_state_close_current = false;
 	
 	static RequestGUIState = function(_guiState)
 	{
@@ -84,10 +85,7 @@ function GUIStateHandler() constructor
 			{
 				global.GameWindowHandlerRef.OpenWindowGroup(windowGroup);
 			}
-			
-			// RESER GUI STATE QUEUE
-			gui_state_queue = undefined;
-		} else if (!is_undefined(gui_state_reset))
+		} else if (gui_state_reset)
 		{
 			if (room == roomMainMenu)
 			{
@@ -95,9 +93,15 @@ function GUIStateHandler() constructor
 			} else {
 				ResetGUIState();
 			}
-			// RESER GUI STATE QUEUE
-			gui_state_reset = undefined;
+		} else if (gui_state_close_current)
+		{
+			CloseCurrentGUIState();	
 		}
+		
+		// RESET GUI STATE QUEUE
+		gui_state_queue = undefined;
+		gui_state_reset = false;
+		gui_state_close_current = false;
 	}
 	
 	static GetGUIState = function()
@@ -187,6 +191,11 @@ function GUIStateHandler() constructor
 		return isGUIStateMainMenuReseted;
 	}
 	
+	static RequestCloseCurrentGUIState = function()
+	{
+		gui_state_close_current = true;	
+	}
+	
 	static CloseCurrentGUIState = function()
 	{
 		var isGUIStateClosed = false;
@@ -200,7 +209,7 @@ function GUIStateHandler() constructor
 			}
 		} else {
 			// TODO: Generic error handling
-			show_message("Invalid 'CloseCurrentGUIState' call. GUI state already closed!");
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Invalid 'CloseCurrentGUIState' call. GUI state already closed!");
 		}
 		return isGUIStateClosed;
 	}

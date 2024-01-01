@@ -38,16 +38,19 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 						{
 							if (!is_undefined(highlighted_examine_data))
 							{
+								var guiChainRule = GUI_CHAIN_RULE.Append;
 								var currentGUIState = global.GUIStateHandlerRef.GetGUIState();
-							
-								if (currentGUIState.action == GUI_ACTION.ExamineObject)
+								// CLOSE PRIOR EXAMINE OBJECT WINDOW
+								if (!is_undefined(currentGUIState))
 								{
-									global.GUIStateHandlerRef.CloseCurrentGUIState();
+								  if (currentGUIState.action == GUI_ACTION.ExamineObject)
+								  {
+									  guiChainRule = GUI_CHAIN_RULE.Overwrite;
+								  }
 								}
-							
 								global.GUIStateHandlerRef.RequestGUIAction(GUI_ACTION.ExamineObject, [
 									CreateWindowMapExamineObject(GAME_WINDOW.MapExamineObject, parentWindow.zIndex - 1, highlighted_examine_data)
-								], GUI_CHAIN_RULE.Append);
+								], guiChainRule);
 							}
 						}
 					}

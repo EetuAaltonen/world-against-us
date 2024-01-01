@@ -27,11 +27,14 @@ function CreateWindowGameOver(_gameWindowId, _zIndex)
 			global.PlayerCharacter.is_dead = false;
 		}
 		
-		InteractionFuncFastTravelSpotRequest(
-			global.NetworkRegionHandlerRef.region_id,
-			global.NetworkRegionHandlerRef.region_id,
-			ROOM_INDEX_CAMP
-		);
+		// FAST TRAVEL BACK TO CAMP
+		var fastTravelInfo = new WorldMapFastTravelInfo(undefined, undefined, ROOM_INDEX_CAMP);
+		if (global.MultiplayerMode)
+		{
+			fastTravelInfo.source_region_id = global.NetworkRegionHandlerRef.region_id;
+			fastTravelInfo.destination_region_id = global.NetworkRegionHandlerRef.region_id;
+		}
+		global.RoomChangeHandlerRef.RequestFastTravel(fastTravelInfo);
 	}
 	var gameOverTimer = new WindowTimerCallback(
 		"GameOverTimer",

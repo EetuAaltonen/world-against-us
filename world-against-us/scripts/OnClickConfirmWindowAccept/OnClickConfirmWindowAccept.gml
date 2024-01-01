@@ -7,6 +7,6 @@ function OnClickConfirmWindowAccept()
 		metadata.confirmCallbackFunction(metadata.callerWindowElement);
 		
 		// CLOSE CONFIRM WINDOW
-		global.GUIStateHandlerRef.CloseCurrentGUIState();
+		global.GUIStateHandlerRef.RequestCloseCurrentGUIState();
 	}
 }

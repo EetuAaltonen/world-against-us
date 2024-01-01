@@ -8,7 +8,7 @@ function WindowActionMenu(_elementId, _relativePosition, _size, _backgroundColor
 		{
 			if (mouse_check_button_released(mb_left) || mouse_check_button_released(mb_right))
 			{
-				global.GUIStateHandlerRef.CloseCurrentGUIState();
+				global.GUIStateHandlerRef.RequestCloseCurrentGUIState();
 			}
 		}
 	}

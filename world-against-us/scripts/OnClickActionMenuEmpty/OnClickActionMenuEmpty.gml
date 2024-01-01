@@ -8,5 +8,5 @@ function OnClickActionMenuEmpty()
 	}
 	
 	// CLOSE ACTION MENU
-	global.GUIStateHandlerRef.CloseCurrentGUIState();
+	global.GUIStateHandlerRef.RequestCloseCurrentGUIState();
 }
