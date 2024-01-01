@@ -44,6 +44,17 @@ function NetworkPacketParser() constructor
 			{
 				switch (_messageType)
 				{
+					case MESSAGE_TYPE.INVALID_REQUEST:
+					{
+						var parsedRequestAction = buffer_read(_msg, buffer_u8);
+						var parsedOriginalMessageType = buffer_read(_msg, buffer_u8);
+						var parsedInvalidationMessage = buffer_read(_msg, buffer_string);
+						parsedPayload = new InvalidRequestInfo(
+							parsedRequestAction,
+							parsedOriginalMessageType,
+							parsedInvalidationMessage
+						);
+					} break;
 					case MESSAGE_TYPE.PONG:
 					{
 						var parsedClientTime = buffer_read(_msg, buffer_u32);

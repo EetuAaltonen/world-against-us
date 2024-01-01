@@ -379,9 +379,10 @@ function NetworkHandler() constructor
 				{
 					case MESSAGE_TYPE.INVALID_REQUEST:
 					{
-						if (!is_undefined(networkPacket.payload))
+						var invalidRequestInfo = networkPacket.payload;
+						if (!is_undefined(invalidRequestInfo))
 						{
-							isMessageHandled = network_error_handler.HandleInvalidRequest(networkPacket);
+							isMessageHandled = network_error_handler.HandleInvalidRequest(invalidRequestInfo);
 						}
 					} break;
 					case MESSAGE_TYPE.DISCONNECT_FROM_HOST:

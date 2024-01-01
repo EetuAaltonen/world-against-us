@@ -6,41 +6,56 @@ function NetworkErrorHandler() constructor
 		return;
 	}
 	
-	static HandleInvalidRequest = function(_networkPacket)
+	static HandleInvalidRequest = function(_invalidRequestInfo)
 	{
 		var isRequestHandled = true;
-		var errorOriginalMessageType = _networkPacket.payload[$ "message_type"] ?? MESSAGE_TYPE.INVALID_REQUEST;
-		var errorMessage = _networkPacket.payload[$ "message"] ?? "Invalid request";
-		var consoleLog = string("Invalid request with MessageType {0}: {1}", errorOriginalMessageType, errorMessage);
-		// ADD CONSOLE LOG
-		global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
-		
-		// ADD NOTIFICATION
-		var notification = new Notification(
-			undefined, errorMessage,
-			undefined, NOTIFICATION_TYPE.Log
-		);
-		global.NotificationHandlerRef.AddNotification(notification);
-							
-		// CLEAR IN-FLIGHT PACKETS TO CANCEL PENDING ACKNOWLEDGMENT ON INVALID REQUEST
-		global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(errorOriginalMessageType);
-							
-		// REQUEST GUI STATE RESET
-		global.GUIStateHandlerRef.RequestGUIStateReset();
-		
-		// REQUEST DISCONNECT SOCKET ON SERTAIN MESSAGE TYPES
-		if (errorOriginalMessageType == MESSAGE_TYPE.CONNECT_TO_HOST ||
-			errorOriginalMessageType == MESSAGE_TYPE.REQUEST_JOIN_GAME ||
-			errorOriginalMessageType == MESSAGE_TYPE.SYNC_WORLD_STATE ||
-			errorOriginalMessageType == MESSAGE_TYPE.SYNC_WORLD_STATE_WEATHER ||
-			errorOriginalMessageType == MESSAGE_TYPE.SYNC_INSTANCE ||
-			errorOriginalMessageType == MESSAGE_TYPE.DISCONNECT_FROM_HOST ||
-			errorOriginalMessageType == MESSAGE_TYPE.PING ||
-			errorOriginalMessageType == MESSAGE_TYPE.PONG ||
-			errorOriginalMessageType == MESSAGE_TYPE.CLIENT_ERROR
-		)
+		if (!is_undefined(_invalidRequestInfo))
 		{
-			global.NetworkHandlerRef.RequestDisconnectSocket();
+			// ADD CONSOLE LOG
+			var consoleLog = string(
+				"Invalid request with MessageType {0}: {1}",
+				_invalidRequestInfo.original_message_type,
+				_invalidRequestInfo.invalidation_message
+			);
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
+		
+			// ADD NOTIFICATION
+			var notification = new Notification(
+				undefined, _invalidRequestInfo.invalidation_message,
+				undefined, NOTIFICATION_TYPE.Log
+			);
+			global.NotificationHandlerRef.AddNotification(notification);
+			
+			// CLEAR IN-FLIGHT PACKETS TO CANCEL PENDING ACKNOWLEDGMENT ON INVALID REQUEST
+			global.NetworkPacketTrackerRef.ClearInFlightPacketsByMessageType(_invalidRequestInfo.original_message_type);
+			
+			// REQUEST ACTION
+			switch (_invalidRequestInfo.request_action)
+			{
+				case INVALID_REQUEST_ACTION.DISCONNECT:
+				{
+					// REQUEST GUI STATE RESET
+					global.GUIStateHandlerRef.RequestGUIStateReset();
+					// REQUEST DISCONNECT SOCKET
+					global.NetworkHandlerRef.RequestDisconnectSocket();
+				} break;
+				case INVALID_REQUEST_ACTION.CANCEL_ACTION:
+				{
+					// REQUEST GUI STATE RESET
+					global.GUIStateHandlerRef.RequestGUIStateReset();
+				} break;
+				case INVALID_REQUEST_ACTION.IGNORE:
+				{
+					// IGNORE
+				} break;
+				default:
+				{
+					// REQUEST GUI STATE RESET
+					global.GUIStateHandlerRef.RequestGUIStateReset();
+					// REQUEST DISCONNECT SOCKET
+					global.NetworkHandlerRef.RequestDisconnectSocket();
+				} break;
+			}
 		}
 		return isRequestHandled;
 	}
