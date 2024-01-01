@@ -1,5 +1,6 @@
 import MESSAGE_TYPE from "./MessageType.js";
 import PACKET_PRIORITY from "./PacketPriority.js";
+import INVALID_REQUEST_ACTION from "../invalid_request/InvalidRequestAction.js";
 
 import ConsoleHandler from "../console/ConsoleHandler.js";
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
@@ -286,15 +287,21 @@ export default class NetworkPacketHandler {
                   isPacketHandled = true;
                 } else {
                   isPacketHandled = this.networkHandler.onInvalidRequest(
-                    networkPacket.header.messageType,
-                    "Another player already looting the container",
+                    new InvalidRequestInfo(
+                      INVALID_REQUEST_ACTION.CANCEL_ACTION,
+                      networkPacket.header.messageType,
+                      "Another player already looting the container"
+                    ),
                     rinfo
                   );
                 }
               } else {
                 isPacketHandled = this.networkHandler.onInvalidRequest(
-                  networkPacket.header.messageType,
-                  "Invalid region ID on request container content",
+                  new InvalidRequestInfo(
+                    INVALID_REQUEST_ACTION.CANCEL_ACTION,
+                    networkPacket.header.messageType,
+                    "Invalid region ID on request container content"
+                  ),
                   rinfo
                 );
               }
@@ -342,15 +349,21 @@ export default class NetworkPacketHandler {
                   }
                 } else {
                   isPacketHandled = this.networkHandler.onInvalidRequest(
-                    networkPacket.header.messageType,
-                    "Another player already looting the container",
+                    new InvalidRequestInfo(
+                      INVALID_REQUEST_ACTION.CANCEL_ACTION,
+                      networkPacket.header.messageType,
+                      "Another player already looting the container"
+                    ),
                     rinfo
                   );
                 }
               } else {
                 isPacketHandled = this.networkHandler.onInvalidRequest(
-                  networkPacket.header.messageType,
-                  "Unknown container",
+                  new InvalidRequestInfo(
+                    INVALID_REQUEST_ACTION.CANCEL_ACTION,
+                    networkPacket.header.messageType,
+                    "Unknown container"
+                  ),
                   rinfo
                 );
               }
@@ -674,15 +687,21 @@ export default class NetworkPacketHandler {
                   isPacketHandled = true;
                 } else {
                   isPacketHandled = this.networkHandler.onInvalidRequest(
-                    networkPacket.header.messageType,
-                    "Another player already operating the scout",
+                    new InvalidRequestInfo(
+                      INVALID_REQUEST_ACTION.CANCEL_ACTION,
+                      networkPacket.header.messageType,
+                      "Another player already operating the scout"
+                    ),
                     rinfo
                   );
                 }
               } else {
                 isPacketHandled = this.networkHandler.onInvalidRequest(
-                  networkPacket.header.messageType,
-                  "Instance to scout is currently unavailable",
+                  new InvalidRequestInfo(
+                    INVALID_REQUEST_ACTION.CANCEL_ACTION,
+                    networkPacket.header.messageType,
+                    "Instance to scout is currently unavailable"
+                  ),
                   rinfo
                 );
               }

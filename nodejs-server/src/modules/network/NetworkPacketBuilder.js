@@ -88,6 +88,29 @@ export default class NetworkPacketBuilder {
     if (payload !== undefined) {
       try {
         switch (messageType) {
+          case MESSAGE_TYPE.INVALID_REQUEST:
+            {
+              const bufferInvalidRequest = Buffer.allocUnsafe(
+                BITWISE.BIT8 + BITWISE.BIT8
+              );
+              let offset = 0;
+              bufferInvalidRequest.writeUInt8(payload.requestAction, offset);
+              offset += BITWISE.BIT8;
+              bufferInvalidRequest.writeUInt8(
+                payload.originalMessageType,
+                offset
+              );
+              const bufferInvalidRequestMessage = Buffer.from(
+                payload.invalidationMessage,
+                "utf8"
+              );
+              this.payloadBuffer = Buffer.concat([
+                bufferInvalidRequest,
+                bufferInvalidRequestMessage,
+              ]);
+              isPayloadWritten = true;
+            }
+            break;
           case MESSAGE_TYPE.PONG:
             {
               const bufferPingPong = Buffer.allocUnsafe(

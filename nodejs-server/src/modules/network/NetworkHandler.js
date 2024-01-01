@@ -2,8 +2,10 @@ import PriorityQueuePkg from "@datastructures-js/priority-queue";
 
 import MESSAGE_TYPE from "./MessageType.js";
 import PACKET_PRIORITY from "./PacketPriority.js";
+import INVALID_REQUEST_ACTION from "../invalid_request/InvalidRequestAction.js";
 
 import ConsoleHandler from "../console/ConsoleHandler.js";
+import InvalidRequestInfo from "../invalid_request/InvalidRequestInfo.js";
 import Player from "../players/Player.js";
 import Client from "../clients/Client.js";
 import ClientHandler from "../clients/ClientHandler.js";
@@ -436,15 +438,21 @@ export default class NetworkHandler {
                 }
               } else {
                 isMessageHandled = this.onInvalidRequest(
-                  messageType,
-                  "Unknown client ID, please reconnect",
+                  new InvalidRequestInfo(
+                    INVALID_REQUEST_ACTION.DISCONNECT,
+                    messageType,
+                    "Unknown client ID, please reconnect"
+                  ),
                   rinfo
                 );
               }
             } else {
               isMessageHandled = this.onInvalidRequest(
-                messageType,
-                "Invalid client ID",
+                new InvalidRequestInfo(
+                  INVALID_REQUEST_ACTION.DISCONNECT,
+                  messageType,
+                  "Invalid client ID"
+                ),
                 rinfo
               );
             }
@@ -456,15 +464,21 @@ export default class NetworkHandler {
             `Failed to handle a message with type ${networkPacket.header.messageType} from a client`
           );
           this.onInvalidRequest(
-            messageType,
-            "Unable to handle the request",
+            new InvalidRequestInfo(
+              INVALID_REQUEST_ACTION.CANCEL_ACTION,
+              messageType,
+              "Unable to handle the request"
+            ),
             rinfo
           );
         }
       } else {
         isMessageHandled = this.onInvalidRequest(
-          MESSAGE_TYPE.INVALID_REQUEST,
-          "Invalid packet format",
+          new InvalidRequestInfo(
+            INVALID_REQUEST_ACTION.DISCONNECT,
+            MESSAGE_TYPE.INVALID_REQUEST,
+            "Invalid packet format"
+          ),
           rinfo
         );
       }
@@ -625,7 +639,7 @@ export default class NetworkHandler {
     }
   }
 
-  onInvalidRequest(originalMessageType, message, rinfo) {
+  onInvalidRequest(invalidRequestInfo, rinfo) {
     let isMessageSended = true;
     const networkPacketHeader = new NetworkPacketHeader(
       MESSAGE_TYPE.INVALID_REQUEST,
@@ -633,10 +647,7 @@ export default class NetworkHandler {
     );
     const networkPacket = new NetworkPacket(
       networkPacketHeader,
-      {
-        message_type: originalMessageType,
-        message: message,
-      },
+      invalidRequestInfo,
       PACKET_PRIORITY.CRITICAL
     );
     // Patch delivery policy
