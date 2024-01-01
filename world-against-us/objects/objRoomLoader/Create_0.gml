@@ -36,6 +36,9 @@ controllers = [
 	// DATABASE
 	new GameController(objDatabase, [], [roomLaunch, roomMainMenu]),
 	
+	// SPAWN
+	new GameController(objSpawn, [], [roomLaunch, roomMainMenu, roomLoadResources]),
+	
 	// HUD
 	new GameController(objHud, [], [roomLaunch, roomMainMenu, roomLoadResources], LAYER_CONTROLLERS_BEHIND),
 	

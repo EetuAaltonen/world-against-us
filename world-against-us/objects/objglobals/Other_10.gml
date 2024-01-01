@@ -32,6 +32,7 @@ global.ObjJournal = instance_exists(objJournal) ? instance_find(objJournal, 0) :
 global.DialogueHandlerRef = instance_exists(objDialogue) ? instance_find(objDialogue, 0).dialogueHandler : undefined;
 global.MapDataHandlerRef = instance_exists(objMap) ? instance_find(objMap, 0).mapDataHandler : undefined;
 global.RoomChangeHandlerRef = instance_exists(objRoomChange) ? instance_find(objRoomChange, 0).roomChangeHandler : undefined;
+global.SpawnHandlerRef = instance_exists(objSpawn) ? instance_find(objSpawn, 0).spawnHandler : undefined;
 
 global.PlayerPrimaryWeaponSlot = instance_exists(objInventory) ? instance_find(objInventory, 0).playerPrimaryWeaponSlot : undefined;
 global.PlayerMagazinePockets = instance_exists(objInventory) ? instance_find(objInventory, 0).magazinePockets : undefined;

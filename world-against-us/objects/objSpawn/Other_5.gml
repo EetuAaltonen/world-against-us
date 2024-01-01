@@ -1,0 +1,1 @@
+spawnHandler.OnRoomEnd();

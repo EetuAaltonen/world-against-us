@@ -128,6 +128,7 @@ global.QuestHandlerRef = undefined;
 global.DialogueHandlerRef = undefined;
 global.MapDataHandlerRef = undefined;
 global.RoomChangeHandlerRef = undefined;
+global.SpawnHandlerRef = undefined;
 global.HighlightHandlerRef = undefined;
 global.GameSaveHandlerRef = undefined;
 

@@ -1,0 +1,135 @@
+function SpawnHandler() constructor
+{
+	spawn_point_object_index = objSpawnPoint;
+	spawn_point = undefined;
+	
+	static OnDestroy = function()
+	{
+		// NO PROPERTIES TO DESTROY
+	}
+	
+	static OnRoomStart = function()
+	{
+		// VALIDATE SPAWN POINT IN ROOM
+		if (ValidateRoomSpawnPoint())
+		{
+			// SPAWN LOCAL PLAYER INSTANCE
+			SpawnLocalPlayerInstance();
+		} else {
+			// TODO: Proper error handling
+			global.ConsoleHandlerRef.AddConsoleLog(
+				CONSOLE_LOG_TYPE.ERROR,
+				"No single valid spawn point to spawn player instance"
+			);
+			if (global.MultiplayerMode)
+			{
+				global.NetworkHandlerRef.RequestDisconnectSocket();
+			} else {
+				global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_MAIN_MENU);	
+			}
+		}
+	}
+	
+	static OnRoomEnd = function()
+	{
+		// RESET SPAWN POINT
+		spawn_point = undefined;
+	}
+	
+	static ValidateRoomSpawnPoint = function()
+	{
+		var isSpawnPointValid = false;
+		var spawnPointInstance = noone;
+		var spawnPointInstanceCount = instance_number(spawn_point_object_index);
+		if (spawnPointInstanceCount == 1)
+		{
+			spawnPointInstance = instance_find(spawn_point_object_index, 0);
+			if (instance_exists(spawnPointInstance))
+			{
+				spawn_point = new Vector2(spawnPointInstance.x, spawnPointInstance.y);
+				isSpawnPointValid = true;
+			}
+		} else if (spawnPointInstanceCount > 1)
+		{
+			// TODO: Proper error handling
+			global.ConsoleHandlerRef.AddConsoleLog(
+				CONSOLE_LOG_TYPE.WARNING,
+				"Room contains more spawn points than max count"
+			);
+		} else if (spawnPointInstanceCount <= 0)
+		{
+			// TODO: Proper error handling
+			global.ConsoleHandlerRef.AddConsoleLog(
+				CONSOLE_LOG_TYPE.WARNING,
+				"Room contains not a single spawn point"
+			);
+		}
+		return isSpawnPointValid;
+	}
+	
+	static SpawnLocalPlayerInstance = function()
+	{
+		if (!is_undefined(spawn_point))
+		{
+			var playerInstanceObject = new InstanceObject(
+				object_get_sprite(objPlayer),
+				objPlayer, spawn_point
+			);
+			
+			// LOAD SPAWN POINT FROM FAST TRAVEL INFO
+			var roomIndex = room_get_name(room);
+			var cacheFastTravelInfo = global.RoomChangeHandlerRef.GetCacheFastTravelInfo(roomIndex);
+			if (!is_undefined(cacheFastTravelInfo))
+			{
+				var cacheLocalPosition = cacheFastTravelInfo.local_position;
+				if (!is_undefined(cacheLocalPosition))
+				{
+					playerInstanceObject.position = new Vector2(cacheLocalPosition.X, cacheLocalPosition.Y);
+				}
+			}
+			
+			// OVERRIDE FAST TRAVEL INFO WITH GAME SAVE DATA
+			if (!global.MultiplayerMode)
+			{
+				// SINGLEPLAYER
+				var gameSaveData = global.GameSaveHandlerRef.game_save_data;
+				if (!is_undefined(gameSaveData))
+				{
+					// CHECK IF ROOM IS LOADING FIRST TIME FROM THE SAVE
+					if (gameSaveData.isSaveLoadingFirstTime)
+					{
+						if (!is_undefined(gameSaveData.player_data))
+						{
+							if (!is_undefined(gameSaveData.player_data.last_location))
+							{
+								var lastPosition = gameSaveData.player_data.last_location.position;
+								if (!is_undefined(lastPosition))
+								{
+									playerInstanceObject.position = new Vector2(lastPosition.X, lastPosition.Y);
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			// SPAWN PLAYER INSTANCE WITH INSTANCE OBJECT DATA
+			SpawnInstance(playerInstanceObject);
+		}
+	}
+	
+	static SpawnInstance = function(_instanceObject)
+	{
+		var spawnedInstance = noone;
+		if (!is_undefined(_instanceObject))
+		{
+			var spawnedInstance = instance_create_depth(
+				_instanceObject.position.X,
+				_instanceObject.position.Y,
+				_instanceObject.position.Y, 
+				_instanceObject.obj_index
+			);
+		}
+		return spawnedInstance;
+	}
+}
