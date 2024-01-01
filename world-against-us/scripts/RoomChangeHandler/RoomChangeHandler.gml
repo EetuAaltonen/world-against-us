@@ -9,7 +9,7 @@ function RoomChangeHandler() constructor
 		fast_travel_cache = undefined;
 	}
 	
-	static RequestRoomChange = function(_destinationRoomIndex, _sourceRegionId = undefined, _destinationRegionId = undefined)
+	static RequestRoomChange = function(_destinationRoomIndex)
 	{
 		var isRoomChangeQueued = false;
 		if (is_undefined(room_change_queue))
@@ -29,25 +29,7 @@ function RoomChangeHandler() constructor
 					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, string("Unknown destination room index '{0}' to fast travel", _destinationRoomIndex));
 				}
 			}
-			
-			// CACHE FAST TRAVEL INFO AND LAST KNOWN POSITION
-			if (!is_undefined(room_change_queue))
-			{
-				var cacheFastTravelInfo = new WorldMapFastTravelInfo(
-					_sourceRegionId,
-					_destinationRegionId,
-					_destinationRoomIndex
-				);
-				if (instance_exists(global.InstancePlayer))
-				{
-					cacheFastTravelInfo.local_position = new Vector2(global.InstancePlayer.x, global.InstancePlayer.y);
-				}
-				if (!AddCacheFastTravelInfo(cacheFastTravelInfo))
-				{
-					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, string("Unable to cache fast travel info with current room '{0}'", room_get_name(room)));
-				}
-				isRoomChangeQueued = true;
-			}
+			isRoomChangeQueued = !is_undefined(room_change_queue);
 		} else {
 			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, string("Room change request overflow, latest request with room index '{0}'", _destinationRoomIndex));
 		}
@@ -61,8 +43,13 @@ function RoomChangeHandler() constructor
 			if (room_exists(room_change_queue))
 			{
 				var destinationRoom = room_change_queue;
+				
+				// RESET NOTIFICATION ANIMATIONS
+				global.NotificationHandlerRef.ResetNotificationAnimations();
+				
 				// RESET ROOM CHANGE QUEUE
 				room_change_queue = undefined;
+				
 				// PROCEED ROOM GOTO
 				room_goto(destinationRoom);
 			}
@@ -71,29 +58,60 @@ function RoomChangeHandler() constructor
 	
 	static RequestFastTravel = function(_fastTravelInfo)
 	{
-		var guiState = new GUIState(
-			GUI_STATE.WorldMapFastTravelQueue, undefined, undefined,
-			[
-				CreateWindowWorldMapFastTravelQueue(GAME_WINDOW.WorldMapFastTravelQueue, -1)
-			],
-			GUI_CHAIN_RULE.OverwriteAll,
-			undefined, undefined
-		);
-		if (global.GUIStateHandlerRef.RequestGUIState(guiState))
+		if (global.MultiplayerMode)
 		{
-			// REQUEST FAST TRAVEL
-			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_FAST_TRAVEL);
-			var networkPacket = new NetworkPacket(
-				networkPacketHeader,
-				_fastTravelInfo,
-				PACKET_PRIORITY.DEFAULT,
-				AckTimeoutFuncResend
+			// MULTIPLAYER
+			var guiState = new GUIState(
+				GUI_STATE.WorldMapFastTravelQueue, undefined, undefined,
+				[
+					CreateWindowWorldMapFastTravelQueue(GAME_WINDOW.WorldMapFastTravelQueue, -1)
+				],
+				GUI_CHAIN_RULE.OverwriteAll,
+				undefined, undefined
 			);
-			if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+			if (global.GUIStateHandlerRef.RequestGUIState(guiState))
 			{
-				show_debug_message("Failed to request fast travel");
+				// REQUEST FAST TRAVEL
+				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.REQUEST_FAST_TRAVEL);
+				var networkPacket = new NetworkPacket(
+					networkPacketHeader,
+					_fastTravelInfo,
+					PACKET_PRIORITY.DEFAULT,
+					AckTimeoutFuncResend
+				);
+				if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+				{
+					show_debug_message("Failed to request fast travel");
+				}
+			}
+		} else {
+			// SINGLEPLAYER
+			if (RequestRoomChange(_fastTravelInfo.destination_room_index))
+			{
+				if (RequestCacheFastTravelInfo(_fastTravelInfo))
+				{
+					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, string("Unable to fast travel to room '{0}'", _fastTravelInfo.destination_room_index));
+				}
 			}
 		}
+	}
+	
+	static RequestCacheFastTravelInfo = function(_fastTravelInfo)
+	{
+		var isFastTravelInfoCached = false;
+		if (instance_exists(global.InstancePlayer))
+		{
+			// CACHE FAST TRAVEL INFO WITH LAST KNOWN POSITION
+			_fastTravelInfo.local_position = new Vector2(global.InstancePlayer.x, global.InstancePlayer.y);
+			
+			if (AddCacheFastTravelInfo(_fastTravelInfo))
+			{
+				isFastTravelInfoCached = true;
+			} else {
+				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, string("Unable to cache fast travel info with current room '{0}'", room_get_name(room)));
+			}
+		}
+		return isFastTravelInfoCached;
 	}
 	
 	static AddCacheFastTravelInfo = function(_fastTravelInfo)

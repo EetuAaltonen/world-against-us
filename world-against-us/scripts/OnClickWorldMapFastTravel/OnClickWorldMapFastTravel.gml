@@ -3,16 +3,16 @@ function OnClickWorldMapFastTravel()
 	var worldMapLocationData = metadata;
 	if (!is_undefined(worldMapLocationData))
 	{
+		var fastTravelInfo = new WorldMapFastTravelInfo(
+			undefined, undefined,
+			worldMapLocationData.room_index
+		);
 		if (global.MultiplayerMode)
 		{
-			var fastTravelInfo = new WorldMapFastTravelInfo(
-				global.NetworkRegionHandlerRef.region_id,
-				global.NetworkRegionHandlerRef.region_id,
-				worldMapLocationData.room_index
-			);
-			global.RoomChangeHandlerRef.RequestFastTravel(fastTravelInfo);
-		} else {
-			global.RoomChangeHandlerRef.RequestRoomChange(worldMapLocationData.room_index);
+			// FETCH SOURCE AND DESTINATION REGION IDS
+			fastTravelInfo.source_region_id = global.NetworkRegionHandlerRef.region_id;
+			fastTravelInfo.destination_region_id = global.NetworkRegionHandlerRef.region_id;
 		}
+		global.RoomChangeHandlerRef.RequestFastTravel(fastTravelInfo);
 	}
 }
