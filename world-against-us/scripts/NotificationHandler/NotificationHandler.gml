@@ -63,11 +63,10 @@ function NotificationHandler() constructor
 		}
 	}
 	
-	// TODO: Call this when RequestRoomChange function is implemented
-	static ClearNotifications = function()
+	static ResetNotificationAnimations = function()
 	{
-		log_notifications = [];
-		popup_notifications = [];
+		// DO NOT CLEAR NOTIFICATION ARRAYS,
+		// BECAUSE NOTIFICATIONS CAN'T THEN CARRY OVER THE ROOM CHANGE
 		
 		// RESET TIMERS
 		popup_animation_curve.Reset();
@@ -110,10 +109,14 @@ function NotificationHandler() constructor
 					notificationBoxBasePos.X - (notificationBoxSize.w * animationPosition),
 					notificationBoxBasePos.Y,
 				);
-				var notificationIconSize = new Size(128, 128);
-				var notificationIconScale = ScaleSpriteToFitSize(notification.icon, notificationIconSize);
+				var iconSize = new Size(128, 128);
+				var iconScale = ScaleSpriteToFitSize(notification.icon, iconSize);
+				var iconPosOffset = new Vector2(
+					sprite_get_xoffset(notification.icon) * iconScale,
+					sprite_get_yoffset(notification.icon) * iconScale
+				);
 			
-				// NOTIFICATION BACKGROUND
+				// NOTIFICATION BACKGROUN
 				draw_sprite_ext(
 					sprGUIBg, 0, notificationBoxPos.X, notificationBoxPos.Y,
 					notificationBoxSize.w, notificationBoxSize.h, 0, #c1db4b, 1
@@ -121,9 +124,9 @@ function NotificationHandler() constructor
 				// NOTIFICATION ICON
 				draw_sprite_ext(
 					notification.icon, 0,
-					notificationBoxPos.X + 20 + (notificationIconSize.w * 0.5),
-					notificationBoxPos.Y + (notificationBoxSize.h * 0.5),
-					notificationIconScale, notificationIconScale, 0, c_white, 1
+					notificationBoxPos.X + 20 - iconPosOffset.X,
+					notificationBoxPos.Y + (notificationBoxSize.h * 0.5) - ((iconSize.h * 0.5) + iconPosOffset.Y),
+					iconScale, iconScale, 0, c_white, 1
 				)
 				// NOTIFICATION TITLE
 				draw_text(notificationBoxPos.X + 200, notificationBoxPos.Y + 30, string("{0}", notification.title ?? EMPTY_STRING));

@@ -44,17 +44,17 @@ if (global.ConsoleHandlerRef.GetAllConsoleLogCount() > 0)
 	var consoleLogErrorCount = global.ConsoleHandlerRef.GetConsoleLogErrorCount();
 	
 	var consoleTextColor = c_white;
-	var consoleIcon = sprInfoIcon;
+	var consoleIcon = sprIconInfo;
 	if (consoleLogErrorCount > 0) {
-		consoleIcon = sprErrorIcon;
+		consoleIcon = sprIconError;
 		consoleTextColor = global.ConsoleHandlerRef.GetConsoleTextColor(CONSOLE_LOG_TYPE.ERROR);
 	} else if (consoleLogWarningCount > 0) {
-		consoleIcon = sprWarningIcon;
+		consoleIcon = sprIconWarning;
 		consoleTextColor = global.ConsoleHandlerRef.GetConsoleTextColor(CONSOLE_LOG_TYPE.WARNING);
 	}
 	
 	var iconSize = new Size(30, 30);
-	var iconScale = ScaleSpriteToFitSize(sprWarningIcon, iconSize);
+	var iconScale = ScaleSpriteToFitSize(consoleIcon, iconSize);
 	var iconPosition = new Vector2(global.GUIW * 0.5 - iconSize.w, 10);
 	draw_sprite_ext(
 		consoleIcon, 0,
