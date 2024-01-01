@@ -71,20 +71,15 @@ function GUIStateHandler() constructor
 				CloseCurrentGUIState();
 			} else if (gui_state_queue.chainRule == GUI_CHAIN_RULE.OverwriteAll)
 			{
-				if (!ResetGUIState())
+				if (room == roomMainMenu)
 				{
-					show_debug_message("Failed to reset GUI state");	
+					ResetGUIStateMainMenu();
+				} else {
+					ResetGUIState();
 				}
 			}
-			// PUSH NEW GUI STATE TO CHAIN
-			array_push(state_chain, gui_state_queue);
-			
-			// OPEN WINDOW GROUP
-			var windowGroup = gui_state_queue.windowGroup;
-			if (!is_undefined(windowGroup))
-			{
-				global.GameWindowHandlerRef.OpenWindowGroup(windowGroup);
-			}
+			// SET GUI STATE
+			SetGUIState(gui_state_queue);
 		} else if (gui_state_reset)
 		{
 			if (room == roomMainMenu)
@@ -102,6 +97,21 @@ function GUIStateHandler() constructor
 		gui_state_queue = undefined;
 		gui_state_reset = false;
 		gui_state_close_current = false;
+	}
+	
+	static SetGUIState = function(_guiState)
+	{
+		var isGUIStateSet = false;
+		var windowGroup = _guiState.windowGroup;
+		if (!is_undefined(windowGroup))
+		{
+			// PUSH NEW GUI STATE TO CHAIN
+			array_push(state_chain, _guiState);
+			// OPEN WINDOW GROUP
+			global.GameWindowHandlerRef.OpenWindowGroup(windowGroup);
+			isGUIStateSet = true;
+		}
+		return isGUIStateSet;
 	}
 	
 	static GetGUIState = function()
@@ -171,7 +181,9 @@ function GUIStateHandler() constructor
 	static ResetGUIState = function()
 	{
 		var isGUIStateReseted = true;
+		// CLOSE WINDOWS
 		global.GameWindowHandlerRef.CloseAllWindows();
+		// SET ROOT GUI STATE CHAIN
 		state_chain = [ROOT_GUI_STATE];
 		return isGUIStateReseted;
 	}
@@ -179,15 +191,19 @@ function GUIStateHandler() constructor
 	static ResetGUIStateMainMenu = function()
 	{
 		var isGUIStateMainMenuReseted = false;
+		// CLOSE ALL WINDOWS
+		global.GameWindowHandlerRef.CloseAllWindows();
+		// RESET GUI STATE CHAIN
+		state_chain = [];
 		// OPEN MAIN MENU ROOT WINDOW
 		var guiState = new GUIState(
 			GUI_STATE.MainMenu, undefined, undefined,
 			[
 				CreateWindowMainMenuRoot(GAME_WINDOW.MainMenuRoot, 0)
 			],
-			GUI_CHAIN_RULE.OverwriteAll
+			GUI_CHAIN_RULE.Append
 		);
-		isGUIStateMainMenuReseted = RequestGUIState(guiState);
+		isGUIStateMainMenuReseted = SetGUIState(guiState);
 		return isGUIStateMainMenuReseted;
 	}
 	
