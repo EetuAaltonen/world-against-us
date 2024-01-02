@@ -88,7 +88,7 @@ function RoomChangeHandler() constructor
 			// SINGLEPLAYER
 			if (RequestRoomChange(_fastTravelInfo.destination_room_index))
 			{
-				if (RequestCacheFastTravelInfo(_fastTravelInfo))
+				if (!RequestCacheFastTravelInfo(_fastTravelInfo))
 				{
 					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, string("Unable to fast travel to room '{0}'", _fastTravelInfo.destination_room_index));
 				}

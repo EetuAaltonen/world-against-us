@@ -423,18 +423,14 @@ function NetworkHandler() constructor
 											// SET NETWORK PROPERTIES
 											client_id = networkPacket.header.client_id;
 											OnConnection();
-						
-											// CLOSE CONNECT WINDOW
-											if (global.GUIStateHandlerRef.CloseCurrentGUIState())
+											
+											// OPEN SAVE SELECTION
+											var mainMenuMultiplayerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.MainMenuMultiplayer);
+											if (!is_undefined(mainMenuMultiplayerWindow))
 											{
-												// OPEN SAVE SELECTION
-												var mainMenuMultiplayerWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.MainMenuMultiplayer);
-												if (!is_undefined(mainMenuMultiplayerWindow))
-												{
-													global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.SaveSelection, [
-														CreateWindowMainMenuSaveSelection(GAME_WINDOW.MainMenuSaveSelection, mainMenuMultiplayerWindow.zIndex - 1, OnClickMenuMultiplayerPlay)
-													], GUI_CHAIN_RULE.Overwrite);
-												}
+												global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.SaveSelection, [
+													CreateWindowMainMenuSaveSelection(GAME_WINDOW.MainMenuSaveSelection, mainMenuMultiplayerWindow.zIndex - 1, OnClickMenuMultiplayerPlay)
+												], GUI_CHAIN_RULE.OverwriteAll);
 											}
 								
 											// RESPOND WITH ACKNOWLEDGMENT TO END CONNECTING TO HOST
