@@ -9,8 +9,9 @@ if (is_undefined(inventory))
 		
 		if (!global.MultiplayerMode)
 		{
+			// TODO: Fix this code
 			// CHECK IF CONTAINER HAS ROOM SAVE RECORD
-			var items = global.GameSaveHandlerRef.GetContainerContentById(containerId);
+			/*var items = global.GameSaveHandlerRef.GetContainerContentById(containerId);
 			if (!is_undefined(items))
 			{
 				var itemCount = array_length(items);
@@ -21,7 +22,7 @@ if (is_undefined(inventory))
 					if (is_undefined(addedItemGridIndex)) break;
 				}
 				isContainerSearched = true;
-			}
+			}*/
 		}
 	} else {
 		throw (string("Object {0} with instance ID {1} is missing 'containerId'", object_get_name(object_index), id));	

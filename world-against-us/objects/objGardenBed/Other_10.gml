@@ -3,9 +3,10 @@ if (!is_undefined(structureId))
 {
 	var structureMetadata = new MetadataStructureGarden();
 	structure = new Structure(structureId, INTERACTABLE_TYPE.Structure, STRUCTURE_CATEGORY.Garden, structureMetadata);
-		
+	
+	// TODO: Fix this code
 	// CHECK IF STRUCTURE HAS ROOM SAVE RECORD
-	var structureSaveData = global.GameSaveHandlerRef.GetStructureInteractableContentById(structure.structure_id);
+	/*var structureSaveData = global.GameSaveHandlerRef.GetStructureInteractableContentById(structure.structure_id);
 	if (!is_undefined(structureSaveData))
 	{
 		if (!is_undefined(structureSaveData.metadata))
@@ -40,7 +41,7 @@ if (!is_undefined(structureId))
 				structure.metadata.output_inventory.AddMultipleItems(saveDataOutputInventory.items);
 			}
 		}
-	}
+	}*/
 } else {
 	throw (string("Object {0} with instance ID {1} is missing 'structureId'", object_get_name(object_index), id));	
 }

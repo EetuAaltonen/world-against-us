@@ -4,8 +4,9 @@ if (!is_undefined(structureId))
 	var structureMetadata = new MetadataStructureConstructionSite();
 	structure = new Structure(structureId, INTERACTABLE_TYPE.Structure, STRUCTURE_CATEGORY.ConstructionSite, structureMetadata);
 	
+	// TODO: Fix this code
 	// CHECK IF STRUCTURE HAS ROOM SAVE RECORD
-	var structureSaveData = global.GameSaveHandlerRef.GetStructureInteractableContentById(structure.structure_id);
+	/*var structureSaveData = global.GameSaveHandlerRef.GetStructureInteractableContentById(structure.structure_id);
 	if (!is_undefined(structureSaveData))
 	{
 		var materialSlotCount = array_length(structure.metadata.material_slots);
@@ -25,5 +26,5 @@ if (!is_undefined(structureId))
 				}
 			}
 		}
-	}
+	}*/
 }
