@@ -90,6 +90,7 @@ export default class NetworkHandler {
       // Update packet tracker
       this.networkPacketTracker.update(tickTime);
 
+      // TODO: Separate each packet queue for each client
       // Broadcast should add a packet for each client's packet queue
       const networkQueueEntry = this.packetQueue.dequeue();
       if (networkQueueEntry != undefined) {
@@ -256,6 +257,21 @@ export default class NetworkHandler {
                   inFlightPacketTrack.expectedSequenceNumber =
                     sequenceNumber + 1;
 
+                  // Broadcast about connected client
+                  const clientsToBroadcast = this.clientHandler.getAllClients();
+                  const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+                    MESSAGE_TYPE.REMOTE_CONNECTED_TO_HOST,
+                    newClientId
+                  );
+                  const broadcastNetworkPacket = new NetworkPacket(
+                    broadcastNetworkPacketHeader,
+                    // TODO: Include player name
+                    undefined,
+                    PACKET_PRIORITY.DEFAULT
+                  );
+                  this.broadcast(broadcastNetworkPacket, clientsToBroadcast);
+
+                  // Response with connect to host message for client proceed
                   const client = this.clientHandler.getClient(newClientId);
                   const networkPacketHeader = new NetworkPacketHeader(
                     MESSAGE_TYPE.CONNECT_TO_HOST,
@@ -403,6 +419,8 @@ export default class NetworkHandler {
                                 instance.roomIndex,
                                 instance.ownerClient
                               );
+
+                            // Response with join game request
                             const networkPacketHeader = new NetworkPacketHeader(
                               MESSAGE_TYPE.REQUEST_JOIN_GAME,
                               clientId
@@ -566,6 +584,20 @@ export default class NetworkHandler {
     if (client !== undefined) {
       // Remove connection sampling
       this.networkConnectionSampler.removeClientConnectionSample(clientId);
+
+      // Broadcast about disconnected client
+      const clientsToBroadcast = this.clientHandler.getAllClients();
+      const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+        MESSAGE_TYPE.REMOTE_DISCONNECT_FROM_HOST,
+        client.uuid
+      );
+      const broadcastNetworkPacket = new NetworkPacket(
+        broadcastNetworkPacketHeader,
+        // TODO: Include player name
+        undefined,
+        PACKET_PRIORITY.DEFAULT
+      );
+      this.broadcast(broadcastNetworkPacket, clientsToBroadcast);
 
       // Disconnect client locally after 1 seconds
       // This provides time window to send disconnect respond

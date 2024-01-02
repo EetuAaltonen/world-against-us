@@ -86,6 +86,25 @@ export default class NetworkPacketHandler {
           break;
         case MESSAGE_TYPE.SYNC_INSTANCE:
           {
+            // Broadcast about entered client within the instance
+            // TODO: Fetch clients only within the instance
+            const clientsToBroadcast = this.clientHandler.getAllClients();
+            const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+              MESSAGE_TYPE.REMOTE_ENTERED_THE_INSTANCE,
+              client.uuid
+            );
+            const broadcastNetworkPacket = new NetworkPacket(
+              broadcastNetworkPacketHeader,
+              // TODO: Supply with player data and position
+              undefined,
+              PACKET_PRIORITY.DEFAULT
+            );
+            this.networkHandler.broadcast(
+              broadcastNetworkPacket,
+              clientsToBroadcast
+            );
+
+            // Response with instance data
             const formatInstance = instance.toJSONStruct();
             const networkPacketHeader = new NetworkPacketHeader(
               MESSAGE_TYPE.SYNC_INSTANCE,
@@ -213,6 +232,45 @@ export default class NetworkPacketHandler {
                 // Set new instance
                 client.setInstanceId(destinationInstanceId);
 
+                // Broadcast if player returns to camp
+                if (
+                  destinationInstance.instanceId === this.instanceHandler.campId
+                ) {
+                  const clientsToBroadcast = this.clientHandler.getAllClients();
+                  const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+                    MESSAGE_TYPE.REMOTE_RETURNED_TO_CAMP,
+                    client.uuid
+                  );
+                  const broadcastNetworkPacket = new NetworkPacket(
+                    broadcastNetworkPacketHeader,
+                    undefined,
+                    PACKET_PRIORITY.DEFAULT
+                  );
+                  this.networkHandler.broadcast(
+                    broadcastNetworkPacket,
+                    clientsToBroadcast
+                  );
+                } else {
+                  // Broadcast about left client within the instance
+                  // TODO: Fetch clients only within the instance
+                  const clientsToBroadcast = this.clientHandler.getAllClients();
+                  const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+                    MESSAGE_TYPE.REMOTE_LEFT_THE_INSTANCE,
+                    client.uuid
+                  );
+                  const broadcastNetworkPacket = new NetworkPacket(
+                    broadcastNetworkPacketHeader,
+                    // TODO: Supply with player data
+                    undefined,
+                    PACKET_PRIORITY.DEFAULT
+                  );
+                  this.networkHandler.broadcast(
+                    broadcastNetworkPacket,
+                    clientsToBroadcast
+                  );
+                }
+
+                // Response with fast travel info
                 const payloadFastTravelInfo = new WorldMapFastTravelInfo(
                   fastTravelInfo.sourceInstanceId,
                   destinationInstanceId,
