@@ -78,3 +78,20 @@ if (global.ConsoleHandlerRef.GetAllConsoleLogCount() > 0)
 	// RESET DRAW PROPERTIES
 	ResetDrawProperties();
 }
+
+if (global.GameSaveHandlerRef.show_auto_save_icon)
+{
+	var autoSaveIcon = sprFloppyDiskSave;
+	var autoSaveIconSize = new Size(80, 80);
+	var autoSaveIconPos = new Vector2(
+		global.GUIW - autoSaveIconSize.w - 50,
+		global.GUIH - autoSaveIconSize.h - 400
+	);
+	var autoSaveIconScale = ScaleSpriteToFitSize(autoSaveIcon, autoSaveIconSize);
+	draw_sprite_ext(
+		autoSaveIcon, 0,
+		autoSaveIconPos.X, autoSaveIconPos.Y,
+		autoSaveIconScale, autoSaveIconScale,
+		0, c_white, 0.85
+	);	
+}

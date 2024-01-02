@@ -75,100 +75,115 @@ for (var i = 0; i < controllerCount; i++)
 	}
 }
 
-// GO TO MAIN MENU AFTER LAUNCH
-if (room == roomLaunch) {
-	// ROOM CHANGE HANDLER YET LOADED
-	room_goto(roomMainMenu);
-}
-// GO TO THE LAST KNOWN PLAYER LOCATION
-else if (room == roomLoadResources)
+switch (room)
 {
-	// READ GAME SAVE DATA
-	if (!global.GameSaveHandlerRef.ReadFromFile())
-	{
-		show_debug_message("Save file doesn't exist");
-	}
-	
-	if (!global.MultiplayerMode)
-	{
-		var gotoLastLocationRoom = false;
-		var gameSaveData = global.GameSaveHandlerRef.game_save_data;
-		if (!is_undefined(gameSaveData))
+	case roomLaunch: {
+		// GO TO MAIN MENU AFTER LAUNCH
+		// ROOM CHANGE HANDLER YET LOADED
+		room_goto(roomMainMenu);
+	} break;
+	case roomLoadResources: {
+		// LOAD SAVE FILE
+		if (global.GameSaveHandlerRef.ReadSaveFromFile())
 		{
-			if (!is_undefined(gameSaveData.player_data))
+			// LOAD PLAYER DATA
+			if (global.PlayerDataHandlerRef.LoadPlayerData(global.GameSaveHandlerRef.game_save_data))
 			{
-				if (!is_undefined(gameSaveData.player_data.last_location))
+				var fastTravelTargetRoom = ROOM_DEFAULT;
+				if (!global.MultiplayerMode)
 				{
-					var roomIndex = gameSaveData.player_data.last_location.room_index;
-					if (!is_undefined(roomIndex))
+					// FETCH LAST KNOWN LOCATION FROM GAME SAVE
+					if (!is_undefined(global.PlayerDataHandlerRef.last_known_location))
 					{
-						global.NotificationHandlerRef.AddNotification(
-							new Notification(
-								sprFloppyDisk, "Game save loaded",
-								string("Save: '{0}'", global.GameSaveHandlerRef.game_save_data.save_name),
-								NOTIFICATION_TYPE.Popup
-							)
-						);
-						global.RoomChangeHandlerRef.RequestRoomChange(roomIndex);
-						gotoLastLocationRoom = true;
+						if (!is_undefined(global.PlayerDataHandlerRef.last_known_location.room_index))
+						{
+							fastTravelTargetRoom = global.PlayerDataHandlerRef.last_known_location.room_index;
+						}
 					}
-				}
+				
+					global.NotificationHandlerRef.AddNotification(
+						new Notification(
+							sprFloppyDisk, "New game save started",
+							string("Save: '{0}'", global.GameSaveHandlerRef.save_name),
+							NOTIFICATION_TYPE.Popup
+						)
+					);
+					// GO TO THE LAST KNOWN PLAYER LOCATION
+					global.RoomChangeHandlerRef.RequestRoomChange(fastTravelTargetRoom);
+				} else {
+					// GOTO DEFAULT ROOM 
+					global.RoomChangeHandlerRef.RequestRoomChange(fastTravelTargetRoom);
+				}		
+			} else {
+				var consoleLog = string("Failed to load and parse player data from save file '{0}'", global.GameSaveHandlerRef.save_file_name);
+				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
+			
+				global.NotificationHandlerRef.AddNotification(
+					new Notification(
+						sprFloppyDiskBroken, "Failed to load game save",
+						string("Save: '{0}'", global.GameSaveHandlerRef.save_name),
+						NOTIFICATION_TYPE.Popup
+					)
+				);
+				// RETURN TO MAIN MENU
+				global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_MAIN_MENU);
 			}
-		}
-	
-		// GOTO DEFAULT ROOM
-		if (!gotoLastLocationRoom)
-		{
+		} else {
+			var consoleLog = string("Failed to load and parse save file '{0}'", global.GameSaveHandlerRef.save_file_name);
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
+		
 			global.NotificationHandlerRef.AddNotification(
 				new Notification(
-					sprFloppyDisk, "New game save started",
-					string("Save: '{0}'", global.GameSaveHandlerRef.game_save_data.save_name),
+					sprFloppyDiskBroken, "Failed to load game save",
+					string("Save: '{0}'", global.GameSaveHandlerRef.save_name),
 					NOTIFICATION_TYPE.Popup
 				)
 			);
-			global.RoomChangeHandlerRef.RequestRoomChange(ROOM_DEFAULT);
+			// RETURN TO MAIN MENU
+			global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_MAIN_MENU);	
 		}
-	}
-} else {
-	if (room != roomMainMenu)
+	} break;
+	case roomMainMenu:
 	{
-		// START ROOM FADE-IN EFFECT
-		roomFadeAlpha = roomFadeAlphaStart;
-		
-		// READ ROOM SAVE DATA FROM FILE
-		global.GameSaveHandlerRef.ReadRoomDataFromFile();
-		
-		// EXECUTE CUSTOM USER EVENT 0 OF OTHER OBJECTS ON ROOM START
-		var objectParentsWithEvent = OBJECT_PARENTS_WITH_EVENT_0;
-		var objectParentCount = array_length(objectParentsWithEvent);
-		for (var i = 0; i < objectParentCount; i++)
+		// RESET GAME SAVE DATA CACHE
+		if (!is_undefined(global.GameSaveHandlerRef.game_save_data))
 		{
-			var objectIndex = objectParentsWithEvent[@ i];
-			var instanceCount = instance_number(objectIndex);
-			for (var j = 0; j < instanceCount; j++)
+			global.GameSaveHandlerRef.ResetGameSaveData();
+		}
+	} break;
+	default:
+	{
+		if (IS_ROOM_IN_GAME_WORLD)
+		{
+			// START ROOM FADE-IN EFFECT
+			roomFadeAlpha = roomFadeAlphaStart;
+		
+			// TODO: Fix this code
+			// READ ROOM SAVE DATA FROM FILE
+			//global.GameSaveHandlerRef.ReadRoomDataFromFile();
+		
+			// EXECUTE CUSTOM USER EVENT 0 OF OTHER OBJECTS ON ROOM START
+			var objectParentsWithEvent = OBJECT_PARENTS_WITH_EVENT_0;
+			var objectParentCount = array_length(objectParentsWithEvent);
+			for (var i = 0; i < objectParentCount; i++)
 			{
-				var instance = instance_find(objectIndex, j);
-				if (instance_exists(instance))
+				var objectIndex = objectParentsWithEvent[@ i];
+				var instanceCount = instance_number(objectIndex);
+				for (var j = 0; j < instanceCount; j++)
 				{
-					with (instance)
+					var instance = instance_find(objectIndex, j);
+					if (instance_exists(instance))
 					{
-						event_perform(ev_other, ev_user0);
+						with (instance)
+						{
+							event_perform(ev_other, ev_user0);
+						}
 					}
 				}
 			}
-		}
 		
-		// CLEAR SAVE DATA CACHE AFTER EVERYTHING IS LOADED IN THE ROOM
-		global.GameSaveHandlerRef.ClearSaveCache();
-		
-		// CHECK IF GAME SAVE IS LOADED FOR THE FIRST TIME
-		var gameSaveData = global.GameSaveHandlerRef.game_save_data;
-		if (!is_undefined(gameSaveData))
-		{
-			if (gameSaveData.isSaveLoadingFirstTime)
-			{
-				gameSaveData.isSaveLoadingFirstTime = false;
-			}
+			// RESET GAME SAVE IS LOADED FOR THE FIRST TIME FLAG
+			global.GameSaveHandlerRef.is_save_loading_first_time = false;
 		}
 	}
 }
