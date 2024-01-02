@@ -177,14 +177,18 @@ function NetworkPacketHandler() constructor
 									var sourceRegionId = worldMapFastTravelInfo.source_region_id;
 									if (!is_undefined(sourceRegionId))
 									{
-										// RESPOND WITH ACKNOWLEDGMENT TO END FAST TRAVEL REQUEST
-										if (global.RoomChangeHandlerRef.RequestRoomChange(destinationRoomIndex, sourceRegionId, destinationRegionId))
+										if (global.RoomChangeHandlerRef.RequestRoomChange(destinationRoomIndex))
 										{
+											// CACHE FAST TRAVEL INFO
+											global.RoomChangeHandlerRef.RequestCacheFastTravelInfo(worldMapFastTravelInfo);
+											
 											// SET REGION DETAILS
 											global.NetworkRegionHandlerRef.region_id = destinationRegionId;
 											global.NetworkRegionHandlerRef.prev_region_id = sourceRegionId;
 											global.NetworkRegionHandlerRef.room_index = destinationRoomIndex;
 											global.NetworkRegionHandlerRef.owner_client = undefined;
+												
+											// RESPOND WITH ACKNOWLEDGMENT TO SUCCESS FAST TRAVEL REQUEST
 											isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 										}
 									}
@@ -366,7 +370,8 @@ function NetworkPacketHandler() constructor
 							// CLOSE OPERATION SCOUT LIST WINDOW
 							if (global.GUIStateHandlerRef.IsCurrentGUIStateGameWindowOpen(GAME_WINDOW.OperationsCenterScoutList))
 							{
-								global.GUIStateHandlerRef.CloseCurrentGUIState();
+								// TODO: Fix logic to close scout list even if console/other windows are open
+								global.GUIStateHandlerRef.RequestCloseCurrentGUIState();
 							}
 							// SET ACTIVE OPERATIONS SCOUT STREAM
 							global.MapDataHandlerRef.active_operations_scout_stream = global.MapDataHandlerRef.target_scout_region;

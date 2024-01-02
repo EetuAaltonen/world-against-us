@@ -304,6 +304,9 @@ function NetworkHandler() constructor
 	
 	static OnDisconnect = function()
 	{
+		// SAVE GAME
+		global.GameSaveHandlerRef.SaveGame();
+		
 		// STOP PINGING
 		network_connection_sampler.StopPinging(-1);
 		// STOP SENT RATE SAMPLING
