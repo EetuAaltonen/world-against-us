@@ -1,13 +1,6 @@
-if (room != roomLaunch && room != roomMainMenu)
+// TODO: Fix this logic
+/*if (IS_ROOM_IN_GAME_WORLD)
 {
-	if (global.InstancePlayer == noone)
-	{
-		if (instance_exists(objPlayer))
-		{
-			global.InstancePlayer = instance_find(objPlayer, 0);
-		}
-	}
-
 	if (global.InstanceWeapon == noone)
 	{
 		if (global.InstancePlayer != noone)
@@ -15,7 +8,7 @@ if (room != roomLaunch && room != roomMainMenu)
 			global.InstanceWeapon = global.InstancePlayer.weapon;
 		}
 	}
-}
+}*/
 
 if (keyboard_check_released(ord("B")))
 {
