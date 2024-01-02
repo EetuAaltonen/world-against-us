@@ -328,7 +328,8 @@ function NetworkHandler() constructor
 		// REQUEST REGION SYNC
 		var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.SYNC_INSTANCE);
 		var networkPacket = new NetworkPacket(
-			networkPacketHeader, undefined,
+			networkPacketHeader,
+			undefined,
 			PACKET_PRIORITY.DEFAULT,
 			AckTimeoutFuncResend
 		);
@@ -440,6 +441,30 @@ function NetworkHandler() constructor
 											isMessageHandled = QueueAcknowledgmentResponse();
 										}
 									} break;
+									case MESSAGE_TYPE.REMOTE_CONNECTED_TO_HOST:
+									{
+										// TODO: Fetch player name from payload
+										global.NotificationHandlerRef.AddNotification(
+											new Notification(
+												sprIconRemoteConnect, "Client connected",
+												"Player X joined the game",
+												NOTIFICATION_TYPE.Popup
+											)
+										);
+										isMessageHandled = true;
+									} break;
+									case MESSAGE_TYPE.REMOTE_DISCONNECT_FROM_HOST:
+									{
+										// TODO: Fetch player name from payload
+										global.NotificationHandlerRef.AddNotification(
+											new Notification(
+												sprIconRemoteDisconnect, "Client disconnected",
+												"Player X disconnected from the game",
+												NOTIFICATION_TYPE.Popup
+											)
+										);
+										isMessageHandled = true;
+									} break;
 									case MESSAGE_TYPE.REQUEST_JOIN_GAME:
 									{
 										if (network_status == NETWORK_STATUS.JOINING_TO_GAME)
@@ -468,6 +493,7 @@ function NetworkHandler() constructor
 										{
 											if (network_packet_handler.HandlePacket(networkPacket))
 											{
+												// TODO: DATA_PLAYER_SYNC is empty and does not do anything
 												var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.DATA_PLAYER_SYNC);
 												var networkPacket = new NetworkPacket(
 													networkPacketHeader,

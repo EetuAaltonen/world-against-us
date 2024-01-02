@@ -83,6 +83,42 @@ function NetworkPacketHandler() constructor
 							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 						}
 					} break;
+					case MESSAGE_TYPE.REMOTE_ENTERED_THE_INSTANCE:
+					{
+						// TODO: Fetch player name from payload and destroy co-op objPlayer
+						global.NotificationHandlerRef.AddNotification(
+							new Notification(
+								sprIconRemoteEnterRegion, "Client entered the region",
+								"Player X entered the area",
+								NOTIFICATION_TYPE.Popup
+							)
+						);
+						isPacketHandled = true;
+					} break;
+					case MESSAGE_TYPE.REMOTE_LEFT_THE_INSTANCE:
+					{
+						// TODO: Fetch player name from payload and destroy co-op objPlayer
+						global.NotificationHandlerRef.AddNotification(
+							new Notification(
+								sprIconRemoteLeftRegion, "Client left the region",
+								"Player X left the area",
+								NOTIFICATION_TYPE.Popup
+							)
+						);
+						isPacketHandled = true;
+					} break;
+					case MESSAGE_TYPE.REMOTE_RETURNED_TO_CAMP:
+					{
+						// TODO: Fetch player name from payload
+						global.NotificationHandlerRef.AddNotification(
+							new Notification(
+								sprIconRemoteToCamp, "Client returned to Camp",
+								"Player X returned to the Camp",
+								NOTIFICATION_TYPE.Popup
+							)
+						);
+						isPacketHandled = true;
+					} break;
 					case MESSAGE_TYPE.REQUEST_PLAYER_LIST:
 					{
 						var playerList = payload;
