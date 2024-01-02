@@ -124,8 +124,8 @@ function NotificationHandler() constructor
 				// NOTIFICATION ICON
 				draw_sprite_ext(
 					notification.icon, 0,
-					notificationBoxPos.X + 20 - iconPosOffset.X,
-					notificationBoxPos.Y + (notificationBoxSize.h * 0.5) - ((iconSize.h * 0.5) + iconPosOffset.Y),
+					notificationBoxPos.X + 20 + iconPosOffset.X,
+					notificationBoxPos.Y + (notificationBoxSize.h * 0.5) - (iconSize.h * 0.5) + iconPosOffset.Y,
 					iconScale, iconScale, 0, c_white, 1
 				)
 				// NOTIFICATION TITLE

@@ -1,7 +1,7 @@
 function OnClickEscMenuReset()
 {
-	var gameSaveName = global.GameSaveHandlerRef.game_save_data.save_name;
-	if (global.GameSaveHandlerRef.ResetGameSave(gameSaveName))
+	var gameSaveName = global.GameSaveHandlerRef.save_name;
+	if (global.GameSaveHandlerRef.ResetGameSave())
 	{
 		var notification = new Notification(
 			sprFloppyDisk, "Game save reseted",
