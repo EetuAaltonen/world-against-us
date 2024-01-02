@@ -52,11 +52,39 @@ function CharacterHuman(_name, _type, _race, _behaviour) : Character(_name, _typ
 		}
 	}
 	
+	static OnDestroy = function()
+	{
+		// OVERRIDE FROM PARENT
+		backpack_slot.OnDestroy();
+		backpack_slot = undefined;
+		DestroyDSMapAndDeleteValues(body_parts);
+		body_parts = undefined;
+	}
+	
 	static UpdateStats = function()
 	{
 		fullness = clamp(fullness - (hunger_rate / game_get_speed(gamespeed_fps)), 0, max_fullness);
 		hydration = clamp(hydration - (thirst_rate / game_get_speed(gamespeed_fps)), 0, max_hydration);
 		energy = clamp(energy - (fatigue_rate / game_get_speed(gamespeed_fps)), 0, max_energy);
+	}
+	
+	static GetBackpackSlotItem = function()
+	{
+		return backpack_slot.GetItemByIndex(0);
+	}
+	
+	static GetBackpackInventory = function()
+	{
+		var backpackInventory = undefined;
+		var backpackItem = GetBackpackSlotItem();
+		if (!is_undefined(backpackItem))
+		{
+			if (!is_undefined(backpackItem.metadata))
+			{
+				backpackInventory = backpackItem.metadata.inventory;	
+			}
+		}
+		return backpackInventory;
 	}
 	
 	static UseMedicine = function(_item, _targetBodyPartIndex = undefined)

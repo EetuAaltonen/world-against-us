@@ -34,6 +34,8 @@ function SpawnHandler() constructor
 	{
 		// RESET SPAWN POINT
 		spawn_point = undefined;
+		// RESET GLOBAL VARIABLE
+		global.InstancePlayer = noone;
 	}
 	
 	static ValidateRoomSpawnPoint = function()
@@ -92,20 +94,23 @@ function SpawnHandler() constructor
 			if (!global.MultiplayerMode)
 			{
 				// SINGLEPLAYER
-				var gameSaveData = global.GameSaveHandlerRef.game_save_data;
-				if (!is_undefined(gameSaveData))
+				// CHECK IF SAVE IS LOADING FIRST TIME
+				if (global.GameSaveHandlerRef.is_save_loading_first_time)
 				{
-					// CHECK IF ROOM IS LOADING FIRST TIME FROM THE SAVE
-					if (gameSaveData.isSaveLoadingFirstTime)
+					var gameSaveData = global.GameSaveHandlerRef.game_save_data;
+					if (!is_undefined(gameSaveData))
 					{
 						if (!is_undefined(gameSaveData.player_data))
 						{
 							if (!is_undefined(gameSaveData.player_data.last_location))
 							{
-								var lastPosition = gameSaveData.player_data.last_location.position;
-								if (!is_undefined(lastPosition))
+								var lastLocation = gameSaveData.player_data.last_location;
+								if (!is_undefined(lastLocation))
 								{
-									playerInstanceObject.position = new Vector2(lastPosition.X, lastPosition.Y);
+									if (!is_undefined(lastLocation.position))
+									{
+										playerInstanceObject.position = new Vector2(lastLocation.position.X, lastLocation.position.Y);
+									}
 								}
 							}
 						}
@@ -114,7 +119,9 @@ function SpawnHandler() constructor
 			}
 			
 			// SPAWN PLAYER INSTANCE WITH INSTANCE OBJECT DATA
-			SpawnInstance(playerInstanceObject);
+			var playerInstance = SpawnInstance(playerInstanceObject);
+			// SET GLOBAL VARIABLE
+			global.InstancePlayer = playerInstance;
 		}
 	}
 	

@@ -33,6 +33,7 @@ function Character(_name, _type, _race, _behaviour) constructor
 	static OnDestroy = function()
 	{
 		DestroyDSMapAndDeleteValues(body_parts);
+		body_parts = undefined;
 	}
 	
 	static UpdateTotalHp = function()

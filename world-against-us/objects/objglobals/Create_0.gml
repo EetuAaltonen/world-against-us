@@ -93,6 +93,7 @@ randomise();
 #macro ROOM_INDEX_FOREST "roomForest"
 
 #macro ROOM_DEFAULT ROOM_INDEX_CAMP
+#macro IS_ROOM_IN_GAME_WORLD (room != roomLaunch && room != roomMainMenu && room != roomLoadResources)
 
 // INSTANCES
 #macro CAMP_INSTANCE_ID 0

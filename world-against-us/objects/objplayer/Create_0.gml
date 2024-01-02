@@ -1,8 +1,6 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
-character = undefined;
-
 image_index = 0;
 image_speed = 0;
 

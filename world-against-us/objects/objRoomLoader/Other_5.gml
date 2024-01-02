@@ -1,8 +1,8 @@
-// CLEAR ROOM SAVE DATA
-if (room != roomLaunch && room != roomMainMenu && room != roomLoadResources)
+if (IS_ROOM_IN_GAME_WORLD)
 {
-	if (!is_undefined(global.GameSaveHandlerRef.game_save_data))
+	// RESET GAME SAVE ROOM DATA
+	if (!is_undefined(global.GameSaveHandlerRef.game_save_room_data))
 	{
-		global.GameSaveHandlerRef.game_save_data.ResetSaveRoomData();
+		global.GameSaveHandlerRef.ResetGameSaveRoomData();
 	}
 }
