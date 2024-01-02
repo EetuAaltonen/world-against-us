@@ -1,7 +1,6 @@
 function ParseJSONStructToCharacter(_jsonStruct)
 {
 	var parsedCharacter = undefined;
-	
 	try
 	{
 		if (is_undefined(_jsonStruct)) return parsedCharacter;
@@ -32,7 +31,10 @@ function ParseJSONStructToCharacter(_jsonStruct)
 					if (!is_undefined(characterStruct[$ "backpack"] ?? undefined))
 					{
 						var parsedBackpack = ParseJSONStructToItem(characterStruct[$ "backpack"]);
-						variable_struct_set(parsedCharacter, "backpack", parsedBackpack);
+						if (!is_undefined(parsedBackpack))
+						{
+							parsedCharacter.backpack_slot.AddItem(parsedBackpack, undefined, false, true);
+						}
 					}
 				} break;
 			}

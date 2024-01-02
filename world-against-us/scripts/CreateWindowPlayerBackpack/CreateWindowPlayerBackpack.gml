@@ -52,7 +52,7 @@ function CreateWindowPlayerBackpack(_gameWindowId, _zIndex)
 		primaryWeaponSlotSize,
 		c_gray, global.PlayerPrimaryWeaponSlot,
 		CallbackItemSlotPlayerPrimaryWeapon
-	);*/
+	);
 	
 	// MAGAZINE POCKETS
 	var magazinePocketTitle = new WindowText(
@@ -85,7 +85,7 @@ function CreateWindowPlayerBackpack(_gameWindowId, _zIndex)
 		medicinePocketGridSize,
 		undefined,
 		global.PlayerMedicinePockets
-	);
+	);*/
 	
 	ds_list_add(backpackElements,
 		backpackTitle,
