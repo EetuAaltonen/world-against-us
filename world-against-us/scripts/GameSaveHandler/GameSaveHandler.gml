@@ -1,56 +1,93 @@
 function GameSaveHandler() constructor
 {
+	save_name = EMPTY_STRING;
+	save_file_name = EMPTY_STRING;
 	game_save_data = undefined;
+	game_save_room_data = undefined;
+	is_save_loading_first_time = true;
+	
+	show_auto_save_icon = false;
+	auto_save_icon_timer = new Timer(TimerFromSeconds(4));
+	
+	static Update = function()
+	{
+		// AUTO SAVE ICON
+		if (auto_save_icon_timer.IsTimerStopped())
+		{
+			auto_save_icon_timer.StopTimer();
+			show_auto_save_icon = false;
+		} else {
+			auto_save_icon_timer.Update();
+		}
+	}
+	
+	static FetchSaveFileNames = function(_saveFileNamesRef)
+	{
+		try
+		{
+			var fileName = file_find_first(string("*{0}", SAVE_FILE_SUFFIX_PLAYER_DATA), fa_directory);
+			while(fileName != EMPTY_STRING)
+			{
+				ds_list_add(_saveFileNamesRef, fileName);
+				fileName = file_find_next();
+			}
+			file_find_close();
+			ds_list_sort(_saveFileNamesRef, false);
+		} catch (error)
+		{
+			show_debug_message(error);
+			show_message(error);
+		}
+	}
 	
 	static InitGameSave = function(_saveName)
 	{
-		var isGameSaveInitialized = false;
-		game_save_data = new GameSave(_saveName);
-		
-		if (!file_exists(game_save_data.save_file_name))
+		var isSaveInitialized = false;
+		if (!is_undefined(_saveName))
 		{
-			if (CreateEmptySaveFile(_saveName))
+			if (_saveName != EMPTY_STRING)
 			{
-				isGameSaveInitialized = true;
-			}
-		} else {
-			isGameSaveInitialized = true;
-		}
+				save_name = FormatSaveName(_saveName);
+				save_file_name = ConcatSaveFileSuffix(save_name);
 		
-		return isGameSaveInitialized;
-	}
-	
-	static ResetGameSave = function(_saveName)
-	{
-		var isGameSaveReseted = false;
-		if (InitGameSave(_saveName))
-		{
-			// OVERWRITE EXISTING SAVE FILE
-			if (CreateEmptySaveFile(_saveName))
-			{
-				if (DeleteRoomSaveFiles(_saveName))
+				if (!file_exists(save_file_name))
 				{
-					isGameSaveReseted = true;
+					if (!CreateEmptySaveFile(save_file_name))
+					{
+						isSaveInitialized = true;
+					}
+				} else {
+					isSaveInitialized = true;	
 				}
 			}
 		}
-		
-		return isGameSaveReseted;
+		return isSaveInitialized;
 	}
 	
-	static CreateEmptySaveFile = function(_saveName)
+	static ResetGameSaveData = function()
+	{
+		game_save_data.OnDestroy();
+		game_save_data = undefined;
+	}
+	
+	static ResetGameSaveRoomData = function()
+	{
+		game_save_data.game_save_room_data.OnDestroy();
+		game_save_data.game_save_room_data = undefined;
+	}
+	
+	static CreateEmptySaveFile = function(_saveFileName)
 	{
 		var isEmptyFileCreated = false;
 		try
 		{
-			var saveFileName = ConcatSaveFileSuffix(_saveName);
 			var emptySaveString = EMPTY_SAVE_DATA;
 			var buffer = buffer_create(
 				string_byte_length(emptySaveString) + 1,
 				buffer_fixed, 1
 			);
 			buffer_write(buffer, buffer_text, emptySaveString);
-			buffer_save(buffer, saveFileName);
+			buffer_save(buffer, _saveFileName);
 			buffer_delete(buffer);
 			
 			isEmptyFileCreated = true;
@@ -60,6 +97,97 @@ function GameSaveHandler() constructor
 			show_message(error);
 		}
 		return isEmptyFileCreated;
+	}
+	
+	static ReadSaveFromFile = function()
+	{
+		var isSaveDataReaded = false;
+		try
+		{
+			if (save_file_name != EMPTY_STRING)
+			{
+				if (file_exists(save_file_name))
+				{
+					var saveFileBuffer = buffer_load(save_file_name);
+					if (buffer_get_size(saveFileBuffer) > 0)
+					{
+						var gameSaveString = buffer_read(saveFileBuffer, buffer_text);
+						if (string_length(gameSaveString) > 0 && gameSaveString != EMPTY_SAVE_DATA)
+						{
+							var gameSaveStruct = json_parse(gameSaveString);
+							game_save_data = ParseJSONStructToGameSaveData(gameSaveStruct);
+							// SET SAVE LOADIN FIRST TIME FLAG
+							is_save_loading_first_time = true;
+							isSaveDataReaded = true;
+						}
+					}
+					buffer_delete(saveFileBuffer);
+				}
+			}
+		} catch (error)
+		{
+			// TODO: Proper error handling
+			show_message(error);
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, string("Failed to load game save: '{0}'", save_name));
+		}
+		return isSaveDataReaded;
+	}
+	
+	static SaveGame = function()
+	{
+		var isGameSaved = false;
+		if (IS_ROOM_IN_GAME_WORLD)
+		{
+			if (game_save_data.FetchSaveData())
+			{
+				if (WriteSaveToFile())
+				{
+					show_auto_save_icon = true;
+					auto_save_icon_timer.StartTimer();
+					isGameSaved = true;
+				}
+			}
+		}
+		return isGameSaved;
+	}
+	
+	static WriteSaveToFile = function()
+	{
+		var isSaveDataWritten = false;
+		if (!is_undefined(game_save_data))
+		{
+			try
+			{
+				// PLAYER DATA
+				var playerDataString = json_stringify(game_save_data.ToJSONStruct());
+				var buffer = buffer_create(
+					string_byte_length(playerDataString) + 1,
+					buffer_fixed, 1
+				);
+				buffer_write(buffer, buffer_text, playerDataString);
+				buffer_save(buffer, save_file_name);
+				buffer_delete(buffer);
+				
+				// ROOM DATA
+				/*var roomDataString = json_stringify(game_save_data.RoomToJSONStruct());
+				var roomName = room_get_name(game_save_data.room_data.index);
+				var roomDataFileName = ConcatRoomSaveFileSuffix(game_save_data.save_name, roomName);
+				buffer = buffer_create(
+					string_byte_length(roomDataString) + 1,
+					buffer_fixed, 1
+				);
+				buffer_write(buffer, buffer_text, roomDataString);
+				buffer_save(buffer, roomDataFileName);
+				buffer_delete(buffer);*/
+
+				isSaveDataWritten = true;
+			} catch (error)
+			{
+				show_debug_message(error);
+				show_message(error);
+			}
+		}
+		return isSaveDataWritten;
 	}
 	
 	static DeletePlayerSaveFile = function(_saveFileName)
@@ -108,128 +236,23 @@ function GameSaveHandler() constructor
 		return isSaveFilesDeleted;
 	}
 	
-	static FetchSaveFileNames = function(_saveFileNamesRef)
+	// TODO: Fix these functions and related logic
+	/*
+	static ResetGameSave = function(_saveName)
 	{
-		try
+		var isGameSaveReseted = false;
+		if (InitGameSave(_saveName))
 		{
-			var fileName = file_find_first(string("*{0}", SAVE_FILE_SUFFIX_PLAYER_DATA), fa_directory);
-		
-			while(fileName != EMPTY_STRING)
+			// OVERWRITE EXISTING SAVE FILE
+			if (CreateEmptySaveFile(_saveName))
 			{
-				ds_list_add(_saveFileNamesRef, fileName);
-				fileName = file_find_next();
-			}
-			file_find_close();
-			ds_list_sort(_saveFileNamesRef, true);
-		} catch (error)
-		{
-			show_debug_message(error);
-			show_message(error);
-		}
-	}
-	
-	static SaveGame = function()
-	{
-		var isGameSaved = false;
-		if (game_save_data.FetchSaveData())
-		{
-			if (SaveToFile())
-			{
-				isGameSaved = true;
-			}
-		}
-		return isGameSaved;
-	}
-	
-	static SaveToFile = function()
-	{
-		var isSaveDataWritten = false;
-		
-		if (!is_undefined(game_save_data))
-		{
-			try
-			{
-				// PLAYER DATA
-				var playerDataString = json_stringify(game_save_data.ToJSONStruct());
-				var buffer = buffer_create(
-					string_byte_length(playerDataString) + 1,
-					buffer_fixed, 1
-				);
-				buffer_write(buffer, buffer_text, playerDataString);
-				buffer_save(buffer, game_save_data.save_file_name);
-				buffer_delete(buffer);
-				
-				// ROOM DATA
-				var roomDataString = json_stringify(game_save_data.RoomToJSONStruct());
-				var roomName = room_get_name(game_save_data.room_data.index);
-				var roomDataFileName = ConcatRoomSaveFileSuffix(game_save_data.save_name, roomName);
-				buffer = buffer_create(
-					string_byte_length(roomDataString) + 1,
-					buffer_fixed, 1
-				);
-				buffer_write(buffer, buffer_text, roomDataString);
-				buffer_save(buffer, roomDataFileName);
-				buffer_delete(buffer);
-
-				isSaveDataWritten = true;
-			} catch (error)
-			{
-				show_debug_message(error);
-				show_message(error);
-			}
-		}
-		
-		return isSaveDataWritten;
-	}
-	
-	static ClearSaveCache = function()
-	{
-		game_save_data.ResetSavePlayerData();
-	}
-	
-	static ReadFromFile = function()
-	{
-		var isSaveDataReaded = false;
-		if (!is_undefined(game_save_data))
-		{
-			if (!is_undefined(game_save_data.save_name))
-			{
-				try
+				if (DeleteRoomSaveFiles(_saveName))
 				{
-					if (file_exists(game_save_data.save_file_name))
-					{
-						var buffer = buffer_load(game_save_data.save_file_name);
-						if (buffer_get_size(buffer) > 0)
-						{
-							var gameSaveString = buffer_read(buffer, buffer_text);
-							buffer_delete(buffer);
-							if (string_length(gameSaveString) > 0 && gameSaveString != EMPTY_SAVE_DATA)
-							{
-								var gameSaveStruct = json_parse(gameSaveString);
-								if (game_save_data.ParseGameSaveStruct(gameSaveStruct))
-								{
-									isSaveDataReaded = true;
-								}
-							}
-						}
-					}
-				} catch (error)
-				{
-					show_message(error);
-					show_debug_message(error);
-					
-					global.NotificationHandlerRef.AddNotification(
-						new Notification(
-							sprFloppyDisk, "Failed to load game save",
-							string("Save: '{0}'", global.GameSaveHandlerRef.game_save_data.save_name),
-							NOTIFICATION_TYPE.Popup
-						)
-					);
-					global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_MAIN_MENU);
+					isGameSaveReseted = true;
 				}
 			}
 		}
-		return isSaveDataReaded;
+		return isGameSaveReseted;
 	}
 	
 	static ReadRoomDataFromFile = function()
@@ -328,5 +351,5 @@ function GameSaveHandler() constructor
 		}
 		
 		return structureContent;
-	}
+	}*/
 }

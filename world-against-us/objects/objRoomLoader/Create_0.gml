@@ -57,9 +57,6 @@ controllers = [
 	// MAP
 	new GameController(objMap, [], [roomLaunch, roomMainMenu], LAYER_CONTROLLERS_BEHIND),
 	
-	// INVENTORY
-	new GameController(objInventory, [], [roomLaunch, roomMainMenu]),
-	
 	// HIGHLIGHT
 	new GameController(objInstanceHighlighter, [], [roomLaunch, roomMainMenu, roomLoadResources], LAYER_HIGHLIGHT_INTERACTABLE),
 	

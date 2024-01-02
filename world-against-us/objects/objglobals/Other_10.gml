@@ -37,6 +37,7 @@ global.SpawnHandlerRef = instance_exists(objSpawn) ? instance_find(objSpawn, 0).
 global.PlayerPrimaryWeaponSlot = instance_exists(objInventory) ? instance_find(objInventory, 0).playerPrimaryWeaponSlot : undefined;
 global.PlayerMagazinePockets = instance_exists(objInventory) ? instance_find(objInventory, 0).magazinePockets : undefined;
 global.PlayerMedicinePockets = instance_exists(objInventory) ? instance_find(objInventory, 0).medicinePockets : undefined;
+global.GameSaveHandlerRef = instance_exists(objGameSave) ? instance_find(objGameSave, 0).gameSaveHandler : undefined;
 
 global.InstanceDrone = instance_exists(objDrone) ? instance_find(objDrone, 0) : noone;
 
