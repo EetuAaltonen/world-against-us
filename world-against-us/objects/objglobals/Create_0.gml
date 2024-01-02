@@ -130,6 +130,7 @@ global.MapDataHandlerRef = undefined;
 global.RoomChangeHandlerRef = undefined;
 global.SpawnHandlerRef = undefined;
 global.HighlightHandlerRef = undefined;
+global.PlayerDataHandlerRef = undefined;
 global.GameSaveHandlerRef = undefined;
 
 // GLOBAL WORLD STATE

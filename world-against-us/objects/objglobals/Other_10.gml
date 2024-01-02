@@ -34,9 +34,8 @@ global.MapDataHandlerRef = instance_exists(objMap) ? instance_find(objMap, 0).ma
 global.RoomChangeHandlerRef = instance_exists(objRoomChange) ? instance_find(objRoomChange, 0).roomChangeHandler : undefined;
 global.SpawnHandlerRef = instance_exists(objSpawn) ? instance_find(objSpawn, 0).spawnHandler : undefined;
 
-global.PlayerPrimaryWeaponSlot = instance_exists(objInventory) ? instance_find(objInventory, 0).playerPrimaryWeaponSlot : undefined;
-global.PlayerMagazinePockets = instance_exists(objInventory) ? instance_find(objInventory, 0).magazinePockets : undefined;
-global.PlayerMedicinePockets = instance_exists(objInventory) ? instance_find(objInventory, 0).medicinePockets : undefined;
+global.PlayerDataHandlerRef = instance_exists(objPlayerData) ? instance_find(objPlayerData, 0).playerDataHandler : undefined;
+global.PlayerCharacter = (!is_undefined(global.PlayerDataHandlerRef)) ? global.PlayerDataHandlerRef.character : undefined;
 global.GameSaveHandlerRef = instance_exists(objGameSave) ? instance_find(objGameSave, 0).gameSaveHandler : undefined;
 
 global.InstanceDrone = instance_exists(objDrone) ? instance_find(objDrone, 0) : noone;
@@ -44,4 +43,3 @@ global.InstanceDrone = instance_exists(objDrone) ? instance_find(objDrone, 0) : 
 global.HighlightHandlerRef = instance_exists(objInstanceHighlighter) ? instance_find(objInstanceHighlighter, 0).highlightHandler : undefined;
 global.ObjGridPath = instance_exists(objGridPath) ? instance_find(objGridPath, 0) : noone;
 global.ObjTempInventory = instance_exists(objTempInventory) ? instance_find(objTempInventory, 0) : noone;
-global.GameSaveHandlerRef = instance_exists(objGameSave) ? instance_find(objGameSave, 0).gameSaveHandler : undefined;

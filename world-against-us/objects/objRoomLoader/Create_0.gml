@@ -39,6 +39,13 @@ controllers = [
 	// SPAWN
 	new GameController(objSpawn, [], [roomLaunch, roomMainMenu, roomLoadResources]),
 	
+	// PLAYER DATA
+	new GameController(objPlayerData, [], [roomLaunch, roomMainMenu]),
+	
+	// GAME SAVE
+	// LOAD AFTER PLAYER DATA
+	new GameController(objGameSave, [], [roomLaunch]),
+	
 	// HUD
 	new GameController(objHud, [], [roomLaunch, roomMainMenu, roomLoadResources], LAYER_CONTROLLERS_BEHIND),
 	
@@ -65,11 +72,7 @@ controllers = [
 	
 	// TEMP INVENTORY
 	new GameController(objTempInventory, [], [roomLaunch, roomMainMenu, roomLoadResources]),
-	
 
-	// LOAD THE GAME SAVE OBJECT LAST
-	// TO SET THE WORLD STATE AFTER EVERYTHING IS LOADED
-	new GameController(objGameSave, [], [roomLaunch])
 	// OBJECTS TO LOAD LAST
 	
 	// FAST TRAVEL
