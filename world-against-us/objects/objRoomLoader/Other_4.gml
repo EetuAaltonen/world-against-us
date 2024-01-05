@@ -89,9 +89,9 @@ switch (room)
 			// LOAD PLAYER DATA
 			if (global.PlayerDataHandlerRef.LoadPlayerData(global.GameSaveHandlerRef.game_save_data))
 			{
-				var fastTravelTargetRoom = ROOM_DEFAULT;
 				if (!global.MultiplayerMode)
 				{
+					var fastTravelTargetRoom = ROOM_DEFAULT;
 					// FETCH LAST KNOWN LOCATION FROM GAME SAVE
 					if (!is_undefined(global.PlayerDataHandlerRef.last_known_location))
 					{
@@ -111,8 +111,11 @@ switch (room)
 					// GO TO THE LAST KNOWN PLAYER LOCATION
 					global.RoomChangeHandlerRef.RequestRoomChange(fastTravelTargetRoom);
 				} else {
-					// GOTO DEFAULT ROOM 
-					global.RoomChangeHandlerRef.RequestRoomChange(fastTravelTargetRoom);
+					// REQUEST JOIN GAME
+					if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.CONNECTED_SAVE_SELECTED)
+					{
+						global.NetworkHandlerRef.RequestJoinGame();
+					}
 				}		
 			} else {
 				var consoleLog = string("Failed to load and parse player data from save file '{0}'", global.GameSaveHandlerRef.save_file_name);
@@ -150,6 +153,31 @@ switch (room)
 		{
 			global.GameSaveHandlerRef.ResetGameSaveData();
 		}
+		
+		// DISCONNECT FROM THE SERVER WHEN RETURNING TO MAINMENU
+		if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.TIMED_OUT)
+		{
+			global.NetworkHandlerRef.network_status = NETWORK_STATUS.OFFLINE;
+			if (global.NetworkHandlerRef.client_id != UNDEFINED_UUID)
+			{
+				global.NetworkHandlerRef.RequestDisconnectSocket();
+			}
+			// CONSOLE LOG
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Connection timed out :(");
+			// ADD POP-UP NOTIFICATION
+			global.NotificationHandlerRef.AddNotification(
+				new Notification(
+					undefined, "Connection timed out :(",
+					undefined, NOTIFICATION_TYPE.Log
+				)
+			);
+		} else if (global.NetworkHandlerRef.network_status != NETWORK_STATUS.OFFLINE)
+		{
+			if (global.NetworkHandlerRef.client_id != UNDEFINED_UUID)
+			{
+				global.NetworkHandlerRef.RequestDisconnectSocket();
+			}
+		}
 	} break;
 	default:
 	{
@@ -157,10 +185,16 @@ switch (room)
 		{
 			// START ROOM FADE-IN EFFECT
 			roomFadeAlpha = roomFadeAlphaStart;
-		
-			// TODO: Fix this code
-			// READ ROOM SAVE DATA FROM FILE
-			//global.GameSaveHandlerRef.ReadRoomDataFromFile();
+			
+			if (!global.MultiplayerMode)
+			{
+				// TODO: Fix this code
+				// READ ROOM SAVE DATA FROM FILE
+				//global.GameSaveHandlerRef.ReadRoomDataFromFile();
+			} else {
+				// SYNC-INSTANCE CALL ON IN-GAME ROOM START
+				global.NetworkHandlerRef.OnRoomStart();
+			}
 		
 			// EXECUTE CUSTOM USER EVENT 0 OF OTHER OBJECTS ON ROOM START
 			var objectParentsWithEvent = OBJECT_PARENTS_WITH_EVENT_0;
