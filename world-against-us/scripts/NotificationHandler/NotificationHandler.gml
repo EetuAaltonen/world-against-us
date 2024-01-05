@@ -25,6 +25,39 @@ function NotificationHandler() constructor
 		}
 	}
 	
+	static AddNotificationPlayerConnected = function(_playerTag)
+	{
+		AddNotification(
+			new Notification(
+				sprIconRemoteConnect, "Client connected",
+				string("{0} joined the game", _playerTag),
+				NOTIFICATION_TYPE.Popup
+			)
+		);
+	}
+	
+	static AddNotificationPlayerDisconnected = function(_playerTag)
+	{
+		AddNotification(
+			new Notification(
+				sprIconRemoteDisconnect, "Client disconnected",
+				string("{0} disconnected from the game", _playerTag),
+				NOTIFICATION_TYPE.Popup
+			)
+		);
+	}
+	
+	static AddNotificationPlayerReturnedToCamp = function(_playerTag)
+	{
+		global.NotificationHandlerRef.AddNotification(
+			new Notification(
+				sprIconRemoteEnterRegion, "Client returned to Camp",
+				string("{0} returned to the Camp", _playerTag),
+				NOTIFICATION_TYPE.Popup
+			)
+		);
+	}
+	
 	static Update = function()
 	{
 		// PRIORITIZE LOG NOTIFICATIONS

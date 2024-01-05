@@ -22,12 +22,24 @@ function NetworkPacketTracker() constructor
 					{
 						if (script_exists(inFlightPacket.ack_timeout_callback_func) && inFlightPacket.acknowledgment_attempt <= inFlightPacket.max_acknowledgment_attempts)
 						{
-							show_debug_message(string("Acknowledgment timeout attempt {0} with message type {1} and sequence number {2} timed out", inFlightPacket.acknowledgment_attempt, inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
+							// CONSOLE LOG
+							var consoleLog = string(
+								"Acknowledgment timeout attempt {0} with message type {1} and sequence number {2} timed out",
+								inFlightPacket.acknowledgment_attempt, inFlightPacket.header.message_type, inFlightPacket.header.sequence_number
+							);
+							global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
+							
 							// CALL TIMEOUT CALLBACK FUNCTION
 							inFlightPacket.ack_timeout_callback_func(inFlightPacket);
 							inFlightPacket.acknowledgment_attempt++;
 						} else {
-							show_message(string("Acknowledgment with message type {0} and sequence number {1} timed out", inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
+							// CONSOLE LOG
+							var consoleLog = string(
+								"Acknowledgment with message type {0} and sequence number {1} timed out",
+								inFlightPacket.header.message_type, inFlightPacket.header.sequence_number
+							);
+							global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
+							
 							// DISCONNECT AFTER FAILED ATTEMPTS
 							DeleteDSListValueByIndex(in_flight_packets, i--);
 							inFlightPacketCount = ds_list_size(in_flight_packets);
@@ -36,12 +48,25 @@ function NetworkPacketTracker() constructor
 					} else {
 						if (inFlightPacket.acknowledgment_attempt <= inFlightPacket.max_acknowledgment_attempts)
 						{
-							show_message(string("Acknowledgment timeout attempt {0} with message type {1} and sequence number {2} timed out without a callback", inFlightPacket.acknowledgment_attempt, inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
+							// CONSOLE LOG
+							var consoleLog = string(
+								"Acknowledgment timeout attempt {0} with message type {1} and sequence number {2} timed out without a callback",
+								inFlightPacket.acknowledgment_attempt, inFlightPacket.header.message_type, inFlightPacket.header.sequence_number
+							);
+							global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
+							
 							// WAIT WITHOUT TIMEOUT CALLBACK FUNCTION
 							inFlightPacket.acknowledgment_attempt++;
 							inFlightPacket.timeout_timer.StartTimer();
 						} else {
-							show_message(string("Acknowledgment with message type {0} and sequence number {1} timed out without a callback", inFlightPacket.header.message_type, inFlightPacket.header.sequence_number));
+							// CONSOLE LOG
+							var consoleLog = string(
+								"Acknowledgment with message type {0} and sequence number {1} timed out without a callback",
+								inFlightPacket.header.message_type, inFlightPacket.header.sequence_number
+							);
+							global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
+							
+
 							// DISCONNECT AFTER FAILED ATTEMPTS
 							DeleteDSListValueByIndex(in_flight_packets, i--);
 							inFlightPacketCount = ds_list_size(in_flight_packets);
@@ -69,7 +94,7 @@ function NetworkPacketTracker() constructor
 		} else {
 			if (_networkPacket.header.message_type == MESSAGE_TYPE.ACKNOWLEDGMENT)
 			{
-				show_debug_message("Unnecessary MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
+				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Unnecessary MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
 				isAckRangePatched = false;
 			}
 		}
@@ -120,7 +145,8 @@ function NetworkPacketTracker() constructor
 			} else if (_sequenceNumber > expected_sequence_number)
 			{
 				// PATCH TO PAST ONE OF MOST RECENT
-				show_debug_message(string("Received sequence number {0} greater than expected {1}", _sequenceNumber, expected_sequence_number));
+				var consoleLog = string("Received sequence number {0} greater than expected {1}", _sequenceNumber, expected_sequence_number);
+				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
 				expected_sequence_number = _sequenceNumber + 1;
 				if (_messageType != MESSAGE_TYPE.ACKNOWLEDGMENT)
 				{
@@ -129,7 +155,8 @@ function NetworkPacketTracker() constructor
 			} else if (_sequenceNumber < expected_sequence_number)
 			{
 				// DROP STALE DATA
-				show_debug_message(string("Received sequence number {0} smaller than expected {1}", _sequenceNumber, expected_sequence_number));
+				var consoleLog = string("Received sequence number {0} smaller than expected {1}", _sequenceNumber, expected_sequence_number);
+				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
 				isCheckedAndProceed = false;
 			}
 			if (expected_sequence_number > max_sequence_number) { expected_sequence_number = 0; }

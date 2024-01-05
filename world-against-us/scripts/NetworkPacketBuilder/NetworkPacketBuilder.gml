@@ -70,6 +70,12 @@ function NetworkPacketBuilder() constructor
 				buffer_seek(_networkBuffer, buffer_seek_relative, 0);
 				switch (_networkMessageType)
 				{
+					case MESSAGE_TYPE.CONNECT_TO_HOST:
+					{
+						var playerTag = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_text, playerTag);
+						isPayloadWritten = true;
+					} break;
 					case MESSAGE_TYPE.PING:
 					{
 						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.client_time);

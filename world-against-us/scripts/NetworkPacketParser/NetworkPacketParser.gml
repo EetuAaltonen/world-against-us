@@ -44,6 +44,15 @@ function NetworkPacketParser() constructor
 			{
 				switch (_messageType)
 				{
+					case MESSAGE_TYPE.REMOTE_CONNECTED_TO_HOST:
+					{
+						var parsedRemoteClientId = buffer_read(_msg, buffer_string);
+						var parsedRemotePlayerTag = buffer_read(_msg, buffer_string);
+						parsedPayload = new RemotePlayerInfo(
+							parsedRemoteClientId,
+							parsedRemotePlayerTag
+						);
+					} break;
 					case MESSAGE_TYPE.INVALID_REQUEST:
 					{
 						var parsedRequestAction = buffer_read(_msg, buffer_u8);
@@ -227,7 +236,7 @@ function NetworkPacketParser() constructor
 						{
 							var parsedPosition = ParseJSONStructToVector2(parsedStruct[$ "position"] ?? undefined);
 							parsedPayload = new InstanceObject(
-								sprDrone,
+								object_get_sprite(objDrone),
 								objDrone,
 								parsedPosition
 							);
