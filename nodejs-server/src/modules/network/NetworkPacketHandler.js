@@ -132,8 +132,29 @@ export default class NetworkPacketHandler {
               const player = instance.getPlayer(client.uuid);
               if (player !== undefined) {
                 player.position = newPosition;
-                // TODO: For debugging
-                //console.log(player.position);
+
+                // Response with remote data position
+                const remotePlayers = instance.getAllRemotePlayers(client.uuid);
+                const formatRemotePlayers =
+                  FormatArrayToJSONStructArray(remotePlayers);
+                const networkPacketHeader = new NetworkPacketHeader(
+                  MESSAGE_TYPE.REMOTE_DATA_POSITION,
+                  client.uuid
+                );
+                const networkPacket = new NetworkPacket(
+                  networkPacketHeader,
+                  {
+                    remote_data_position: formatRemotePlayers,
+                  },
+                  PACKET_PRIORITY.HIGH
+                );
+                this.networkHandler.packetQueue.enqueue(
+                  new NetworkQueueEntry(
+                    networkPacket,
+                    [client],
+                    networkPacket.priority
+                  )
+                );
                 isPacketHandled = true;
               }
             }
@@ -146,8 +167,29 @@ export default class NetworkPacketHandler {
               const player = instance.getPlayer(client.uuid);
               if (player !== undefined) {
                 player.inputMovement = deviceInputMovement;
-                // TODO: For debugging
-                //console.log(player.inputMovement);
+
+                // Broadcast about device input change within the instance
+                const clientsToBroadcast =
+                  this.clientHandler.getClientsToBroadcastInstance(
+                    instance.instanceId,
+                    client.uuid
+                  );
+                const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+                  MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT,
+                  client.uuid
+                );
+                const broadcastNetworkPacket = new NetworkPacket(
+                  broadcastNetworkPacketHeader,
+                  {
+                    network_id: client.uuid,
+                    device_input_movement: player.inputMovement.toJSONStruct(),
+                  },
+                  PACKET_PRIORITY.DEFAULT
+                );
+                this.networkHandler.broadcast(
+                  broadcastNetworkPacket,
+                  clientsToBroadcast
+                );
                 isPacketHandled = true;
               }
             }
@@ -233,17 +275,22 @@ export default class NetworkPacketHandler {
                 client.setInstanceId(destinationInstanceId);
 
                 // Broadcast if player returns to camp
+                const remotePlayerInfo = new RemotePlayerInfo(
+                  client.uuid,
+                  client.playerTag
+                );
                 if (
                   destinationInstance.instanceId === this.instanceHandler.campId
                 ) {
-                  const clientsToBroadcast = this.clientHandler.getAllClients();
+                  const clientsToBroadcast =
+                    this.clientHandler.getClientsToBroadcastInGame(client.uuid);
                   const broadcastNetworkPacketHeader = new NetworkPacketHeader(
                     MESSAGE_TYPE.REMOTE_RETURNED_TO_CAMP,
                     client.uuid
                   );
                   const broadcastNetworkPacket = new NetworkPacket(
                     broadcastNetworkPacketHeader,
-                    undefined,
+                    remotePlayerInfo,
                     PACKET_PRIORITY.DEFAULT
                   );
                   this.networkHandler.broadcast(
@@ -252,16 +299,17 @@ export default class NetworkPacketHandler {
                   );
                 } else {
                   // Broadcast about left client within the instance
-                  // TODO: Fetch clients only within the instance
-                  const clientsToBroadcast = this.clientHandler.getAllClients();
+                  const clientsToBroadcast =
+                    this.clientHandler.getClientsToBroadcastInstance(
+                      fastTravelInfo.sourceInstanceId
+                    );
                   const broadcastNetworkPacketHeader = new NetworkPacketHeader(
                     MESSAGE_TYPE.REMOTE_LEFT_THE_INSTANCE,
                     client.uuid
                   );
                   const broadcastNetworkPacket = new NetworkPacket(
                     broadcastNetworkPacketHeader,
-                    // TODO: Supply with player data
-                    undefined,
+                    remotePlayerInfo,
                     PACKET_PRIORITY.DEFAULT
                   );
                   this.networkHandler.broadcast(
@@ -712,6 +760,10 @@ export default class NetworkPacketHandler {
 
                   // Broadcast scouting drone sync withing scouted instance
                   const formatScoutingDrone = scoutingDrone.toJSONStruct();
+                  const clientsToBroadcast =
+                    this.clientHandler.getClientsToBroadcastInstance(
+                      scoutInstanceId
+                    );
                   const broadcastNetworkPacketHeader = new NetworkPacketHeader(
                     MESSAGE_TYPE.SYNC_SCOUTING_DRONE_DATA,
                     client.uuid
@@ -721,9 +773,10 @@ export default class NetworkPacketHandler {
                     formatScoutingDrone,
                     PACKET_PRIORITY.DEFAULT
                   );
-                  this.networkHandler.broadcast(broadcastNetworkPacket, [
-                    client,
-                  ]);
+                  this.networkHandler.broadcast(
+                    broadcastNetworkPacket,
+                    clientsToBroadcast
+                  );
 
                   // Response with start operations scout stream
                   const networkPacketHeader = new NetworkPacketHeader(
@@ -788,6 +841,10 @@ export default class NetworkPacketHandler {
                   // Broadcast scouting drone position withing scouted instance
                   const formatScoutingDrone =
                     activeOperationsScoutStream.scoutingDrone.toJSONStruct();
+                  const clientsToBroadcast =
+                    this.clientHandler.getClientsToBroadcastInstance(
+                      scoutingDrone.instanceId
+                    );
                   const broadcastNetworkPacketHeader = new NetworkPacketHeader(
                     MESSAGE_TYPE.SCOUTING_DRONE_DATA_POSITION,
                     client.uuid
@@ -797,9 +854,10 @@ export default class NetworkPacketHandler {
                     formatScoutingDrone,
                     PACKET_PRIORITY.DEFAULT
                   );
-                  this.networkHandler.broadcast(broadcastNetworkPacket, [
-                    client,
-                  ]);
+                  this.networkHandler.broadcast(
+                    broadcastNetworkPacket,
+                    clientsToBroadcast
+                  );
 
                   // Response with scouted instance data
                   const formatScoutInstance = scoutInstance.toJSONStruct();
@@ -837,6 +895,10 @@ export default class NetworkPacketHandler {
                 // Broadcast scouting drone position withing scouted instance
                 const formatScoutingDrone =
                   activeOperationsScoutStream.scoutingDrone.toJSONStruct();
+                const clientsToBroadcast =
+                  this.clientHandler.getClientsToBroadcastInstance(
+                    scoutInstanceId
+                  );
                 const broadcastNetworkPacketHeader = new NetworkPacketHeader(
                   MESSAGE_TYPE.DESTROY_SCOUTING_DRONE_DATA,
                   client.uuid
@@ -846,7 +908,10 @@ export default class NetworkPacketHandler {
                   formatScoutingDrone,
                   PACKET_PRIORITY.DEFAULT
                 );
-                this.networkHandler.broadcast(broadcastNetworkPacket, [client]);
+                this.networkHandler.broadcast(
+                  broadcastNetworkPacket,
+                  clientsToBroadcast
+                );
 
                 // Response with end operations scout stream
                 const networkPacketHeader = new NetworkPacketHeader(

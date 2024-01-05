@@ -22,7 +22,29 @@ export default class ClientHandler {
   }
 
   getAllClients() {
-    return Object.values(this.clients);
+    return this.clients.filter(
+      (client) => client.instanceId !== UNDEFINED_UUID
+    );
+  }
+
+  getClientsToBroadcastGlobal(excludeClientId = UNDEFINED_UUID) {
+    return this.getAllClients().filter((client) => {
+      return client.uuid !== excludeClientId;
+    });
+  }
+
+  getClientsToBroadcastInGame(excludeClientId = UNDEFINED_UUID) {
+    return this.getAllClients().filter((client) => {
+      return client.instanceId !== undefined && client.uuid !== excludeClientId;
+    });
+  }
+
+  getClientsToBroadcastInstance(instanceId, excludeClientId = UNDEFINED_UUID) {
+    return this.getAllClients().filter((client) => {
+      return (
+        client.instanceId === instanceId && client.uuid !== excludeClientId
+      );
+    });
   }
 
   getClientCount() {
