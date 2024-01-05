@@ -4,7 +4,7 @@ function NetworkRegionObjectHandler() constructor
 	requested_container_access = undefined;
 	// TODO: Move under the Region struct
 	local_patrols = ds_list_create();
-	scouting_drone = noone;
+	scouting_drone = undefined;
 	
 	patrol_update_timer = new Timer(TimerFromMilliseconds(300));
 	patrol_update_timer.StartTimer();
@@ -16,6 +16,8 @@ function NetworkRegionObjectHandler() constructor
 		
 		DestroyDSListAndDeleteValues(local_patrols);
 		local_patrols = undefined;
+		
+		scouting_drone = undefined;
 	}
 	
 	static Update = function()
@@ -80,6 +82,15 @@ function NetworkRegionObjectHandler() constructor
 						patrol_update_timer.Update();
 					}
 				}
+			}
+		}
+		
+		// INTERPOLATE SCOUTING DRONE MOVEMENT
+		if (!is_undefined(scouting_drone))
+		{
+			if (instance_exists(scouting_drone.instance_ref))
+			{
+				scouting_drone.InterpolateMovement();
 			}
 		}
 	}
@@ -160,18 +171,29 @@ function NetworkRegionObjectHandler() constructor
 			objDrone
 		);
 		scouting_drone = droneInstance;
+	
+	static SpawnScoutingDrone = function(_instanceObject, _layerName)
+	{
+		var isDroneSpawned = true;
+		if (is_undefined(scouting_drone))
+		{
+			scouting_drone = _instanceObject;
+			var scoutingDroneInstance = global.SpawnHandlerRef.SpawnInstance(scouting_drone);
+			scouting_drone.instance_ref = scoutingDroneInstance;
+		} else {
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Trying to spawn a second scouting drone, max 1");	
+		}
 		return isDroneSpawned;
 	}
 	
-	static SyncScoutingDrone = function(_scoutingDroneData)
+	static UpdateScoutingDrone = function(_scoutingDroneData)
 	{
 		var isDroneSynced = false;
-		if (scouting_drone != noone)
+		if (!is_undefined(scouting_drone))
 		{
-			if (instance_exists(scouting_drone))
+			if (instance_exists(scouting_drone.instance_ref))
 			{
-				scouting_drone.x = _scoutingDroneData.position.X;
-				scouting_drone.y = _scoutingDroneData.position.Y;
+				scouting_drone.StartInterpolateMovement(_scoutingDroneData.position, 300);
 				isDroneSynced = true;
 			}
 		}
@@ -181,12 +203,12 @@ function NetworkRegionObjectHandler() constructor
 	static DestroyScoutingDrone = function(_scoutingDroneData)
 	{
 		var isDroneDestroyed = false;
-		if (scouting_drone != noone)
+		if (!is_undefined(scouting_drone))
 		{
-			if (instance_exists(scouting_drone))
+			if (instance_exists(scouting_drone.instance_ref))
 			{
-				instance_destroy(scouting_drone);
-				scouting_drone = noone;
+				instance_destroy(scouting_drone.instance_ref);
+				scouting_drone = undefined;
 			}
 			isDroneDestroyed = true;
 		}

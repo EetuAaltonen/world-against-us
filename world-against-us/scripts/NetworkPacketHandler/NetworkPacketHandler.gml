@@ -406,6 +406,13 @@ function NetworkPacketHandler() constructor
 						var scoutingDroneInstanceObject = payload;
 						if (!is_undefined(scoutingDroneInstanceObject))
 						{
+							global.NotificationHandlerRef.AddNotification(
+								new Notification(
+									sprIconDroneEnterRegion, "Scouting drone arrived",
+									"Scouting drone entered the area",
+									NOTIFICATION_TYPE.Popup
+								)
+							);
 							isPacketHandled = global.NetworkRegionObjectHandlerRef.SpawnScoutingDrone(scoutingDroneInstanceObject);
 						}
 					} break;
@@ -414,7 +421,7 @@ function NetworkPacketHandler() constructor
 						var scoutingDroneData = payload;
 						if (!is_undefined(scoutingDroneData))
 						{
-							isPacketHandled = global.NetworkRegionObjectHandlerRef.SyncScoutingDrone(scoutingDroneData);
+							isPacketHandled = global.NetworkRegionObjectHandlerRef.UpdateScoutingDrone(scoutingDroneData);
 						}
 					} break;
 					case MESSAGE_TYPE.DESTROY_SCOUTING_DRONE_DATA:
@@ -422,6 +429,13 @@ function NetworkPacketHandler() constructor
 						var scoutingDroneData = payload;
 						if (!is_undefined(scoutingDroneData))
 						{
+							global.NotificationHandlerRef.AddNotification(
+								new Notification(
+									sprIconDroneLeaveRegion, "Scouting drone disappeared",
+									"Scouting drone left the area",
+									NOTIFICATION_TYPE.Popup
+								)
+							);
 							isPacketHandled = global.NetworkRegionObjectHandlerRef.DestroyScoutingDrone(scoutingDroneData);
 						}
 					} break;
