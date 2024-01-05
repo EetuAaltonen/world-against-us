@@ -7,6 +7,8 @@ function MapIcon(_object_name, _position, _origin, _size, _icon_style = undefine
 	icon_style = _icon_style;
 	icon_alpha = _icon_alpha;
 	
+	simulated_instance_object = undefined;
+	
 	static ToJSONStruct = function()
 	{
 		var scaledPosition = ScaleFloatValuesToIntVector2(position.X, position.Y);

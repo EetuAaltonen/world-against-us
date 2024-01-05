@@ -64,7 +64,23 @@ function GUIStateHandler() constructor
 	
 	static CheckGUIStateQueueAndProceed = function()
 	{
-		if (!is_undefined(gui_state_queue))
+		if (gui_state_reset && (gui_state_close_current || !is_undefined(gui_state_queue)))
+		{
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Trying to reset GUI state with overlapping close and GUI state queue");
+		}
+		
+		if (gui_state_reset)
+		{
+			if (room == roomMainMenu)
+			{
+				ResetGUIStateMainMenu();
+			} else {
+				ResetGUIState();
+			}
+		} else if (gui_state_close_current)
+		{
+			CloseCurrentGUIState();	
+		} else if (!is_undefined(gui_state_queue))
 		{
 			// OVERWRITE GUI STATE
 			if (gui_state_queue.chainRule == GUI_CHAIN_RULE.Overwrite) {
@@ -80,17 +96,6 @@ function GUIStateHandler() constructor
 			}
 			// SET GUI STATE
 			SetGUIState(gui_state_queue);
-		} else if (gui_state_reset)
-		{
-			if (room == roomMainMenu)
-			{
-				ResetGUIStateMainMenu();
-			} else {
-				ResetGUIState();
-			}
-		} else if (gui_state_close_current)
-		{
-			CloseCurrentGUIState();	
 		}
 		
 		// RESET GUI STATE QUEUE
