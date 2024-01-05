@@ -9,6 +9,7 @@ import NetworkPacket from "../network_packets/NetworkPacket.js";
 
 import WorldStateSync from "../world_state/WorldStateSync.js";
 import PlayerInfo from "../players/PlayerInfo.js";
+import RemotePlayerInfo from "../players/RemotePlayerInfo.js";
 import WorldMapFastTravelInfo from "../world_map/WorldMapFastTravelInfo.js";
 import ContainerContentInfo from "../containers/ContainerContentInfo.js";
 import OperationsScoutStream from "../operations_center/OperationsScoutStream.js";
@@ -87,16 +88,22 @@ export default class NetworkPacketHandler {
         case MESSAGE_TYPE.SYNC_INSTANCE:
           {
             // Broadcast about entered client within the instance
-            // TODO: Fetch clients only within the instance
-            const clientsToBroadcast = this.clientHandler.getAllClients();
+            const remotePlayerInfo = new RemotePlayerInfo(
+              client.uuid,
+              client.playerTag
+            );
+            const clientsToBroadcast =
+              this.clientHandler.getClientsToBroadcastInstance(
+                instance.instanceId,
+                client.uuid
+              );
             const broadcastNetworkPacketHeader = new NetworkPacketHeader(
               MESSAGE_TYPE.REMOTE_ENTERED_THE_INSTANCE,
               client.uuid
             );
             const broadcastNetworkPacket = new NetworkPacket(
               broadcastNetworkPacketHeader,
-              // TODO: Supply with player data and position
-              undefined,
+              remotePlayerInfo,
               PACKET_PRIORITY.DEFAULT
             );
             this.networkHandler.broadcast(
