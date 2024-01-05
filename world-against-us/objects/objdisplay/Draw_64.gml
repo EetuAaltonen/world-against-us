@@ -4,6 +4,7 @@ if (global.DEBUGMODE)
 	draw_set_color(c_yellow);
 	draw_text(32, 32, "FPS real: " + string(fpsReal));
 	draw_text(32, 64, "FPS: " + string(_fps));
+	draw_text(32, 96, "DeltaTime: " + string(delta_time));
 
 	// RESET DRAW PROPERTIES
 	ResetDrawProperties();
@@ -29,7 +30,8 @@ if (global.MultiplayerMode)
 			var ownerClientID = (global.NetworkRegionHandlerRef.owner_client == UNDEFINED_UUID) ? "Unknown" : global.NetworkRegionHandlerRef.owner_client;
 			draw_text(global.GUIW - 20, 110, string("{0} :Region Owner", (global.NetworkHandlerRef.client_id == ownerClientID) ? "Self" : ownerClientID));
 			draw_text(global.GUIW - 20, 130, string("{0}ms :Ping", !is_undefined(global.NetworkConnectionSamplerRef.ping) ? global.NetworkConnectionSamplerRef.ping : "-"));
-			draw_text(global.GUIW - 20, 150, string("{0}kb/s :Out", !is_undefined(global.NetworkConnectionSamplerRef.last_data_sent_rate) ? (global.NetworkConnectionSamplerRef.last_data_sent_rate * 0.001)  : "-"));
+			draw_text(global.GUIW - 20, 150, string("{0}kb/s :Out", global.NetworkConnectionSamplerRef.last_data_out_rate * 0.001));
+			draw_text(global.GUIW - 20, 170, string("{0}kb/s :In", global.NetworkConnectionSamplerRef.last_data_in_rate * 0.001));
 		}
 	}
 }

@@ -5,9 +5,11 @@ function NetworkConnectionSampler() constructor
 	ping_timeout_timer = new Timer(TimerFromSeconds(3));
 	last_update_time = 0;
 	
-	sent_rate_sample_timer = new Timer(TimerFromSeconds(1));
-	data_sent_rate = 0;
-	last_data_sent_rate = undefined;
+	data_rate_sample_timer = new Timer(TimerFromSeconds(1));
+	data_out_rate = 0;
+	last_data_out_rate = 0;
+	data_in_rate = 0;
+	last_data_in_rate = 0;
 	
 	static Update = function()
 	{
@@ -27,13 +29,17 @@ function NetworkConnectionSampler() constructor
 			ping_timeout_timer.Update();
 		}
 		// UPDATE DATA SAMPLE RATE
-		if (sent_rate_sample_timer.IsTimerStopped())
+		if (data_rate_sample_timer.IsTimerStopped())
 		{
-			last_data_sent_rate = data_sent_rate;
-			data_sent_rate = 0;
-			sent_rate_sample_timer.StartTimer();
+			last_data_out_rate = data_out_rate;
+			data_out_rate = 0;
+			
+			last_data_in_rate = data_in_rate;
+			data_in_rate = 0;
+			
+			data_rate_sample_timer.StartTimer();
 		} else {
-			sent_rate_sample_timer.Update();
+			data_rate_sample_timer.Update();
 		}
 	}
 	

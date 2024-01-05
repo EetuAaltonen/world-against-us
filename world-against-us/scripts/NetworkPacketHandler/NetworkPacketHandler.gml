@@ -11,24 +11,6 @@ function NetworkPacketHandler() constructor
 				var payload = _networkPacket.payload;
 				switch (messageType)
 				{
-					case MESSAGE_TYPE.PONG:
-					{
-						var pingSample = payload;
-						if (!is_undefined(pingSample))
-						{
-							global.NetworkConnectionSamplerRef.StopPinging(pingSample.client_time);
-							
-							// RESPONSE WITH PONG
-							var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PONG);
-							var networkPacket = new NetworkPacket(
-								networkPacketHeader,
-								pingSample,
-								PACKET_PRIORITY.DEFAULT,
-								undefined
-							);
-							isPacketHandled = global.NetworkHandlerRef.AddPacketToQueue(networkPacket);
-						}
-					} break;
 					case MESSAGE_TYPE.REQUEST_JOIN_GAME:
 					{
 						var networkJoinGameRequest = payload;
@@ -78,6 +60,7 @@ function NetworkPacketHandler() constructor
 						if (!is_undefined(region))
 						{
 							global.NetworkRegionHandlerRef.owner_client = region.owner_client;
+							global.NetworkRegionObjectHandlerRef.SyncRegionPlayers(region.local_players);
 							global.NetworkRegionObjectHandlerRef.SyncRegionPatrols(region.arrived_patrols);
 							// RESPOND WITH ACKNOWLEDGMENT TO END SYNC INSTANCE
 							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
@@ -85,39 +68,71 @@ function NetworkPacketHandler() constructor
 					} break;
 					case MESSAGE_TYPE.REMOTE_ENTERED_THE_INSTANCE:
 					{
-						// TODO: Fetch player name from payload and destroy co-op objPlayer
-						global.NotificationHandlerRef.AddNotification(
-							new Notification(
-								sprIconRemoteEnterRegion, "Client entered the region",
-								"Player X entered the area",
-								NOTIFICATION_TYPE.Popup
-							)
-						);
+						var remotePlayerInfo = networkPacket.payload;
+						if (!is_undefined(remotePlayerInfo))
+						{
+							// TODO: Spawn remote player
+							
+							global.NotificationHandlerRef.AddNotification(
+								new Notification(
+									sprIconRemoteEnterRegion, "Client entered the region",
+									string("{0} entered the area", remotePlayerInfo.player_tag),
+									NOTIFICATION_TYPE.Popup
+								)
+							);
+							// RESPOND WITH ACKNOWLEDGMENT TO REMOTE ENTERED THE INSTANCE
+							isPacketHandled = QueueAcknowledgmentResponse();
+						}
+					} break;
+					case MESSAGE_TYPE.REMOTE_DATA_POSITION:
+					{
+						// Parse this elsewhere
+						var remoteDataPosition = payload[$ "remote_data_position"];
+						if (!is_undefined(remoteDataPosition))
+						{
+							global.NetworkRegionObjectHandlerRef.UpdateRegionRemotePosition(remoteDataPosition);
+						}
+						isPacketHandled = true;
+					} break;
+					case MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT:
+					{
+						// Parse this elsewhere
+						var remoteDataMovementInput = payload;
+						if (!is_undefined(remoteDataMovementInput))
+						{
+							global.NetworkRegionObjectHandlerRef.UpdateRegionRemoteInput(remoteDataMovementInput);
+						}
 						isPacketHandled = true;
 					} break;
 					case MESSAGE_TYPE.REMOTE_LEFT_THE_INSTANCE:
 					{
-						// TODO: Fetch player name from payload and destroy co-op objPlayer
-						global.NotificationHandlerRef.AddNotification(
-							new Notification(
-								sprIconRemoteLeftRegion, "Client left the region",
-								"Player X left the area",
-								NOTIFICATION_TYPE.Popup
-							)
-						);
-						isPacketHandled = true;
+						// TODO: Destroy remote player
+						
+						var remotePlayerInfo = networkPacket.payload;
+						if (!is_undefined(remotePlayerInfo))
+						{
+							global.NotificationHandlerRef.AddNotification(
+								new Notification(
+									sprIconRemoteLeaveRegion, "Client left the region",
+									string("{0} left the area", remotePlayerInfo.player_tag),
+									NOTIFICATION_TYPE.Popup
+								)
+							);
+							// RESPOND WITH ACKNOWLEDGMENT TO REMOTE LEFT THE INSTANCE
+							isPacketHandled = QueueAcknowledgmentResponse();
+						}
 					} break;
 					case MESSAGE_TYPE.REMOTE_RETURNED_TO_CAMP:
 					{
-						// TODO: Fetch player name from payload
-						global.NotificationHandlerRef.AddNotification(
-							new Notification(
-								sprIconRemoteToCamp, "Client returned to Camp",
-								"Player X returned to the Camp",
-								NOTIFICATION_TYPE.Popup
-							)
-						);
-						isPacketHandled = true;
+						// TODO: Destroy remote player
+						
+						var remotePlayerInfo = networkPacket.payload;
+						if (!is_undefined(remotePlayerInfo))
+						{
+							global.NotificationHandlerRef.AddNotificationPlayerReturnedToCamp(remotePlayerInfo.player_tag);
+							// RESPOND WITH ACKNOWLEDGMENT TO REMOTE RETURNED TO CAMP
+							isPacketHandled = QueueAcknowledgmentResponse();
+						}
 					} break;
 					case MESSAGE_TYPE.REQUEST_PLAYER_LIST:
 					{
@@ -143,14 +158,14 @@ function NetworkPacketHandler() constructor
 					} break;
 					case MESSAGE_TYPE.REQUEST_INSTANCE_LIST:
 					{
-						var parsedAvailableInstances = payload;
+						var availableInstances = payload;
 						var worldMapWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.WorldMap);
 						if (!is_undefined(worldMapWindow))
 						{
 							var instanceListElement = worldMapWindow.GetChildElementById("InstanceList");
 							if (!is_undefined(instanceListElement))
 							{
-								instanceListElement.UpdateDataCollection(parsedAvailableInstances);
+								instanceListElement.UpdateDataCollection(availableInstances);
 										
 								// HIDE LOADING ICON
 								var instanceListLoadingElement = worldMapWindow.GetChildElementById("InstanceListLoading");
@@ -187,6 +202,12 @@ function NetworkPacketHandler() constructor
 											global.NetworkRegionHandlerRef.prev_region_id = sourceRegionId;
 											global.NetworkRegionHandlerRef.room_index = destinationRoomIndex;
 											global.NetworkRegionHandlerRef.owner_client = undefined;
+											
+											// POP-UP NOTIFICATION
+											if (destinationRoomIndex == ROOM_INDEX_CAMP)
+											{
+												global.NotificationHandlerRef.AddNotificationPlayerReturnedToCamp(global.NetworkHandlerRef.player_tag);
+											}
 												
 											// RESPOND WITH ACKNOWLEDGMENT TO SUCCESS FAST TRAVEL REQUEST
 											isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
