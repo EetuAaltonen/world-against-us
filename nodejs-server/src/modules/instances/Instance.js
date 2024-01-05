@@ -24,7 +24,7 @@ export default class Instance {
     this.parentInstanceId = undefined;
     this.ownerClient = undefined;
     this.localPlayers = {};
-    this.localPatrols = {}; // TODO: local patrols
+    this.localPatrols = {};
     this.containerHandler = new ContainerHandler(this.networkHandler);
 
     this.availablePatrolId = 0;
@@ -35,7 +35,6 @@ export default class Instance {
     const formatLocalPlayers = FormatHashMapToJSONStructArray(
       this.localPlayers
     );
-
     const arrivedPatrols = Object.values(this.localPatrols).filter(
       (patrolJSONObject) => patrolJSONObject.travelTime <= 0
     );
@@ -111,7 +110,6 @@ export default class Instance {
                           this.instanceId,
                           patrolState
                         );
-
                         this.removePatrol(patrolId);
                       }
                     }
@@ -140,6 +138,19 @@ export default class Instance {
 
   getPlayer(clientId) {
     return this.localPlayers[clientId];
+  }
+
+  getAllPlayerIds() {
+    return Object.keys(this.localPlayers);
+  }
+
+  getAllRemotePlayers(excludeClientId) {
+    const remotePlayers = this.getAllPlayerIds().filter((clientId) => {
+      return clientId !== excludeClientId;
+    });
+    return remotePlayers.map((clientId) => {
+      return this.getPlayer(clientId);
+    });
   }
 
   getPlayerIdFirst() {
