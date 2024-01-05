@@ -88,10 +88,12 @@ function NetworkPacketBuilder() constructor
 					} break;
 					case MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT:
 					{
-						buffer_write(_networkBuffer, buffer_s8, _networkPacketPayload.key_up);
-						buffer_write(_networkBuffer, buffer_s8, _networkPacketPayload.key_down);
-						buffer_write(_networkBuffer, buffer_s8, _networkPacketPayload.key_left);
-						buffer_write(_networkBuffer, buffer_s8, _networkPacketPayload.key_right);
+						var deviceInputCompress = 0;
+						if (_networkPacketPayload.key_up) deviceInputCompress += 1;
+						if (_networkPacketPayload.key_down) deviceInputCompress += 2;
+						if (_networkPacketPayload.key_left) deviceInputCompress += 4;
+						if (_networkPacketPayload.key_right) deviceInputCompress += 8;
+						buffer_write(_networkBuffer, buffer_s8, deviceInputCompress);
 						isPayloadWritten = true;
 					} break;
 					case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:

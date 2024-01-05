@@ -92,6 +92,32 @@ function NetworkPacketParser() constructor
 							parsedPayload = ParseJSONStructToRegion(parsedStruct);
 						}
 					} break;
+					case MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT:
+					{
+			            var parsedDeviceInputCompress = buffer_read(_msg, buffer_u8);
+						
+			            var parsedKeyRight = (parsedDeviceInputCompress >= 8);
+			            if (parsedKeyRight) parsedDeviceInputCompress -= 8;
+			            var parsedKeyLeft = (parsedDeviceInputCompress >= 4);
+			            if (parsedKeyLeft) parsedDeviceInputCompress -= 4;
+			            var parsedKeyDown = (parsedDeviceInputCompress >= 2);
+			            if (parsedKeyDown) parsedDeviceInputCompress -= 2;
+			            var parsedKeyUp = (parsedDeviceInputCompress >= 1);
+			            if (parsedKeyUp) parsedDeviceInputCompress -= 1;
+						
+						var parsedNetworkId = buffer_read(_msg, buffer_string);
+						
+						var emptyInstanceObject = new InstanceObject(
+							undefined, objPlayer, undefined
+						);
+						emptyInstanceObject.network_id = parsedNetworkId;
+						emptyInstanceObject.device_input_movement.key_up = parsedKeyUp;
+						emptyInstanceObject.device_input_movement.key_down = parsedKeyDown;
+						emptyInstanceObject.device_input_movement.key_left = parsedKeyLeft;
+						emptyInstanceObject.device_input_movement.key_right = parsedKeyRight;
+						
+						parsedPayload = emptyInstanceObject;
+					} break;
 					case MESSAGE_TYPE.REQUEST_PLAYER_LIST:
 					{
 						var payloadString = buffer_read(_msg, buffer_string);

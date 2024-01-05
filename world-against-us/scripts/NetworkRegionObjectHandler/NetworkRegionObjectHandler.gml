@@ -3,6 +3,7 @@ function NetworkRegionObjectHandler() constructor
 	active_inventory_stream = undefined;
 	requested_container_access = undefined;
 	// TODO: Move under the Region struct
+	local_players = ds_list_create();
 	local_patrols = ds_list_create();
 	scouting_drone = undefined;
 	
@@ -14,6 +15,9 @@ function NetworkRegionObjectHandler() constructor
 		active_inventory_stream = undefined;
 		requested_container_access = undefined;
 		
+		DestroyDSListAndDeleteValues(local_players);
+		local_players = undefined;
+		
 		DestroyDSListAndDeleteValues(local_patrols);
 		local_patrols = undefined;
 		
@@ -22,6 +26,7 @@ function NetworkRegionObjectHandler() constructor
 	
 	static Update = function()
 	{
+		// SEND PATROL PROGRESS POSITION UPDATE
 		var regionOwnerClient = global.NetworkRegionHandlerRef.owner_client;
 		var clientId = global.NetworkHandlerRef.client_id;
 		if (clientId != UNDEFINED_UUID)
@@ -145,6 +150,9 @@ function NetworkRegionObjectHandler() constructor
 			}
 		}
 		
+		// CLEAR LOCAL PLAYERS
+		ClearDSListAndDeleteValues(local_players);
+		
 		// CLEAR LOCAL PATROLS
 		ClearDSListAndDeleteValues(local_patrols);
 		
@@ -152,25 +160,116 @@ function NetworkRegionObjectHandler() constructor
 		patrol_update_timer.StartTimer();
 	}
 	
-	static SpawnScoutingDrone = function(_instanceObject, _layerName)
+	static SyncRegionPlayers = function(_players)
 	{
-		var isDroneSpawned = true;
-		if (scouting_drone != noone)
+		var isPlayersSync = true;
+		// TODO: Check for existing players with same ID and sync their location
+		var playerCount = array_length(_players);
+		for (var i = 0; i < playerCount; i++)
 		{
-			var existentDrone = instance_find(objDrone, 0);
-			if (existentDrone != noone)
+			var player = _players[@ i];
+			if (!is_undefined(player))
 			{
-				instance_destroy(existentDrone);
+				var remotePlayerPosition = new Vector2(
+					player.position.X,
+					player.position.Y,
+				);
+				var remotePlayerInstanceObject = new InstanceObject(
+					sprSoldierOriginaRemote, objPlayer,
+					remotePlayerPosition
+				);
+				var spawnedPlayerInstance = global.SpawnHandlerRef.SpawnInstance(remotePlayerInstanceObject);
+				if (spawnedPlayerInstance != noone)
+				{
+					// SET REMOTE PLAYER CHARACTER
+					spawnedPlayerInstance.character = new CharacterHuman(
+						player.name, CHARACTER_TYPE.Human,
+						CHARACTER_RACE.humanoid, CHARACTER_BEHAVIOUR.REMOTE_PLAYER
+					);
+					// SET REMOTE PLAYER INSTANCE REF
+					remotePlayerInstanceObject.instance_ref = spawnedPlayerInstance;
+					// SET NETWORK ID
+					remotePlayerInstanceObject.network_id = player.network_id;
+					// SET DEVICE INPUT MOVEMENT
+					spawnedPlayerInstance.movementInput = remotePlayerInstanceObject.device_input_movement;
+					
+					ds_list_add(local_players, remotePlayerInstanceObject);
+				}
 			}
 		}
-		
-		var droneInstance = instance_create_layer(
-			_instanceObject.position.X,
-			_instanceObject.position.Y,
-			LAYER_CHARACTERS,
-			objDrone
-		);
-		scouting_drone = droneInstance;
+		return isPlayersSync;
+	}
+	
+	static GetPlayerInstanceObjectById = function(_clientId)
+	{
+		var playerInstanceObject = undefined;
+		var playerInstanceCount = ds_list_size(local_players);
+		for (var i = 0; i < playerInstanceCount; i++)
+		{
+			var instanceObject = local_players[| i];
+			if (!is_undefined(instanceObject))
+			{
+				if (instanceObject.network_id == _clientId)
+				{
+					if (instance_exists(instanceObject.instance_ref))
+					{
+						playerInstanceObject = instanceObject;
+					} else {
+						// DELETE EXPIRED PLAYER DATA
+						DeleteDSListValueByIndex(local_players, i--);
+						playerInstanceCount = ds_list_size(local_players);
+					}
+					break;
+				}
+			}
+		}
+		return playerInstanceObject;
+	}
+	
+	static UpdateRegionRemotePosition = function(_remoteDataPositions)
+	{
+		var remoteCount = array_length(_remoteDataPositions);
+		for (var i = 0; i < remoteCount; i++)
+		{
+			var remoteDataPosition = _remoteDataPositions[@ i];
+			if (!is_undefined(remoteDataPosition))
+			{
+				var playerInstanceObject = GetPlayerInstanceObjectById(remoteDataPosition.network_id);
+				if (!is_undefined(playerInstanceObject))
+				{
+					var scaledRemoteDataPosition = ScaleIntValuesToFloatVector2(
+						remoteDataPosition.position.X,
+						remoteDataPosition.position.Y
+					);
+					playerInstanceObject.position.X = scaledRemoteDataPosition.X;
+					playerInstanceObject.position.Y = scaledRemoteDataPosition.Y;
+					
+					var playerInstanceRef = playerInstanceObject.instance_ref;
+					if (instance_exists(playerInstanceRef))
+					{
+						playerInstanceRef.x = playerInstanceObject.position.X;
+						playerInstanceRef.y = playerInstanceObject.position.Y;
+					}
+				}
+			}
+		}
+	}
+	
+	static UpdateRegionRemoteInput = function(_remoteDataInput)
+	{
+		var deviceInputMovement = _remoteDataInput.device_input_movement;
+		if (!is_undefined(deviceInputMovement))
+		{
+			var playerInstanceObject = GetPlayerInstanceObjectById(_remoteDataInput.network_id);
+			if (!is_undefined(playerInstanceObject))
+			{
+				playerInstanceObject.device_input_movement.key_up = deviceInputMovement.key_up;
+				playerInstanceObject.device_input_movement.key_down = deviceInputMovement.key_down;
+				playerInstanceObject.device_input_movement.key_left = deviceInputMovement.key_left;
+				playerInstanceObject.device_input_movement.key_right = deviceInputMovement.key_right;
+			}
+		}
+	}
 	
 	static SpawnScoutingDrone = function(_instanceObject, _layerName)
 	{
@@ -250,7 +349,6 @@ function NetworkRegionObjectHandler() constructor
 			var patrol = local_patrols[| i];
 			if (!is_undefined(patrol))
 			{
-				// DON'T SPAWN PATROLS ON QUEUE
 				if (patrol.patrol_id == _patrolId)
 				{
 					if (instance_exists(patrol.instance_ref))
