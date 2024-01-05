@@ -1,6 +1,7 @@
 function OnClickEscMenuReset()
 {
 	var gameSaveName = global.GameSaveHandlerRef.save_name;
+	// TODO: Fix ResetGameSave function call
 	if (global.GameSaveHandlerRef.ResetGameSave())
 	{
 		var notification = new Notification(

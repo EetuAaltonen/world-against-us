@@ -57,8 +57,9 @@ function CreateWindowMap(_gameWindowId, _zIndex)
 	// OVERRIDE WINDOW ONCLOSE FUNCTION
 	var overrideOnClose = function()
 	{
-		// SUSPEND MAP UPDATE
+		// SUSPEND MAP UPDATE AND CLEAR ICONS
 		global.MapDataHandlerRef.is_dynamic_data_updating = false;
+		global.MapDataHandlerRef.ClearDynamicMapData();
 	}
 	mapWindow.OnClose = overrideOnClose;
 	

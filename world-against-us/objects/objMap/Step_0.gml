@@ -6,6 +6,7 @@ if (global.GUIStateHandlerRef.IsGUIStateClosed())
 		{
 			if (mapDataHandler.GenerateStaticMapData())
 			{
+				// NOTIFICATION LOG
 				global.NotificationHandlerRef.AddNotification(
 					new Notification(
 						undefined,
@@ -15,6 +16,7 @@ if (global.GUIStateHandlerRef.IsGUIStateClosed())
 					)
 				);
 			} else {
+				// NOTIFICATION LOG
 				global.NotificationHandlerRef.AddNotification(
 					new Notification(
 						undefined,

@@ -25,7 +25,7 @@ function ItemActionUnloadWeapon(_weapon)
 					{
 						// REVERSE UNLOAD IF DOESN'T FIT
 						_weapon.metadata.ReloadAmmo(shell);
-						// LOG NOTIFICATION
+						// NOTIFICATION LOG
 						global.NotificationHandlerRef.AddNotification(
 							new Notification(
 								undefined,

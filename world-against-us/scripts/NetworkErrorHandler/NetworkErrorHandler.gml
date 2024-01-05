@@ -11,7 +11,7 @@ function NetworkErrorHandler() constructor
 		var isRequestHandled = true;
 		if (!is_undefined(_invalidRequestInfo))
 		{
-			// ADD CONSOLE LOG
+			// CONSOLE LOG
 			var consoleLog = string(
 				"Invalid request with MessageType {0}: {1}",
 				_invalidRequestInfo.original_message_type,
@@ -19,7 +19,7 @@ function NetworkErrorHandler() constructor
 			);
 			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
 		
-			// ADD NOTIFICATION
+			// NOTIFICATION LOG
 			var notification = new Notification(
 				undefined, _invalidRequestInfo.invalidation_message,
 				undefined, NOTIFICATION_TYPE.Log
@@ -65,10 +65,10 @@ function NetworkErrorHandler() constructor
 		var isErrorHandled = false;
 		var errorMessage = _networkPacket.payload[$ "error"] ?? "Unknown server error";
 		var consoleLog = string("{0}. Disconnecting...", errorMessage);
-		// ADD CONSOLE LOG
+		// CONSOLE LOG
 		global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
 		
-		// ADD NOTIFICATION
+		// NOTIFICATION LOG
 		var notification = new Notification(
 			undefined, "Internal server error, something went wrong",
 			undefined, NOTIFICATION_TYPE.Log

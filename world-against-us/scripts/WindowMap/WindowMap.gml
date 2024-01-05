@@ -290,6 +290,7 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 								c_red, c_red, c_red, c_red,
 								1
 							);
+							
 							// RESET DRAW PROPERTIES
 							ResetDrawProperties();
 						}
