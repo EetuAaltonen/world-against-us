@@ -13,7 +13,7 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"7056554e-e85b-4ee2-b0df-a6220a236d6b",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"99eafad4-7a67-4f4e-bbd3-6d4abdd1a495",},
   ],
   "gridX": 0,
   "gridY": 0,
@@ -54,7 +54,7 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"7056554e-e85b-4ee2-b0df-a6220a236d6b","path":"sprites/sprSoldierOriginal/sprSoldierOriginal.yy",},},},"Disabled":false,"id":"5dd214ba-0a7e-413d-9ddb-28b00d043de3","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"99eafad4-7a67-4f4e-bbd3-6d4abdd1a495","path":"sprites/sprSoldierOriginal/sprSoldierOriginal.yy",},},},"Disabled":false,"id":"23ee7e90-a790-49ec-843a-c9b0a04e38e3","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,

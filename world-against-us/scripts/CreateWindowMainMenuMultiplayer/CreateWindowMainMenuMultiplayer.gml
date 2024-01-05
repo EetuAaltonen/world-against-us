@@ -9,7 +9,7 @@ function CreateWindowMainMenuMultiplayer(_gameWindowId, _zIndex)
 	);
 	
 	var multiplayerElements = ds_list_create();
-	var panelSize = new Size(600, 200);
+	var panelSize = new Size(600, 300);
 	var multiplayerPanel = new WindowPanel(
 		"MultiplayerPanel",
 		new Vector2(windowSize.w * 0.5 - (panelSize.w * 0.5), windowSize.h * 0.5 - (panelSize.h * 0.5)),
@@ -19,33 +19,68 @@ function CreateWindowMainMenuMultiplayer(_gameWindowId, _zIndex)
 	
 	var multiplayerPanelElements = ds_list_create();
 	// PANEL TITLE
-	ds_list_add(multiplayerPanelElements,
-		new WindowText(
-			"MultiplayerPanelTitle",
-			new Vector2(panelSize.w * 0.5, 20),
-			undefined, undefined,
-			"Multiplayer", font_default, fa_center, fa_middle, c_black, 1
-		)
+	var multiplayerPanelTitle = new WindowText(
+		"MultiplayerPanelTitle",
+		new Vector2(panelSize.w * 0.5, 20),
+		undefined, undefined,
+		"Multiplayer", font_default, fa_center, fa_middle, c_black, 1
 	);
 	
-	// ADDRESS & PORT INPUT
+	// PLAYER TAG INPUT
 	var inputSize = new Size(500, 30);
+	var playerTagInputTitlePos = new Vector2(48, 50);
+	var playerTagInputTitle = new WindowText(
+		"MultiplayerPlayerTagInputTitle",
+		playerTagInputTitlePos, undefined,
+		undefined, "Username / Player Tag",
+		font_small_bold, fa_left, fa_middle,
+		c_black, 1
+	);
+	var playerTagInputPos = new Vector2(panelSize.w * 0.5 - (inputSize.w * 0.5), 60);
+	var playerTagInput = new WindowInput(
+		"MultiplayerPlayerTagInput",
+		playerTagInputPos, inputSize,
+		#48a630, "*Name length 3-16 characters"
+	);
+	
+	// ADDRESS INPUT
+	var addressInputTitlePos = new Vector2(48, 110);
+	var addressInputTitle = new WindowText(
+		"MultiplayerAddressInputTitle",
+		addressInputTitlePos, undefined,
+		undefined, "Server Address",
+		font_small_bold, fa_left, fa_middle,
+		c_black, 1
+	);
+	var addressInputPos = new Vector2(panelSize.w * 0.5 - (inputSize.w * 0.5), 120);
 	var addressInput = new WindowInput(
 		"MultiplayerAddressInput",
-		new Vector2(panelSize.w * 0.5 - (inputSize.w * 0.5), panelSize.h * 0.5 - (inputSize.h * 0.5) - 20),
-		inputSize, #48a630, "*Address"
+		addressInputPos, inputSize,
+		#48a630, "*Address"
 	);
+	
+	// PORT INPUT
+	var portInputTitlePos = new Vector2(48, 170);
+	var poertInputTitle = new WindowText(
+		"MultiplayerPortInputTitle",
+		portInputTitlePos, undefined,
+		undefined, "Server Port",
+		font_small_bold, fa_left, fa_middle,
+		c_black, 1
+	);
+	var portInputPos = new Vector2(panelSize.w * 0.5 - (inputSize.w * 0.5), 180);
 	var portInput = new WindowInput(
 		"MultiplayerPortInput",
-		new Vector2(panelSize.w * 0.5 - (inputSize.w * 0.5), panelSize.h * 0.5 - (inputSize.h * 0.5) + 20),
-		inputSize, #48a630, "*Port"
+		portInputPos, inputSize,
+		#48a630, "*Port"
 	);
+	
 	// SET DEFAULT SERVER INFO
 	addressInput.input = DEFAULT_HOST_ADDRESS;
 	portInput.input = DEFAULT_HOST_PORT;
 	
 	// CONNECT BUTTON
-	var buttonSize = new Size(100, 30);
+	var buttonSize = new Size(120, 40);
 	var buttonStyle = new ButtonStyle(
 		buttonSize, 0,
 		#48a630, #2c8017,
@@ -56,12 +91,17 @@ function CreateWindowMainMenuMultiplayer(_gameWindowId, _zIndex)
 	);
 	var multiplayerConnectButton = new WindowButton(
 		"MultiplayerConnectButton",
-		new Vector2(panelSize.w * 0.5 - (buttonSize.w * 0.5), panelSize.h - buttonSize.h - 20),
+		new Vector2(panelSize.w * 0.5 - (buttonSize.w * 0.5), panelSize.h - buttonSize.h - 30),
 		buttonSize, buttonStyle.button_background_color, "Connect", buttonStyle, OnClickMenuConnect
 	);
 	
 	ds_list_add(multiplayerPanelElements,
+		multiplayerPanelTitle,
+		playerTagInputTitle,
+		playerTagInput,
+		addressInputTitle,
 		addressInput,
+		poertInputTitle,
 		portInput,
 		multiplayerConnectButton
 	);
