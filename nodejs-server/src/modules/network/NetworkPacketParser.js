@@ -54,6 +54,13 @@ export default class NetworkPacketParser {
     try {
       if (msg.length > 0) {
         switch (messageType) {
+          case MESSAGE_TYPE.CONNECT_TO_HOST:
+            {
+              let offset = 0;
+              const parsedPlayerTag = msg.toString("utf8", offset);
+              payload = parsedPlayerTag;
+            }
+            break;
           case MESSAGE_TYPE.PING:
             {
               let offset = 0;
@@ -80,14 +87,15 @@ export default class NetworkPacketParser {
           case MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT:
             {
               let offset = 0;
-              const parsedKeyUp = msg.readUInt8(offset);
-              offset += BITWISE.BIT8;
-              const parsedKeyDown = msg.readUInt8(offset);
-              offset += BITWISE.BIT8;
-              const parsedKeyLeft = msg.readUInt8(offset);
-              offset += BITWISE.BIT8;
-              const parsedKeyRight = msg.readUInt8(offset);
-              offset += BITWISE.BIT8;
+              let parsedDeviceInputCompress = msg.readUInt8(offset);
+              const parsedKeyRight = parsedDeviceInputCompress >= 8;
+              if (parsedKeyRight) parsedDeviceInputCompress -= 8;
+              const parsedKeyLeft = parsedDeviceInputCompress >= 4;
+              if (parsedKeyLeft) parsedDeviceInputCompress -= 4;
+              const parsedKeyDown = parsedDeviceInputCompress >= 2;
+              if (parsedKeyDown) parsedDeviceInputCompress -= 2;
+              const parsedKeyUp = parsedDeviceInputCompress >= 1;
+              if (parsedKeyUp) parsedDeviceInputCompress -= 1;
               payload = new DeviceInputMovement(
                 parsedKeyUp,
                 parsedKeyDown,
@@ -331,6 +339,7 @@ export default class NetworkPacketParser {
         }
       }
     } catch (error) {
+      console.log(error);
       ConsoleHandler.Log(error);
     }
     return payload;

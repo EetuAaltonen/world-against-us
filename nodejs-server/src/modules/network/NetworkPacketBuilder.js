@@ -88,6 +88,20 @@ export default class NetworkPacketBuilder {
     if (payload !== undefined) {
       try {
         switch (messageType) {
+          case MESSAGE_TYPE.REMOTE_CONNECTED_TO_HOST:
+            {
+              const bufferClientId = Buffer.from(
+                payload.clientId + NULL_TERMINATOR,
+                "utf8"
+              );
+              const bufferPlayerTag = Buffer.from(payload.playerTag, "utf8");
+              this.payloadBuffer = Buffer.concat([
+                bufferClientId,
+                bufferPlayerTag,
+              ]);
+              isPayloadWritten = true;
+            }
+            break;
           case MESSAGE_TYPE.INVALID_REQUEST:
             {
               const bufferInvalidRequest = Buffer.allocUnsafe(
@@ -129,6 +143,35 @@ export default class NetworkPacketBuilder {
               const bufferWeather = Buffer.allocUnsafe(BITWISE.BIT8);
               bufferWeather.writeUInt8(payload);
               this.payloadBuffer = bufferWeather;
+              isPayloadWritten = true;
+            }
+            break;
+          case MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT:
+            {
+              let deviceInputCompress = 0;
+              if (payload.device_input_movement.key_up)
+                deviceInputCompress += 1;
+              if (payload.device_input_movement.key_down)
+                deviceInputCompress += 2;
+              if (payload.device_input_movement.key_left)
+                deviceInputCompress += 4;
+              if (payload.device_input_movement.key_right)
+                deviceInputCompress += 8;
+
+              const bufferDeviceInputMovement = Buffer.allocUnsafe(
+                BITWISE.BIT8
+              );
+              let offset = 0;
+              bufferDeviceInputMovement.writeUInt8(deviceInputCompress, offset);
+
+              const bufferPlayerNetworkId = Buffer.from(
+                payload.network_id,
+                "utf8"
+              );
+              this.payloadBuffer = Buffer.concat([
+                bufferDeviceInputMovement,
+                bufferPlayerNetworkId,
+              ]);
               isPayloadWritten = true;
             }
             break;
