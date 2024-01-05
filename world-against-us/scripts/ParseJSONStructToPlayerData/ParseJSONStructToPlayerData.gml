@@ -9,7 +9,8 @@ function ParseJSONStructToPlayerData(_jsonStruct)
 		
 		var parsedPosition = ParseJSONStructToVector2(playerStruct[$ "position"] ?? undefined)
 		parsedPlayer = new PlayerData(
-			playerStruct[$ "name"] ?? "Player X",
+			playerStruct[$ "network_id"] ?? UNDEFINED_UUID,
+			playerStruct[$ "name"] ?? "RemotePlayer",
 			parsedPosition
 		);
 	} catch (error)

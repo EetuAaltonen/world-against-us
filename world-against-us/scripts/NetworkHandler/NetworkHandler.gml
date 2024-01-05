@@ -3,6 +3,7 @@ function NetworkHandler() constructor
 	socket = undefined;
 	
 	client_id = UNDEFINED_UUID;
+	player_tag = EMPTY_STRING;
 	network_status = NETWORK_STATUS.OFFLINE;
 	host_address = undefined;
 	host_port = undefined;
@@ -172,6 +173,7 @@ function NetworkHandler() constructor
 		
 			// RESET NETWORK PROPERTIES
 			client_id = UNDEFINED_UUID;
+			player_tag = EMPTY_STRING;
 			network_status = NETWORK_STATUS.OFFLINE;
 			host_address = undefined;
 			host_port = undefined;
@@ -202,15 +204,17 @@ function NetworkHandler() constructor
 		return isSocketDeleted;
 	}
 	
-	static RequestConnectSocket = function(_address, _port)
+	static RequestConnectSocket = function(_playerTag, _address, _port)
 	{
 		var isConnecting = false;
 		if (!is_undefined(socket)) {
+			player_tag = _playerTag;
 			host_address = _address;
 			host_port = _port;
 			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONNECT_TO_HOST);
 			var networkPacket = new NetworkPacket(
-				networkPacketHeader, undefined,
+				networkPacketHeader,
+				player_tag,
 				PACKET_PRIORITY.HIGH,
 				AckTimeoutFuncResend
 			);
