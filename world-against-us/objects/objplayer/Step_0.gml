@@ -1,9 +1,9 @@
 // OVERRIDE THE PARENT EVENT
-character.Update();
-if (character.is_dead) return;
-
 if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 {
+	character.Update();
+	if (character.is_dead) return;
+	
 	// CHECK GUI STATE
 	if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;
 	GetLocalPlayerMovementInput(movementInput);
@@ -20,7 +20,7 @@ if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 				medicine.sourceInventory.RemoveItemByGridIndex(medicine.grid_index);
 			}
 		} else {
-			// LOG NOTIFICATION
+			// NOTIFICATION LOG
 			global.NotificationHandlerRef.AddNotification(
 				new Notification(
 					undefined,
@@ -31,6 +31,10 @@ if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 			);
 		}
 	}
+	
+	// DEBUG MODE
+	maxSpeed = (global.DEBUGMODE) ? 10 : baseMaxSpeed;
+	acceleration = (global.DEBUGMODE) ? 0.5 : baseAcceleration;
 }
 
 var hInput = movementInput.key_right - movementInput.key_left;
@@ -47,9 +51,6 @@ if (vInput == 0)
 {
 	vSpeed = Approach(vSpeed, 0, acceleration * 2);
 }
-
-maxSpeed = (global.DEBUGMODE) ? 8 : baseMaxSpeed;
-acceleration = (global.DEBUGMODE) ? 0.5 : baseAcceleration;
 
 hSpeed = clamp(hSpeed, -maxSpeed, maxSpeed);
 vSpeed = clamp(vSpeed, -maxSpeed, maxSpeed);
@@ -83,5 +84,11 @@ if (place_meeting(x, y + vSpeed, objBlockParent))
 }
 y += vSpeed;
 
-var spriteDirection = CalculateSpriteDirectionToAim(new Vector2(x, y), MouseWorldPosition());
-image_xscale = spriteDirection.image_x_scale;
+// CALCULATE IMAGE X SCALE
+if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
+{
+	var spriteDirection = CalculateSpriteDirectionToAim(new Vector2(x, y), MouseWorldPosition());
+	image_xscale = spriteDirection.image_x_scale;
+} else {
+	image_xscale = (hSpeed != 0) ? sign(hSpeed) : image_xscale;
+}

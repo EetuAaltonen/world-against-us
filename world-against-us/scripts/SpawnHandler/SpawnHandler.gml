@@ -136,6 +136,7 @@ function SpawnHandler() constructor
 				_instanceObject.position.Y, 
 				_instanceObject.obj_index
 			);
+			spawnedInstance.sprite_index = _instanceObject.spr_index;
 		}
 		return spawnedInstance;
 	}
