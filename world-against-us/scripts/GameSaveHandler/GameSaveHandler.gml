@@ -49,10 +49,10 @@ function GameSaveHandler() constructor
 			{
 				save_name = FormatSaveName(_saveName);
 				save_file_name = ConcatSaveFileSuffix(save_name);
-		
+				
 				if (!file_exists(save_file_name))
 				{
-					if (!CreateEmptySaveFile(save_file_name))
+					if (CreateEmptySaveFile(save_file_name))
 					{
 						isSaveInitialized = true;
 					}
@@ -64,9 +64,12 @@ function GameSaveHandler() constructor
 		return isSaveInitialized;
 	}
 	
-	static ResetGameSaveData = function()
+	static ResetGameSaveDataCache = function()
 	{
-		game_save_data.OnDestroy();
+		if (game_save_data != EMPTY_SAVE_DATA)
+		{
+			game_save_data.OnDestroy();
+		}
 		game_save_data = undefined;
 	}
 	
@@ -99,6 +102,25 @@ function GameSaveHandler() constructor
 		return isEmptyFileCreated;
 	}
 	
+	static ResetSaveFile = function()
+	{
+		var isGameSaveReseted = false;
+		// DELETE SAVE FILE
+		if (DeleteSaveFile(save_file_name))
+		{
+			// DELETE ROOM SAVE FILES
+			if (DeleteRoomSaveFiles(save_name))
+			{
+				// CREATE EMPTY SAVE FILE
+				if (CreateEmptySaveFile(save_file_name))
+				{
+					isGameSaveReseted = true;
+				}
+			}
+		}
+		return isGameSaveReseted;
+	}
+	
 	static ReadSaveFromFile = function()
 	{
 		var isSaveDataReaded = false;
@@ -112,13 +134,24 @@ function GameSaveHandler() constructor
 					if (buffer_get_size(saveFileBuffer) > 0)
 					{
 						var gameSaveString = buffer_read(saveFileBuffer, buffer_text);
-						if (string_length(gameSaveString) > 0 && gameSaveString != EMPTY_SAVE_DATA)
+						if (string_length(gameSaveString) > 0)
 						{
-							var gameSaveStruct = json_parse(gameSaveString);
-							game_save_data = ParseJSONStructToGameSaveData(gameSaveStruct);
-							// SET SAVE LOADIN FIRST TIME FLAG
-							is_save_loading_first_time = true;
-							isSaveDataReaded = true;
+							if (gameSaveString != EMPTY_SAVE_DATA)
+							{
+								var gameSaveStruct = json_parse(gameSaveString);
+								game_save_data = ParseJSONStructToGameSaveData(gameSaveStruct);
+								if (!is_undefined(game_save_data))
+								{
+									// SET SAVE LOADIN FIRST TIME FLAG
+									is_save_loading_first_time = true;
+									isSaveDataReaded = true;
+								}
+							} else {
+								game_save_data = EMPTY_SAVE_DATA;
+								// SET SAVE LOADIN FIRST TIME FLAG
+								is_save_loading_first_time = true;
+								isSaveDataReaded = true;
+							}
 						}
 					}
 					buffer_delete(saveFileBuffer);
@@ -138,6 +171,13 @@ function GameSaveHandler() constructor
 		var isGameSaved = false;
 		if (IS_ROOM_IN_GAME_WORLD)
 		{
+			if (game_save_data == EMPTY_SAVE_DATA)
+			{
+				// INIT NEW GAME SAVE DATA
+				game_save_data = new GameSaveData(undefined);
+				game_save_data.InitNewSave();
+			}
+			
 			if (game_save_data.FetchSaveData())
 			{
 				if (WriteSaveToFile())
@@ -190,7 +230,7 @@ function GameSaveHandler() constructor
 		return isSaveDataWritten;
 	}
 	
-	static DeletePlayerSaveFile = function(_saveFileName)
+	static DeleteSaveFile = function(_saveFileName)
 	{
 		var isSaveFileDeleted = false;
 		try
@@ -238,23 +278,6 @@ function GameSaveHandler() constructor
 	
 	// TODO: Fix these functions and related logic
 	/*
-	static ResetGameSave = function(_saveName)
-	{
-		var isGameSaveReseted = false;
-		if (InitGameSave(_saveName))
-		{
-			// OVERWRITE EXISTING SAVE FILE
-			if (CreateEmptySaveFile(_saveName))
-			{
-				if (DeleteRoomSaveFiles(_saveName))
-				{
-					isGameSaveReseted = true;
-				}
-			}
-		}
-		return isGameSaveReseted;
-	}
-	
 	static ReadRoomDataFromFile = function()
 	{
 		var isRoomSaveReaded = false;
