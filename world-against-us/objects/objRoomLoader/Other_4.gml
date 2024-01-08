@@ -74,7 +74,6 @@ for (var i = 0; i < controllerCount; i++)
 		}
 	}
 }
-
 switch (room)
 {
 	case roomLaunch: {
@@ -83,38 +82,78 @@ switch (room)
 		room_goto(roomMainMenu);
 	} break;
 	case roomLoadResources: {
+		// INIT NEW PLAYER DATA
+		global.PlayerDataHandlerRef.InitPlayerData();
+		
 		// LOAD SAVE FILE
 		if (global.GameSaveHandlerRef.ReadSaveFromFile())
 		{
 			// LOAD PLAYER DATA
-			if (global.PlayerDataHandlerRef.LoadPlayerData(global.GameSaveHandlerRef.game_save_data))
+			if (global.PlayerDataHandlerRef.LoadPlayerData())
 			{
 				if (!global.MultiplayerMode)
 				{
 					var fastTravelTargetRoom = ROOM_DEFAULT;
-					// FETCH LAST KNOWN LOCATION FROM GAME SAVE
-					if (!is_undefined(global.PlayerDataHandlerRef.last_known_location))
+					var gameSaveData = global.GameSaveHandlerRef.game_save_data;
+					if (!is_undefined(gameSaveData))
 					{
-						if (!is_undefined(global.PlayerDataHandlerRef.last_known_location.room_index))
+						if (gameSaveData != EMPTY_SAVE_DATA)
 						{
-							fastTravelTargetRoom = global.PlayerDataHandlerRef.last_known_location.room_index;
+							// FETCH LAST KNOWN LOCATION FROM GAME SAVE
+							if (!is_undefined(global.PlayerDataHandlerRef.last_known_location))
+							{
+								if (!is_undefined(global.PlayerDataHandlerRef.last_known_location.room_index))
+								{
+									fastTravelTargetRoom = global.PlayerDataHandlerRef.last_known_location.room_index;
+								}
+							}
+						} else {
+							global.NotificationHandlerRef.AddNotification(
+								new Notification(
+									sprFloppyDisk, "New game save started",
+									string("Save: '{0}'", global.GameSaveHandlerRef.save_name),
+									NOTIFICATION_TYPE.Popup
+								)
+							);
 						}
+						// GO TO THE LAST KNOWN PLAYER LOCATION
+						global.RoomChangeHandlerRef.RequestRoomChange(fastTravelTargetRoom);
+					} else {
+						var consoleLog = string("Failed to process save data after parsing save file '{0}'", global.GameSaveHandlerRef.save_file_name);
+						global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
+						
+						global.NotificationHandlerRef.AddNotification(
+							new Notification(
+								sprFloppyDiskBroken, "Failed to load game save",
+								string("Save: '{0}'", global.GameSaveHandlerRef.save_name),
+								NOTIFICATION_TYPE.Popup
+							)
+						);
+						// RETURN TO MAIN MENU
+						global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_MAIN_MENU);
 					}
-				
-					global.NotificationHandlerRef.AddNotification(
-						new Notification(
-							sprFloppyDisk, "New game save started",
-							string("Save: '{0}'", global.GameSaveHandlerRef.save_name),
-							NOTIFICATION_TYPE.Popup
-						)
-					);
-					// GO TO THE LAST KNOWN PLAYER LOCATION
-					global.RoomChangeHandlerRef.RequestRoomChange(fastTravelTargetRoom);
 				} else {
 					// REQUEST JOIN GAME
 					if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.CONNECTED_SAVE_SELECTED)
 					{
 						global.NetworkHandlerRef.RequestJoinGame();
+					} else {
+						var consoleLog = string(
+							"Invalid network status on join game {0} != {1}",
+							global.NetworkHandlerRef.network_status,
+							NETWORK_STATUS.CONNECTED_SAVE_SELECTED
+						);
+						global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
+						
+						global.NotificationHandlerRef.AddNotification(
+							new Notification(
+								undefined, "Failed to join the game",
+								undefined, NOTIFICATION_TYPE.Log
+							)
+						);
+						
+						// REQUEST DISCONNECT
+						global.NetworkHandlerRef.RequestDisconnectSocket();
 					}
 				}		
 			} else {
@@ -132,7 +171,7 @@ switch (room)
 				global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_MAIN_MENU);
 			}
 		} else {
-			var consoleLog = string("Failed to load and parse save file '{0}'", global.GameSaveHandlerRef.save_file_name);
+			var consoleLog = string("Failed to read game save file '{0}'", global.GameSaveHandlerRef.save_file_name);
 			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
 		
 			global.NotificationHandlerRef.AddNotification(
@@ -151,7 +190,7 @@ switch (room)
 		// RESET GAME SAVE DATA CACHE
 		if (!is_undefined(global.GameSaveHandlerRef.game_save_data))
 		{
-			global.GameSaveHandlerRef.ResetGameSaveData();
+			global.GameSaveHandlerRef.ResetGameSaveDataCache();
 		}
 		
 		// DISCONNECT FROM THE SERVER WHEN RETURNING TO MAINMENU

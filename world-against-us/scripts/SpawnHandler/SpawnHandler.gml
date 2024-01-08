@@ -100,16 +100,19 @@ function SpawnHandler() constructor
 					var gameSaveData = global.GameSaveHandlerRef.game_save_data;
 					if (!is_undefined(gameSaveData))
 					{
-						if (!is_undefined(gameSaveData.player_data))
+						if (gameSaveData != EMPTY_SAVE_DATA)
 						{
-							if (!is_undefined(gameSaveData.player_data.last_location))
+							if (!is_undefined(gameSaveData.player_data))
 							{
-								var lastLocation = gameSaveData.player_data.last_location;
-								if (!is_undefined(lastLocation))
+								if (!is_undefined(gameSaveData.player_data.last_location))
 								{
-									if (!is_undefined(lastLocation.position))
+									var lastLocation = gameSaveData.player_data.last_location;
+									if (!is_undefined(lastLocation))
 									{
-										playerInstanceObject.position = new Vector2(lastLocation.position.X, lastLocation.position.Y);
+										if (!is_undefined(lastLocation.position))
+										{
+											playerInstanceObject.position = new Vector2(lastLocation.position.X, lastLocation.position.Y);
+										}
 									}
 								}
 							}
