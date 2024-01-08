@@ -182,7 +182,7 @@ function NetworkPacketBuilder() constructor
 						buffer_write(_networkBuffer, buffer_u8, patrolState.ai_state);
 						isPayloadWritten = true;
 					} break;
-					case MESSAGE_TYPE.PATROLS_DATA_PROGRESS_POSITION:
+					case MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA:
 					{
 						var patrolsDataProgressPosition = _networkPacketPayload;
 						buffer_write(_networkBuffer, buffer_u32, patrolsDataProgressPosition.region_id);

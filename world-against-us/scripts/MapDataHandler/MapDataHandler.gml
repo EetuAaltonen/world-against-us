@@ -163,9 +163,10 @@ function MapDataHandler() constructor
 		}
 	}
 	
-	static SyncDynamicMapData = function(_region)
+	static SyncDynamicMapData = function(_regionSnapshot)
 	{
-		var worldMapLocation = global.WorldMapLocationData[? _region.room_index];
+		// TODO: Optimize and simplify this code
+		var worldMapLocation = global.WorldMapLocationData[? target_scout_region.room_index];
 		if (!is_undefined(worldMapLocation))
 		{
 			var patrolPath = worldMapLocation.patrol_path;
@@ -178,7 +179,7 @@ function MapDataHandler() constructor
 						sprite_get_width(sprBandit),
 						sprite_get_height(sprBandit)
 					);
-					// PATCH EXISTENT MAP ICONS
+					// PATCH EXISTENT PATROL MAP ICONS
 					var dynamicIconCount = ds_list_size(dynamic_map_data.icons);
 					for (var i = 0; i < dynamicIconCount; i++)
 					{
@@ -186,10 +187,10 @@ function MapDataHandler() constructor
 						if (!is_undefined(dynamicMapIcon))
 						{
 							var existentPatrolIndex = undefined;
-							var patrolCount = array_length(_region.arrived_patrols);
+							var patrolCount = array_length(_regionSnapshot.local_patrols);
 							for (var j = 0; j < patrolCount; j++)
 							{
-								var patrol = _region.arrived_patrols[@ j];
+								var patrol = _regionSnapshot.local_patrols[@ j];
 								if (!is_undefined(patrol))
 								{
 									if (dynamicMapIcon.simulated_instance_object.network_id == patrol.patrol_id &&
@@ -203,39 +204,38 @@ function MapDataHandler() constructor
 						
 							if (!is_undefined(existentPatrolIndex))
 							{
-								var patrol = _region.arrived_patrols[@ existentPatrolIndex];
+								var patrol = _regionSnapshot.local_patrols[@ existentPatrolIndex];								
 								var patrolPosition = new Vector2(
 									path_get_x(patrolPath, patrol.route_progress),
 									path_get_y(patrolPath, patrol.route_progress)
 								);
-								var positionWithOffset = new Vector2(
-									patrolPosition.X - (banditSpriteSize.w * 0.5),
-									patrolPosition.Y - (banditSpriteSize.h)
-								);
-								
-								show_debug_message(string(
-									"{0}:{1} --> {2}:{3}",
-									dynamicMapIcon.simulated_instance_object.position.X,
-									dynamicMapIcon.simulated_instance_object.position.Y,
-									patrolPosition.X,
-									patrolPosition.Y
-								));
+								// USE LOCAL POSITION IF OUTSIDE THE ROUTE
+								if (patrol.local_position.X != 0 && patrol.local_position.Y != 0)
+								{
+									patrolPosition = patrol.local_position;
+								}
 								dynamicMapIcon.simulated_instance_object.StartInterpolateMovement(patrolPosition, 300);
-								array_delete(_region.arrived_patrols, existentPatrolIndex, 1);
+								array_delete(_regionSnapshot.local_patrols, existentPatrolIndex, 1);
+								patrolCount = array_length(_regionSnapshot.local_patrols);
 							} else {
-								ds_list_delete(dynamic_map_data.icons, i--);
-								dynamicIconCount = ds_list_size(dynamic_map_data.icons);
+								// DELETE OUTDATED PATROL MAP ICONS
+								if (dynamicMapIcon.object_name == object_get_name(objBandit))
+								{
+									ds_list_delete(dynamic_map_data.icons, i--);
+									dynamicIconCount = ds_list_size(dynamic_map_data.icons);
+								}
 							}
 						} else {
+							// DELETE UNDEFINED MAP ICONS
 							ds_list_delete(dynamic_map_data.icons, i--);
 							dynamicIconCount = ds_list_size(dynamic_map_data.icons);
 						}
 					}
-					// ADD NEW MAP ICONS
-					var newPatrolIconCount = array_length(_region.arrived_patrols);
+					// ADD NEW PATROL MAP ICONS
+					var newPatrolIconCount = array_length(_regionSnapshot.local_patrols);
 					for (var i = 0; i < newPatrolIconCount; i++)
 					{
-						var patrol = _region.arrived_patrols[@ i];
+						var patrol = _regionSnapshot.local_patrols[@ i];
 						if (!is_undefined(patrol))
 						{
 							var patrolPosition = new Vector2(
@@ -267,33 +267,95 @@ function MapDataHandler() constructor
 				}
 			}
 			
-			// TODO: Do same with player icons
-			/*var playerMapIconStyle = global.MapIconStyleData[? "objPlayer"];
-			var patrolCount = array_length(_region.local_players);
-			var playerSpriteSize = new Size(
-				sprite_get_width(sprSoldier),
-				sprite_get_height(sprSoldier)
-			);
-			for (var i = 0; i < patrolCount; i++)
+			var playerMapIconStyle = global.MapIconStyleData[? object_get_name(objPlayer)];
+			if (!is_undefined(playerMapIconStyle))
 			{
-				var player = _region.local_players[@ i];
-				var positionWithOffset = new Vector2(
-					player.position.X - (playerSpriteSize.w * 0.5),
-					player.position.Y - (playerSpriteSize.h)
+				var playerSpriteSize = new Size(
+					sprite_get_width(sprSoldierOriginal),
+					sprite_get_height(sprSoldierOriginal)
 				);
-				var mapIcon = new MapIcon(
-					"objPlayer",
-					// TOP-LEFT CORNER TO DRAW RECTANGLE
-					positionWithOffset,
-					player.position,
-					playerSpriteSize,
-					playerMapIconStyle,
-					1
-				);
-				ds_list_add(dynamic_map_data.icons, mapIcon);
-			}*/
+				// PATCH EXISTENT PLAYER MAP ICONS
+				var dynamicIconCount = ds_list_size(dynamic_map_data.icons);
+				for (var i = 0; i < dynamicIconCount; i++)
+				{
+					var dynamicMapIcon = dynamic_map_data.icons[| i];
+					if (!is_undefined(dynamicMapIcon))
+					{
+						var existentPlayerIndex = undefined;
+						var playerCount = array_length(_regionSnapshot.local_players);
+						for (var j = 0; j < playerCount; j++)
+						{
+							var player = _regionSnapshot.local_players[@ j];
+							if (!is_undefined(player))
+							{
+								if (dynamicMapIcon.simulated_instance_object.network_id == player.network_id &&
+									dynamicMapIcon.simulated_instance_object.obj_index == objPlayer)
+								{
+									existentPlayerIndex = j;
+									break;
+								}
+							}
+						}
+						
+						if (!is_undefined(existentPlayerIndex))
+						{
+							var player = _regionSnapshot.local_players[@ existentPlayerIndex];								
+							var playerPosition = new Vector2(
+								player.position.X,
+								player.position.Y
+							);
+							dynamicMapIcon.simulated_instance_object.StartInterpolateMovement(playerPosition, 300);
+							array_delete(_regionSnapshot.local_players, existentPlayerIndex, 1);
+							playerCount = array_length(_regionSnapshot.local_players);
+						} else {
+							// DELETE OUTDATED PLAYER MAP ICONS
+							if (dynamicMapIcon.object_name == object_get_name(objPlayer))
+							{
+								ds_list_delete(dynamic_map_data.icons, i--);
+								dynamicIconCount = ds_list_size(dynamic_map_data.icons);
+							}
+						}
+					} else {
+						// DELETE UNDEFINED MAP ICONS
+						ds_list_delete(dynamic_map_data.icons, i--);
+						dynamicIconCount = ds_list_size(dynamic_map_data.icons);
+					}
+				}
+				// ADD NEW PLAYER MAP ICONS
+				var newPlayerIconCount = array_length(_regionSnapshot.local_players);
+				for (var i = 0; i < newPlayerIconCount; i++)
+				{
+					var player = _regionSnapshot.local_players[@ i];
+					if (!is_undefined(patrol))
+					{
+						var playerPosition = new Vector2(
+							player.position.X,
+							player.position.Y
+						);
+						var positionWithOffset = new Vector2(
+							playerPosition.X - (playerSpriteSize.w * 0.5),
+							playerPosition.Y - (playerSpriteSize.h)
+						);
+						var mapIcon = new MapIcon(
+							object_get_name(objBandit),
+							// TOP-LEFT CORNER TO DRAW RECTANGLE
+							positionWithOffset,
+							playerPosition,
+							playerSpriteSize,
+							playerMapIconStyle,
+							1
+						);
+						mapIcon.simulated_instance_object = new InstanceObject(
+							object_get_sprite(objPlayer),
+							objPlayer,
+							playerPosition
+						);
+						mapIcon.simulated_instance_object.network_id = player.network_id;
+						ds_list_add(dynamic_map_data.icons, mapIcon);
+					}
+				}
+			}
 		}
-		
 		// SORT DYNAMIC MAP ICONS
 		dynamic_map_data.SortIcons();
 	}
