@@ -7,7 +7,7 @@ function NetworkRegionObjectHandler() constructor
 	local_patrols = ds_list_create();
 	scouting_drone = undefined;
 	
-	patrol_update_timer = new Timer(TimerFromMilliseconds(300));
+	patrol_update_timer = new Timer(1000 / 10);
 	patrol_update_timer.StartTimer();
 	
 	static OnDestroy = function()
@@ -44,8 +44,14 @@ function NetworkRegionObjectHandler() constructor
 						{
 							var patrol = local_patrols[| i];
 							patrol.Update();
+							
 							var formatPatrol = patrol.ToJSONStruct();
-							var formatPosition = ScaleFloatValuesToIntVector2(patrol.local_position.X, patrol.local_position.Y);
+							var formatPosition = new Vector2(0, 0);
+							// UPDATE LOCATION ONLY OUTSIDE THE ROUTE
+							if (patrol.ai_state != AI_STATE.PATROL)
+							{
+								formatPosition = ScaleFloatValuesToIntVector2(patrol.local_position.X, patrol.local_position.Y);
+							}
 							array_push(formatPatrols,
 								{
 									patrol_id: formatPatrol.patrol_id,
@@ -55,7 +61,7 @@ function NetworkRegionObjectHandler() constructor
 							);
 						}
 						
-						var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PATROLS_DATA_PROGRESS_POSITION);
+						var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA);
 						var networkPacket = new NetworkPacket(
 							networkPacketHeader,
 							{
@@ -84,7 +90,7 @@ function NetworkRegionObjectHandler() constructor
 						// RESET TIMER
 						patrol_update_timer.StartTimer();
 					} else {
-						patrol_update_timer.Update();
+						patrol_update_timer.UpdateDelta();
 					}
 				}
 			}
@@ -163,37 +169,25 @@ function NetworkRegionObjectHandler() constructor
 	static SyncRegionPlayers = function(_players)
 	{
 		var isPlayersSync = true;
-		// TODO: Check for existing players with same ID and sync their location
 		var playerCount = array_length(_players);
 		for (var i = 0; i < playerCount; i++)
 		{
 			var player = _players[@ i];
 			if (!is_undefined(player))
 			{
-				var remotePlayerPosition = new Vector2(
-					player.position.X,
-					player.position.Y,
-				);
-				var remotePlayerInstanceObject = new InstanceObject(
-					sprSoldierOriginaRemote, objPlayer,
-					remotePlayerPosition
-				);
-				var spawnedPlayerInstance = global.SpawnHandlerRef.SpawnInstance(remotePlayerInstanceObject);
-				if (spawnedPlayerInstance != noone)
+				// DON'T SPAWN LOCAL PLAYER
+				if (player.network_id != global.NetworkHandlerRef.client_id)
 				{
-					// SET REMOTE PLAYER CHARACTER
-					spawnedPlayerInstance.character = new CharacterHuman(
-						player.name, CHARACTER_TYPE.Human,
-						CHARACTER_RACE.humanoid, CHARACTER_BEHAVIOUR.REMOTE_PLAYER
+					var remotePlayerInfo = new RemotePlayerInfo(
+						player.network_id,
+						player.name
 					);
-					// SET REMOTE PLAYER INSTANCE REF
-					remotePlayerInstanceObject.instance_ref = spawnedPlayerInstance;
-					// SET NETWORK ID
-					remotePlayerInstanceObject.network_id = player.network_id;
-					// SET DEVICE INPUT MOVEMENT
-					spawnedPlayerInstance.movementInput = remotePlayerInstanceObject.device_input_movement;
-					
-					ds_list_add(local_players, remotePlayerInstanceObject);
+					var remotePlayerPosition = new Vector2(
+						player.position.X,
+						player.position.Y,
+					);
+					// SPAWN REMOTE PLAYER
+					global.SpawnHandlerRef.SpawnRemotePlayerInstance(remotePlayerInfo, remotePlayerPosition);
 				}
 			}
 		}
@@ -226,29 +220,67 @@ function NetworkRegionObjectHandler() constructor
 		return playerInstanceObject;
 	}
 	
-	static UpdateRegionRemotePosition = function(_remoteDataPositions)
+	static UpdateRegionFromSnapshot = function(_regionSnapshot)
 	{
-		var remoteCount = array_length(_remoteDataPositions);
-		for (var i = 0; i < remoteCount; i++)
+		// UPDATE LOCAL PLAYERS
+		var playerCount = _regionSnapshot.local_player_count;
+		for (var i = 0; i < playerCount; i++)
 		{
-			var remoteDataPosition = _remoteDataPositions[@ i];
-			if (!is_undefined(remoteDataPosition))
+			var playerData = _regionSnapshot.local_players[@ i];
+			if (!is_undefined(playerData))
 			{
-				var playerInstanceObject = GetPlayerInstanceObjectById(remoteDataPosition.network_id);
-				if (!is_undefined(playerInstanceObject))
+				// DON'T UPDATE LOCAL PLAYER
+				if (playerData.network_id != global.NetworkHandlerRef.client_id)
 				{
-					var scaledRemoteDataPosition = ScaleIntValuesToFloatVector2(
-						remoteDataPosition.position.X,
-						remoteDataPosition.position.Y
-					);
-					playerInstanceObject.position.X = scaledRemoteDataPosition.X;
-					playerInstanceObject.position.Y = scaledRemoteDataPosition.Y;
-					
-					var playerInstanceRef = playerInstanceObject.instance_ref;
-					if (instance_exists(playerInstanceRef))
+					var playerInstanceObject = GetPlayerInstanceObjectById(playerData.network_id);
+					if (!is_undefined(playerInstanceObject))
 					{
-						playerInstanceRef.x = playerInstanceObject.position.X;
-						playerInstanceRef.y = playerInstanceObject.position.Y;
+						playerInstanceObject.position.X = playerData.position.X;
+						playerInstanceObject.position.Y = playerData.position.Y;
+					
+						var playerInstanceRef = playerInstanceObject.instance_ref;
+						if (instance_exists(playerInstanceRef))
+						{
+							playerInstanceRef.x = playerInstanceObject.position.X;
+							playerInstanceRef.y = playerInstanceObject.position.Y;
+						}
+					} else {
+						var consoleLog = string("Unable to update position for unknown remote player instance object with network ID '{0}'", playerData.network_id);
+						global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);	
+					}
+				}
+			}
+		}
+		
+		// UPDATE LOCAL PATROLS
+		// CHECK IF CLIENT HAS AUTHORITY ON THE REGION
+		if (global.NetworkRegionHandlerRef.owner_client != global.NetworkHandlerRef.client_id)
+		{
+			var patrolCount = _regionSnapshot.local_patrol_count;
+			for (var i = 0; i < patrolCount; i++)
+			{
+				var patrolData = _regionSnapshot.local_patrols[@ i];
+				if (!is_undefined(patrolData))
+				{
+					var patrol = GetPatrolById(patrolData.patrol_id);
+					if (!is_undefined(patrol))
+					{
+						if (instance_exists(patrol.instance_ref))
+						{
+							if (patrol.ai_state == AI_STATE.PATROL)
+							{
+								if (patrol.instance_ref.path_index != -1)
+								{
+									if (patrol.instance_ref.path_position < patrolData.route_progress)
+									{
+										patrol.instance_ref.path_position = patrolData.route_progress;
+									}
+								}
+							} else {
+								patrol.instance_ref.x = patrolData.local_position.X;
+								patrol.instance_ref.y = patrolData.local_position.Y;
+							}
+						}
 					}
 				}
 			}
@@ -269,6 +301,37 @@ function NetworkRegionObjectHandler() constructor
 				playerInstanceObject.device_input_movement.key_right = deviceInputMovement.key_right;
 			}
 		}
+	}
+	
+	static DestroyRemotePlayerInstanceObjectById = function(_remotePlayerInfo)
+	{
+		var isPlayerInstanceDestroyed = false;
+		var playerInstanceCount = ds_list_size(local_players);
+		for (var i = 0; i < playerInstanceCount; i++)
+		{
+			var playerInstanceObject = local_players[| i];
+			if (!is_undefined(playerInstanceObject))
+			{
+				if (playerInstanceObject.network_id == _remotePlayerInfo.network_id)
+				{
+					if (instance_exists(playerInstanceObject.instance_ref))
+					{
+						instance_destroy(playerInstanceObject.instance_ref);
+					}
+					ds_list_delete(local_players, i);
+					isPlayerInstanceDestroyed = true;
+					break;
+				}	
+			}
+		}
+		
+		if (!isPlayerInstanceDestroyed)
+		{
+			var consoleLog = string("Unable to destroy unknown remote player instance object with player tag '{0}'", _remotePlayerInfo);
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);	
+		}
+		
+		return isPlayerInstanceDestroyed;
 	}
 	
 	static SpawnScoutingDrone = function(_instanceObject, _layerName)
