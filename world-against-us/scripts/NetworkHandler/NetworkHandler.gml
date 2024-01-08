@@ -71,7 +71,6 @@ function NetworkHandler() constructor
 										var networkPacketSize = SendPacketOverUDP();
 										if (networkPacketSize > 0)
 										{
-											ds_queue_dequeue(network_packet_queue);
 											global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.INFO, string("Network packet ({0}) {1}kb sent >> Packet send interval {2}ms", networkPacket.header.message_type, networkPacketSize * 0.001, packetSendInterval));
 											last_packet_time = current_time;
 										} else {
@@ -80,6 +79,8 @@ function NetworkHandler() constructor
 										// UPDATE DATA OUT RATE
 										global.NetworkConnectionSamplerRef.data_out_rate += networkPacketSize;
 									}
+									// REMOVE PACKET FROM QUEUE
+									ds_queue_dequeue(network_packet_queue);
 								}
 							} else {
 								// DELETE UNNECESSARY ACKNOWLEDGMENTS
@@ -135,7 +136,11 @@ function NetworkHandler() constructor
 		var networkPacketSize = 0;
 		if (!is_undefined(socket))
 		{
-			networkPacketSize = network_send_udp_raw(socket, host_address, host_port, pre_alloc_network_buffer, buffer_tell(pre_alloc_network_buffer));
+			// COMPRESS NETWORK BUFFER
+			var compressNetworkBuffer = buffer_compress(pre_alloc_network_buffer, 0, buffer_tell(pre_alloc_network_buffer));
+			networkPacketSize = network_send_udp_raw(socket, host_address, host_port, compressNetworkBuffer, buffer_get_size(compressNetworkBuffer));
+			// DELETE COMPRESS NETWORK BUFFER
+			buffer_delete(compressNetworkBuffer);
 		}
 		return networkPacketSize;
 	}
@@ -558,6 +563,11 @@ function NetworkHandler() constructor
 											var remotePlayerInfo = networkPacket.payload;
 											if (!is_undefined(remotePlayerInfo))
 											{
+												if (IS_ROOM_IN_GAME_WORLD)
+												{
+													global.NetworkRegionObjectHandlerRef.DestroyRemotePlayerInstanceObjectById(remotePlayerInfo.client_id);	
+												}
+												
 												global.NotificationHandlerRef.AddNotificationPlayerDisconnected(remotePlayerInfo.player_tag);
 												// RESPOND WITH ACKNOWLEDGMENT TO REMOTE DISCONNECTED FROM HOST
 												isMessageHandled = QueueAcknowledgmentResponse();
