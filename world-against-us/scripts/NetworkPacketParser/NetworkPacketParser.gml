@@ -101,6 +101,10 @@ function NetworkPacketParser() constructor
 							parsedPayload = ParseJSONStructToRegion(parsedStruct);
 						}
 					} break;
+					case MESSAGE_TYPE.INSTANCE_SNAPSHOT_DATA:
+					{
+						parsedPayload = ParseRegionSnapshotPayload(_msg);
+					} break;
 					case MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT:
 					{
 			            var parsedDeviceInputCompress = buffer_read(_msg, buffer_u8);
@@ -274,5 +278,56 @@ function NetworkPacketParser() constructor
 			parsedPayload = undefined;
 		}
 		return parsedPayload;
+	}
+	
+	static ParseRegionSnapshotPayload = function(_msg)
+	{
+		var parsedRegionSnapshot = undefined;
+		var parsedRegionId = buffer_read(_msg, buffer_u32);
+		var parsedPlayerCount = buffer_read(_msg, buffer_u8);
+		var parsedPatrolCount = buffer_read(_msg, buffer_u8);
+						
+		// PARSE LOCAL PLAYERS
+		var localPlayers = [];
+		repeat(parsedPlayerCount)
+		{
+			var parsedNetworkId = buffer_read(_msg, buffer_string);
+			var parsedPositionX = buffer_read(_msg, buffer_u32);
+			var parsedPositionY = buffer_read(_msg, buffer_u32);
+			var parsedPosition = ScaleIntValuesToFloatVector2(parsedPositionX, parsedPositionY);
+			var playerData = new PlayerData(
+				parsedNetworkId,
+				"RemotePlayer",
+				parsedPosition
+			);
+			array_push(localPlayers, playerData);
+		}
+		
+		// PARSE LOCAL PATROS
+		var localPatrols = [];
+		repeat(parsedPatrolCount)
+		{
+			var parsedPatrolId = buffer_read(_msg, buffer_u8);
+			var parsedRouteProgress = buffer_read(_msg, buffer_u16);
+			var scaledRouteProgress = ScaleIntPercentToFloat(parsedRouteProgress);
+			var parsedPositionX = buffer_read(_msg, buffer_u32);
+			var parsedPositionY = buffer_read(_msg, buffer_u32);
+			var parsedPosition = ScaleIntValuesToFloatVector2(parsedPositionX, parsedPositionY);
+			var patrol = new Patrol(
+				parsedPatrolId,
+				undefined,
+				undefined,
+				scaledRouteProgress
+			);
+			patrol.local_position = parsedPosition;
+			array_push(localPatrols, patrol);
+		}
+		
+		parsedRegionSnapshot = new NetworkRegionSnapshot(
+			parsedRegionId,
+			localPlayers,
+			localPatrols
+		);
+		return parsedRegionSnapshot;
 	}
 }

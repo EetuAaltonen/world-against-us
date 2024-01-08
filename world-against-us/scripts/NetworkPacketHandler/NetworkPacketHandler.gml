@@ -66,6 +66,16 @@ function NetworkPacketHandler() constructor
 							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 						}
 					} break;
+					case MESSAGE_TYPE.INSTANCE_SNAPSHOT_DATA:
+					{
+						var regionSnapshot = payload;
+						if (!is_undefined(regionSnapshot))
+						{
+							global.NetworkRegionObjectHandlerRef.UpdateRegionFromSnapshot(regionSnapshot);
+							isPacketHandled = true;
+						}
+						isPacketHandled = true;
+					} break;
 					case MESSAGE_TYPE.REMOTE_ENTERED_THE_INSTANCE:
 					{
 						var remotePlayerInfo = networkPacket.payload;
