@@ -53,6 +53,15 @@ function NetworkPacketParser() constructor
 							parsedRemotePlayerTag
 						);
 					} break;
+					case MESSAGE_TYPE.REMOTE_DISCONNECT_FROM_HOST:
+					{
+						var parsedRemoteClientId = buffer_read(_msg, buffer_string);
+						var parsedRemotePlayerTag = buffer_read(_msg, buffer_string);
+						parsedPayload = new RemotePlayerInfo(
+							parsedRemoteClientId,
+							parsedRemotePlayerTag
+						);
+					} break;
 					case MESSAGE_TYPE.INVALID_REQUEST:
 					{
 						var parsedRequestAction = buffer_read(_msg, buffer_u8);
@@ -105,6 +114,15 @@ function NetworkPacketParser() constructor
 					{
 						parsedPayload = ParseRegionSnapshotPayload(_msg);
 					} break;
+					case MESSAGE_TYPE.REMOTE_ENTERED_THE_INSTANCE:
+					{
+						var parsedRemoteClientId = buffer_read(_msg, buffer_string);
+						var parsedRemotePlayerTag = buffer_read(_msg, buffer_string);
+						parsedPayload = new RemotePlayerInfo(
+							parsedRemoteClientId,
+							parsedRemotePlayerTag
+						);
+					} break;
 					case MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT:
 					{
 			            var parsedDeviceInputCompress = buffer_read(_msg, buffer_u8);
@@ -130,6 +148,24 @@ function NetworkPacketParser() constructor
 						emptyInstanceObject.device_input_movement.key_right = parsedKeyRight;
 						
 						parsedPayload = emptyInstanceObject;
+					} break;
+					case MESSAGE_TYPE.REMOTE_LEFT_THE_INSTANCE:
+					{
+						var parsedRemoteClientId = buffer_read(_msg, buffer_string);
+						var parsedRemotePlayerTag = buffer_read(_msg, buffer_string);
+						parsedPayload = new RemotePlayerInfo(
+							parsedRemoteClientId,
+							parsedRemotePlayerTag
+						);
+					} break;
+					case MESSAGE_TYPE.REMOTE_RETURNED_TO_CAMP:
+					{
+						var parsedRemoteClientId = buffer_read(_msg, buffer_string);
+						var parsedRemotePlayerTag = buffer_read(_msg, buffer_string);
+						parsedPayload = new RemotePlayerInfo(
+							parsedRemoteClientId,
+							parsedRemotePlayerTag
+						);
 					} break;
 					case MESSAGE_TYPE.REQUEST_PLAYER_LIST:
 					{
@@ -225,12 +261,7 @@ function NetworkPacketParser() constructor
 					} break;
 					case MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM:
 					{
-						var payloadString = buffer_read(_msg, buffer_string);
-						var parsedStruct = json_parse(payloadString);
-						if (parsedStruct != EMPTY_STRUCT)
-						{
-							parsedPayload = ParseJSONStructToRegion(parsedStruct);
-						}
+						parsedPayload = ParseRegionSnapshotPayload(_msg);
 					} break;
 					case MESSAGE_TYPE.SYNC_SCOUTING_DRONE_DATA:
 					{

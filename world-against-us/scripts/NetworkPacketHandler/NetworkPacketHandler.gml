@@ -78,10 +78,12 @@ function NetworkPacketHandler() constructor
 					} break;
 					case MESSAGE_TYPE.REMOTE_ENTERED_THE_INSTANCE:
 					{
-						var remotePlayerInfo = networkPacket.payload;
+						var remotePlayerInfo = payload;
 						if (!is_undefined(remotePlayerInfo))
 						{
-							// TODO: Spawn remote player
+							// SPAWN REMOTE PLAYER
+							var remotePlayerPosition = new Vector2(0, 0);
+							global.SpawnHandlerRef.SpawnRemotePlayerInstance(remotePlayerInfo, remotePlayerPosition);
 							
 							global.NotificationHandlerRef.AddNotification(
 								new Notification(
@@ -91,16 +93,17 @@ function NetworkPacketHandler() constructor
 								)
 							);
 							// RESPOND WITH ACKNOWLEDGMENT TO REMOTE ENTERED THE INSTANCE
-							isPacketHandled = QueueAcknowledgmentResponse();
+							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 						}
 					} break;
 					case MESSAGE_TYPE.REMOTE_DATA_POSITION:
 					{
+						// TODO: Remove this function, replaced with instance snapshot
 						// Parse this elsewhere
 						var remoteDataPosition = payload[$ "remote_data_position"];
 						if (!is_undefined(remoteDataPosition))
 						{
-							global.NetworkRegionObjectHandlerRef.UpdateRegionRemotePosition(remoteDataPosition);
+							//global.NetworkRegionObjectHandlerRef.UpdateRegionRemotePosition(remoteDataPosition);
 						}
 						isPacketHandled = true;
 					} break;
@@ -110,17 +113,19 @@ function NetworkPacketHandler() constructor
 						var remoteDataMovementInput = payload;
 						if (!is_undefined(remoteDataMovementInput))
 						{
-							global.NetworkRegionObjectHandlerRef.UpdateRegionRemoteInput(remoteDataMovementInput);
+							// TODO: Fix client side interpolation / input simulation
+							//global.NetworkRegionObjectHandlerRef.UpdateRegionRemoteInput(remoteDataMovementInput);
 						}
 						isPacketHandled = true;
 					} break;
 					case MESSAGE_TYPE.REMOTE_LEFT_THE_INSTANCE:
 					{
-						// TODO: Destroy remote player
-						
-						var remotePlayerInfo = networkPacket.payload;
+						var remotePlayerInfo = payload;
 						if (!is_undefined(remotePlayerInfo))
 						{
+							// DESTROY REMOTE PLAYER INSTANCE
+							global.NetworkRegionObjectHandlerRef.DestroyRemotePlayerInstanceObjectById(remotePlayerInfo.client_id);
+							
 							global.NotificationHandlerRef.AddNotification(
 								new Notification(
 									sprIconRemoteLeaveRegion, "Client left the region",
@@ -129,19 +134,20 @@ function NetworkPacketHandler() constructor
 								)
 							);
 							// RESPOND WITH ACKNOWLEDGMENT TO REMOTE LEFT THE INSTANCE
-							isPacketHandled = QueueAcknowledgmentResponse();
+							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 						}
 					} break;
 					case MESSAGE_TYPE.REMOTE_RETURNED_TO_CAMP:
 					{
-						// TODO: Destroy remote player
-						
-						var remotePlayerInfo = networkPacket.payload;
+						var remotePlayerInfo = payload;
 						if (!is_undefined(remotePlayerInfo))
 						{
+							// DESTROY REMOTE PLAYER INSTANCE
+							global.NetworkRegionObjectHandlerRef.DestroyRemotePlayerInstanceObjectById(remotePlayerInfo.client_id);
+							
 							global.NotificationHandlerRef.AddNotificationPlayerReturnedToCamp(remotePlayerInfo.player_tag);
 							// RESPOND WITH ACKNOWLEDGMENT TO REMOTE RETURNED TO CAMP
-							isPacketHandled = QueueAcknowledgmentResponse();
+							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 						}
 					} break;
 					case MESSAGE_TYPE.REQUEST_PLAYER_LIST:
@@ -415,11 +421,11 @@ function NetworkPacketHandler() constructor
 					} break;
 					case MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM:
 					{
-						var region = payload;
-						if (!is_undefined(region))
+						var regionSnapshot = payload;
+						if (!is_undefined(regionSnapshot))
 						{
 							// SYNC DYNAMIC REGION MAP DATA
-							global.MapDataHandlerRef.SyncDynamicMapData(region);
+							global.MapDataHandlerRef.SyncDynamicMapData(regionSnapshot);
 							// RESTART MAP DATA UPDATE TIMER
 							global.MapDataHandlerRef.is_dynamic_data_updating = true;
 							global.MapDataHandlerRef.map_update_timer.StartTimer();
