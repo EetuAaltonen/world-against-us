@@ -46,9 +46,6 @@ function InstanceObject(_sprite_index, _object_index, _position) constructor
 			position.X = lerp(start_position.X, target_position.X, lerpPercent);
 			position.Y = lerp(start_position.Y, target_position.Y, lerpPercent);
 			
-			// TODO: For debugging
-			//show_debug_message(string("{0}:{1} == {2}:{3}", start_position.X, start_position.Y, target_position.X, target_position.Y));
-			
 			// UPDATE INSTANCE POSITION
 			if (instance_exists(instance_ref))
 			{

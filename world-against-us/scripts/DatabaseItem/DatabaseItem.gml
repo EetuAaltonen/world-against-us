@@ -13,11 +13,6 @@ function DatabaseItem() constructor
 		return itemClone;
 	}
 	
-	static GetItemNames = function()
-	{
-		return ds_map_keys_to_array(itemData);
-	}
-	
 	static OnDestroy = function()
 	{
 		global.ItemDatabase = undefined;

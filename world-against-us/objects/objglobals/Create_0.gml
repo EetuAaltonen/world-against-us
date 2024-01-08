@@ -7,16 +7,6 @@ randomise();
 #macro GUI_BASE_WIDTH 1920
 #macro GUI_BASE_HEIGHT 1080
 
-// NETWORKING
-#macro UNDEFINED_UUID "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined"
-#macro DEFAULT_HOST_ADDRESS "127.0.0.1"
-#macro DEFAULT_HOST_PORT 54544
-
-// SAVE FILES
-#macro SAVE_FILE_SUFFIX_PLAYER_DATA "_save_player_data.json"
-#macro SAVE_FILE_SUFFIX_ROOM "_save_{0}.json"
-#macro EMPTY_SAVE_DATA "{ }"
-
 // STRING
 #macro EMPTY_STRING ""
 #macro STRING_LINE_BREAK "\n"
@@ -29,14 +19,24 @@ randomise();
 // STRUCT
 #macro EMPTY_STRUCT {}
 
+// OBJECT
+#macro UNDEFINED_OBJECT_NAME "<undefined>"
+
+// SAVE FILES
+#macro SAVE_FILE_SUFFIX_PLAYER_DATA "_save_player_data.json"
+#macro SAVE_FILE_SUFFIX_ROOM "_save_{0}.json"
+#macro EMPTY_SAVE_DATA "{ }"
+
+// NETWORKING
+#macro UNDEFINED_UUID "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined"
+#macro DEFAULT_HOST_ADDRESS "127.0.0.1"
+#macro DEFAULT_HOST_PORT 54544
+
 // SPRITE MODIFIERS
 #macro SPRITE_ERROR sprError
 #macro SPRITE_NO_MASK sprNoMask
 #macro ITEM_DEFAULT_ANGLE 0
 #macro ITEM_ROTATED_ANGLE 90
-
-// OBJECT
-#macro UNDEFINED_OBJECT_NAME "<undefined>"
 
 // COLLISION
 #macro OBJECTS_TO_HIT [objHitbox]
