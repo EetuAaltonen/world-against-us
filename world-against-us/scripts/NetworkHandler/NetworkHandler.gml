@@ -474,7 +474,7 @@ function NetworkHandler() constructor
 												if (!is_undefined(mainMenuMultiplayerWindow))
 												{
 													global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.SaveSelection, [
-														CreateWindowMainMenuSaveSelection(GAME_WINDOW.MainMenuSaveSelection, mainMenuMultiplayerWindow.zIndex - 1, OnClickMenuMultiplayerPlay)
+														CreateWindowMainMenuSaveSelection(GAME_WINDOW.MainMenuSaveSelection, mainMenuMultiplayerWindow.zIndex - 1, OnClickMenuSaveSelectionPlay)
 													], GUI_CHAIN_RULE.OverwriteAll);
 												}
 												// RESPOND WITH ACKNOWLEDGMENT TO END CONNECTING TO HOST

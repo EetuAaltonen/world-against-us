@@ -6,7 +6,7 @@ function OnClickMenuSaveSelectionDeleteConfirmCallback(callerWindowElement)
 		var saveName = FormatSaveName(saveInput.input);
 		var saveFileName = ConcatSaveFileSuffix(saveName);
 		
-		if (global.GameSaveHandlerRef.DeletePlayerSaveFile(saveFileName))
+		if (global.GameSaveHandlerRef.DeleteSaveFile(saveFileName))
 		{
 			if (global.GameSaveHandlerRef.DeleteRoomSaveFiles(saveName))
 			{

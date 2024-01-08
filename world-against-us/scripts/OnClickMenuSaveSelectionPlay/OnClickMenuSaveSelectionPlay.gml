@@ -1,4 +1,4 @@
-function OnClickMenuSingleplayerPlay()
+function OnClickMenuSaveSelectionPlay()
 {
 	var saveInput = parentElement.GetChildElementById("SaveInput");
 	if (saveInput.input != saveInput.placeholder)
@@ -7,6 +7,11 @@ function OnClickMenuSingleplayerPlay()
 		{
 			if (global.GameSaveHandlerRef.InitGameSave(saveInput.input))
 			{
+				if (global.MultiplayerMode)
+				{
+					// SET NETWORK STATUS ON MULTIPLAYER
+					global.NetworkHandlerRef.network_status = NETWORK_STATUS.CONNECTED_SAVE_SELECTED;
+				}
 				global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_LOAD_RESOURCES);
 			} else {
 				global.NotificationHandlerRef.AddNotification(
