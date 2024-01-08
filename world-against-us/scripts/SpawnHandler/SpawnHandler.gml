@@ -69,6 +69,22 @@ function SpawnHandler() constructor
 		return isSpawnPointValid;
 	}
 	
+	static SpawnInstance = function(_instanceObject)
+	{
+		var spawnedInstance = noone;
+		if (!is_undefined(_instanceObject))
+		{
+			var spawnedInstance = instance_create_depth(
+				_instanceObject.position.X,
+				_instanceObject.position.Y,
+				_instanceObject.position.Y, 
+				_instanceObject.obj_index
+			);
+			spawnedInstance.sprite_index = _instanceObject.spr_index;
+		}
+		return spawnedInstance;
+	}
+	
 	static SpawnLocalPlayerInstance = function()
 	{
 		if (!is_undefined(spawn_point))
@@ -128,19 +144,29 @@ function SpawnHandler() constructor
 		}
 	}
 	
-	static SpawnInstance = function(_instanceObject)
+	static SpawnRemotePlayerInstance = function(_remotePlayerInfo, _position)
 	{
-		var spawnedInstance = noone;
-		if (!is_undefined(_instanceObject))
+		var remotePlayerInstanceObject = new InstanceObject(
+			sprSoldierOriginaRemote, objPlayer,
+			_position
+		);
+		var spawnedPlayerInstance = global.SpawnHandlerRef.SpawnInstance(remotePlayerInstanceObject);
+		if (spawnedPlayerInstance != noone)
 		{
-			var spawnedInstance = instance_create_depth(
-				_instanceObject.position.X,
-				_instanceObject.position.Y,
-				_instanceObject.position.Y, 
-				_instanceObject.obj_index
+			// SET REMOTE PLAYER CHARACTER
+			spawnedPlayerInstance.character = new CharacterHuman(
+				_remotePlayerInfo.player_tag, CHARACTER_TYPE.Human,
+				CHARACTER_RACE.humanoid, CHARACTER_BEHAVIOUR.REMOTE_PLAYER
 			);
-			spawnedInstance.sprite_index = _instanceObject.spr_index;
+			// SET REMOTE PLAYER INSTANCE REF
+			remotePlayerInstanceObject.instance_ref = spawnedPlayerInstance;
+			// SET NETWORK ID
+			remotePlayerInstanceObject.network_id = _remotePlayerInfo.client_id;
+			// SET DEVICE INPUT MOVEMENT
+			spawnedPlayerInstance.movementInput = remotePlayerInstanceObject.device_input_movement;
+			
+			// ADD INSTANCE OBJECT TO LOCAL PLAYER LIST
+			ds_list_add(global.NetworkRegionObjectHandlerRef.local_players, remotePlayerInstanceObject);
 		}
-		return spawnedInstance;
 	}
 }
