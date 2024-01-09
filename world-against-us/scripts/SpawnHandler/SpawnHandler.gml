@@ -127,7 +127,11 @@ function SpawnHandler() constructor
 									{
 										if (!is_undefined(lastLocation.position))
 										{
-											playerInstanceObject.position = new Vector2(lastLocation.position.X, lastLocation.position.Y);
+											if (lastLocation.position.X != 0 &&
+												lastLocation.position.Y != 0)
+											{
+												playerInstanceObject.position = new Vector2(lastLocation.position.X, lastLocation.position.Y);
+											}
 										}
 									}
 								}

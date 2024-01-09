@@ -29,15 +29,30 @@ function GameSaveData(_player_data/*, _game_state_data*/) constructor
 	
 	static FetchSaveData = function()
 	{
-		var isSaveDataFetched = true;
-		// FETCH CHARACTER
-		player_data.character.name = global.PlayerCharacter.name;
-		player_data.character.backpack = global.PlayerCharacter.GetBackpackSlotItem();
+		var isSaveDataFetched = false;
+		if (IS_ROOM_IN_GAME_WORLD)
+		{
+			// FETCH CHARACTER
+			player_data.character.name = global.PlayerCharacter.name;
+			player_data.character.backpack = global.PlayerCharacter.GetBackpackSlotItem();
 		
-		// FETCH LAST POSITION
-		player_data.last_location.position.X = global.InstancePlayer.x;
-		player_data.last_location.position.Y = global.InstancePlayer.y;
-		
+			// FETCH LAST POSITION
+			player_data.last_location.room_index = ROOM_DEFAULT;
+			player_data.last_location.position.X = 0;
+			player_data.last_location.position.Y = 0;
+			if (!global.MultiplayerMode)
+			{
+				player_data.last_location.room_index = room_get_name(room);
+				if (instance_exists(global.InstancePlayer))
+				{
+					player_data.last_location.position.X = global.InstancePlayer.x;
+					player_data.last_location.position.Y = global.InstancePlayer.y;
+				}
+			}
+			isSaveDataFetched = true;
+		} else {
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Calling FetchSaveData outside of IS_ROOM_IN_GAME_WORLD");	
+		}
 		return isSaveDataFetched;
 	}
 }

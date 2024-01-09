@@ -185,7 +185,11 @@ function GameSaveHandler() constructor
 					show_auto_save_icon = true;
 					auto_save_icon_timer.StartTimer();
 					isGameSaved = true;
+				} else {
+					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Failed to write save data to file");
 				}
+			} else {
+				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Failed to fetch save data");
 			}
 		}
 		return isGameSaved;
