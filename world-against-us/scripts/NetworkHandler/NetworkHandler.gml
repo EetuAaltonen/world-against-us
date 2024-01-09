@@ -235,7 +235,7 @@ function NetworkHandler() constructor
 		return isConnecting;
 	}
 	
-	static RequestDisconnectSocket = function()
+	static RequestDisconnectSocket = function(_isRequestImmediate)
 	{
 		// FORCE DISCONNECT MESSAGE IF ONLINE
 		if (global.MultiplayerMode)
@@ -249,14 +249,31 @@ function NetworkHandler() constructor
 				PACKET_PRIORITY.CRITICAL,
 				undefined
 			);
-			if (AddPacketToQueue(networkPacket))
+			if (_isRequestImmediate)
 			{
-				network_status = NETWORK_STATUS.DISCONNECTING;
-			} else {
-				show_debug_message("Failed to queue disconnect");
+				// PREPARE AND SEND PACKET
+				var sentNetworkPacketBytes = PrepareAndSendNetworkPacket(networkPacket);
+				if (sentNetworkPacketBytes > 0)
+				{
+					network_status = NETWORK_STATUS.OFFLINE;
+				} else {
+					show_debug_message("Failed to send immediate disconnect");
+				}
+				// DELETE SOCKET
 				if (!DeleteSocket())
 				{
-					show_debug_message("Failed to delete socket on failed disconnect queue");
+					show_debug_message("Failed to delete socket on immediate disconnect");
+				}
+			} else {
+				if (AddPacketToQueue(networkPacket))
+				{
+					network_status = NETWORK_STATUS.DISCONNECTING;
+				} else {
+					show_debug_message("Failed to queue disconnect");
+					if (!DeleteSocket())
+					{
+						show_debug_message("Failed to delete socket on failed disconnect queue");
+					}
 				}
 			}
 		} else {
@@ -279,7 +296,7 @@ function NetworkHandler() constructor
 				undefined, NOTIFICATION_TYPE.Log
 			)
 		);
-		RequestDisconnectSocket();
+		RequestDisconnectSocket(true);
 	}
 	
 	static AddPacketToQueue = function(_networkPacket)
@@ -345,20 +362,20 @@ function NetworkHandler() constructor
 		if (!network_region_handler.network_region_object_handler.ValidateRegionContainers())
 		{
 			show_message("Error occured during OnRoomStart");
-			RequestDisconnectSocket();
-		}
-		
-		// REQUEST REGION SYNC
-		var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.SYNC_INSTANCE);
-		var networkPacket = new NetworkPacket(
-			networkPacketHeader,
-			undefined,
-			PACKET_PRIORITY.DEFAULT,
-			AckTimeoutFuncResend
-		);
-		if (!AddPacketToQueue(networkPacket))
-		{
-			show_debug_message("Failed to add 'sync instance' packet to queue");
+			RequestDisconnectSocket(true);
+		} else {
+			// REQUEST REGION SYNC
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.SYNC_INSTANCE);
+			var networkPacket = new NetworkPacket(
+				networkPacketHeader,
+				undefined,
+				PACKET_PRIORITY.DEFAULT,
+				AckTimeoutFuncResend
+			);
+			if (!AddPacketToQueue(networkPacket))
+			{
+				show_debug_message("Failed to add 'sync instance' packet to queue");
+			}
 		}
 	}
 	
@@ -591,14 +608,16 @@ function NetworkHandler() constructor
 						{
 							var consoleLog = string("Unable to handle message type: {0}", messageType);
 							global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
-							RequestDisconnectSocket();
+							RequestDisconnectSocket(false);
 						}
 					}
 				}
 			}
 		} else {
 			// TODO: Generic error handling
-			show_debug_message("Unable to handle undefined message");
+			var consoleLog = string("Unable to handle undefined message", messageType);
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
+			RequestDisconnectSocket(false);
 		}
 		return isMessageHandled;
 	}

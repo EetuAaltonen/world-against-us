@@ -37,7 +37,7 @@ function NetworkErrorHandler() constructor
 					// REQUEST GUI STATE RESET
 					global.GUIStateHandlerRef.RequestGUIStateReset();
 					// REQUEST DISCONNECT SOCKET
-					global.NetworkHandlerRef.RequestDisconnectSocket();
+					global.NetworkHandlerRef.RequestDisconnectSocket(true);
 				} break;
 				case INVALID_REQUEST_ACTION.CANCEL_ACTION:
 				{
@@ -53,7 +53,7 @@ function NetworkErrorHandler() constructor
 					// REQUEST GUI STATE RESET
 					global.GUIStateHandlerRef.RequestGUIStateReset();
 					// REQUEST DISCONNECT SOCKET
-					global.NetworkHandlerRef.RequestDisconnectSocket();
+					global.NetworkHandlerRef.RequestDisconnectSocket(true);
 				} break;
 			}
 		}

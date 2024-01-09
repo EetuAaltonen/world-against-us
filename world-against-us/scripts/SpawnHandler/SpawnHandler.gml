@@ -23,7 +23,7 @@ function SpawnHandler() constructor
 			);
 			if (global.MultiplayerMode)
 			{
-				global.NetworkHandlerRef.RequestDisconnectSocket();
+				global.NetworkHandlerRef.RequestDisconnectSocket(true);
 			} else {
 				global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_MAIN_MENU);	
 			}
