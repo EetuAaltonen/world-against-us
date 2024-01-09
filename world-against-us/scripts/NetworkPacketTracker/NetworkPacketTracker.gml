@@ -107,6 +107,7 @@ function NetworkPacketTracker() constructor
 		if (++outgoing_sequence_number > max_sequence_number) { outgoing_sequence_number = 0; }
 		_networkPacket.header.sequence_number = outgoing_sequence_number;
 		// DON'T TRACK SEPARATE ACKNOWLEDGMENT RESPONSES
+		// TODO: Implement delivery policy for network packets
 		if (_networkPacket.header.message_type != MESSAGE_TYPE.ACKNOWLEDGMENT &&
 			_networkPacket.header.message_type != MESSAGE_TYPE.DISCONNECT_FROM_HOST)
 		{

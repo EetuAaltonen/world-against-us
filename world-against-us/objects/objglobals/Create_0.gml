@@ -175,10 +175,6 @@ resetDynamicVariables = function()
 	
 	// WEAPON
 	global.InstanceWeapon = noone;
-
-	// COOP
-	// TODO: Create handler for co-op player data
-	global.OtherPlayerData = ds_map_create();
 	
 	// DRONE
 	global.InstanceDrone = noone;

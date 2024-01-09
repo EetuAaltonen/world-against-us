@@ -10,7 +10,7 @@ function NetworkHandler() constructor
 	
 	pre_alloc_network_buffer = undefined;
 	delete_socket_timer = new Timer(TimerFromMilliseconds(1000));
-	packet_send_interval_threshold = 30; // == 30ms
+	packet_send_rate = 30; // == 30ms
 	last_packet_time = current_time;
 	
 	network_packet_builder = new NetworkPacketBuilder();
@@ -55,40 +55,30 @@ function NetworkHandler() constructor
 				network_packet_tracker.Update();
 				
 				var packetSendInterval = current_time - last_packet_time;
-				if (packetSendInterval >= packet_send_interval_threshold)
+				if (packetSendInterval >= packet_send_rate)
 				{
 					if (!ds_queue_empty(network_packet_queue))
 					{
-						var networkPacket = ds_queue_head(network_packet_queue);
+						var networkPacket = ds_queue_dequeue(network_packet_queue);
 						if (!is_undefined(networkPacket))
 						{
-							if (network_packet_tracker.PatchNetworkPacketAckRange(networkPacket))
+							var sentNetworkPacketBytes = PrepareAndSendNetworkPacket(networkPacket);
+							if (sentNetworkPacketBytes > 0)
 							{
-								if (network_packet_tracker.PatchNetworkPacketSequenceNumber(networkPacket))
-								{
-									if (network_packet_builder.CreatePacket(pre_alloc_network_buffer, networkPacket))
-									{
-										var networkPacketSize = SendPacketOverUDP();
-										if (networkPacketSize > 0)
-										{
-											global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.INFO, string("Network packet ({0}) {1}kb sent >> Packet send interval {2}ms", networkPacket.header.message_type, networkPacketSize * 0.001, packetSendInterval));
-											last_packet_time = current_time;
-										} else {
-											show_debug_message(string("Failed to send packet with message type {0}", networkPacket.header.message_type));	
-										}
-										// UPDATE DATA OUT RATE
-										global.NetworkConnectionSamplerRef.data_out_rate += networkPacketSize;
-									}
-									// REMOVE PACKET FROM QUEUE
-									ds_queue_dequeue(network_packet_queue);
-								}
+								var consoleLog = string(
+									"Network packet ({0}) {1}kb sent >> Packet send interval {2}ms",
+									networkPacket.header.message_type,
+									sentNetworkPacketBytes * 0.001,
+									packetSendInterval
+								);
+								global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.INFO, consoleLog);
+								last_packet_time = current_time;
 							} else {
-								// DELETE UNNECESSARY ACKNOWLEDGMENTS
-								if (networkPacket.header.message_type == MESSAGE_TYPE.ACKNOWLEDGMENT)
-								{
-									ds_queue_dequeue(network_packet_queue);
-								}
+								var consoleLog = string("Failed to send packet with message type {0}", networkPacket.header.message_type);
+								global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
 							}
+							// UPDATE DATA OUT RATE
+							global.NetworkConnectionSamplerRef.data_out_rate += sentNetworkPacketBytes;
 						}
 					}
 				}
@@ -96,7 +86,7 @@ function NetworkHandler() constructor
 			/*
 			// TODO: Move this logic elsewhere
 			// CHECK GAME OVER WINDOW
-			if (room != roomMainMenu && room != roomCamp && room != roomLoadResources)
+			if (IS_ROOM_IN_GAME_WORLD)
 			{
 				if (!is_undefined(global.PlayerCharacter))
 				{
@@ -129,6 +119,22 @@ function NetworkHandler() constructor
 				}
 			}*/
 		}
+	}
+	
+	static PrepareAndSendNetworkPacket = function(_networkPacket)
+	{
+		var sentNetworkPacketBytes = 0;
+		if (network_packet_tracker.PatchNetworkPacketAckRange(_networkPacket))
+		{
+			if (network_packet_tracker.PatchNetworkPacketSequenceNumber(_networkPacket))
+			{
+				if (network_packet_builder.CreatePacket(pre_alloc_network_buffer, _networkPacket))
+				{
+					sentNetworkPacketBytes = SendPacketOverUDP();
+				}
+			}
+		}
+		return sentNetworkPacketBytes;
 	}
 	
 	static SendPacketOverUDP = function()
