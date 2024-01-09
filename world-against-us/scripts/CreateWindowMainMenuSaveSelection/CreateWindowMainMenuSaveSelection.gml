@@ -114,7 +114,7 @@ function CreateWindowMainMenuSaveSelection(_gameWindowId, _zIndex, playCallbackF
 		// DISCONNECT FROM A HOST IF SAVE SELECTION INTERRUPTED
 		if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.CONNECTED)
 		{
-			global.NetworkHandlerRef.RequestDisconnectSocket();
+			global.NetworkHandlerRef.RequestDisconnectSocket(true);
 		}
 	}
 	saveSelectionWindow.OnClose = overrideOnClose;

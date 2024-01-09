@@ -131,30 +131,36 @@ function NetworkRegionObjectHandler() constructor
 	
 	static OnRoomEnd = function()
 	{
-		var patrolCount = ds_list_size(local_patrols);
-		for (var i = 0; i < patrolCount; i++)
+		// TODO: Update region owner and patrol states on server side when owner client leaves / disconnects
+		/*
+		if (global.NetworkRegionHandlerRef.owner_client == global.NetworkHandlerRef.client_id)
 		{
-			var banditInstance = local_patrols[| i];
-			if (instance_exists(banditInstance))
+			var patrolCount = ds_list_size(local_patrols);
+			for (var i = 0; i < patrolCount; i++)
 			{
-				switch (banditInstance.aiState)
+				var banditInstance = local_patrols[| i];
+				if (instance_exists(banditInstance))
 				{
-					case AI_STATE.CHASE:
+					switch (banditInstance.aiState)
 					{
-						// BROADCAST PATROL STATUS RESET IF TARGET IS LOCAL PLAYER
-						if (banditInstance.targetInstance == global.InstancePlayer)
+						case AI_STATE.CHASE:
 						{
+							// BROADCAST PATROL STATUS RESET IF TARGET IS LOCAL PLAYER
+							if (banditInstance.targetInstance == global.InstancePlayer)
+							{
+								BroadcastPatrolState(banditInstance.patrolId, AI_STATE.PATROL);
+							}
+						} break;
+						case AI_STATE.PATROL_RESUME:
+						{
+							// BROADCAST PATROL STATUS RESET IF PATROL IS RESUMING
 							BroadcastPatrolState(banditInstance.patrolId, AI_STATE.PATROL);
-						}
-					} break;
-					case AI_STATE.PATROL_RESUME:
-					{
-						// BROADCAST PATROL STATUS RESET IF PATROL IS RESUMING
-						BroadcastPatrolState(banditInstance.patrolId, AI_STATE.PATROL);
-					} break;
+						} break;
+					}
 				}
 			}
 		}
+		*/
 		
 		// CLEAR LOCAL PLAYERS
 		ClearDSListAndDeleteValues(local_players);

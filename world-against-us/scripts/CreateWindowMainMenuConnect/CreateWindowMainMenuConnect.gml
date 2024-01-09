@@ -29,7 +29,7 @@ function CreateWindowMainMenuConnect(_gameWindowId, _zIndex, _address, _port)
 		// DISCONNECT FROM A HOST IF CONNECTING INTERRUPTED
 		if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.CONNECTING)
 		{
-			global.NetworkHandlerRef.RequestDisconnectSocket();
+			global.NetworkHandlerRef.RequestDisconnectSocket(true);
 		}
 	}
 	multiplayerConnectWindow.OnClose = overrideOnClose;

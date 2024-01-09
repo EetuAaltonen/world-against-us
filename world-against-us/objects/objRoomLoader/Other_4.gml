@@ -153,7 +153,7 @@ switch (room)
 						);
 						
 						// REQUEST DISCONNECT
-						global.NetworkHandlerRef.RequestDisconnectSocket();
+						global.NetworkHandlerRef.RequestDisconnectSocket(true);
 					}
 				}		
 			} else {
@@ -194,28 +194,26 @@ switch (room)
 		}
 		
 		// DISCONNECT FROM THE SERVER WHEN RETURNING TO MAINMENU
-		if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.TIMED_OUT)
+		if (global.NetworkHandlerRef.network_status != NETWORK_STATUS.OFFLINE)
 		{
+			if (global.NetworkHandlerRef.network_status == NETWORK_STATUS.TIMED_OUT)
+			{
+				// CONSOLE LOG
+				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Connection timed out :(");
+				// ADD POP-UP NOTIFICATION
+				global.NotificationHandlerRef.AddNotification(
+					new Notification(
+						undefined, "Connection timed out :(",
+						undefined, NOTIFICATION_TYPE.Log
+					)
+				);
+			}
+			
+			if (global.NetworkHandlerRef.client_id != UNDEFINED_UUID)
+			{
+				global.NetworkHandlerRef.RequestDisconnectSocket(true);
+			}
 			global.NetworkHandlerRef.network_status = NETWORK_STATUS.OFFLINE;
-			if (global.NetworkHandlerRef.client_id != UNDEFINED_UUID)
-			{
-				global.NetworkHandlerRef.RequestDisconnectSocket();
-			}
-			// CONSOLE LOG
-			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Connection timed out :(");
-			// ADD POP-UP NOTIFICATION
-			global.NotificationHandlerRef.AddNotification(
-				new Notification(
-					undefined, "Connection timed out :(",
-					undefined, NOTIFICATION_TYPE.Log
-				)
-			);
-		} else if (global.NetworkHandlerRef.network_status != NETWORK_STATUS.OFFLINE)
-		{
-			if (global.NetworkHandlerRef.client_id != UNDEFINED_UUID)
-			{
-				global.NetworkHandlerRef.RequestDisconnectSocket();
-			}
 		}
 	} break;
 	default:
