@@ -173,6 +173,9 @@ export default class NetworkHandler {
         this.instanceHandler.update(tickTime);
       }
 
+      // Update auto save timer
+      this.worldStateHandler.updateAutoSave(tickTime);
+
       return setTimeout(() => {
         this.tick();
       }, 0);
@@ -412,7 +415,7 @@ export default class NetworkHandler {
                         break;
                       case MESSAGE_TYPE.REQUEST_JOIN_GAME:
                         {
-                          const player = new Player(`Player_${clientId}`);
+                          const player = new Player(clientId, client.playerTag);
                           const instanceId =
                             this.instanceHandler.addPlayerToDefaultInstance(
                               clientId,
@@ -671,6 +674,9 @@ export default class NetworkHandler {
         );
       }
     }
+
+    // Autosave on last client disconnect
+    this.worldStateHandler.autosave();
   }
 
   onInvalidRequest(invalidRequestInfo, rinfo) {

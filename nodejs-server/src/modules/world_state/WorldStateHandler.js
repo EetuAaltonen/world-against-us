@@ -1,5 +1,6 @@
 import WEATHER_CONDITION from "./WeatherCondition.js";
 
+import ConsoleHandler from "../console/ConsoleHandler.js";
 import FileHandler from "../files/FileHandler.js";
 import WorldStateDateTime from "./WorldStateDateTime.js";
 import ParseJSONStructsToArray from "../json/ParseJSONStructsToArray.js";
@@ -45,17 +46,21 @@ export default class WorldStateHandler {
   update(passedTickTime) {
     let isUpdated = false;
     // Update date time
-    if (this.dateTime.update(passedTickTime)) {
-      // Check autosave
-      this.autoSaveTimer += passedTickTime * 0.001;
-      if (this.autoSaveTimer >= AUTOSAVE_TIME_SECONDS) {
-        this.autoSaveTimer -= AUTOSAVE_TIME_SECONDS;
-        if (!this.autosave()) {
-          isUpdated = false;
-        }
+    isUpdated = this.dateTime.update(passedTickTime);
+    return isUpdated;
+  }
+
+  updateAutoSave(passedTickTime) {
+    // Check autosave
+    this.autoSaveTimer += passedTickTime * 0.001;
+    if (this.autoSaveTimer >= AUTOSAVE_TIME_SECONDS) {
+      this.autoSaveTimer -= AUTOSAVE_TIME_SECONDS;
+      if (this.autosave()) {
+        // TODO: Broadcast autosave command to clients
+      } else {
+        ConsoleHandler.Log("Failed to auto save");
       }
     }
-    return isUpdated;
   }
 
   autosave() {
@@ -116,8 +121,15 @@ export default class WorldStateHandler {
         } else {
           isSaveLoaded = false;
         }
+
+        if (isSaveLoaded) {
+          ConsoleHandler.Log(`Save file loaded successfully`);
+        } else {
+          this.networkHandler.onError(new Error("Failed to parse save file"));
+        }
       } else {
         isSaveLoaded = true;
+        ConsoleHandler.Log(`Save file not found`);
       }
     }
     return isSaveLoaded;
