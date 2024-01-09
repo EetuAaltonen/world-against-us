@@ -281,35 +281,42 @@ export default class InstanceHandler {
       const instance = this.getInstance(instanceId);
       if (instance !== undefined) {
         // Check if instance is sub-instance
-        if (instance.parentInstanceId === undefined) {
-          let totalPlayerCount = instance.getPlayerCount();
-          const subInstanceIds = this.getInstanceIds().filter((id) => {
-            const instance = this.getInstance(id);
-            if (instance !== undefined) {
-              return instance.parentInstanceId === instanceId;
-            }
-            return false;
-          });
-          subInstanceIds.forEach((subInstanceId) => {
-            totalPlayerCount +=
-              this.getInstance(subInstanceId).getPlayerCount();
-          });
+        let totalPlayerCount = instance.getPlayerCount();
+        const subInstanceIds = this.getInstanceIds().filter((id) => {
+          const subInstance = this.getInstance(id);
+          if (subInstance !== undefined) {
+            return subInstance.parentInstanceId === instanceId;
+          }
+          return false;
+        });
+        subInstanceIds.forEach((subInstanceId) => {
+          totalPlayerCount += this.getInstance(subInstanceId).getPlayerCount();
+        });
 
-          if (totalPlayerCount <= 0) {
-            if (this.deleteInstance(instanceId)) {
-              ConsoleHandler.Log(`Instance deleted: ${instanceId}`);
-              // Delete sub-instances
-              subInstanceIds.forEach((subInstanceId) => {
-                this.deleteInstance(subInstanceId);
-                ConsoleHandler.Log(`Sub-instance deleted: ${subInstanceId}`);
-              });
-              isInstanceReleased = true;
-            } else {
-              // TODO: Proper error handling
+        // Check if instance with sub-instances are empty
+        if (totalPlayerCount <= 0) {
+          if (this.deleteInstance(instanceId)) {
+            ConsoleHandler.Log(
+              `Instance ${instance.roomIndex} ${instance.instanceId} deleted`
+            );
+            // Delete sub-instances
+            subInstanceIds.forEach((subInstanceId) => {
+              this.deleteInstance(subInstanceId);
               ConsoleHandler.Log(
-                "Failed to delete instance with ID: " + instanceId
+                `Sub-instance ${subInstanceId} of ${instance.roomIndex} ${instance.instanceId} deleted`
               );
+            });
+
+            // Check parent instance for release
+            if (instance.parentInstanceId !== undefined) {
+              this.checkInstanceRelease(instance.parentInstanceId);
             }
+            isInstanceReleased = true;
+          } else {
+            // TODO: Proper error handling
+            ConsoleHandler.Log(
+              "Failed to delete instance with ID: " + instanceId
+            );
           }
         }
       }

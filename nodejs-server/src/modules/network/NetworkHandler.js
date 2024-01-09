@@ -677,6 +677,10 @@ export default class NetworkHandler {
 
     // Autosave on last client disconnect
     this.worldStateHandler.autosave();
+
+    ConsoleHandler.Log(
+      `Player '${client.playerTag}' disconnected from the server`
+    );
   }
 
   onInvalidRequest(invalidRequestInfo, rinfo) {
