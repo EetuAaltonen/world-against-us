@@ -283,7 +283,7 @@ export default class NetworkPacketParser {
               );
             }
             break;
-          case MESSAGE_TYPE.PATROLS_DATA_PROGRESS_POSITION:
+          case MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA:
             {
               let offset = 0;
               const parsedInstanceId = msg.readUInt32LE(offset);
