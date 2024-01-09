@@ -23,7 +23,7 @@ import NetworkJoinGameRequest from "./NetworkJoinGameRequest.js";
 // TODO: Check these data structs (snake cased classes)
 
 const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
-// TODO: Add UUID for server broadcasting
+const SERVER_BROADCAST_UUID = "serveruu-uuuu-uuuu-uuuu-uuubroadcast";
 
 export default class NetworkHandler {
   constructor(socket) {
@@ -530,9 +530,7 @@ export default class NetworkHandler {
       weatherCondition,
       PACKET_PRIORITY.HIGH
     );
-    const clientsInGame = this.clientHandler
-      .getAllClients()
-      .filter((client) => client.instanceId !== undefined);
+    const clientsInGame = this.clientHandler.getClientsToBroadcastInGame();
     isWeatherBroadcasted = this.broadcast(networkPacket, clientsInGame);
     return isWeatherBroadcasted;
   }
@@ -548,9 +546,9 @@ export default class NetworkHandler {
       patrolState,
       PACKET_PRIORITY.HIGH
     );
-    const clientsInInstance = this.clientHandler
-      .getAllClients()
-      .filter((client) => client.instanceId === instanceId);
+    // TODO: Exclude the request source client
+    const clientsInInstance =
+      this.clientHandler.getClientsToBroadcastInstance(instanceId);
     isStateBroadcasted = this.broadcast(networkPacket, clientsInInstance);
     return isStateBroadcasted;
   }
@@ -558,6 +556,9 @@ export default class NetworkHandler {
   broadcast(networkPacket, clients) {
     let isBroadcasted = false;
     if (networkPacket !== undefined) {
+      // Patch server broadcast UUID
+      networkPacket.header.clientId = SERVER_BROADCAST_UUID;
+
       if (clients.length > 0) {
         this.queueNetworkPacket(new NetworkQueueEntry(networkPacket, clients));
       }
@@ -574,15 +575,16 @@ export default class NetworkHandler {
       this.networkConnectionSampler.removeClientConnectionSample(clientId);
 
       // Broadcast about disconnected client
-      const clientsToBroadcast = this.clientHandler.getAllClients();
+      const remotePlayerInfo = new RemotePlayerInfo(clientId, client.playerTag);
+      const clientsToBroadcast =
+        this.clientHandler.getClientsToBroadcastGlobal(clientId);
       const broadcastNetworkPacketHeader = new NetworkPacketHeader(
         MESSAGE_TYPE.REMOTE_DISCONNECT_FROM_HOST,
         client.uuid
       );
       const broadcastNetworkPacket = new NetworkPacket(
         broadcastNetworkPacketHeader,
-        // TODO: Include player name
-        undefined,
+        remotePlayerInfo,
         PACKET_PRIORITY.DEFAULT
       );
       this.broadcast(broadcastNetworkPacket, clientsToBroadcast);

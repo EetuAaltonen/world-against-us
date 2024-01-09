@@ -810,14 +810,15 @@ export default class NetworkPacketHandler {
                   );
 
                   // Response with scouted instance data
-                  const formatScoutInstance = scoutInstance.toJSONStruct();
+                  const scoutInstanceSnapshot =
+                    scoutInstance.fetchInstanceSnapshot();
                   const networkPacketHeader = new NetworkPacketHeader(
                     MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM,
                     client.uuid
                   );
                   const networkPacket = new NetworkPacket(
                     networkPacketHeader,
-                    formatScoutInstance,
+                    scoutInstanceSnapshot,
                     PACKET_PRIORITY.DEFAULT
                   );
                   this.networkHandler.queueNetworkPacket(

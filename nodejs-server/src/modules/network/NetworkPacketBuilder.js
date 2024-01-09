@@ -257,6 +257,11 @@ export default class NetworkPacketBuilder {
               isPayloadWritten = true;
             }
             break;
+          case MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM:
+            {
+              isPayloadWritten = this.writeInstanceSnapshotBuffer(payload);
+            }
+            break;
           default: {
             this.payloadBuffer = Buffer.from(
               JSON.stringify(payload ?? {}),
