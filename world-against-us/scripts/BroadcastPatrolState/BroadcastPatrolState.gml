@@ -2,9 +2,8 @@ function BroadcastPatrolState(_patrolId, _aiState)
 {
 	if (global.MultiplayerMode)
 	{
-		// TODO: Restrict patrol state broadcast for only under region owner authority and control
-		//if (global.NetworkHandlerRef.client_id == global.NetworkRegionHandlerRef.owner_client)
-		//{
+		if (global.NetworkHandlerRef.client_id == global.NetworkRegionHandlerRef.owner_client)
+		{
 			if (!is_undefined(_patrolId))
 			{
 				// UPDATE PATROL STATE
@@ -22,6 +21,6 @@ function BroadcastPatrolState(_patrolId, _aiState)
 					show_debug_message("Failed to queue patrol state update");
 				}
 			}
-		//}
+		}
 	}
 }
