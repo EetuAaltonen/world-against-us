@@ -1,5 +1,3 @@
-import PriorityQueuePkg from "@datastructures-js/priority-queue";
-
 import MESSAGE_TYPE from "./MessageType.js";
 import PACKET_PRIORITY from "./PacketPriority.js";
 import INVALID_REQUEST_ACTION from "../invalid_request/InvalidRequestAction.js";
@@ -30,16 +28,6 @@ export default class NetworkHandler {
     this.socket = socket;
     this.isServerRunning = true;
     this.uptime = 0;
-
-    this.packetQueue = new PriorityQueuePkg.PriorityQueue((a, b) => {
-      if (a.priority >= b.priority) {
-        return -1;
-      }
-      if (a.priority < b.priority) {
-        // Prioritize HIGH:0 -> LOW:N
-        return 1;
-      }
-    });
 
     this.networkPacketParser = new NetworkPacketParser();
     this.networkPacketBuilder = new NetworkPacketBuilder();
@@ -90,99 +78,91 @@ export default class NetworkHandler {
       // Update packet tracker
       this.networkPacketTracker.update(tickTime);
 
-      // TODO: Separate each packet queue for each client
-      // Broadcast should add a packet for each client's packet queue
-      const networkQueueEntry = this.packetQueue.dequeue();
-      if (networkQueueEntry != undefined) {
-        const networkPacket = networkQueueEntry.networkPacket;
-        if (networkPacket != undefined) {
-          const messageType = networkPacket.header.messageType;
-          const deliveryPolicy = networkPacket.deliveryPolicy;
-          if (deliveryPolicy != undefined) {
-            networkQueueEntry.clients.forEach((client) => {
-              if (client !== undefined) {
-                if (
-                  !deliveryPolicy.patchSequenceNumber &&
-                  !deliveryPolicy.patchAckRange &&
-                  !deliveryPolicy.toInFlightTrack
-                ) {
-                  // Send network packet without delivery policy
-                  this.sendPacketOverUDP(networkPacket, client);
-                } else {
-                  const inFlightPacketTrack =
-                    this.networkPacketTracker.getInFlightPacketTrack(
+      const allClients = this.clientHandler.getAllClients();
+      allClients.forEach((client) => {
+        if (client !== undefined) {
+          let networkPacket = client.getPacketToSend(tickTime);
+          if (networkPacket !== undefined) {
+            const messageType = networkPacket.header.messageType;
+            const deliveryPolicy = networkPacket.deliveryPolicy;
+            if (deliveryPolicy != undefined) {
+              if (
+                !deliveryPolicy.patchSequenceNumber &&
+                !deliveryPolicy.patchAckRange &&
+                !deliveryPolicy.toInFlightTrack
+              ) {
+                // Send network packet without delivery policy
+                this.sendPacketOverUDP(networkPacket, client);
+              } else {
+                const inFlightPacketTrack =
+                  this.networkPacketTracker.getInFlightPacketTrack(client.uuid);
+                if (inFlightPacketTrack !== undefined) {
+                  // Patch sequence number
+                  if (deliveryPolicy.patchSequenceNumber) {
+                    if (
+                      !inFlightPacketTrack.patchSequenceNumber(networkPacket)
+                    ) {
+                      ConsoleHandler.Log(
+                        "Failed to patch sequence number to network packet"
+                      );
+                      return;
+                    }
+                  }
+                  // Patch ACK range
+                  if (deliveryPolicy.patchAckRange) {
+                    if (!inFlightPacketTrack.patchAckRange(networkPacket)) {
+                      ConsoleHandler.Log(
+                        "Failed to patch Ack range to network packet"
+                      );
+                      return;
+                    }
+                  }
+                  // Add to in-flight tracking
+                  if (deliveryPolicy.toInFlightTrack) {
+                    if (!inFlightPacketTrack.addNetworkPacket(networkPacket)) {
+                      ConsoleHandler.Log(
+                        "Failed to add a network packet to in-flight track"
+                      );
+                      return;
+                    }
+                  }
+
+                  // Check start pinging
+                  if (messageType === MESSAGE_TYPE.PONG) {
+                    if (
+                      this.networkConnectionSampler.startPinging(client.uuid)
+                    ) {
+                      const clientConnectionSample =
+                        this.networkConnectionSampler.getClientConnectionSample(
+                          client.uuid
+                        );
+                      if (clientConnectionSample !== undefined) {
+                        const pingSample = clientConnectionSample.pingSample;
+                        networkPacket.payload = pingSample;
+                      }
+                    }
+                  }
+
+                  // Send patched network packet
+                  const sentPacketSize = this.sendPacketOverUDP(
+                    networkPacket,
+                    client
+                  );
+                  // TODO: Check MTU threshold
+                  // Update client data sent rate
+                  const clientConnectionSample =
+                    this.networkConnectionSampler.getClientConnectionSample(
                       client.uuid
                     );
-                  if (inFlightPacketTrack !== undefined) {
-                    // Patch sequence number
-                    if (deliveryPolicy.patchSequenceNumber) {
-                      if (
-                        !inFlightPacketTrack.patchSequenceNumber(networkPacket)
-                      ) {
-                        ConsoleHandler.Log(
-                          "Failed to patch sequence number to network packet"
-                        );
-                        return;
-                      }
-                    }
-                    // Patch ACK range
-                    if (deliveryPolicy.patchAckRange) {
-                      if (!inFlightPacketTrack.patchAckRange(networkPacket)) {
-                        ConsoleHandler.Log(
-                          "Failed to patch Ack range to network packet"
-                        );
-                        return;
-                      }
-                    }
-                    // Add to in-flight tracking
-                    if (deliveryPolicy.toInFlightTrack) {
-                      if (
-                        !inFlightPacketTrack.addNetworkPacket(networkPacket)
-                      ) {
-                        ConsoleHandler.Log(
-                          "Failed to add a network packet to in-flight track"
-                        );
-                        return;
-                      }
-                    }
-
-                    // Check start pinging
-                    if (messageType === MESSAGE_TYPE.PONG) {
-                      if (
-                        this.networkConnectionSampler.startPinging(client.uuid)
-                      ) {
-                        const clientConnectionSample =
-                          this.networkConnectionSampler.getClientConnectionSample(
-                            client.uuid
-                          );
-                        if (clientConnectionSample !== undefined) {
-                          const pingSample = clientConnectionSample.pingSample;
-                          networkPacket.payload = pingSample;
-                        }
-                      }
-                    }
-
-                    // Send patched network packet
-                    const sentPacketSize = this.sendPacketOverUDP(
-                      networkPacket,
-                      client
-                    );
-                    // TODO: Check MTU threshold
-                    // Update client data sent rate
-                    const clientConnectionSample =
-                      this.networkConnectionSampler.getClientConnectionSample(
-                        client.uuid
-                      );
-                    if (clientConnectionSample !== undefined) {
-                      clientConnectionSample.dataSentRate += sentPacketSize;
-                    }
+                  if (clientConnectionSample !== undefined) {
+                    clientConnectionSample.dataSentRate += sentPacketSize;
                   }
                 }
               }
-            });
+            }
           }
         }
-      }
+      });
 
       // Pause update calls on empty server
       if (this.clientHandler.getClientCount() > 0) {
@@ -205,6 +185,19 @@ export default class NetworkHandler {
     }
   }
 
+  queueNetworkPacket(networkQueueEntry) {
+    const networkPacket = networkQueueEntry.networkPacket;
+    networkQueueEntry.clients.forEach((client) => {
+      if (client !== undefined) {
+        if (networkPacket.priority <= PACKET_PRIORITY.HIGH) {
+          client.priorityPacketQueue.push(networkPacket);
+        } else {
+          client.packetQueue.push(networkPacket);
+        }
+      }
+    });
+  }
+
   sendPacketOverUDP(networkPacket, client) {
     let sentPacketSize = 0;
     const networkBuffer =
@@ -218,7 +211,7 @@ export default class NetworkHandler {
       // TODO: Check MTU threshold
       sentPacketSize = networkBuffer.length * 0.001; // Convert to kb
     }
-    console.log(
+    ConsoleHandler.Log(
       `Network packet (${networkPacket.header.messageType}) ${sentPacketSize}kb sent`
     );
     return sentPacketSize;
