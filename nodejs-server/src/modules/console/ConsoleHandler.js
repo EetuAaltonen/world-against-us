@@ -1,8 +1,9 @@
+import moment from "moment/moment.js";
+
 export default class ConsoleHandler {
   static Log(consoleLog) {
-    const currentDate = new Date();
-    const formatDateTime = currentDate.toISOString();
-    const formatConsoleLog = `${formatDateTime} ${consoleLog}`;
+    const formatTimeStamp = moment().format("YYYY-MM-DD HH:mm:ss");
+    const formatConsoleLog = `${formatTimeStamp} >> ${consoleLog}`;
     console.log(formatConsoleLog);
   }
 }

@@ -3,7 +3,8 @@ export default function (items) {
   if (items !== undefined) {
     Object.keys(items).forEach((gridIndex) => {
       const item = items[gridIndex];
-      formatItemArray.push(item);
+      const formatItem = item.toJSONStruct();
+      formatItemArray.push(formatItem);
     });
   }
   return formatItemArray;

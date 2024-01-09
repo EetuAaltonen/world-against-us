@@ -5,26 +5,28 @@ const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
 
 export default class ClientHandler {
   constructor() {
-    this.clients = [];
+    this.clients = {};
   }
 
   addClient(rinfo, playerTag) {
     let newUuid = uuidv4();
     if (newUuid !== undefined) {
-      const client = new Client(newUuid, rinfo.address, rinfo.port, playerTag);
-      this.clients.push(client);
+      this.clients[newUuid] = new Client(
+        newUuid,
+        rinfo.address,
+        rinfo.port,
+        playerTag
+      );
     }
     return newUuid;
   }
 
   getClient(clientId) {
-    return this.clients.find((client) => client.uuid === clientId);
+    return this.clients[clientId];
   }
 
   getAllClients() {
-    return this.clients.filter(
-      (client) => client.instanceId !== UNDEFINED_UUID
-    );
+    return Object.values(this.clients);
   }
 
   getClientsToBroadcastGlobal(excludeClientId = UNDEFINED_UUID) {
@@ -53,14 +55,15 @@ export default class ClientHandler {
 
   removeClient(clientId, clientAddress, clientPort) {
     let isRemoved = false;
-    const index = this.clients.findIndex(
+    // TODO: removeClient is called multiple times after timed out client
+    const clientToDelete = this.getAllClients().find(
       (client) =>
         (client.uuid === clientId || clientId === UNDEFINED_UUID) &&
         client.address === clientAddress &&
         client.port === clientPort
     );
-    if (index > -1) {
-      this.clients.splice(index, 1);
+    if (clientToDelete !== undefined) {
+      delete this.clients[clientToDelete.uuid];
       isRemoved = true;
     }
     return isRemoved;

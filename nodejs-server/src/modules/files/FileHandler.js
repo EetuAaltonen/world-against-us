@@ -1,6 +1,4 @@
 import fs from "fs";
-import moment from "moment/moment.js";
-
 import ConsoleHandler from "../console/ConsoleHandler.js";
 
 export default class FileHandler {
@@ -17,8 +15,7 @@ export default class FileHandler {
         const filePath = this.fetchRelativeFilePath();
         fs.writeFile(filePath, json, "utf8", (err) => {
           if (err) throw err;
-          const timeStamp = moment().format("YYYY-MM-DD hh:mm:ss");
-          ConsoleHandler.Log(`${timeStamp} >> Autosave completed`);
+          ConsoleHandler.Log(`Autosave completed`);
         });
         isSaved = true;
       }
