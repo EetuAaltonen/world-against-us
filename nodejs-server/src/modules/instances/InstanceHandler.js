@@ -280,43 +280,44 @@ export default class InstanceHandler {
     if (instanceId !== this.campId) {
       const instance = this.getInstance(instanceId);
       if (instance !== undefined) {
-        // Check if instance is sub-instance
-        let totalPlayerCount = instance.getPlayerCount();
-        const subInstanceIds = this.getInstanceIds().filter((id) => {
-          const subInstance = this.getInstance(id);
-          if (subInstance !== undefined) {
-            return subInstance.parentInstanceId === instanceId;
-          }
-          return false;
-        });
-        subInstanceIds.forEach((subInstanceId) => {
-          totalPlayerCount += this.getInstance(subInstanceId).getPlayerCount();
-        });
-
-        // Check if instance with sub-instances are empty
-        if (totalPlayerCount <= 0) {
-          if (this.deleteInstance(instanceId)) {
-            ConsoleHandler.Log(
-              `Instance ${instance.roomIndex} ${instance.instanceId} deleted`
-            );
-            // Delete sub-instances
-            subInstanceIds.forEach((subInstanceId) => {
-              this.deleteInstance(subInstanceId);
-              ConsoleHandler.Log(
-                `Sub-instance ${subInstanceId} of ${instance.roomIndex} ${instance.instanceId} deleted`
-              );
-            });
-
-            // Check parent instance for release
-            if (instance.parentInstanceId !== undefined) {
-              this.checkInstanceRelease(instance.parentInstanceId);
+        // Check parent instance for release
+        if (instance.parentInstanceId !== undefined) {
+          this.checkInstanceRelease(instance.parentInstanceId);
+        } else {
+          // If instance is parent instance
+          let totalPlayerCount = instance.getPlayerCount();
+          const subInstanceIds = this.getInstanceIds().filter((id) => {
+            const subInstance = this.getInstance(id);
+            if (subInstance !== undefined) {
+              return subInstance.parentInstanceId === instanceId;
             }
-            isInstanceReleased = true;
-          } else {
-            // TODO: Proper error handling
-            ConsoleHandler.Log(
-              "Failed to delete instance with ID: " + instanceId
-            );
+            return false;
+          });
+          subInstanceIds.forEach((subInstanceId) => {
+            totalPlayerCount +=
+              this.getInstance(subInstanceId).getPlayerCount();
+          });
+
+          // Check if instance with sub-instances are empty
+          if (totalPlayerCount <= 0) {
+            if (this.deleteInstance(instanceId)) {
+              ConsoleHandler.Log(
+                `Instance ${instance.roomIndex} ${instance.instanceId} deleted`
+              );
+              // Delete sub-instances
+              subInstanceIds.forEach((subInstanceId) => {
+                this.deleteInstance(subInstanceId);
+                ConsoleHandler.Log(
+                  `Sub-instance ${subInstanceId} of ${instance.roomIndex} ${instance.instanceId} deleted`
+                );
+              });
+              isInstanceReleased = true;
+            } else {
+              // TODO: Proper error handling
+              ConsoleHandler.Log(
+                "Failed to delete instance with ID: " + instanceId
+              );
+            }
           }
         }
       }
