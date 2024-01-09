@@ -111,8 +111,8 @@ export default class ContainerHandler {
         inventoryStreamItems.toJSONStruct(),
         PACKET_PRIORITY.DEFAULT
       );
-      this.networkHandler.packetQueue.enqueue(
-        new NetworkQueueEntry(networkPacket, [client], networkPacket.priority)
+      this.networkHandler.queueNetworkPacket(
+        new NetworkQueueEntry(networkPacket, [client])
       );
       isItemsSent = true;
     } else {
@@ -141,8 +141,8 @@ export default class ContainerHandler {
       inventoryStreamItems.toJSONStruct(),
       PACKET_PRIORITY.DEFAULT
     );
-    this.networkHandler.packetQueue.enqueue(
-      new NetworkQueueEntry(networkPacket, [client], networkPacket.priority)
+    this.networkHandler.queueNetworkPacket(
+      new NetworkQueueEntry(networkPacket, [client])
     );
     return isItemsRequested;
   }
@@ -165,8 +165,8 @@ export default class ContainerHandler {
       inventoryStreamItems,
       PACKET_PRIORITY.DEFAULT
     );
-    this.networkHandler.packetQueue.enqueue(
-      new NetworkQueueEntry(networkPacket, [client], networkPacket.priority)
+    this.networkHandler.queueNetworkPacket(
+      new NetworkQueueEntry(networkPacket, [client])
     );
     return isInventoryStreamEnded;
   }

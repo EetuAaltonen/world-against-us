@@ -53,12 +53,8 @@ export default class NetworkPacketHandler {
               formatWorldStateSync,
               PACKET_PRIORITY.HIGH
             );
-            this.networkHandler.packetQueue.enqueue(
-              new NetworkQueueEntry(
-                networkPacket,
-                [client],
-                networkPacket.priority
-              )
+            this.networkHandler.queueNetworkPacket(
+              new NetworkQueueEntry(networkPacket, [client])
             );
             isPacketHandled = true;
           }
@@ -75,12 +71,8 @@ export default class NetworkPacketHandler {
               undefined,
               PACKET_PRIORITY.HIGH
             );
-            this.networkHandler.packetQueue.enqueue(
-              new NetworkQueueEntry(
-                networkPacket,
-                [client],
-                networkPacket.priority
-              )
+            this.networkHandler.queueNetworkPacket(
+              new NetworkQueueEntry(networkPacket, [client])
             );
             isPacketHandled = true;
           }
@@ -122,12 +114,8 @@ export default class NetworkPacketHandler {
               formatInstance,
               PACKET_PRIORITY.HIGH
             );
-            this.networkHandler.packetQueue.enqueue(
-              new NetworkQueueEntry(
-                networkPacket,
-                [client],
-                networkPacket.priority
-              )
+            this.networkHandler.queueNetworkPacket(
+              new NetworkQueueEntry(networkPacket, [client])
             );
             isPacketHandled = true;
           }
@@ -227,12 +215,8 @@ export default class NetworkPacketHandler {
               { player_list: formatPlayerInfoArray },
               PACKET_PRIORITY.DEFAULT
             );
-            this.networkHandler.packetQueue.enqueue(
-              new NetworkQueueEntry(
-                networkPacket,
-                [client],
-                networkPacket.priority
-              )
+            this.networkHandler.queueNetworkPacket(
+              new NetworkQueueEntry(networkPacket, [client])
             );
             isPacketHandled = true;
           }
@@ -253,12 +237,8 @@ export default class NetworkPacketHandler {
               { available_instances: formatAvailableInstanceArray },
               PACKET_PRIORITY.DEFAULT
             );
-            this.networkHandler.packetQueue.enqueue(
-              new NetworkQueueEntry(
-                networkPacket,
-                [client],
-                networkPacket.priority
-              )
+            this.networkHandler.queueNetworkPacket(
+              new NetworkQueueEntry(networkPacket, [client])
             );
             isPacketHandled = true;
           }
@@ -340,12 +320,8 @@ export default class NetworkPacketHandler {
                   payloadFastTravelInfo,
                   PACKET_PRIORITY.DEFAULT
                 );
-                this.networkHandler.packetQueue.enqueue(
-                  new NetworkQueueEntry(
-                    networkPacket,
-                    [client],
-                    networkPacket.priority
-                  )
+                this.networkHandler.queueNetworkPacket(
+                  new NetworkQueueEntry(networkPacket, [client])
                 );
                 isPacketHandled = true;
               }
@@ -390,12 +366,8 @@ export default class NetworkPacketHandler {
                     containerContentInfo,
                     PACKET_PRIORITY.DEFAULT
                   );
-                  this.networkHandler.packetQueue.enqueue(
-                    new NetworkQueueEntry(
-                      networkPacket,
-                      [client],
-                      networkPacket.priority
-                    )
+                  this.networkHandler.queueNetworkPacket(
+                    new NetworkQueueEntry(networkPacket, [client])
                   );
                   isPacketHandled = true;
                 } else {
@@ -451,12 +423,8 @@ export default class NetworkPacketHandler {
                       undefined,
                       PACKET_PRIORITY.DEFAULT
                     );
-                    this.networkHandler.packetQueue.enqueue(
-                      new NetworkQueueEntry(
-                        networkPacket,
-                        [client],
-                        networkPacket.priority
-                      )
+                    this.networkHandler.queueNetworkPacket(
+                      new NetworkQueueEntry(networkPacket, [client])
                     );
                     isPacketHandled = true;
                   }
@@ -730,12 +698,8 @@ export default class NetworkPacketHandler {
               { available_instances: formatAvailableInstanceArray },
               PACKET_PRIORITY.DEFAULT
             );
-            this.networkHandler.packetQueue.enqueue(
-              new NetworkQueueEntry(
-                networkPacket,
-                [client],
-                networkPacket.priority
-              )
+            this.networkHandler.queueNetworkPacket(
+              new NetworkQueueEntry(networkPacket, [client])
             );
             isPacketHandled = true;
           }
@@ -795,12 +759,8 @@ export default class NetworkPacketHandler {
                     undefined,
                     PACKET_PRIORITY.DEFAULT
                   );
-                  this.networkHandler.packetQueue.enqueue(
-                    new NetworkQueueEntry(
-                      networkPacket,
-                      [client],
-                      networkPacket.priority
-                    )
+                  this.networkHandler.queueNetworkPacket(
+                    new NetworkQueueEntry(networkPacket, [client])
                   );
                   isPacketHandled = true;
                 } else {
@@ -877,12 +837,8 @@ export default class NetworkPacketHandler {
                     formatScoutInstance,
                     PACKET_PRIORITY.DEFAULT
                   );
-                  this.networkHandler.packetQueue.enqueue(
-                    new NetworkQueueEntry(
-                      networkPacket,
-                      [client],
-                      networkPacket.priority
-                    )
+                  this.networkHandler.queueNetworkPacket(
+                    new NetworkQueueEntry(networkPacket, [client])
                   );
                   isPacketHandled = true;
                 }
@@ -930,12 +886,8 @@ export default class NetworkPacketHandler {
                   undefined,
                   PACKET_PRIORITY.DEFAULT
                 );
-                this.networkHandler.packetQueue.enqueue(
-                  new NetworkQueueEntry(
-                    networkPacket,
-                    [client],
-                    networkPacket.priority
-                  )
+                this.networkHandler.queueNetworkPacket(
+                  new NetworkQueueEntry(networkPacket, [client])
                 );
                 isPacketHandled = true;
               }

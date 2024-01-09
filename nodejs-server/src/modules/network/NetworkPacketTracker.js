@@ -163,8 +163,8 @@ export default class NetworkPacketTracker {
       )
     ) {
       inFlightPacket.priority = PACKET_PRIORITY.CRITICAL;
-      this.networkHandler.packetQueue.enqueue(
-        new NetworkQueueEntry(inFlightPacket, [client], inFlightPacket.priority)
+      this.networkHandler.queueNetworkPacket(
+        new NetworkQueueEntry(inFlightPacket, [client])
       );
       ConsoleHandler.Log(
         `Resending packet with message type ${inFlightPacket.header.messageType}`

@@ -375,12 +375,8 @@ export default class NetworkHandler {
                               // Patch delivery policy
                               networkPacket.deliveryPolicy.toInFlightTrack = false;
 
-                              this.packetQueue.enqueue(
-                                new NetworkQueueEntry(
-                                  networkPacket,
-                                  [client],
-                                  networkPacket.priority
-                                )
+                              this.queueNetworkPacket(
+                                new NetworkQueueEntry(networkPacket, [client])
                               );
                               isMessageHandled = true;
                             }
@@ -430,12 +426,8 @@ export default class NetworkHandler {
                               networkJoinGameRequest,
                               PACKET_PRIORITY.HIGH
                             );
-                            this.packetQueue.enqueue(
-                              new NetworkQueueEntry(
-                                networkPacket,
-                                [client],
-                                networkPacket.priority
-                              )
+                            this.queueNetworkPacket(
+                              new NetworkQueueEntry(networkPacket, [client])
                             );
                             isMessageHandled = true;
                           } else {
@@ -523,9 +515,7 @@ export default class NetworkHandler {
     // Patch delivery policy
     networkPacket.deliveryPolicy.toInFlightTrack = false;
 
-    this.packetQueue.enqueue(
-      new NetworkQueueEntry(networkPacket, [client], networkPacket.priority)
-    );
+    this.queueNetworkPacket(new NetworkQueueEntry(networkPacket, [client]));
     return isResponseQueued;
   }
 
@@ -569,9 +559,7 @@ export default class NetworkHandler {
     let isBroadcasted = false;
     if (networkPacket !== undefined) {
       if (clients.length > 0) {
-        this.packetQueue.enqueue(
-          new NetworkQueueEntry(networkPacket, clients, networkPacket.priority)
-        );
+        this.queueNetworkPacket(new NetworkQueueEntry(networkPacket, clients));
       }
       isBroadcasted = true;
     }
@@ -634,9 +622,7 @@ export default class NetworkHandler {
     networkPacket.deliveryPolicy.patchAckRange = false;
     networkPacket.deliveryPolicy.toInFlightTrack = false;
 
-    this.packetQueue.enqueue(
-      new NetworkQueueEntry(networkPacket, [client], networkPacket.priority)
-    );
+    this.queueNetworkPacket(new NetworkQueueEntry(networkPacket, [client]));
     return isDisconnecting;
   }
 
@@ -687,12 +673,10 @@ export default class NetworkHandler {
     networkPacket.deliveryPolicy.patchAckRange = false;
     networkPacket.deliveryPolicy.toInFlightTrack = false;
 
-    this.packetQueue.enqueue(
-      new NetworkQueueEntry(
-        networkPacket,
-        [new Client(UNDEFINED_UUID, rinfo.address, rinfo.port)],
-        networkPacket.priority
-      )
+    this.queueNetworkPacket(
+      new NetworkQueueEntry(networkPacket, [
+        new Client(UNDEFINED_UUID, rinfo.address, rinfo.port),
+      ])
     );
     return isMessageSended;
   }
@@ -717,9 +701,7 @@ export default class NetworkHandler {
       networkPacket.deliveryPolicy.patchAckRange = false;
       networkPacket.deliveryPolicy.toInFlightTrack = false;
 
-      this.packetQueue.enqueue(
-        new NetworkQueueEntry(networkPacket, allClients, networkPacket.priority)
-      );
+      this.queueNetworkPacket(new NetworkQueueEntry(networkPacket, allClients));
     } catch (error) {
       ConsoleHandler.Log(`Server error:\n${error.stack}`);
       setTimeout(() => {
