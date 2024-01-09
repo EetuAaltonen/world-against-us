@@ -1,12 +1,18 @@
+import MESSAGE_TYPE from "../network/MessageType.js";
+import PACKET_PRIORITY from "../network/PacketPriority.js";
 import ROOM_INDEX from "./RoomIndex.js";
 import AI_STATE from "../patrols/AIState.js";
 
 import ConsoleHandler from "../console/ConsoleHandler.js";
+import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
+import NetworkPacket from "../network_packets/NetworkPacket.js";
+
 import ContainerHandler from "../containers/ContainerHandler.js";
 import Patrol from "../patrols/Patrol.js";
-import GetRandomInt from "../math/GetRandomInt.js";
 import PatrolState from "../patrols/PatrolState.js";
+import InstanceSnapshot from "./InstanceSnapshot.js";
 
+import GetRandomInt from "../math/GetRandomInt.js";
 import FormatHashMapToJSONStructArray from "../formatting/FormatHashMapToJSONStructArray.js";
 
 const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
@@ -15,6 +21,8 @@ const PATROL_ROUTE_TIME_TOWN = 255000; // == ~4min 15sec
 const MAX_PATROL_ID = 100;
 const MIN_PATROL_COUNT = 1;
 const MAX_PATROL_COUNT = 2;
+
+const SNAPSHOT_SEND_RATE = 1000 / 20; // == 100ms
 
 export default class Instance {
   constructor(instanceId, roomIndex, networkHandler) {
@@ -28,6 +36,9 @@ export default class Instance {
     this.containerHandler = new ContainerHandler(this.networkHandler);
 
     this.availablePatrolId = 0;
+
+    this.snapshotSendTimer = 0;
+    this.isNewSnapshotRequired = true;
   }
 
   toJSONStruct() {
@@ -53,75 +64,46 @@ export default class Instance {
     if (this.roomIndex === ROOM_INDEX.ROOM_CAMP) {
       // TODO: Update the Camp
     } else {
-      const localPatrolIds = this.getAllPatrolIds();
-      if (localPatrolIds.length <= 0) {
-        const randomPatrolCount = GetRandomInt(
-          MIN_PATROL_COUNT,
-          MAX_PATROL_COUNT
+      isUpdated = this.updateLocalPatrols(passedTickTime);
+    }
+
+    this.snapshotSendTimer += passedTickTime;
+    if (this.snapshotSendTimer >= SNAPSHOT_SEND_RATE) {
+      this.snapshotSendTimer -= SNAPSHOT_SEND_RATE;
+
+      if (this.isNewSnapshotRequired) {
+        this.isNewSnapshotRequired = false;
+
+        // Broad cast instance snapshot within the instance
+        const clientsToBroadcast =
+          this.networkHandler.clientHandler.getClientsToBroadcastInstance(
+            this.instanceId
+          );
+        const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+          MESSAGE_TYPE.INSTANCE_SNAPSHOT_DATA,
+          undefined
         );
-        for (let i = 0; i < randomPatrolCount; i++) {
-          this.addPatrol();
-        }
-      } else {
-        localPatrolIds.forEach((patrolId) => {
-          const patrol = this.getPatrol(patrolId);
-          if (patrol !== undefined) {
-            if (patrol.travelTime > 0) {
-              patrol.travelTime -= passedTickTime;
-            } else {
-              switch (patrol.aiState) {
-                case AI_STATE.QUEUE:
-                  {
-                    patrol.aiState = AI_STATE.PATROL;
-                    ConsoleHandler.Log(
-                      `Patrol with ID ${patrolId} arrived to destination`
-                    );
-                    // Broadcast new state
-                    const patrolState = new PatrolState(
-                      this.instanceId,
-                      patrolId,
-                      patrol.aiState
-                    );
-                    this.networkHandler.broadcastPatrolState(
-                      this.instanceId,
-                      patrolState
-                    );
-                  }
-                  break;
-                case AI_STATE.PATROL:
-                  {
-                    // Simulate patrol movements when game area is empty
-                    if (this.ownerClient === undefined) {
-                      if (patrol.aiState === AI_STATE.PATROL) {
-                        patrol.routeTime -= passedTickTime;
-                      }
-                      if (patrol.routeTime <= 0) {
-                        patrol.aiState = AI_STATE.PATROL_END;
-                        ConsoleHandler.Log(
-                          `Patrol with ID ${patrolId} left the area`
-                        );
-                        // Broadcast new state
-                        const patrolState = new PatrolState(
-                          this.instanceId,
-                          patrolId,
-                          patrol.aiState
-                        );
-                        this.networkHandler.broadcastPatrolState(
-                          this.instanceId,
-                          patrolState
-                        );
-                        this.removePatrol(patrolId);
-                      }
-                    }
-                  }
-                  break;
-              }
-            }
-          }
-        });
+        const instanceSnapshot = this.fetchInstanceSnapshot();
+        const broadcastNetworkPacket = new NetworkPacket(
+          broadcastNetworkPacketHeader,
+          instanceSnapshot,
+          PACKET_PRIORITY.DEFAULT
+        );
+        this.networkHandler.broadcast(
+          broadcastNetworkPacket,
+          clientsToBroadcast
+        );
       }
     }
     return isUpdated;
+  }
+
+  fetchInstanceSnapshot() {
+    return new InstanceSnapshot(
+      this.instanceId,
+      this.getAllPlayers(),
+      this.getAllPatrols()
+    );
   }
 
   addPlayer(clientId, player) {
@@ -142,6 +124,10 @@ export default class Instance {
 
   getAllPlayerIds() {
     return Object.keys(this.localPlayers);
+  }
+
+  getAllPlayers() {
+    return Object.values(this.localPlayers);
   }
 
   getAllRemotePlayers(excludeClientId) {
@@ -202,6 +188,10 @@ export default class Instance {
     return Object.keys(this.localPatrols);
   }
 
+  getAllPatrols() {
+    return Object.values(this.localPatrols);
+  }
+
   getPatrolCount() {
     const patrolIds = this.getAllPatrolIds();
     const arrivedPatrols = patrolIds.filter((patrolId) => {
@@ -213,6 +203,80 @@ export default class Instance {
       return isArrived;
     });
     return arrivedPatrols.length;
+  }
+
+  updateLocalPatrols(passedTickTime) {
+    let isPatrolsUpdated = false;
+    const localPatrolIds = this.getAllPatrolIds();
+    if (localPatrolIds.length <= 0) {
+      const randomPatrolCount = GetRandomInt(
+        MIN_PATROL_COUNT,
+        MAX_PATROL_COUNT
+      );
+      for (let i = 0; i < randomPatrolCount; i++) {
+        this.addPatrol();
+      }
+      isPatrolsUpdated = true;
+    } else {
+      localPatrolIds.forEach((patrolId) => {
+        const patrol = this.getPatrol(patrolId);
+        if (patrol !== undefined) {
+          if (patrol.travelTime > 0) {
+            patrol.travelTime -= passedTickTime;
+          } else {
+            switch (patrol.aiState) {
+              case AI_STATE.QUEUE:
+                {
+                  patrol.aiState = AI_STATE.PATROL;
+                  ConsoleHandler.Log(
+                    `Patrol with ID ${patrolId} arrived to destination`
+                  );
+                  // Broadcast new state
+                  const patrolState = new PatrolState(
+                    this.instanceId,
+                    patrolId,
+                    patrol.aiState
+                  );
+                  this.networkHandler.broadcastPatrolState(
+                    this.instanceId,
+                    patrolState
+                  );
+                }
+                break;
+              case AI_STATE.PATROL:
+                {
+                  // Simulate patrol movements when game area is empty
+                  if (this.ownerClient === undefined) {
+                    if (patrol.aiState === AI_STATE.PATROL) {
+                      patrol.routeTime -= passedTickTime;
+                    }
+                    if (patrol.routeTime <= 0) {
+                      patrol.aiState = AI_STATE.PATROL_END;
+                      ConsoleHandler.Log(
+                        `Patrol with ID ${patrolId} left the area`
+                      );
+                      // Broadcast new state
+                      const patrolState = new PatrolState(
+                        this.instanceId,
+                        patrolId,
+                        patrol.aiState
+                      );
+                      this.networkHandler.broadcastPatrolState(
+                        this.instanceId,
+                        patrolState
+                      );
+                      this.removePatrol(patrolId);
+                    }
+                  }
+                }
+                break;
+            }
+          }
+        }
+      });
+      isPatrolsUpdated = true;
+    }
+    return isPatrolsUpdated;
   }
 
   handlePatrolState(patrolState) {

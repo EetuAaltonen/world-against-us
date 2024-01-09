@@ -127,29 +127,10 @@ export default class NetworkPacketHandler {
               const player = instance.getPlayer(client.uuid);
               if (player !== undefined) {
                 player.position = newPosition;
+                // Set new snapshot required flag
+                instance.isNewSnapshotRequired = true;
 
-                // Response with remote data position
-                const remotePlayers = instance.getAllRemotePlayers(client.uuid);
-                const formatRemotePlayers =
-                  FormatArrayToJSONStructArray(remotePlayers);
-                const networkPacketHeader = new NetworkPacketHeader(
-                  MESSAGE_TYPE.REMOTE_DATA_POSITION,
-                  client.uuid
-                );
-                const networkPacket = new NetworkPacket(
-                  networkPacketHeader,
-                  {
-                    remote_data_position: formatRemotePlayers,
-                  },
-                  PACKET_PRIORITY.HIGH
-                );
-                this.networkHandler.packetQueue.enqueue(
-                  new NetworkQueueEntry(
-                    networkPacket,
-                    [client],
-                    networkPacket.priority
-                  )
-                );
+                // Acknowledgment is sent with new snapshot
                 isPacketHandled = true;
               }
             }
@@ -655,7 +636,7 @@ export default class NetworkPacketHandler {
             }
           }
           break;
-        case MESSAGE_TYPE.PATROLS_DATA_PROGRESS_POSITION:
+        case MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA:
           {
             const patrolsProgressPosition = networkPacket.payload;
             if (patrolsProgressPosition !== undefined) {
@@ -666,14 +647,16 @@ export default class NetworkPacketHandler {
                       patrolProgressPosition.patrol_id
                     );
                     if (patrol !== undefined) {
-                      patrol.localPosition.X =
+                      patrol.localPosition.x =
                         patrolProgressPosition.position_x;
-                      patrol.localPosition.Y =
+                      patrol.localPosition.y =
                         patrolProgressPosition.position_y;
                       patrol.routeTime =
                         patrol.totalRouteTime -
                         patrol.totalRouteTime *
                           (patrolProgressPosition.route_progress * 0.001);
+                      // Set new snapshot required flag
+                      instance.isNewSnapshotRequired = true;
                     }
                   }
                 );
