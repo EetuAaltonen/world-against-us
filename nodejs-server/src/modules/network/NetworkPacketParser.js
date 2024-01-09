@@ -1,6 +1,7 @@
 import BITWISE from "./Bitwise.js";
 import MESSAGE_TYPE from "./MessageType.js";
 
+import zlib from "node:zlib";
 import ConsoleHandler from "../console/ConsoleHandler.js";
 import Vector2 from "../math/Vector2.js";
 import GridIndex from "../inventory/GridIndex.js";
@@ -21,31 +22,38 @@ import ParseJSONStructToInventoryStreamItems from "../inventory/ParseJSONStructT
 export default class NetworkPacketParser {
   constructor() {}
 
-  parsePacket(msg) {
-    let offset = 0;
-    const messageType = msg.readUInt8(offset);
-    offset += BITWISE.BIT8;
-    const clientId = msg.toString("utf8", offset, offset + BITWISE.ID_LENGTH);
-    offset += BITWISE.ID_LENGTH;
-    const sequenceNumber = msg.readUInt8(offset);
-    offset += BITWISE.BIT8;
-    const ackCount = msg.readUInt8(offset);
-    offset += BITWISE.BIT8;
-
-    const header = new NetworkPacketHeader(messageType, clientId);
-    header.sequenceNumber = sequenceNumber;
-    header.ackCount = ackCount;
-    header.ackRange = [];
-    for (let i = 0; i < ackCount; i++) {
-      const acknowledgmentId = msg.readUInt8(offset);
+  parsePacket(compressMsg) {
+    let networkPacket = undefined;
+    try {
+      // Decompress message buffer
+      let msg = zlib.inflateSync(compressMsg);
+      let offset = 0;
+      const messageType = msg.readUInt8(offset);
       offset += BITWISE.BIT8;
-      header.ackRange.push(acknowledgmentId);
-    }
+      const clientId = msg.toString("utf8", offset, offset + BITWISE.ID_LENGTH);
+      offset += BITWISE.ID_LENGTH;
+      const sequenceNumber = msg.readUInt8(offset);
+      offset += BITWISE.BIT8;
+      const ackCount = msg.readUInt8(offset);
+      offset += BITWISE.BIT8;
 
-    // Slice header from buffer
-    msg = msg.slice(offset);
-    const payload = this.parsePayload(messageType, msg);
-    const networkPacket = new NetworkPacket(header, payload);
+      const header = new NetworkPacketHeader(messageType, clientId);
+      header.sequenceNumber = sequenceNumber;
+      header.ackCount = ackCount;
+      header.ackRange = [];
+      for (let i = 0; i < ackCount; i++) {
+        const acknowledgmentId = msg.readUInt8(offset);
+        offset += BITWISE.BIT8;
+        header.ackRange.push(acknowledgmentId);
+      }
+
+      // Slice header from buffer
+      msg = msg.slice(offset);
+      const payload = this.parsePayload(messageType, msg);
+      networkPacket = new NetworkPacket(header, payload);
+    } catch (error) {
+      console.log(error);
+    }
     return networkPacket;
   }
 

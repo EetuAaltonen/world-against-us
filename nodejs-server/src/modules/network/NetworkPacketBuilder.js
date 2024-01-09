@@ -1,6 +1,7 @@
 import BITWISE from "./Bitwise.js";
 import MESSAGE_TYPE from "./MessageType.js";
 
+import zlib from "node:zlib";
 import ConsoleHandler from "../console/ConsoleHandler.js";
 
 const NULL_TERMINATOR = "\0";
@@ -10,7 +11,7 @@ export default class NetworkPacketBuilder {
     this.baseHeaderBuffer = Buffer.alloc(
       BITWISE.BIT8 + // Message Type
         BITWISE.ID_LENGTH + // UUID
-        BITWISE.BIT8 + // Null Termination
+        BITWISE.BIT8 + // Null Terminator
         BITWISE.BIT8 + // Sequence Number
         BITWISE.BIT8 // Ack Count
     );
@@ -19,22 +20,32 @@ export default class NetworkPacketBuilder {
   }
 
   createNetworkBuffer(networkPacket) {
-    let networkBuffer;
-    if (this.writePacketHeader(networkPacket)) {
-      if (this.writePacketPayload(networkPacket)) {
-        networkBuffer = this.baseHeaderBuffer;
-        if (this.headerAckRangeBuffer !== undefined) {
-          networkBuffer = Buffer.concat([
-            networkBuffer,
-            this.headerAckRangeBuffer,
-          ]);
-        }
-        if (this.payloadBuffer !== undefined) {
-          networkBuffer = Buffer.concat([networkBuffer, this.payloadBuffer]);
+    let compressNetworkBuffer = undefined;
+    try {
+      let networkBuffer = undefined;
+      if (this.writePacketHeader(networkPacket)) {
+        if (this.writePacketPayload(networkPacket)) {
+          networkBuffer = this.baseHeaderBuffer;
+          if (this.headerAckRangeBuffer !== undefined) {
+            networkBuffer = Buffer.concat([
+              networkBuffer,
+              this.headerAckRangeBuffer,
+            ]);
+          }
+          if (this.payloadBuffer !== undefined) {
+            networkBuffer = Buffer.concat([networkBuffer, this.payloadBuffer]);
+          }
         }
       }
+
+      // Compress the network buffer
+      if (networkBuffer !== undefined) {
+        compressNetworkBuffer = zlib.deflateSync(networkBuffer);
+      }
+    } catch (error) {
+      console.log(error);
     }
-    return networkBuffer;
+    return compressNetworkBuffer;
   }
 
   writePacketHeader(networkPacket) {
