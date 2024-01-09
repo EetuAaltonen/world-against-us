@@ -162,6 +162,23 @@ export default class NetworkPacketBuilder {
               isPayloadWritten = this.writeInstanceSnapshotBuffer(payload);
             }
             break;
+          case MESSAGE_TYPE.REMOTE_ENTERED_THE_INSTANCE:
+            {
+              const bufferClientId = Buffer.from(
+                payload.clientId + NULL_TERMINATOR,
+                "utf8"
+              );
+              const bufferPlayerTag = Buffer.from(
+                payload.playerTag + NULL_TERMINATOR,
+                "utf8"
+              );
+              this.payloadBuffer = Buffer.concat([
+                bufferClientId,
+                bufferPlayerTag,
+              ]);
+              isPayloadWritten = true;
+            }
+            break;
           case MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT:
             {
               let deviceInputCompress = 0;
@@ -187,6 +204,20 @@ export default class NetworkPacketBuilder {
               this.payloadBuffer = Buffer.concat([
                 bufferDeviceInputMovement,
                 bufferPlayerNetworkId,
+              ]);
+              isPayloadWritten = true;
+            }
+            break;
+          case MESSAGE_TYPE.REMOTE_LEFT_THE_INSTANCE:
+            {
+              const bufferClientId = Buffer.from(
+                payload.clientId + NULL_TERMINATOR,
+                "utf8"
+              );
+              const bufferPlayerTag = Buffer.from(payload.playerTag, "utf8");
+              this.payloadBuffer = Buffer.concat([
+                bufferClientId,
+                bufferPlayerTag,
               ]);
               isPayloadWritten = true;
             }
