@@ -5,7 +5,7 @@ function NetworkPacketParser() constructor
 		var parsedNetworkPacket = undefined;
 		try
 		{
-			// UNCOMPRESS MESSAGE BUFFER
+			// DECOMPRESS MESSAGE BUFFER
 			var msg = buffer_decompress(_compressMsg);
 			
 			buffer_seek(msg, buffer_seek_start, 0);
