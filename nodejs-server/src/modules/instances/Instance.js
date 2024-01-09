@@ -300,6 +300,10 @@ export default class Instance {
 
   setOwner(clientId) {
     this.ownerClient = clientId;
+    // If owner leaves, run clean up
+    if (clientId === undefined) {
+      this.onOwnerLeave();
+    }
   }
 
   resetOwner() {
@@ -318,6 +322,20 @@ export default class Instance {
       isOwnerReset = true;
     }
     return isOwnerReset;
+  }
+
+  onOwnerLeave() {
+    // Reset patrol states on chase and resume
+    if (this.roomIndex !== ROOM_INDEX.ROOM_CAMP) {
+      this.getAllPatrols().forEach((patrol) => {
+        if (
+          patrol.aiState === AI_STATE.CHASE ||
+          patrol.aiState === AI_STATE.PATROL_RESUME
+        ) {
+          patrol.aiState = AI_STATE.PATROL;
+        }
+      });
+    }
   }
 
   removePlayer(clientId) {
