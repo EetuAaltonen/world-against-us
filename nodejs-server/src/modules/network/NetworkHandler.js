@@ -192,11 +192,16 @@ export default class NetworkHandler {
   queueNetworkPacket(networkQueueEntry) {
     const networkPacket = networkQueueEntry.networkPacket;
     networkQueueEntry.clients.forEach((client) => {
+      // Make clone from original network packet without header ref
+      const networkPacketClone =
+        networkQueueEntry.clients.length > 1
+          ? networkPacket.clone()
+          : networkPacket;
       if (client !== undefined) {
-        if (networkPacket.priority <= PACKET_PRIORITY.HIGH) {
-          client.priorityPacketQueue.push(networkPacket);
+        if (networkPacketClone.priority <= PACKET_PRIORITY.HIGH) {
+          client.priorityPacketQueue.push(networkPacketClone);
         } else {
-          client.packetQueue.push(networkPacket);
+          client.packetQueue.push(networkPacketClone);
         }
       }
     });
@@ -215,9 +220,6 @@ export default class NetworkHandler {
       // TODO: Check MTU threshold
       sentPacketSize = networkBuffer.length * 0.001; // Convert to kb
     }
-    ConsoleHandler.Log(
-      `Network packet (${networkPacket.header.messageType}) ${sentPacketSize}kb sent`
-    );
     return sentPacketSize;
   }
 
