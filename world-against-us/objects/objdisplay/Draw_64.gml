@@ -1,21 +1,24 @@
+draw_set_color(c_yellow);
+draw_set_font(font_small_bold);
+// FPS
+draw_text(12, 12, "FPS: " + string(_fps));
 // DEBUG FPS
 if (global.DEBUGMODE)
 {
-	draw_set_color(c_yellow);
-	draw_text(32, 32, "FPS real: " + string(fpsReal));
-	draw_text(32, 64, "FPS: " + string(_fps));
-	draw_text(32, 96, "DeltaTime: " + string(delta_time));
+	draw_text(12, 28, "FPS real: " + string(fpsReal));
+	draw_text(12, 44, "DeltaTime: " + string(delta_time));
 
-	// RESET DRAW PROPERTIES
-	ResetDrawProperties();
+	
 }
+// RESET DRAW PROPERTIES
+ResetDrawProperties();
 
 // NETWORKING INFO
 draw_set_font(font_small_bold);
 draw_set_color(c_red);
 draw_set_halign(fa_right);
 		
-draw_text(global.GUIW - 20, 10, string("{0} :Status", global.MultiplayerMode ? "Online" : "Offline"));
+draw_text(global.GUIW - 20, 10, string("({0}) {1} :Status", global.NetworkHandlerRef.network_status, global.MultiplayerMode ? "Online" : "Offline"));
 
 if (global.MultiplayerMode)
 {

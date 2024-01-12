@@ -110,7 +110,24 @@ function NetworkPacketParser() constructor
 						var parsedStruct = json_parse(payloadString);
 						if (parsedStruct != EMPTY_STRUCT)
 						{
-							parsedPayload = ParseJSONStructToRegion(parsedStruct);
+							var regionStruct = parsedStruct[$ "region"] ?? undefined;
+							var parsedRegion = ParseJSONStructToRegion(regionStruct);
+							
+							var parsedScoutingDrone = undefined;
+							var scoutingDroneStruct = parsedStruct[$ "scouting_drone"] ?? undefined;
+							if (!is_undefined(scoutingDroneStruct))
+							{
+								var parsedPosition = ParseJSONStructToVector2(scoutingDroneStruct[$ "position"] ?? undefined);
+								parsedScoutingDrone = new InstanceObject(
+									object_get_sprite(objDrone),
+									objDrone,
+									parsedPosition
+								);
+							}
+							parsedPayload = {
+								region: parsedRegion,
+								scouting_drone: parsedScoutingDrone
+							}
 						}
 					} break;
 					case MESSAGE_TYPE.INSTANCE_SNAPSHOT_DATA:

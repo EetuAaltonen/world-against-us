@@ -131,15 +131,14 @@ function NetworkPacketTracker() constructor
 	static ProcessSequenceNumber = function(_sequenceNumber, _messageType)
 	{
 		var isCheckedAndProceed = false;
-		// TODO: Verify what happens when sequence number is wrapped back to 0
-		// If incoming packet still has seq number 126 or 127??
 		if (_messageType != MESSAGE_TYPE.DISCONNECT_FROM_HOST)
 		{
 			if (_sequenceNumber == expected_sequence_number)
 			{
 				// SUCCESSFULLY RECEIVED THE EXPECTED
 				expected_sequence_number = _sequenceNumber + 1;
-				if (_messageType != MESSAGE_TYPE.ACKNOWLEDGMENT)
+				if (_messageType != MESSAGE_TYPE.ACKNOWLEDGMENT &&
+					_messageType != MESSAGE_TYPE.PONG)
 				{
 					ds_list_add(pending_ack_range, _sequenceNumber);
 				}
