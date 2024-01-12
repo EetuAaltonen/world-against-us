@@ -1,2 +1,2 @@
-# Client generated static map data
-datafiles/map_data/room*
+# Ignore builds
+build/
