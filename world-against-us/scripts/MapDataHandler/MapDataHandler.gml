@@ -326,7 +326,7 @@ function MapDataHandler() constructor
 				for (var i = 0; i < newPlayerIconCount; i++)
 				{
 					var player = _regionSnapshot.local_players[@ i];
-					if (!is_undefined(patrol))
+					if (!is_undefined(player))
 					{
 						var playerPosition = new Vector2(
 							player.position.X,
@@ -401,8 +401,7 @@ function MapDataHandler() constructor
 			{
 				if (iconStyle.is_dynamic == isIconDynamic)
 				{
-					// TODO: Fetch dynamic icons from new 'map_object_instances' list
-					/*var styleObjectIndex = asset_get_index(iconStyle.object_name);
+					var styleObjectIndex = asset_get_index(iconStyle.object_name);
 					var instanceCount = instance_number(styleObjectIndex);
 					for (var i = 0; i < instanceCount; i++)
 					{
@@ -431,7 +430,7 @@ function MapDataHandler() constructor
 							);
 							ds_list_add(mapIcons, mapIcon);
 						}
-					}*/
+					}
 				}
 			}
 		}

@@ -131,42 +131,14 @@ function NetworkRegionObjectHandler() constructor
 	
 	static OnRoomEnd = function()
 	{
-		// TODO: Update region owner and patrol states on server side when owner client leaves / disconnects
-		/*
-		if (global.NetworkRegionHandlerRef.owner_client == global.NetworkHandlerRef.client_id)
-		{
-			var patrolCount = ds_list_size(local_patrols);
-			for (var i = 0; i < patrolCount; i++)
-			{
-				var banditInstance = local_patrols[| i];
-				if (instance_exists(banditInstance))
-				{
-					switch (banditInstance.aiState)
-					{
-						case AI_STATE.CHASE:
-						{
-							// BROADCAST PATROL STATUS RESET IF TARGET IS LOCAL PLAYER
-							if (banditInstance.targetInstance == global.InstancePlayer)
-							{
-								BroadcastPatrolState(banditInstance.patrolId, AI_STATE.PATROL);
-							}
-						} break;
-						case AI_STATE.PATROL_RESUME:
-						{
-							// BROADCAST PATROL STATUS RESET IF PATROL IS RESUMING
-							BroadcastPatrolState(banditInstance.patrolId, AI_STATE.PATROL);
-						} break;
-					}
-				}
-			}
-		}
-		*/
-		
 		// CLEAR LOCAL PLAYERS
 		ClearDSListAndDeleteValues(local_players);
 		
 		// CLEAR LOCAL PATROLS
 		ClearDSListAndDeleteValues(local_patrols);
+		
+		// RESET SCOTING DRONE
+		scouting_drone = undefined;
 		
 		// RESET PATROL UPDATE TIMER
 		patrol_update_timer.StartTimer();
@@ -309,7 +281,7 @@ function NetworkRegionObjectHandler() constructor
 		}
 	}
 	
-	static DestroyRemotePlayerInstanceObjectById = function(_remotePlayerInfo)
+	static DestroyRemotePlayerInstanceObjectById = function(_remotePlayerNetworkId)
 	{
 		var isPlayerInstanceDestroyed = false;
 		var playerInstanceCount = ds_list_size(local_players);
@@ -318,7 +290,7 @@ function NetworkRegionObjectHandler() constructor
 			var playerInstanceObject = local_players[| i];
 			if (!is_undefined(playerInstanceObject))
 			{
-				if (playerInstanceObject.network_id == _remotePlayerInfo.network_id)
+				if (playerInstanceObject.network_id == _remotePlayerNetworkId)
 				{
 					if (instance_exists(playerInstanceObject.instance_ref))
 					{
@@ -330,17 +302,16 @@ function NetworkRegionObjectHandler() constructor
 				}	
 			}
 		}
-		
 		if (!isPlayerInstanceDestroyed)
 		{
-			var consoleLog = string("Unable to destroy unknown remote player instance object with player tag '{0}'", _remotePlayerInfo);
+			var consoleLog = string("Unable to destroy unknown remote player instance object with network ID '{0}'", _remotePlayerNetworkId);
 			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);	
 		}
 		
 		return isPlayerInstanceDestroyed;
 	}
 	
-	static SpawnScoutingDrone = function(_instanceObject, _layerName)
+	static SpawnScoutingDrone = function(_instanceObject)
 	{
 		var isDroneSpawned = true;
 		if (is_undefined(scouting_drone))
