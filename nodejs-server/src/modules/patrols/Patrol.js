@@ -19,13 +19,12 @@ export default class Patrol {
   }
 
   toJSONStruct() {
-    var formatTravelTime = Math.max(0, this.travelTime);
     var formatScaledRouteProgress = this.getScaledRouteProgress();
     var formatLocalPosition = this.localPosition.toJSONStruct();
     return {
       patrol_id: this.patrolId,
       ai_state: this.aiState,
-      travel_time: formatTravelTime,
+      travel_time: this.travelTime,
       scaled_route_progress: formatScaledRouteProgress,
       local_position: formatLocalPosition,
     };
@@ -35,5 +34,11 @@ export default class Patrol {
     return Math.round(
       (1 - this.routeTime / this.totalRouteTime) * FIXED_POINT_PERCENT_PRECISION
     );
+  }
+
+  forceResumePatrolling() {
+    this.aiState = AI_STATE.PATROL;
+    this.localPosition.x = 0;
+    this.localPosition.y = 0;
   }
 }

@@ -102,7 +102,7 @@ export default class Instance {
     return new InstanceSnapshot(
       this.instanceId,
       this.getAllPlayers(),
-      this.getAllPatrols()
+      this.getAllLocalPatrols()
     );
   }
 
@@ -192,6 +192,10 @@ export default class Instance {
     return Object.values(this.localPatrols);
   }
 
+  getAllLocalPatrols() {
+    return this.getAllPatrols().filter((patrol) => patrol.travelTime <= 0);
+  }
+
   getPatrolCount() {
     const patrolIds = this.getAllPatrolIds();
     const arrivedPatrols = patrolIds.filter((patrolId) => {
@@ -222,7 +226,7 @@ export default class Instance {
         const patrol = this.getPatrol(patrolId);
         if (patrol !== undefined) {
           if (patrol.travelTime > 0) {
-            patrol.travelTime -= passedTickTime;
+            patrol.travelTime = Math.max(0, patrol.travelTime - passedTickTime);
           } else {
             switch (patrol.aiState) {
               case AI_STATE.QUEUE:
@@ -332,7 +336,7 @@ export default class Instance {
           patrol.aiState === AI_STATE.CHASE ||
           patrol.aiState === AI_STATE.PATROL_RESUME
         ) {
-          patrol.aiState = AI_STATE.PATROL;
+          patrol.forceResumePatrolling();
         }
       });
     }
@@ -340,7 +344,8 @@ export default class Instance {
 
   removePlayer(clientId) {
     let isPlayerRemoved = false;
-    if (this.getPlayer(clientId) !== undefined) {
+    const player = this.getPlayer(clientId);
+    if (player !== undefined) {
       // End active inventory stream
       const activeInventoryStream =
         this.containerHandler.getActiveInventoryStreamByClientId(clientId);

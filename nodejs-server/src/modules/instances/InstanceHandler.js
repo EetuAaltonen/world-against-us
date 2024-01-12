@@ -231,45 +231,36 @@ export default class InstanceHandler {
 
   removePlayerFromInstance(clientId, instanceId = undefined) {
     let isPlayerRemoved = false;
-    if (instanceId !== undefined) {
-      const instance = this.getInstance(instanceId);
-      if (instance !== undefined) {
-        if (instance.removePlayer(clientId)) {
-          if (!this.checkInstanceRelease(instanceId)) {
-            if (instance.ownerClient === clientId) {
-              if (!instance.resetOwner()) {
-                // TODO: Proper error handling
-                ConsoleHandler.Log(
-                  `Failed to reset owner for an instance with ID: ${instanceId}`
-                );
-              }
-            }
-          }
-          isPlayerRemoved = true;
-        }
-      }
-    } else {
+    let instance = undefined;
+    // Get instance by client ID
+    if (instanceId === undefined) {
       const instanceIds = this.getInstanceIds();
       const instanceCount = instanceIds.length;
       for (let i = 0; i < instanceCount; i++) {
         const instanceId = instanceIds[i];
-        const instance = this.getInstance(instanceId);
-        if (instance.getPlayer(clientId) !== undefined) {
-          if (instance.removePlayer(clientId)) {
-            if (!this.checkInstanceRelease(instanceId)) {
-              if (instance.ownerClient === clientId) {
-                if (!instance.resetOwner()) {
-                  // TODO: Proper error handling
-                  ConsoleHandler.Log(
-                    `Failed to reset owner for an instance with ID: ${instanceId}`
-                  );
-                }
-              }
+        const instanceWithPlayer = this.getInstance(instanceId);
+        const player = instanceWithPlayer.getPlayer(clientId);
+        if (player !== undefined) {
+          instance = instanceWithPlayer;
+          break;
+        }
+      }
+    } else {
+      instance = this.getInstance(instanceId);
+    }
+    if (instance !== undefined) {
+      if (instance.removePlayer(clientId)) {
+        if (!this.checkInstanceRelease(instanceId)) {
+          if (instance.ownerClient === clientId) {
+            if (!instance.resetOwner()) {
+              // TODO: Proper error handling
+              ConsoleHandler.Log(
+                `Failed to reset owner for an instance with ID: ${instanceId}`
+              );
             }
-            isPlayerRemoved = true;
-            break;
           }
         }
+        isPlayerRemoved = true;
       }
     }
     return isPlayerRemoved;
