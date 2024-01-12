@@ -1,4 +1,5 @@
 import NetworkPacketDeliveryPolicy from "./NetworkPacketDeliveryPolicy.js";
+import NetworkPacketHeader from "./NetworkPacketHeader.js";
 
 export default class NetworkPacket {
   constructor(header, payload, priority) {
@@ -11,6 +12,20 @@ export default class NetworkPacket {
     this.timeoutTimer = this.acknowledgmentTimeout;
 
     this.deliveryPolicy = new NetworkPacketDeliveryPolicy();
+  }
+
+  clone() {
+    const networkPacketHeaderClone = new NetworkPacketHeader(
+      this.header.messageType,
+      this.header.clientId
+    );
+    const networkPacketClone = new NetworkPacket(
+      networkPacketHeaderClone,
+      this.payload,
+      this.priority
+    );
+    networkPacketClone.deliveryPolicy = this.deliveryPolicy;
+    return networkPacketClone;
   }
 
   update(passedTickTime) {

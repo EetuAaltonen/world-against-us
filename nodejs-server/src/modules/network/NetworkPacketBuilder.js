@@ -101,6 +101,22 @@ export default class NetworkPacketBuilder {
         switch (messageType) {
           case MESSAGE_TYPE.REMOTE_CONNECTED_TO_HOST:
             {
+              // TODO: Write single function to build payload from RemotePlayerInfo
+              // that appears in almost every MESSAGE_TYPE.REMOTE_X...
+              const bufferClientId = Buffer.from(
+                payload.clientId + NULL_TERMINATOR,
+                "utf8"
+              );
+              const bufferPlayerTag = Buffer.from(payload.playerTag, "utf8");
+              this.payloadBuffer = Buffer.concat([
+                bufferClientId,
+                bufferPlayerTag,
+              ]);
+              isPayloadWritten = true;
+            }
+            break;
+          case MESSAGE_TYPE.REMOTE_DISCONNECT_FROM_HOST:
+            {
               const bufferClientId = Buffer.from(
                 payload.clientId + NULL_TERMINATOR,
                 "utf8"
@@ -222,6 +238,20 @@ export default class NetworkPacketBuilder {
               isPayloadWritten = true;
             }
             break;
+          case MESSAGE_TYPE.REMOTE_RETURNED_TO_CAMP:
+            {
+              const bufferClientId = Buffer.from(
+                payload.clientId + NULL_TERMINATOR,
+                "utf8"
+              );
+              const bufferPlayerTag = Buffer.from(payload.playerTag, "utf8");
+              this.payloadBuffer = Buffer.concat([
+                bufferClientId,
+                bufferPlayerTag,
+              ]);
+              isPayloadWritten = true;
+            }
+            break;
           case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
             {
               const bufferInstanceIndices = Buffer.allocUnsafe(
@@ -313,99 +343,104 @@ export default class NetworkPacketBuilder {
   }
 
   writeInstanceSnapshotBuffer(payload) {
-    let isBufferWritten = true;
-    let offset = 0;
-    const bufferSnapshotData = Buffer.allocUnsafe(
-      BITWISE.BIT32 + BITWISE.BIT8 + BITWISE.BIT8
-    );
-    bufferSnapshotData.writeUInt32LE(payload.instanceId);
-    offset += BITWISE.BIT32;
-    const localPlayerCount = payload.localPlayerCount;
-    bufferSnapshotData.writeUInt8(localPlayerCount, offset);
-    offset += BITWISE.BIT8;
-    const localPatrolCount = payload.localPatrolCount;
-    bufferSnapshotData.writeUInt8(localPatrolCount, offset);
-
-    this.payloadBuffer = bufferSnapshotData;
-
-    let bufferLocalPlayerData = undefined;
-    if (localPlayerCount > 0) {
-      // Allocate local player data buffer
-      bufferLocalPlayerData = Buffer.allocUnsafe(
-        (BITWISE.ID_LENGTH + // Network ID
-          BITWISE.BIT8 + // Null Terminator
-          BITWISE.BIT32 + // X-position
-          BITWISE.BIT32) * // X-position
-          localPlayerCount // Multiplier
+    let isBufferWritten = false;
+    try {
+      let offset = 0;
+      const bufferSnapshotData = Buffer.allocUnsafe(
+        BITWISE.BIT32 + BITWISE.BIT8 + BITWISE.BIT8
       );
-      let plrDataOffset = 0;
-      for (let i = 0; i < localPlayerCount; i++) {
-        const playerData = payload.localPlayers[i];
-        bufferLocalPlayerData.fill(
-          playerData.networkId + NULL_TERMINATOR,
-          plrDataOffset,
-          plrDataOffset + BITWISE.ID_LENGTH + BITWISE.BIT8,
-          "utf8"
-        );
-        plrDataOffset += BITWISE.ID_LENGTH + BITWISE.BIT8;
+      bufferSnapshotData.writeUInt32LE(payload.instanceId);
+      offset += BITWISE.BIT32;
+      const localPlayerCount = payload.localPlayerCount;
+      bufferSnapshotData.writeUInt8(localPlayerCount, offset);
+      offset += BITWISE.BIT8;
+      const localPatrolCount = payload.localPatrolCount;
+      bufferSnapshotData.writeUInt8(localPatrolCount, offset);
 
-        bufferLocalPlayerData.writeUInt32LE(
-          playerData.position.x,
-          plrDataOffset
-        );
-        plrDataOffset += BITWISE.BIT32;
-        bufferLocalPlayerData.writeUInt32LE(
-          playerData.position.y,
-          plrDataOffset
-        );
-        plrDataOffset += BITWISE.BIT32;
-      }
-    }
-    let bufferLocalPatrolData = undefined;
-    if (localPatrolCount > 0) {
-      // Allocate local player data buffer
-      bufferLocalPatrolData = Buffer.allocUnsafe(
-        (BITWISE.BIT8 + // Patrol ID
-          BITWISE.BIT16 + // Route progress
-          BITWISE.BIT32 + // X-position
-          BITWISE.BIT32) * // X-position
-          localPatrolCount // Multiplier
-      );
-      let patrolDataOffset = 0;
-      for (let i = 0; i < localPatrolCount; i++) {
-        const patrol = payload.localPatrols[i];
-        bufferLocalPatrolData.writeUInt8(patrol.patrolId, patrolDataOffset);
-        patrolDataOffset += BITWISE.BIT8;
-        const scaledRouteProgress = patrol.getScaledRouteProgress();
-        bufferLocalPatrolData.writeUInt16LE(
-          scaledRouteProgress,
-          patrolDataOffset
-        );
-        patrolDataOffset += BITWISE.BIT16;
-        bufferLocalPatrolData.writeUInt32LE(
-          patrol.localPosition.x,
-          patrolDataOffset
-        );
-        patrolDataOffset += BITWISE.BIT32;
-        bufferLocalPatrolData.writeUInt32LE(
-          patrol.localPosition.y,
-          patrolDataOffset
-        );
-        patrolDataOffset += BITWISE.BIT32;
-      }
-    }
+      this.payloadBuffer = bufferSnapshotData;
 
-    if (bufferLocalPlayerData !== undefined) {
-      this.payloadBuffer = Buffer.concat([
-        this.payloadBuffer,
-        bufferLocalPlayerData,
-      ]);
-    }
-    if (bufferLocalPatrolData !== undefined) {
-      this.payloadBuffer = Buffer.concat([
-        this.payloadBuffer,
-        bufferLocalPatrolData,
-      ]);
+      let bufferLocalPlayerData = undefined;
+      if (localPlayerCount > 0) {
+        // Allocate local player data buffer
+        bufferLocalPlayerData = Buffer.allocUnsafe(
+          (BITWISE.ID_LENGTH + // Network ID
+            BITWISE.BIT8 + // Null Terminator
+            BITWISE.BIT32 + // X-position
+            BITWISE.BIT32) * // X-position
+            localPlayerCount // Multiplier
+        );
+        let plrDataOffset = 0;
+        for (let i = 0; i < localPlayerCount; i++) {
+          const playerData = payload.localPlayers[i];
+          bufferLocalPlayerData.fill(
+            playerData.networkId + NULL_TERMINATOR,
+            plrDataOffset,
+            plrDataOffset + BITWISE.ID_LENGTH + BITWISE.BIT8,
+            "utf8"
+          );
+          plrDataOffset += BITWISE.ID_LENGTH + BITWISE.BIT8;
+
+          bufferLocalPlayerData.writeUInt32LE(
+            playerData.position.x,
+            plrDataOffset
+          );
+          plrDataOffset += BITWISE.BIT32;
+          bufferLocalPlayerData.writeUInt32LE(
+            playerData.position.y,
+            plrDataOffset
+          );
+          plrDataOffset += BITWISE.BIT32;
+        }
+      }
+      let bufferLocalPatrolData = undefined;
+      if (localPatrolCount > 0) {
+        // Allocate local player data buffer
+        bufferLocalPatrolData = Buffer.allocUnsafe(
+          (BITWISE.BIT8 + // Patrol ID
+            BITWISE.BIT16 + // Route progress
+            BITWISE.BIT32 + // X-position
+            BITWISE.BIT32) * // X-position
+            localPatrolCount // Multiplier
+        );
+        let patrolDataOffset = 0;
+        for (let i = 0; i < localPatrolCount; i++) {
+          const patrol = payload.localPatrols[i];
+          bufferLocalPatrolData.writeUInt8(patrol.patrolId, patrolDataOffset);
+          patrolDataOffset += BITWISE.BIT8;
+          const scaledRouteProgress = patrol.getScaledRouteProgress();
+          bufferLocalPatrolData.writeUInt16LE(
+            scaledRouteProgress,
+            patrolDataOffset
+          );
+          patrolDataOffset += BITWISE.BIT16;
+          bufferLocalPatrolData.writeUInt32LE(
+            patrol.localPosition.x,
+            patrolDataOffset
+          );
+          patrolDataOffset += BITWISE.BIT32;
+          bufferLocalPatrolData.writeUInt32LE(
+            patrol.localPosition.y,
+            patrolDataOffset
+          );
+          patrolDataOffset += BITWISE.BIT32;
+        }
+      }
+
+      if (bufferLocalPlayerData !== undefined) {
+        this.payloadBuffer = Buffer.concat([
+          this.payloadBuffer,
+          bufferLocalPlayerData,
+        ]);
+      }
+      if (bufferLocalPatrolData !== undefined) {
+        this.payloadBuffer = Buffer.concat([
+          this.payloadBuffer,
+          bufferLocalPatrolData,
+        ]);
+      }
+      isBufferWritten = true;
+    } catch (error) {
+      throw error;
     }
     return isBufferWritten;
   }

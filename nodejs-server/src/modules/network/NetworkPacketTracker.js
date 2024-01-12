@@ -29,7 +29,7 @@ export default class NetworkPacketTracker {
                 inFlightPacket.maxAcknowledgmentAttempt
               ) {
                 ConsoleHandler.Log(
-                  `Acknowledgment timeout attempt ${inFlightPacket.acknowledgmentAttempt} with message type ${inFlightPacket.header.messageType} and sequence number ${inFlightPacket.header.sequenceNumber} timed out`
+                  `Acknowledgment timeout attempt ${inFlightPacket.acknowledgmentAttempt} with message type ${inFlightPacket.header.messageType} and sequence number ${inFlightPacket.header.sequenceNumber} timed out from ${clientId}`
                 );
                 inFlightPacket.acknowledgmentAttempt++;
                 inFlightPacket.restartTimeOutTimer();
