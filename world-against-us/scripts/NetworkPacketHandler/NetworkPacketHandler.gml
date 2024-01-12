@@ -56,12 +56,21 @@ function NetworkPacketHandler() constructor
 					} break;
 					case MESSAGE_TYPE.SYNC_INSTANCE:
 					{
-						var region = payload;
-						if (!is_undefined(region))
+						var regionSync = payload;
+						if (!is_undefined(regionSync))
 						{
-							global.NetworkRegionHandlerRef.owner_client = region.owner_client;
-							global.NetworkRegionObjectHandlerRef.SyncRegionPlayers(region.local_players);
-							global.NetworkRegionObjectHandlerRef.SyncRegionPatrols(region.arrived_patrols);
+							var region = regionSync.region;
+							if (!is_undefined(region))
+							{
+								global.NetworkRegionHandlerRef.owner_client = region.owner_client;
+								global.NetworkRegionObjectHandlerRef.SyncRegionPlayers(region.local_players);
+								global.NetworkRegionObjectHandlerRef.SyncRegionPatrols(region.arrived_patrols);
+							}
+							var scoutingDroneInstanceObject = regionSync.scouting_drone;
+							if (!is_undefined(scoutingDroneInstanceObject))
+							{
+								global.NetworkRegionObjectHandlerRef.SpawnScoutingDrone(scoutingDroneInstanceObject);
+							}
 							// RESPOND WITH ACKNOWLEDGMENT TO END SYNC INSTANCE
 							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 						}
@@ -74,7 +83,8 @@ function NetworkPacketHandler() constructor
 							global.NetworkRegionObjectHandlerRef.UpdateRegionFromSnapshot(regionSnapshot);
 							isPacketHandled = true;
 						}
-						isPacketHandled = true;
+						// RESPOND WITH ACKNOWLEDGMENT TO INSTANCE SNAPSHOT DATA
+						isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 					} break;
 					case MESSAGE_TYPE.REMOTE_ENTERED_THE_INSTANCE:
 					{
@@ -435,6 +445,9 @@ function NetworkPacketHandler() constructor
 					} break;
 					case MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM:
 					{
+						// REQUEST GUI STATE RESET
+						global.GUIStateHandlerRef.RequestGUIStateReset();
+						
 						// RESPOND WITH ACKNOWLEDGMENT TO END OPERATIONS SCOUT STREAM REQUEST
 						isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 					} break;
@@ -478,7 +491,7 @@ function NetworkPacketHandler() constructor
 					} break;
 					default:
 					{
-						var errorMessage = string("Implementation missing for message type {0}", messageType);
+						var errorMessage = string("Missing implementation for message type {0}", messageType);
 						var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CLIENT_ERROR);
 						var networkPacket = new NetworkPacket(
 							networkPacketHeader,
