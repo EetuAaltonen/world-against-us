@@ -105,13 +105,27 @@ export default class NetworkPacketHandler {
 
             // Response with instance data
             const formatInstance = instance.toJSONStruct();
+            let formatScoutingDrone = undefined;
+            const activeOperationsScoutStream =
+              this.instanceHandler.activeOperationsScoutStream;
+            if (activeOperationsScoutStream !== undefined) {
+              if (
+                activeOperationsScoutStream.instanceId === instance.instanceId
+              ) {
+                formatScoutingDrone =
+                  activeOperationsScoutStream.scoutingDrone.toJSONStruct();
+              }
+            }
             const networkPacketHeader = new NetworkPacketHeader(
               MESSAGE_TYPE.SYNC_INSTANCE,
               client.uuid
             );
             const networkPacket = new NetworkPacket(
               networkPacketHeader,
-              formatInstance,
+              {
+                region: formatInstance,
+                scouting_drone: formatScoutingDrone,
+              },
               PACKET_PRIORITY.HIGH
             );
             this.networkHandler.queueNetworkPacket(
@@ -695,12 +709,20 @@ export default class NetworkPacketHandler {
                 this.instanceHandler.getInstance(scoutInstanceId);
               if (scoutInstance !== undefined) {
                 let isStreamInterruptible = true;
-                if (
-                  this.instanceHandler.activeOperationsScoutStream !== undefined
-                ) {
+                const activeOperationsScoutStream =
+                  this.instanceHandler.activeOperationsScoutStream;
+                if (activeOperationsScoutStream !== undefined) {
                   isStreamInterruptible =
-                    this.instanceHandler.activeOperationsScoutStream
-                      .operatingClient === client.uuid;
+                    activeOperationsScoutStream.operatingClient === client.uuid;
+
+                  // Broadcast scouting drone leave withing prior scouted instance
+                  if (
+                    scoutInstance.instanceId !=
+                    activeOperationsScoutStream.instanceId
+                  ) {
+                    // Broadcast destroy scouting drone withing scouted instance
+                    this.broadcastScoutingDroneDestroy(scoutInstanceId, client);
+                  }
                 }
 
                 if (isStreamInterruptible) {
@@ -825,6 +847,12 @@ export default class NetworkPacketHandler {
                     new NetworkQueueEntry(networkPacket, [client])
                   );
                   isPacketHandled = true;
+                } else {
+                  // End operations scout stream if instance has deleted
+                  isPacketHandled = this.endOperationsScoutStream(
+                    scoutingDrone.instanceId,
+                    client
+                  );
                 }
               }
             }
@@ -834,52 +862,72 @@ export default class NetworkPacketHandler {
           {
             const scoutInstanceId = networkPacket.payload;
             if (scoutInstanceId !== undefined) {
-              const activeOperationsScoutStream =
-                this.instanceHandler.activeOperationsScoutStream;
-              if (activeOperationsScoutStream.instanceId === scoutInstanceId) {
-                this.instanceHandler.activeOperationsScoutStream = undefined;
-
-                // Broadcast scouting drone position withing scouted instance
-                const formatScoutingDrone =
-                  activeOperationsScoutStream.scoutingDrone.toJSONStruct();
-                const clientsToBroadcast =
-                  this.clientHandler.getClientsToBroadcastInstance(
-                    scoutInstanceId
-                  );
-                const broadcastNetworkPacketHeader = new NetworkPacketHeader(
-                  MESSAGE_TYPE.DESTROY_SCOUTING_DRONE_DATA,
-                  client.uuid
-                );
-                const broadcastNetworkPacket = new NetworkPacket(
-                  broadcastNetworkPacketHeader,
-                  formatScoutingDrone,
-                  PACKET_PRIORITY.DEFAULT
-                );
-                this.networkHandler.broadcast(
-                  broadcastNetworkPacket,
-                  clientsToBroadcast
-                );
-
-                // Response with end operations scout stream
-                const networkPacketHeader = new NetworkPacketHeader(
-                  MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM,
-                  client.uuid
-                );
-                const networkPacket = new NetworkPacket(
-                  networkPacketHeader,
-                  undefined,
-                  PACKET_PRIORITY.DEFAULT
-                );
-                this.networkHandler.queueNetworkPacket(
-                  new NetworkQueueEntry(networkPacket, [client])
-                );
-                isPacketHandled = true;
-              }
+              isPacketHandled = this.endOperationsScoutStream(
+                scoutInstanceId,
+                client
+              );
             }
           }
           break;
       }
     }
     return isPacketHandled;
+  }
+
+  broadcastScoutingDroneDestroy(scoutInstanceId, client) {
+    // Broadcast scouting drone destroy withing scouted instance
+    const activeOperationsScoutStream =
+      this.instanceHandler.activeOperationsScoutStream;
+    if (activeOperationsScoutStream !== undefined) {
+      if (activeOperationsScoutStream.instanceId === scoutInstanceId) {
+        const formatScoutingDrone =
+          activeOperationsScoutStream.scoutingDrone.toJSONStruct();
+        const clientsToBroadcast =
+          this.clientHandler.getClientsToBroadcastInstance(scoutInstanceId);
+        const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+          MESSAGE_TYPE.DESTROY_SCOUTING_DRONE_DATA,
+          client.uuid
+        );
+        const broadcastNetworkPacket = new NetworkPacket(
+          broadcastNetworkPacketHeader,
+          formatScoutingDrone,
+          PACKET_PRIORITY.DEFAULT
+        );
+        this.networkHandler.broadcast(
+          broadcastNetworkPacket,
+          clientsToBroadcast
+        );
+      }
+    }
+  }
+
+  endOperationsScoutStream(scoutInstanceId, client) {
+    let isScoutStreamEnded = false;
+    const activeOperationsScoutStream =
+      this.instanceHandler.activeOperationsScoutStream;
+    if (activeOperationsScoutStream !== undefined) {
+      if (activeOperationsScoutStream.instanceId === scoutInstanceId) {
+        this.instanceHandler.activeOperationsScoutStream = undefined;
+
+        // Broadcast destroy scouting drone withing scouted instance
+        this.broadcastScoutingDroneDestroy(scoutInstanceId, client);
+
+        // Response with end operations scout stream
+        const networkPacketHeader = new NetworkPacketHeader(
+          MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM,
+          client.uuid
+        );
+        const networkPacket = new NetworkPacket(
+          networkPacketHeader,
+          undefined,
+          PACKET_PRIORITY.DEFAULT
+        );
+        this.networkHandler.queueNetworkPacket(
+          new NetworkQueueEntry(networkPacket, [client])
+        );
+        isScoutStreamEnded = true;
+      }
+    }
+    return isScoutStreamEnded;
   }
 }
