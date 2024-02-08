@@ -229,7 +229,7 @@ export default class Instance {
             patrol.travelTime = Math.max(0, patrol.travelTime - passedTickTime);
           } else {
             switch (patrol.aiState) {
-              case AI_STATE.QUEUE:
+              case AI_STATE.TRAVEL:
                 {
                   patrol.aiState = AI_STATE.PATROL;
                   ConsoleHandler.Log(

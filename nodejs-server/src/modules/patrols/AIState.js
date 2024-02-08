@@ -1,5 +1,5 @@
 export default {
-  QUEUE: 0,
+  TRAVEL: 0,
   PATROL: 1,
   CHASE: 2,
   PATROL_RESUME: 3,

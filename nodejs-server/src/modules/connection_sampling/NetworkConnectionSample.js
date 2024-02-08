@@ -22,7 +22,7 @@ export default class NetworkConnectionSample {
     this.sentRateSampleTimer += passedTickTime;
     if (this.sentRateSampleTimer >= this.sentRateSampleInterval) {
       this.sentRateSampleTimer -= this.sentRateSampleInterval;
-      ConsoleHandler.Log(`Data sent ${this.dataSentRate}kb/s`);
+      ConsoleHandler.Log(`Data sent ${this.dataSentRate} kb/s`);
       this.dataSentRate = 0;
     }
     return isUpdated;

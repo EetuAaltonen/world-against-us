@@ -12,7 +12,7 @@ export default class Patrol {
     this.patrolId = patrolId;
     this.totalRouteTime = routeTime;
     this.routeTime = routeTime;
-    this.aiState = AI_STATE.QUEUE;
+    this.aiState = AI_STATE.TRAVEL;
     this.travelTime = GetRandomInt(MIN_TRAVEL_TIME, MAX_TRAVEL_TIME);
 
     this.localPosition = new Vector2(0, 0);
