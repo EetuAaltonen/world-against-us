@@ -2,7 +2,7 @@
 if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 {
 	character.Update();
-	if (character.is_dead) return;
+	if (character.IsInvulnerableState()) return;
 	
 	// CHECK GUI STATE
 	if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;

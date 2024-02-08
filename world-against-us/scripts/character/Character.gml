@@ -10,8 +10,10 @@ function Character(_name, _type, _race, _behaviour) constructor
 	stamina = 100;
 	body_parts = ds_map_create();
 	InitBodyParts();
-	
+
 	is_dead = false;
+	is_fast_traveling = false;
+	is_robbed = false;
 	
 	static InitBodyParts = function()
 	{
@@ -76,6 +78,20 @@ function Character(_name, _type, _race, _behaviour) constructor
 	static UpdateStats = function()
 	{
 		// OVERRIDE THIS FUNCTION
+	}
+	
+	static IsInvulnerableState = function()
+	{
+		return (is_dead || is_fast_traveling || is_robbed);
+	}
+	
+	static RestoreState = function()
+	{
+		is_dead = false;
+		total_hp_percent = 100;
+		
+		is_fast_traveling = false;
+		is_robbed = false;
 	}
 	
 	static GetBodyPartByBoundingPosition = function(_position)
