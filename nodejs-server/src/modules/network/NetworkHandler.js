@@ -209,16 +209,21 @@ export default class NetworkHandler {
 
   sendPacketOverUDP(networkPacket, client) {
     let sentPacketSize = 0;
-    const networkBuffer =
+    const compressNetworkBuffer =
       this.networkPacketBuilder.createNetworkBuffer(networkPacket);
-    if (networkBuffer !== undefined) {
-      this.socket.send(networkBuffer, client.port, client.address, (err) => {
-        if (err ?? undefined !== undefined) {
-          ConsoleHandler.Log(err);
+    if (compressNetworkBuffer !== undefined) {
+      this.socket.send(
+        compressNetworkBuffer,
+        client.port,
+        client.address,
+        (err) => {
+          if (err ?? undefined !== undefined) {
+            ConsoleHandler.Log(err);
+          }
         }
-      });
+      );
       // TODO: Check MTU threshold
-      sentPacketSize = networkBuffer.length * 0.001; // Convert to kb
+      sentPacketSize = compressNetworkBuffer.length * 8 * 0.001; // Convert to kilobits
     }
     return sentPacketSize;
   }
@@ -410,8 +415,8 @@ export default class NetworkHandler {
                               clientId,
                               pingSample
                             );
-                            this.queueAcknowledgmentResponse(client);
-                            isMessageHandled = true;
+                            isMessageHandled =
+                              this.queueAcknowledgmentResponse(client);
                           }
                         }
                         break;
