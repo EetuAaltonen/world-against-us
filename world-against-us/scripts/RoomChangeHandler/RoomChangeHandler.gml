@@ -79,9 +79,11 @@ function RoomChangeHandler() constructor
 					PACKET_PRIORITY.DEFAULT,
 					AckTimeoutFuncResend
 				);
-				if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+				if (global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 				{
-					show_debug_message("Failed to request fast travel");
+					global.PlayerCharacter.is_fast_traveling = true;
+				} else {
+					show_debug_message("Failed to request fast travel");	
 				}
 			}
 		} else {

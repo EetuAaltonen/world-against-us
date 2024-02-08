@@ -20,13 +20,6 @@ function CreateWindowGameOver(_gameWindowId, _zIndex)
 	
 	var gameOverCallbackFunction = function()
 	{
-		// RECOVER PLAYER
-		if (!is_undefined(global.PlayerCharacter))
-		{
-			global.PlayerCharacter.total_hp_percent = 100;
-			global.PlayerCharacter.is_dead = false;
-		}
-		
 		// FAST TRAVEL BACK TO CAMP
 		var fastTravelInfo = new WorldMapFastTravelInfo(undefined, undefined, ROOM_INDEX_CAMP);
 		if (global.MultiplayerMode)
@@ -52,7 +45,7 @@ function CreateWindowGameOver(_gameWindowId, _zIndex)
 	// OVERRIDE WINDOW ONOPEN FUNCTION
 	var overrideOnOpen = function()
 	{
-		// SHOW PLAYER LIST LOADING ICON
+		// START GAME OVER TIMER
 		var gameOverWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.GameOver);
 		if (!is_undefined(gameOverWindow))
 		{

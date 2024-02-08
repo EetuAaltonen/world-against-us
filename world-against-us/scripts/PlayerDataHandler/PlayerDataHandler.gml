@@ -83,4 +83,20 @@ function PlayerDataHandler() constructor
 		}
 		return isPlayerDataLoaded;
 	}
+	
+	static OnRobbed = function()
+	{
+		global.PlayerCharacter.is_robbed = true;
+		
+		// OPEN GAME OVER WINDOW
+		var guiState = new GUIState(
+			GUI_STATE.GameOver, undefined, undefined,
+			[
+				CreateWindowGameOver(GAME_WINDOW.GameOver, -1)
+			],
+			GUI_CHAIN_RULE.OverwriteAll,
+			undefined, undefined
+		);
+		global.GUIStateHandlerRef.RequestGUIState(guiState);	
+	}
 }
