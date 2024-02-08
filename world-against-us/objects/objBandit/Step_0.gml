@@ -3,15 +3,19 @@ event_inherited();
 
 var checkChaseCondition = function()
 {
-	var nearestTarget = instance_nearest(x, y, objPlayer);
-	if (instance_exists(nearestTarget))
+	var nearestTargetInstance = instance_nearest(x, y, objPlayer);
+	if (instance_exists(nearestTargetInstance))
 	{
-		var distanceToTarget = point_distance(x, y, nearestTarget.x, nearestTarget.y);
+		var targetPos = new Vector2(
+			(nearestTargetInstance.bbox_left + ((nearestTargetInstance.bbox_right - nearestTargetInstance.bbox_left) * 0.5)),
+			max(nearestTargetInstance.y, nearestTargetInstance.bbox_bottom)
+		);
+		var distanceToTarget = point_distance(x, y, targetPos.X, targetPos.Y);
 		if (distanceToTarget <= visionRadius)
 		{
-			if (!is_undefined(nearestTarget.character))
+			if (!is_undefined(nearestTargetInstance.character))
 			{
-				if (!nearestTarget.character.is_dead)
+				if (!nearestTargetInstance.character.IsInvulnerableState())
 				{
 					aiState = AI_STATE.CHASE;
 					
@@ -29,7 +33,7 @@ var checkChaseCondition = function()
 					}
 					path_end();
 					// SET NEW TARGET
-					targetInstance = nearestTarget;
+					targetInstance = nearestTargetInstance;
 					// START CHASE PATH UPDATE TIMER
 					chasePathUpdateTimer.StartTimer();
 				}
@@ -95,75 +99,68 @@ switch (aiState)
 		{
 			resumePatrolling();
 		} else {
-			var hitBoxInstance = targetInstance.hitboxInstance;
-			var targetPos = new Vector2(
-				hitBoxInstance.boundingBox.top_left_point.X + (0.5 * (hitBoxInstance.boundingBox.top_right_point.X - hitBoxInstance.boundingBox.top_left_point.X)),
-				hitBoxInstance.boundingBox.top_left_point.Y + (0.5 * (hitBoxInstance.boundingBox.bottom_left_point.Y - hitBoxInstance.boundingBox.top_left_point.Y)),
-			);
-			var distanceToTarget = point_distance(x, y, targetPos.X, targetPos.Y);
-			if (distanceToTarget <= (pathBlockingRadius * 4))
+			if (!targetInstance.character.IsInvulnerableState())
 			{
-				if (!is_undefined(targetInstance.character))
+				var targetPos = new Vector2(
+					(targetInstance.bbox_left + ((targetInstance.bbox_right - targetInstance.bbox_left) * 0.5)),
+					targetInstance.bbox_bottom
+				);
+				var distanceToTarget = point_distance(x, y, targetPos.X, targetPos.Y);
+				if (distanceToTarget <= (pathBlockingRadius * 4))
 				{
-					targetInstance.character.total_hp_percent = 0;
-				}
-				resumePatrolling();
-			} else {
-				if (chasePathUpdateTimer.IsTimerStopped())
-				{
-					if (distanceToTarget > visionRadius)
+					global.PlayerDataHandlerRef.OnRobbed();
+					resumePatrolling();
+				} else {
+					if (chasePathUpdateTimer.IsTimerStopped())
 					{
-						resumePatrolling();
-					} else {
-						if (!is_undefined(targetInstance.character))
+						if (distanceToTarget > visionRadius)
 						{
-							if (!targetInstance.character.is_dead)
+							resumePatrolling();
+						} else {
+							// CALCULATE NEW PATH TO TARGET
+							path_clear_points(pathToTarget);
+							if (mp_grid_path(global.ObjGridPath.roomGrid, pathToTarget, x, y, targetPos.X, targetPos.Y, true))
 							{
-								// CALCULATE NEW PATH TO TARGET
-								path_clear_points(pathToTarget);
-								if (mp_grid_path(global.ObjGridPath.roomGrid, pathToTarget, x, y, targetPos.X, targetPos.Y, true))
-								{
-									targetPath = pathToTarget;
-									// START CHASING PLAYER
-									path_start(targetPath, maxSpeed, path_action_stop, false);
-								}
+								targetPath = pathToTarget;
+								// START CHASING PLAYER
+								path_start(targetPath, maxSpeed, path_action_stop, false);
+							}
 						
-								// TODO: Verify that this logic works
-								/*var pathPointStep = 1 / path_get_number(pathToTarget);
-								var pathPointNext = new Vector2(
-									path_get_x(pathToTarget, path_position + pathPointStep),
-									path_get_y(pathToTarget, path_position + pathPointStep)
-								);
-								var nearestBlockingInstance = FindNearestInstanceToPoint(pathPointNext, objBandit, id);
-								if (nearestBlockingInstance != noone)
-								{
-									var distanceBlockingToTarget = point_distance(nearestBlockingInstance.x, nearestBlockingInstance.y, targetInstance.x, targetInstance.y);
+							// TODO: Verify that this logic works
+							/*var pathPointStep = 1 / path_get_number(pathToTarget);
+							var pathPointNext = new Vector2(
+								path_get_x(pathToTarget, path_position + pathPointStep),
+								path_get_y(pathToTarget, path_position + pathPointStep)
+							);
+							var nearestBlockingInstance = FindNearestInstanceToPoint(pathPointNext, objBandit, id);
+							if (nearestBlockingInstance != noone)
+							{
+								var distanceBlockingToTarget = point_distance(nearestBlockingInstance.x, nearestBlockingInstance.y, targetInstance.x, targetInstance.y);
 					
-									if (point_distance(pathPointNext.X, pathPointNext.Y, nearestBlockingInstance.x, nearestBlockingInstance.y) <= pathBlockingRadius &&
-														distanceToTarget >= distanceBlockingToTarget)
+								if (point_distance(pathPointNext.X, pathPointNext.Y, nearestBlockingInstance.x, nearestBlockingInstance.y) <= pathBlockingRadius &&
+													distanceToTarget >= distanceBlockingToTarget)
+								{
+									path_end();
+								} else {
+									nearestBlockingInstance = FindNearestInstanceToPoint(new Vector2(x, y), objBandit, id);
+									distanceBlockingToTarget = point_distance(nearestBlockingInstance.x, nearestBlockingInstance.y, targetInstance.x, targetInstance.y);
+									if (distance_to_object(nearestBlockingInstance) <= pathBlockingRadius &&
+										distanceToTarget >= distanceBlockingToTarget)
 									{
 										path_end();
-									} else {
-										nearestBlockingInstance = FindNearestInstanceToPoint(new Vector2(x, y), objBandit, id);
-										distanceBlockingToTarget = point_distance(nearestBlockingInstance.x, nearestBlockingInstance.y, targetInstance.x, targetInstance.y);
-										if (distance_to_object(nearestBlockingInstance) <= pathBlockingRadius &&
-											distanceToTarget >= distanceBlockingToTarget)
-										{
-											path_end();
-										}	
-									}
-								}*/
-								// RESET CHASE PATH UPDATE TIMER
-								chasePathUpdateTimer.StartTimer();
-							} else {
-								resumePatrolling();	
-							}
+									}	
+								}
+							}*/
+							// RESET CHASE PATH UPDATE TIMER
+							chasePathUpdateTimer.StartTimer();
 						}
+					}  else {
+						// UPDATE CHASE PATH TIMER
+						chasePathUpdateTimer.Update();
 					}
-				}  else {
-					// UPDATE CHASE PATH TIMER
-					chasePathUpdateTimer.Update();
 				}
+			} else {
+				resumePatrolling();	
 			}
 		}
 	} break;
