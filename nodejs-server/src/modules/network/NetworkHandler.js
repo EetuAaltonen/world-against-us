@@ -593,6 +593,12 @@ export default class NetworkHandler {
       // Remove connection sampling
       this.networkConnectionSampler.removeClientConnectionSample(clientId);
 
+      // Clear network packet queue before definitive deletion
+      client.clearPacketQueue();
+
+      // Clear in-flight packet track before definitive deletion
+      this.networkPacketTracker.clearInFlightPacketTrack(clientId);
+
       // Broadcast about disconnected client
       const remotePlayerInfo = new RemotePlayerInfo(clientId, client.playerTag);
       const clientsToBroadcast =

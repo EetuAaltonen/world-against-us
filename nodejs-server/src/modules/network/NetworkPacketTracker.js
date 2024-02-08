@@ -151,6 +151,13 @@ export default class NetworkPacketTracker {
     return Object.keys(this.inFlightPacketTracks);
   }
 
+  clearInFlightPacketTrack(clientId) {
+    const inFlightPacketTrack = this.getInFlightPacketTrack(clientId);
+    if (inFlightPacketTrack !== undefined) {
+      inFlightPacketTrack.clearTrackedInFlightPackets();
+    }
+  }
+
   removeInFlightPacketTrack(clientId) {
     delete this.inFlightPacketTracks[clientId];
   }

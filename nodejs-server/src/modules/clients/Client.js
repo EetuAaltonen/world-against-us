@@ -35,6 +35,11 @@ export default class Client {
     return networkPacket;
   }
 
+  clearPacketQueue() {
+    this.priorityPacketQueue = [];
+    this.packetQueue = [];
+  }
+
   setInstanceId(instanceId) {
     this.instanceId = instanceId;
   }
