@@ -1,5 +1,8 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
-inventory.OnDestroy();
-inventory = undefined;
+if (!is_undefined(inventory))
+{
+	inventory.OnDestroy();
+	inventory = undefined;
+}

@@ -4,7 +4,7 @@ if (is_undefined(inventory))
 	if (!is_undefined(containerId))
 	{
 		// INITIALIZE INVENTORY
-		var inventorySize = new InventorySize(10, 6);
+		var inventorySize = new InventorySize(10, 12);
 		inventory = new Inventory(containerId, INVENTORY_TYPE.LootContainer, inventorySize);
 		
 		if (!global.MultiplayerMode)
@@ -25,6 +25,13 @@ if (is_undefined(inventory))
 			}*/
 		}
 	} else {
-		throw (string("Object {0} with instance ID {1} is missing 'containerId'", object_get_name(object_index), id));	
+		var consoleLog = string("Object {0} with instance ID {1} is missing 'containerId'", object_get_name(object_index), id);
+		global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
+		if (global.MultiplayerMode)
+		{
+			global.NetworkHandlerRef.RequestDisconnectSocket(true);
+		} else {
+			global.RoomChangeHandlerRef.RequestRoomChange(ROOM_INDEX_MAIN_MENU);	
+		}
 	}
 }
