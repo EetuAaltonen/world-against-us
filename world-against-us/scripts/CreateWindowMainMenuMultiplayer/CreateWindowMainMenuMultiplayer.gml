@@ -26,6 +26,8 @@ function CreateWindowMainMenuMultiplayer(_gameWindowId, _zIndex)
 		"Multiplayer", font_default, fa_center, fa_middle, c_black, 1
 	);
 	
+	var inputFieldColor = #538acf;
+	
 	// PLAYER TAG INPUT
 	var inputSize = new Size(500, 30);
 	var playerTagInputTitlePos = new Vector2(48, 50);
@@ -40,7 +42,7 @@ function CreateWindowMainMenuMultiplayer(_gameWindowId, _zIndex)
 	var playerTagInput = new WindowInput(
 		"MultiplayerPlayerTagInput",
 		playerTagInputPos, inputSize,
-		#48a630, "*Name length 3-16 characters"
+		inputFieldColor, "*Name length 3-16 characters"
 	);
 	
 	// ADDRESS INPUT
@@ -56,7 +58,7 @@ function CreateWindowMainMenuMultiplayer(_gameWindowId, _zIndex)
 	var addressInput = new WindowInput(
 		"MultiplayerAddressInput",
 		addressInputPos, inputSize,
-		#48a630, "*Address"
+		inputFieldColor, "*Address"
 	);
 	
 	// PORT INPUT
@@ -72,7 +74,7 @@ function CreateWindowMainMenuMultiplayer(_gameWindowId, _zIndex)
 	var portInput = new WindowInput(
 		"MultiplayerPortInput",
 		portInputPos, inputSize,
-		#48a630, "*Port"
+		inputFieldColor, "*Port"
 	);
 	
 	// SET DEFAULT SERVER INFO
@@ -83,7 +85,7 @@ function CreateWindowMainMenuMultiplayer(_gameWindowId, _zIndex)
 	var buttonSize = new Size(120, 40);
 	var buttonStyle = new ButtonStyle(
 		buttonSize, 0,
-		#48a630, #2c8017,
+		#538acf, #245ca3,
 		fa_left, fa_top,
 		c_black, c_black,
 		font_default,

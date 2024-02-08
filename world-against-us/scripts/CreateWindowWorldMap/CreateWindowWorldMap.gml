@@ -75,14 +75,18 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 	var buttonSize = new Size(150, 100);
 	var buttonStyle = new ButtonStyle(
 		buttonSize, 0,
-		#48a630, #2c8017,
+		#85774d, #615636,
 		fa_left, fa_top,
 		c_black, c_black,
 		font_default,
 		fa_center, fa_middle
 	);
 	
-	var buttonPositionCamp = new Vector2(703, 425);
+	// WORLD MAP LOCATION ICON
+	var mapLocationIconSize = new Size(150, 98);
+	var mapLocationIconOffset = 20;
+	
+	var buttonPositionCamp = new Vector2(600, 260);
 	var campWorldMapLocationData = global.WorldMapLocationData[? ROOM_INDEX_CAMP];
 	var fastTravelCampButton = new WindowButton(
 		"FastTravelCampButton",
@@ -92,7 +96,19 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 	);
 	fastTravelCampButton.isActive = false;
 	
-	var buttonPositionTown = new Vector2(1388, 408);
+	// CAMP MAP ICON
+	var mapLocationIconCamp = new WindowImage(
+		"MapLocationIconCamp",
+		new Vector2(
+			buttonPositionCamp.X,
+			buttonPositionCamp.Y - mapLocationIconSize.h - mapLocationIconOffset,
+		),
+		mapLocationIconSize,
+		undefined, sprMapIconCamp,
+		0, 1, 0
+	);
+	
+	var buttonPositionTown = new Vector2(1300, 310);
 	var townWorldMapLocationData = global.WorldMapLocationData[? ROOM_INDEX_TOWN];
 	var fastTravelTownButton = new WindowButton(
 		"FastTravelTownButton",
@@ -101,7 +117,19 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 		townWorldMapLocationData
 	);
 	
-	var buttonPositionForest = new Vector2(1038, 753);
+	// TOWN MAP ICON
+	var mapLocationIconTown = new WindowImage(
+		"MapLocationIconTown",
+		new Vector2(
+			buttonPositionTown.X,
+			buttonPositionTown.Y - mapLocationIconSize.h - mapLocationIconOffset,
+		),
+		mapLocationIconSize,
+		undefined, sprMapIconTown,
+		0, 1, 0
+	);
+	
+	var buttonPositionForest = new Vector2(800, 760);
 	var forestWorldMapLocationData = global.WorldMapLocationData[? ROOM_INDEX_FOREST];
 	var fastTravelForestButton = new WindowButton(
 		"FastTravelForestButton",
@@ -110,12 +138,27 @@ function CreateWindowWorldMap(_gameWindowId, _zIndex)
 		forestWorldMapLocationData
 	);
 	
+	// FOREST MAP ICON
+	var mapLocationIconForest = new WindowImage(
+		"MapLocationIconForest",
+		new Vector2(
+			buttonPositionForest.X,
+			buttonPositionForest.Y - mapLocationIconSize.h - mapLocationIconOffset,
+		),
+		mapLocationIconSize,
+		undefined, sprMapIconForest,
+		0, 1, 0
+	);
+	
 	ds_list_add(mapElements,
 		mapBackgroundImage,
 		// Render after map
 		fastTravelCampButton,
+		mapLocationIconCamp,
 		fastTravelTownButton,
+		mapLocationIconTown,
 		fastTravelForestButton,
+		mapLocationIconForest,
 		instanceListTitle,
 		instanceList,
 		instanceListLoading,

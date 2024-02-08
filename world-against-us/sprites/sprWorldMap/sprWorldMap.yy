@@ -2,9 +2,9 @@
   "resourceType": "GMSprite",
   "resourceVersion": "1.0",
   "name": "sprWorldMap",
-  "bbox_bottom": 1535,
+  "bbox_bottom": 881,
   "bbox_left": 0,
-  "bbox_right": 2047,
+  "bbox_right": 1279,
   "bbox_top": 0,
   "bboxMode": 0,
   "collisionKind": 1,
@@ -13,14 +13,14 @@
   "edgeFiltering": false,
   "For3D": false,
   "frames": [
-    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"87255b7c-720f-424d-a6d8-5b40db48c34a",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"d08da6ef-89b7-475d-a6a2-dcf824ca793d",},
   ],
   "gridX": 0,
   "gridY": 0,
-  "height": 1536,
+  "height": 882,
   "HTile": false,
   "layers": [
-    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"7aeb25ec-a073-4377-a827-330383d629bc","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"c4a4a3d0-9cc2-44b5-b9ea-f4d89b4c22f3","blendMode":0,"displayName":"default","isLocked":false,"opacity":100.0,"visible":true,},
   ],
   "nineSlice": null,
   "origin": 0,
@@ -54,7 +54,7 @@
     "timeUnits": 1,
     "tracks": [
       {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"1.0","Keyframes":[
-            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"87255b7c-720f-424d-a6d8-5b40db48c34a","path":"sprites/sprWorldMap/sprWorldMap.yy",},},},"Disabled":false,"id":"313a6594-ed27-4e7b-a63a-007dce820230","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
+            {"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"1.0","Channels":{"0":{"resourceType":"SpriteFrameKeyframe","resourceVersion":"1.0","Id":{"name":"d08da6ef-89b7-475d-a6a2-dcf824ca793d","path":"sprites/sprWorldMap/sprWorldMap.yy",},},},"Disabled":false,"id":"c178d45a-e33c-438d-a83c-e90b7f18101c","IsCreationKey":false,"Key":0.0,"Length":1.0,"Stretch":false,},
           ],},"modifiers":[],"spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange": null,
@@ -70,5 +70,5 @@
   },
   "type": 0,
   "VTile": false,
-  "width": 2048,
+  "width": 1280,
 }
