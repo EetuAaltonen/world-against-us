@@ -68,7 +68,7 @@ function NetworkHandler() constructor
 								var consoleLog = string(
 									"Network packet ({0}) {1}kb sent >> Packet send interval {2}ms",
 									networkPacket.header.message_type,
-									sentNetworkPacketBytes * 0.001,
+									BytesToKilobits(sentNetworkPacketBytes),
 									packetSendInterval
 								);
 								global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.INFO, consoleLog);
