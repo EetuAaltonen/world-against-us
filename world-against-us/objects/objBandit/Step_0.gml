@@ -86,7 +86,7 @@ switch (aiState)
 			}
 		} else {
 			path_end();
-			aiState = AI_STATE.QUEUE;
+			aiState = AI_STATE.TRAVEL;
 		}
 	} break;
 	case AI_STATE.CHASE:

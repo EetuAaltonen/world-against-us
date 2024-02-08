@@ -27,7 +27,7 @@ if (initPath)
 		targetPath = patrolPath;
 		switch (aiState)
 		{
-			case AI_STATE.QUEUE:
+			case AI_STATE.TRAVEL:
 			{
 				// NO START PATROLLING
 				aiState = AI_STATE.PATROL;

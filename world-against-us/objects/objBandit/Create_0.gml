@@ -7,7 +7,7 @@ maxSpeed = 5;
 
 // AI
 patrolId = undefined;
-aiState = AI_STATE.QUEUE;
+aiState = AI_STATE.TRAVEL;
 initPath = true;
 
 // PATH
