@@ -219,12 +219,14 @@ export default class InstanceHandler {
 
   setInstanceParenthood(childInstanceId, roomIndex, parentInstanceId) {
     const parentInstance = this.getInstance(parentInstanceId);
-    const parentInstanceHierarchy =
-      WORLD_MAP_LOCATION_HIERARCHY[parentInstance.roomIndex];
-    if (Object.keys(parentInstanceHierarchy).includes(roomIndex)) {
-      const childInstance = this.getInstance(childInstanceId);
-      if (childInstance !== undefined) {
-        childInstance.parentInstanceId = parentInstanceId;
+    if (parentInstance !== undefined) {
+      const parentInstanceHierarchy =
+        WORLD_MAP_LOCATION_HIERARCHY[parentInstance.roomIndex];
+      if (Object.keys(parentInstanceHierarchy).includes(roomIndex)) {
+        const childInstance = this.getInstance(childInstanceId);
+        if (childInstance !== undefined) {
+          childInstance.parentInstanceId = parentInstanceId;
+        }
       }
     }
   }

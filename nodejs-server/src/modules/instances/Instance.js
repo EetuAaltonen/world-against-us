@@ -18,6 +18,7 @@ import FormatHashMapToJSONStructArray from "../formatting/FormatHashMapToJSONStr
 const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
 
 const PATROL_ROUTE_TIME_TOWN = 255000; // == ~4min 15sec
+const PATROL_ROUTE_TIME_FOREST = 83000; // == ~1min 23sec
 const MAX_PATROL_ID = 100;
 const MIN_PATROL_COUNT = 1;
 const MAX_PATROL_COUNT = 2;
@@ -168,7 +169,20 @@ export default class Instance {
           );
           this.localPatrols[this.availablePatrolId] = newPatrol;
           ConsoleHandler.Log(
-            `Patrol with ID ${newPatrol.patrolId} started traveling, remaining ${newPatrol.travelTime}`
+            `Patrol with ID ${newPatrol.patrolId} started traveling towards Town, remaining ${newPatrol.travelTime}`
+          );
+          isPatrolAdded = true;
+        }
+        break;
+      case ROOM_INDEX.ROOM_FOREST:
+        {
+          const newPatrol = new Patrol(
+            this.availablePatrolId,
+            PATROL_ROUTE_TIME_FOREST
+          );
+          this.localPatrols[this.availablePatrolId] = newPatrol;
+          ConsoleHandler.Log(
+            `Patrol with ID ${newPatrol.patrolId} started traveling towards Forest, remaining ${newPatrol.travelTime}`
           );
           isPatrolAdded = true;
         }
