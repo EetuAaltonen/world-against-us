@@ -88,8 +88,9 @@ function NetworkPacketBuilder() constructor
 					} break;
 					case MESSAGE_TYPE.PLAYER_DATA_POSITION:
 					{
-						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.X);
-						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.Y);
+						var playerPosition = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u32, playerPosition.X);
+						buffer_write(_networkBuffer, buffer_u32, playerPosition.Y);
 						isPayloadWritten = true;
 					} break;
 					case MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT:

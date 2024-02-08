@@ -4,7 +4,6 @@ function NetworkPacketTracker() constructor
 	max_sequence_number = 255;
 	in_flight_packets = ds_list_create();
 	expected_sequence_number = 0;
-	expected_acknowledgment_id = 0;
 	pending_ack_range = ds_list_create();
 	dropped_packet_count = 0;
 	
@@ -117,6 +116,12 @@ function NetworkPacketTracker() constructor
 		return isSequenceNumberPatched;
 	}
 	
+	/// @function			ProcessAckRange(_ackCount, _ackRange)
+	/// @description		Loops through a given ACK range
+	///						and removes matching packets from in-flight tracking
+	/// @param	{number} ackCount
+	/// @param	{list} ackRange
+	/// @return {bool}
 	static ProcessAckRange = function(_ackCount, _ackRange)
 	{
 		var isAcknowledgmentProceed = true;
@@ -128,6 +133,12 @@ function NetworkPacketTracker() constructor
 		return isAcknowledgmentProceed;
 	}
 	
+	/// @function			ProcessSequenceNumber(_sequenceNumber, _messageType)
+	/// @description		Checks a given sequence number to validate the correct packet order
+	///						and adds valid ones into the pending acknowledgments collection
+	/// @param	{number} sequenceNumer
+	/// @param	{number} messageType
+	/// @return {bool}
 	static ProcessSequenceNumber = function(_sequenceNumber, _messageType)
 	{
 		var isCheckedAndProceed = false;
@@ -193,7 +204,6 @@ function NetworkPacketTracker() constructor
 	{
 		outgoing_sequence_number = -1;
 		expected_sequence_number = 0;
-		expected_acknowledgment_id = 0;
 		dropped_packet_count = 0;
 		
 		ClearDSListAndDeleteValues(in_flight_packets);

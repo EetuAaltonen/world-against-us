@@ -40,6 +40,7 @@ controllers = [
 	new GameController(objSpawn, [], [roomLaunch, roomMainMenu, roomLoadResources]),
 	
 	// PLAYER DATA
+	// LOAD AFTER SPAWN
 	new GameController(objPlayerData, [], [roomLaunch, roomMainMenu]),
 	
 	// GAME SAVE

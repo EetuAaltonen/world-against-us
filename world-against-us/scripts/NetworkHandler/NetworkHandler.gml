@@ -87,41 +87,6 @@ function NetworkHandler() constructor
 					}
 				}
 			}
-			/*
-			// TODO: Move this logic elsewhere
-			// CHECK GAME OVER WINDOW
-			if (IS_ROOM_IN_GAME_WORLD)
-			{
-				if (!is_undefined(global.PlayerCharacter))
-				{
-					if (global.PlayerCharacter.is_dead)
-					{
-						// CHECK IF NOT IN FAST TRAVEL QUEUE
-						var fastTravelQueueWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.WorldMapFastTravelQueue);
-						if (is_undefined(fastTravelQueueWindow))
-						{
-							// CHECK IF NOT GAME OVER WINDOW SHOWING
-							var gameOverWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.GameOver);
-							if (is_undefined(gameOverWindow))
-							{
-								// DELETE ALL ITEMS
-								global.PlayerBackpack.ClearAllItems();
-							
-								// OPEN MAP
-								var guiState = new GUIState(
-									GUI_STATE.GameOver, undefined, undefined,
-									[
-										CreateWindowGameOver(GAME_WINDOW.GameOver, -1)
-									],
-									GUI_CHAIN_RULE.OverwriteAll,
-									undefined, undefined
-								);
-								global.GUIStateHandlerRef.RequestGUIState(guiState);
-							}
-						}
-					}
-				}
-			}*/
 		}
 	}
 	
@@ -155,6 +120,9 @@ function NetworkHandler() constructor
 		return networkPacketSize;
 	}
 	
+	/// @function		CreateSocket()
+	/// @description	Creates UDP socket and allocates new network buffer
+	/// @return {bool}
 	static CreateSocket = function()
 	{
 		var isSocketCreated = false;
@@ -164,8 +132,7 @@ function NetworkHandler() constructor
 			pre_alloc_network_buffer = buffer_create(256, buffer_grow, 1);
 			isSocketCreated = true;
 		} else {
-			// TODO: Generic error handler
-			show_message("Client is already connected or socket already exists!");
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Client already connected or socket already exists");
 		}
 		return isSocketCreated;
 	}
@@ -221,6 +188,7 @@ function NetworkHandler() constructor
 			player_tag = _playerTag;
 			host_address = _address;
 			host_port = _port;
+			
 			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONNECT_TO_HOST);
 			var networkPacket = new NetworkPacket(
 				networkPacketHeader,
