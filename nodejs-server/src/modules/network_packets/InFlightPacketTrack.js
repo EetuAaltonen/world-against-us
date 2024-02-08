@@ -8,7 +8,6 @@ export default class InFlightPacketTrack {
     this.outgoingSequenceNumber = -1;
     this.maxSequenceNumber = 255;
     this.expectedSequenceNumber = 0;
-    // TODO: Add pending acknowledgment logic
     this.pendingAckRange = [];
     this.droppedPacketCount = 0;
   }
@@ -27,7 +26,7 @@ export default class InFlightPacketTrack {
   patchAckRange(networkPacket) {
     let isAcknowledgmentIdPatched = true;
     if (this.pendingAckRange.length > 0) {
-      // Clone ack range values
+      // Patch ACK range values
       networkPacket.header.ackCount = this.pendingAckRange.length;
       networkPacket.header.ackRange = this.pendingAckRange.slice();
       // Clear pending ack range
@@ -68,6 +67,11 @@ export default class InFlightPacketTrack {
 
   getInFlightPacketCount() {
     return this.inFlightPackets.length;
+  }
+
+  clearTrackedInFlightPackets() {
+    this.inFlightPackets = [];
+    this.pendingAckRange = [];
   }
 
   removeTrackedInFlightPacket(sequenceNumber) {

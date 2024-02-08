@@ -96,7 +96,7 @@ export default class NetworkPacketTracker {
   }
 
   processSequenceNumber(sequenceNumber, clientId, messageType) {
-    let isSequenceNumberProcessed = false;
+    let isCheckedAndProceed = false;
     if (clientId !== UNDEFINED_UUID) {
       const inFlightPacketTrack = this.getInFlightPacketTrack(clientId);
       if (inFlightPacketTrack !== undefined) {
@@ -106,7 +106,7 @@ export default class NetworkPacketTracker {
           if (messageType !== MESSAGE_TYPE.ACKNOWLEDGMENT) {
             inFlightPacketTrack.pendingAckRange.push(sequenceNumber);
           }
-          isSequenceNumberProcessed = true;
+          isCheckedAndProceed = true;
         } else if (
           sequenceNumber > inFlightPacketTrack.expectedSequenceNumber
         ) {
@@ -118,7 +118,7 @@ export default class NetworkPacketTracker {
           if (messageType !== MESSAGE_TYPE.ACKNOWLEDGMENT) {
             inFlightPacketTrack.pendingAckRange.push(sequenceNumber);
           }
-          isSequenceNumberProcessed = true;
+          isCheckedAndProceed = true;
         } else if (
           sequenceNumber < inFlightPacketTrack.expectedSequenceNumber
         ) {
@@ -126,8 +126,9 @@ export default class NetworkPacketTracker {
           ConsoleHandler.Log(
             `Received sequence number ${sequenceNumber} smaller than expected ${inFlightPacketTrack.expectedSequenceNumber}`
           );
-          isSequenceNumberProcessed = false;
+          isCheckedAndProceed = false;
         }
+
         if (
           inFlightPacketTrack.expectedSequenceNumber >
           inFlightPacketTrack.maxSequenceNumber
@@ -136,7 +137,7 @@ export default class NetworkPacketTracker {
         }
       }
     }
-    return isSequenceNumberProcessed;
+    return isCheckedAndProceed;
   }
 
   addInFlightPacketTrack(clientId) {
