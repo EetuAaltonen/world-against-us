@@ -95,6 +95,14 @@ export default class NetworkPacketTracker {
     return isAcknowledgmentProceed;
   }
 
+  /**
+   * Function checks a given sequence number to validate the correct packet order
+   * and adds valid ones into the pending acknowledgments collection
+   * @param {number} sequenceNumber
+   * @param {string} clientId
+   * @param {number} messageType
+   * @return {bool} The sequence number is valid and packet handling can proceed
+   */
   processSequenceNumber(sequenceNumber, clientId, messageType) {
     let isCheckedAndProceed = false;
     if (clientId !== UNDEFINED_UUID) {

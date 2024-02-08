@@ -21,6 +21,11 @@ export default class InstanceHandler {
     this.activeOperationsScoutStream = undefined;
   }
 
+  /**
+   * Function creates default Camp instance
+   * with the default instance ID and storage container
+   * @return {bool} Instance is successfully created
+   */
   createDefaultCampInstance() {
     let isInstanceCreated = true;
     const campInstance = new Instance(
@@ -44,6 +49,12 @@ export default class InstanceHandler {
     return campStorageContainer;
   }
 
+  /**
+   * Function creates a new instance from a valid given room index,
+   * and adds it to instances collection
+   * @param {string} roomIndex
+   * @return {number} The created instance ID
+   */
   createInstance(roomIndex) {
     let createdInstanceId;
     if (this.isRoomIndexValid(roomIndex)) {
@@ -217,6 +228,14 @@ export default class InstanceHandler {
     return instanceId;
   }
 
+  /**
+   * Function sets dependency between given child and parent instances
+   * and requires room index to validate the instance hierarchy
+   * @param {string} childInstanceId
+   * @param {string} roomIndex
+   * @param {string} parentInstanceId
+   * @return {void}
+   */
   setInstanceParenthood(childInstanceId, roomIndex, parentInstanceId) {
     const parentInstance = this.getInstance(parentInstanceId);
     if (parentInstance !== undefined) {
