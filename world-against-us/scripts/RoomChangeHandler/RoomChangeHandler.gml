@@ -18,11 +18,14 @@ function RoomChangeHandler() constructor
 			{
 				case ROOM_INDEX_MAIN_MENU: { room_change_queue = roomMainMenu; } break;
 				case ROOM_INDEX_LOAD_RESOURCES: { room_change_queue = roomLoadResources; } break;
+				
 				case ROOM_INDEX_CAMP: { room_change_queue = roomCamp; } break;
+				
 				case ROOM_INDEX_TOWN: { room_change_queue = roomTown; } break;
 				case ROOM_INDEX_OFFICE: { room_change_queue = roomOffice; } break;
 				case ROOM_INDEX_LIBRARY: { room_change_queue = roomLibrary; } break;
 				case ROOM_INDEX_MARKET: { room_change_queue = roomMarket; } break;
+				
 				case ROOM_INDEX_FOREST: { room_change_queue = roomForest; } break;
 				default: {
 					room_change_queue = undefined;
