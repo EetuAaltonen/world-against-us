@@ -1,11 +1,11 @@
 function NetworkConnectionSampler() constructor
 {
 	ping = undefined;
-	ping_interval_timer = new Timer(TimerFromSeconds(1));
-	ping_timeout_timer = new Timer(TimerFromSeconds(3));
-	last_update_time = 0;
+	ping_interval_timer = new Timer(1000);
+	ping_timeout_timer = new Timer(3000);
+	last_update_time = current_time;
 	
-	data_rate_sample_timer = new Timer(TimerFromSeconds(1));
+	data_rate_sample_timer = new Timer(1000);
 	data_out_rate = 0;
 	last_data_out_rate = 0;
 	data_in_rate = 0;
@@ -16,17 +16,29 @@ function NetworkConnectionSampler() constructor
 		// CHECK PINGING INTERVAL
 		if (ping_interval_timer.IsTimerStopped())
 		{
-			ping_interval_timer.StopTimer();
-			StartPinging();
+			SendPingSample();
+			ping_interval_timer.StartTimer();
 		} else {
-			ping_interval_timer.Update();
+			ping_interval_timer.UpdateDelta();
 		}
 		// CHECK PINGING TIMEOUT
 		if (ping_timeout_timer.IsTimerStopped())
 		{
 			ping_timeout_timer.StopTimer();
+			global.NetworkHandlerRef.RequestDisconnectSocket(false);
+			// CONSOLE LOG
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Pinging timed out");
+			// NOTIFICATION
+			global.NotificationHandlerRef.AddNotification(
+				new Notification(
+					undefined,
+					"Connection timed out",
+					undefined,
+					NOTIFICATION_TYPE.Log
+				)
+			);
 		} else {
-			ping_timeout_timer.Update();
+			ping_timeout_timer.UpdateDelta();
 		}
 		// UPDATE DATA SAMPLE RATE
 		if (data_rate_sample_timer.IsTimerStopped())
@@ -39,49 +51,86 @@ function NetworkConnectionSampler() constructor
 			
 			data_rate_sample_timer.StartTimer();
 		} else {
-			data_rate_sample_timer.Update();
+			data_rate_sample_timer.UpdateDelta();
 		}
 	}
 	
 	static StartPinging = function()
 	{
+		SendPingSample();
+		ping_interval_timer.StartTimer();
+	}
+	
+	static SendPingSample = function()
+	{
 		last_update_time = current_time;
-		ping_timeout_timer.StartTimer();
 		
 		// PING
-		var pingSample = new NetworkPingSample(last_update_time, 0);
 		var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PING);
 		var networkPacket = new NetworkPacket(
 			networkPacketHeader,
-			pingSample,
-			PACKET_PRIORITY.HIGH,
+			last_update_time,
+			PACKET_PRIORITY.DEFAULT,
 			AckTimeoutFuncPinging
 		);
-		if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+		
+		var networkPacketBuilder = global.NetworkHandlerRef.network_packet_builder;
+		if (networkPacketBuilder.CreatePingPacket(global.NetworkHandlerRef.pre_alloc_network_buffer, networkPacket))
 		{
-			show_debug_message("Failed to queue PING packet");
+			var sentNetworkPacketBytes = global.NetworkHandlerRef.SendPacketOverUDP();
+			if (sentNetworkPacketBytes > 0)
+			{
+				var consoleLog = string(
+					"Network packet ({0}) {1}kb sent >> Packet send interval 1000ms (Ping)",
+					networkPacket.header.message_type,
+					BytesToKilobits(sentNetworkPacketBytes)
+				);
+				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.INFO, consoleLog);
+				
+				// UPDATE DATA OUT RATE
+				global.NetworkConnectionSamplerRef.data_out_rate += sentNetworkPacketBytes;
+			} else {
+				show_debug_message("Failed to send PING packet");
+			}
+		}
+		
+		// START TIMEOUT TIMER
+		if (!ping_timeout_timer.is_timer_running)
+		{
+			ping_timeout_timer.StartTimer();
 		}
 	}
 	
-	static StopPinging = function(lastUpdateTimeSample)
+	static ProcessPingSample = function(_receivedPingSample)
 	{
-		ping_timeout_timer.StopTimer();
-		if (last_update_time > 0)
+		ping = current_time - _receivedPingSample;
+		if (_receivedPingSample < last_update_time)
 		{
-			if (last_update_time == lastUpdateTimeSample)
-			{
-				ping = current_time - lastUpdateTimeSample;
-			}
-			last_update_time = 0;
+			var consoleLog = string(
+				"Received old ping sample {0}, expected {1}",
+				_receivedPingSample,
+				last_update_time
+			);
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
 		}
-		ping_interval_timer.StartTimer();
+		
+		// STOP TIMEOUT TIMER
+		ping_timeout_timer.StopTimer();
 	}
 	
 	static ResetNetworkConnectionSampling = function()
 	{
-		ping_timeout_timer.StopTimer();
-		last_update_time = 0;
-		ping_interval_timer.StopTimer();
+		// RESET PINGING
 		ping = undefined;
+		last_update_time = current_time;
+		ping_timeout_timer.StopTimer();
+		ping_interval_timer.StopTimer();
+		
+		// RESET DATA SEND RATE SAMPLING
+		data_rate_sample_timer.StopTimer();
+		data_out_rate = 0;
+		last_data_out_rate = 0;
+		data_in_rate = 0;
+		last_data_in_rate = 0;
 	}
 }
