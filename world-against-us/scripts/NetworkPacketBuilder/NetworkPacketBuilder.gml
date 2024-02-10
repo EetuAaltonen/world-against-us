@@ -28,6 +28,31 @@ function NetworkPacketBuilder() constructor
 		return isPacketCreated;
 	}
 	
+	static CreatePingPacket = function(_networkBuffer, _networkPacket)
+	{
+		var isPacketCreated = false;
+		try
+		{
+			if (buffer_exists(_networkBuffer))
+			{
+				if (!is_undefined(_networkPacket))
+				{
+					var messageType = _networkPacket.header.message_type;
+					var clientTime = _networkPacket.payload;
+					buffer_seek(_networkBuffer, buffer_seek_start, 0);
+					buffer_write(_networkBuffer, buffer_u8, messageType);
+					buffer_write(_networkBuffer, buffer_u32, clientTime);
+					isPacketCreated = true;
+				}
+			}
+		} catch (error)
+		{
+			show_debug_message(error);
+			show_message(error);
+		}
+		return isPacketCreated;
+	}
+	
 	static WritePacketHeader = function(_networkBuffer, _networkPacketHeader)
 	{
 		var isHeaderWritten = false;
@@ -74,16 +99,6 @@ function NetworkPacketBuilder() constructor
 					{
 						var playerTag = _networkPacketPayload;
 						buffer_write(_networkBuffer, buffer_text, playerTag);
-						isPayloadWritten = true;
-					} break;
-					case MESSAGE_TYPE.PING:
-					{
-						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.client_time);
-						isPayloadWritten = true;
-					} break;
-					case MESSAGE_TYPE.PONG:
-					{
-						buffer_write(_networkBuffer, buffer_u32, _networkPacketPayload.server_time);
 						isPayloadWritten = true;
 					} break;
 					case MESSAGE_TYPE.PLAYER_DATA_POSITION:

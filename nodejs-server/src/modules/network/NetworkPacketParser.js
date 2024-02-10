@@ -12,7 +12,6 @@ import InventoryStream from "../inventory/InventoryStream.js";
 import InventoryStreamItems from "../inventory/InventoryStreamItems.js";
 import ContainerInventoryActionInfo from "../containers/ContainerInventoryActionInfo.js";
 import PatrolState from "../patrols/PatrolState.js";
-import NetworkPingSample from "../connection_sampling/NetworkPingSample.js";
 import DeviceInputMovement from "../device_input/DeviceInputMovement.js";
 import ScoutingDrone from "../operations_center/ScoutingDrone.js";
 // TODO: Check these data structs (snake cased classes)
@@ -30,26 +29,38 @@ export default class NetworkPacketParser {
       let offset = 0;
       const messageType = msg.readUInt8(offset);
       offset += BITWISE.BIT8;
-      const clientId = msg.toString("utf8", offset, offset + BITWISE.ID_LENGTH);
-      offset += BITWISE.ID_LENGTH;
-      const sequenceNumber = msg.readUInt8(offset);
-      offset += BITWISE.BIT8;
-      const ackCount = msg.readUInt8(offset);
-      offset += BITWISE.BIT8;
-
-      const header = new NetworkPacketHeader(messageType, clientId);
-      header.sequenceNumber = sequenceNumber;
-      header.ackCount = ackCount;
-      header.ackRange = [];
-      for (let i = 0; i < ackCount; i++) {
-        const acknowledgmentId = msg.readUInt8(offset);
+      let header = undefined;
+      let payload = undefined;
+      if (messageType == MESSAGE_TYPE.PING) {
+        const clientTime = msg.readUInt32LE(offset);
+        header = new NetworkPacketHeader(messageType, undefined);
+        payload = clientTime;
+      } else {
+        const clientId = msg.toString(
+          "utf8",
+          offset,
+          offset + BITWISE.ID_LENGTH
+        );
+        offset += BITWISE.ID_LENGTH;
+        const sequenceNumber = msg.readUInt8(offset);
         offset += BITWISE.BIT8;
-        header.ackRange.push(acknowledgmentId);
-      }
+        const ackCount = msg.readUInt8(offset);
+        offset += BITWISE.BIT8;
 
-      // Slice header from buffer
-      msg = msg.slice(offset);
-      const payload = this.parsePayload(messageType, msg);
+        header = new NetworkPacketHeader(messageType, clientId);
+        header.sequenceNumber = sequenceNumber;
+        header.ackCount = ackCount;
+        header.ackRange = [];
+        for (let i = 0; i < ackCount; i++) {
+          const acknowledgmentId = msg.readUInt8(offset);
+          offset += BITWISE.BIT8;
+          header.ackRange.push(acknowledgmentId);
+        }
+
+        // Slice header from buffer
+        msg = msg.slice(offset);
+        payload = this.parsePayload(messageType, msg);
+      }
       networkPacket = new NetworkPacket(header, payload);
     } catch (error) {
       console.log(error);
@@ -67,20 +78,6 @@ export default class NetworkPacketParser {
               let offset = 0;
               const parsedPlayerTag = msg.toString("utf8", offset);
               payload = parsedPlayerTag;
-            }
-            break;
-          case MESSAGE_TYPE.PING:
-            {
-              let offset = 0;
-              const parsedClientTime = msg.readUInt32LE(offset);
-              payload = new NetworkPingSample(parsedClientTime, 0);
-            }
-            break;
-          case MESSAGE_TYPE.PONG:
-            {
-              let offset = 0;
-              const parsedServerTime = msg.readUInt32LE(offset);
-              payload = new NetworkPingSample(0, parsedServerTime);
             }
             break;
           case MESSAGE_TYPE.PLAYER_DATA_POSITION:

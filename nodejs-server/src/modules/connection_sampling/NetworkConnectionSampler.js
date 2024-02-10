@@ -15,8 +15,8 @@ export default class NetworkConnectionSampler {
       if (clientConnectionSample !== undefined) {
         clientConnectionSample.update(passedTickTime);
         // Check Ping timeout
-        if (clientConnectionSample.pingSample.isTimedOut()) {
-          console.log("Client pinging timed out");
+        if (clientConnectionSample.pingSampler.isTimedOut()) {
+          console.log(`${clientId} pinging timed out`);
           const client = this.clientHandler.getClient(clientId);
           if (client !== undefined) {
             this.networkHandler.disconnectClientWithTimeout(
@@ -40,57 +40,12 @@ export default class NetworkConnectionSampler {
     return isSamplingAdded;
   }
 
-  initPinging(clientId, pingSampleRequest) {
-    let isInitialized = false;
-    if (pingSampleRequest !== undefined) {
-      let clientConnectionSample = this.getClientConnectionSample(clientId);
-      if (clientConnectionSample !== undefined) {
-        const pingSample = clientConnectionSample.pingSample;
-        if (pingSample.serverTime > 0) {
-          ConsoleHandler.Log("Client pinging started without prior response");
-        }
-        pingSample.clientTime = pingSampleRequest.clientTime;
-        isInitialized = true;
-      } else {
-        ConsoleHandler.Log("Client pinging without connection sampling");
-      }
-    }
-    return isInitialized;
-  }
-
-  startPinging(clientId) {
-    let isPinging = false;
+  updateClientSendRate(clientId, bufferSizeInBytes) {
     const clientConnectionSample = this.getClientConnectionSample(clientId);
     if (clientConnectionSample !== undefined) {
-      const pingSample = clientConnectionSample.pingSample;
-      pingSample.serverTime = Math.floor(this.networkHandler.uptime);
-      isPinging = true;
-    }
-    return isPinging;
-  }
-
-  stopPinging(clientId, pingSampleResponse) {
-    if (pingSampleResponse !== undefined) {
-      let clientConnectionSample = this.getClientConnectionSample(clientId);
-      if (clientConnectionSample !== undefined) {
-        const pingSample = clientConnectionSample.pingSample;
-        if (pingSampleResponse.serverTime === pingSample.serverTime) {
-          const now = this.networkHandler.uptime;
-          clientConnectionSample.ping = now - pingSample.serverTime;
-        } else {
-          ConsoleHandler.Log(
-            `${pingSampleResponse.serverTime} === ${pingSample.serverTime}`
-          );
-          ConsoleHandler.Log(
-            "Client pinging stopped with inconsistent server time"
-          );
-        }
-        pingSample.reset();
-      } else {
-        ConsoleHandler.Log(
-          "Client pinging stopped without initialized connection sampling"
-        );
-      }
+      // Convert to kilobits
+      const sentPacketSize = bufferSizeInBytes * 8 * 0.001;
+      clientConnectionSample.dataSentRate += sentPacketSize;
     }
   }
 
@@ -100,6 +55,19 @@ export default class NetworkConnectionSampler {
 
   getAllClientConnectionSampleIds() {
     return Object.keys(this.clientConnectionSamples);
+  }
+
+  handlePingMessage(clientTime, client) {
+    let isMessageHandled = false;
+    const clientConnectionSample = this.getClientConnectionSample(client.uuid);
+    if (clientConnectionSample !== undefined) {
+      // Sample ping
+      clientConnectionSample.pingSampler.processPingSample(clientTime);
+      isMessageHandled = true;
+    } else {
+      ConsoleHandler.Log("Client pinging without connection sampling");
+    }
+    return isMessageHandled;
   }
 
   removeClientConnectionSample(clientId) {

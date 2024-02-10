@@ -22,25 +22,56 @@ export default class NetworkPacketBuilder {
   createNetworkBuffer(networkPacket) {
     let compressNetworkBuffer = undefined;
     try {
-      let networkBuffer = undefined;
-      if (this.writePacketHeader(networkPacket)) {
-        if (this.writePacketPayload(networkPacket)) {
-          networkBuffer = this.baseHeaderBuffer;
-          if (this.headerAckRangeBuffer !== undefined) {
-            networkBuffer = Buffer.concat([
-              networkBuffer,
-              this.headerAckRangeBuffer,
-            ]);
-          }
-          if (this.payloadBuffer !== undefined) {
-            networkBuffer = Buffer.concat([networkBuffer, this.payloadBuffer]);
+      if (networkPacket !== undefined) {
+        let networkBuffer = undefined;
+        if (this.writePacketHeader(networkPacket)) {
+          if (this.writePacketPayload(networkPacket)) {
+            networkBuffer = this.baseHeaderBuffer;
+            if (this.headerAckRangeBuffer !== undefined) {
+              networkBuffer = Buffer.concat([
+                networkBuffer,
+                this.headerAckRangeBuffer,
+              ]);
+            }
+            if (this.payloadBuffer !== undefined) {
+              networkBuffer = Buffer.concat([
+                networkBuffer,
+                this.payloadBuffer,
+              ]);
+            }
           }
         }
-      }
 
-      // Compress the network buffer
-      if (networkBuffer !== undefined) {
-        compressNetworkBuffer = zlib.deflateSync(networkBuffer);
+        // Compress the network buffer
+        if (networkBuffer !== undefined) {
+          compressNetworkBuffer = zlib.deflateSync(networkBuffer);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    return compressNetworkBuffer;
+  }
+
+  createPingNetworkBuffer(networkPacket) {
+    let compressNetworkBuffer = undefined;
+    try {
+      if (networkPacket !== undefined) {
+        const pingNetworkBuffer = Buffer.alloc(
+          BITWISE.BIT8 + // Message type
+            BITWISE.BIT32 // Client time
+        );
+        let offset = 0;
+        const messageType = networkPacket.header.messageType;
+        pingNetworkBuffer.writeUInt8(messageType, offset);
+        offset += BITWISE.BIT8;
+        const clientTime = networkPacket.payload;
+        pingNetworkBuffer.writeUInt32LE(clientTime, offset);
+
+        // Compress the network buffer
+        if (pingNetworkBuffer !== undefined) {
+          compressNetworkBuffer = zlib.deflateSync(pingNetworkBuffer);
+        }
       }
     } catch (error) {
       console.log(error);
