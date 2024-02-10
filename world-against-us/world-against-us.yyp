@@ -300,7 +300,6 @@
     {"id":{"name":"spr9BulletProjectile","path":"sprites/spr9BulletProjectile/spr9BulletProjectile.yy",},},
     {"id":{"name":"ScaleIntValuesToFloatSize","path":"scripts/ScaleIntValuesToFloatSize/ScaleIntValuesToFloatSize.yy",},},
     {"id":{"name":"CheckCollisionProjectile","path":"scripts/CheckCollisionProjectile/CheckCollisionProjectile.yy",},},
-    {"id":{"name":"NetworkPingSample","path":"scripts/NetworkPingSample/NetworkPingSample.yy",},},
     {"id":{"name":"objRoomLoader","path":"objects/objRoomLoader/objRoomLoader.yy",},},
     {"id":{"name":"objSmallLeafPlant","path":"objects/objSmallLeafPlant/objSmallLeafPlant.yy",},},
     {"id":{"name":"IsReloadingCombatibleMagazine","path":"scripts/IsReloadingCombatibleMagazine/IsReloadingCombatibleMagazine.yy",},},

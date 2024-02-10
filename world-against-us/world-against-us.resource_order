@@ -239,7 +239,6 @@
     {"name":"spr9BulletProjectile","order":2,"path":"sprites/spr9BulletProjectile/spr9BulletProjectile.yy",},
     {"name":"ScaleIntValuesToFloatSize","order":4,"path":"scripts/ScaleIntValuesToFloatSize/ScaleIntValuesToFloatSize.yy",},
     {"name":"CheckCollisionProjectile","order":4,"path":"scripts/CheckCollisionProjectile/CheckCollisionProjectile.yy",},
-    {"name":"NetworkPingSample","order":1,"path":"scripts/NetworkPingSample/NetworkPingSample.yy",},
     {"name":"objRoomLoader","order":15,"path":"objects/objRoomLoader/objRoomLoader.yy",},
     {"name":"objSmallLeafPlant","order":17,"path":"objects/objSmallLeafPlant/objSmallLeafPlant.yy",},
     {"name":"IsReloadingCombatibleMagazine","order":7,"path":"scripts/IsReloadingCombatibleMagazine/IsReloadingCombatibleMagazine.yy",},
