@@ -255,14 +255,7 @@ export default class NetworkHandler {
               );
             }
           } else {
-            isMessageHandled = this.onInvalidRequest(
-              new InvalidRequestInfo(
-                INVALID_REQUEST_ACTION.DISCONNECT,
-                messageType,
-                "Failed to ping unknown client, please reconnect"
-              ),
-              rinfo
-            );
+            isMessageHandled = this.onUnknownClientID(rinfo);
           }
         } else {
           const clientId = networkPacket.header.clientId;
@@ -460,24 +453,10 @@ export default class NetworkHandler {
                     }
                   }
                 } else {
-                  isMessageHandled = this.onInvalidRequest(
-                    new InvalidRequestInfo(
-                      INVALID_REQUEST_ACTION.DISCONNECT,
-                      messageType,
-                      "Unknown client ID, please reconnect"
-                    ),
-                    rinfo
-                  );
+                  isMessageHandled = this.onUnknownClientID(rinfo);
                 }
               } else {
-                isMessageHandled = this.onInvalidRequest(
-                  new InvalidRequestInfo(
-                    INVALID_REQUEST_ACTION.DISCONNECT,
-                    messageType,
-                    "Invalid client ID"
-                  ),
-                  rinfo
-                );
+                isMessageHandled = this.onUnknownClientID(rinfo);
               }
             }
           }
@@ -686,8 +665,19 @@ export default class NetworkHandler {
     );
   }
 
+  onUnknownClientID(rinfo) {
+    return this.onInvalidRequest(
+      new InvalidRequestInfo(
+        INVALID_REQUEST_ACTION.DISCONNECT,
+        MESSAGE_TYPE.INVALID_REQUEST,
+        "Unknown client ID, please reconnect"
+      ),
+      rinfo
+    );
+  }
+
   onInvalidRequest(invalidRequestInfo, rinfo) {
-    let isMessageSended = true;
+    let isResponseSent = true;
     const networkPacketHeader = new NetworkPacketHeader(
       MESSAGE_TYPE.INVALID_REQUEST,
       UNDEFINED_UUID
@@ -697,17 +687,28 @@ export default class NetworkHandler {
       invalidRequestInfo,
       PACKET_PRIORITY.CRITICAL
     );
-    // Patch delivery policy
-    networkPacket.deliveryPolicy.patchSequenceNumber = false;
-    networkPacket.deliveryPolicy.patchAckRange = false;
-    networkPacket.deliveryPolicy.toInFlightTrack = false;
 
-    this.queueNetworkPacket(
-      new NetworkQueueEntry(networkPacket, [
-        new Client(UNDEFINED_UUID, rinfo.address, rinfo.port),
-      ])
-    );
-    return isMessageSended;
+    // Respond with invalid request details
+    const networkBuffer =
+      this.networkPacketBuilder.createNetworkBuffer(networkPacket);
+    if (networkBuffer !== undefined) {
+      this.socket.send(networkBuffer, rinfo.port, rinfo.address, (err) => {
+        if (err ?? undefined !== undefined) {
+          ConsoleHandler.Log(err);
+        }
+      });
+
+      // Update client data sent rate
+      const client = this.clientHandler.getClientBySocket(rinfo);
+      if (client !== undefined) {
+        this.networkConnectionSampler.updateClientSendRate(
+          client.uuid,
+          networkBuffer.length
+        );
+      }
+      isResponseSent = true;
+    }
+    return isResponseSent;
   }
 
   onError(error) {
