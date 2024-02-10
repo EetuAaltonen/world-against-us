@@ -148,8 +148,7 @@ function NetworkPacketTracker() constructor
 			{
 				// SUCCESSFULLY RECEIVED THE EXPECTED
 				expected_sequence_number = _sequenceNumber + 1;
-				if (_messageType != MESSAGE_TYPE.ACKNOWLEDGMENT &&
-					_messageType != MESSAGE_TYPE.PONG)
+				if (_messageType != MESSAGE_TYPE.ACKNOWLEDGMENT)
 				{
 					ds_list_add(pending_ack_range, _sequenceNumber);
 				}

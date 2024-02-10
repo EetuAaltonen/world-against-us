@@ -10,22 +10,28 @@ function NetworkPacketParser() constructor
 			
 			buffer_seek(msg, buffer_seek_start, 0);
 			var parsedMessageType = buffer_read(msg, buffer_u8);
-			var parsedClientId = buffer_read(msg, buffer_string);
-			var parsedSequenceNumber = buffer_read(msg, buffer_u8);
-			var parsedAckCount = buffer_read(msg, buffer_u8);
-			
 			var parsedHeader = new NetworkPacketHeader(parsedMessageType);
-		    parsedHeader.client_id = parsedClientId;
-			parsedHeader.sequence_number = parsedSequenceNumber;
-		    parsedHeader.ack_count = parsedAckCount;
-		    ClearDSListAndDeleteValues(parsedHeader.ack_range);
-			for (var i = 0; i < parsedAckCount; i++)
+			var parsedPayload = undefined;
+			if (parsedMessageType == MESSAGE_TYPE.PING)
 			{
-				var acknowledgmentId = buffer_read(msg, buffer_u8);
-				ds_list_add(parsedHeader.ack_range, acknowledgmentId);
-			}
+				parsedPayload = buffer_read(msg, buffer_u32);
+			} else {
+				var parsedClientId = buffer_read(msg, buffer_string);
+				var parsedSequenceNumber = buffer_read(msg, buffer_u8);
+				var parsedAckCount = buffer_read(msg, buffer_u8);
+				
+			    parsedHeader.client_id = parsedClientId;
+				parsedHeader.sequence_number = parsedSequenceNumber;
+			    parsedHeader.ack_count = parsedAckCount;
+			    ClearDSListAndDeleteValues(parsedHeader.ack_range);
+				for (var i = 0; i < parsedAckCount; i++)
+				{
+					var acknowledgmentId = buffer_read(msg, buffer_u8);
+					ds_list_add(parsedHeader.ack_range, acknowledgmentId);
+				}
 			
-			var parsedPayload = ParsePayload(parsedMessageType, msg);
+				parsedPayload = ParsePayload(parsedMessageType, msg);
+			}
 			parsedNetworkPacket = new NetworkPacket(parsedHeader, parsedPayload);
 		} catch (error)
 		{
@@ -75,12 +81,6 @@ function NetworkPacketParser() constructor
 							parsedOriginalMessageType,
 							parsedInvalidationMessage
 						);
-					} break;
-					case MESSAGE_TYPE.PONG:
-					{
-						var parsedClientTime = buffer_read(_msg, buffer_u32);
-						var parsedServerTime = buffer_read(_msg, buffer_u32);
-						parsedPayload = new NetworkPingSample(parsedClientTime, parsedServerTime);
 					} break;
 					case MESSAGE_TYPE.REQUEST_JOIN_GAME:
 					{
