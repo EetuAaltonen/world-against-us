@@ -128,36 +128,8 @@ export default class NetworkHandler {
                     }
                   }
 
-                  // Check start pinging
-                  if (messageType === MESSAGE_TYPE.PONG) {
-                    if (
-                      this.networkConnectionSampler.startPinging(client.uuid)
-                    ) {
-                      const clientConnectionSample =
-                        this.networkConnectionSampler.getClientConnectionSample(
-                          client.uuid
-                        );
-                      if (clientConnectionSample !== undefined) {
-                        const pingSample = clientConnectionSample.pingSample;
-                        networkPacket.payload = pingSample;
-                      }
-                    }
-                  }
-
                   // Send patched network packet
-                  const sentPacketSize = this.sendPacketOverUDP(
-                    networkPacket,
-                    client
-                  );
-                  // TODO: Check MTU threshold
-                  // Update client data sent rate
-                  const clientConnectionSample =
-                    this.networkConnectionSampler.getClientConnectionSample(
-                      client.uuid
-                    );
-                  if (clientConnectionSample !== undefined) {
-                    clientConnectionSample.dataSentRate += sentPacketSize;
-                  }
+                  this.sendPacketOverUDP(networkPacket, client);
                 }
               }
             }
