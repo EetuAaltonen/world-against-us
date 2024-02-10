@@ -183,6 +183,7 @@ export default class NetworkHandler {
     let sentPacketSize = 0;
     const compressNetworkBuffer =
       this.networkPacketBuilder.createNetworkBuffer(networkPacket);
+    // TODO: Check MTU threshold
     if (compressNetworkBuffer !== undefined) {
       this.socket.send(
         compressNetworkBuffer,
@@ -194,8 +195,11 @@ export default class NetworkHandler {
           }
         }
       );
-      // TODO: Check MTU threshold
-      sentPacketSize = compressNetworkBuffer.length * 8 * 0.001; // Convert to kilobits
+      // Update client data sent rate
+      this.networkConnectionSampler.updateClientSendRate(
+        client.uuid,
+        compressNetworkBuffer.length
+      );
     }
     return sentPacketSize;
   }
@@ -203,264 +207,278 @@ export default class NetworkHandler {
   handleMessage(msg, rinfo) {
     try {
       let isMessageHandled = false;
-      const networkPacket = this.networkPacketParser.parsePacket(msg, rinfo);
+      const networkPacket = this.networkPacketParser.parsePacket(msg);
       if (networkPacket !== undefined) {
-        const clientId = networkPacket.header.clientId;
         const messageType = networkPacket.header.messageType;
-        const sequenceNumber = networkPacket.header.sequenceNumber;
-        const ackCount = networkPacket.header.ackCount;
-        const ackRange = networkPacket.header.ackRange;
-
-        switch (messageType) {
-          case MESSAGE_TYPE.CONNECT_TO_HOST:
-            {
-              const playerTag = networkPacket.payload;
-              if (playerTag !== undefined) {
-                if (playerTag.length > 2) {
-                  if (clientId === UNDEFINED_UUID) {
-                    // Generate new Uuid and save client
-                    const newClientId = this.clientHandler.addClient(
-                      rinfo,
-                      playerTag
-                    );
-                    ConsoleHandler.Log(
-                      `Player '${playerTag}' connected to the server`
-                    );
-                    if (newClientId !== undefined) {
-                      // Add network trackers
-                      this.networkPacketTracker.addInFlightPacketTrack(
-                        newClientId
-                      );
-                      this.networkConnectionSampler.addConnectionSample(
-                        newClientId
-                      );
-
-                      // Manually add the first outgoing acknowledgment
-                      const inFlightPacketTrack =
-                        this.networkPacketTracker.getInFlightPacketTrack(
-                          newClientId
-                        );
-                      inFlightPacketTrack.pendingAckRange.push(sequenceNumber);
-                      inFlightPacketTrack.expectedSequenceNumber =
-                        sequenceNumber + 1;
-
-                      // Response with connect to host message for client proceed
-                      const client = this.clientHandler.getClient(newClientId);
-                      const networkPacketHeader = new NetworkPacketHeader(
-                        MESSAGE_TYPE.CONNECT_TO_HOST,
-                        newClientId
-                      );
-                      const networkPacket = new NetworkPacket(
-                        networkPacketHeader,
-                        undefined,
-                        PACKET_PRIORITY.HIGH
-                      );
-                      this.queueNetworkPacket(
-                        new NetworkQueueEntry(networkPacket, [client])
-                      );
-
-                      // Broadcast about connected client
-                      const remotePlayerInfo = new RemotePlayerInfo(
-                        newClientId,
-                        playerTag
-                      );
-                      const clientsToBroadcast =
-                        this.clientHandler.getClientsToBroadcastGlobal(
-                          newClientId
-                        );
-                      const broadcastNetworkPacketHeader =
-                        new NetworkPacketHeader(
-                          MESSAGE_TYPE.REMOTE_CONNECTED_TO_HOST,
-                          newClientId
-                        );
-                      const broadcastNetworkPacket = new NetworkPacket(
-                        broadcastNetworkPacketHeader,
-                        remotePlayerInfo,
-                        PACKET_PRIORITY.DEFAULT
-                      );
-                      this.broadcast(
-                        broadcastNetworkPacket,
-                        clientsToBroadcast
-                      );
-
-                      isMessageHandled = true;
-                    } else {
-                      ConsoleHandler.Log("Failed to connect client");
-                    }
-                  } else {
-                    ConsoleHandler.Log(
-                      `Client with UUID ${clientId} requested to join game`
-                    );
-                  }
-                }
-              }
-            }
-            break;
-          case MESSAGE_TYPE.DISCONNECT_FROM_HOST:
-            {
-              isMessageHandled = this.disconnectClientWithTimeout(
-                clientId,
-                rinfo.address,
-                rinfo.port
-              );
-            }
-            break;
-          case MESSAGE_TYPE.CLIENT_ERROR:
-            {
-              const errorMessage = networkPacket.payload["error"] ?? "Unknown";
-              ConsoleHandler.Log(
-                `CLIENT ERROR: ${errorMessage}. Disconnecting...`
-              );
-              isMessageHandled = this.disconnectClientWithTimeout(
-                clientId,
-                rinfo.address,
-                rinfo.port
-              );
-            }
-            break;
-          default: {
-            if (clientId !== UNDEFINED_UUID) {
-              const client = this.clientHandler.getClient(clientId);
-              if (client !== undefined) {
-                if (
-                  this.networkPacketTracker.processAckRange(
-                    ackCount,
-                    ackRange,
-                    clientId
-                  )
-                ) {
-                  if (
-                    this.networkPacketTracker.processSequenceNumber(
-                      sequenceNumber,
-                      clientId,
-                      messageType
-                    )
-                  ) {
-                    switch (messageType) {
-                      case MESSAGE_TYPE.ACKNOWLEDGMENT:
-                        {
-                          // No further actions
-                          isMessageHandled = true;
-                        }
-                        break;
-                      case MESSAGE_TYPE.PING:
-                        {
-                          const pingSample = networkPacket.payload;
-                          if (pingSample !== undefined) {
-                            if (
-                              this.networkConnectionSampler.initPinging(
-                                clientId,
-                                pingSample
-                              )
-                            ) {
-                              const responsePingPong =
-                                this.networkConnectionSampler.getClientConnectionSample(
-                                  clientId
-                                );
-
-                              const networkPacketHeader =
-                                new NetworkPacketHeader(
-                                  MESSAGE_TYPE.PONG,
-                                  client.uuid
-                                );
-                              const networkPacket = new NetworkPacket(
-                                networkPacketHeader,
-                                responsePingPong,
-                                PACKET_PRIORITY.HIGH
-                              );
-                              // Patch delivery policy
-                              networkPacket.deliveryPolicy.toInFlightTrack = false;
-
-                              this.queueNetworkPacket(
-                                new NetworkQueueEntry(networkPacket, [client])
-                              );
-                              isMessageHandled = true;
-                            }
-                          }
-                        }
-                        break;
-                      case MESSAGE_TYPE.PONG:
-                        {
-                          const pingSample = networkPacket.payload;
-                          if (pingSample !== undefined) {
-                            this.networkConnectionSampler.stopPinging(
-                              clientId,
-                              pingSample
-                            );
-                            isMessageHandled =
-                              this.queueAcknowledgmentResponse(client);
-                          }
-                        }
-                        break;
-                      case MESSAGE_TYPE.REQUEST_JOIN_GAME:
-                        {
-                          const player = new Player(clientId, client.playerTag);
-                          const instanceId =
-                            this.instanceHandler.addPlayerToDefaultInstance(
-                              clientId,
-                              player
-                            );
-                          const instance =
-                            this.instanceHandler.getInstance(instanceId);
-                          if (instance !== undefined) {
-                            // Set new instance
-                            client.setInstanceId(instanceId);
-                            const networkJoinGameRequest =
-                              new NetworkJoinGameRequest(
-                                instanceId,
-                                instance.roomIndex,
-                                instance.ownerClient
-                              );
-
-                            // Response with join game request
-                            const networkPacketHeader = new NetworkPacketHeader(
-                              MESSAGE_TYPE.REQUEST_JOIN_GAME,
-                              clientId
-                            );
-                            const networkPacket = new NetworkPacket(
-                              networkPacketHeader,
-                              networkJoinGameRequest,
-                              PACKET_PRIORITY.HIGH
-                            );
-                            this.queueNetworkPacket(
-                              new NetworkQueueEntry(networkPacket, [client])
-                            );
-                            isMessageHandled = true;
-                          } else {
-                            client.resetInstanceId();
-                          }
-                        }
-                        break;
-                      default: {
-                        isMessageHandled =
-                          this.networkPacketHandler.handlePacket(
-                            client,
-                            rinfo,
-                            networkPacket
-                          );
-                      }
-                    }
-                  }
-                }
-              } else {
-                isMessageHandled = this.onInvalidRequest(
-                  new InvalidRequestInfo(
-                    INVALID_REQUEST_ACTION.DISCONNECT,
-                    messageType,
-                    "Unknown client ID, please reconnect"
-                  ),
-                  rinfo
+        // Handle pinging
+        if (messageType == MESSAGE_TYPE.PING) {
+          const client = this.clientHandler.getClientBySocket(rinfo);
+          if (client !== undefined) {
+            if (
+              this.networkConnectionSampler.handlePingMessage(
+                networkPacket.payload,
+                client
+              )
+            ) {
+              // Respond with ping packet
+              const pingNetworkBuffer =
+                this.networkPacketBuilder.createPingNetworkBuffer(
+                  networkPacket
                 );
+              if (pingNetworkBuffer !== undefined) {
+                this.socket.send(
+                  pingNetworkBuffer,
+                  rinfo.port,
+                  rinfo.address,
+                  (err) => {
+                    if (err ?? undefined !== undefined) {
+                      ConsoleHandler.Log(err);
+                    }
+                  }
+                );
+
+                // Update client data sent rate
+                this.networkConnectionSampler.updateClientSendRate(
+                  client.uuid,
+                  pingNetworkBuffer.length
+                );
+                isMessageHandled = true;
               }
             } else {
               isMessageHandled = this.onInvalidRequest(
                 new InvalidRequestInfo(
                   INVALID_REQUEST_ACTION.DISCONNECT,
                   messageType,
-                  "Invalid client ID"
+                  "Failed to ping the client, please reconnect"
                 ),
                 rinfo
               );
+            }
+          } else {
+            isMessageHandled = this.onInvalidRequest(
+              new InvalidRequestInfo(
+                INVALID_REQUEST_ACTION.DISCONNECT,
+                messageType,
+                "Failed to ping unknown client, please reconnect"
+              ),
+              rinfo
+            );
+          }
+        } else {
+          const clientId = networkPacket.header.clientId;
+          const sequenceNumber = networkPacket.header.sequenceNumber;
+          const ackCount = networkPacket.header.ackCount;
+          const ackRange = networkPacket.header.ackRange;
+          switch (messageType) {
+            case MESSAGE_TYPE.CONNECT_TO_HOST:
+              {
+                const playerTag = networkPacket.payload;
+                if (playerTag !== undefined) {
+                  if (playerTag.length > 2) {
+                    if (clientId === UNDEFINED_UUID) {
+                      // Generate new Uuid and save client
+                      const newClientId = this.clientHandler.addClient(
+                        rinfo,
+                        playerTag
+                      );
+                      ConsoleHandler.Log(
+                        `Player '${playerTag}' connected to the server`
+                      );
+                      if (newClientId !== undefined) {
+                        // Add network trackers
+                        this.networkPacketTracker.addInFlightPacketTrack(
+                          newClientId
+                        );
+                        this.networkConnectionSampler.addConnectionSample(
+                          newClientId
+                        );
+
+                        // Manually add the first outgoing acknowledgment
+                        const inFlightPacketTrack =
+                          this.networkPacketTracker.getInFlightPacketTrack(
+                            newClientId
+                          );
+                        inFlightPacketTrack.pendingAckRange.push(
+                          sequenceNumber
+                        );
+                        inFlightPacketTrack.expectedSequenceNumber =
+                          sequenceNumber + 1;
+
+                        // Response with connect to host message for client proceed
+                        const client =
+                          this.clientHandler.getClient(newClientId);
+                        const networkPacketHeader = new NetworkPacketHeader(
+                          MESSAGE_TYPE.CONNECT_TO_HOST,
+                          newClientId
+                        );
+                        const networkPacket = new NetworkPacket(
+                          networkPacketHeader,
+                          undefined,
+                          PACKET_PRIORITY.HIGH
+                        );
+                        this.queueNetworkPacket(
+                          new NetworkQueueEntry(networkPacket, [client])
+                        );
+
+                        // Broadcast about connected client
+                        const remotePlayerInfo = new RemotePlayerInfo(
+                          newClientId,
+                          playerTag
+                        );
+                        const clientsToBroadcast =
+                          this.clientHandler.getClientsToBroadcastGlobal(
+                            newClientId
+                          );
+                        const broadcastNetworkPacketHeader =
+                          new NetworkPacketHeader(
+                            MESSAGE_TYPE.REMOTE_CONNECTED_TO_HOST,
+                            newClientId
+                          );
+                        const broadcastNetworkPacket = new NetworkPacket(
+                          broadcastNetworkPacketHeader,
+                          remotePlayerInfo,
+                          PACKET_PRIORITY.DEFAULT
+                        );
+                        this.broadcast(
+                          broadcastNetworkPacket,
+                          clientsToBroadcast
+                        );
+
+                        isMessageHandled = true;
+                      } else {
+                        ConsoleHandler.Log("Failed to connect client");
+                      }
+                    } else {
+                      ConsoleHandler.Log(
+                        `Client with UUID ${clientId} requested to join game`
+                      );
+                    }
+                  }
+                }
+              }
+              break;
+            case MESSAGE_TYPE.DISCONNECT_FROM_HOST:
+              {
+                isMessageHandled = this.disconnectClientWithTimeout(
+                  clientId,
+                  rinfo.address,
+                  rinfo.port
+                );
+              }
+              break;
+            case MESSAGE_TYPE.CLIENT_ERROR:
+              {
+                const errorMessage =
+                  networkPacket.payload["error"] ?? "Unknown";
+                ConsoleHandler.Log(
+                  `CLIENT ERROR: ${errorMessage}. Disconnecting...`
+                );
+                isMessageHandled = this.disconnectClientWithTimeout(
+                  clientId,
+                  rinfo.address,
+                  rinfo.port
+                );
+              }
+              break;
+            default: {
+              if (clientId !== UNDEFINED_UUID) {
+                const client = this.clientHandler.getClient(clientId);
+                if (client !== undefined) {
+                  if (
+                    this.networkPacketTracker.processAckRange(
+                      ackCount,
+                      ackRange,
+                      clientId
+                    )
+                  ) {
+                    if (
+                      this.networkPacketTracker.processSequenceNumber(
+                        sequenceNumber,
+                        clientId,
+                        messageType
+                      )
+                    ) {
+                      switch (messageType) {
+                        case MESSAGE_TYPE.ACKNOWLEDGMENT:
+                          {
+                            // No further actions
+                            isMessageHandled = true;
+                          }
+                          break;
+                        case MESSAGE_TYPE.REQUEST_JOIN_GAME:
+                          {
+                            const player = new Player(
+                              clientId,
+                              client.playerTag
+                            );
+                            const instanceId =
+                              this.instanceHandler.addPlayerToDefaultInstance(
+                                clientId,
+                                player
+                              );
+                            const instance =
+                              this.instanceHandler.getInstance(instanceId);
+                            if (instance !== undefined) {
+                              // Set new instance
+                              client.setInstanceId(instanceId);
+                              const networkJoinGameRequest =
+                                new NetworkJoinGameRequest(
+                                  instanceId,
+                                  instance.roomIndex,
+                                  instance.ownerClient
+                                );
+
+                              // Response with join game request
+                              const networkPacketHeader =
+                                new NetworkPacketHeader(
+                                  MESSAGE_TYPE.REQUEST_JOIN_GAME,
+                                  clientId
+                                );
+                              const networkPacket = new NetworkPacket(
+                                networkPacketHeader,
+                                networkJoinGameRequest,
+                                PACKET_PRIORITY.HIGH
+                              );
+                              this.queueNetworkPacket(
+                                new NetworkQueueEntry(networkPacket, [client])
+                              );
+                              isMessageHandled = true;
+                            } else {
+                              client.resetInstanceId();
+                            }
+                          }
+                          break;
+                        default: {
+                          isMessageHandled =
+                            this.networkPacketHandler.handlePacket(
+                              client,
+                              rinfo,
+                              networkPacket
+                            );
+                        }
+                      }
+                    }
+                  }
+                } else {
+                  isMessageHandled = this.onInvalidRequest(
+                    new InvalidRequestInfo(
+                      INVALID_REQUEST_ACTION.DISCONNECT,
+                      messageType,
+                      "Unknown client ID, please reconnect"
+                    ),
+                    rinfo
+                  );
+                }
+              } else {
+                isMessageHandled = this.onInvalidRequest(
+                  new InvalidRequestInfo(
+                    INVALID_REQUEST_ACTION.DISCONNECT,
+                    messageType,
+                    "Invalid client ID"
+                  ),
+                  rinfo
+                );
+              }
             }
           }
         }
