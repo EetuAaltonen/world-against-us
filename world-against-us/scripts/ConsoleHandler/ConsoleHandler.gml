@@ -19,7 +19,13 @@ function ConsoleHandler() constructor
 	
 	static AddConsoleLog = function(_consoleLogType, _consoleLogMessage)
 	{
-		var timestampMessage = string("{0}-{1}-{2} {3}:{4}:{5} [{6}] {7}", current_year, current_month, current_day, current_hour, current_minute, current_second, _consoleLogType, _consoleLogMessage)
+		var formatMonth = current_month < 10 ? string("0{0}", current_month) : current_month;
+		var formatDay = current_day < 10 ? string("0{0}", current_day) : current_day;
+		var formatHour = current_hour < 10 ? string("0{0}", current_hour) : current_hour;
+		var formatMinute = current_minute < 10 ? string("0{0}", current_minute) : current_minute;
+		var formatSecond = current_second < 10 ? string("0{0}", current_second) : current_second;
+
+		var timestampMessage = string("{0}-{1}-{2} {3}:{4}:{5} {6}", current_year, formatMonth, formatDay, formatHour, formatMinute, formatSecond, _consoleLogMessage)
 		var consoleLog = new ConsoleLog(_consoleLogType, timestampMessage);
 		var consoleMessageCount = ds_list_size(console_logs);
 		var messageOverflowCount = max(0, (consoleMessageCount + 1) - console_logs_limit);
