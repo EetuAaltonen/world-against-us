@@ -84,8 +84,8 @@ export default class NetworkHandler {
         if (client !== undefined) {
           let networkPacket = client.getPacketToSend(tickTime);
           if (networkPacket !== undefined) {
-            const messageType = networkPacket.header.messageType;
             const deliveryPolicy = networkPacket.deliveryPolicy;
+            let compressNetworkBuffer = undefined;
             if (deliveryPolicy != undefined) {
               if (
                 !deliveryPolicy.patchSequenceNumber &&
@@ -93,7 +93,19 @@ export default class NetworkHandler {
                 !deliveryPolicy.toInFlightTrack
               ) {
                 // Send network packet without delivery policy
-                this.sendPacketOverUDP(networkPacket, client);
+                compressNetworkBuffer =
+                  this.networkPacketBuilder.createNetworkBuffer(networkPacket);
+                if (
+                  !this.sendNetworkPacket(
+                    compressNetworkBuffer,
+                    client.address,
+                    client.port
+                  )
+                ) {
+                  ConsoleHandler.Log(
+                    `Failed to send network packet to client with ID ${client.uuid}`
+                  );
+                }
               } else {
                 const inFlightPacketTrack =
                   this.networkPacketTracker.getInFlightPacketTrack(client.uuid);
@@ -129,7 +141,21 @@ export default class NetworkHandler {
                   }
 
                   // Send patched network packet
-                  this.sendPacketOverUDP(networkPacket, client);
+                  compressNetworkBuffer =
+                    this.networkPacketBuilder.createNetworkBuffer(
+                      networkPacket
+                    );
+                  if (
+                    !this.sendNetworkPacket(
+                      compressNetworkBuffer,
+                      client.address,
+                      client.port
+                    )
+                  ) {
+                    ConsoleHandler.Log(
+                      `Failed to send network packet to client with ID ${client.uuid}`
+                    );
+                  }
                 }
               }
             }
@@ -179,29 +205,27 @@ export default class NetworkHandler {
     });
   }
 
-  sendPacketOverUDP(networkPacket, client) {
-    let sentPacketSize = 0;
-    const compressNetworkBuffer =
-      this.networkPacketBuilder.createNetworkBuffer(networkPacket);
+  sendNetworkPacket(networkBuffer, address, port) {
+    let isNetworkPacketSent = false;
     // TODO: Check MTU threshold
-    if (compressNetworkBuffer !== undefined) {
-      this.socket.send(
-        compressNetworkBuffer,
-        client.port,
-        client.address,
-        (err) => {
-          if (err ?? undefined !== undefined) {
-            ConsoleHandler.Log(err);
-          }
+    if (networkBuffer !== undefined) {
+      this.socket.send(networkBuffer, port, address, (err) => {
+        if (err ?? undefined !== undefined) {
+          ConsoleHandler.Log(err);
         }
-      );
+      });
+
       // Update client data sent rate
-      this.networkConnectionSampler.updateClientSendRate(
-        client.uuid,
-        compressNetworkBuffer.length
-      );
+      const client = this.clientHandler.getClientBySocket(address, port);
+      if (client !== undefined) {
+        this.networkConnectionSampler.updateClientSendRate(
+          client.uuid,
+          networkBuffer.length
+        );
+      }
+      isNetworkPacketSent = true;
     }
-    return sentPacketSize;
+    return isNetworkPacketSent;
   }
 
   handleMessage(msg, rinfo) {
@@ -212,7 +236,10 @@ export default class NetworkHandler {
         const messageType = networkPacket.header.messageType;
         // Handle pinging
         if (messageType == MESSAGE_TYPE.PING) {
-          const client = this.clientHandler.getClientBySocket(rinfo);
+          const client = this.clientHandler.getClientBySocket(
+            rinfo.address,
+            rinfo.port
+          );
           if (client !== undefined) {
             if (
               this.networkConnectionSampler.handlePingMessage(
@@ -225,25 +252,11 @@ export default class NetworkHandler {
                 this.networkPacketBuilder.createPingNetworkBuffer(
                   networkPacket
                 );
-              if (pingNetworkBuffer !== undefined) {
-                this.socket.send(
-                  pingNetworkBuffer,
-                  rinfo.port,
-                  rinfo.address,
-                  (err) => {
-                    if (err ?? undefined !== undefined) {
-                      ConsoleHandler.Log(err);
-                    }
-                  }
-                );
-
-                // Update client data sent rate
-                this.networkConnectionSampler.updateClientSendRate(
-                  client.uuid,
-                  pingNetworkBuffer.length
-                );
-                isMessageHandled = true;
-              }
+              isMessageHandled = this.sendNetworkPacket(
+                pingNetworkBuffer,
+                rinfo.address,
+                rinfo.port
+              );
             } else {
               isMessageHandled = this.onInvalidRequest(
                 new InvalidRequestInfo(
@@ -255,7 +268,7 @@ export default class NetworkHandler {
               );
             }
           } else {
-            isMessageHandled = this.onUnknownClientID(rinfo);
+            isMessageHandled = this.onUnknownClientID(messageType, rinfo);
           }
         } else {
           const clientId = networkPacket.header.clientId;
@@ -453,10 +466,10 @@ export default class NetworkHandler {
                     }
                   }
                 } else {
-                  isMessageHandled = this.onUnknownClientID(rinfo);
+                  isMessageHandled = this.onUnknownClientID(messageType, rinfo);
                 }
               } else {
-                isMessageHandled = this.onUnknownClientID(rinfo);
+                isMessageHandled = this.onUnknownClientID(messageType, rinfo);
               }
             }
           }
@@ -665,11 +678,11 @@ export default class NetworkHandler {
     );
   }
 
-  onUnknownClientID(rinfo) {
+  onUnknownClientID(messageType, rinfo) {
     return this.onInvalidRequest(
       new InvalidRequestInfo(
         INVALID_REQUEST_ACTION.DISCONNECT,
-        MESSAGE_TYPE.INVALID_REQUEST,
+        messageType,
         "Unknown client ID, please reconnect"
       ),
       rinfo
@@ -691,23 +704,11 @@ export default class NetworkHandler {
     // Respond with invalid request details
     const networkBuffer =
       this.networkPacketBuilder.createNetworkBuffer(networkPacket);
-    if (networkBuffer !== undefined) {
-      this.socket.send(networkBuffer, rinfo.port, rinfo.address, (err) => {
-        if (err ?? undefined !== undefined) {
-          ConsoleHandler.Log(err);
-        }
-      });
-
-      // Update client data sent rate
-      const client = this.clientHandler.getClientBySocket(rinfo);
-      if (client !== undefined) {
-        this.networkConnectionSampler.updateClientSendRate(
-          client.uuid,
-          networkBuffer.length
-        );
-      }
-      isResponseSent = true;
-    }
+    isResponseSent = this.sendNetworkPacket(
+      networkBuffer,
+      rinfo.address,
+      rinfo.port
+    );
     return isResponseSent;
   }
 
