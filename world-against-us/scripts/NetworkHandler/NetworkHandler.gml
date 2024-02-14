@@ -8,7 +8,11 @@ function NetworkHandler() constructor
 	host_address = undefined;
 	host_port = undefined;
 	
+	// NETWORK BUFFERS
 	pre_alloc_network_buffer = undefined;
+	pre_alloc_network_buffer_compressed = undefined;
+	
+	
 	delete_socket_timer = new Timer(TimerFromMilliseconds(1000));
 	packet_send_rate = 1000 / 33.33333; // == 30ms == ~Every other frame
 	last_packet_time = current_time;
@@ -19,6 +23,7 @@ function NetworkHandler() constructor
 	network_packet_tracker = new NetworkPacketTracker();
 	network_packet_queue = ds_queue_create();
 	
+	network_packet_delivery_policy_handler = new NetworkPacketDeliveryPolicyHandler();
 	network_connection_sampler = new NetworkConnectionSampler();
 	network_error_handler = new NetworkErrorHandler();
 	
@@ -130,6 +135,7 @@ function NetworkHandler() constructor
 		{
 			socket = network_create_socket(network_socket_udp);
 			pre_alloc_network_buffer = buffer_create(256, buffer_grow, 1);
+			pre_alloc_network_buffer_compressed = buffer_create(256, buffer_grow, 1);
 			isSocketCreated = true;
 		} else {
 			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Client already connected or socket already exists");
@@ -146,6 +152,7 @@ function NetworkHandler() constructor
 			socket = undefined;
 			
 			buffer_delete(pre_alloc_network_buffer);
+			buffer_delete(pre_alloc_network_buffer_compressed);
 		
 			// RESET NETWORK PROPERTIES
 			client_id = UNDEFINED_UUID;

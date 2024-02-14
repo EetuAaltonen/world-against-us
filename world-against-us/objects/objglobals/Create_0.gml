@@ -166,6 +166,7 @@ global.NetworkRegionHandlerRef = undefined;
 global.NetworkRegionObjectHandlerRef = undefined;
 global.NetworkPacketTrackerRef = undefined;
 global.NetworkConnectionSamplerRef = undefined;
+global.NetworkPacketDeliveryPolicies = undefined;
 
 // DRONE
 global.InstanceDrone = noone;
