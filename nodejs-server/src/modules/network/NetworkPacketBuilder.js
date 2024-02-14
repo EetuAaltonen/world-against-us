@@ -8,110 +8,108 @@ const NULL_TERMINATOR = "\0";
 
 export default class NetworkPacketBuilder {
   constructor() {
-    this.baseHeaderBuffer = Buffer.alloc(
-      BITWISE.BIT8 + // Message Type
-        BITWISE.ID_LENGTH + // UUID
+    this.headerBufferMessageType = Buffer.alloc(
+      BITWISE.BIT8 // Message Type
+    );
+    this.headerBufferBase = Buffer.alloc(
+      BITWISE.ID_LENGTH + // UUID
         BITWISE.BIT8 + // Null Terminator
         BITWISE.BIT8 + // Sequence Number
         BITWISE.BIT8 // Ack Count
     );
-    this.headerAckRangeBuffer = undefined;
+    this.headerBufferAckRange = undefined;
     this.payloadBuffer = undefined;
   }
 
   createNetworkBuffer(networkPacket) {
-    let compressNetworkBuffer = undefined;
+    let networkBuffer = undefined;
     try {
       if (networkPacket !== undefined) {
-        let networkBuffer = undefined;
         if (this.writePacketHeader(networkPacket)) {
           if (this.writePacketPayload(networkPacket)) {
-            networkBuffer = this.baseHeaderBuffer;
-            if (this.headerAckRangeBuffer !== undefined) {
-              networkBuffer = Buffer.concat([
-                networkBuffer,
-                this.headerAckRangeBuffer,
-              ]);
+            if (!networkPacket.deliveryPolicy.minimalHeader) {
+              networkBuffer = this.headerBufferBase;
+              // Concat network buffer with ACK range buffer
+              if (this.headerBufferAckRange !== undefined) {
+                networkBuffer = Buffer.concat([
+                  networkBuffer,
+                  this.headerBufferAckRange,
+                ]);
+              }
+              // Concat network buffer with payload buffer
+              if (this.payloadBuffer !== undefined) {
+                networkBuffer = Buffer.concat([
+                  networkBuffer,
+                  this.payloadBuffer,
+                ]);
+              }
+            } else {
+              // Use only payload
+              networkBuffer = this.payloadBuffer;
             }
-            if (this.payloadBuffer !== undefined) {
+
+            if (networkBuffer !== undefined) {
+              // Compress network buffer
+              if (networkPacket.deliveryPolicy.compress) {
+                networkBuffer = zlib.deflateSync(networkBuffer);
+              }
+              // Concat final network buffer
               networkBuffer = Buffer.concat([
+                this.headerBufferMessageType,
                 networkBuffer,
-                this.payloadBuffer,
               ]);
+            } else {
+              networkBuffer = this.headerBufferMessageType;
             }
           }
         }
-
-        // Compress the network buffer
-        if (networkBuffer !== undefined) {
-          compressNetworkBuffer = zlib.deflateSync(networkBuffer);
-        }
       }
     } catch (error) {
       console.log(error);
     }
-    return compressNetworkBuffer;
-  }
-
-  createPingNetworkBuffer(networkPacket) {
-    let compressNetworkBuffer = undefined;
-    try {
-      if (networkPacket !== undefined) {
-        const pingNetworkBuffer = Buffer.alloc(
-          BITWISE.BIT8 + // Message type
-            BITWISE.BIT32 // Client time
-        );
-        let offset = 0;
-        const messageType = networkPacket.header.messageType;
-        pingNetworkBuffer.writeUInt8(messageType, offset);
-        offset += BITWISE.BIT8;
-        const clientTime = networkPacket.payload;
-        pingNetworkBuffer.writeUInt32LE(clientTime, offset);
-
-        // Compress the network buffer
-        if (pingNetworkBuffer !== undefined) {
-          compressNetworkBuffer = zlib.deflateSync(pingNetworkBuffer);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    return compressNetworkBuffer;
+    return networkBuffer;
   }
 
   writePacketHeader(networkPacket) {
     let isPacketHeaderWritten = false;
-    const messageType = networkPacket.header.messageType;
-    const clientId = networkPacket.header.clientId;
-    const sequenceNumber = networkPacket.header.sequenceNumber;
-    const ackCount = networkPacket.header.ackCount;
-    const ackRange = networkPacket.header.ackRange;
     try {
-      // Write message type and client ID
-      let offset = 0;
-      this.baseHeaderBuffer.writeUInt8(messageType, offset);
-      offset += BITWISE.BIT8;
-      this.baseHeaderBuffer.fill(
-        clientId + NULL_TERMINATOR,
-        offset,
-        offset + BITWISE.ID_LENGTH + BITWISE.BIT8,
-        "utf8"
-      );
-      offset += BITWISE.ID_LENGTH + BITWISE.BIT8;
-      // Write sequence number and ack count
-      this.baseHeaderBuffer.writeUInt8(sequenceNumber, offset);
-      offset += BITWISE.BIT8;
-      this.baseHeaderBuffer.writeUInt8(ackCount, offset);
+      // Write message type
+      const messageType = networkPacket.header.messageType;
+      this.headerBufferMessageType.writeUInt8(messageType, 0);
+
       // Reset header ack range buffer
-      this.headerAckRangeBuffer = undefined;
-      if (ackCount > 0) {
-        // Allocate ack range buffer
-        this.headerAckRangeBuffer = Buffer.allocUnsafe(BITWISE.BIT8 * ackCount);
-        let ackOffset = 0;
-        for (let i = 0; i < ackCount; i++) {
-          const acknowledgmentId = ackRange[i] ?? 0;
-          this.headerAckRangeBuffer.writeUInt8(acknowledgmentId, ackOffset);
-          ackOffset += BITWISE.BIT8;
+      this.headerBufferAckRange = undefined;
+      if (!networkPacket.deliveryPolicy.minimalHeader) {
+        const clientId = networkPacket.header.clientId;
+        const sequenceNumber = networkPacket.header.sequenceNumber;
+        const ackCount = networkPacket.header.ackCount;
+        const ackRange = networkPacket.header.ackRange;
+
+        // Write client ID
+        let offset = 0;
+        this.headerBufferBase.fill(
+          clientId + NULL_TERMINATOR,
+          offset,
+          offset + BITWISE.ID_LENGTH + BITWISE.BIT8,
+          "utf8"
+        );
+        offset += BITWISE.ID_LENGTH + BITWISE.BIT8;
+        // Write sequence number and ack count
+        this.headerBufferBase.writeUInt8(sequenceNumber, offset);
+        offset += BITWISE.BIT8;
+        this.headerBufferBase.writeUInt8(ackCount, offset);
+
+        if (ackCount > 0) {
+          // Allocate ack range buffer
+          this.headerBufferAckRange = Buffer.allocUnsafe(
+            BITWISE.BIT8 * ackCount
+          );
+          let ackOffset = 0;
+          for (let i = 0; i < ackCount; i++) {
+            const acknowledgmentId = ackRange[i] ?? 0;
+            this.headerBufferAckRange.writeUInt8(acknowledgmentId, ackOffset);
+            ackOffset += BITWISE.BIT8;
+          }
         }
       }
       isPacketHeaderWritten = true;
@@ -130,6 +128,14 @@ export default class NetworkPacketBuilder {
     if (payload !== undefined) {
       try {
         switch (messageType) {
+          case MESSAGE_TYPE.PING:
+            {
+              const bufferPing = Buffer.allocUnsafe(BITWISE.BIT32);
+              bufferPing.writeUInt32LE(payload);
+              this.payloadBuffer = bufferPing;
+              isPayloadWritten = true;
+            }
+            break;
           case MESSAGE_TYPE.REMOTE_CONNECTED_TO_HOST:
             {
               // TODO: Write single function to build payload from RemotePlayerInfo
@@ -180,19 +186,6 @@ export default class NetworkPacketBuilder {
                 bufferInvalidRequest,
                 bufferInvalidRequestMessage,
               ]);
-              isPayloadWritten = true;
-            }
-            break;
-          case MESSAGE_TYPE.PONG:
-            {
-              const bufferPingPong = Buffer.allocUnsafe(
-                BITWISE.BIT32 + BITWISE.BIT32
-              );
-              let offset = 0;
-              bufferPingPong.writeUInt32LE(payload.clientTime, offset);
-              offset += BITWISE.BIT32;
-              bufferPingPong.writeUInt32LE(payload.serverTime, offset);
-              this.payloadBuffer = bufferPingPong;
               isPayloadWritten = true;
             }
             break;
