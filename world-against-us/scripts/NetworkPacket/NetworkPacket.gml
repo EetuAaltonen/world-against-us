@@ -3,6 +3,8 @@ function NetworkPacket(_header, _payload, _priority = PACKET_PRIORITY.DEFAULT, _
 	header = _header;
 	payload = _payload;
 	priority = _priority;
+	delivery_policy = (global.NetworkPacketDeliveryPolicies[? header.message_type] ??
+						global.NetworkPacketDeliveryPolicies[? MESSAGE_TYPE.ENUM_LENGTH]);
 	
 	ack_timeout_callback_func = _ack_timeout_callback_func;
 	max_acknowledgment_attempts = 2;

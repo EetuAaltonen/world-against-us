@@ -1,38 +1,56 @@
 function NetworkPacketParser() constructor
 {
-	static ParsePacket = function(_compressMsg)
+	static ParsePacket = function(_msgRaw, _networkBufferCompress)
 	{
 		var parsedNetworkPacket = undefined;
 		try
 		{
-			// DECOMPRESS MESSAGE BUFFER
-			var msg = buffer_decompress(_compressMsg);
-			
-			buffer_seek(msg, buffer_seek_start, 0);
-			var parsedMessageType = buffer_read(msg, buffer_u8);
+			buffer_seek(_msgRaw, buffer_seek_start, 0);
+			var parsedMessageType = buffer_read(_msgRaw, buffer_u8);
 			var parsedHeader = new NetworkPacketHeader(parsedMessageType);
-			var parsedPayload = undefined;
-			if (parsedMessageType == MESSAGE_TYPE.PING)
+			var deliveryPolicy = (global.NetworkPacketDeliveryPolicies[? parsedMessageType] ??
+									global.NetworkPacketDeliveryPolicies[? MESSAGE_TYPE.ENUM_LENGTH]);
+			
+			var msg = _msgRaw;
+			if (deliveryPolicy.compress)
 			{
-				parsedPayload = buffer_read(msg, buffer_u32);
-			} else {
-				var parsedClientId = buffer_read(msg, buffer_string);
-				var parsedSequenceNumber = buffer_read(msg, buffer_u8);
-				var parsedAckCount = buffer_read(msg, buffer_u8);
-				
-			    parsedHeader.client_id = parsedClientId;
-				parsedHeader.sequence_number = parsedSequenceNumber;
-			    parsedHeader.ack_count = parsedAckCount;
-			    ClearDSListAndDeleteValues(parsedHeader.ack_range);
-				for (var i = 0; i < parsedAckCount; i++)
+				// DECOMPRESS MESSAGE BUFFER
+				buffer_copy(
+					_msgRaw, buffer_sizeof(buffer_u8), buffer_get_size(_msgRaw) - buffer_sizeof(buffer_u8),
+					_networkBufferCompress, 0
+				);
+				msg = buffer_decompress(_networkBufferCompress);
+				buffer_seek(msg, buffer_seek_start, 0);
+			}
+			
+			if (buffer_exists(msg))
+			{
+				// PARSE HEADER
+				if (!deliveryPolicy.minimal_header)
 				{
-					var acknowledgmentId = buffer_read(msg, buffer_u8);
-					ds_list_add(parsedHeader.ack_range, acknowledgmentId);
+					var parsedClientId = buffer_read(msg, buffer_string);
+					var parsedSequenceNumber = buffer_read(msg, buffer_u8);
+					var parsedAckCount = buffer_read(msg, buffer_u8);
+				
+				    parsedHeader.client_id = parsedClientId;
+					parsedHeader.sequence_number = parsedSequenceNumber;
+				    parsedHeader.ack_count = parsedAckCount;
+					
+					ClearDSListAndDeleteValues(parsedHeader.ack_range);
+					for (var i = 0; i < parsedAckCount; i++)
+					{
+						var acknowledgmentId = buffer_read(msg, buffer_u8);
+						ds_list_add(parsedHeader.ack_range, acknowledgmentId);
+					}
 				}
 			
-				parsedPayload = ParsePayload(parsedMessageType, msg);
+				// PARSE PAYLOAD
+				var parsedPayload = ParsePayload(parsedMessageType, msg);
+				parsedNetworkPacket = new NetworkPacket(parsedHeader, parsedPayload);
+				
+				// DELETE NETWORK BUFFER AFTER READING
+				buffer_delete(msg);
 			}
-			parsedNetworkPacket = new NetworkPacket(parsedHeader, parsedPayload);
 		} catch (error)
 		{
 			show_debug_message(error);
@@ -46,8 +64,6 @@ function NetworkPacketParser() constructor
 		var parsedPayload = undefined;
 		try
 		{
-			// SET BUFFER TO THE INDEX BEFORE THE PAYLOAD
-			buffer_seek(_msg, buffer_seek_relative, 0);
 			// CHECK IF PACKET HAS PAYLOAD
 			if (buffer_tell(_msg) < buffer_get_size(_msg))
 			{
@@ -61,6 +77,10 @@ function NetworkPacketParser() constructor
 							parsedRemoteClientId,
 							parsedRemotePlayerTag
 						);
+					} break;
+					case MESSAGE_TYPE.PING:
+					{
+						parsedPayload = buffer_read(_msg, buffer_u32);
 					} break;
 					case MESSAGE_TYPE.REMOTE_DISCONNECT_FROM_HOST:
 					{

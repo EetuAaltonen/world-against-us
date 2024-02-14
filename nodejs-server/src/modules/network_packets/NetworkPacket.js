@@ -1,4 +1,5 @@
-import NetworkPacketDeliveryPolicy from "./NetworkPacketDeliveryPolicy.js";
+import MESSAGE_TYPE from "../network/MessageType.js";
+import DELIVERY_POLICIES from "./NetworkPacketDeliveryPolicies.js";
 import NetworkPacketHeader from "./NetworkPacketHeader.js";
 
 export default class NetworkPacket {
@@ -11,7 +12,9 @@ export default class NetworkPacket {
     this.acknowledgmentTimeout = 3000; // == 3s
     this.timeoutTimer = this.acknowledgmentTimeout;
 
-    this.deliveryPolicy = new NetworkPacketDeliveryPolicy();
+    this.deliveryPolicy =
+      DELIVERY_POLICIES[this.header.messageType] ??
+      DELIVERY_POLICIES[MESSAGE_TYPE.LENGTH];
   }
 
   clone() {
