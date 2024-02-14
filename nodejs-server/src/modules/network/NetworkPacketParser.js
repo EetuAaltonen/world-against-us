@@ -1,5 +1,6 @@
 import BITWISE from "./Bitwise.js";
 import MESSAGE_TYPE from "./MessageType.js";
+import DELIVERY_POLICIES from "../network_packets/NetworkPacketDeliveryPolicies.js";
 
 import zlib from "node:zlib";
 import ConsoleHandler from "../console/ConsoleHandler.js";
@@ -21,68 +22,80 @@ import ParseJSONStructToInventoryStreamItems from "../inventory/ParseJSONStructT
 export default class NetworkPacketParser {
   constructor() {}
 
-  parsePacket(compressMsg) {
+  parsePacket(msgRaw) {
     let networkPacket = undefined;
     try {
-      // Decompress message buffer
-      let msg = zlib.inflateSync(compressMsg);
       let offset = 0;
-      const messageType = msg.readUInt8(offset);
+      const messageType = msgRaw.readUInt8(offset);
       offset += BITWISE.BIT8;
-      let header = undefined;
-      let payload = undefined;
-      if (messageType == MESSAGE_TYPE.PING) {
-        const clientTime = msg.readUInt32LE(offset);
-        header = new NetworkPacketHeader(messageType, undefined);
-        payload = clientTime;
-      } else {
-        const clientId = msg.toString(
-          "utf8",
-          offset,
-          offset + BITWISE.ID_LENGTH
-        );
-        offset += BITWISE.ID_LENGTH;
-        const sequenceNumber = msg.readUInt8(offset);
-        offset += BITWISE.BIT8;
-        const ackCount = msg.readUInt8(offset);
-        offset += BITWISE.BIT8;
+      const header = new NetworkPacketHeader(messageType, undefined);
+      const deliveryPolicy =
+        DELIVERY_POLICIES[messageType] ??
+        DELIVERY_POLICIES[MESSAGE_TYPE.LENGTH];
 
-        header = new NetworkPacketHeader(messageType, clientId);
-        header.sequenceNumber = sequenceNumber;
-        header.ackCount = ackCount;
-        header.ackRange = [];
-        for (let i = 0; i < ackCount; i++) {
-          const acknowledgmentId = msg.readUInt8(offset);
+      let msg = msgRaw;
+      if (deliveryPolicy.compress) {
+        const compressMsg = msgRaw.subarray(offset);
+        // Decompress message buffer
+        msg = zlib.inflateSync(compressMsg);
+        // Reset offset
+        offset = 0;
+      }
+
+      if (Buffer.isBuffer(msg)) {
+        // Parse Header
+        if (!deliveryPolicy.minimalHeader) {
+          const clientId = msg.toString(
+            "utf8",
+            offset,
+            offset + BITWISE.ID_LENGTH
+          );
+          offset += BITWISE.ID_LENGTH;
+          const sequenceNumber = msg.readUInt8(offset);
           offset += BITWISE.BIT8;
-          header.ackRange.push(acknowledgmentId);
+          const ackCount = msg.readUInt8(offset);
+          offset += BITWISE.BIT8;
+
+          header.clientId = clientId;
+          header.sequenceNumber = sequenceNumber;
+          header.ackCount = ackCount;
+          header.ackRange = [];
+          for (let i = 0; i < ackCount; i++) {
+            const acknowledgmentId = msg.readUInt8(offset);
+            offset += BITWISE.BIT8;
+            header.ackRange.push(acknowledgmentId);
+          }
         }
 
-        // Slice header from buffer
-        msg = msg.slice(offset);
-        payload = this.parsePayload(messageType, msg);
+        // Parse payload
+        const payload = this.parsePayload(messageType, msg, offset);
+        networkPacket = new NetworkPacket(header, payload);
       }
-      networkPacket = new NetworkPacket(header, payload);
     } catch (error) {
       console.log(error);
     }
     return networkPacket;
   }
 
-  parsePayload(messageType, msg) {
+  parsePayload(messageType, msg, offset) {
     let payload;
     try {
-      if (msg.length > 0) {
+      if (offset < msg.length) {
         switch (messageType) {
           case MESSAGE_TYPE.CONNECT_TO_HOST:
             {
-              let offset = 0;
               const parsedPlayerTag = msg.toString("utf8", offset);
               payload = parsedPlayerTag;
             }
             break;
+          case MESSAGE_TYPE.PING:
+            {
+              const clientTime = msg.readUInt32LE(offset);
+              payload = clientTime;
+            }
+            break;
           case MESSAGE_TYPE.PLAYER_DATA_POSITION:
             {
-              let offset = 0;
               const parsedXPos = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;
               const parsedYPos = msg.readUInt32LE(offset);
@@ -91,7 +104,6 @@ export default class NetworkPacketParser {
             break;
           case MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT:
             {
-              let offset = 0;
               let parsedDeviceInputCompress = msg.readUInt8(offset);
               const parsedKeyRight = parsedDeviceInputCompress >= 8;
               if (parsedKeyRight) parsedDeviceInputCompress -= 8;
@@ -111,7 +123,6 @@ export default class NetworkPacketParser {
             break;
           case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
             {
-              let offset = 0;
               const parsedSourceInstanceId = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;
               const parsedDestinationInstanceId = msg.readUInt32LE(offset);
@@ -126,7 +137,6 @@ export default class NetworkPacketParser {
             break;
           case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
             {
-              let offset = 0;
               const parsedInstanceId = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;
               const parsedContainerId = msg.toString("utf8", offset);
@@ -138,7 +148,6 @@ export default class NetworkPacketParser {
             break;
           case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:
             {
-              let offset = 0;
               const parsedStreamItemLimit = msg.readUInt8(offset);
               offset += BITWISE.BIT8;
               const parsedIsStreamSending = Boolean(msg.readUInt8(offset));
@@ -159,14 +168,13 @@ export default class NetworkPacketParser {
             break;
           case MESSAGE_TYPE.CONTAINER_INVENTORY_STREAM:
             {
-              const jsonString = msg.toString("utf8", 0, msg.length);
+              const jsonString = msg.toString("utf8", offset);
               const jsonStruct = JSON.parse(jsonString);
               payload = ParseJSONStructToInventoryStreamItems(jsonStruct);
             }
             break;
           case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
             {
-              let offset = 0;
               const parsedInstanceId = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;
               const parsedInventoryId = msg.toString("utf8", offset);
@@ -179,7 +187,6 @@ export default class NetworkPacketParser {
             break;
           case MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM:
             {
-              let offset = 0;
               const parsedSourceGridIndexCol = msg.readUInt8(offset);
               offset += BITWISE.BIT8;
               const parsedSourceGridIndexRow = msg.readUInt8(offset);
@@ -205,7 +212,6 @@ export default class NetworkPacketParser {
             break;
           case MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM:
             {
-              let offset = 0;
               const parsedSourceGridIndexCol = msg.readUInt8(offset);
               offset += BITWISE.BIT8;
               const parsedSourceGridIndexRow = msg.readUInt8(offset);
@@ -231,7 +237,6 @@ export default class NetworkPacketParser {
             break;
           case MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM:
             {
-              let offset = 0;
               const parsedSourceGridIndexCol = msg.readUInt8(offset);
               offset += BITWISE.BIT8;
               const parsedSourceGridIndexRow = msg.readUInt8(offset);
@@ -255,7 +260,6 @@ export default class NetworkPacketParser {
             break;
           case MESSAGE_TYPE.RELEASE_CONTAINER_CONTENT:
             {
-              let offset = 0;
               const parsedInstanceId = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;
               const parsedContainerId = msg.toString("utf8", offset);
@@ -267,7 +271,6 @@ export default class NetworkPacketParser {
             break;
           case MESSAGE_TYPE.PATROL_STATE:
             {
-              let offset = 0;
               const parsedInstanceId = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;
               const parsedPatrolId = msg.readUInt8(offset);
@@ -282,7 +285,6 @@ export default class NetworkPacketParser {
             break;
           case MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA:
             {
-              let offset = 0;
               const parsedInstanceId = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;
               const parsedPatrolCount = msg.readUInt8(offset);
@@ -312,13 +314,11 @@ export default class NetworkPacketParser {
             break;
           case MESSAGE_TYPE.START_OPERATIONS_SCOUT_STREAM:
             {
-              let offset = 0;
               payload = msg.readUInt32LE(offset);
             }
             break;
           case MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM:
             {
-              let offset = 0;
               const parsedInstanceId = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;
               const parsedXPos = msg.readUInt32LE(offset);
@@ -332,13 +332,12 @@ export default class NetworkPacketParser {
             break;
           case MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM:
             {
-              let offset = 0;
               payload = msg.readUInt32LE(offset);
             }
             break;
           default: {
             // Default JSON payload parsing
-            const jsonString = msg.toString("utf8", 0, msg.length);
+            const jsonString = msg.toString("utf8", offset);
             payload = JSON.parse(jsonString);
           }
         }
