@@ -9,15 +9,38 @@ function NetworkPacketBuilder() constructor
 			{
 				if (!is_undefined(_networkPacket))
 				{
-					if (!WritePacketHeader(_networkBuffer, _networkPacket.header))
+					// WRITE NETWORK PACKET HEADER
+					if (WritePacketHeader(_networkBuffer, _networkPacket))
 					{
-						throw ("Failed to write the packet header");
+						// WRITE NETWORK PACKET PAYLOAD
+						if (WritePacketPayload(_networkBuffer, _networkPacket.header.message_type, _networkPacket.payload))
+						{
+							// COMPRESS NETWORK BUFFER
+							if (_networkPacket.delivery_policy.compress)
+							{
+								var messageTypeBytes = buffer_sizeof(buffer_u8);
+								var networkBufferCompress = buffer_compress(_networkBuffer, messageTypeBytes, buffer_tell(_networkBuffer) - messageTypeBytes);
+								buffer_copy(networkBufferCompress, 0, buffer_get_size(networkBufferCompress), _networkBuffer, messageTypeBytes);
+						
+								// SET SEEK POSITION TO END OF THE WRITTEN DATA BLOCK IN NETWORK BUFFER
+								// DATA SIZE IS NEEDED TO SUPPLY network_send_udp_raw FUNCTION AND IS EASILY FETCHED USING buffer_tell FUNCTION
+								// THEREFORE, THE SEEK POSITION FOR buffer_tell FUNCTION IS SET HERE BEFOREHAND
+								buffer_seek(_networkBuffer, buffer_seek_start, messageTypeBytes + buffer_get_size(networkBufferCompress));
+						
+								// DELETE TEMP COMPRESS BUFFER
+								buffer_delete(networkBufferCompress);
+							}
+							isPacketCreated = true;
+						} else {
+							var errorMessage = string("Failed to write payload for network packet with message type {0}", _networkPacket.header.message_type);
+							global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, errorMessage);
+							throw(errorMessage);
+						}
+					} else {
+						var errorMessage = string("Failed to write header for network packet with message type {0}", _networkPacket.header.message_type);
+						global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, errorMessage);
+						throw(errorMessage);
 					}
-					if (!WritePacketPayload(_networkBuffer, _networkPacket.header.message_type, _networkPacket.payload))
-					{
-						throw ("Failed to write the packet payload");
-					}
-					isPacketCreated = true;
 				}
 			}
 		} catch (error)
@@ -28,52 +51,33 @@ function NetworkPacketBuilder() constructor
 		return isPacketCreated;
 	}
 	
-	static CreatePingPacket = function(_networkBuffer, _networkPacket)
-	{
-		var isPacketCreated = false;
-		try
-		{
-			if (buffer_exists(_networkBuffer))
-			{
-				if (!is_undefined(_networkPacket))
-				{
-					var messageType = _networkPacket.header.message_type;
-					var clientTime = _networkPacket.payload;
-					buffer_seek(_networkBuffer, buffer_seek_start, 0);
-					buffer_write(_networkBuffer, buffer_u8, messageType);
-					buffer_write(_networkBuffer, buffer_u32, clientTime);
-					isPacketCreated = true;
-				}
-			}
-		} catch (error)
-		{
-			show_debug_message(error);
-			show_message(error);
-		}
-		return isPacketCreated;
-	}
-	
-	static WritePacketHeader = function(_networkBuffer, _networkPacketHeader)
+	static WritePacketHeader = function(_networkBuffer, _networkPacket)
 	{
 		var isHeaderWritten = false;
 		try
 		{
-			if (!is_undefined(_networkPacketHeader))
+			if (!is_undefined(_networkPacket.header))
 			{
-				var messageType = _networkPacketHeader.message_type;
-				var clientId = _networkPacketHeader.client_id ?? UNDEFINED_UUID;
-				var sequenceNumber = _networkPacketHeader.sequence_number;
-				var ackCount = _networkPacketHeader.ack_count;
-				var ackRange = _networkPacketHeader.ack_range;
 				buffer_seek(_networkBuffer, buffer_seek_start, 0);
+				
+				var messageType = _networkPacket.header.message_type;
 				buffer_write(_networkBuffer, buffer_u8, messageType);
-				buffer_write(_networkBuffer, buffer_text, clientId);
-				buffer_write(_networkBuffer, buffer_u8, sequenceNumber);
-				buffer_write(_networkBuffer, buffer_u8, ackCount);
-				for (var i = 0; i < ackCount; i++)
+				
+				if (!_networkPacket.delivery_policy.minimal_header)
 				{
-					var acknowledgmentId = ackRange[| i] ?? 0;
-					buffer_write(_networkBuffer, buffer_u8, acknowledgmentId);
+					var clientId = _networkPacket.header.client_id ?? UNDEFINED_UUID;
+					var sequenceNumber = _networkPacket.header.sequence_number;
+					var ackCount = _networkPacket.header.ack_count;
+					var ackRange = _networkPacket.header.ack_range;
+					
+					buffer_write(_networkBuffer, buffer_text, clientId);
+					buffer_write(_networkBuffer, buffer_u8, sequenceNumber);
+					buffer_write(_networkBuffer, buffer_u8, ackCount);
+					for (var i = 0; i < ackCount; i++)
+					{
+						var acknowledgmentId = ackRange[| i] ?? 0;
+						buffer_write(_networkBuffer, buffer_u8, acknowledgmentId);
+					}
 				}
 				isHeaderWritten = true;
 			}
@@ -90,15 +94,21 @@ function NetworkPacketBuilder() constructor
 		var isPayloadWritten = false;
 		try
 		{
+			buffer_seek(_networkBuffer, buffer_seek_relative, 0);
 			if (!is_undefined(_networkPacketPayload))
 			{
-				buffer_seek(_networkBuffer, buffer_seek_relative, 0);
 				switch (_networkMessageType)
 				{
 					case MESSAGE_TYPE.CONNECT_TO_HOST:
 					{
 						var playerTag = _networkPacketPayload;
 						buffer_write(_networkBuffer, buffer_text, playerTag);
+						isPayloadWritten = true;
+					} break;
+					case MESSAGE_TYPE.PING:
+					{
+						var clientTime = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u32, clientTime);
 						isPayloadWritten = true;
 					} break;
 					case MESSAGE_TYPE.PLAYER_DATA_POSITION:
