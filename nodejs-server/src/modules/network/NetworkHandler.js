@@ -252,25 +252,23 @@ export default class NetworkHandler {
         // Handle pinging
         if (messageType == MESSAGE_TYPE.PING) {
           const client = this.clientHandler.getClientBySocket(
-            rinfo.address,
-            rinfo.port
+            rinfo.port,
+            rinfo.address
           );
           if (client !== undefined) {
+            const clientTime = networkPacket.payload;
             if (
               this.networkConnectionSampler.handlePingMessage(
-                networkPacket.payload,
+                clientTime,
                 client
               )
             ) {
               // Respond with ping packet
-              const pingNetworkBuffer =
-                this.networkPacketBuilder.createPingNetworkBuffer(
-                  networkPacket
-                );
-              isMessageHandled = this.sendNetworkPacket(
-                pingNetworkBuffer,
+              isMessageHandled = this.prepareAndSendNetworkPacket(
+                networkPacket,
+                rinfo.port,
                 rinfo.address,
-                rinfo.port
+                client
               );
             } else {
               isMessageHandled = this.onInvalidRequest(
@@ -533,8 +531,6 @@ export default class NetworkHandler {
       undefined,
       PACKET_PRIORITY.DEFAULT
     );
-    // Patch delivery policy
-    networkPacket.deliveryPolicy.toInFlightTrack = false;
 
     this.queueNetworkPacket(new NetworkQueueEntry(networkPacket, [client]));
     return isResponseQueued;
@@ -646,10 +642,6 @@ export default class NetworkHandler {
       undefined,
       PACKET_PRIORITY.CRITICAL
     );
-    // Patch delivery policy
-    networkPacket.deliveryPolicy.patchSequenceNumber = false;
-    networkPacket.deliveryPolicy.patchAckRange = false;
-    networkPacket.deliveryPolicy.toInFlightTrack = false;
 
     this.queueNetworkPacket(new NetworkQueueEntry(networkPacket, [client]));
     return isDisconnecting;
@@ -717,12 +709,10 @@ export default class NetworkHandler {
     );
 
     // Respond with invalid request details
-    const networkBuffer =
-      this.networkPacketBuilder.createNetworkBuffer(networkPacket);
-    isResponseSent = this.sendNetworkPacket(
-      networkBuffer,
-      rinfo.address,
-      rinfo.port
+    isResponseSent = this.prepareAndSendNetworkPacket(
+      networkPacket,
+      rinfo.port,
+      rinfo.address
     );
     return isResponseSent;
   }
