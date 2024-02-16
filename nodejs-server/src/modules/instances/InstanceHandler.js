@@ -39,7 +39,7 @@ export default class InstanceHandler {
   }
 
   getDefaultCampStorageContainer() {
-    let campStorageContainer;
+    let campStorageContainer = undefined;
     const campInstance = this.getInstance(this.campId);
     if (campInstance !== undefined) {
       campStorageContainer = campInstance.containerHandler.getContainerById(
