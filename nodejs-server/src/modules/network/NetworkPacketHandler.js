@@ -625,8 +625,18 @@ export default class NetworkPacketHandler {
                       instance.containerHandler.removeActiveInventoryStream(
                         containerId
                       );
-                      // Rollback interrupted inventory stream by deleting the container
-                      instance.containerHandler.removeContainer(containerId);
+
+                      const defaultCampStorageContainer =
+                        this.instanceHandler.getDefaultCampStorageContainer();
+                      const campStorageContainerId =
+                        defaultCampStorageContainer !== undefined
+                          ? defaultCampStorageContainer.containerId
+                          : undefined;
+                      // Check that container is not a default camp storage
+                      if (containerId !== campStorageContainerId) {
+                        // Rollback interrupted inventory stream by deleting the container
+                        instance.containerHandler.removeContainer(containerId);
+                      }
                     }
 
                     isPacketHandled =
