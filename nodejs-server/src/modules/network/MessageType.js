@@ -55,4 +55,6 @@ export default {
   INVALID_REQUEST: 44,
   SERVER_ERROR: 45,
   CLIENT_ERROR: 46,
+
+  LENGTH: 47,
 };
