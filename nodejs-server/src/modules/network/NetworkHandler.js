@@ -291,88 +291,106 @@ export default class NetworkHandler {
           switch (messageType) {
             case MESSAGE_TYPE.CONNECT_TO_HOST:
               {
-                const playerTag = networkPacket.payload;
-                if (playerTag !== undefined) {
-                  if (playerTag.length > 2) {
-                    if (clientId === UNDEFINED_UUID) {
-                      // Generate new Uuid and save client
-                      const newClientId = this.clientHandler.addClient(
-                        rinfo,
-                        playerTag
-                      );
-                      ConsoleHandler.Log(
-                        `Player '${playerTag}' connected to the server`
-                      );
-                      if (newClientId !== undefined) {
-                        // Add network trackers
-                        this.networkPacketTracker.addInFlightPacketTrack(
-                          newClientId
-                        );
-                        this.networkConnectionSampler.addConnectionSample(
-                          newClientId
-                        );
-
-                        // Manually add the first outgoing acknowledgment
-                        const inFlightPacketTrack =
-                          this.networkPacketTracker.getInFlightPacketTrack(
-                            newClientId
-                          );
-                        inFlightPacketTrack.pendingAckRange.push(
-                          sequenceNumber
-                        );
-                        inFlightPacketTrack.expectedSequenceNumber =
-                          sequenceNumber + 1;
-
-                        // Response with connect to host message for client proceed
-                        const client =
-                          this.clientHandler.getClient(newClientId);
-                        const networkPacketHeader = new NetworkPacketHeader(
-                          MESSAGE_TYPE.CONNECT_TO_HOST,
-                          newClientId
-                        );
-                        const networkPacket = new NetworkPacket(
-                          networkPacketHeader,
-                          undefined,
-                          PACKET_PRIORITY.HIGH
-                        );
-                        this.queueNetworkPacket(
-                          new NetworkQueueEntry(networkPacket, [client])
-                        );
-
-                        // Broadcast about connected client
-                        const remotePlayerInfo = new RemotePlayerInfo(
-                          newClientId,
+                // Check if client is already connected
+                if (
+                  this.clientHandler.getClientBySocket(
+                    rinfo.port,
+                    rinfo.address
+                  ) === undefined
+                ) {
+                  const playerTag = networkPacket.payload;
+                  if (playerTag !== undefined) {
+                    // Check minimum player tag length
+                    if (playerTag.length >= 3) {
+                      if (clientId === UNDEFINED_UUID) {
+                        // Generate new Uuid and save client
+                        const newClientId = this.clientHandler.addClient(
+                          rinfo,
                           playerTag
                         );
-                        const clientsToBroadcast =
-                          this.clientHandler.getClientsToBroadcastGlobal(
+                        ConsoleHandler.Log(
+                          `Player '${playerTag}' connected to the server`
+                        );
+                        if (newClientId !== undefined) {
+                          // Add network trackers
+                          this.networkPacketTracker.addInFlightPacketTrack(
                             newClientId
                           );
-                        const broadcastNetworkPacketHeader =
-                          new NetworkPacketHeader(
-                            MESSAGE_TYPE.REMOTE_CONNECTED_TO_HOST,
+                          this.networkConnectionSampler.addConnectionSample(
                             newClientId
                           );
-                        const broadcastNetworkPacket = new NetworkPacket(
-                          broadcastNetworkPacketHeader,
-                          remotePlayerInfo,
-                          PACKET_PRIORITY.DEFAULT
-                        );
-                        this.broadcast(
-                          broadcastNetworkPacket,
-                          clientsToBroadcast
-                        );
 
-                        isMessageHandled = true;
+                          // Manually add the first outgoing acknowledgment
+                          const inFlightPacketTrack =
+                            this.networkPacketTracker.getInFlightPacketTrack(
+                              newClientId
+                            );
+                          inFlightPacketTrack.pendingAckRange.push(
+                            sequenceNumber
+                          );
+                          inFlightPacketTrack.expectedSequenceNumber =
+                            sequenceNumber + 1;
+
+                          // Response with connect to host message for client proceed
+                          const client =
+                            this.clientHandler.getClient(newClientId);
+                          const networkPacketHeader = new NetworkPacketHeader(
+                            MESSAGE_TYPE.CONNECT_TO_HOST,
+                            newClientId
+                          );
+                          const networkPacket = new NetworkPacket(
+                            networkPacketHeader,
+                            undefined,
+                            PACKET_PRIORITY.HIGH
+                          );
+                          this.queueNetworkPacket(
+                            new NetworkQueueEntry(networkPacket, [client])
+                          );
+
+                          // Broadcast about connected client
+                          const remotePlayerInfo = new RemotePlayerInfo(
+                            newClientId,
+                            playerTag
+                          );
+                          const clientsToBroadcast =
+                            this.clientHandler.getClientsToBroadcastGlobal(
+                              newClientId
+                            );
+                          const broadcastNetworkPacketHeader =
+                            new NetworkPacketHeader(
+                              MESSAGE_TYPE.REMOTE_CONNECTED_TO_HOST,
+                              newClientId
+                            );
+                          const broadcastNetworkPacket = new NetworkPacket(
+                            broadcastNetworkPacketHeader,
+                            remotePlayerInfo,
+                            PACKET_PRIORITY.DEFAULT
+                          );
+                          this.broadcast(
+                            broadcastNetworkPacket,
+                            clientsToBroadcast
+                          );
+
+                          isMessageHandled = true;
+                        } else {
+                          ConsoleHandler.Log("Failed to connect client");
+                        }
                       } else {
-                        ConsoleHandler.Log("Failed to connect client");
+                        ConsoleHandler.Log(
+                          `Client with UUID ${clientId} requested to join game`
+                        );
                       }
-                    } else {
-                      ConsoleHandler.Log(
-                        `Client with UUID ${clientId} requested to join game`
-                      );
                     }
                   }
+                } else {
+                  isMessageHandled = this.onInvalidRequest(
+                    new InvalidRequestInfo(
+                      INVALID_REQUEST_ACTION.DISCONNECT,
+                      messageType,
+                      "Failed to connect"
+                    ),
+                    rinfo
+                  );
                 }
               }
               break;
