@@ -74,24 +74,10 @@ function NetworkConnectionSampler() constructor
 			AckTimeoutFuncPinging
 		);
 		
-		var networkPacketBuilder = global.NetworkHandlerRef.network_packet_builder;
-		if (networkPacketBuilder.CreatePingPacket(global.NetworkHandlerRef.pre_alloc_network_buffer, networkPacket))
+		// PREPARE AND SEND PING NETWORK PACKET
+		if (!global.NetworkHandlerRef.PrepareAndSendNetworkPacket(networkPacket))
 		{
-			var sentNetworkPacketBytes = global.NetworkHandlerRef.SendPacketOverUDP();
-			if (sentNetworkPacketBytes > 0)
-			{
-				var consoleLog = string(
-					"Network packet ({0}) {1}kb sent >> Packet send interval 1000ms (Ping)",
-					networkPacket.header.message_type,
-					BytesToKilobits(sentNetworkPacketBytes)
-				);
-				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.INFO, consoleLog);
-				
-				// UPDATE DATA OUT RATE
-				global.NetworkConnectionSamplerRef.data_out_rate += sentNetworkPacketBytes;
-			} else {
-				show_debug_message("Failed to send PING packet");
-			}
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Failed to send PING network packet");
 		}
 		
 		// START TIMEOUT TIMER

@@ -12,36 +12,42 @@ export default class InFlightPacketTrack {
     this.droppedPacketCount = 0;
   }
 
-  patchSequenceNumber(networkPacket, inFlightPacketTrack) {
-    let isSequenceNumberPatched = true;
-    if (++this.outgoingSequenceNumber > this.maxSequenceNumber) {
-      this.outgoingSequenceNumber = 0;
+  patchNetworkPacketAckRange(networkPacket) {
+    let isAckRangePatched = false;
+    if (networkPacket.deliveryPolicy.patchAckRange) {
+      if (this.pendingAckRange.length > 0) {
+        // Patch ACK range values
+        networkPacket.header.ackCount = this.pendingAckRange.length;
+        networkPacket.header.ackRange = this.pendingAckRange.slice();
+        isAckRangePatched = true;
+      } else {
+        if (networkPacket.header.message_type === MESSAGE_TYPE.ACKNOWLEDGMENT) {
+          ConsoleHandler.Log("Unnecessary MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
+        } else {
+          isAckRangePatched = true;
+        }
+      }
+      // Pending ACK range is cleared after packet is successfully sent
+    } else {
+      // Patch ACK range set to false in delivery policy
+      isAckRangePatched = true;
     }
-    networkPacket.header.sequenceNumber = this.outgoingSequenceNumber;
-    if (inFlightPacketTrack) {
-    }
-    return isSequenceNumberPatched;
+    return isAckRangePatched;
   }
 
-  patchAckRange(networkPacket) {
-    let isAcknowledgmentIdPatched = true;
-    if (this.pendingAckRange.length > 0) {
-      // Patch ACK range values
-      networkPacket.header.ackCount = this.pendingAckRange.length;
-      networkPacket.header.ackRange = this.pendingAckRange.slice();
-      // Clear pending ack range
-      this.pendingAckRange = [];
-    } else {
-      if (networkPacket.header.message_type === MESSAGE_TYPE.ACKNOWLEDGMENT) {
-        ConsoleHandler.Log("Unnecessary MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
-        // Reverse outgoing sequence number
-        if (--this.outgoingSequenceNumber < 0) {
-          this.outgoingSequenceNumber = this.maxSequenceNumber;
-        }
-        isAcknowledgmentIdPatched = false;
+  patchNetworkPacketSequenceNumber(networkPacket) {
+    let isSequenceNumberPatched = false;
+    if (networkPacket.deliveryPolicy.patchSequenceNumber) {
+      if (++this.outgoingSequenceNumber > this.maxSequenceNumber) {
+        this.outgoingSequenceNumber = 0;
       }
+      networkPacket.header.sequenceNumber = this.outgoingSequenceNumber;
+      isSequenceNumberPatched = true;
+    } else {
+      // Patch sequence number set to false in delivery policy
+      isSequenceNumberPatched = true;
     }
-    return isAcknowledgmentIdPatched;
+    return isSequenceNumberPatched;
   }
 
   addNetworkPacket(networkPacket) {

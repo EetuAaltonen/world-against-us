@@ -81,39 +81,75 @@ function NetworkPacketTracker() constructor
 	
 	static PatchNetworkPacketAckRange = function(_networkPacket)
 	{
-		var isAckRangePatched = true;
-		if (ds_list_size(pending_ack_range) > 0)
+		var isAckRangePatched = false;
+		if (_networkPacket.delivery_policy.patch_ack_range)
 		{
-			// CLONE ACK RANGE VALUES
-			_networkPacket.header.ack_count = ds_list_size(pending_ack_range);
-			ds_list_copy(_networkPacket.header.ack_range, pending_ack_range);
-			
-			// CLEAR PENDING ACK RANGE
-			ClearDSListAndDeleteValues(pending_ack_range);
-		} else {
-			if (_networkPacket.header.message_type == MESSAGE_TYPE.ACKNOWLEDGMENT)
+			if (ds_list_size(pending_ack_range) > 0)
 			{
-				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Unnecessary MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
-				isAckRangePatched = false;
+				// CLONE ACK RANGE VALUES
+				_networkPacket.header.ack_count = ds_list_size(pending_ack_range);
+				ds_list_copy(_networkPacket.header.ack_range, pending_ack_range);
+				isAckRangePatched = true;
+			} else {
+				if (_networkPacket.header.message_type == MESSAGE_TYPE.ACKNOWLEDGMENT)
+				{
+					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Unnecessary MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
+				} else {
+					isAckRangePatched = true;	
+				}
 			}
+			// PENDING ACK RANGE IS CLEARED AFTER PACKET IS SUCCESSFULLY SENT
+		} else {
+			// PATCH ACK RANGE SET TO FALSE IN DELIVERY POLICY
+			isAckRangePatched = true;
 		}
 		return isAckRangePatched;
 	}
 	
 	static PatchNetworkPacketSequenceNumber = function(_networkPacket)
 	{
-		var isSequenceNumberPatched = true;
-		if (++outgoing_sequence_number > max_sequence_number) { outgoing_sequence_number = 0; }
-		_networkPacket.header.sequence_number = outgoing_sequence_number;
-		// DON'T TRACK SEPARATE ACKNOWLEDGMENT RESPONSES
-		// TODO: Implement delivery policy for network packets
-		if (_networkPacket.header.message_type != MESSAGE_TYPE.ACKNOWLEDGMENT &&
-			_networkPacket.header.message_type != MESSAGE_TYPE.DISCONNECT_FROM_HOST)
+		var isSequenceNumberPatched = false;
+		if (_networkPacket.delivery_policy.patch_sequence_number)
+		{
+			if (++outgoing_sequence_number > max_sequence_number) { outgoing_sequence_number = 0; }
+			_networkPacket.header.sequence_number = outgoing_sequence_number;
+			isSequenceNumberPatched = true;
+		} else {
+			// PATCH SEQUENCE NUMBER SET TO FALSE IN DELIVERY POLICY
+			isSequenceNumberPatched = true;	
+		}
+		return isSequenceNumberPatched;
+	}
+	
+	static PatchInFlightPacketTrack = function(_networkPacket)
+	{
+		var isPacketTrackPatched = false;
+		if (_networkPacket.delivery_policy.in_flight_track)
 		{
 			_networkPacket.timeout_timer.StartTimer();
 			ds_list_add(in_flight_packets, _networkPacket);
+			isPacketTrackPatched = true;
+		} else {
+			// IN-FLIGHT PACKET TRACK SET TO FALSE IN DELIVERY POLICY
+			isPacketTrackPatched = true;
 		}
-		return isSequenceNumberPatched;
+		return isPacketTrackPatched;
+	}
+	
+	static OnNetworkPacketSend = function(_networkPacket)
+	{
+		// PATCH IN-FLIGHT PACKET TRACK
+		if (!PatchInFlightPacketTrack(_networkPacket))
+		{
+			var consoleLog = string("Unable to add network packet with message type {0} to in-flight packet tracking", _networkPacket.header.message_type);
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);	
+		}
+		
+		// CLEAR PENDING ACK RANGE
+		if (_networkPacket.delivery_policy.patch_ack_range)
+		{
+			ClearDSListAndDeleteValues(pending_ack_range);
+		}
 	}
 	
 	/// @function			ProcessAckRange(_ackCount, _ackRange)
