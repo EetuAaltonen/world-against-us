@@ -67,18 +67,8 @@ function NetworkHandler() constructor
 						var networkPacket = ds_queue_dequeue(network_packet_queue);
 						if (!is_undefined(networkPacket))
 						{
-							var sentNetworkPacketBytes = PrepareAndSendNetworkPacket(networkPacket);
-							if (sentNetworkPacketBytes > 0)
+							if (!PrepareAndSendNetworkPacket(networkPacket))
 							{
-								var consoleLog = string(
-									"Network packet ({0}) {1}kb sent >> Packet send interval {2}ms",
-									networkPacket.header.message_type,
-									BytesToKilobits(sentNetworkPacketBytes),
-									packetSendInterval
-								);
-								global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.INFO, consoleLog);
-								last_packet_time = current_time;
-							} else {
 								// IGNORE DROPPED UNECESSARY ACKNOWLEDGMENTS
 								if (networkPacket.header.message_type != MESSAGE_TYPE.ACKNOWLEDGMENT)
 								{
@@ -86,8 +76,6 @@ function NetworkHandler() constructor
 									global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
 								}
 							}
-							// UPDATE DATA OUT RATE
-							global.NetworkConnectionSamplerRef.data_out_rate += sentNetworkPacketBytes;
 						}
 					}
 				}
@@ -97,30 +85,48 @@ function NetworkHandler() constructor
 	
 	static PrepareAndSendNetworkPacket = function(_networkPacket)
 	{
-		var sentNetworkPacketBytes = 0;
-		if (network_packet_tracker.PatchNetworkPacketAckRange(_networkPacket))
+		var isNetworkPacketSent = false;
+		// PATCH ACK RANGE
+		// Patch before sequence number to avoid conflicts with dropped unnecessary ACK packets
+		if (!network_packet_tracker.PatchNetworkPacketAckRange(_networkPacket)) return isNetworkPacketSent;
+		// PATCH SEQUENCE NUMBER
+		if (!network_packet_tracker.PatchNetworkPacketSequenceNumber(_networkPacket)) return isNetworkPacketSent;
+		// CREATE NETWORK BUFFER
+		if (!network_packet_builder.CreatePacket(pre_alloc_network_buffer, _networkPacket)) return isNetworkPacketSent;
+		
+		// SEND NETWORK PACKET
+		var sentNetworkPacketBytes = SendNetworkPacketUDP();
+		if (sentNetworkPacketBytes > 0)
 		{
-			if (network_packet_tracker.PatchNetworkPacketSequenceNumber(_networkPacket))
-			{
-				if (network_packet_builder.CreatePacket(pre_alloc_network_buffer, _networkPacket))
-				{
-					sentNetworkPacketBytes = SendPacketOverUDP();
-				}
-			}
+			// CONSOLE LOG
+			var packetSendInterval = current_time - last_packet_time;
+			var consoleLog = string(
+				"Network packet ({0}) {1}kb sent >> Packet send interval {2}ms",
+				_networkPacket.header.message_type,
+				BytesToKilobits(sentNetworkPacketBytes),
+				packetSendInterval
+			);
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.INFO, consoleLog);
+			
+			// UPDATE LAST PACKET TIME
+			last_packet_time = current_time;
+			
+			// UPDATE PACKET TRACKER
+			network_packet_tracker.OnNetworkPacketSend(_networkPacket);
+			
+			// UPDATE DATA OUT RATE
+			global.NetworkConnectionSamplerRef.data_out_rate += sentNetworkPacketBytes;
+			isNetworkPacketSent = true;
 		}
 		return sentNetworkPacketBytes;
 	}
 	
-	static SendPacketOverUDP = function()
+	static SendNetworkPacketUDP = function()
 	{
 		var networkPacketSize = 0;
 		if (!is_undefined(socket))
 		{
-			// COMPRESS NETWORK BUFFER
-			var compressNetworkBuffer = buffer_compress(pre_alloc_network_buffer, 0, buffer_tell(pre_alloc_network_buffer));
-			networkPacketSize = network_send_udp_raw(socket, host_address, host_port, compressNetworkBuffer, buffer_get_size(compressNetworkBuffer));
-			// DELETE COMPRESS NETWORK BUFFER
-			buffer_delete(compressNetworkBuffer);
+			networkPacketSize = network_send_udp_raw(socket, host_address, host_port, pre_alloc_network_buffer, buffer_tell(pre_alloc_network_buffer));
 		}
 		return networkPacketSize;
 	}
@@ -231,12 +237,11 @@ function NetworkHandler() constructor
 			if (_isRequestImmediate)
 			{
 				// PREPARE AND SEND PACKET
-				var sentNetworkPacketBytes = PrepareAndSendNetworkPacket(networkPacket);
-				if (sentNetworkPacketBytes > 0)
+				if (PrepareAndSendNetworkPacket(networkPacket))
 				{
-					network_status = NETWORK_STATUS.OFFLINE;
+					network_status = NETWORK_STATUS.DISCONNECTING;
 				} else {
-					show_debug_message("Failed to send immediate disconnect");
+					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Failed to send immediate disconnect network packet");
 				}
 				// DELETE SOCKET
 				if (!DeleteSocket())
