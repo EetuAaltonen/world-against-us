@@ -24,11 +24,11 @@ export default class Client {
     } else {
       // Check packet queue
       if (this.packetQueue.length > 0) {
-        // Check send rate timer
+        // Check packet send rate timer
         if (this.packetSendRateTimer >= this.packetSendRate) {
-          // Reset send rate timer
-          this.packetSendRateTimer = 0;
+          // Fetch network packet
           networkPacket = this.packetQueue.shift();
+          // Send rate timer is restarted after packet is successfully sent
         }
       }
     }
