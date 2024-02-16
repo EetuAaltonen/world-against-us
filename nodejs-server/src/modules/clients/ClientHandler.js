@@ -25,10 +25,10 @@ export default class ClientHandler {
     return this.clients[clientId];
   }
 
-  getClientBySocket(address, port) {
+  getClientBySocket(port, address) {
     const allClients = this.getAllClients();
     return allClients.find(
-      (client) => client.address === address && client.port === port
+      (client) => client.port === port && client.address === address
     );
   }
 
