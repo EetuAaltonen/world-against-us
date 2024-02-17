@@ -520,7 +520,7 @@ export default class NetworkPacketHandler {
             }
           }
           break;
-        case MESSAGE_TYPE.CONTAINER_INVENTORY_ADD_ITEM:
+        case MESSAGE_TYPE.CONTAINER_INVENTORY_DEPOSIT_ITEM:
           {
             // TODO: Check that inventory is not streaming actively
             // TODO: Move all parse functions under the packet parser
