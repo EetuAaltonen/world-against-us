@@ -540,6 +540,27 @@ export default class NetworkPacketHandler {
             }
           }
           break;
+        case MESSAGE_TYPE.CONTAINER_INVENTORY_STACK_ITEM:
+          {
+            // TODO: Check that inventory is not streaming actively
+            // TODO: Move all parse functions under the packet parser
+            // And rename to InventoryActionInfo
+            const containerInventoryActionInfo =
+              ParseJSONStructToContainerAction(networkPacket.payload);
+            if (containerInventoryActionInfo !== undefined) {
+              const item = containerInventoryActionInfo.item;
+              const container = instance.containerHandler.getContainerById(
+                containerInventoryActionInfo.containerId
+              );
+              if (container !== undefined) {
+                if (container.inventory.stackItem(item)) {
+                  isPacketHandled =
+                    this.networkHandler.queueAcknowledgmentResponse(client);
+                }
+              }
+            }
+          }
+          break;
         case MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM:
           {
             const containerInventoryActionInfo = networkPacket.payload;
