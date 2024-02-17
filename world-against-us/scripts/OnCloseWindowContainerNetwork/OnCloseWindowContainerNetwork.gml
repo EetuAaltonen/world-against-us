@@ -8,11 +8,12 @@ function OnCloseWindowContainerNetwork(_containerId)
 	// TODO: Block window closing, to prevent container inventory action interrupts while exhanging network acknowledgments
 	// How about on disconnect?
 	// CONTAINER INVENTORY ACTIONS
-	global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_ADD_ITEM);
+	global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_DEPOSIT_ITEM);
 	global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_STACK_ITEM);
 	global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_IDENTIFY_ITEM);
 	global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM);
-	global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM);
+	global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_WITHDRAW_ITEM);
+	global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.CONTAINER_INVENTORY_DELETE_ITEM);
 	
 	// RESET ACTIVE INVENTORY STREAM
 	global.NetworkRegionObjectHandlerRef.active_inventory_stream = undefined;
