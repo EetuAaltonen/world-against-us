@@ -24,7 +24,7 @@ function DragItem(_item_data) constructor
 					if (!is_undefined(restoredItem))
 					{
 						var containerInventoryActionInfo = new ContainerInventoryActionInfo(item_data.sourceInventory.inventory_id, undefined, undefined, undefined, undefined, restoredItem);
-						var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_ADD_ITEM);
+						var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_DEPOSIT_ITEM);
 						var networkPacket = new NetworkPacket(
 							networkPacketHeader,
 							containerInventoryActionInfo.ToJSONStruct(),

@@ -235,7 +235,30 @@ export default class NetworkPacketParser {
               );
             }
             break;
-          case MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM:
+          case MESSAGE_TYPE.CONTAINER_INVENTORY_WITHDRAW_ITEM:
+            {
+              const parsedSourceGridIndexCol = msg.readUInt8(offset);
+              offset += BITWISE.BIT8;
+              const parsedSourceGridIndexRow = msg.readUInt8(offset);
+              offset += BITWISE.BIT8;
+              const parsedContainerId = msg.toString("utf8", offset);
+
+              const parsedSourceGridIndex = new GridIndex(
+                parsedSourceGridIndexCol,
+                parsedSourceGridIndexRow
+              );
+
+              payload = new ContainerInventoryActionInfo(
+                parsedContainerId,
+                parsedSourceGridIndex,
+                undefined,
+                undefined,
+                undefined,
+                undefined
+              );
+            }
+            break;
+          case MESSAGE_TYPE.CONTAINER_INVENTORY_DELETE_ITEM:
             {
               const parsedSourceGridIndexCol = msg.readUInt8(offset);
               offset += BITWISE.BIT8;
