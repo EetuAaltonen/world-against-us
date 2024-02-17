@@ -184,7 +184,16 @@ function NetworkPacketBuilder() constructor
 						buffer_write(_networkBuffer, buffer_text, containerInventoryActionInfo.container_id);
 						isPayloadWritten = true;
 					} break;
-					case MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM:
+					case MESSAGE_TYPE.CONTAINER_INVENTORY_WITHDRAW_ITEM:
+					{
+						// TODO: Add region ID to validate the request on server
+						var containerInventoryActionInfo = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u8, containerInventoryActionInfo.source_grid_index.col);
+						buffer_write(_networkBuffer, buffer_u8, containerInventoryActionInfo.source_grid_index.row);
+						buffer_write(_networkBuffer, buffer_text, containerInventoryActionInfo.container_id);
+						isPayloadWritten = true;
+					} break;
+					case MESSAGE_TYPE.CONTAINER_INVENTORY_DELETE_ITEM:
 					{
 						// TODO: Add region ID to validate the request on server
 						var containerInventoryActionInfo = _networkPacketPayload;

@@ -12,7 +12,7 @@ function OnPressedGUIDragItemStart(_item)
 		if (IsInventoryContainer(_item.sourceInventory.type))
 		{
 			var containerInventoryActionInfo = new ContainerInventoryActionInfo(_item.sourceInventory.inventory_id, _item.grid_index, undefined, undefined, undefined, undefined);
-			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM);
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_WITHDRAW_ITEM);
 			var networkPacket = new NetworkPacket(
 				networkPacketHeader,
 				containerInventoryActionInfo,

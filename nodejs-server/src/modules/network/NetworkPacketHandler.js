@@ -2,7 +2,6 @@ import MESSAGE_TYPE from "./MessageType.js";
 import PACKET_PRIORITY from "./PacketPriority.js";
 import INVALID_REQUEST_ACTION from "../invalid_request/InvalidRequestAction.js";
 
-import ConsoleHandler from "../console/ConsoleHandler.js";
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
 import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
 import NetworkPacket from "../network_packets/NetworkPacket.js";
@@ -520,7 +519,7 @@ export default class NetworkPacketHandler {
             }
           }
           break;
-        case MESSAGE_TYPE.CONTAINER_INVENTORY_ADD_ITEM:
+        case MESSAGE_TYPE.CONTAINER_INVENTORY_DEPOSIT_ITEM:
           {
             // TODO: Check that inventory is not streaming actively
             // TODO: Move all parse functions under the packet parser
@@ -582,7 +581,27 @@ export default class NetworkPacketHandler {
             }
           }
           break;
-        case MESSAGE_TYPE.CONTAINER_INVENTORY_REMOVE_ITEM:
+        case MESSAGE_TYPE.CONTAINER_INVENTORY_WITHDRAW_ITEM:
+          {
+            const containerInventoryActionInfo = networkPacket.payload;
+            if (containerInventoryActionInfo !== undefined) {
+              const container = instance.containerHandler.getContainerById(
+                containerInventoryActionInfo.containerId
+              );
+              if (container !== undefined) {
+                if (
+                  container.inventory.removeItemByGridIndex(
+                    containerInventoryActionInfo.sourceGridIndex
+                  )
+                ) {
+                  isPacketHandled =
+                    this.networkHandler.queueAcknowledgmentResponse(client);
+                }
+              }
+            }
+          }
+          break;
+        case MESSAGE_TYPE.CONTAINER_INVENTORY_DELETE_ITEM:
           {
             const containerInventoryActionInfo = networkPacket.payload;
             if (containerInventoryActionInfo !== undefined) {

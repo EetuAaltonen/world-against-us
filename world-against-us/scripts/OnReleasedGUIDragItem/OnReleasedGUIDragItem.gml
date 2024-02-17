@@ -19,7 +19,7 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 						if (!is_undefined(droppedItem))
 						{
 							var containerInventoryActionInfo = new ContainerInventoryActionInfo(_inventory.inventory_id, undefined, undefined, undefined, undefined, droppedItem);
-							var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_ADD_ITEM);
+							var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_DEPOSIT_ITEM);
 							var networkPacket = new NetworkPacket(
 								networkPacketHeader,
 								containerInventoryActionInfo.ToJSONStruct(),
