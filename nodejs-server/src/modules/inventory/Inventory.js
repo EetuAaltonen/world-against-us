@@ -54,6 +54,20 @@ export default class Inventory {
     return isItemsAdded;
   }
 
+  stackItem(item) {
+    let isItemStacked = false;
+    if (item !== undefined) {
+      const existentItem = this.getItemByGridIndex(item.gridIndex);
+      if (existentItem !== undefined) {
+        if (item.quantity > 0) {
+          existentItem.quantity += item.quantity;
+          isItemStacked = true;
+        }
+      }
+    }
+    return isItemStacked;
+  }
+
   getItemByGridIndex(gridIndex) {
     let item;
     const gridIndexKey = this.formatGridIndex(gridIndex);

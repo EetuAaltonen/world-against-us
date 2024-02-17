@@ -14,10 +14,7 @@ function CombineItems(_sourceItem, _targetItem, _only_compatibility = false)
 			}
 		} else {
 			_targetItem.Stack(_sourceItem);
-			if (_sourceItem.quantity <= 0)
-			{
-				isCombined = true;
-			}
+			isCombined = (_sourceItem.quantity <= 0);
 		}
 	// RELOAD WEAPON
 	} else {
