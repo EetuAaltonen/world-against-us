@@ -8,15 +8,15 @@ const NULL_TERMINATOR = "\0";
 
 export default class NetworkPacketBuilder {
   constructor() {
-    this.headerBufferMessageType = Buffer.alloc(
+    this.headerBufferMessageType = Buffer.allocUnsafe(
       BITWISE.BIT8 // Message Type
-    );
-    this.headerBufferBase = Buffer.alloc(
+    ).fill(0);
+    this.headerBufferBase = Buffer.allocUnsafe(
       BITWISE.ID_LENGTH + // UUID
         BITWISE.BIT8 + // Null Terminator
         BITWISE.BIT8 + // Sequence Number
         BITWISE.BIT8 // Ack Count
-    );
+    ).fill(0);
     this.headerBufferAckRange = undefined;
     this.payloadBuffer = undefined;
   }
@@ -44,7 +44,7 @@ export default class NetworkPacketBuilder {
                 ]);
               }
             } else {
-              // Use only payload
+              // Write only payload
               networkBuffer = this.payloadBuffer;
             }
 
@@ -103,7 +103,7 @@ export default class NetworkPacketBuilder {
           // Allocate ack range buffer
           this.headerBufferAckRange = Buffer.allocUnsafe(
             BITWISE.BIT8 * ackCount
-          );
+          ).fill(0);
           let ackOffset = 0;
           for (let i = 0; i < ackCount; i++) {
             const acknowledgmentId = ackRange[i] ?? 0;
@@ -130,7 +130,7 @@ export default class NetworkPacketBuilder {
         switch (messageType) {
           case MESSAGE_TYPE.PING:
             {
-              const bufferPing = Buffer.allocUnsafe(BITWISE.BIT32);
+              const bufferPing = Buffer.allocUnsafe(BITWISE.BIT32).fill(0);
               bufferPing.writeUInt32LE(payload);
               this.payloadBuffer = bufferPing;
               isPayloadWritten = true;
@@ -170,7 +170,7 @@ export default class NetworkPacketBuilder {
             {
               const bufferInvalidRequest = Buffer.allocUnsafe(
                 BITWISE.BIT8 + BITWISE.BIT8
-              );
+              ).fill(0);
               let offset = 0;
               bufferInvalidRequest.writeUInt8(payload.requestAction, offset);
               offset += BITWISE.BIT8;
@@ -191,7 +191,7 @@ export default class NetworkPacketBuilder {
             break;
           case MESSAGE_TYPE.SYNC_WORLD_STATE_WEATHER:
             {
-              const bufferWeather = Buffer.allocUnsafe(BITWISE.BIT8);
+              const bufferWeather = Buffer.allocUnsafe(BITWISE.BIT8).fill(0);
               bufferWeather.writeUInt8(payload);
               this.payloadBuffer = bufferWeather;
               isPayloadWritten = true;
@@ -233,7 +233,7 @@ export default class NetworkPacketBuilder {
 
               const bufferDeviceInputMovement = Buffer.allocUnsafe(
                 BITWISE.BIT8
-              );
+              ).fill(0);
               let offset = 0;
               bufferDeviceInputMovement.writeUInt8(deviceInputCompress, offset);
 
@@ -280,7 +280,7 @@ export default class NetworkPacketBuilder {
             {
               const bufferInstanceIndices = Buffer.allocUnsafe(
                 BITWISE.BIT32 + BITWISE.BIT32
-              );
+              ).fill(0);
               bufferInstanceIndices.writeUInt32LE(payload.sourceInstanceId, 0);
               bufferInstanceIndices.writeUInt32LE(
                 payload.destinationInstanceId,
@@ -299,7 +299,9 @@ export default class NetworkPacketBuilder {
             break;
           case MESSAGE_TYPE.REQUEST_CONTAINER_CONTENT:
             {
-              const bufferContainerInfo = Buffer.allocUnsafe(BITWISE.BIT32);
+              const bufferContainerInfo = Buffer.allocUnsafe(
+                BITWISE.BIT32
+              ).fill(0);
               bufferContainerInfo.writeInt32LE(payload.contentCount, 0);
               const bufferContainerId = Buffer.from(
                 payload.containerId,
@@ -314,7 +316,9 @@ export default class NetworkPacketBuilder {
             break;
           case MESSAGE_TYPE.END_CONTAINER_INVENTORY_STREAM:
             {
-              const bufferInstanceId = Buffer.allocUnsafe(BITWISE.BIT32);
+              const bufferInstanceId = Buffer.allocUnsafe(BITWISE.BIT32).fill(
+                0
+              );
               bufferInstanceId.writeUInt32LE(payload.instanceId, 0);
               const bufferInventoryId = Buffer.from(
                 payload.inventoryId,
@@ -331,7 +335,7 @@ export default class NetworkPacketBuilder {
             {
               const bufferPatrol = Buffer.allocUnsafe(
                 BITWISE.BIT32 + BITWISE.BIT8 + BITWISE.BIT8
-              );
+              ).fill(0);
               bufferPatrol.writeUInt32LE(payload.instanceId, 0);
               bufferPatrol.writeUInt8(payload.patrolId, BITWISE.BIT32);
               bufferPatrol.writeUInt8(
@@ -372,7 +376,7 @@ export default class NetworkPacketBuilder {
       let offset = 0;
       const bufferSnapshotData = Buffer.allocUnsafe(
         BITWISE.BIT32 + BITWISE.BIT8 + BITWISE.BIT8
-      );
+      ).fill(0);
       bufferSnapshotData.writeUInt32LE(payload.instanceId);
       offset += BITWISE.BIT32;
       const localPlayerCount = payload.localPlayerCount;
@@ -392,7 +396,7 @@ export default class NetworkPacketBuilder {
             BITWISE.BIT32 + // X-position
             BITWISE.BIT32) * // X-position
             localPlayerCount // Multiplier
-        );
+        ).fill(0);
         let plrDataOffset = 0;
         for (let i = 0; i < localPlayerCount; i++) {
           const playerData = payload.localPlayers[i];
@@ -425,7 +429,7 @@ export default class NetworkPacketBuilder {
             BITWISE.BIT32 + // X-position
             BITWISE.BIT32) * // X-position
             localPatrolCount // Multiplier
-        );
+        ).fill(0);
         let patrolDataOffset = 0;
         for (let i = 0; i < localPatrolCount; i++) {
           const patrol = payload.localPatrols[i];
