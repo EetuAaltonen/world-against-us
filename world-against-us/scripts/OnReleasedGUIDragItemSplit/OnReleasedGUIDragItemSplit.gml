@@ -14,6 +14,9 @@ function OnReleasedGUIDragItemSplit(_inventory, _mouseHoverIndex)
 				if (!is_undefined(splitItemGridIndex))
 				{
 					dragItemData.quantity -= splitQuantity;
+					
+					// NETWORKING DEPOSIT ITEM
+					NetworkInventoryDepositItem(_inventory, _mouseHoverIndex);
 				}
 			} else {
 				var targetItemGridIndex = _inventory.grid_data[_mouseHoverIndex.row][_mouseHoverIndex.col];
