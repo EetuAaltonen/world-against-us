@@ -26,7 +26,9 @@ function OnReleasedGUIDragItemSplit(_inventory, _mouseHoverIndex)
 					var targetItem = _inventory.GetItemByGridIndex(targetItemGridIndex);
 					if (!is_undefined(targetItem))
 					{
+						// TODO: Simplify combine logic
 						var itemCloneToCombine = dragItemData.Clone(splitQuantity);
+						var sourceQuantity = dragItemData.quantity;
 						if (CombineItems(itemCloneToCombine, targetItem))
 						{
 							isDragItemStackEmpty = true;
@@ -34,6 +36,10 @@ function OnReleasedGUIDragItemSplit(_inventory, _mouseHoverIndex)
 						
 						// CHECK IF DRAG ITEM STACK IS EMPTY
 						dragItemData.quantity -= (isDragItemStackEmpty) ? splitQuantity : (splitQuantity - itemCloneToCombine.quantity);
+						
+						// NETWORKING STACK ITEM
+						NetworkInventoryStackItem(_inventory, sourceQuantity, dragItemData, targetItem);
+						
 						isDragItemStackEmpty = (dragItemData.quantity <= 0);
 					}
 				}
