@@ -595,15 +595,30 @@ function NetworkHandler() constructor
 	
 	static QueueAcknowledgmentResponse = function()
 	{
-		var isResponseQueued = false;
-		var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.ACKNOWLEDGMENT);
-		var networkPacket = new NetworkPacket(
-			networkPacketHeader,
-			undefined,
-			PACKET_PRIORITY.DEFAULT
-		);
-		isResponseQueued = AddPacketToQueue(networkPacket);
-		return isResponseQueued;
+		var isQueueHandled = false;
+		// CHECK FOR PENDING ACKS
+		var ackRangeSize = ds_list_size(network_packet_tracker.pending_ack_range);
+		if (ackRangeSize > 0)
+		{
+			var headNetworkPacket = ds_queue_head(network_packet_queue);
+			if (!is_undefined(headNetworkPacket))
+			{
+				// DO NOT QUEUE ACKS IF HEAD HAS ACK RANGE PATCH SET
+				if (headNetworkPacket.delivery_policy.patch_ack_range) return true;
+			}
+		
+			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.ACKNOWLEDGMENT);
+			var networkPacket = new NetworkPacket(
+				networkPacketHeader,
+				undefined,
+				PACKET_PRIORITY.DEFAULT
+			);
+			isQueueHandled = AddPacketToQueue(networkPacket);
+		} else {
+			// DO NOT QUEUE UNNECESSARY ACKS
+			isQueueHandled = true;	
+		}
+		return isQueueHandled;
 	}
 	
 	static CancelPacketsSendQueueAndTrackingByMessageType = function(_messageType)
