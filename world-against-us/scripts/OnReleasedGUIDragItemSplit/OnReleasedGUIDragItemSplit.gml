@@ -1,7 +1,6 @@
 function OnReleasedGUIDragItemSplit(_inventory, _mouseHoverIndex)
 {
 	var isDragItemStackEmpty = false;
-
 	if (!is_undefined(global.ObjMouse.dragItem))
 	{
 		var dragItemData = global.ObjMouse.dragItem.item_data;
@@ -17,6 +16,8 @@ function OnReleasedGUIDragItemSplit(_inventory, _mouseHoverIndex)
 					
 					// NETWORKING DEPOSIT ITEM
 					NetworkInventoryDepositItem(_inventory, _mouseHoverIndex);
+					
+					isDragItemStackEmpty = (dragItemData.quantity <= 0);
 				}
 			} else {
 				var targetItemGridIndex = _inventory.grid_data[_mouseHoverIndex.row][_mouseHoverIndex.col];
