@@ -539,18 +539,37 @@ export default class NetworkHandler {
   }
 
   queueAcknowledgmentResponse(client) {
-    let isResponseQueued = true;
-    const networkPacketHeader = new NetworkPacketHeader(
-      MESSAGE_TYPE.ACKNOWLEDGMENT,
-      client.uuid
-    );
-    const networkPacket = new NetworkPacket(
-      networkPacketHeader,
-      undefined,
-      PACKET_PRIORITY.DEFAULT
-    );
+    let isResponseQueued = false;
+    const inFlightPacketTrack =
+      this.networkPacketTracker.getInFlightPacketTrack(client.uuid);
+    if (inFlightPacketTrack !== undefined) {
+      // Check for pending ACKs
+      if (inFlightPacketTrack.pendingAckRange.length > 0) {
+        const headNetworkPacket =
+          client.priorityPacketQueue.length > 0
+            ? client.priorityPacketQueue[0]
+            : client.packetQueue[0];
+        if (headNetworkPacket !== undefined) {
+          // Do not queue ACKs if head has ACK range patch set
+          if (headNetworkPacket.deliveryPolicy.patchAckRange) return true;
+        }
 
-    this.queueNetworkPacket(new NetworkQueueEntry(networkPacket, [client]));
+        const networkPacketHeader = new NetworkPacketHeader(
+          MESSAGE_TYPE.ACKNOWLEDGMENT,
+          client.uuid
+        );
+        const networkPacket = new NetworkPacket(
+          networkPacketHeader,
+          undefined,
+          PACKET_PRIORITY.DEFAULT
+        );
+        this.queueNetworkPacket(new NetworkQueueEntry(networkPacket, [client]));
+        isResponseQueued = true;
+      } else {
+        // Do not queue unnecessary ACKs
+        isResponseQueued = true;
+      }
+    }
     return isResponseQueued;
   }
 
