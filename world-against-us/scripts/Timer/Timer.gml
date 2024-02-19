@@ -1,6 +1,6 @@
 function Timer(_setting_time) constructor
 {
-	setting_time = _setting_time;
+	setting_time = _setting_time; // milliseconds
 	running_time = 0;
 	is_timer_running = false;
 	
