@@ -221,7 +221,7 @@ function UseWeapon(_mouseWorldPosition)
 	}
 	
 	kickbackAnimation = primaryWeapon.metadata.kickback;
-	fireDelay = TimerRatePerMinute(primaryWeapon.metadata.fire_rate);
+	fireDelay = (60000 / primaryWeapon.metadata.fire_rate);
 	muzzleFlashTimer = muzzleFlashTime;
 }
 
