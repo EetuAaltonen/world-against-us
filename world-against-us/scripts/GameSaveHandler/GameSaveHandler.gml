@@ -7,7 +7,7 @@ function GameSaveHandler() constructor
 	is_save_loading_first_time = true;
 	
 	show_auto_save_icon = false;
-	auto_save_icon_timer = new Timer(TimerFromSeconds(4));
+	auto_save_icon_timer = new Timer(4000);
 	
 	static Update = function()
 	{

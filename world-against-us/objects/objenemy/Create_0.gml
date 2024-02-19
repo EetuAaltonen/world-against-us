@@ -11,13 +11,11 @@ maxSpeed = 2;
 
 // PATH FINDING
 pathToTarget = path_add();
-pathUpdateInterval = TimerFromSeconds(0.25);
-pathUpdateTimer = new Timer(pathUpdateInterval);
+pathUpdateTimer = new Timer(250);
 pathBlockingRadius = 20;
 
 // TARGET
-targetSearchInterval = TimerFromSeconds(2);
-targetSearchTimer = new Timer(targetSearchInterval);
+targetSearchTimer = new Timer(2000);
 targetSearchTimer.StartTimer();
 
 targetInstance = noone;

@@ -15,15 +15,13 @@ patrolPath = undefined;
 patrolPathPercent = -1;
 patrolPathLastPosition = undefined;
 pathToTarget = path_add();
-chasePathUpdateInterval = TimerFromSeconds(0.5);
-chasePathUpdateTimer = new Timer(chasePathUpdateInterval);
+chasePathUpdateTimer = new Timer(500);
 pathBlockingRadius = 20;
 
 targetPath = undefined;
 
 // TARGET
-targetSearchInterval = TimerFromSeconds(2);
-targetSearchTimer = new Timer(targetSearchInterval);
+targetSearchTimer = new Timer(2000);
 targetSearchTimer.StartTimer();
 
 targetInstance = noone;

@@ -7,7 +7,7 @@ function NetworkRegionObjectHandler() constructor
 	local_patrols = ds_list_create();
 	scouting_drone = undefined;
 	
-	patrol_update_timer = new Timer(1000 / 10);
+	patrol_update_timer = new Timer(100);
 	patrol_update_timer.StartTimer();
 	
 	static OnDestroy = function()

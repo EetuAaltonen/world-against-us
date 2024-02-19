@@ -2,8 +2,7 @@ function NotificationHandler() constructor
 {
 	// LOG NOTIFICATIONS
 	log_notifications = [];
-	log_notification_duration = TimerFromSeconds(2);
-	log_notification_timer = new Timer(log_notification_duration);
+	log_notification_timer = new Timer(2000);
 	log_notification_timer.StartTimer();
 	
 	// POPUP NOTIFICATIONS
