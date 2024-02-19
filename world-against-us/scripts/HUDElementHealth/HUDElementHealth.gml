@@ -28,8 +28,8 @@ function HUDElementHealth(_position) : HUDElement(_position) constructor
 		if (pulseTimer.IsTimerStopped())
 		{
 			heartScale = heartBaseScale;
-			// UPDATE VISUAL HEART BEAR RATE
-			pulseTimer.setting_time = 60000 / baseBeatRate;
+			// UPDATE VISUAL HEART BEAT RATE
+			pulseTimer.setting_time = 60000 / beatRate;
 			// RESTART PULSE TIMER
 			pulseTimer.StartTimer();
 		} else {
