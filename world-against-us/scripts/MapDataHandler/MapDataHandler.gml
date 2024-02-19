@@ -14,7 +14,7 @@ function MapDataHandler() constructor
 	{
 		if (is_dynamic_data_updating)
 		{
-			map_update_timer.UpdateDelta();
+			map_update_timer.Update();
 			if (map_update_timer.IsTimerStopped())
 			{
 				UpdateDynamicMapData();

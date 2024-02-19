@@ -40,7 +40,7 @@ function InstanceObject(_sprite_index, _object_index, _position) constructor
 		if (!is_undefined(start_position) &&
 			!is_undefined(target_position))
 		{
-			interpolation_timer.UpdateDelta();	
+			interpolation_timer.Update();
 			
 			var lerpPercent = 1 - (interpolation_timer.running_time / interpolation_timer.setting_time);
 			position.X = lerp(start_position.X, target_position.X, lerpPercent);
