@@ -12,12 +12,11 @@ function GameSaveHandler() constructor
 	static Update = function()
 	{
 		// AUTO SAVE ICON
+		auto_save_icon_timer.Update();
 		if (auto_save_icon_timer.IsTimerStopped())
 		{
 			auto_save_icon_timer.StopTimer();
 			show_auto_save_icon = false;
-		} else {
-			auto_save_icon_timer.Update();
 		}
 	}
 	
