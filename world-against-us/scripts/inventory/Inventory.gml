@@ -19,9 +19,7 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 	
 	// Item search
 	identify_index = undefined;
-	// TODO: Fix identify timer
-	identify_duration = 2000;
-	identify_timer = 0;
+	identify_timer = new Timer(2000);
 	
 	static ToJSONStruct = function()
 	{
@@ -413,7 +411,8 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 	{
 		if (!is_undefined(identify_index))
 		{
-			if (identify_timer-- <= 0)
+			identify_timer.Update();
+			if (identify_timer.IsTimerStopped())
 			{
 				var item = GetItemByGridIndex(identify_index);
 				item.is_known = true;
@@ -438,9 +437,10 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 					}
 				}
 				
-				// RESET INDENTIFY TARGET AND TIMER
+				// RESET INDENTIFY TARGET
 				identify_index = undefined;
-				identify_timer = 0;
+				// STOP IDENTIFY TIMER
+				identify_timer.StopTimer();
 			}
 		}
 	}
