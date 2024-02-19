@@ -109,7 +109,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 							if (!is_undefined(item))
 							{
 								inventory.identify_index = item.grid_index;
-								inventory.identify_timer = inventory.identify_duration;
+								inventory.identify_timer.StartTimer();
 							}
 						}
 					}
