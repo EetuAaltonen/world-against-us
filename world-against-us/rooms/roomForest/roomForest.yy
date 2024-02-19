@@ -105,7 +105,6 @@
     {"name":"inst_AE88ABB","path":"rooms/roomForest/roomForest.yy",},
     {"name":"inst_39D92923","path":"rooms/roomForest/roomForest.yy",},
     {"name":"inst_7C071085","path":"rooms/roomForest/roomForest.yy",},
-    {"name":"inst_7AB55A40","path":"rooms/roomForest/roomForest.yy",},
     {"name":"inst_26E4781B","path":"rooms/roomForest/roomForest.yy",},
     {"name":"inst_46CEB66","path":"rooms/roomForest/roomForest.yy",},
     {"name":"inst_6BFB87F0","path":"rooms/roomForest/roomForest.yy",},
@@ -319,6 +318,7 @@
     {"name":"inst_4F4F472C","path":"rooms/roomForest/roomForest.yy",},
     {"name":"inst_35DF653","path":"rooms/roomForest/roomForest.yy",},
     {"name":"inst_2957AD87","path":"rooms/roomForest/roomForest.yy",},
+    {"name":"inst_7AB55A40","path":"rooms/roomForest/roomForest.yy",},
   ],
   "isDnd": false,
   "layers": [
