@@ -1,9 +1,8 @@
 // DEBUG FPS
 fpsReal = fps_real;
 _fps = fps;
-// TODO: Fix FPS update interval logic
-fpsUpdateInterval = 250;
-fpsUpdateTimer = fpsUpdateInterval;
+fpsUpdateTimer = new Timer(250);
+fpsUpdateTimer.StartTimer();
 
 // DISPLAY PROPERTIES
 idealDisplayWidth = VIEW_BASE_WIDTH;
