@@ -1,2 +1,2 @@
-containerId = "container_6250929F";
+containerId = "container_15D8C117";
 lootTableTag = "garbage_bin";
