@@ -13,7 +13,7 @@ function NetworkHandler() constructor
 	pre_alloc_network_buffer_compressed = undefined;
 	
 	
-	delete_socket_timer = new Timer(TimerFromMilliseconds(1000));
+	delete_socket_timer = new Timer(1000);
 	packet_send_rate = 1000 / 33.33333; // == 30ms == ~Every other frame
 	last_packet_time = current_time;
 	

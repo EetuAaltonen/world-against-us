@@ -19,7 +19,8 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 	
 	// Item search
 	identify_index = undefined;
-	identify_duration = TimerFromSeconds(2);
+	// TODO: Fix identify timer
+	identify_duration = 2000;
 	identify_timer = 0;
 	
 	static ToJSONStruct = function()

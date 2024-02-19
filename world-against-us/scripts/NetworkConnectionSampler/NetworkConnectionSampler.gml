@@ -14,7 +14,7 @@ function NetworkConnectionSampler() constructor
 	static Update = function()
 	{
 		// CHECK PINGING INTERVAL
-		ping_interval_timer.UpdateDelta();
+		ping_interval_timer.Update();
 		if (ping_interval_timer.IsTimerStopped())
 		{
 			SendPingSample();
@@ -22,7 +22,7 @@ function NetworkConnectionSampler() constructor
 		}
 		
 		// CHECK PINGING TIMEOUT
-		ping_timeout_timer.UpdateDelta();
+		ping_timeout_timer.Update();
 		if (ping_timeout_timer.IsTimerStopped())
 		{
 			ping_timeout_timer.StopTimer();
@@ -41,7 +41,7 @@ function NetworkConnectionSampler() constructor
 		}
 		
 		// UPDATE DATA SAMPLE RATE
-		data_rate_sample_timer.UpdateDelta();
+		data_rate_sample_timer.Update();
 		if (data_rate_sample_timer.IsTimerStopped())
 		{
 			last_data_out_rate = data_out_rate;

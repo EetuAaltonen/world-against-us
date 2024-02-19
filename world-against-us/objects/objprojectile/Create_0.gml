@@ -10,7 +10,8 @@ initSpeed = true;
 bullet = undefined;
 // TODO: Fix bullet hole logic
 //bulletHoleRadius = 4;
-//bulletHoleDuration = TimerFromSeconds(5);
+// TODO: Fix bullet hole timer
+//bulletHoleDuration = 5000;
 
 traceTailPosition = new Vector2(x, y);
 traceTailStep = new Vector2(0, 0);
