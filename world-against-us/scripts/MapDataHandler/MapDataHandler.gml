@@ -4,7 +4,7 @@ function MapDataHandler() constructor
 	dynamic_map_data = new MapData();
 	
 	is_dynamic_data_updating = false;
-	map_update_timer = new Timer(TimerFromMilliseconds(300));
+	map_update_timer = new Timer(MAP_DATA_UPDATE_INTERVAL);
 	
 	target_scout_region = undefined;
 	active_operations_scout_stream = undefined;
@@ -14,7 +14,7 @@ function MapDataHandler() constructor
 	{
 		if (is_dynamic_data_updating)
 		{
-			map_update_timer.UpdateDelta();
+			map_update_timer.Update();
 			if (map_update_timer.IsTimerStopped())
 			{
 				UpdateDynamicMapData();

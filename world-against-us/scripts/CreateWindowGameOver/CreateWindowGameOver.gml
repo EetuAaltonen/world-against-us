@@ -34,7 +34,7 @@ function CreateWindowGameOver(_gameWindowId, _zIndex)
 		new Vector2(0, 0),
 		new Size(0, 0),
 		undefined,
-		5, gameOverCallbackFunction 
+		5000, gameOverCallbackFunction 
 	);
 	
 	ds_list_add(gameOverElements,

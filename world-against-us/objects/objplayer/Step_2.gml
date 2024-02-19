@@ -2,7 +2,7 @@ if (global.MultiplayerMode)
 {
 	if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 	{
-		positionSyncTImer.UpdateDelta();
+		positionSyncTImer.Update();
 		
 		if (movementInput.key_up != prevMovementInput.key_up ||
 			movementInput.key_down != prevMovementInput.key_down ||

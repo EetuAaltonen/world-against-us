@@ -9,5 +9,5 @@ function NetworkPacket(_header, _payload, _priority = PACKET_PRIORITY.DEFAULT, _
 	ack_timeout_callback_func = _ack_timeout_callback_func;
 	max_acknowledgment_attempts = 2;
 	acknowledgment_attempt = 1;
-	timeout_timer = new Timer(TimerFromSeconds(3));
+	timeout_timer = new Timer(3000);
 }
