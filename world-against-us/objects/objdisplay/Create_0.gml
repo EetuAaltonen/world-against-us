@@ -1,7 +1,8 @@
 // DEBUG FPS
 fpsReal = fps_real;
 _fps = fps;
-fpsUpdateInterval = TimerFromMilliseconds(250);
+// TODO: Fix FPS update interval logic
+fpsUpdateInterval = 250;
 fpsUpdateTimer = fpsUpdateInterval;
 
 // DISPLAY PROPERTIES
