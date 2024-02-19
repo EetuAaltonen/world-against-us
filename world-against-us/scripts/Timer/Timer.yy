@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "Timers",
-    "path": "folders/Scripts/Game/Timers.yy",
+    "path": "folders/Scripts/Game/Data/Timers.yy",
   },
 }

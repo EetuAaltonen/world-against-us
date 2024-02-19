@@ -22,17 +22,6 @@ function Timer(_setting_time) constructor
 		{
 			if (running_time > 0)
 			{
-				running_time = max(0, --running_time);
-			}
-		}
-	}
-	
-	static UpdateDelta = function()
-	{
-		if (is_timer_running)
-		{
-			if (running_time > 0)
-			{
 				running_time -= delta_time * 0.001;
 				running_time = max(0, running_time);
 			}
