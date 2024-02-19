@@ -14,12 +14,11 @@ function MapDataHandler() constructor
 	{
 		if (is_dynamic_data_updating)
 		{
+			map_update_timer.UpdateDelta();
 			if (map_update_timer.IsTimerStopped())
 			{
 				UpdateDynamicMapData();
 				map_update_timer.StartTimer();
-			} else {
-				map_update_timer.Update();
 			}
 			
 			// UPDATE DYNAMIC MAP SIMULATED INTERPOLATION

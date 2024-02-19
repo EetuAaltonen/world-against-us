@@ -37,6 +37,7 @@ function NetworkRegionObjectHandler() constructor
 				if (patrolCount > 0)
 				{
 					// UPDATE PATROL LOCATION
+					patrol_update_timer.UpdateDelta();
 					if (patrol_update_timer.IsTimerStopped())
 					{
 						var formatPatrols = [];
@@ -89,8 +90,6 @@ function NetworkRegionObjectHandler() constructor
 						
 						// RESET TIMER
 						patrol_update_timer.StartTimer();
-					} else {
-						patrol_update_timer.UpdateDelta();
 					}
 				}
 			}

@@ -37,6 +37,8 @@ function NetworkHandler() constructor
 	
 	static Update = function()
 	{
+		// TODO: Replace timer with deltatimer
+		delete_socket_timer.Update();
 		if (delete_socket_timer.IsTimerStopped())
 		{
 			if (!DeleteSocket())
@@ -44,7 +46,6 @@ function NetworkHandler() constructor
 				show_debug_message("Failed to delete socket on delete socket timer stopped");
 			}
 		} else {
-			delete_socket_timer.Update();
 			if (network_status == NETWORK_STATUS.CONNECTING || global.MultiplayerMode)
 			{
 				if (global.MultiplayerMode)

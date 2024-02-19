@@ -2,6 +2,8 @@ if (global.MultiplayerMode)
 {
 	if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 	{
+		positionSyncTImer.UpdateDelta();
+		
 		if (movementInput.key_up != prevMovementInput.key_up ||
 			movementInput.key_down != prevMovementInput.key_down ||
 			movementInput.key_left != prevMovementInput.key_left ||
@@ -62,8 +64,6 @@ if (global.MultiplayerMode)
 				// RESET PREVIOUS VALUES
 				ResetPlayerVelocityValues();
 			}*/
-		} else {
-			positionSyncTImer.UpdateDelta();
 		}
 	}
 }

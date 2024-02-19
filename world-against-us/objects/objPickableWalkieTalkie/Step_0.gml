@@ -5,6 +5,7 @@ if (!is_undefined(global.WorldStateData))
 
 if (global.GUIStateHandlerRef.IsGUIStateClosed())
 {
+	overheadDialogueTimer.Update();
 	if (overheadDialogueTimer.IsTimerStopped())
 	{
 		var currentDialogue = global.DialogueData[? dialogueStoryTitle][? overheadDialogueIndex];
@@ -13,7 +14,5 @@ if (global.GUIStateHandlerRef.IsGUIStateClosed())
 			overheadDialogueIndex = currentDialogue.GetFirstOption().GetNextIndex();
 		}
 		overheadDialogueTimer.StartTimer();
-	} else {
-		overheadDialogueTimer.Update();
 	}
 }

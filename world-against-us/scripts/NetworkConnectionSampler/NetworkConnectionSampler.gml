@@ -14,14 +14,15 @@ function NetworkConnectionSampler() constructor
 	static Update = function()
 	{
 		// CHECK PINGING INTERVAL
+		ping_interval_timer.UpdateDelta();
 		if (ping_interval_timer.IsTimerStopped())
 		{
 			SendPingSample();
 			ping_interval_timer.StartTimer();
-		} else {
-			ping_interval_timer.UpdateDelta();
 		}
+		
 		// CHECK PINGING TIMEOUT
+		ping_timeout_timer.UpdateDelta();
 		if (ping_timeout_timer.IsTimerStopped())
 		{
 			ping_timeout_timer.StopTimer();
@@ -37,10 +38,10 @@ function NetworkConnectionSampler() constructor
 					NOTIFICATION_TYPE.Log
 				)
 			);
-		} else {
-			ping_timeout_timer.UpdateDelta();
 		}
+		
 		// UPDATE DATA SAMPLE RATE
+		data_rate_sample_timer.UpdateDelta();
 		if (data_rate_sample_timer.IsTimerStopped())
 		{
 			last_data_out_rate = data_out_rate;
@@ -50,8 +51,6 @@ function NetworkConnectionSampler() constructor
 			data_in_rate = 0;
 			
 			data_rate_sample_timer.StartTimer();
-		} else {
-			data_rate_sample_timer.UpdateDelta();
 		}
 	}
 	
