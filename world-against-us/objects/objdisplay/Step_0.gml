@@ -40,9 +40,11 @@ if (keyboard_check_released(ord("P")))
 
 
 // DEBUG FPS
-if (fpsUpdateTimer-- < 0)
+fpsUpdateTimer.Update();
+if (fpsUpdateTimer.IsTimerStopped())
 {
 	fpsReal = fps_real;
 	_fps = fps;
-	fpsUpdateTimer = fpsUpdateInterval;
+	// RESTART FPS UPDATE TIMER
+	fpsUpdateTimer.StartTimer();
 }
