@@ -6,8 +6,9 @@ function HUDElementHealth(_position) : HUDElement(_position) constructor
 
 	baseBeatRate = 70; // per minute
 	beatRate = baseBeatRate; 
-	pulseDelay = 10; // in frames
-	pulseTimer = TimerRatePerMinute(beatRate);
+	pulseDelay = 170; // ms
+	pulseTimer = new Timer(60000 / baseBeatRate);
+	pulseTimer.StartTimer();
 	pulseLinePoints = [
 		new Vector2(120, global.GUIH - 50),
 		new Vector2(70, global.GUIH - 50),
@@ -23,15 +24,20 @@ function HUDElementHealth(_position) : HUDElement(_position) constructor
 	
 	static Update = function()
 	{
-		if (pulseTimer > 0 && pulseTimer <= pulseDelay)
-		{
-			heartScale = heartPulseScale;
-		} else if (pulseTimer <= 0)
+		pulseTimer.Update();
+		if (pulseTimer.IsTimerStopped())
 		{
 			heartScale = heartBaseScale;
-			pulseTimer = TimerRatePerMinute(beatRate);
+			// UPDATE VISUAL HEART BEAT RATE
+			pulseTimer.setting_time = 60000 / beatRate;
+			// RESTART PULSE TIMER
+			pulseTimer.StartTimer();
+		} else {
+			if (pulseTimer.running_time <= pulseDelay)
+			{
+				heartScale = heartPulseScale;
+			}
 		}
-		pulseTimer--;
 	}
 	
 	static SetBeatRate = function(_newBeatRate)
@@ -60,7 +66,7 @@ function HUDElementHealth(_position) : HUDElement(_position) constructor
 
 				// HEART PULSE
 				var linePointCount = array_length(pulseLinePoints);
-				var pulseLineStep = TimerRatePerMinute(beatRate) / linePointCount;
+				var pulseLineStep = pulseTimer.setting_time / linePointCount;
 				for (var i = 0; i < (linePointCount - 1); i++)
 				{
 					var linePoint = pulseLinePoints[@ i];
@@ -73,7 +79,7 @@ function HUDElementHealth(_position) : HUDElement(_position) constructor
 		
 					var pulseTimerMin = (pulseLineStep * i);
 					var pulseTimerMax = (pulseLineStep * (i + 1));
-					var pulseLinePercent = ((pulseTimer - pulseTimerMin) / (pulseTimerMax - pulseTimerMin));
+					var pulseLinePercent = ((pulseTimer.GetTime() - pulseTimerMin) / (pulseTimerMax - pulseTimerMin));
 					if (pulseLinePercent > 0 && pulseLinePercent < 1)
 					{
 						var xPointerPos = linePoint.X;
