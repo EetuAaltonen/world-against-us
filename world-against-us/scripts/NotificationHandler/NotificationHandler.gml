@@ -64,12 +64,11 @@ function NotificationHandler() constructor
 		var logNotificationCount = array_length(log_notifications);
 		if (logNotificationCount > 0)
 		{
+			log_notification_timer.Update();
 			if (log_notification_timer.IsTimerStopped())
 			{
 				array_delete(log_notifications, 0, 1);
 				log_notification_timer.StartTimer();
-			} else {
-				log_notification_timer.Update();
 			}
 		} else {
 			var popupNotificationCount = array_length(popup_notifications);

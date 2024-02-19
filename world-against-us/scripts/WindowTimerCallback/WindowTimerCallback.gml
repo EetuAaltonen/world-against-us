@@ -6,12 +6,11 @@ function WindowTimerCallback(_elementId, _relativePosition, _size, _backgroundCo
 	
 	static UpdateContent = function()
 	{
+		timer.Update();
 		if (timer.IsTimerStopped())
 		{
 			timer.StopTimer();
 			callback_function();
-		} else {
-			timer.Update();
 		}
 	}
 }

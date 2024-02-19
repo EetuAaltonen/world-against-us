@@ -111,6 +111,7 @@ switch (aiState)
 					global.PlayerDataHandlerRef.OnRobbed();
 					resumePatrolling();
 				} else {
+					chasePathUpdateTimer.Update();
 					if (chasePathUpdateTimer.IsTimerStopped())
 					{
 						if (distanceToTarget > visionRadius)
@@ -154,9 +155,6 @@ switch (aiState)
 							// RESET CHASE PATH UPDATE TIMER
 							chasePathUpdateTimer.StartTimer();
 						}
-					}  else {
-						// UPDATE CHASE PATH TIMER
-						chasePathUpdateTimer.Update();
 					}
 				}
 			} else {

@@ -15,6 +15,7 @@ function NetworkPacketTracker() constructor
 			var inFlightPacket = in_flight_packets[| i];
 			if (!is_undefined(inFlightPacket))
 			{
+				inFlightPacket.timeout_timer.Update();
 				if (inFlightPacket.timeout_timer.IsTimerStopped())
 				{
 					if (!is_undefined(inFlightPacket.ack_timeout_callback_func))
@@ -72,8 +73,6 @@ function NetworkPacketTracker() constructor
 							global.NetworkHandlerRef.DisconnectTimeout();
 						}
 					}
-				} else {
-					inFlightPacket.timeout_timer.Update();
 				}
 			}
 		}
