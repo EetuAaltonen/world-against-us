@@ -666,6 +666,11 @@ export default class NetworkHandler {
             `Failed to disconnect a client with ID: ${clientId}`
           );
         }
+
+        // Autosave on last client disconnect
+        if (this.clientHandler.getClientCount() <= 0) {
+          this.worldStateHandler.autosave();
+        }
       }, 1000);
     } else {
       client = new Client(UNDEFINED_UUID, clientAddress, clientPort);
@@ -713,9 +718,6 @@ export default class NetworkHandler {
         );
       }
     }
-
-    // Autosave on last client disconnect
-    this.worldStateHandler.autosave();
 
     ConsoleHandler.Log(
       `Player '${client.playerTag}' disconnected from the server`
