@@ -225,7 +225,6 @@ export default class InstanceHandler {
       if (createdInstanceId !== undefined) {
         const createdInstance = this.instances[createdInstanceId];
         if (createdInstance.addPlayer(clientId, player)) {
-          createdInstance.setOwner(clientId);
           instanceId = createdInstanceId;
         }
       }
