@@ -197,6 +197,17 @@ export default class NetworkPacketBuilder {
               isPayloadWritten = true;
             }
             break;
+          case MESSAGE_TYPE.SYNC_INSTANCE_OWNER:
+            {
+              const ownerClientId = payload;
+              const bufferClientId = Buffer.from(
+                ownerClientId + NULL_TERMINATOR,
+                "utf8"
+              );
+              this.payloadBuffer = bufferClientId;
+              isPayloadWritten = true;
+            }
+            break;
           case MESSAGE_TYPE.INSTANCE_SNAPSHOT_DATA:
             {
               isPayloadWritten = this.writeInstanceSnapshotBuffer(payload);
