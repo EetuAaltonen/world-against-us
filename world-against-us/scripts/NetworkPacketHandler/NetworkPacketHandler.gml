@@ -75,6 +75,16 @@ function NetworkPacketHandler() constructor
 							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 						}
 					} break;
+					case MESSAGE_TYPE.SYNC_INSTANCE_OWNER:
+					{
+						var regionOwnerClient = payload;
+						if (!is_undefined(regionOwnerClient))
+						{
+							global.NetworkRegionHandlerRef.owner_client = regionOwnerClient;
+							// RESPOND WITH ACKNOWLEDGMENT TO SYNC INSTANCE OWNER
+							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
+						}
+					} break;
 					case MESSAGE_TYPE.INSTANCE_SNAPSHOT_DATA:
 					{
 						var regionSnapshot = payload;
