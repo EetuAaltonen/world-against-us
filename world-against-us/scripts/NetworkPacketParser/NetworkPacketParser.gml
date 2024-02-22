@@ -150,6 +150,11 @@ function NetworkPacketParser() constructor
 							}
 						}
 					} break;
+					case MESSAGE_TYPE.SYNC_INSTANCE_OWNER:
+					{
+						var ownerClientId = buffer_read(_msg, buffer_string)
+						parsedPayload = ownerClientId;
+					} break;
 					case MESSAGE_TYPE.INSTANCE_SNAPSHOT_DATA:
 					{
 						parsedPayload = ParseRegionSnapshotPayload(_msg);
