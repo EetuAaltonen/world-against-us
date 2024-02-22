@@ -99,66 +99,76 @@ switch (aiState)
 		{
 			resumePatrolling();
 		} else {
-			if (!targetInstance.character.IsInvulnerableState())
+			var targetCharacter = targetInstance.character;
+			if (!is_undefined(targetCharacter))
 			{
-				var targetPos = new Vector2(
-					(targetInstance.bbox_left + ((targetInstance.bbox_right - targetInstance.bbox_left) * 0.5)),
-					targetInstance.bbox_bottom
-				);
-				var distanceToTarget = point_distance(x, y, targetPos.X, targetPos.Y);
-				if (distanceToTarget <= (pathBlockingRadius * 4))
+				if (!targetCharacter.IsInvulnerableState())
 				{
-					global.PlayerDataHandlerRef.OnRobbed();
-					resumePatrolling();
-				} else {
-					chasePathUpdateTimer.Update();
-					if (chasePathUpdateTimer.IsTimerStopped())
+					var targetPos = new Vector2(
+						(targetInstance.bbox_left + ((targetInstance.bbox_right - targetInstance.bbox_left) * 0.5)),
+						targetInstance.bbox_bottom
+					);
+					var distanceToTarget = point_distance(x, y, targetPos.X, targetPos.Y);
+					if (distanceToTarget <= (pathBlockingRadius * 4))
 					{
-						if (distanceToTarget > visionRadius)
+						targetCharacter.is_robbed = true;
+						if (targetCharacter.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 						{
-							resumePatrolling();
-						} else {
-							// CALCULATE NEW PATH TO TARGET
-							path_clear_points(pathToTarget);
-							if (mp_grid_path(global.ObjGridPath.roomGrid, pathToTarget, x, y, targetPos.X, targetPos.Y, true))
+							global.PlayerDataHandlerRef.OnRobbed();
+						}
+						resumePatrolling();
+					} else {
+						chasePathUpdateTimer.Update();
+						if (chasePathUpdateTimer.IsTimerStopped())
+						{
+							if (distanceToTarget > visionRadius)
 							{
-								targetPath = pathToTarget;
-								// START CHASING PLAYER
-								path_start(targetPath, maxSpeed, path_action_stop, false);
-							}
-						
-							// TODO: Verify that this logic works
-							/*var pathPointStep = 1 / path_get_number(pathToTarget);
-							var pathPointNext = new Vector2(
-								path_get_x(pathToTarget, path_position + pathPointStep),
-								path_get_y(pathToTarget, path_position + pathPointStep)
-							);
-							var nearestBlockingInstance = FindNearestInstanceToPoint(pathPointNext, objBandit, id);
-							if (nearestBlockingInstance != noone)
-							{
-								var distanceBlockingToTarget = point_distance(nearestBlockingInstance.x, nearestBlockingInstance.y, targetInstance.x, targetInstance.y);
-					
-								if (point_distance(pathPointNext.X, pathPointNext.Y, nearestBlockingInstance.x, nearestBlockingInstance.y) <= pathBlockingRadius &&
-													distanceToTarget >= distanceBlockingToTarget)
+								resumePatrolling();
+							} else {
+								// CALCULATE NEW PATH TO TARGET
+								path_clear_points(pathToTarget);
+								if (mp_grid_path(global.ObjGridPath.roomGrid, pathToTarget, x, y, targetPos.X, targetPos.Y, true))
 								{
-									path_end();
-								} else {
-									nearestBlockingInstance = FindNearestInstanceToPoint(new Vector2(x, y), objBandit, id);
-									distanceBlockingToTarget = point_distance(nearestBlockingInstance.x, nearestBlockingInstance.y, targetInstance.x, targetInstance.y);
-									if (distance_to_object(nearestBlockingInstance) <= pathBlockingRadius &&
-										distanceToTarget >= distanceBlockingToTarget)
+									targetPath = pathToTarget;
+									// START CHASING PLAYER
+									path_start(targetPath, maxSpeed, path_action_stop, false);
+								}
+						
+								// TODO: Verify that this logic works
+								/*var pathPointStep = 1 / path_get_number(pathToTarget);
+								var pathPointNext = new Vector2(
+									path_get_x(pathToTarget, path_position + pathPointStep),
+									path_get_y(pathToTarget, path_position + pathPointStep)
+								);
+								var nearestBlockingInstance = FindNearestInstanceToPoint(pathPointNext, objBandit, id);
+								if (nearestBlockingInstance != noone)
+								{
+									var distanceBlockingToTarget = point_distance(nearestBlockingInstance.x, nearestBlockingInstance.y, targetInstance.x, targetInstance.y);
+					
+									if (point_distance(pathPointNext.X, pathPointNext.Y, nearestBlockingInstance.x, nearestBlockingInstance.y) <= pathBlockingRadius &&
+														distanceToTarget >= distanceBlockingToTarget)
 									{
 										path_end();
-									}	
-								}
-							}*/
-							// RESET CHASE PATH UPDATE TIMER
-							chasePathUpdateTimer.StartTimer();
+									} else {
+										nearestBlockingInstance = FindNearestInstanceToPoint(new Vector2(x, y), objBandit, id);
+										distanceBlockingToTarget = point_distance(nearestBlockingInstance.x, nearestBlockingInstance.y, targetInstance.x, targetInstance.y);
+										if (distance_to_object(nearestBlockingInstance) <= pathBlockingRadius &&
+											distanceToTarget >= distanceBlockingToTarget)
+										{
+											path_end();
+										}	
+									}
+								}*/
+								// RESET CHASE PATH UPDATE TIMER
+								chasePathUpdateTimer.StartTimer();
+							}
 						}
 					}
+				} else {
+					resumePatrolling();	
 				}
 			} else {
-				resumePatrolling();	
+				resumePatrolling();		
 			}
 		}
 	} break;
@@ -233,9 +243,9 @@ switch (aiState)
 				// STOP THE PATH
 				path_end();
 				
-				if (!is_undefined(targetInstance.character))
+				if (!is_undefined(targetCharacter))
 				{
-					targetInstance.character.total_hp_percent = 0;
+					targetCharacter.total_hp_percent = 0;
 				}
 				targetInstance = noone;
 				
