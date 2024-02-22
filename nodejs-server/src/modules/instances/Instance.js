@@ -85,6 +85,7 @@ export default class Instance {
           undefined
         );
         const instanceSnapshot = this.fetchInstanceSnapshot();
+
         const broadcastNetworkPacket = new NetworkPacket(
           broadcastNetworkPacketHeader,
           instanceSnapshot,
@@ -109,8 +110,11 @@ export default class Instance {
 
   addPlayer(clientId, player) {
     let isPlayerAdded = false;
+    // Check for existing player
     if (this.getPlayer(clientId) === undefined) {
+      // Add new player
       this.localPlayers[clientId] = player;
+      // Set instance owner
       if (this.ownerClient === undefined) {
         this.setOwner(clientId);
       }
@@ -142,8 +146,8 @@ export default class Instance {
 
   getPlayerIdFirst() {
     let foundPlayerId = undefined;
-    if (this.getPlayerCount > 0) {
-      foundPlayerId = Object.keys(this.localPlayers)[0];
+    if (this.getPlayerCount() > 0) {
+      foundPlayerId = this.getAllPlayerIds()[0];
     }
     return foundPlayerId;
   }
