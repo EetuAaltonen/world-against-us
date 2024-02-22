@@ -1,5 +1,10 @@
 import ROOM_INDEX from "./RoomIndex.js";
 import WORLD_MAP_LOCATION_HIERARCHY from "../world_map/WorldMapLocationHierarchy.js";
+import MESSAGE_TYPE from "../network/MessageType.js";
+import PACKET_PRIORITY from "../network/PacketPriority.js";
+
+import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
+import NetworkPacket from "../network_packets/NetworkPacket.js";
 
 import ConsoleHandler from "../console/ConsoleHandler.js";
 import Instance from "./Instance.js";
@@ -220,7 +225,6 @@ export default class InstanceHandler {
       if (createdInstanceId !== undefined) {
         const createdInstance = this.instances[createdInstanceId];
         if (createdInstance.addPlayer(clientId, player)) {
-          createdInstance.setOwner(clientId);
           instanceId = createdInstanceId;
         }
       }
@@ -273,7 +277,31 @@ export default class InstanceHandler {
       if (instance.removePlayer(clientId)) {
         if (!this.checkInstanceRelease(instanceId)) {
           if (instance.ownerClient === clientId) {
-            if (!instance.resetOwner()) {
+            if (instance.resetOwner()) {
+              if (instance.ownerClient !== undefined) {
+                // Broadcast about new instance owner
+                const clientHandler = this.networkHandler.clientHandler;
+                const clientsToBroadcast =
+                  clientHandler.getClientsToBroadcastInstance(
+                    instance.instanceId,
+                    clientId
+                  );
+
+                const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+                  MESSAGE_TYPE.SYNC_INSTANCE_OWNER,
+                  clientId
+                );
+                const broadcastNetworkPacket = new NetworkPacket(
+                  broadcastNetworkPacketHeader,
+                  instance.ownerClient,
+                  PACKET_PRIORITY.HIGH
+                );
+                this.networkHandler.broadcast(
+                  broadcastNetworkPacket,
+                  clientsToBroadcast
+                );
+              }
+            } else {
               // TODO: Proper error handling
               ConsoleHandler.Log(
                 `Failed to reset owner for an instance with ID: ${instanceId}`
