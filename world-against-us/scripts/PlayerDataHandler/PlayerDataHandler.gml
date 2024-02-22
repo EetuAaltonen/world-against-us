@@ -86,8 +86,6 @@ function PlayerDataHandler() constructor
 	
 	static OnRobbed = function()
 	{
-		global.PlayerCharacter.is_robbed = true;
-		
 		// OPEN GAME OVER WINDOW
 		var guiState = new GUIState(
 			GUI_STATE.GameOver, undefined, undefined,
