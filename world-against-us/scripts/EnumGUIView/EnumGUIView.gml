@@ -5,6 +5,8 @@ enum GUI_VIEW
 	Multiplayer,
 	Settings,
 	SaveSelection,
+	// DEBUG MONITOR
+	DebugMonitorGame,
 	// PLAYER OVERVIEW
 	PlayerBackpack,
 	PlayerHealthStatus,
