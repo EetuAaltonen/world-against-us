@@ -5,7 +5,7 @@ function NetworkPacketTracker() constructor
 	in_flight_packets = ds_list_create();
 	expected_sequence_number = 0;
 	pending_ack_range = ds_list_create();
-	dropped_packet_count = 0;
+	packet_loss_count = 0;
 	
 	static Update = function()
 	{
@@ -202,6 +202,8 @@ function NetworkPacketTracker() constructor
 				// DROP STALE DATA
 				var consoleLog = string("Received sequence number {0} smaller than expected {1}", _sequenceNumber, expected_sequence_number);
 				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
+				// UPDATE PACKET LOSS COUNT
+				global.NetworkPacketTrackerRef.UpdatePacketLossCount(1);
 				isCheckedAndProceed = false;
 			}
 			if (expected_sequence_number > max_sequence_number) { expected_sequence_number = 0; }
@@ -234,11 +236,21 @@ function NetworkPacketTracker() constructor
 		return isPacketRemoved;
 	}
 	
+	static UpdatePacketLossCount = function(_droppedPacketCount)
+	{
+		packet_loss_count += _droppedPacketCount;
+		
+		// DEBUG MONITOR
+		var monitorHandlerRef = global.DebugMonitorNetworkHandlerRef;
+		array_push(monitorHandlerRef.packet_loss_samples, packet_loss_count);
+		monitorHandlerRef.packet_loss_samples_max_value = max(packet_loss_count, monitorHandlerRef.packet_loss_samples_max_value);
+	}
+	
 	static ResetNetworkPacketTracking = function()
 	{
 		outgoing_sequence_number = -1;
 		expected_sequence_number = 0;
-		dropped_packet_count = 0;
+		packet_loss_count = 0;
 		
 		ClearDSListAndDeleteValues(in_flight_packets);
 		ClearDSListAndDeleteValues(pending_ack_range);
