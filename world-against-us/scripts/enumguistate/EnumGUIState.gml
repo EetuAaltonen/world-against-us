@@ -3,6 +3,7 @@ enum GUI_STATE
 	GameRoot,
 	MainMenu,
 	Console,
+	DebugMonitor,
 	Confirm,
 	EscMenu,
 	PlayerOverview,
