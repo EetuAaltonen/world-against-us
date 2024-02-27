@@ -10,6 +10,8 @@ enum GAME_WINDOW
 	Console,
 	// CONFIRM
 	Confirm,
+	// DEBUG MONITOR
+	DebugMonitor,
 	// ESC MENU
 	EscMenu,
 	// PLAYER OVERVIEW
