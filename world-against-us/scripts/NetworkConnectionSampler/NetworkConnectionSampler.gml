@@ -50,6 +50,19 @@ function NetworkConnectionSampler() constructor
 			last_data_in_rate = data_in_rate;
 			data_in_rate = 0;
 			
+			// DEBUG MONITOR
+			var monitorHandlerRef = global.DebugMonitorNetworkHandlerRef;
+			
+			if (array_length(monitorHandlerRef.data_out_samples) >= monitorHandlerRef.data_out_samples_max_count) array_shift(monitorHandlerRef.data_out_samples);
+			var dataOutSampleKilobits = BytesToKilobits(last_data_out_rate);
+			array_push(monitorHandlerRef.data_out_samples, dataOutSampleKilobits);
+			monitorHandlerRef.data_out_samples_max_value = max(dataOutSampleKilobits, monitorHandlerRef.data_out_samples_max_value);
+			
+			if (array_length(monitorHandlerRef.data_in_samples) >= monitorHandlerRef.data_in_samples_max_count) array_shift(monitorHandlerRef.data_in_samples);
+			var dataInSampleKilobits = BytesToKilobits(last_data_in_rate);
+			array_push(monitorHandlerRef.data_in_samples, dataInSampleKilobits);
+			monitorHandlerRef.data_in_samples_max_value = max(dataInSampleKilobits, monitorHandlerRef.data_in_samples_max_value);
+			
 			data_rate_sample_timer.StartTimer();
 		}
 	}
@@ -88,7 +101,6 @@ function NetworkConnectionSampler() constructor
 	
 	static ProcessPingSample = function(_receivedPingSample)
 	{
-		ping = current_time - _receivedPingSample;
 		if (_receivedPingSample < last_update_time)
 		{
 			var consoleLog = string(
@@ -97,6 +109,13 @@ function NetworkConnectionSampler() constructor
 				last_update_time
 			);
 			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
+		} else {
+			ping = current_time - _receivedPingSample;
+			
+			var monitorHandlerRef = global.DebugMonitorNetworkHandlerRef;
+			if (array_length(monitorHandlerRef.ping_samples) >= monitorHandlerRef.ping_samples_max_count) array_shift(monitorHandlerRef.ping_samples);
+			array_push(monitorHandlerRef.ping_samples, ping);
+			monitorHandlerRef.ping_samples_max_value = max(ping, monitorHandlerRef.ping_samples_max_value);	
 		}
 		
 		// STOP TIMEOUT TIMER
