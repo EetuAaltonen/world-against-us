@@ -49,7 +49,7 @@ function DebugMonitorGameHandler() constructor
 			
 			// SAMPLE MEMORY USAGE
 			if (array_length(memory_usage_samples) >= fps_samples_max_count) array_shift(memory_usage_samples);
-			var memoryDump = debug_event("DumpMemory");
+			var memoryDump = debug_event("DumpMemory", true);
 			var memoryUsageSample = floor((memoryDump.totalUsed ?? 0) * 0.000001);
 			array_push(memory_usage_samples, memoryUsageSample);
 			memory_usage_samples_max_value = max(memoryUsageSample, memory_usage_samples_max_value);

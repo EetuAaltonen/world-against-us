@@ -54,7 +54,7 @@ function CreateWindowDebugMonitorNetwork(_gameWindowId, _zIndex, _debugNetworkHa
 		monitorGraphSize,
 		#1f1f1f,
 		packetDropSamplesClone,
-		"Over time packet loss count sampling",
+		"Overall packet loss count sampling",
 		"Total count",
 		undefined,
 		_debugNetworkHandlerRef.packet_loss_samples_max_value,
