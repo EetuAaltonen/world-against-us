@@ -8,6 +8,7 @@ enum GUI_VIEW
 	// DEBUG MONITOR
 	DebugMonitorGame,
 	DebugMonitorNetwork,
+	DebugMonitorMultiplayer,
 	// PLAYER OVERVIEW
 	PlayerBackpack,
 	PlayerHealthStatus,
