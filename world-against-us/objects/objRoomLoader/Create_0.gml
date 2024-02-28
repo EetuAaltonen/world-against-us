@@ -24,6 +24,9 @@ controllers = [
 	// CONSOLE
 	new GameController(objConsole, [], [roomLaunch]),
 	
+	// DEBUG MONITOR
+	new GameController(objDebugMonitor, [], [roomLaunch]),
+	
 	// NOTIFICATION
 	new GameController(objNotification, [], [roomLaunch], LAYER_CONTROLLERS_FRONT),
 	
