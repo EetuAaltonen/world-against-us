@@ -8,7 +8,7 @@ if (keyboard_check_released(KEY_DEBUG_MONITOR))
 			CreateWindowDebugMonitorGame(GAME_WINDOW.DebugMonitor, -1, debugMonitorGameHandler)
 		],
 		GUI_CHAIN_RULE.OverwriteAll,
-		undefined, undefined
+		CallbackGUIStateInputDebugMonitor, undefined
 	);
 	global.GUIStateHandlerRef.RequestGUIState(guiState);
 }

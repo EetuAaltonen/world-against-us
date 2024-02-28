@@ -7,6 +7,7 @@ enum GUI_VIEW
 	SaveSelection,
 	// DEBUG MONITOR
 	DebugMonitorGame,
+	DebugMonitorNetwork,
 	// PLAYER OVERVIEW
 	PlayerBackpack,
 	PlayerHealthStatus,
