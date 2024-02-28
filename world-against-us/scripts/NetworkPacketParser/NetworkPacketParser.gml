@@ -11,6 +11,7 @@ function NetworkPacketParser() constructor
 			var deliveryPolicy = (global.NetworkPacketDeliveryPolicies[? parsedMessageType] ??
 									global.NetworkPacketDeliveryPolicies[? MESSAGE_TYPE.ENUM_LENGTH]);
 			
+			var deleteBufferAfterward = false;
 			var msg = _msgRaw;
 			if (deliveryPolicy.compress)
 			{
@@ -21,6 +22,7 @@ function NetworkPacketParser() constructor
 				);
 				msg = buffer_decompress(_networkBufferCompress);
 				buffer_seek(msg, buffer_seek_start, 0);
+				deleteBufferAfterward = true;
 			}
 			
 			if (buffer_exists(msg))
@@ -48,8 +50,11 @@ function NetworkPacketParser() constructor
 				var parsedPayload = ParsePayload(parsedMessageType, msg);
 				parsedNetworkPacket = new NetworkPacket(parsedHeader, parsedPayload);
 				
-				// DELETE NETWORK BUFFER AFTER READING
-				buffer_delete(msg);
+				// DELETE TEMP NETWORK BUFFER AFTER READING
+				if (deleteBufferAfterward)
+				{
+					buffer_delete(msg);
+				}
 			}
 		} catch (error)
 		{
