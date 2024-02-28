@@ -15,6 +15,12 @@ function CallbackGUIStateInputDebugMonitor()
 			global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.DebugMonitorNetwork, [
 				CreateWindowDebugMonitorNetwork(GAME_WINDOW.DebugMonitor, -1, global.DebugMonitorNetworkHandlerRef)
 			], GUI_CHAIN_RULE.OverwriteAll);
+		} else if (keyboard_check_released(ord("3")))
+		{
+			// OPEN MULTIPLAYER MONITORING
+			global.GUIStateHandlerRef.RequestGUIView(GUI_VIEW.DebugMonitorMultiplayer, [
+				CreateWindowDebugMonitorMultiplayer(GAME_WINDOW.DebugMonitor, -1, global.DebugMonitorMultiplayerHandlerRef)
+			], GUI_CHAIN_RULE.OverwriteAll);
 		}
 	}
 }
