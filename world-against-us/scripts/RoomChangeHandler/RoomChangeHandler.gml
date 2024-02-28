@@ -85,6 +85,9 @@ function RoomChangeHandler() constructor
 				if (global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 				{
 					global.PlayerCharacter.is_fast_traveling = true;
+					
+					// DEBUG MONITOR
+					global.DebugMonitorMultiplayerHandlerRef.StartFastTravelTimeSampling();
 				} else {
 					show_debug_message("Failed to request fast travel");	
 				}
