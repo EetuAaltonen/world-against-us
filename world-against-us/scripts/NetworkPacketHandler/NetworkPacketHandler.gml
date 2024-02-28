@@ -244,6 +244,9 @@ function NetworkPacketHandler() constructor
 											{
 												global.NotificationHandlerRef.AddNotificationPlayerReturnedToCamp(global.NetworkHandlerRef.player_tag);
 											}
+											
+											// DEBUG MONITOR
+											global.DebugMonitorMultiplayerHandlerRef.EndFastTravelTimeSampling();
 												
 											// RESPOND WITH ACKNOWLEDGMENT TO SUCCESS FAST TRAVEL REQUEST
 											isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();

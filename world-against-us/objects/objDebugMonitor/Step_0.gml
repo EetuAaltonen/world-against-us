@@ -1,4 +1,8 @@
 debugMonitorGameHandler.Update();
+if (global.MultiplayerMode)
+{
+	debugMonitorMultiplayerHandler.Update();	
+}
 
 if (keyboard_check_released(KEY_DEBUG_MONITOR))
 {
