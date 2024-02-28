@@ -8,6 +8,7 @@ global.ObjMouse = instance_exists(objMouse) ? instance_find(objMouse, 0) : noone
 global.NotificationHandlerRef = instance_exists(objNotification) ? instance_find(objNotification, 0).notificationHandler : undefined;
 global.ConsoleHandlerRef = instance_exists(objConsole) ? instance_find(objConsole, 0).consoleHandler : undefined;
 global.DebugMonitorGameHandlerRef = instance_exists(objDebugMonitor) ? instance_find(objDebugMonitor, 0).debugMonitorGameHandler : undefined;
+global.DebugMonitorNetworkHandlerRef = instance_exists(objDebugMonitor) ? instance_find(objDebugMonitor, 0).debugMonitorNetworkHandler : undefined;
 global.ObjNetwork = instance_exists(objNetwork) ? instance_find(objNetwork, 0) : noone;
 global.NetworkHandlerRef = instance_exists(objNetwork) ? instance_find(objNetwork, 0).networkHandler : undefined;
 global.NetworkRegionHandlerRef = (!is_undefined(global.NetworkHandlerRef)) ? global.NetworkHandlerRef.network_region_handler : undefined;

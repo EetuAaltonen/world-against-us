@@ -124,6 +124,7 @@ global.GUIStateHandlerRef = undefined;
 global.ObjMouse = noone;
 global.ConsoleHandlerRef = undefined;
 global.DebugMonitorGameHandlerRef = undefined;
+global.DebugMonitorNetworkHandlerRef = undefined;
 global.NotificationHandlerRef = undefined;
 global.ObjNetwork = noone;
 global.NetworkHandlerRef = undefined;
