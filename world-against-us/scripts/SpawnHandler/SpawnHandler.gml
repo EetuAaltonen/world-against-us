@@ -143,6 +143,8 @@ function SpawnHandler() constructor
 			
 			// SPAWN PLAYER INSTANCE WITH INSTANCE OBJECT DATA
 			var playerInstance = SpawnInstance(playerInstanceObject);
+			// FETCH CHARACTER FROM GLOBAL VARIABLE
+			playerInstance.character = global.PlayerCharacter;
 			// SET GLOBAL VARIABLE
 			global.InstancePlayer = playerInstance;
 		}
