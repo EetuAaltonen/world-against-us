@@ -141,7 +141,7 @@ function NetworkPacketTracker() constructor
 		if (!PatchInFlightPacketTrack(_networkPacket))
 		{
 			var consoleLog = string("Unable to add network packet with message type {0} to in-flight packet tracking", _networkPacket.header.message_type);
-			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);	
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
 		}
 		
 		// CLEAR PENDING ACK RANGE
