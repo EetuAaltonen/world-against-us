@@ -1,40 +1,83 @@
 // OVERRIDE THE PARENT EVENT
-if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
+if (!is_undefined(character))
 {
-	character.Update();
-	if (character.IsInvulnerableState()) return;
-	
-	// CHECK GUI STATE
-	if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;
-	GetLocalPlayerMovementInput(movementInput);
-	
-	// QUICK HEAL
-	if (keyboard_check_released(ord("Q")))
+	if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 	{
-		var medicine = FetchMedicineFromPockets();
-		if (!is_undefined(medicine))
+		character.Update();
+		if (character.IsInvulnerableState()) return;
+	
+		// CHECK GUI STATE
+		if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;
+		
+		if (!autopilotMode)
 		{
-			character.UseMedicine(medicine);
-			if (medicine.metadata.healing_left <= 0)
-			{
-				medicine.sourceInventory.RemoveItemByGridIndex(medicine.grid_index);
-			}
+			GetLocalPlayerMovementInput(movementInput);
 		} else {
-			// NOTIFICATION LOG
-			global.NotificationHandlerRef.AddNotification(
-				new Notification(
-					undefined,
-					"Quick healing failed, missing healing items",
-					undefined,
-					NOTIFICATION_TYPE.Log
-				)
-			);
+			autopilotInputTimer.Update();
+			if (autopilotInputTimer.IsTimerStopped())
+			{
+				// CALCULATE NEW RANDOM MOVEMENT INPUT
+				GenerateAutopilotMovementInput(movementInput);
+				
+				// RESTART AUTOPILOT TIMER
+				autopilotInputTimer.StartTimer();	
+			}
+		}
+	
+		// QUICK HEAL
+		if (keyboard_check_released(ord("Q")))
+		{
+			var medicine = FetchMedicineFromPockets();
+			if (!is_undefined(medicine))
+			{
+				character.UseMedicine(medicine);
+				if (medicine.metadata.healing_left <= 0)
+				{
+					medicine.sourceInventory.RemoveItemByGridIndex(medicine.grid_index);
+				}
+			} else {
+				// NOTIFICATION LOG
+				global.NotificationHandlerRef.AddNotification(
+					new Notification(
+						undefined,
+						"Quick healing failed, missing healing items",
+						undefined,
+						NOTIFICATION_TYPE.Log
+					)
+				);
+			}
+		}
+	
+		// DEBUG MODE
+		maxSpeed = (global.DEBUGMODE) ? 10 : baseMaxSpeed;
+		acceleration = (global.DEBUGMODE) ? 0.5 : baseAcceleration;
+		if (global.DEBUGMODE)
+		{
+			if (keyboard_check_released(KEY_DEBUG_PLAYER_AUTOPILOT))
+			{
+				autopilotMode = !autopilotMode;
+				
+				if (autopilotMode)
+				{
+					autopilotInputTimer.StartTimer();
+				} else {
+					autopilotInputTimer.StopTimer();
+				}
+				
+				var autopilotNotification = string(
+					"Player autopilot turned {0}",
+					autopilotMode ? "ON" : "OFF"
+				);
+				global.NotificationHandlerRef.AddNotification(
+					new Notification(
+						undefined,
+						autopilotNotification,
+						undefined, NOTIFICATION_TYPE.Log
+					)
+				);
+			}
 		}
 	}
-	
-	// DEBUG MODE
-	maxSpeed = (global.DEBUGMODE) ? 10 : baseMaxSpeed;
-	acceleration = (global.DEBUGMODE) ? 0.5 : baseAcceleration;
 }
 
 var hInput = movementInput.key_right - movementInput.key_left;
