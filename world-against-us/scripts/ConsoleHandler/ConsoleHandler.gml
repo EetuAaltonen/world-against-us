@@ -51,15 +51,19 @@ function ConsoleHandler() constructor
 		}
 		ds_list_add(console_logs, consoleLog);
 		
-		var consoleWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.Console);
-		if (!is_undefined(consoleWindow))
+		var currentGUIState = global.GUIStateHandlerRef.GetGUIState();
+		if (currentGUIState.index == GUI_STATE.Console)
 		{
-			var consoleLogListElement = consoleWindow.GetChildElementById("ConsoleLogList");
-			if (!is_undefined(consoleLogListElement))
+			var consoleWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.Console);
+			if (!is_undefined(consoleWindow))
 			{
-				var consoleMessages = ds_list_create();
-				ds_list_copy(consoleMessages, global.ConsoleHandlerRef.console_logs);
-				consoleLogListElement.UpdateDataCollection(consoleMessages);
+				var consoleLogListElement = consoleWindow.GetChildElementById("ConsoleLogList");
+				if (!is_undefined(consoleLogListElement))
+				{
+					var consoleMessages = ds_list_create();
+					ds_list_copy(consoleMessages, global.ConsoleHandlerRef.console_logs);
+					consoleLogListElement.UpdateDataCollection(consoleMessages);
+				}
 			}
 		}
 	}
