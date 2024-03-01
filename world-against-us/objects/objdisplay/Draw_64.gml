@@ -33,6 +33,11 @@ if (global.MultiplayerMode)
 			draw_text(global.GUIW - 20, 130, string("{0}ms :Ping", !is_undefined(global.NetworkConnectionSamplerRef.ping) ? global.NetworkConnectionSamplerRef.ping : "-"));
 			draw_text(global.GUIW - 20, 150, string("{0}kb/s :Out", BytesToKilobits(global.NetworkConnectionSamplerRef.last_data_out_rate)));
 			draw_text(global.GUIW - 20, 170, string("{0}kb/s :In", BytesToKilobits(global.NetworkConnectionSamplerRef.last_data_in_rate)));
+			var queuedPacketCount = ds_queue_size(global.NetworkHandlerRef.network_packet_queue);
+			if (queuedPacketCount > 3)
+			{
+				draw_text(global.GUIW - 20, 190, string("{0}x :Queue", queuedPacketCount));
+			}
 		}
 	}
 }
