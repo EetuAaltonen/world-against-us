@@ -83,7 +83,6 @@ function GameWindowHandler() constructor
 	{
 		var window = undefined;
 		var windowCount = ds_list_size(gameWindows);
-		
 		for (var i = windowCount - 1; i >= 0; i--)
 		{
 			var gameWindow = gameWindows[| i];
