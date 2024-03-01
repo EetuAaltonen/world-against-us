@@ -1,12 +1,12 @@
 draw_set_color(c_yellow);
 draw_set_font(font_small_bold);
 // FPS
-draw_text(12, 28, "FPS: " + string(_fps));
-draw_text(12, 44, "FPS real: " + string(fpsReal));
+draw_text(12, 36, "FPS: " + string(_fps));
+draw_text(12, 52, "FPS real: " + string(fpsReal));
 // DEBUG FPS
 if (global.DEBUGMODE)
 {
-	draw_text(12, 60, "DeltaTime: " + string(delta_time));
+	draw_text(12, 68, "DeltaTime: " + string(delta_time));
 }
 // RESET DRAW PROPERTIES
 ResetDrawProperties();
