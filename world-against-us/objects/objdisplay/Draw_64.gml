@@ -1,12 +1,12 @@
 draw_set_color(c_yellow);
 draw_set_font(font_small_bold);
 // FPS
-draw_text(12, 28, "FPS: " + string(_fps));
-draw_text(12, 44, "FPS real: " + string(fpsReal));
+draw_text(12, 36, "FPS: " + string(_fps));
+draw_text(12, 52, "FPS real: " + string(fpsReal));
 // DEBUG FPS
 if (global.DEBUGMODE)
 {
-	draw_text(12, 60, "DeltaTime: " + string(delta_time));
+	draw_text(12, 68, "DeltaTime: " + string(delta_time));
 }
 // RESET DRAW PROPERTIES
 ResetDrawProperties();
@@ -33,6 +33,11 @@ if (global.MultiplayerMode)
 			draw_text(global.GUIW - 20, 130, string("{0}ms :Ping", !is_undefined(global.NetworkConnectionSamplerRef.ping) ? global.NetworkConnectionSamplerRef.ping : "-"));
 			draw_text(global.GUIW - 20, 150, string("{0}kb/s :Out", BytesToKilobits(global.NetworkConnectionSamplerRef.last_data_out_rate)));
 			draw_text(global.GUIW - 20, 170, string("{0}kb/s :In", BytesToKilobits(global.NetworkConnectionSamplerRef.last_data_in_rate)));
+			var queuedPacketCount = ds_queue_size(global.NetworkHandlerRef.network_packet_queue);
+			if (queuedPacketCount > 3)
+			{
+				draw_text(global.GUIW - 20, 190, string("{0}x :Queue", queuedPacketCount));
+			}
 		}
 	}
 }
