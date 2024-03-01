@@ -2,7 +2,7 @@ function CreateWindowConsole(_gameWindowId, _zIndex, _consoleMessages)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH);
 	var windowStyle = new GameWindowStyle(c_black, 0.8);
-	var mapWindow = new GameWindow(
+	var consoleWindow = new GameWindow(
 		_gameWindowId,
 		new Vector2(0, 0),
 		windowSize, windowStyle, _zIndex
@@ -44,6 +44,6 @@ function CreateWindowConsole(_gameWindowId, _zIndex, _consoleMessages)
 		consoleLogElement
 	);
 	
-	mapWindow.AddChildElements(consoleElements);
-	return mapWindow;
+	consoleWindow.AddChildElements(consoleElements);
+	return consoleWindow;
 }
