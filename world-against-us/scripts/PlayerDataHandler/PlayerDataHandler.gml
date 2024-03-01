@@ -8,6 +8,8 @@ function PlayerDataHandler() constructor
 	magazinePockets = undefined;
 	medicinePockets = undefined;
 	
+	positionSyncTImer = new Timer(500);
+	
 	static OnDestroy = function()
 	{
 		character.OnDestroy();
@@ -18,6 +20,70 @@ function PlayerDataHandler() constructor
 		magazinePockets = undefined;
 		medicinePockets.OnDestroy();
 		medicinePockets = undefined;
+	}
+	
+	static Update = function()
+	{
+		if (global.MultiplayerMode)
+		{
+			if (instance_exists(global.InstancePlayer))
+			{
+				positionSyncTImer.Update();
+				var playerInstance = global.InstancePlayer;
+				if (playerInstance.x != playerInstance.previousPosition.X || playerInstance.y != playerInstance.previousPosition.Y )
+				{
+					if (positionSyncTImer.IsTimerStopped())
+					{
+						var formatPosition = ScaleFloatValuesToIntVector2(playerInstance.x, playerInstance.y);
+						var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PLAYER_DATA_POSITION);
+						var networkPacket = new NetworkPacket(
+							networkPacketHeader,
+							formatPosition,
+							PACKET_PRIORITY.DEFAULT,
+							undefined
+						);
+						if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+						{
+							// TODO: Generic error handling
+							show_debug_message("Unable to queue MESSAGE_TYPE.PLAYER_DATA_POSITION");
+						}
+						// UPDATE PREVIOUS POSITION
+						playerInstance.previousPosition.X = playerInstance.x;
+						playerInstance.previousPosition.Y = playerInstance.y;
+				
+						// RESET TIMER
+						positionSyncTImer.StartTimer();
+					}
+				}
+				
+				// UPDATE PLAYER MOVEMENT INPUT
+				var movementInput = playerInstance.movementInput;
+				var prevMovementInput = playerInstance.prevMovementInput;
+				if (movementInput.key_up != prevMovementInput.key_up ||
+					movementInput.key_down != prevMovementInput.key_down ||
+					movementInput.key_left != prevMovementInput.key_left ||
+					movementInput.key_right != prevMovementInput.key_right)
+				{
+					var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT);
+					var networkPacket = new NetworkPacket(
+						networkPacketHeader,
+						movementInput,
+						PACKET_PRIORITY.DEFAULT,
+						undefined
+					);
+					if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+					{
+						// TODO: Generic error handling
+						show_debug_message("Unable to queue MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT");
+					}
+					
+					prevMovementInput.key_up = movementInput.key_up;
+					prevMovementInput.key_down = movementInput.key_down;
+					prevMovementInput.key_left = movementInput.key_left;
+					prevMovementInput.key_right = movementInput.key_right;
+				}
+			}
+		}
 	}
 	
 	static InitPlayerData = function()
