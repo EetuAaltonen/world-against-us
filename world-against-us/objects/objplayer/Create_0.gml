@@ -23,7 +23,7 @@ prevMovementInput = new DeviceInputMovement(0, 0, 0, 0);
 
 // NETWORKING
 previousPosition = new Vector2(0, 0);
-positionSyncTImer = new Timer(200);
+
 // DEBUG AUTOPILOT BOT
 autopilotMode = false;
 autopilotInputTimer = new Timer(500);
