@@ -22,6 +22,40 @@ function PlayerDataHandler() constructor
 		medicinePockets = undefined;
 	}
 	
+	static OnRoomStart = function()
+	{
+		// NETWORKING
+		if (global.MultiplayerMode)
+		{
+			// START POSITION SYNC TIMER
+			positionSyncTImer.StartTimer();
+		}
+		
+		if (!is_undefined(character))
+		{
+			// RESTORE PLAYER CHARACTER STATE TO NORMAL
+			if (character.IsInvulnerableState())
+			{
+				if (room_get_name(room) == ROOM_INDEX_CAMP)
+				{
+					// DELETE ALL ITEMS AFTER BEING ROBBED
+					// AND SAVE LOCAL GAME
+					if (character.is_robbed)
+					{
+						// DELETE ALL ITEMS
+						global.PlayerBackpack.ClearAllItems();
+				
+						character.RestoreState();
+				
+						// SAVE 
+						global.GameSaveHandlerRef.SaveGame();
+					}
+				}
+				character.RestoreState();
+			}
+		}
+	}
+	
 	static Update = function()
 	{
 		if (global.MultiplayerMode)
