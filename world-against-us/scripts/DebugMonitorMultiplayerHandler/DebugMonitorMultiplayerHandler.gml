@@ -22,26 +22,29 @@ function DebugMonitorMultiplayerHandler() constructor
 		{
 			// SAMPLE NETWORK ENTITY COUNT
 			var networkEntityCount = 0;
-			var regionHandler = global.NetworkRegionObjectHandlerRef;
-			// LOCAL INSTANCE OBJECTS
-			if (instance_exists(global.InstancePlayer)) networkEntityCount++;
-			var localPlayers = regionHandler.local_players;
-			if (!is_undefined(localPlayers)) networkEntityCount += ds_list_size(localPlayers);
-			var localPatrols = regionHandler.local_patrols;
-			if (!is_undefined(localPatrols)) networkEntityCount += ds_list_size(localPatrols);
-			if (!is_undefined(regionHandler.scouting_drone)) networkEntityCount++;
-			// CONTAINERS
-			if (!is_undefined(regionHandler.requested_container_access)) networkEntityCount++;
-			// SCOUTING STREAM
-			var mapDataHandler = global.MapDataHandlerRef;
-			if (!is_undefined(mapDataHandler.active_operations_scout_stream))
+			if (IS_ROOM_IN_GAME_WORLD)
 			{
-				// OPERATIONS CENTER INSTANCE
-				networkEntityCount++;
-				// SCOUTING DRONE
-				if (!is_undefined(mapDataHandler.scouting_drone)) networkEntityCount++;
-				// MONITORED INSTANCE OBJECTS
-				if (!is_undefined(mapDataHandler.dynamic_map_data)) networkEntityCount += ds_list_size(mapDataHandler.dynamic_map_data);
+				var regionHandler = global.NetworkRegionObjectHandlerRef;
+				// LOCAL INSTANCE OBJECTS
+				if (instance_exists(global.InstancePlayer)) networkEntityCount++;
+				var localPlayers = regionHandler.local_players;
+				if (!is_undefined(localPlayers)) networkEntityCount += ds_list_size(localPlayers);
+				var localPatrols = regionHandler.local_patrols;
+				if (!is_undefined(localPatrols)) networkEntityCount += ds_list_size(localPatrols);
+				if (!is_undefined(regionHandler.scouting_drone)) networkEntityCount++;
+				// CONTAINERS
+				if (!is_undefined(regionHandler.requested_container_access)) networkEntityCount++;
+				// SCOUTING STREAM
+				var mapDataHandler = global.MapDataHandlerRef;
+				if (!is_undefined(mapDataHandler.active_operations_scout_stream))
+				{
+					// OPERATIONS CENTER INSTANCE
+					networkEntityCount++;
+					// SCOUTING DRONE
+					if (!is_undefined(mapDataHandler.scouting_drone)) networkEntityCount++;
+					// MONITORED INSTANCE OBJECTS
+					if (!is_undefined(mapDataHandler.dynamic_map_data)) networkEntityCount += ds_list_size(mapDataHandler.dynamic_map_data);
+				}
 			}
 			
 			if (array_length(network_entities_samples) >= network_entities_samples_max_count) array_shift(network_entities_samples);
