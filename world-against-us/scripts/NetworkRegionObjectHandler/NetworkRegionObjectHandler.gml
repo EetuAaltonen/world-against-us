@@ -121,7 +121,8 @@ function NetworkRegionObjectHandler() constructor
 					array_push(existContainerIds, containerInstance.containerId);
 				} else {
 					isContainersValid = false;
-					show_debug_message(string("Duplicate container ID {0} type of {1}", containerInstance.containerId, containerInstance.lootTableTag));
+					var consoleLog = string("Duplicate container object type of {0} with container ID {0} and loot table tag {1}", object_get_name(containerInstance.object_index), containerInstance.containerId, containerInstance.lootTableTag);
+					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
 				}
 			}
 		}

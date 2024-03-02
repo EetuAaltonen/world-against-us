@@ -16,7 +16,8 @@ if (initWeapon)
 			
 		if (owner.character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 		{
-			if (!is_undefined(global.ObjNetwork.client.clientId))
+			// TODO: Fix weapon equip network coding
+			/*if (!is_undefined(global.ObjNetwork.client.clientId))
 			{
 				// NETWORKING WEAPON EQUIP FUNCTIONS
 				var networkBuffer = global.ObjNetwork.client.CreateBuffer(MESSAGE_TYPE.DATA_PLAYER_WEAPON_EQUIP);
@@ -24,7 +25,7 @@ if (initWeapon)
 			
 				buffer_write(networkBuffer, buffer_text, jsonData);
 				global.ObjNetwork.client.SendPacketOverUDP(networkBuffer);
-			}
+			}*/
 		}
 	}
 }
