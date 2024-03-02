@@ -1,6 +1,6 @@
 function CallbackGUIStateInputPlayerOverview()
 {
-	if (room != roomMainMenu)
+	if (IS_ROOM_IN_GAME_WORLD)
 	{
 		var currentGUIState = global.GUIStateHandlerRef.GetGUIState();
 		if (currentGUIState.index == GUI_STATE.PlayerOverview)
