@@ -2,6 +2,9 @@ if (global.MultiplayerMode)
 {
 	if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 	{
+		/*
+			// TODO: Include player velocity to PLAYER_DATA_POSITION packet in network coding
+			// and rename to PLAYER_DATA_MOVEMENT
 			/*
 			if (hSpeed != prev_hspeed || vSpeed != prev_vspeed)
 			{
@@ -14,7 +17,7 @@ if (global.MultiplayerMode)
 				
 				// RESET PREVIOUS VALUES
 				ResetPlayerVelocityValues();
-			}*/
-		}
+			}
+		}*/
 	}
 }
