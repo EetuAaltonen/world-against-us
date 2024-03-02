@@ -169,7 +169,7 @@ function PlayerDataHandler() constructor
 						global.ItemDatabase.GetItemByName("Watering Can"),
 						global.ItemDatabase.GetItemByName("Garden Tools"),
 						global.ItemDatabase.GetItemByName("Fertilizer Sack"),
-						global.ItemDatabase.GetItemByName("Tomato Seed Pack")
+						global.ItemDatabase.GetItemByName("Tomato Seed Pack", 10)
 					]);
 				}
 				isPlayerDataLoaded = true;
