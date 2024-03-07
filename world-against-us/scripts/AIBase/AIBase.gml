@@ -11,7 +11,7 @@ function AIBase(_instanceRef, _aiStates, _defaultAIStateIndex) constructor
 		return;
 	}
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
 		// OVERDRIVE THIS FUNCTION
 		return;
