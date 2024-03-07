@@ -1,5 +1,6 @@
 function CharacterHuman(_name, _type, _race, _behaviour) : Character(_name, _type, _race, _behaviour) constructor
 {
+	// STATS
 	max_fullness = 100;
 	fullness = max_fullness;
 	hunger_base_rate = 0.0025;
@@ -15,7 +16,16 @@ function CharacterHuman(_name, _type, _race, _behaviour) : Character(_name, _typ
 	fatigue_base_rate = 0.0001;
 	fatigue_rate = fatigue_base_rate;
 	
-	vision_radius = 600;
+	// MOBILITY
+	// TODO: Add variables for walking and running
+	// and make this adjustable
+	max_speed = 5;
+	
+	// SENSES
+	vision_radius = MetersToPixels(20);
+	
+	// COMBAT
+	close_range_radius = MetersToPixels(2);
 	
 	backpack_slot = new Inventory(string("{0}_Inventory", _name), INVENTORY_TYPE.BackpackSlot, new InventorySize(3, 4), new InventoryFilter([], ["Backpack"], []));
 	
