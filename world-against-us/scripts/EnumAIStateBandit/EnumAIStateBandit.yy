@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "EnumAIState",
+  "name": "EnumAIStateBandit",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "AI",
-    "path": "folders/Scripts/World/Character/AI.yy",
+    "name": "AIState",
+    "path": "folders/Scripts/Game/Data/AI/AIState.yy",
   },
 }
