@@ -1,99 +1,86 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
-var checkChaseCondition = function()
+aiBandit.Update();
+
+// AI BEHAVIOUR
+/*switch (aiState)
 {
-	var nearestTargetInstance = instance_nearest(x, y, objPlayer);
-	if (instance_exists(nearestTargetInstance))
+	case AI_STATE_BANDIT.PATROL_RETURN:
 	{
-		var targetPos = new Vector2(
-			(nearestTargetInstance.bbox_left + ((nearestTargetInstance.bbox_right - nearestTargetInstance.bbox_left) * 0.5)),
-			max(nearestTargetInstance.y, nearestTargetInstance.bbox_bottom)
-		);
-		var distanceToTarget = point_distance(x, y, targetPos.X, targetPos.Y);
-		if (distanceToTarget <= visionRadius)
+		checkChaseCondition();
+		
+		if (aiState == AI_STATE_BANDIT.PATROL_RETURN)
 		{
-			if (!is_undefined(nearestTargetInstance.character))
+			if (!is_undefined(targetPath))
 			{
-				if (!nearestTargetInstance.character.IsInvulnerableState())
+				var distanceToPriorPoint = distance_to_point(patrolPathLastPosition.X, patrolPathLastPosition.Y);
+				var distanceThreshold = 100;
+				if (path_position == 1 || (distanceToPriorPoint <= distanceThreshold))
 				{
-					aiState = AI_STATE.CHASE;
-					
-					// NETWORKING
-					BroadcastPatrolState(patrolId, aiState);
-					
-					// CACHE CURRENT PATROL STEP
-					if (targetPath == patrolPath)
+					continuePatrolling();
+				}
+			} else {
+				var distanceToPriorPoint = distance_to_point(patrolPathLastPosition.X, patrolPathLastPosition.Y);
+				if (distanceToPriorPoint > (pathBlockingRadius * 2))
+				{
+					// CALCULATE NEW PATH TO PRIOR PATROL POINT
+					path_clear_points(pathToTarget);
+				
+					// TODO: Multiple duplicate mp_grid_path code
+					if (mp_grid_path(global.ObjGridPath.roomGrid, pathToTarget, x, y, patrolPathLastPosition.X, patrolPathLastPosition.Y, true))
 					{
-						patrolPathPercent = path_position;
-						patrolPathLastPosition = new Vector2(
-							path_get_x(path_index, patrolPathPercent),
-							path_get_y(path_index, patrolPathPercent)
+						targetPath = pathToTarget;
+						targetPosition = patrolPathLastPosition;
+					
+						// NETWORKING
+						var patrolState = new PatrolState(
+							global.NetworkRegionHandlerRef.region_id,
+							patrolId, aiState,
+							patrolRouteProgress,
+							new Vector2(x, y),
+							targetPosition
 						);
+						BroadcastPatrolState(patrolState);
+					
+						path_start(targetPath, maxSpeed, path_action_stop, false);
 					}
-					path_end();
-					// SET NEW TARGET
-					targetInstance = nearestTargetInstance;
-					// START CHASE PATH UPDATE TIMER
-					chasePathUpdateTimer.StartTimer();
+				} else {
+					continuePatrolling();	
 				}
 			}
+		}
+	} break;
+	default:
+	{
+		if (path_position == 1) {
+			// TODO: Broad cast patrol end sync
+			// and make sure clients destroy related patrols locally
+			path_end();
 		}
 	}
 }
 
-var resumePatrolling = function()
-{
-	path_end();
-	aiState = AI_STATE.PATROL_RESUME;
-	targetInstance = noone;
-	targetPath = undefined;
-	
-	// NETWORKING
-	BroadcastPatrolState(patrolId, aiState);
-	
-	// CLEAR CHASE PATH POINTS
-	path_clear_points(pathToTarget);
-	
-	// STOP CHASE PATH UPDATE TIMER
-	chasePathUpdateTimer.StopTimer();
-}
-
-var continuePatrolling = function()
-{
-	// CONTINUE PATROLLING
-	aiState = AI_STATE.PATROL;
-	targetPath = patrolPath;
-	path_start(targetPath, maxSpeed, path_action_stop, true);
-	path_position = max(0, patrolPathPercent);
-	
-	// NETWORKING
-	BroadcastPatrolState(patrolId, aiState);
-
-	// CLEAR PATROL CACHE
-	patrolPathPercent = -1;
-	patrolPathLastPosition = undefined;
-}
-
-// AI BEHAVIOUR
+// TODO: Check if commented code below can be just removed
+/*
 switch (aiState)
 {
-	case AI_STATE.PATROL:
+	case AI_STATE_BANDIT.PATROL:
 	{
 		if (!is_undefined(targetPath))
 		{
 			if (path_position == 1) {
 				path_end();
-				aiState = AI_STATE.PATROL_END;
+				aiState = AI_STATE_BANDIT.PATROL_END;
 			} else {
 				checkChaseCondition();
 			}
 		} else {
 			path_end();
-			aiState = AI_STATE.TRAVEL;
+			aiState = AI_STATE_BANDIT.TRAVEL;
 		}
 	} break;
-	case AI_STATE.CHASE:
+	case AI_STATE_BANDIT.CHASE:
 	{
 		if (!instance_exists(targetInstance))
 		{
@@ -160,7 +147,7 @@ switch (aiState)
 									}
 								}*/
 								// RESET CHASE PATH UPDATE TIMER
-								chasePathUpdateTimer.StartTimer();
+								/*chasePathUpdateTimer.StartTimer();
 							}
 						}
 					}
@@ -172,7 +159,7 @@ switch (aiState)
 			}
 		}
 	} break;
-	case AI_STATE.PATROL_RESUME:
+	case AI_STATE_BANDIT.PATROL_RETURN:
 	{
 		if (!is_undefined(targetPath))
 		{
@@ -205,7 +192,7 @@ switch (aiState)
 			path_end();
 		}
 	}
-}
+}*/
 
 /*if (targetInstance == noone)
 {
