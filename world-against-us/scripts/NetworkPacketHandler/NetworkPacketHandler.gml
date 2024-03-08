@@ -388,7 +388,7 @@ function NetworkPacketHandler() constructor
 							}
 						}
 					} break;
-					case MESSAGE_TYPE.PATROL_STATE:
+					case MESSAGE_TYPE.SYNC_PATROL_STATE:
 					{
 						var patrolState = payload;
 						if (!is_undefined(patrolState))

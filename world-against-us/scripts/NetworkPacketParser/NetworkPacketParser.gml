@@ -286,7 +286,7 @@ function NetworkPacketParser() constructor
 							[]
 						);
 					} break;
-					case MESSAGE_TYPE.PATROL_STATE:
+					case MESSAGE_TYPE.SYNC_PATROL_STATE:
 					{
 						var parsedRegionId = buffer_read(_msg, buffer_u32);
 						var parsedPatrolId = buffer_read(_msg, buffer_u8);

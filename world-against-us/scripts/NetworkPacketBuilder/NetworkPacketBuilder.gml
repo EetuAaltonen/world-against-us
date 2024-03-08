@@ -209,7 +209,7 @@ function NetworkPacketBuilder() constructor
 						buffer_write(_networkBuffer, buffer_text, networkContainerContentRequest.container_id);
 						isPayloadWritten = true;
 					} break;
-					case MESSAGE_TYPE.PATROL_STATE:
+					case MESSAGE_TYPE.SYNC_PATROL_STATE:
 					{
 						var patrolState = _networkPacketPayload;
 						buffer_write(_networkBuffer, buffer_u32, patrolState.region_id);
