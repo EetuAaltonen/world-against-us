@@ -254,10 +254,14 @@ export default class Instance {
                     `Patrol with ID ${patrolId} arrived to destination`
                   );
                   // Broadcast new state
+                  const formatRouteProgress = patrol.getRouteProgress();
                   const patrolState = new PatrolState(
                     this.instanceId,
                     patrolId,
-                    patrol.aiState
+                    patrol.aiState,
+                    formatRouteProgress,
+                    patrol.position,
+                    patrol.targetNetworkId
                   );
                   this.networkHandler.broadcastPatrolState(
                     this.instanceId,
