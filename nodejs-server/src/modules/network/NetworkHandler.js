@@ -592,7 +592,7 @@ export default class NetworkHandler {
   broadcastPatrolState(instanceId, patrolState) {
     let isStateBroadcasted = false;
     const networkPacketHeader = new NetworkPacketHeader(
-      MESSAGE_TYPE.PATROL_STATE,
+      MESSAGE_TYPE.SYNC_PATROL_STATE,
       UNDEFINED_UUID
     );
     const networkPacket = new NetworkPacket(

@@ -292,7 +292,7 @@ export default class NetworkPacketParser {
               };
             }
             break;
-          case MESSAGE_TYPE.PATROL_STATE:
+          case MESSAGE_TYPE.SYNC_PATROL_STATE:
             {
               const parsedInstanceId = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;

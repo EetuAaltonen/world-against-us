@@ -687,7 +687,7 @@ export default class NetworkPacketHandler {
             }
           }
           break;
-        case MESSAGE_TYPE.PATROL_STATE:
+        case MESSAGE_TYPE.SYNC_PATROL_STATE:
           {
             const patrolState = networkPacket.payload;
             if (patrolState !== undefined) {

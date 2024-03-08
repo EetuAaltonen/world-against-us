@@ -342,7 +342,7 @@ export default class NetworkPacketBuilder {
               isPayloadWritten = true;
             }
             break;
-          case MESSAGE_TYPE.PATROL_STATE:
+          case MESSAGE_TYPE.SYNC_PATROL_STATE:
             {
               const bufferPatrol = Buffer.allocUnsafe(
                 BITWISE.BIT32 + BITWISE.BIT8 + BITWISE.BIT8
