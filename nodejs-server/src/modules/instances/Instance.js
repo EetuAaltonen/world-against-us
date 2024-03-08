@@ -1,7 +1,7 @@
 import MESSAGE_TYPE from "../network/MessageType.js";
 import PACKET_PRIORITY from "../network/PacketPriority.js";
 import ROOM_INDEX from "./RoomIndex.js";
-import AI_STATE from "../patrols/AIState.js";
+import AI_STATE_BANDIT from "../patrols/AIStateBandit.js";
 
 import ConsoleHandler from "../console/ConsoleHandler.js";
 import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
@@ -247,9 +247,9 @@ export default class Instance {
             patrol.travelTime = Math.max(0, patrol.travelTime - passedTickTime);
           } else {
             switch (patrol.aiState) {
-              case AI_STATE.TRAVEL:
+              case AI_STATE_BANDIT.TRAVEL:
                 {
-                  patrol.aiState = AI_STATE.PATROL;
+                  patrol.aiState = AI_STATE_BANDIT.PATROL;
                   ConsoleHandler.Log(
                     `Patrol with ID ${patrolId} arrived to destination`
                   );
@@ -265,16 +265,16 @@ export default class Instance {
                   );
                 }
                 break;
-              case AI_STATE.PATROL:
+              case AI_STATE_BANDIT.PATROL:
                 {
                   // Simulate patrol movements when game area is empty
                   if (this.ownerClient === undefined) {
-                    if (patrol.aiState === AI_STATE.PATROL) {
+                    if (patrol.aiState === AI_STATE_BANDIT.PATROL) {
                       patrol.routeTime -= passedTickTime;
                       patrol.routeProgress = patrol.getRouteProgress();
                     }
                     if (patrol.routeTime <= 0) {
-                      patrol.aiState = AI_STATE.PATROL_END;
+                      patrol.aiState = AI_STATE_BANDIT.PATROL_END;
                       ConsoleHandler.Log(
                         `Patrol with ID ${patrolId} left the area`
                       );
@@ -311,7 +311,7 @@ export default class Instance {
     const patrol = this.getPatrol(patrolState.patrolId);
     if (patrol !== undefined) {
       patrol.aiState = patrolState.aiState;
-      if (patrol.aiState !== AI_STATE.PATROL_END) {
+      if (patrol.aiState !== AI_STATE_BANDIT.PATROL_END) {
         patrol.routeProgress = patrolState.routeProgress;
         patrol.routeTime = patrol.totalRouteTime * patrol.routeProgress;
         patrol.position = patrolState.position;
@@ -364,8 +364,8 @@ export default class Instance {
     if (this.roomIndex !== ROOM_INDEX.ROOM_CAMP) {
       this.getAllPatrols().forEach((patrol) => {
         if (
-          patrol.aiState === AI_STATE.CHASE ||
-          patrol.aiState === AI_STATE.PATROL_RESUME
+          patrol.aiState === AI_STATE_BANDIT.CHASE ||
+          patrol.aiState === AI_STATE_BANDIT.PATROL_RESUME
         ) {
           patrol.forceResumePatrolling();
         }

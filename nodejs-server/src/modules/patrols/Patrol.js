@@ -1,4 +1,4 @@
-import AI_STATE from "./AIState.js";
+import AI_STATE_BANDIT from "./AIStateBandit.js";
 
 import GetRandomInt from "../math/GetRandomInt.js";
 import Vector2 from "../math/Vector2.js";
@@ -14,7 +14,7 @@ export default class Patrol {
     this.totalRouteTime = routeTime;
     this.routeTime = this.totalRouteTime;
     this.routeProgress = 0;
-    this.aiState = AI_STATE.TRAVEL;
+    this.aiState = AI_STATE_BANDIT.TRAVEL;
     this.travelTime = GetRandomInt(MIN_TRAVEL_TIME, MAX_TRAVEL_TIME);
     this.position = new Vector2(0, 0);
     this.targetNetworkId = UNDEFINED_UUID;
@@ -42,7 +42,7 @@ export default class Patrol {
   }
 
   forceResumePatrolling() {
-    this.aiState = AI_STATE.PATROL;
+    this.aiState = AI_STATE_BANDIT.PATROL;
     this.position.x = 0;
     this.position.y = 0;
   }
