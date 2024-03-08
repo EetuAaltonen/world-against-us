@@ -65,7 +65,85 @@ function Patrol(_patrol_id, _ai_state, _travel_time, _route_progress) constructo
 		}
 	}
 	
+	static SyncState = function(_patrolState)
+	{
+		var isSynced = false;
+		if (patrol_id == _patrolState.patrol_id)
+		{
+			if (instance_exists(instance_ref))
+			{
+				// SYNC AI STATE
+				ai_state = _patrolState.ai_state;
+				
+				switch (_patrolState.ai_state)
+				{
+					case AI_STATE_BANDIT.PATROL:
+					{
+						route_progress = _patrolState.route_progress;
+						
+						// SYNC INSTANCE BEHAVIOR
+						if (instance_exists(instance_ref))
+						{
+							isSynced = instance_ref.aiBandit.ResumePatrol();
+						}
+					} break;
+					case AI_STATE_BANDIT.CHASE:
+					{
+						if (instance_exists(instance_ref))
+						{
+							var targetInstance = FindInstanceNetwork(_patrolState.target_network_id, objPlayer);
+							if (instance_exists(targetInstance))
+							{
+								// SYNC INSTANCE BEHAVIOR
+								with (instance_ref)
+								{
+									// END PATHING
+									path_end();
+								
+									x = _patrolState.position.X;
+									y = _patrolState.position.Y;
+									
+									// SET TARGET
+									aiBandit.SetTargetInstance(targetInstance);
+									
+									// START CHASING TARGET
+									isSynced = aiBandit.StartChasingTarget();
+								}
+							}
+						}
+					} break;
+					case AI_STATE_BANDIT.PATROL_RETURN:
+					{
+						route_progress = _patrolState.route_progress;
+						
+						// SYNC INSTANCE BEHAVIOR
+						if (instance_exists(instance_ref))
+						{
+							with (instance_ref)
+							{
+								// END PATHING
+								path_end();
+								
+								x = _patrolState.position.X;
+								y = _patrolState.position.Y;
+									
+								// START CHASING TARGET
+								isSynced = aiBandit.ReturnToPatrol();
+							}
+						}
+					} break;
+					case AI_STATE_BANDIT.PATROL_END:
+					{
+						if (instance_exists(instance_ref))
+						{
+							instance_ref.aiBandit.EndPatrol();
+							isSynced = true;
+						}
+					} break;
+				}
+			}
 		}
+		return isSynced;
 	}
 	
 	static Sync = function(_syncPatrol)
