@@ -271,6 +271,7 @@ export default class Instance {
                   if (this.ownerClient === undefined) {
                     if (patrol.aiState === AI_STATE.PATROL) {
                       patrol.routeTime -= passedTickTime;
+                      patrol.routeProgress = patrol.getRouteProgress();
                     }
                     if (patrol.routeTime <= 0) {
                       patrol.aiState = AI_STATE.PATROL_END;
@@ -278,10 +279,14 @@ export default class Instance {
                         `Patrol with ID ${patrolId} left the area`
                       );
                       // Broadcast new state
+                      const formatRouteProgress = patrol.getRouteProgress();
                       const patrolState = new PatrolState(
                         this.instanceId,
                         patrolId,
-                        patrol.aiState
+                        patrol.aiState,
+                        formatRouteProgress,
+                        patrol.position,
+                        patrol.targetNetworkId
                       );
                       this.networkHandler.broadcastPatrolState(
                         this.instanceId,
@@ -301,11 +306,19 @@ export default class Instance {
     return isPatrolsUpdated;
   }
 
-  handlePatrolState(patrolState) {
+  syncPatrolState(patrolState) {
     var isStateHandled = false;
     const patrol = this.getPatrol(patrolState.patrolId);
     if (patrol !== undefined) {
       patrol.aiState = patrolState.aiState;
+      if (patrol.aiState !== AI_STATE.PATROL_END) {
+        patrol.routeProgress = patrolState.routeProgress;
+        patrol.routeTime = patrol.totalRouteTime * patrol.routeProgress;
+        patrol.position = patrolState.position;
+        patrol.targetNetworkId = patrolState.targetNetworkId;
+      } else {
+        this.removePatrol(patrol.patrolId);
+      }
       isStateHandled = true;
     }
     return isStateHandled;
