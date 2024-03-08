@@ -238,8 +238,6 @@ export default class NetworkHandler {
           sentNetworkPacketBytes
         );
       }
-      // Reset send rate timer
-      client.packetSendRateTimer = 0;
     }
   }
 
