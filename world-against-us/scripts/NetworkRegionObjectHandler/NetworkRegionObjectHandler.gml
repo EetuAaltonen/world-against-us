@@ -2,6 +2,7 @@ function NetworkRegionObjectHandler() constructor
 {
 	active_inventory_stream = undefined;
 	requested_container_access = undefined;
+	
 	// TODO: Move under the Region struct
 	local_players = ds_list_create();
 	local_patrols = ds_list_create();
@@ -354,7 +355,42 @@ function NetworkRegionObjectHandler() constructor
 		return isDroneDestroyed;
 	}
 	
-	static SyncRegionPatrols = function (_patrols)
+	static BroadcastPatrolState = function(_aiBase)
+	{
+		var isStateBroadcasted = false;
+		if (global.NetworkRegionHandlerRef.IsClientRegionOwner())
+		{
+			var instanceOriginPosition = GetInstanceOriginPosition(_aiBase.instance_ref);
+			if (!is_undefined(instanceOriginPosition))
+			{
+				var targetInstanceNetworkId = (instance_exists(_aiBase.target_instance)) ? (_aiBase.target_instance.networkId ?? UNDEFINED_UUID) : UNDEFINED_UUID;
+				var patrolState = new PatrolState(
+					global.NetworkRegionHandlerRef.region_id,
+					_aiBase.patrol.patrol_id,
+					_aiBase.GetStateIndex(),
+					_aiBase.patrol.route_progress,
+					instanceOriginPosition,
+					targetInstanceNetworkId
+				);
+				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.SYNC_PATROL_STATE);
+				var networkPacket = new NetworkPacket(
+					networkPacketHeader,
+					patrolState.ToJSONStruct(),
+					PACKET_PRIORITY.DEFAULT,
+					AckTimeoutFuncResend
+				);
+				if (global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+				{
+					isStateBroadcasted = true;
+				} else {
+					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Failed to queue sync patrol state on broadcast");
+				}
+			}
+		}
+		return isStateBroadcasted;
+	}
+	
+	static SyncRegionPatrols = function(_patrols)
 	{
 		var isPatrolSync = true;
 		var patrolCount = array_length(_patrols);
