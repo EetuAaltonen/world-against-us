@@ -36,6 +36,10 @@ export default class ClientHandler {
     return Object.values(this.clients);
   }
 
+  getClientCount() {
+    return Object.keys(this.clients).length;
+  }
+
   getClientsToBroadcastGlobal(excludeClientId = UNDEFINED_UUID) {
     return this.getAllClients().filter((client) => {
       return client.uuid !== excludeClientId;
@@ -54,10 +58,6 @@ export default class ClientHandler {
         client.instanceId === instanceId && client.uuid !== excludeClientId
       );
     });
-  }
-
-  getClientCount() {
-    return Object.keys(this.clients).length;
   }
 
   removeClient(clientId, clientAddress, clientPort) {
