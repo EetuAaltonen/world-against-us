@@ -29,23 +29,14 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 		if (state_machine.SetState(AI_STATE_BANDIT.PATROL))
 		{
 			// RESUME PATROL PATHING
-			isPatrolResumed = ResumePatrolPathing();
-			
-			// START TARGET SEEK TIMER
-			target_seek_timer.StartTimer();
+			if (ResumePatrolPathing())
+			{
+				// START TARGET SEEK TIMER
+				target_seek_timer.StartTimer();
+				isPatrolResumed = true;
+			}
 		}
 		return isPatrolResumed;
-		
-		// TODO: Fix networking
-		/*// NETWORKING
-		var patrolState = new PatrolState(
-			global.NetworkRegionHandlerRef.region_id,
-			patrolId, aiState,
-			patrolRouteProgress,
-			new Vector2(x, y),
-			new Vector2(x, y)
-		);
-		BroadcastPatrolState(patrolState);*/
 	}
 	
 	static ResumePatrolPathing = function()
@@ -132,6 +123,28 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 			
 			// UPDATE INSTANCE BEHAVIOUR
 			EndPathing();
+			
+			// DELETE PATROL
+			global.NPCPatrolHandlerRef.DeletePatrol(patrol.patrol_id)
+		
+			// NETWORKING
+			if (global.MultiplayerMode)
+			{
+				if (global.NetworkRegionHandlerRef.IsClientRegionOwner())
+				{
+					global.NetworkRegionObjectHandlerRef.BroadcastPatrolState(self);
+				}
+			}
+	
+			// UPDATE INSTANCE BEHAVIOR
+			if (instance_exists(instance_ref))
+			{
+				with (instance_ref)
+				{
+					// DESTROY INSTANCE
+					instance_destroy();
+				}
+			}
 			isPatrolEnded = true;
 		}
 		return isPatrolEnded;
