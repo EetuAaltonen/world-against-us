@@ -108,14 +108,15 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 			
 			// SET TARGET POSITION
 			var yOffset = instance_ref.bbox_bottom - instance_ref.y;
-			var lastRoutePoint = new Vector2(
-				path_get_x(patrol_route.path, patrol_route_progress),
-				path_get_y(patrol_route.path, patrol_route_progress) + yOffset
-			);
-			SetTargetPosition(lastRoutePoint);
+			var lastRoutePoint = patrol.route.GetPathPoint(patrol.route_progress);
+			if (!is_undefined(lastRoutePoint))
+			{
+				lastRoutePoint.Y += yOffset;
+				SetTargetPosition(lastRoutePoint);
 			
-			// START PATHING TO POINT
-			isReturning = StartPathingToPoint();
+				// START PATHING TO POINT
+				isReturning = StartPathingToPoint();
+			}
 		}
 		return isReturning;
 	}
