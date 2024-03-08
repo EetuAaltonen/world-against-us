@@ -22,6 +22,30 @@ function Patrol(_patrol_id, _ai_state, _travel_time, _route_progress) constructo
 		}
 	}
 	
+	static InitRoute = function()
+	{
+		var isRouteInitialized = false;
+		var pathLayerId = layer_get_id(LAYER_PATH_PATROL);
+		if (layer_exists(pathLayerId))
+		{
+			// FETCH PATH INDEX BY ROOM
+			var pathIndex = undefined;
+			switch(room)
+			{
+				case roomTown: { pathIndex = pthPatrolTown; } break;
+				case roomForest: { pathIndex = pthPatrolForest; } break;
+			}
+			
+			if (!is_undefined(pathIndex))
+			{
+				// SET PATROL ROUTE
+				route = new Path(pathIndex);
+				isRouteInitialized = true;
+			}
+		}
+		return isRouteInitialized;
+	}
+	
 	static Update = function()
 	{
 		if (instance_ref != noone)
