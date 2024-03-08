@@ -19,6 +19,11 @@ function NetworkRegionHandler() constructor
 		network_region_object_handler.Update();
 	}
 	
+	static IsClientRegionOwner = function()
+	{
+		return (global.NetworkHandlerRef.client_id == owner_client);
+	}
+	
 	static ResetRegionData = function()
 	{
 		region_id = undefined;
