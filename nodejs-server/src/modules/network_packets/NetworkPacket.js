@@ -33,7 +33,7 @@ export default class NetworkPacket {
 
   update(passedTickTime) {
     if (!isTimedOut()) {
-      this.timeoutTimer -= max(0, passedTickTime);
+      this.timeoutTimer -= passedTickTime;
     }
   }
 
