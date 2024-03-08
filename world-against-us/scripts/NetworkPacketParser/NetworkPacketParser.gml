@@ -286,15 +286,24 @@ function NetworkPacketParser() constructor
 							[]
 						);
 					} break;
-					case MESSAGE_TYPE.PATROL_STATE:
+					case MESSAGE_TYPE.SYNC_PATROL_STATE:
 					{
 						var parsedRegionId = buffer_read(_msg, buffer_u32);
 						var parsedPatrolId = buffer_read(_msg, buffer_u8);
 						var parsedAIState = buffer_read(_msg, buffer_u8);
+						var parsedRouteProgress = buffer_read(_msg, buffer_f32);
+						var parsedPositionX = buffer_read(_msg, buffer_u32);
+						var parsedPositionY = buffer_read(_msg, buffer_u32);
+						var parsedTargetNetworkId = buffer_read(_msg, buffer_string);
+						
+						var parsedPosition = ScaleIntValuesToFloatVector2(parsedPositionX, parsedPositionY);
 						parsedPayload = new PatrolState(
 							parsedRegionId,
 							parsedPatrolId,
-							parsedAIState
+							parsedAIState,
+							parsedRouteProgress,
+							parsedPosition,
+							parsedTargetNetworkId
 						);
 					} break;
 					case MESSAGE_TYPE.REQUEST_SCOUT_LIST:
@@ -400,7 +409,7 @@ function NetworkPacketParser() constructor
 				undefined,
 				scaledRouteProgress
 			);
-			patrol.local_position = parsedPosition;
+			patrol.position = parsedPosition;
 			array_push(localPatrols, patrol);
 		}
 		

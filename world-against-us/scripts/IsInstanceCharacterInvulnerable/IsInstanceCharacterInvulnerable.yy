@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "BroadcastPatrolState",
+  "name": "IsInstanceCharacterInvulnerable",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "PatrolState",
-    "path": "folders/Scripts/Game/Network/PatrolState.yy",
+    "name": "Character",
+    "path": "folders/Scripts/World/Character.yy",
   },
 }

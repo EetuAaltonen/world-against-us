@@ -1,35 +1,7 @@
 function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character, _targetSeekInterval, _pathUpdateInterval, _pathBlockingRadius) : AIEnemyHuman(_instanceRef, _aiStates, _defaultAIStateIndex, _character, _targetSeekInterval, _pathUpdateInterval, _pathBlockingRadius) constructor
 {
 	// PATROL
-	patrol_route = undefined;
-	patrol_route_progress = -1;
-	patrol_route_last_position = undefined;
-	
-	OnCreate();
-	
-	static OnCreate = function()
-	{
-		// INITIALIZE PATROL ROUTE IN ROOM
-		var pathLayerId = layer_get_id(LAYER_PATH_PATROL);
-		if (layer_exists(pathLayerId))
-		{
-			var pathIndex = undefined;
-			switch(room)
-			{
-				case roomTown: { pathIndex = pthPatrolTown; } break;
-				case roomForest: { pathIndex = pthPatrolForest; } break;
-			}
-			
-			if (!is_undefined(pathIndex))
-			{
-				// SET PATROL ROUTE
-				patrol_route = new Path(pathIndex);
-				
-				// START PATROLLING
-				ResumePatrol();
-			}
-		}
-	}
+	patrol = undefined;
 	
 	static OnDestroy = function(_struct = self)
 	{
@@ -46,7 +18,7 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 	{
 		with (instance_ref)
 		{
-			other.patrol_route_progress	= path_position;
+			other.patrol.route_progress = path_position;
 		}
 	}
 	
@@ -57,23 +29,14 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 		if (state_machine.SetState(AI_STATE_BANDIT.PATROL))
 		{
 			// RESUME PATROL PATHING
-			isPatrolResumed = ResumePatrolPathing();
-			
-			// START TARGET SEEK TIMER
-			target_seek_timer.StartTimer();
+			if (ResumePatrolPathing())
+			{
+				// START TARGET SEEK TIMER
+				target_seek_timer.StartTimer();
+				isPatrolResumed = true;
+			}
 		}
 		return isPatrolResumed;
-		
-		// TODO: Fix networking
-		/*// NETWORKING
-		var patrolState = new PatrolState(
-			global.NetworkRegionHandlerRef.region_id,
-			patrolId, aiState,
-			patrolRouteProgress,
-			new Vector2(x, y),
-			new Vector2(x, y)
-		);
-		BroadcastPatrolState(patrolState);*/
 	}
 	
 	static ResumePatrolPathing = function()
@@ -81,8 +44,8 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 		var isPathingResumed = false;
 		// START PATHING
 		var pathingSpeed = !is_undefined(instance_ref.character) ? instance_ref.character.max_speed : 0;
-		patrol_route_progress = max(0, patrol_route_progress);
-		isPathingResumed = StartPathing(patrol_route.path, pathingSpeed, path_action_stop, true, patrol_route_progress);
+		patrol.route_progress = max(0, patrol.route_progress);
+		isPathingResumed = StartPathing(patrol.route.path, pathingSpeed, path_action_stop, true, patrol.route_progress);
 		return isPathingResumed;
 	}
 	
@@ -97,20 +60,22 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 		return targetInstance;
 	}
 	
-	static StartChasingTarget = function(_targetInstance)
+	static StartChasingTarget = function()
 	{
 		var isChaseStarted = false;
 		// UPDATE AI STATE
 		if (state_machine.SetState(AI_STATE_BANDIT.CHASE))
 		{
-			// STOP TARGET SEEK TIMER
-			target_seek_timer.StopTimer();
-			
-			// SET TARGET INSTANCE
-			SetTargetInstance(_targetInstance);
-			
 			// START PATHING TO TARGET
-			isChaseStarted = StartPathingToTarget();
+			if (StartPathingToTarget())
+			{
+				// STOP TARGET SEEK TIMER
+				target_seek_timer.StopTimer();
+				
+				// START PATH UPDATE TIMER
+				path_update_timer.StartTimer();
+				isChaseStarted = true;
+			}
 		} else {
 			// CONSOLE LOG
 			var consoleLog = string("Failed to set AI state to {0} to Bandit with id {1}", AI_STATE_BANDIT.CHASE, _aiBase.instance_ref.id);
@@ -136,14 +101,15 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 			
 			// SET TARGET POSITION
 			var yOffset = instance_ref.bbox_bottom - instance_ref.y;
-			var lastRoutePoint = new Vector2(
-				path_get_x(patrol_route.path, patrol_route_progress),
-				path_get_y(patrol_route.path, patrol_route_progress) + yOffset
-			);
-			SetTargetPosition(lastRoutePoint);
+			var lastRoutePoint = patrol.route.GetPathPoint(patrol.route_progress);
+			if (!is_undefined(lastRoutePoint))
+			{
+				lastRoutePoint.Y += yOffset;
+				SetTargetPosition(lastRoutePoint);
 			
-			// START PATHING TO POINT
-			isReturning = StartPathingToPoint();
+				// START PATHING TO POINT
+				isReturning = StartPathingToPoint();
+			}
 		}
 		return isReturning;
 	}
@@ -159,6 +125,28 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 			
 			// UPDATE INSTANCE BEHAVIOUR
 			EndPathing();
+			
+			// DELETE PATROL
+			global.NPCPatrolHandlerRef.DeletePatrol(patrol.patrol_id)
+		
+			// NETWORKING
+			if (global.MultiplayerMode)
+			{
+				if (global.NetworkRegionHandlerRef.IsClientRegionOwner())
+				{
+					global.NetworkRegionObjectHandlerRef.BroadcastPatrolState(self);
+				}
+			}
+	
+			// UPDATE INSTANCE BEHAVIOR
+			if (instance_exists(instance_ref))
+			{
+				with (instance_ref)
+				{
+					// DESTROY INSTANCE
+					instance_destroy();
+				}
+			}
 			isPatrolEnded = true;
 		}
 		return isPatrolEnded;

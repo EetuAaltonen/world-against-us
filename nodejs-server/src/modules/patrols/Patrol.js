@@ -1,8 +1,9 @@
-import AI_STATE from "./AIState.js";
+import AI_STATE_BANDIT from "./AIStateBandit.js";
 
 import GetRandomInt from "../math/GetRandomInt.js";
 import Vector2 from "../math/Vector2.js";
 
+const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
 const MIN_TRAVEL_TIME = 4000;
 const MAX_TRAVEL_TIME = 20000;
 const FIXED_POINT_PERCENT_PRECISION = 1000;
@@ -11,23 +12,27 @@ export default class Patrol {
   constructor(patrolId, routeTime) {
     this.patrolId = patrolId;
     this.totalRouteTime = routeTime;
-    this.routeTime = routeTime;
-    this.aiState = AI_STATE.TRAVEL;
+    this.routeTime = this.totalRouteTime;
+    this.routeProgress = 0;
+    this.aiState = AI_STATE_BANDIT.TRAVEL;
     this.travelTime = GetRandomInt(MIN_TRAVEL_TIME, MAX_TRAVEL_TIME);
-
-    this.localPosition = new Vector2(0, 0);
+    this.position = new Vector2(0, 0);
+    this.targetNetworkId = UNDEFINED_UUID;
   }
 
   toJSONStruct() {
-    var formatScaledRouteProgress = this.getScaledRouteProgress();
-    var formatLocalPosition = this.localPosition.toJSONStruct();
+    var formatPosition = this.position.toJSONStruct();
     return {
       patrol_id: this.patrolId,
       ai_state: this.aiState,
       travel_time: this.travelTime,
-      scaled_route_progress: formatScaledRouteProgress,
-      local_position: formatLocalPosition,
+      route_progress: this.routeProgress,
+      position: formatPosition,
     };
+  }
+
+  getRouteProgress() {
+    return 1 - this.routeTime / this.totalRouteTime;
   }
 
   getScaledRouteProgress() {
@@ -37,8 +42,8 @@ export default class Patrol {
   }
 
   forceResumePatrolling() {
-    this.aiState = AI_STATE.PATROL;
-    this.localPosition.x = 0;
-    this.localPosition.y = 0;
+    this.aiState = AI_STATE_BANDIT.PATROL;
+    this.position.x = 0;
+    this.position.y = 0;
   }
 }

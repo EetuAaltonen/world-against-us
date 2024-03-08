@@ -143,10 +143,18 @@ function SpawnHandler() constructor
 			
 			// SPAWN PLAYER INSTANCE WITH INSTANCE OBJECT DATA
 			var playerInstance = SpawnInstance(playerInstanceObject);
+			
 			// FETCH CHARACTER FROM GLOBAL VARIABLE
 			playerInstance.character = global.PlayerCharacter;
+			
 			// SET GLOBAL VARIABLE
 			global.InstancePlayer = playerInstance;
+			
+			if (global.MultiplayerMode)
+			{
+				// SET NETWORK ID
+				playerInstance.networkId = global.NetworkHandlerRef.client_id ?? UNDEFINED_UUID;
+			}
 		}
 	}
 	
@@ -168,6 +176,7 @@ function SpawnHandler() constructor
 			remotePlayerInstanceObject.instance_ref = spawnedPlayerInstance;
 			// SET NETWORK ID
 			remotePlayerInstanceObject.network_id = _remotePlayerInfo.client_id;
+			spawnedPlayerInstance.networkId = _remotePlayerInfo.client_id;
 			// SET DEVICE INPUT MOVEMENT
 			spawnedPlayerInstance.movementInput = remotePlayerInstanceObject.device_input_movement;
 			

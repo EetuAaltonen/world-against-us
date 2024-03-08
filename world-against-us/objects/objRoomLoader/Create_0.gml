@@ -76,6 +76,9 @@ controllers = [
 	
 	// TEMP INVENTORY
 	new GameController(objTempInventory, [], [roomLaunch, roomMainMenu, roomLoadResources]),
+	
+	// NPC HANDLER
+	new GameController(objNPCHandler, [], [roomLaunch, roomMainMenu, roomLoadResources]),
 
 	// OBJECTS TO LOAD LAST
 	

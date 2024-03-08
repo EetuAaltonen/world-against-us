@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "GetInstanceOriginPosition",
+  "name": "NPCHandler",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Instance",
-    "path": "folders/Scripts/World/Instance.yy",
+    "name": "NPC",
+    "path": "folders/Scripts/Game/Data/NPC.yy",
   },
 }

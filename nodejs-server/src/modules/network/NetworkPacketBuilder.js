@@ -342,18 +342,38 @@ export default class NetworkPacketBuilder {
               isPayloadWritten = true;
             }
             break;
-          case MESSAGE_TYPE.PATROL_STATE:
+          case MESSAGE_TYPE.SYNC_PATROL_STATE:
             {
-              const bufferPatrol = Buffer.allocUnsafe(
-                BITWISE.BIT32 + BITWISE.BIT8 + BITWISE.BIT8
+              const bufferPatrolState = Buffer.allocUnsafe(
+                BITWISE.BIT32 + // Instance ID
+                  BITWISE.BIT8 + // Patrol ID
+                  BITWISE.BIT8 + // AI state
+                  BITWISE.BIT32 + // Route progress
+                  BITWISE.BIT32 + // Position X
+                  BITWISE.BIT32 // Position Y
               ).fill(0);
-              bufferPatrol.writeUInt32LE(payload.instanceId, 0);
-              bufferPatrol.writeUInt8(payload.patrolId, BITWISE.BIT32);
-              bufferPatrol.writeUInt8(
-                payload.aiState,
-                BITWISE.BIT32 + BITWISE.BIT8
+              let offset = 0;
+              bufferPatrolState.writeUInt32LE(payload.instanceId, offset);
+              offset += BITWISE.BIT32;
+              bufferPatrolState.writeUInt8(payload.patrolId, offset);
+              offset += BITWISE.BIT8;
+              bufferPatrolState.writeUInt8(payload.aiState, offset);
+              offset += BITWISE.BIT8;
+              bufferPatrolState.writeFloatLE(payload.routeProgress, offset);
+              offset += BITWISE.BIT32;
+              bufferPatrolState.writeUInt32LE(payload.position.x, offset);
+              offset += BITWISE.BIT32;
+              bufferPatrolState.writeUInt32LE(payload.position.y, offset);
+
+              const bufferTargetNetworkId = Buffer.from(
+                payload.targetNetworkId,
+                "utf8"
               );
-              this.payloadBuffer = bufferPatrol;
+
+              this.payloadBuffer = Buffer.concat([
+                bufferPatrolState,
+                bufferTargetNetworkId,
+              ]);
               isPayloadWritten = true;
             }
             break;

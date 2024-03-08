@@ -2,12 +2,13 @@ function NetworkRegionObjectHandler() constructor
 {
 	active_inventory_stream = undefined;
 	requested_container_access = undefined;
+	
 	// TODO: Move under the Region struct
 	local_players = ds_list_create();
 	local_patrols = ds_list_create();
 	scouting_drone = undefined;
 	
-	patrol_update_timer = new Timer(100);
+	patrol_update_timer = new Timer(500);
 	patrol_update_timer.StartTimer();
 	
 	static OnDestroy = function()
@@ -36,8 +37,9 @@ function NetworkRegionObjectHandler() constructor
 				var patrolCount = ds_list_size(local_patrols);
 				if (patrolCount > 0)
 				{
+					// TODO: Fix patrol logic
 					// UPDATE PATROL LOCATION
-					patrol_update_timer.Update();
+					/*patrol_update_timer.Update();
 					if (patrol_update_timer.IsTimerStopped())
 					{
 						var formatPatrols = [];
@@ -49,15 +51,15 @@ function NetworkRegionObjectHandler() constructor
 							var formatPatrol = patrol.ToJSONStruct();
 							var formatPosition = new Vector2(0, 0);
 							// UPDATE LOCATION ONLY OUTSIDE THE ROUTE
-							if (patrol.ai_state != AI_STATE.PATROL)
+							if (patrol.ai_state != AI_STATE_BANDIT.PATROL)
 							{
-								formatPosition = ScaleFloatValuesToIntVector2(patrol.local_position.X, patrol.local_position.Y);
+								formatPosition = ScaleFloatValuesToIntVector2(patrol.position.X, patrol.position.Y);
 							}
 							array_push(formatPatrols,
 								{
 									patrol_id: formatPatrol.patrol_id,
 									route_progress: formatPatrol.route_progress,
-									local_position: formatPosition
+									position: formatPosition
 								}
 							);
 						}
@@ -90,7 +92,7 @@ function NetworkRegionObjectHandler() constructor
 						
 						// RESET TIMER
 						patrol_update_timer.StartTimer();
-					}
+					}*/
 				}
 			}
 		}
@@ -201,7 +203,7 @@ function NetworkRegionObjectHandler() constructor
 	static UpdateRegionFromSnapshot = function(_regionSnapshot)
 	{
 		// UPDATE LOCAL PLAYERS
-		var playerCount = _regionSnapshot.local_player_count;
+		/*var playerCount = _regionSnapshot.local_player_count;
 		for (var i = 0; i < playerCount; i++)
 		{
 			var playerData = _regionSnapshot.local_players[@ i];
@@ -213,14 +215,23 @@ function NetworkRegionObjectHandler() constructor
 					var playerInstanceObject = GetPlayerInstanceObjectById(playerData.network_id);
 					if (!is_undefined(playerInstanceObject))
 					{
-						playerInstanceObject.position.X = playerData.position.X;
-						playerInstanceObject.position.Y = playerData.position.Y;
-					
-						var playerInstanceRef = playerInstanceObject.instance_ref;
-						if (instance_exists(playerInstanceRef))
+						var distance = point_distance(
+							playerData.position.X,
+							playerData.position.Y,
+							playerInstanceObject.position.X,
+							playerInstanceObject.position.Y
+						);
+						if (distance > 30)
 						{
-							playerInstanceRef.x = playerInstanceObject.position.X;
-							playerInstanceRef.y = playerInstanceObject.position.Y;
+							playerInstanceObject.position.X = playerData.position.X;
+							playerInstanceObject.position.Y = playerData.position.Y;
+							
+							var playerInstanceRef = playerInstanceObject.instance_ref;
+							if (instance_exists(playerInstanceRef))
+							{
+								playerInstanceRef.x = playerInstanceObject.position.X;
+								playerInstanceRef.y = playerInstanceObject.position.Y;
+							}
 						}
 					} else {
 						var consoleLog = string("Unable to update position for unknown remote player instance object with network ID '{0}'", playerData.network_id);
@@ -228,12 +239,13 @@ function NetworkRegionObjectHandler() constructor
 					}
 				}
 			}
-		}
+		}*/
 		
 		// UPDATE LOCAL PATROLS
 		// CHECK IF CLIENT HAS AUTHORITY ON THE REGION
-		if (global.NetworkRegionHandlerRef.owner_client != global.NetworkHandlerRef.client_id)
+		/*if (global.NetworkRegionHandlerRef.owner_client != global.NetworkHandlerRef.client_id)
 		{
+			// TODO: Fix random patrol teleporting on chase start
 			var patrolCount = _regionSnapshot.local_patrol_count;
 			for (var i = 0; i < patrolCount; i++)
 			{
@@ -245,23 +257,31 @@ function NetworkRegionObjectHandler() constructor
 					{
 						if (instance_exists(patrol.instance_ref))
 						{
-							if (patrol.ai_state == AI_STATE.PATROL)
+							switch (patrol.ai_state)
 							{
-								if (patrol.instance_ref.path_index != -1)
+								case AI_STATE_BANDIT.PATROL:
 								{
-									if (patrol.instance_ref.path_position < patrolData.route_progress)
+									if (patrol.instance_ref.path_index != -1)
 									{
-										patrol.instance_ref.path_position = patrolData.route_progress;
+										show_debug_message(string("patrol.instance_ref.path_position - patrolData.route_progress) == {0}", (patrol.instance_ref.path_position - patrolData.route_progress) * 1000 ));
+										if (patrol.instance_ref.path_position < patrolData.route_progress)
+										{
+											patrol.instance_ref.path_position = patrolData.route_progress;
+										}
 									}
+								} break;
+								default:
+								{
+									patrol.instance_ref.x = patrolData.position.X;
+									patrol.instance_ref.y = patrolData.position.Y;
 								}
-							} else {
-								patrol.instance_ref.x = patrolData.local_position.X;
-								patrol.instance_ref.y = patrolData.local_position.Y;
 							}
 						}
 					}
 				}
 			}
+		}*/
+	}
 		}
 	}
 	
@@ -354,7 +374,42 @@ function NetworkRegionObjectHandler() constructor
 		return isDroneDestroyed;
 	}
 	
-	static SyncRegionPatrols = function (_patrols)
+	static BroadcastPatrolState = function(_aiBase)
+	{
+		var isStateBroadcasted = false;
+		if (global.NetworkRegionHandlerRef.IsClientRegionOwner())
+		{
+			var instanceOriginPosition = GetInstanceOriginPosition(_aiBase.instance_ref);
+			if (!is_undefined(instanceOriginPosition))
+			{
+				var targetInstanceNetworkId = (instance_exists(_aiBase.target_instance)) ? (_aiBase.target_instance.networkId ?? UNDEFINED_UUID) : UNDEFINED_UUID;
+				var patrolState = new PatrolState(
+					global.NetworkRegionHandlerRef.region_id,
+					_aiBase.patrol.patrol_id,
+					_aiBase.GetStateIndex(),
+					_aiBase.patrol.route_progress,
+					instanceOriginPosition,
+					targetInstanceNetworkId
+				);
+				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.SYNC_PATROL_STATE);
+				var networkPacket = new NetworkPacket(
+					networkPacketHeader,
+					patrolState.ToJSONStruct(),
+					PACKET_PRIORITY.DEFAULT,
+					AckTimeoutFuncResend
+				);
+				if (global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+				{
+					isStateBroadcasted = true;
+				} else {
+					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Failed to queue sync patrol state on broadcast");
+				}
+			}
+		}
+		return isStateBroadcasted;
+	}
+	
+	static SyncRegionPatrols = function(_patrols)
 	{
 		var isPatrolSync = true;
 		var patrolCount = array_length(_patrols);
@@ -364,7 +419,7 @@ function NetworkRegionObjectHandler() constructor
 			if (!is_undefined(patrol))
 			{
 				// DON'T SPAWN TRAVELLING PATROLS
-				if (patrol.ai_state != AI_STATE.TRAVEL && patrol.travel_time <= 0)
+				if (patrol.ai_state != AI_STATE_BANDIT.TRAVEL && patrol.travel_time <= 0)
 				{
 					var existingPatrol = GetPatrolById(patrol.patrol_id);
 					if (!is_undefined(existingPatrol))
@@ -407,50 +462,18 @@ function NetworkRegionObjectHandler() constructor
 	
 	static SpawnPatrol = function(_patrol)
 	{
+		// TODO: Sync Chase, Patrol resume, and Patrol end AI states more precisely
 		var isPatrolSpawned = false;
 		var banditInstance = instance_create_layer(0, 0, LAYER_CHARACTERS, objBandit);
-		banditInstance.patrolId = _patrol.patrol_id;
-		banditInstance.patrolPathPercent = _patrol.route_progress;
+		banditInstance.patrol = _patrol;
 		_patrol.instance_ref = banditInstance;
 		ds_list_add(local_patrols, _patrol);
 		return isPatrolSpawned;
 	}
 	
-	static HandleRegionPatrolState = function(_patrolState)
+	static SyncRegionPatrolState = function(_patrolState)
 	{
-		var isPatrolStateHandled = false;
-		if (_patrolState.region_id == global.NetworkRegionHandlerRef.region_id)
-		{
-			switch (_patrolState.ai_state)
-			{
-				case AI_STATE.PATROL:
-				{
-					var patrol = new Patrol(_patrolState.patrol_id, _patrolState.ai_state, 0, 0);
-					isPatrolStateHandled = SyncRegionPatrols([patrol]);
-				} break;
-				case AI_STATE.PATROL_END:
-				{
-					var patrolCount = ds_list_size(local_patrols);
-					for (var i = 0; i < patrolCount; i++)
-					{
-						var patrol = local_patrols[| i];
-						var banditInstance = patrol.instance_ref;
-						if (instance_exists(banditInstance))
-						{
-							if (banditInstance.patrolId == _patrolState.patrol_id)
-							{
-								instance_destroy(banditInstance);
-								DeleteDSListValueByIndex(local_patrols, i--);
-								patrolCount = ds_list_size(local_patrols);
-								break;
-							}
-						}
-					}
-					isPatrolStateHandled = true;
-				} break;
-			}
-		}
-		return isPatrolStateHandled;
+		return global.NPCPatrolHandlerRef.SyncPatrolState(_patrolState);
 	}
 	
 	static ResetRegionObjectData = function()

@@ -3,7 +3,6 @@ function FindNearestInstanceToPoint(_point, _object, _ignoreInstanceID = undefin
 	var nearestInstance = noone;
 	var shortestDitance = undefined;
 	var instanceCount = instance_number(_object);
-	
 	for (var i = 0; i < instanceCount; i++)
 	{
 		var instance = instance_find(_object, i);
@@ -32,6 +31,5 @@ function FindNearestInstanceToPoint(_point, _object, _ignoreInstanceID = undefin
 			}
 		}
 	}
-	
 	return nearestInstance;
 }
