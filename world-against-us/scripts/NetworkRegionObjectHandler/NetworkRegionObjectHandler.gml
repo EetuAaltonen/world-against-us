@@ -471,41 +471,9 @@ function NetworkRegionObjectHandler() constructor
 		return isPatrolSpawned;
 	}
 	
-	static HandleRegionPatrolState = function(_patrolState)
+	static SyncRegionPatrolState = function(_patrolState)
 	{
-		var isPatrolStateHandled = false;
-		if (_patrolState.region_id == global.NetworkRegionHandlerRef.region_id)
-		{
-			switch (_patrolState.ai_state)
-			{
-				case AI_STATE.PATROL:
-				{
-					var patrol = new Patrol(_patrolState.patrol_id, _patrolState.ai_state, 0, 0);
-					isPatrolStateHandled = SyncRegionPatrols([patrol]);
-				} break;
-				case AI_STATE.PATROL_END:
-				{
-					var patrolCount = ds_list_size(local_patrols);
-					for (var i = 0; i < patrolCount; i++)
-					{
-						var patrol = local_patrols[| i];
-						var banditInstance = patrol.instance_ref;
-						if (instance_exists(banditInstance))
-						{
-							if (banditInstance.patrolId == _patrolState.patrol_id)
-							{
-								instance_destroy(banditInstance);
-								DeleteDSListValueByIndex(local_patrols, i--);
-								patrolCount = ds_list_size(local_patrols);
-								break;
-							}
-						}
-					}
-					isPatrolStateHandled = true;
-				} break;
-			}
-		}
-		return isPatrolStateHandled;
+		return global.NPCPatrolHandlerRef.SyncPatrolState(_patrolState);
 	}
 	
 	static ResetRegionObjectData = function()
