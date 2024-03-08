@@ -1,35 +1,7 @@
 function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character, _targetSeekInterval, _pathUpdateInterval, _pathBlockingRadius) : AIEnemyHuman(_instanceRef, _aiStates, _defaultAIStateIndex, _character, _targetSeekInterval, _pathUpdateInterval, _pathBlockingRadius) constructor
 {
 	// PATROL
-	patrol_route = undefined;
-	patrol_route_progress = -1;
-	patrol_route_last_position = undefined;
-	
-	OnCreate();
-	
-	static OnCreate = function()
-	{
-		// INITIALIZE PATROL ROUTE IN ROOM
-		var pathLayerId = layer_get_id(LAYER_PATH_PATROL);
-		if (layer_exists(pathLayerId))
-		{
-			var pathIndex = undefined;
-			switch(room)
-			{
-				case roomTown: { pathIndex = pthPatrolTown; } break;
-				case roomForest: { pathIndex = pthPatrolForest; } break;
-			}
-			
-			if (!is_undefined(pathIndex))
-			{
-				// SET PATROL ROUTE
-				patrol_route = new Path(pathIndex);
-				
-				// START PATROLLING
-				ResumePatrol();
-			}
-		}
-	}
+	patrol = undefined;
 	
 	static OnDestroy = function(_struct = self)
 	{
@@ -46,7 +18,7 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 	{
 		with (instance_ref)
 		{
-			other.patrol_route_progress	= path_position;
+			other.patrol.route_progress = path_position;
 		}
 	}
 	
@@ -81,8 +53,8 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 		var isPathingResumed = false;
 		// START PATHING
 		var pathingSpeed = !is_undefined(instance_ref.character) ? instance_ref.character.max_speed : 0;
-		patrol_route_progress = max(0, patrol_route_progress);
-		isPathingResumed = StartPathing(patrol_route.path, pathingSpeed, path_action_stop, true, patrol_route_progress);
+		patrol.route_progress = max(0, patrol.route_progress);
+		isPathingResumed = StartPathing(patrol.route.path, pathingSpeed, path_action_stop, true, patrol.route_progress);
 		return isPathingResumed;
 	}
 	
