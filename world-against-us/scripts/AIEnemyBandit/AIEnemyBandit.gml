@@ -60,20 +60,22 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 		return targetInstance;
 	}
 	
-	static StartChasingTarget = function(_targetInstance)
+	static StartChasingTarget = function()
 	{
 		var isChaseStarted = false;
 		// UPDATE AI STATE
 		if (state_machine.SetState(AI_STATE_BANDIT.CHASE))
 		{
-			// STOP TARGET SEEK TIMER
-			target_seek_timer.StopTimer();
-			
-			// SET TARGET INSTANCE
-			SetTargetInstance(_targetInstance);
-			
 			// START PATHING TO TARGET
-			isChaseStarted = StartPathingToTarget();
+			if (StartPathingToTarget())
+			{
+				// STOP TARGET SEEK TIMER
+				target_seek_timer.StopTimer();
+				
+				// START PATH UPDATE TIMER
+				path_update_timer.StartTimer();
+				isChaseStarted = true;
+			}
 		} else {
 			// CONSOLE LOG
 			var consoleLog = string("Failed to set AI state to {0} to Bandit with id {1}", AI_STATE_BANDIT.CHASE, _aiBase.instance_ref.id);
