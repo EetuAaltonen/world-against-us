@@ -36,6 +36,19 @@ function Path(_path = undefined) constructor
 		return isPathFound;
 	}
 	
+	static GetPathPoint = function(_pathPosition)
+	{
+		var pathPoint = undefined;
+		if (IsPathExist(path))
+		{
+			pathPoint = new Vector2(
+				path_get_x(path, _pathPosition),
+				path_get_y(path, _pathPosition)
+			);
+		}
+		return pathPoint;
+	}
+	
 	static Draw = function(_pathPosition = 0)
 	{
 		if (IsPathExist(path))

@@ -292,17 +292,34 @@ export default class NetworkPacketParser {
               };
             }
             break;
-          case MESSAGE_TYPE.PATROL_STATE:
+          case MESSAGE_TYPE.SYNC_PATROL_STATE:
             {
               const parsedInstanceId = msg.readUInt32LE(offset);
               offset += BITWISE.BIT32;
               const parsedPatrolId = msg.readUInt8(offset);
               offset += BITWISE.BIT8;
               const parsedAIState = msg.readUInt8(offset);
+              offset += BITWISE.BIT8;
+              const parsedRouteProgress = msg.readFloatLE(offset);
+              offset += BITWISE.BIT32;
+              const parsedPositionX = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedPositionY = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedTargetNetworkId = msg.toString("utf8", offset);
+
+              const parsedPosition = new Vector2(
+                parsedPositionX,
+                parsedPositionY
+              );
+
               payload = new PatrolState(
                 parsedInstanceId,
                 parsedPatrolId,
-                parsedAIState
+                parsedAIState,
+                parsedRouteProgress,
+                parsedPosition,
+                parsedTargetNetworkId
               );
             }
             break;

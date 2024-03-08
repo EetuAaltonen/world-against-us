@@ -47,3 +47,6 @@ global.InstanceDrone = instance_exists(objDrone) ? instance_find(objDrone, 0) : 
 global.HighlightHandlerRef = instance_exists(objInstanceHighlighter) ? instance_find(objInstanceHighlighter, 0).highlightHandler : undefined;
 global.ObjGridPath = instance_exists(objGridPath) ? instance_find(objGridPath, 0) : noone;
 global.ObjTempInventory = instance_exists(objTempInventory) ? instance_find(objTempInventory, 0) : noone;
+
+global.NPCHandlerRef = instance_exists(objNPCHandler) ? instance_find(objNPCHandler, 0).npcHandler : undefined;
+global.NPCPatrolHandlerRef = (!is_undefined(global.NPCHandlerRef)) ? global.NPCHandlerRef.npc_patrol_handler : undefined;

@@ -3,12 +3,11 @@ function AIStateBanditPatrol(_aiBase)
 	// UPDATE PATROL ROUTE PROGRESS
 	_aiBase.UpdatePatrolRouteProgress();
 	
-	if (!global.MultiplayerMode)
+	// CHECK PATROL ROUTE END
+	if (_aiBase.patrol.route_progress < 1)
 	{
-#region Offline
-		// CHECK PATROL ROUTE END
-		if (_aiBase.patrol_route_progress < 1)
-		{	
+		if (!global.MultiplayerMode || global.NetworkRegionHandlerRef.IsClientRegionOwner())
+		{
 			_aiBase.target_seek_timer.Update();
 			if (_aiBase.target_seek_timer.IsTimerStopped())
 			{
@@ -19,67 +18,35 @@ function AIStateBanditPatrol(_aiBase)
 				var targetInstanceInVision = _aiBase.SeekTargetInVision(objPlayer);
 				if (instance_exists(targetInstanceInVision))
 				{
-					// UPDATE PATROL ROUTE PROGRESS
-					_aiBase.patrol_route_progress = _aiBase.instance_ref.path_position;
+					// SET TARGET INSTANCE
+					_aiBase.SetTargetInstance(targetInstanceInVision);
 					
 					// START CHASE
-					if (_aiBase.StartChasingTarget(targetInstanceInVision))
+					if (_aiBase.StartChasingTarget())
 					{
-						// START PATH UPDATE TIMER
-						_aiBase.path_update_timer.StartTimer();
-					} else {
-						// TODO: Handle error
-					}
-				} else {
-					// TODO: Handle target lost
-				}
-			}
-		} else {
-			// END PATROLLING
-			_aiBase.EndPatrol();
-		}
-#endregion
-	} else {
-#region Multiplayer
-		if (!global.NetworkRegionHandlerRef.IsClientRegionOwner())
-		{
-			// CHECK PATROL ROUTE END
-			if (_aiBase.patrol_route_progress < 1)
-			{
-				_aiBase.target_seek_timer.Update();
-				if (_aiBase.target_seek_timer.IsTimerStopped())
-				{
-					// SEEK TARGET
-					var targetInstanceInVision = _aiBase.SeekTargetInVision(objPlayer);
-					if (instance_exists(targetInstanceInVision))
-					{
-						// START CHASE
-						if (_aiBase.StartChasingTarget(targetInstanceInVision))
+						// NETWORKING
+						if (global.MultiplayerMode)
 						{
 							// NETWORKING
-							var patrolState = new PatrolState(
-								global.NetworkRegionHandlerRef.region_id,
-								patrolId, aiState,
-								patrolRouteProgress,
-								new Vector2(x, y),
-								targetPosition
-							);
-							BroadcastPatrolState(patrolState);
-						} else {
-							// TODO: Handle error	
+							global.NetworkRegionObjectHandlerRef.BroadcastPatrolState(_aiBase);	
 						}
+					} else {
+						var consoleLog = string("Failed to {0} AI start chasing target", object_get_name(_aiBase.instance_ref.object_index));
+						global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
 					}
-				
-					// RESTART TARGET SEEK TIMER
-					_aiBase.target_seek_timer.StartTimer();
 				}
-			}  else {
-				// END PATROLLING
-				//_aiBase.EndPatrol();
 			}
 		}
-#endregion
+	} else {
+		// END PATROLLING
+		if (_aiBase.EndPatrol())
+		{
+			// NETWORKING
+			if (global.MultiplayerMode)
+			{
+				global.NetworkRegionObjectHandlerRef.BroadcastPatrolState(_aiBase);
+			}
+		}
 	}
-	
 	return true;
 }

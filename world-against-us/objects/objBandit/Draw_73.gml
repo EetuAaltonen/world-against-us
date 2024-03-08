@@ -20,9 +20,9 @@ if (global.DEBUGMODE)
 			case AI_STATE_BANDIT.PATROL:
 			{
 				// DRAW PATROL PATH
-				if (!is_undefined(aiBandit.patrol_route))
+				if (!is_undefined(aiBandit.patrol.route))
 				{
-					aiBandit.patrol_route.Draw();
+					aiBandit.patrol.route.Draw();
 				}
 			} break;
 			case AI_STATE_BANDIT.PATROL_END:
@@ -37,13 +37,15 @@ if (global.DEBUGMODE)
 					aiBandit.path_to_target.Draw();
 					
 					// DRAW PATH UPDATE THRESHOLD
-					var pathToTargetEndX = path_get_x(aiBandit.path_to_target.path, 1);
-					var pathToTargetEndY = path_get_y(aiBandit.path_to_target.path, 1);
-					draw_circle_color(
-						pathToTargetEndX, pathToTargetEndY,
-						aiBandit.path_update_threshold,
-						c_red, c_red, true
-					);
+					var pathEndPoint = aiBandit.path_to_target.GetPathPoint(1);
+					if (!is_undefined(pathEndPoint))
+					{
+						draw_circle_color(
+							pathEndPoint.X, pathEndPoint.Y,
+							aiBandit.path_update_threshold,
+							c_red, c_red, true
+						);
+					}
 				}
 			}
 		}
@@ -80,22 +82,10 @@ if (global.DEBUGMODE)
 			);
 		}
 		
-		// DRAW LAST KNOWN PATROL POSITION
-		var patrolPathLastPosition = aiBandit.patrol_route_last_position;
-		if (!is_undefined(patrolPathLastPosition))
-		{
-			draw_text_color(
-				x + 20, bbox_bottom + 110,
-				string("patrol_route_last_position: {0}-{1}", patrolPathLastPosition.X, patrolPathLastPosition.Y),
-				c_orange, c_orange,
-				c_orange, c_orange, 1
-			);
-		}
-		
 		// DRAW PATROL ROUTE PROGRESS
 		draw_text_color(
 			x + 20, bbox_bottom + 140,
-			string("patrol_route_progress (x1000): {0}", aiBandit.patrol_route_progress * 1000),
+			string("patrol.route_progress (x1000): {0}", aiBandit.patrol.route_progress * 1000),
 			c_orange, c_orange,
 			c_orange, c_orange, 1
 		);

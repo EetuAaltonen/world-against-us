@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "GetInstanceOriginPosition",
+  "name": "FindInstanceNetwork",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

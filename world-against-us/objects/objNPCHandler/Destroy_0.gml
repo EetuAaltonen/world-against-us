@@ -1,0 +1,1 @@
+DeleteStruct(npcHandler);

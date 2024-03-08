@@ -5,14 +5,20 @@ function AIStateBanditPatrolResume(_aiBase)
 #region Offline
 		if (_aiBase.instance_ref.path_position >= 1)
 		{
-			if (!_aiBase.ResumePatrol())
-			{
-				// TODO: Handle error
-			}
+			// RESUME PATROL
+			_aiBase.ResumePatrol();
 		}
 #endregion
 	} else {
 #region Multiplayer
+		if (global.NetworkRegionHandlerRef.IsClientRegionOwner())
+		{
+			if (_aiBase.instance_ref.path_position >= 1)
+			{
+				// RESUME PATROL
+				if (_aiBase.ResumePatrol()) global.NetworkRegionObjectHandlerRef.BroadcastPatrolState(_aiBase);
+			}
+		}
 #endregion		
 	}
 }
