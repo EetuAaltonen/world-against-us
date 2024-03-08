@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "GetInstanceOriginPosition",
+  "name": "IsInstanceCharacterInvulnerable",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Instance",
-    "path": "folders/Scripts/World/Instance.yy",
+    "name": "Character",
+    "path": "folders/Scripts/World/Character.yy",
   },
 }
