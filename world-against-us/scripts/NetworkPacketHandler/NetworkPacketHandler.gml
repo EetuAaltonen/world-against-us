@@ -393,7 +393,7 @@ function NetworkPacketHandler() constructor
 						var patrolState = payload;
 						if (!is_undefined(patrolState))
 						{
-							if (global.NetworkRegionObjectHandlerRef.HandleRegionPatrolState(patrolState))
+							if (global.NetworkRegionObjectHandlerRef.SyncRegionPatrolState(patrolState))
 							{
 								// RESPOND WITH ACKNOWLEDGMENT TO END PATROL STATE CHANGE
 								isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();	
