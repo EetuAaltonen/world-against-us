@@ -692,10 +692,18 @@ export default class NetworkPacketHandler {
             const patrolState = networkPacket.payload;
             if (patrolState !== undefined) {
               if (patrolState.instanceId === instance.instanceId) {
-                if (instance.handlePatrolState(patrolState)) {
-                  this.networkHandler.queueAcknowledgmentResponse(client);
+                if (instance.syncPatrolState(patrolState)) {
+                  // Broadcast about new patrol state within the instance
+                  this.networkHandler.broadcastPatrolState(
+                    instance.instanceId,
+                    patrolState,
+                    client.uuid
+                  );
+
+                  // Respond with acknowledgment
+                  isPacketHandled =
+                    this.networkHandler.queueAcknowledgmentResponse(client);
                 }
-                isPacketHandled = true;
               }
             }
           }
