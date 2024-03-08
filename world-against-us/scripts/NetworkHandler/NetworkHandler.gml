@@ -12,9 +12,7 @@ function NetworkHandler() constructor
 	pre_alloc_network_buffer = undefined;
 	pre_alloc_network_buffer_compressed = undefined;
 	
-	
 	delete_socket_timer = new Timer(1000);
-	packet_send_rate = 1000 / 33.33333; // == 30ms == ~Every other frame
 	last_packet_time = current_time;
 	
 	network_packet_builder = new NetworkPacketBuilder();
@@ -60,22 +58,18 @@ function NetworkHandler() constructor
 				// UPDATE NETWORK PACKET TRACKER
 				network_packet_tracker.Update();
 				
-				var packetSendInterval = current_time - last_packet_time;
-				if (packetSendInterval >= packet_send_rate)
+				if (!ds_queue_empty(network_packet_queue))
 				{
-					if (!ds_queue_empty(network_packet_queue))
+					var networkPacket = ds_queue_dequeue(network_packet_queue);
+					if (!is_undefined(networkPacket))
 					{
-						var networkPacket = ds_queue_dequeue(network_packet_queue);
-						if (!is_undefined(networkPacket))
+						if (!PrepareAndSendNetworkPacket(networkPacket))
 						{
-							if (!PrepareAndSendNetworkPacket(networkPacket))
+							// IGNORE DROPPED UNECESSARY ACKNOWLEDGMENTS
+							if (networkPacket.header.message_type != MESSAGE_TYPE.ACKNOWLEDGMENT)
 							{
-								// IGNORE DROPPED UNECESSARY ACKNOWLEDGMENTS
-								if (networkPacket.header.message_type != MESSAGE_TYPE.ACKNOWLEDGMENT)
-								{
-									var consoleLog = string("Failed to send packet with message type {0}", networkPacket.header.message_type);
-									global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
-								}
+								var consoleLog = string("Failed to send packet with message type {0}", networkPacket.header.message_type);
+								global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
 							}
 						}
 					}
@@ -109,11 +103,11 @@ function NetworkHandler() constructor
 			);
 			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.INFO, consoleLog);
 			
-			// UPDATE LAST PACKET TIME
-			last_packet_time = current_time;
-			
 			// UPDATE PACKET TRACKER
 			network_packet_tracker.OnNetworkPacketSend(_networkPacket);
+			
+			// UPDATE LAST PACKET TIME
+			last_packet_time = current_time;
 			
 			// UPDATE DATA OUT RATE
 			global.NetworkConnectionSamplerRef.data_out_rate += sentNetworkPacketBytes;
