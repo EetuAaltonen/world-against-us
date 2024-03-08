@@ -589,7 +589,11 @@ export default class NetworkHandler {
     return isWeatherBroadcasted;
   }
 
-  broadcastPatrolState(instanceId, patrolState) {
+  broadcastPatrolState(
+    instanceId,
+    patrolState,
+    excludeClientId = UNDEFINED_UUID
+  ) {
     let isStateBroadcasted = false;
     const networkPacketHeader = new NetworkPacketHeader(
       MESSAGE_TYPE.SYNC_PATROL_STATE,
@@ -600,9 +604,10 @@ export default class NetworkHandler {
       patrolState,
       PACKET_PRIORITY.HIGH
     );
-    // TODO: Exclude the request source client
-    const clientsInInstance =
-      this.clientHandler.getClientsToBroadcastInstance(instanceId);
+    const clientsInInstance = this.clientHandler.getClientsToBroadcastInstance(
+      instanceId,
+      excludeClientId
+    );
     isStateBroadcasted = this.broadcast(networkPacket, clientsInInstance);
     return isStateBroadcasted;
   }
