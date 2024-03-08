@@ -165,6 +165,10 @@ global.PlayerMedicinePockets = undefined;
 // TEMP INVENTORY
 global.ObjTempInventory = noone;
 
+// NPC HANDLER
+global.NPCHandlerRef = undefined;
+global.NPCPatrolHandlerRef = undefined;
+
 // NETWORKING
 global.MultiplayerMode = false;
 global.NetworkRegionHandlerRef = undefined;
