@@ -25,12 +25,13 @@ function NetworkRegionObjectHandler() constructor
 		{
 			if (clientId == regionOwnerClient)
 			{
-				var patrolCount = ds_list_size(local_patrols);
+				// TODO: Fix patrol logic
+				/*var patrolCount = ds_list_size(local_patrols);
 				if (patrolCount > 0)
 				{
-					// TODO: Fix patrol logic
+					
 					// UPDATE PATROL LOCATION
-					/*patrol_update_timer.Update();
+					patrol_update_timer.Update();
 					if (patrol_update_timer.IsTimerStopped())
 					{
 						var formatPatrols = [];
@@ -83,8 +84,8 @@ function NetworkRegionObjectHandler() constructor
 						
 						// RESET TIMER
 						patrol_update_timer.StartTimer();
-					}*/
-				}
+					}
+				}*/
 			}
 		}
 		
