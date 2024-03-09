@@ -31,7 +31,7 @@ function InstanceObject(_sprite_index, _object_index, _position) constructor
 	{
 		start_position = position.Clone();
 		target_position = _targetPosition;
-		interpolation_timer.setting_time = _interpolationTime + (global.NetworkConnectionSamplerRef.ping ?? 0);
+		interpolation_timer.setting_time = _interpolationTime;
 		interpolation_timer.StartTimer();
 	}
 	
