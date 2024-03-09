@@ -9,8 +9,9 @@ const MAX_TRAVEL_TIME = 20000;
 const FIXED_POINT_PERCENT_PRECISION = 1000;
 
 export default class Patrol {
-  constructor(patrolId, routeTime) {
+  constructor(patrolId, instanceId, routeTime) {
     this.patrolId = patrolId;
+    this.instanceId = instanceId;
     this.totalRouteTime = routeTime;
     this.routeTime = this.totalRouteTime;
     this.routeProgress = 0;
@@ -24,10 +25,12 @@ export default class Patrol {
     var formatPosition = this.position.toJSONStruct();
     return {
       patrol_id: this.patrolId,
+      region_id: this.instanceId,
       ai_state: this.aiState,
       travel_time: this.travelTime,
       route_progress: this.routeProgress,
       position: formatPosition,
+      target_network_id: this.targetNetworkId,
     };
   }
 
