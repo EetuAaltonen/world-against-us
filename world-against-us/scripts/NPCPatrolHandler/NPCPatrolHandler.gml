@@ -111,11 +111,16 @@ function NPCPatrolHandler() constructor
 	
 	static DeletePatrol = function(_patrolId)
 	{
-		var patrol = GetPatrol(_patrolId);
-		if (!is_undefined(patrol))
-		{
-			DeleteStruct(patrol);
-		}
-		ds_map_delete(local_patrols, _patrolId);	
+		DeleteDSMapValueByKey(local_patrols, _patrolId);
+	}
+	
+	static ClearLocalPatrols = function()
+	{
+		ClearDSMapAndDeleteValues(local_patrols);
+	}
+	
+	static OnRoomEnd = function()
+	{
+		ClearLocalPatrols();
 	}
 }
