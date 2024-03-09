@@ -137,6 +137,11 @@ function NetworkHandler() constructor
 			socket = network_create_socket(network_socket_udp);
 			pre_alloc_network_buffer = buffer_create(256, buffer_grow, 1);
 			pre_alloc_network_buffer_compressed = buffer_create(256, buffer_grow, 1);
+			
+			// RESET DEBUG MONITOR
+			global.DebugMonitorNetworkHandlerRef.ResetNetworkDebugMonitoring();
+			global.DebugMonitorMultiplayerHandlerRef.ResetMultiplayerDebugMonitoring();
+			
 			isSocketCreated = true;
 		} else {
 			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Client already connected or socket already exists");
