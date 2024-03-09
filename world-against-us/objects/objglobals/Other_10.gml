@@ -13,6 +13,7 @@ global.DebugMonitorMultiplayerHandlerRef = instance_exists(objDebugMonitor) ? in
 global.ObjNetwork = instance_exists(objNetwork) ? instance_find(objNetwork, 0) : noone;
 global.NetworkHandlerRef = instance_exists(objNetwork) ? instance_find(objNetwork, 0).networkHandler : undefined;
 global.NetworkRegionHandlerRef = (!is_undefined(global.NetworkHandlerRef)) ? global.NetworkHandlerRef.network_region_handler : undefined;
+global.NetworkRegionRemotePlayerHandlerRef = (!is_undefined(global.NetworkRegionHandlerRef)) ? global.NetworkRegionHandlerRef.network_region_remote_player_handler : undefined;
 global.NetworkRegionObjectHandlerRef = (!is_undefined(global.NetworkRegionHandlerRef)) ? global.NetworkRegionHandlerRef.network_region_object_handler : undefined;
 global.NetworkPacketTrackerRef = (!is_undefined(global.NetworkHandlerRef)) ? global.NetworkHandlerRef.network_packet_tracker : undefined;
 global.NetworkPacketDeliveryPolicies = (!is_undefined(global.NetworkHandlerRef)) ? global.NetworkHandlerRef.network_packet_delivery_policy_handler.delivery_policies : undefined;
