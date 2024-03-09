@@ -118,25 +118,23 @@ function NetworkPacketHandler() constructor
 					} break;
 					case MESSAGE_TYPE.REMOTE_DATA_POSITION:
 					{
-						// TODO: Remove this function, replaced with instance snapshot
-						// Parse this elsewhere
-						var remoteDataPosition = payload[$ "remote_data_position"];
-						if (!is_undefined(remoteDataPosition))
+						var remoteInstanceObject = payload;
+						if (!is_undefined(remoteInstanceObject))
 						{
-							//global.NetworkRegionObjectHandlerRef.UpdateRegionRemotePosition(remoteDataPosition);
+							// TODO: Polish client side interpolation / input simulation
+							global.NetworkRegionObjectHandlerRef.UpdateRegionRemotePosition(remoteInstanceObject);
+							isPacketHandled = true;
 						}
-						isPacketHandled = true;
 					} break;
 					case MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT:
 					{
-						// Parse this elsewhere
 						var remoteDataMovementInput = payload;
 						if (!is_undefined(remoteDataMovementInput))
 						{
-							// TODO: Fix client side interpolation / input simulation
-							//global.NetworkRegionObjectHandlerRef.UpdateRegionRemoteInput(remoteDataMovementInput);
+							// TODO: Polish client side interpolation / input simulation
+							global.NetworkRegionObjectHandlerRef.UpdateRegionRemoteInput(remoteDataMovementInput);
+							isPacketHandled = true;
 						}
-						isPacketHandled = true;
 					} break;
 					case MESSAGE_TYPE.REMOTE_LEFT_THE_INSTANCE:
 					{

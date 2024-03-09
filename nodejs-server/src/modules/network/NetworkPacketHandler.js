@@ -141,7 +141,27 @@ export default class NetworkPacketHandler {
               if (player !== undefined) {
                 player.position = newPosition;
                 // Set new snapshot required flag
-                instance.isNewSnapshotRequired = true;
+                //instance.isNewSnapshotRequired = true;
+
+                // Broadcast about updated player position data
+                const clientsToBroadcast =
+                  this.clientHandler.getClientsToBroadcastInstance(
+                    instance.instanceId,
+                    client.uuid
+                  );
+                const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+                  MESSAGE_TYPE.REMOTE_DATA_POSITION,
+                  client.uuid
+                );
+                const broadcastNetworkPacket = new NetworkPacket(
+                  broadcastNetworkPacketHeader,
+                  player.toJSONStruct(),
+                  PACKET_PRIORITY.DEFAULT
+                );
+                this.networkHandler.broadcast(
+                  broadcastNetworkPacket,
+                  clientsToBroadcast
+                );
 
                 // Acknowledgment is sent with new snapshot
                 isPacketHandled = true;

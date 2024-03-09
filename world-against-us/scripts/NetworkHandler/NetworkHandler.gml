@@ -78,6 +78,11 @@ function NetworkHandler() constructor
 		}
 	}
 	
+	static Draw = function()
+	{
+		network_region_handler.Draw();	
+	}
+	
 	static PrepareAndSendNetworkPacket = function(_networkPacket)
 	{
 		var isNetworkPacketSent = false;

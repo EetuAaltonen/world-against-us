@@ -1,5 +1,6 @@
 import MESSAGE_TYPE from "./MessageType.js";
 import PACKET_PRIORITY from "./PacketPriority.js";
+import DELIVERY_POLICIES from "../network_packets/NetworkPacketDeliveryPolicies.js";
 
 import ConsoleHandler from "../console/ConsoleHandler.js";
 import InFlightPacketTrack from "../network_packets/InFlightPacketTrack.js";
@@ -108,10 +109,13 @@ export default class NetworkPacketTracker {
     if (clientId !== UNDEFINED_UUID) {
       const inFlightPacketTrack = this.getInFlightPacketTrack(clientId);
       if (inFlightPacketTrack !== undefined) {
+        const deliveryPolicy =
+          DELIVERY_POLICIES[messageType] ??
+          DELIVERY_POLICIES[MESSAGE_TYPE.LENGTH];
         if (sequenceNumber === inFlightPacketTrack.expectedSequenceNumber) {
           // Successfully received the expected
           inFlightPacketTrack.expectedSequenceNumber = sequenceNumber + 1;
-          if (messageType !== MESSAGE_TYPE.ACKNOWLEDGMENT) {
+          if (deliveryPolicy.toInFlightTrack) {
             inFlightPacketTrack.pendingAckRange.push(sequenceNumber);
           }
           isCheckedAndProceed = true;
@@ -123,7 +127,7 @@ export default class NetworkPacketTracker {
             `Received sequence number ${sequenceNumber} greater than expected ${inFlightPacketTrack.expectedSequenceNumber}`
           );
           inFlightPacketTrack.expectedSequenceNumber = sequenceNumber + 1;
-          if (messageType !== MESSAGE_TYPE.ACKNOWLEDGMENT) {
+          if (deliveryPolicy.toInFlightTrack) {
             inFlightPacketTrack.pendingAckRange.push(sequenceNumber);
           }
           isCheckedAndProceed = true;

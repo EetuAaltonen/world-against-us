@@ -97,6 +97,14 @@ function NetworkRegionObjectHandler() constructor
 			}
 		}
 		
+		// INTERPOLATE REMOTE PLAYER MOVEMENT
+		var playerCount = ds_list_size(local_players);
+		for (var i = 0; i < playerCount; i++)
+		{
+			var playerInstanceObject = local_players[| i];
+			playerInstanceObject.InterpolateMovement();
+		}
+		
 		// INTERPOLATE SCOUTING DRONE MOVEMENT
 		if (!is_undefined(scouting_drone))
 		{
@@ -105,6 +113,24 @@ function NetworkRegionObjectHandler() constructor
 				scouting_drone.InterpolateMovement();
 			}
 		}
+	}
+	
+	static Draw = function()
+	{
+		// REMOTE PLAYER POSITION ON SERVER
+		var playerCount = ds_list_size(local_players);
+		for (var i = 0; i < playerCount; i++)
+		{
+			var playerInstanceObject = local_players[| i];
+			if (!is_undefined(playerInstanceObject.target_position))
+			{
+				draw_circle_color(
+					playerInstanceObject.target_position.X,
+					playerInstanceObject.target_position.Y,
+					2, c_blue, c_blue, false
+				);
+			}
+		}	
 	}
 	
 	static ValidateRegionContainers = function()
@@ -282,6 +308,29 @@ function NetworkRegionObjectHandler() constructor
 			}
 		}*/
 	}
+	
+	static UpdateRegionRemotePosition = function(_remoteInstanceObject)
+	{
+		var playerInstanceObject = GetPlayerInstanceObjectById(_remoteInstanceObject.network_id);
+		if (!is_undefined(playerInstanceObject))
+		{
+			var positionThreshold = 50;
+			var distance = point_distance(
+				_remoteInstanceObject.position.X,
+				_remoteInstanceObject.position.Y,
+				playerInstanceObject.position.X,
+				playerInstanceObject.position.Y
+			);
+			if (distance > positionThreshold)
+			{
+				var playerInstanceRef = playerInstanceObject.instance_ref;
+				if (instance_exists(playerInstanceRef))
+				{
+					playerInstanceObject.position = new Vector2(playerInstanceRef.x, playerInstanceRef.y);
+					playerInstanceObject.start_position = playerInstanceObject.position;
+					playerInstanceObject.StartInterpolateMovement(_remoteInstanceObject.position, 50);
+				}
+			}
 		}
 	}
 	

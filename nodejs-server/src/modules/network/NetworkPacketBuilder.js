@@ -230,6 +230,29 @@ export default class NetworkPacketBuilder {
               isPayloadWritten = true;
             }
             break;
+          case MESSAGE_TYPE.REMOTE_DATA_POSITION:
+            {
+              const player = payload;
+              const bufferRemotePosition = Buffer.allocUnsafe(
+                BITWISE.BIT32 + BITWISE.BIT32
+              ).fill(0);
+              let offset = 0;
+              bufferRemotePosition.writeUInt32LE(player.position.X, offset);
+              offset += BITWISE.BIT32;
+              bufferRemotePosition.writeUInt32LE(player.position.Y, offset);
+
+              const bufferRemoteNetworkId = Buffer.from(
+                player.network_id,
+                "utf8"
+              );
+
+              this.payloadBuffer = Buffer.concat([
+                bufferRemotePosition,
+                bufferRemoteNetworkId,
+              ]);
+              isPayloadWritten = true;
+            }
+            break;
           case MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT:
             {
               let deviceInputCompress = 0;
