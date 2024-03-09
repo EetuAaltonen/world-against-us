@@ -173,6 +173,16 @@ function NetworkPacketParser() constructor
 							parsedRemotePlayerTag
 						);
 					} break;
+					case MESSAGE_TYPE.REMOTE_DATA_POSITION:
+					{
+						var parsedRemotePositionX = buffer_read(_msg, buffer_u32);
+						var parsedRemotePositionY = buffer_read(_msg, buffer_u32);
+						var parsedRemoteClientId = buffer_read(_msg, buffer_string);
+						var parsedRemotePosition = ScaleIntValuesToFloatVector2(parsedRemotePositionX, parsedRemotePositionY);
+						var remoteInstanceData = new InstanceObject(object_get_sprite(objPlayer), objPlayer, parsedRemotePosition);
+						remoteInstanceData.network_id = parsedRemoteClientId;
+						parsedPayload = remoteInstanceData;
+					} break;
 					case MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT:
 					{
 			            var parsedDeviceInputCompress = buffer_read(_msg, buffer_u8);

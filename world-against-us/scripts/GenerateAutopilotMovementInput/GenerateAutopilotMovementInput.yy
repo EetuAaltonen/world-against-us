@@ -6,6 +6,6 @@
   "isDnD": false,
   "parent": {
     "name": "Autopilot",
-    "path": "folders/Scripts/World/Character/AI/Autopilot.yy",
+    "path": "folders/Scripts/Game/Data/AI/Autopilot.yy",
   },
 }

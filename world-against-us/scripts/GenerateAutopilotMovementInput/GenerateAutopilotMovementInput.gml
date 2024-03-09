@@ -47,6 +47,4 @@ function GenerateAutopilotMovementInput(movementInput) {
 		movementInput.key_right = false;
 		movementInput.key_left = true;
 	}
-	
-	show_debug_message(string(movementInput));
 }
