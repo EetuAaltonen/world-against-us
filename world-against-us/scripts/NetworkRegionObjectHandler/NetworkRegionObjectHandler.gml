@@ -115,6 +115,24 @@ function NetworkRegionObjectHandler() constructor
 		}
 	}
 	
+	static Draw = function()
+	{
+		// REMOTE PLAYER POSITION ON SERVER
+		var playerCount = ds_list_size(local_players);
+		for (var i = 0; i < playerCount; i++)
+		{
+			var playerInstanceObject = local_players[| i];
+			if (!is_undefined(playerInstanceObject.target_position))
+			{
+				draw_circle_color(
+					playerInstanceObject.target_position.X,
+					playerInstanceObject.target_position.Y,
+					2, c_blue, c_blue, false
+				);
+			}
+		}	
+	}
+	
 	static ValidateRegionContainers = function()
 	{
 		var isContainersValid = true;
