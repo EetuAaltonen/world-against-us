@@ -158,30 +158,22 @@ function SpawnHandler() constructor
 		}
 	}
 	
-	static SpawnRemotePlayerInstance = function(_remotePlayerInfo, _position)
+	static SpawnRemotePlayerInstance = function(_remotePlayerInstanceObject, _remotePlayerInfo)
 	{
-		var remotePlayerInstanceObject = new InstanceObject(
-			sprSoldierOriginaRemote, objPlayer,
-			_position
-		);
-		var spawnedPlayerInstance = global.SpawnHandlerRef.SpawnInstance(remotePlayerInstanceObject);
-		if (spawnedPlayerInstance != noone)
+		var playerInstance = global.SpawnHandlerRef.SpawnInstance(_remotePlayerInstanceObject);
+		if (playerInstance != noone)
 		{
 			// SET REMOTE PLAYER CHARACTER
-			spawnedPlayerInstance.character = new CharacterHuman(
+			playerInstance.character = new CharacterHuman(
 				_remotePlayerInfo.player_tag, CHARACTER_TYPE.Human,
 				CHARACTER_RACE.humanoid, CHARACTER_BEHAVIOUR.REMOTE_PLAYER
 			);
 			// SET REMOTE PLAYER INSTANCE REF
-			remotePlayerInstanceObject.instance_ref = spawnedPlayerInstance;
+			_remotePlayerInstanceObject.instance_ref = playerInstance;
 			// SET NETWORK ID
-			remotePlayerInstanceObject.network_id = _remotePlayerInfo.client_id;
-			spawnedPlayerInstance.networkId = _remotePlayerInfo.client_id;
+			playerInstance.networkId = _remotePlayerInstanceObject.network_id;
 			// SET DEVICE INPUT MOVEMENT
-			spawnedPlayerInstance.movementInput = remotePlayerInstanceObject.device_input_movement;
-			
-			// ADD INSTANCE OBJECT TO LOCAL PLAYER LIST
-			ds_list_add(global.NetworkRegionObjectHandlerRef.local_players, remotePlayerInstanceObject);
+			playerInstance.movementInput = _remotePlayerInstanceObject.device_input_movement;
 		}
 	}
 }
