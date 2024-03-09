@@ -78,11 +78,6 @@ function NetworkHandler() constructor
 		}
 	}
 	
-	static Draw = function()
-	{
-		network_region_handler.Draw();	
-	}
-	
 	static PrepareAndSendNetworkPacket = function(_networkPacket)
 	{
 		var isNetworkPacketSent = false;
@@ -554,12 +549,14 @@ function NetworkHandler() constructor
 												{
 													if (IS_ROOM_IN_GAME_WORLD)
 													{
-														global.NetworkRegionObjectHandlerRef.DestroyRemotePlayerInstanceObjectById(remotePlayerInfo.client_id);	
+														if (global.NetworkRegionRemotePlayerHandlerRef.SyncRegionRemotePlayerDisconnect(remotePlayerInfo))
+														{
+															global.NotificationHandlerRef.AddNotificationPlayerDisconnected(remotePlayerInfo.player_tag);
+													
+															// RESPOND WITH ACKNOWLEDGMENT TO REMOTE DISCONNECTED FROM HOST
+															isMessageHandled = QueueAcknowledgmentResponse();
+														}
 													}
-												
-													global.NotificationHandlerRef.AddNotificationPlayerDisconnected(remotePlayerInfo.player_tag);
-													// RESPOND WITH ACKNOWLEDGMENT TO REMOTE DISCONNECTED FROM HOST
-													isMessageHandled = QueueAcknowledgmentResponse();
 												}
 											} break;
 											default:
@@ -644,5 +641,10 @@ function NetworkHandler() constructor
 				ds_queue_enqueue(network_packet_queue, networkPacket);
 			}
 		}
+	}
+	
+	static Draw = function()
+	{
+		network_region_handler.Draw();
 	}
 }
