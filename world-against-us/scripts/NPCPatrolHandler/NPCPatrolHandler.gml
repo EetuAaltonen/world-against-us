@@ -91,17 +91,22 @@ function NPCPatrolHandler() constructor
 		var isStateSynced = false;
 		if (!is_undefined(_patrolState))
 		{
-			var patrol = GetPatrol(_patrolState.patrol_id);
-			if (!is_undefined(patrol))
+			if (_patrolState.region_id == global.NetworkRegionHandlerRef.region_id)
 			{
-				isStateSynced = patrol.SyncState(_patrolState);
-			} else {
-				var newPatrol = new Patrol(_patrolState.patrol_id, AI_STATE_BANDIT.TRAVEL, 0, 0);
-				if (AddPatrol(newPatrol))
+				var patrol = GetPatrol(_patrolState.patrol_id);
+				if (!is_undefined(patrol))
 				{
-					if (SpawnPatrol(newPatrol))
+					isStateSynced = patrol.SyncState(_patrolState);
+				} else {
+					var positionX = (!is_undefined(_patrolState.position)) ? _patrolState.position.X : 0;
+					var positionY = (!is_undefined(_patrolState.position)) ? _patrolState.position.Y : 0;
+					var newPatrol = new Patrol(_patrolState.patrol_id, _patrolState.region_id, AI_STATE_BANDIT.TRAVEL, positionX, positionY, UNDEFINED_UUID);
+					if (AddPatrol(newPatrol))
 					{
-						isStateSynced = newPatrol.SyncState(_patrolState);
+						if (SpawnPatrol(newPatrol))
+						{
+							isStateSynced = newPatrol.SyncState(_patrolState);
+						}
 					}
 				}
 			}
