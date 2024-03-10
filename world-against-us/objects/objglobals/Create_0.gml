@@ -172,6 +172,7 @@ global.NPCPatrolHandlerRef = undefined;
 // NETWORKING
 global.MultiplayerMode = false;
 global.NetworkRegionHandlerRef = undefined;
+global.NetworkRegionRemotePlayerHandlerRef = undefined;
 global.NetworkRegionObjectHandlerRef = undefined;
 global.NetworkPacketTrackerRef = undefined;
 global.NetworkConnectionSamplerRef = undefined;

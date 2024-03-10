@@ -1,4 +1,1 @@
-if (global.DEBUGMODE)
-{
-	networkHandler.Draw();
-}
+networkHandler.Draw();

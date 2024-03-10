@@ -63,7 +63,7 @@ function NetworkPacketHandler() constructor
 							if (!is_undefined(region))
 							{
 								global.NetworkRegionHandlerRef.owner_client = region.owner_client;
-								global.NetworkRegionObjectHandlerRef.SyncRegionPlayers(region.local_players);
+								global.NetworkRegionRemotePlayerHandlerRef.SyncRegionRemotePlayers(region.local_players);
 								global.NetworkRegionObjectHandlerRef.SyncRegionPatrols(region.arrived_patrols);
 							}
 							var scoutingDroneInstanceObject = regionSync.scouting_drone;
@@ -101,17 +101,17 @@ function NetworkPacketHandler() constructor
 						var remotePlayerInfo = payload;
 						if (!is_undefined(remotePlayerInfo))
 						{
-							// SPAWN REMOTE PLAYER
-							var remotePlayerPosition = new Vector2(0, 0);
-							global.SpawnHandlerRef.SpawnRemotePlayerInstance(remotePlayerInfo, remotePlayerPosition);
+							if (global.NetworkRegionRemotePlayerHandlerRef.SyncRegionRemotePlayerEnter(remotePlayerInfo))
+							{
+								global.NotificationHandlerRef.AddNotification(
+									new Notification(
+										sprIconRemoteEnterRegion, "Client entered the region",
+										string("{0} entered the area", remotePlayerInfo.player_tag),
+										NOTIFICATION_TYPE.Popup
+									)
+								);
+							}
 							
-							global.NotificationHandlerRef.AddNotification(
-								new Notification(
-									sprIconRemoteEnterRegion, "Client entered the region",
-									string("{0} entered the area", remotePlayerInfo.player_tag),
-									NOTIFICATION_TYPE.Popup
-								)
-							);
 							// RESPOND WITH ACKNOWLEDGMENT TO REMOTE ENTERED THE INSTANCE
 							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 						}
@@ -122,7 +122,7 @@ function NetworkPacketHandler() constructor
 						if (!is_undefined(remoteInstanceObject))
 						{
 							// TODO: Polish client side interpolation / input simulation
-							global.NetworkRegionObjectHandlerRef.UpdateRegionRemotePosition(remoteInstanceObject);
+							global.NetworkRegionRemotePlayerHandlerRef.UpdateRegionRemotePosition(remoteInstanceObject);
 							isPacketHandled = true;
 						}
 					} break;
@@ -132,7 +132,7 @@ function NetworkPacketHandler() constructor
 						if (!is_undefined(remoteDataMovementInput))
 						{
 							// TODO: Polish client side interpolation / input simulation
-							global.NetworkRegionObjectHandlerRef.UpdateRegionRemoteInput(remoteDataMovementInput);
+							global.NetworkRegionRemotePlayerHandlerRef.UpdateRegionRemoteInput(remoteDataMovementInput);
 							isPacketHandled = true;
 						}
 					} break;
@@ -141,18 +141,19 @@ function NetworkPacketHandler() constructor
 						var remotePlayerInfo = payload;
 						if (!is_undefined(remotePlayerInfo))
 						{
-							// DESTROY REMOTE PLAYER INSTANCE
-							global.NetworkRegionObjectHandlerRef.DestroyRemotePlayerInstanceObjectById(remotePlayerInfo.client_id);
-							
-							global.NotificationHandlerRef.AddNotification(
-								new Notification(
-									sprIconRemoteLeaveRegion, "Client left the region",
-									string("{0} left the area", remotePlayerInfo.player_tag),
-									NOTIFICATION_TYPE.Popup
-								)
-							);
-							// RESPOND WITH ACKNOWLEDGMENT TO REMOTE LEFT THE INSTANCE
-							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
+							if (global.NetworkRegionRemotePlayerHandlerRef.SyncRegionRemotePlayerLeave(remotePlayerInfo))
+							{
+								global.NotificationHandlerRef.AddNotification(
+									new Notification(
+										sprIconRemoteLeaveRegion, "Client left the region",
+										string("{0} left the area", remotePlayerInfo.player_tag),
+										NOTIFICATION_TYPE.Popup
+									)
+								);
+								
+								// RESPOND WITH ACKNOWLEDGMENT TO REMOTE LEFT THE INSTANCE
+								isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
+							}
 						}
 					} break;
 					case MESSAGE_TYPE.REMOTE_RETURNED_TO_CAMP:
@@ -160,12 +161,13 @@ function NetworkPacketHandler() constructor
 						var remotePlayerInfo = payload;
 						if (!is_undefined(remotePlayerInfo))
 						{
-							// DESTROY REMOTE PLAYER INSTANCE
-							global.NetworkRegionObjectHandlerRef.DestroyRemotePlayerInstanceObjectById(remotePlayerInfo.client_id);
-							
-							global.NotificationHandlerRef.AddNotificationPlayerReturnedToCamp(remotePlayerInfo.player_tag);
-							// RESPOND WITH ACKNOWLEDGMENT TO REMOTE RETURNED TO CAMP
-							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
+							if (global.NetworkRegionRemotePlayerHandlerRef.SyncRegionRemotePlayerReturnCamp(remotePlayerInfo))
+							{
+								global.NotificationHandlerRef.AddNotificationPlayerReturnedToCamp(remotePlayerInfo.player_tag);
+								
+								// RESPOND WITH ACKNOWLEDGMENT TO REMOTE RETURNED TO CAMP
+								isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
+							}
 						}
 					} break;
 					case MESSAGE_TYPE.REQUEST_PLAYER_LIST:

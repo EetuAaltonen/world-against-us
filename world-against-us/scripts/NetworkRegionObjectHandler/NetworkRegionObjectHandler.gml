@@ -3,9 +3,6 @@ function NetworkRegionObjectHandler() constructor
 	active_inventory_stream = undefined;
 	requested_container_access = undefined;
 	
-	// TODO: Move under the Region struct
-	local_players = ds_list_create();
-	local_patrols = ds_list_create();
 	scouting_drone = undefined;
 	
 	patrol_update_timer = new Timer(500);
@@ -15,12 +12,6 @@ function NetworkRegionObjectHandler() constructor
 	{
 		active_inventory_stream = undefined;
 		requested_container_access = undefined;
-		
-		DestroyDSListAndDeleteValues(local_players);
-		local_players = undefined;
-		
-		DestroyDSListAndDeleteValues(local_patrols);
-		local_patrols = undefined;
 		
 		scouting_drone = undefined;
 	}
@@ -34,12 +25,13 @@ function NetworkRegionObjectHandler() constructor
 		{
 			if (clientId == regionOwnerClient)
 			{
-				var patrolCount = ds_list_size(local_patrols);
+				// TODO: Fix patrol logic
+				/*var patrolCount = ds_list_size(local_patrols);
 				if (patrolCount > 0)
 				{
-					// TODO: Fix patrol logic
+					
 					// UPDATE PATROL LOCATION
-					/*patrol_update_timer.Update();
+					patrol_update_timer.Update();
 					if (patrol_update_timer.IsTimerStopped())
 					{
 						var formatPatrols = [];
@@ -92,17 +84,9 @@ function NetworkRegionObjectHandler() constructor
 						
 						// RESET TIMER
 						patrol_update_timer.StartTimer();
-					}*/
-				}
+					}
+				}*/
 			}
-		}
-		
-		// INTERPOLATE REMOTE PLAYER MOVEMENT
-		var playerCount = ds_list_size(local_players);
-		for (var i = 0; i < playerCount; i++)
-		{
-			var playerInstanceObject = local_players[| i];
-			playerInstanceObject.InterpolateMovement();
 		}
 		
 		// INTERPOLATE SCOUTING DRONE MOVEMENT
@@ -113,24 +97,6 @@ function NetworkRegionObjectHandler() constructor
 				scouting_drone.InterpolateMovement();
 			}
 		}
-	}
-	
-	static Draw = function()
-	{
-		// REMOTE PLAYER POSITION ON SERVER
-		var playerCount = ds_list_size(local_players);
-		for (var i = 0; i < playerCount; i++)
-		{
-			var playerInstanceObject = local_players[| i];
-			if (!is_undefined(playerInstanceObject.target_position))
-			{
-				draw_circle_color(
-					playerInstanceObject.target_position.X,
-					playerInstanceObject.target_position.Y,
-					2, c_blue, c_blue, false
-				);
-			}
-		}	
 	}
 	
 	static ValidateRegionContainers = function()
@@ -159,71 +125,11 @@ function NetworkRegionObjectHandler() constructor
 	
 	static OnRoomEnd = function()
 	{
-		// CLEAR LOCAL PLAYERS
-		ClearDSListAndDeleteValues(local_players);
-		
-		// CLEAR LOCAL PATROLS
-		ClearDSListAndDeleteValues(local_patrols);
-		
 		// RESET SCOTING DRONE
 		scouting_drone = undefined;
 		
 		// RESET PATROL UPDATE TIMER
 		patrol_update_timer.StartTimer();
-	}
-	
-	static SyncRegionPlayers = function(_players)
-	{
-		var isPlayersSync = true;
-		var playerCount = array_length(_players);
-		for (var i = 0; i < playerCount; i++)
-		{
-			var player = _players[@ i];
-			if (!is_undefined(player))
-			{
-				// DON'T SPAWN LOCAL PLAYER
-				if (player.network_id != global.NetworkHandlerRef.client_id)
-				{
-					var remotePlayerInfo = new RemotePlayerInfo(
-						player.network_id,
-						player.name
-					);
-					var remotePlayerPosition = new Vector2(
-						player.position.X,
-						player.position.Y,
-					);
-					// SPAWN REMOTE PLAYER
-					global.SpawnHandlerRef.SpawnRemotePlayerInstance(remotePlayerInfo, remotePlayerPosition);
-				}
-			}
-		}
-		return isPlayersSync;
-	}
-	
-	static GetPlayerInstanceObjectById = function(_clientId)
-	{
-		var playerInstanceObject = undefined;
-		var playerInstanceCount = ds_list_size(local_players);
-		for (var i = 0; i < playerInstanceCount; i++)
-		{
-			var instanceObject = local_players[| i];
-			if (!is_undefined(instanceObject))
-			{
-				if (instanceObject.network_id == _clientId)
-				{
-					if (instance_exists(instanceObject.instance_ref))
-					{
-						playerInstanceObject = instanceObject;
-					} else {
-						// DELETE EXPIRED PLAYER DATA
-						DeleteDSListValueByIndex(local_players, i--);
-						playerInstanceCount = ds_list_size(local_players);
-					}
-					break;
-				}
-			}
-		}
-		return playerInstanceObject;
 	}
 	
 	static UpdateRegionFromSnapshot = function(_regionSnapshot)
@@ -309,77 +215,6 @@ function NetworkRegionObjectHandler() constructor
 		}*/
 	}
 	
-	static UpdateRegionRemotePosition = function(_remoteInstanceObject)
-	{
-		var playerInstanceObject = GetPlayerInstanceObjectById(_remoteInstanceObject.network_id);
-		if (!is_undefined(playerInstanceObject))
-		{
-			var positionThreshold = 50;
-			var distance = point_distance(
-				_remoteInstanceObject.position.X,
-				_remoteInstanceObject.position.Y,
-				playerInstanceObject.position.X,
-				playerInstanceObject.position.Y
-			);
-			if (distance > positionThreshold)
-			{
-				var playerInstanceRef = playerInstanceObject.instance_ref;
-				if (instance_exists(playerInstanceRef))
-				{
-					playerInstanceObject.position = new Vector2(playerInstanceRef.x, playerInstanceRef.y);
-					playerInstanceObject.start_position = playerInstanceObject.position;
-					playerInstanceObject.StartInterpolateMovement(_remoteInstanceObject.position, 50);
-				}
-			}
-		}
-	}
-	
-	static UpdateRegionRemoteInput = function(_remoteDataInput)
-	{
-		var deviceInputMovement = _remoteDataInput.device_input_movement;
-		if (!is_undefined(deviceInputMovement))
-		{
-			var playerInstanceObject = GetPlayerInstanceObjectById(_remoteDataInput.network_id);
-			if (!is_undefined(playerInstanceObject))
-			{
-				playerInstanceObject.device_input_movement.key_up = deviceInputMovement.key_up;
-				playerInstanceObject.device_input_movement.key_down = deviceInputMovement.key_down;
-				playerInstanceObject.device_input_movement.key_left = deviceInputMovement.key_left;
-				playerInstanceObject.device_input_movement.key_right = deviceInputMovement.key_right;
-			}
-		}
-	}
-	
-	static DestroyRemotePlayerInstanceObjectById = function(_remotePlayerNetworkId)
-	{
-		var isPlayerInstanceDestroyed = false;
-		var playerInstanceCount = ds_list_size(local_players);
-		for (var i = 0; i < playerInstanceCount; i++)
-		{
-			var playerInstanceObject = local_players[| i];
-			if (!is_undefined(playerInstanceObject))
-			{
-				if (playerInstanceObject.network_id == _remotePlayerNetworkId)
-				{
-					if (instance_exists(playerInstanceObject.instance_ref))
-					{
-						instance_destroy(playerInstanceObject.instance_ref);
-					}
-					ds_list_delete(local_players, i);
-					isPlayerInstanceDestroyed = true;
-					break;
-				}	
-			}
-		}
-		if (!isPlayerInstanceDestroyed)
-		{
-			var consoleLog = string("Unable to destroy unknown remote player instance object with network ID '{0}'", _remotePlayerNetworkId);
-			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);	
-		}
-		
-		return isPlayerInstanceDestroyed;
-	}
-	
 	static SpawnScoutingDrone = function(_instanceObject)
 	{
 		var isDroneSpawned = true;
@@ -460,64 +295,7 @@ function NetworkRegionObjectHandler() constructor
 	
 	static SyncRegionPatrols = function(_patrols)
 	{
-		var isPatrolSync = true;
-		var patrolCount = array_length(_patrols);
-		for (var i = 0; i < patrolCount; i++)
-		{
-			var patrol = _patrols[@ i];
-			if (!is_undefined(patrol))
-			{
-				// DON'T SPAWN TRAVELLING PATROLS
-				if (patrol.ai_state != AI_STATE_BANDIT.TRAVEL && patrol.travel_time <= 0)
-				{
-					var existingPatrol = GetPatrolById(patrol.patrol_id);
-					if (!is_undefined(existingPatrol))
-					{
-						existingPatrol.Sync(patrol);
-					} else {
-						SpawnPatrol(patrol);
-					}
-				}
-			}
-		}
-		return isPatrolSync;
-	}
-	
-	static GetPatrolById = function(_patrolId)
-	{
-		var foundPatrol = undefined;
-		var patrolCount = ds_list_size(local_patrols);
-		for (var i = 0; i < patrolCount; i++)
-		{
-			var patrol = local_patrols[| i];
-			if (!is_undefined(patrol))
-			{
-				if (patrol.patrol_id == _patrolId)
-				{
-					if (instance_exists(patrol.instance_ref))
-					{
-						foundPatrol = patrol;
-					} else {
-						// DELETE EXPIRED PATROL DATA
-						DeleteDSListValueByIndex(local_patrols, i--);
-						patrolCount = ds_list_size(local_patrols);
-					}
-					break;
-				}
-			}
-		}
-		return foundPatrol;
-	}
-	
-	static SpawnPatrol = function(_patrol)
-	{
-		// TODO: Sync Chase, Patrol resume, and Patrol end AI states more precisely
-		var isPatrolSpawned = false;
-		var banditInstance = instance_create_layer(0, 0, LAYER_CHARACTERS, objBandit);
-		banditInstance.patrol = _patrol;
-		_patrol.instance_ref = banditInstance;
-		ds_list_add(local_patrols, _patrol);
-		return isPatrolSpawned;
+		return global.NPCPatrolHandlerRef.SyncPatrols(_patrols);
 	}
 	
 	static SyncRegionPatrolState = function(_patrolState)
@@ -528,6 +306,5 @@ function NetworkRegionObjectHandler() constructor
 	static ResetRegionObjectData = function()
 	{
 		active_inventory_stream = undefined;
-		ClearDSListAndDeleteValues(local_patrols);
 	}
 }

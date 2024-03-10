@@ -78,11 +78,6 @@ function NetworkHandler() constructor
 		}
 	}
 	
-	static Draw = function()
-	{
-		network_region_handler.Draw();	
-	}
-	
 	static PrepareAndSendNetworkPacket = function(_networkPacket)
 	{
 		var isNetworkPacketSent = false;
@@ -142,6 +137,11 @@ function NetworkHandler() constructor
 			socket = network_create_socket(network_socket_udp);
 			pre_alloc_network_buffer = buffer_create(256, buffer_grow, 1);
 			pre_alloc_network_buffer_compressed = buffer_create(256, buffer_grow, 1);
+			
+			// RESET DEBUG MONITOR
+			global.DebugMonitorNetworkHandlerRef.ResetNetworkDebugMonitoring();
+			global.DebugMonitorMultiplayerHandlerRef.ResetMultiplayerDebugMonitoring();
+			
 			isSocketCreated = true;
 		} else {
 			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Client already connected or socket already exists");
@@ -554,12 +554,14 @@ function NetworkHandler() constructor
 												{
 													if (IS_ROOM_IN_GAME_WORLD)
 													{
-														global.NetworkRegionObjectHandlerRef.DestroyRemotePlayerInstanceObjectById(remotePlayerInfo.client_id);	
+														if (global.NetworkRegionRemotePlayerHandlerRef.SyncRegionRemotePlayerDisconnect(remotePlayerInfo))
+														{
+															global.NotificationHandlerRef.AddNotificationPlayerDisconnected(remotePlayerInfo.player_tag);
+													
+															// RESPOND WITH ACKNOWLEDGMENT TO REMOTE DISCONNECTED FROM HOST
+															isMessageHandled = QueueAcknowledgmentResponse();
+														}
 													}
-												
-													global.NotificationHandlerRef.AddNotificationPlayerDisconnected(remotePlayerInfo.player_tag);
-													// RESPOND WITH ACKNOWLEDGMENT TO REMOTE DISCONNECTED FROM HOST
-													isMessageHandled = QueueAcknowledgmentResponse();
 												}
 											} break;
 											default:
@@ -644,5 +646,10 @@ function NetworkHandler() constructor
 				ds_queue_enqueue(network_packet_queue, networkPacket);
 			}
 		}
+	}
+	
+	static Draw = function()
+	{
+		network_region_handler.Draw();
 	}
 }

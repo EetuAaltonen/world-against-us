@@ -179,8 +179,10 @@ function NetworkPacketParser() constructor
 						var parsedRemotePositionY = buffer_read(_msg, buffer_u32);
 						var parsedRemoteClientId = buffer_read(_msg, buffer_string);
 						var parsedRemotePosition = ScaleIntValuesToFloatVector2(parsedRemotePositionX, parsedRemotePositionY);
-						var remoteInstanceData = new InstanceObject(object_get_sprite(objPlayer), objPlayer, parsedRemotePosition);
-						remoteInstanceData.network_id = parsedRemoteClientId;
+						var remoteInstanceData = new InstanceObject(
+							object_get_sprite(objPlayer), objPlayer,
+							parsedRemotePosition, parsedRemoteClientId
+						);
 						parsedPayload = remoteInstanceData;
 					} break;
 					case MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT:
@@ -199,9 +201,9 @@ function NetworkPacketParser() constructor
 						var parsedNetworkId = buffer_read(_msg, buffer_string);
 						
 						var emptyInstanceObject = new InstanceObject(
-							undefined, objPlayer, undefined
+							undefined, objPlayer,
+							undefined, parsedNetworkId
 						);
-						emptyInstanceObject.network_id = parsedNetworkId;
 						emptyInstanceObject.device_input_movement.key_up = parsedKeyUp;
 						emptyInstanceObject.device_input_movement.key_down = parsedKeyDown;
 						emptyInstanceObject.device_input_movement.key_left = parsedKeyLeft;
