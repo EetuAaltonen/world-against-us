@@ -6,22 +6,19 @@ function NetworkRegionHandler() constructor
 	room_index = undefined;
 	owner_client = UNDEFINED_UUID;
 	
+	network_region_remote_player_handler = new NetworkRegionRemotePlayerHandler();
 	network_region_object_handler = new NetworkRegionObjectHandler();
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		network_region_object_handler.OnDestroy();
-		network_region_object_handler = undefined;
+		DeleteStruct(_struct.network_region_remote_player_handler);
+		DeleteStruct(_struct.network_region_object_handler);
 	}
 	
 	static Update = function()
 	{
+		network_region_remote_player_handler.Update();
 		network_region_object_handler.Update();
-	}
-	
-	static Draw = function()
-	{
-		network_region_object_handler.Draw();	
 	}
 	
 	static IsClientRegionOwner = function()
@@ -41,6 +38,12 @@ function NetworkRegionHandler() constructor
 	
 	static OnRoomEnd = function()
 	{
+		network_region_remote_player_handler.OnRoomEnd();
 		network_region_object_handler.OnRoomEnd();
+	}
+	
+	static Draw = function()
+	{
+		network_region_remote_player_handler.Draw();
 	}
 }

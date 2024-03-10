@@ -4,6 +4,11 @@ function NPCHandler() constructor
 	
 	static OnDestroy = function(_struct = self)
 	{
-		DeleteStruct(npc_patrol_handler);
+		DeleteStruct(_struct.npc_patrol_handler);
+	}
+	
+	static OnRoomEnd = function()
+	{
+		npc_patrol_handler.OnRoomEnd();
 	}
 }

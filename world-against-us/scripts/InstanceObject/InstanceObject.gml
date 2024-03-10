@@ -1,4 +1,4 @@
-function InstanceObject(_sprite_index, _object_index, _position) constructor
+function InstanceObject(_sprite_index, _object_index, _position, _network_id = undefined) constructor
 {
 	spr_index = _sprite_index;
 	obj_index = _object_index;
@@ -6,7 +6,7 @@ function InstanceObject(_sprite_index, _object_index, _position) constructor
 	position = _position;
 	
 	instance_ref = noone;
-	network_id = undefined;
+	network_id = _network_id;
 	device_input_movement = new DeviceInputMovement(0, 0, 0, 0);
 	
 	// MOVEMENT INTERPOLATION
@@ -25,6 +25,15 @@ function InstanceObject(_sprite_index, _object_index, _position) constructor
 			obj_name: obj_name,
 			position: formatPosition
 		}
+	}
+	
+	static OnDestroy = function(_struct = self)
+	{
+		DeleteStruct(_struct.position);
+		DeleteStruct(_struct.device_input_movement);
+		DeleteStruct(_struct.start_position);
+		DeleteStruct(_struct.target_position);
+		DeleteStruct(_struct.interpolation_timer);
 	}
 	
 	static StartInterpolateMovement = function(_targetPosition, _interpolationTime)

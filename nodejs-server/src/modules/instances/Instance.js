@@ -169,6 +169,7 @@ export default class Instance {
         {
           const newPatrol = new Patrol(
             this.availablePatrolId,
+            this.instanceId,
             PATROL_ROUTE_TIME_TOWN
           );
           this.localPatrols[this.availablePatrolId] = newPatrol;
@@ -182,6 +183,7 @@ export default class Instance {
         {
           const newPatrol = new Patrol(
             this.availablePatrolId,
+            this.instanceId,
             PATROL_ROUTE_TIME_FOREST
           );
           this.localPatrols[this.availablePatrolId] = newPatrol;
