@@ -610,6 +610,22 @@ export default class NetworkHandler {
     return isStateBroadcasted;
   }
 
+  broadcastPatrolActionRob(patrolActionRob) {
+    let isStateBroadcasted = false;
+    const networkPacketHeader = new NetworkPacketHeader(
+      MESSAGE_TYPE.PATROL_ACTION_ROB,
+      UNDEFINED_UUID
+    );
+    const networkPacket = new NetworkPacket(
+      networkPacketHeader,
+      patrolActionRob,
+      PACKET_PRIORITY.HIGH
+    );
+    const clientsInInstance = this.clientHandler.getClientsToBroadcastInGame();
+    isStateBroadcasted = this.broadcast(networkPacket, clientsInInstance);
+    return isStateBroadcasted;
+  }
+
   broadcast(networkPacket, clients) {
     let isBroadcasted = false;
     if (networkPacket !== undefined) {
