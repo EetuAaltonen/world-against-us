@@ -12,7 +12,7 @@ import WorldMapFastTravelPoint from "../world_map/WorldMapFastTravelInfo.js";
 import InventoryStream from "../inventory/InventoryStream.js";
 import InventoryStreamItems from "../inventory/InventoryStreamItems.js";
 import ContainerInventoryActionInfo from "../containers/ContainerInventoryActionInfo.js";
-import PatrolSnapshotData from "../patrols/PatrolSnapshotData.js";
+import PatrolSnapshot from "../patrols/PatrolSnapshot.js";
 import PatrolState from "../patrols/PatrolState.js";
 import DeviceInputMovement from "../device_input/DeviceInputMovement.js";
 import ScoutingDrone from "../operations_center/ScoutingDrone.js";
@@ -342,7 +342,7 @@ export default class NetworkPacketParser {
                 const parsedPositionY = msg.readUInt32LE(offset);
                 offset += BITWISE.BIT32;
                 parsedPatrols.push(
-                  new PatrolSnapshotData(
+                  new PatrolSnapshot(
                     parsedPatrolId,
                     parsedRouteProgress,
                     new Vector2(parsedPositionX, parsedPositionY)
