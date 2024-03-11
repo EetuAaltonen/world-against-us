@@ -1,10 +1,10 @@
-function Character(_name, _type, _race, _behaviour) constructor
+function Character(_name, _type, _race, _behavior) constructor
 {
 	name = _name;
 	uuid = undefined;
 	type = _type;
 	race = _race;
-	behaviour = _behaviour;
+	behavior = _behavior;
 	
 	total_hp_percent = 100;
 	stamina = 100;
@@ -28,7 +28,7 @@ function Character(_name, _type, _race, _behaviour) constructor
 			name,
 			type,
 			race,
-			behaviour
+			behavior
 		);
 	}
 	

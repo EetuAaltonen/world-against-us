@@ -166,7 +166,7 @@ function SpawnHandler() constructor
 			// SET REMOTE PLAYER CHARACTER
 			playerInstance.character = new CharacterHuman(
 				_remotePlayerInfo.player_tag, CHARACTER_TYPE.Human,
-				CHARACTER_RACE.humanoid, CHARACTER_BEHAVIOUR.REMOTE_PLAYER
+				CHARACTER_RACE.humanoid, CHARACTER_BEHAVIOR.REMOTE_PLAYER
 			);
 			// SET REMOTE PLAYER INSTANCE REF
 			_remotePlayerInstanceObject.instance_ref = playerInstance;

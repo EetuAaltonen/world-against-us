@@ -2,7 +2,7 @@
 event_inherited();
 
 // CHARACTER
-character = new CharacterHuman("Bandit", CHARACTER_TYPE.Human, CHARACTER_RACE.humanoid, CHARACTER_BEHAVIOUR.HOSTILE);
+character = new CharacterHuman("Bandit", CHARACTER_TYPE.Human, CHARACTER_RACE.humanoid, CHARACTER_BEHAVIOR.HOSTILE);
 
 // AI STATES
 aiStates = ds_map_create();
