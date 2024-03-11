@@ -186,6 +186,20 @@ function PlayerDataHandler() constructor
 	
 	static OnRobbed = function()
 	{
+		if (!is_undefined(character))
+		{
+			// SET PLAYER BEING ROBBED
+			character.is_robbed = true;
+		}
+		
+		var playerInstance = global.InstancePlayer;
+		if (instance_exists(playerInstance))
+		{
+			// RESET DEVICE INPUT MOVEMENT
+			// THIS ALSO TRIGGERS PLAYER TO STOP ON REMOTE CLIENTS' VIEW
+			playerInstance.movementInput.Reset();
+		}
+		
 		// OPEN GAME OVER WINDOW
 		var guiState = new GUIState(
 			GUI_STATE.GameOver, undefined, undefined,
