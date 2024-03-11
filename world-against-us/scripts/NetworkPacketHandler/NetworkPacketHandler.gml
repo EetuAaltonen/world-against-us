@@ -400,6 +400,16 @@ function NetworkPacketHandler() constructor
 							}
 						}
 					} break;
+					case MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA:
+					{
+						var patrolsSnapshotData = payload;
+						if (!is_undefined(patrolsSnapshotData))
+						{
+							// PATROL SNAPSHOT DATA IS ROUTINE AND ONLY LATEST MESSAGE TAKES EFFECT
+							// NO GUARANTEE FOR DELIVERY REQUIRED
+							isPacketHandled = global.NetworkRegionObjectHandlerRef.SyncRegionPatrolsSnapshot(patrolsSnapshotData);
+						}
+					} break;
 					case MESSAGE_TYPE.REQUEST_SCOUT_LIST:
 					{
 						var parsedAvailableInstances = payload;
