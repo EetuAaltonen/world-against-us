@@ -339,6 +339,16 @@ function NetworkPacketParser() constructor
 							local_patrols: parsedLocalPatrols
 						};
 					} break;
+					case MESSAGE_TYPE.PATROL_ACTION_ROB:
+					{
+						var payloadString = buffer_read(_msg, buffer_string);
+						var parsedStruct = json_parse(payloadString);
+						if (parsedStruct != EMPTY_STRUCT)
+						{
+							var parsedPatrolActionRob = ParseJSONStructToPatrolActionRob(parsedStruct);
+							parsedPayload = parsedPatrolActionRob;
+						}
+					} break;
 					case MESSAGE_TYPE.REQUEST_SCOUT_LIST:
 					{
 						var payloadString = buffer_read(_msg, buffer_string);

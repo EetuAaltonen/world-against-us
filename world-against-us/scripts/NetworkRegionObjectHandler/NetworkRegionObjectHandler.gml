@@ -183,11 +183,44 @@ function NetworkRegionObjectHandler() constructor
 				{
 					isStateBroadcasted = true;
 				} else {
-					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Failed to queue sync patrol state on broadcast");
+					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Failed to queue sync patrol state to broadcast");
 				}
 			}
 		}
 		return isStateBroadcasted;
+	}
+	
+	static BroadcastPatrolActionRob = function(_aiBase)
+	{
+		var isActionBroadcasted = false;
+		if (global.NetworkRegionHandlerRef.IsClientRegionOwner())
+		{
+			if (instance_exists(_aiBase.target_instance))
+			{
+				var targetInstanceNetworkId = _aiBase.target_instance.networkId;
+				var targetPlayerTag = (!is_undefined(_aiBase.target_instance.character)) ? _aiBase.target_instance.character.name : UNDEFINED_OBJECT_NAME;
+				var patrolActionRob = new PatrolActionRob(
+					global.NetworkRegionHandlerRef.region_id,
+					_aiBase.patrol.patrol_id,
+					targetInstanceNetworkId,
+					targetPlayerTag
+				);
+				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PATROL_ACTION_ROB);
+				var networkPacket = new NetworkPacket(
+					networkPacketHeader,
+					patrolActionRob.ToJSONStruct(),
+					PACKET_PRIORITY.DEFAULT,
+					AckTimeoutFuncResend
+				);
+				if (global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+				{
+					isActionBroadcasted = true;
+				} else {
+					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Failed to queue patrol action rob to broadcast");
+				}
+			}
+		}
+		return isActionBroadcasted;
 	}
 	
 	static SyncRegionPatrols = function(_patrols)
@@ -203,6 +236,62 @@ function NetworkRegionObjectHandler() constructor
 	static SyncRegionPatrolsSnapshot = function(_patrolsSnapshotData)
 	{
 		return global.NPCPatrolHandlerRef.SyncPatrolsSnapshot(_patrolsSnapshotData);
+	}
+	
+	static SyncPatrolActionRob = function(_patrolActionRob)
+	{
+		var isActionSynced = false;
+		if (!global.NetworkRegionHandlerRef.IsClientRegionOwner())
+		{
+			if (_patrolActionRob.target_network_id == global.NetworkHandlerRef.client_id)
+			{
+				if (global.NetworkRegionHandlerRef.region_id == _patrolActionRob.region_id)
+				{
+					// SET LOCAL PLAYER BEING ROBBED
+					global.PlayerDataHandlerRef.OnRobbed();
+				}
+			} else {
+				// POP-UP NOTIFICATION
+				global.NotificationHandlerRef.AddNotification(
+					new Notification(
+						sprIconRemoteRob, "Player robbed",
+						string("{0} got robbed", _patrolActionRob.target_player_tag),
+						NOTIFICATION_TYPE.Popup
+					)
+				);
+			}
+			isActionSynced = true;
+		} else {
+			if (global.NetworkRegionHandlerRef.region_id == _patrolActionRob.region_id)
+			{
+				if (_patrolActionRob.target_network_id != global.NetworkHandlerRef.client_id)
+				{
+					var remotePlayerInstanceObject = global.NetworkRegionRemotePlayerHandlerRef.GetRemotePlayer(_patrolActionRob.target_network_id);
+					if (!is_undefined(remotePlayerInstanceObject))
+					{
+						if (instance_exists(remotePlayerInstanceObject))
+						{
+							if (!is_undefined(remotePlayerInstanceObject.character))
+							{
+								// SET REMOTE PLAYER BEING ROBBED
+								remotePlayerInstanceObject.character.is_robbed = true;
+							}
+						}
+					}
+				
+					// POP-UP NOTIFICATION
+					global.NotificationHandlerRef.AddNotification(
+						new Notification(
+							sprIconRemoteRob, "Player robbed",
+							string("{0} got robbed", _patrolActionRob.target_player_tag),
+							NOTIFICATION_TYPE.Popup
+						)
+					);
+				}
+			}
+			isActionSynced = true;
+		}
+		return isActionSynced;
 	}
 	
 	static ResetRegionObjectData = function()

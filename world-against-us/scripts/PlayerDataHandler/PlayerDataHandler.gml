@@ -1,7 +1,7 @@
 function PlayerDataHandler() constructor
 {
-	// TODO: Editable player name
-	player_name = "Player";
+	// TODO: Editable player name for singleplayer
+	player_name = (global.MultiplayerMode) ? global.NetworkHandlerRef.player_tag : "Player";
 	character = undefined;
 	last_known_location = undefined;
 	primaryWeaponSlot = undefined;
@@ -64,57 +64,60 @@ function PlayerDataHandler() constructor
 			{
 				positionSyncTImer.Update();
 				var playerInstance = global.InstancePlayer;
-				if (playerInstance.x != playerInstance.previousPosition.X || playerInstance.y != playerInstance.previousPosition.Y )
+				if (instance_exists(playerInstance))
 				{
-					if (positionSyncTImer.IsTimerStopped())
+					if ((playerInstance.x != playerInstance.previousPosition.X) || (playerInstance.y != playerInstance.previousPosition.Y))
 					{
-						var formatPosition = ScaleFloatValuesToIntVector2(playerInstance.x, playerInstance.y);
-						var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PLAYER_DATA_POSITION);
+						if (positionSyncTImer.IsTimerStopped())
+						{
+							var formatPosition = ScaleFloatValuesToIntVector2(playerInstance.x, playerInstance.y);
+							var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PLAYER_DATA_POSITION);
+							var networkPacket = new NetworkPacket(
+								networkPacketHeader,
+								formatPosition,
+								PACKET_PRIORITY.DEFAULT,
+								undefined
+							);
+							if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+							{
+								// TODO: Generic error handling
+								show_debug_message("Unable to queue MESSAGE_TYPE.PLAYER_DATA_POSITION");
+							}
+							// UPDATE PREVIOUS POSITION
+							playerInstance.previousPosition.X = playerInstance.x;
+							playerInstance.previousPosition.Y = playerInstance.y;
+				
+							// RESET TIMER
+							positionSyncTImer.StartTimer();
+						}
+					}
+				
+					// UPDATE PLAYER MOVEMENT INPUT
+					var movementInput = playerInstance.movementInput;
+					var prevMovementInput = playerInstance.prevMovementInput;
+					if (movementInput.key_up != prevMovementInput.key_up ||
+						movementInput.key_down != prevMovementInput.key_down ||
+						movementInput.key_left != prevMovementInput.key_left ||
+						movementInput.key_right != prevMovementInput.key_right)
+					{
+						var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT);
 						var networkPacket = new NetworkPacket(
 							networkPacketHeader,
-							formatPosition,
+							movementInput,
 							PACKET_PRIORITY.DEFAULT,
 							undefined
 						);
 						if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 						{
 							// TODO: Generic error handling
-							show_debug_message("Unable to queue MESSAGE_TYPE.PLAYER_DATA_POSITION");
+							show_debug_message("Unable to queue MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT");
 						}
-						// UPDATE PREVIOUS POSITION
-						playerInstance.previousPosition.X = playerInstance.x;
-						playerInstance.previousPosition.Y = playerInstance.y;
-				
-						// RESET TIMER
-						positionSyncTImer.StartTimer();
-					}
-				}
-				
-				// UPDATE PLAYER MOVEMENT INPUT
-				var movementInput = playerInstance.movementInput;
-				var prevMovementInput = playerInstance.prevMovementInput;
-				if (movementInput.key_up != prevMovementInput.key_up ||
-					movementInput.key_down != prevMovementInput.key_down ||
-					movementInput.key_left != prevMovementInput.key_left ||
-					movementInput.key_right != prevMovementInput.key_right)
-				{
-					var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT);
-					var networkPacket = new NetworkPacket(
-						networkPacketHeader,
-						movementInput,
-						PACKET_PRIORITY.DEFAULT,
-						undefined
-					);
-					if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-					{
-						// TODO: Generic error handling
-						show_debug_message("Unable to queue MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT");
-					}
 					
-					prevMovementInput.key_up = movementInput.key_up;
-					prevMovementInput.key_down = movementInput.key_down;
-					prevMovementInput.key_left = movementInput.key_left;
-					prevMovementInput.key_right = movementInput.key_right;
+						prevMovementInput.key_up = movementInput.key_up;
+						prevMovementInput.key_down = movementInput.key_down;
+						prevMovementInput.key_left = movementInput.key_left;
+						prevMovementInput.key_right = movementInput.key_right;
+					}
 				}
 			}
 		}
@@ -186,6 +189,20 @@ function PlayerDataHandler() constructor
 	
 	static OnRobbed = function()
 	{
+		if (!is_undefined(character))
+		{
+			// SET PLAYER BEING ROBBED
+			character.is_robbed = true;
+		}
+		
+		var playerInstance = global.InstancePlayer;
+		if (instance_exists(playerInstance))
+		{
+			// RESET DEVICE INPUT MOVEMENT
+			// THIS ALSO TRIGGERS PLAYER TO STOP ON REMOTE CLIENTS' VIEW
+			playerInstance.movementInput.Reset();
+		}
+		
 		// OPEN GAME OVER WINDOW
 		var guiState = new GUIState(
 			GUI_STATE.GameOver, undefined, undefined,
@@ -195,6 +212,6 @@ function PlayerDataHandler() constructor
 			GUI_CHAIN_RULE.OverwriteAll,
 			undefined, undefined
 		);
-		global.GUIStateHandlerRef.RequestGUIState(guiState);	
+		global.GUIStateHandlerRef.RequestGUIState(guiState);
 	}
 }

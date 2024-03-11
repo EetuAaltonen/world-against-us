@@ -19,6 +19,7 @@ import ScoutingDrone from "../operations_center/ScoutingDrone.js";
 // TODO: Check these data structs (snake cased classes)
 
 import ParseJSONStructToInventoryStreamItems from "../inventory/ParseJSONStructToInventoryStreamItems.js";
+import ParseJSONStructToPatrolActionRob from "../patrols/ParseJSONStructToPatrolActionRob.js";
 
 export default class NetworkPacketParser {
   constructor() {}
@@ -353,6 +354,13 @@ export default class NetworkPacketParser {
                 instanceId: parsedInstanceId,
                 localPatrols: parsedPatrols,
               };
+            }
+            break;
+          case MESSAGE_TYPE.PATROL_ACTION_ROB:
+            {
+              const jsonString = msg.toString("utf8", offset);
+              const jsonStruct = JSON.parse(jsonString);
+              payload = ParseJSONStructToPatrolActionRob(jsonStruct);
             }
             break;
           case MESSAGE_TYPE.START_OPERATIONS_SCOUT_STREAM:
