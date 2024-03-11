@@ -190,6 +190,39 @@ function NetworkRegionObjectHandler() constructor
 		return isStateBroadcasted;
 	}
 	
+	static BroadcastPatrolActionRob = function(_aiBase)
+	{
+		var isActionBroadcasted = false;
+		if (global.NetworkRegionHandlerRef.IsClientRegionOwner())
+		{
+			if (instance_exists(_aiBase.target_instance))
+			{
+				var targetInstanceNetworkId = _aiBase.target_instance.networkId;
+				var targetPlayerTag = (!is_undefined(_aiBase.target_instance.character)) ? _aiBase.target_instance.character.name : UNDEFINED_OBJECT_NAME;
+				var patrolActionRob = new PatrolActionRob(
+					global.NetworkRegionHandlerRef.region_id,
+					_aiBase.patrol.patrol_id,
+					targetInstanceNetworkId,
+					targetPlayerTag
+				);
+				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PATROL_ACTION_ROB);
+				var networkPacket = new NetworkPacket(
+					networkPacketHeader,
+					patrolActionRob.ToJSONStruct(),
+					PACKET_PRIORITY.DEFAULT,
+					AckTimeoutFuncResend
+				);
+				if (global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+				{
+					isActionBroadcasted = true;
+				} else {
+					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Failed to queue patrol action rob to broadcast");
+				}
+			}
+		}
+		return isActionBroadcasted;
+	}
+	
 	static SyncRegionPatrols = function(_patrols)
 	{
 		return global.NPCPatrolHandlerRef.SyncPatrols(_patrols);
