@@ -14,7 +14,7 @@ if (initWeapon)
 		initWeapon = false;
 		InitializeWeapon();
 			
-		if (owner.character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
+		if (owner.character.behavior == CHARACTER_BEHAVIOR.PLAYER)
 		{
 			// TODO: Fix weapon equip network coding
 			/*if (!is_undefined(global.ObjNetwork.client.clientId))

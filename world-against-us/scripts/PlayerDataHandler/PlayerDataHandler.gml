@@ -130,7 +130,7 @@ function PlayerDataHandler() constructor
 			OnDestroy();
 		}
 		
-		character = new CharacterHuman(player_name, CHARACTER_TYPE.Human, CHARACTER_RACE.humanoid, CHARACTER_BEHAVIOUR.PLAYER);
+		character = new CharacterHuman(player_name, CHARACTER_TYPE.Human, CHARACTER_RACE.humanoid, CHARACTER_BEHAVIOR.PLAYER);
 		last_known_location = undefined;
 		primaryWeaponSlot = new Inventory("PlayerPrimaryWeaponSlot", INVENTORY_TYPE.PlayerPrimaryWeaponSlot, new InventorySize(4, 6), new InventoryFilter([], ["Weapon"], []));
 		magazinePockets = new Inventory("PlayerMagazinePocket", INVENTORY_TYPE.MagazinePockets, new InventorySize(4, 2), new InventoryFilter([], ["Magazine", "Bullet", "Fuel Ammo"], []));

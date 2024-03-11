@@ -1,6 +1,6 @@
 if (global.MultiplayerMode)
 {
-	if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
+	if (character.behavior == CHARACTER_BEHAVIOR.PLAYER)
 	{
 		/*
 			// TODO: Include player velocity to PLAYER_DATA_POSITION packet in network coding

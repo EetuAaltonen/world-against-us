@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "EnumCharacterBehaviour",
+  "name": "EnumCharacterBehavior",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

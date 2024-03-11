@@ -1,7 +1,7 @@
 // OVERRIDE THE PARENT EVENT
 if (!is_undefined(character))
 {
-	if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
+	if (character.behavior == CHARACTER_BEHAVIOR.PLAYER)
 	{
 		character.Update();
 		if (character.IsInvulnerableState()) return;
@@ -128,7 +128,7 @@ if (place_meeting(x, y + vSpeed, objBlockParent))
 y += vSpeed;
 
 // CALCULATE IMAGE X SCALE
-if (character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
+if (character.behavior == CHARACTER_BEHAVIOR.PLAYER)
 {
 	var spriteDirection = CalculateSpriteDirectionToAim(new Vector2(x, y), MouseWorldPosition());
 	image_xscale = spriteDirection.image_x_scale;

@@ -3,7 +3,7 @@ event_inherited();
 
 if (!is_undefined(character))
 {
-	if (character.behaviour == CHARACTER_BEHAVIOUR.REMOTE_PLAYER)
+	if (character.behavior == CHARACTER_BEHAVIOR.REMOTE_PLAYER)
 	{
 		draw_set_font(font_tiny_bold);
 		draw_set_halign(fa_center);
