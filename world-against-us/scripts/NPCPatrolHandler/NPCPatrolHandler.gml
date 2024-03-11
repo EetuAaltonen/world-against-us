@@ -44,6 +44,11 @@ function NPCPatrolHandler() constructor
 		return local_patrols[? _patrolId] ?? undefined;
 	}
 	
+	static GetPatrolNetworkIDs = function()
+	{
+		return ds_map_keys_to_array(local_patrols);
+	}
+	
 	static SyncPatrols = function(_patrols)
 	{
 		var isPatrolsSynced = true;
@@ -81,6 +86,63 @@ function NPCPatrolHandler() constructor
 					var consoleLog = string("Failed to sync patrol with network ID {0}", patrol.patrol_id);
 					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
 				}
+			}
+		}
+		return isPatrolsSynced;
+	}
+	
+	static SyncPatrolsSnapshot = function(_patrolsSnapshotData)
+	{
+		var isPatrolsSynced = false;
+		if (_patrolsSnapshotData.region_id == global.NetworkRegionHandlerRef.region_id)
+		{
+			if (!global.NetworkRegionHandlerRef.IsClientRegionOwner())
+			{
+				if (is_array(_patrolsSnapshotData.local_patrols))
+				{
+					var patrolCount = array_length(_patrolsSnapshotData.local_patrols);
+					for (var i = 0; i < patrolCount; i++)
+					{
+						var isExistPatrolSynced = false;
+						var patrolSnapshot = _patrolsSnapshotData.local_patrols[i];
+						if (!is_undefined(patrolSnapshot))
+						{
+							var existPatrol = GetPatrol(patrolSnapshot.patrol_id);
+							if (!is_undefined(existPatrol))
+							{
+								var routeProgressDelta = abs(existPatrol.route_progress - patrolSnapshot.route_progress);
+								var routeProgressThreshold = 0.02;
+								var positionDelta = point_distance(
+									existPatrol.position.X, existPatrol.position.Y,
+									patrolSnapshot.position.X, patrolSnapshot.position.Y
+								);
+								var positionThreshold = MetersToPixels(2);
+								if ((routeProgressDelta > routeProgressThreshold) || (positionDelta > positionThreshold))
+								{
+									var patrolState = new PatrolState(
+										_patrolsSnapshotData.region_id, existPatrol.patrol_id,
+										existPatrol.ai_state, patrolSnapshot.route_progress,
+										patrolSnapshot.position, existPatrol.target_network_id
+									);
+									isExistPatrolSynced = existPatrol.SyncState(patrolState);
+								} else {
+									// PATROL IS ALREADY IN SYNC
+									isExistPatrolSynced = true;
+								}
+							}
+						}
+					
+						if (!isExistPatrolSynced)
+						{
+							var consoleLog = string("Failed to sync patrol from snapshot with patrol ID {0}", patrolSnapshot.patrol_id);
+							global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
+						}
+					}
+					isPatrolsSynced = true;
+				}
+			} else {
+				// SET PATROLS SYNCED EVEN WHEN SKIPPED
+				isPatrolsSynced = true;
 			}
 		}
 		return isPatrolsSynced;

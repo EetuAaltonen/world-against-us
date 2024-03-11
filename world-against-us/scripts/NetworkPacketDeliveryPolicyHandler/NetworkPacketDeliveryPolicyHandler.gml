@@ -19,6 +19,8 @@ function NetworkPacketDeliveryPolicyHandler() constructor
 		ds_map_add(delivery_policies, MESSAGE_TYPE.REMOTE_DATA_POSITION, new NetworkPacketDeliveryPolicy(false, true, true, true, false));
 		ds_map_add(delivery_policies, MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT, new NetworkPacketDeliveryPolicy(false, true, true, true, false));
 		
+		ds_map_add(delivery_policies, MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA, new NetworkPacketDeliveryPolicy(false, true, true, true, false));
+		
 		// DEFAULT
 		ds_map_add(
 			delivery_policies, MESSAGE_TYPE.ENUM_LENGTH,

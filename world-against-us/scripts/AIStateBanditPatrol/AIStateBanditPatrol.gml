@@ -1,5 +1,8 @@
 function AIStateBanditPatrol(_aiBase)
 {
+	// UPDATE PATROL POSITION
+	_aiBase.UpdatePatrolPosition();
+	
 	// UPDATE PATROL ROUTE PROGRESS
 	_aiBase.UpdatePatrolRouteProgress();
 	

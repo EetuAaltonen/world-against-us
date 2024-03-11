@@ -31,8 +31,7 @@ function Patrol(_patrolId, _regionId, _aiState, _travelTimer, _routeProgress, _t
 	static InitRoute = function()
 	{
 		var isRouteInitialized = false;
-		var pathLayerId = layer_get_id(LAYER_PATH_PATROL);
-		if (layer_exists(pathLayerId))
+		if (IS_ROOM_PATROL_ROUTED)
 		{
 			// FETCH PATH INDEX BY ROOM
 			var pathIndex = undefined;
@@ -69,43 +68,17 @@ function Patrol(_patrolId, _regionId, _aiState, _travelTimer, _routeProgress, _t
 						route_progress = _patrolState.route_progress;
 						
 						// SYNC INSTANCE BEHAVIOR
-						if (instance_exists(instance_ref))
-						{
-							isSynced = instance_ref.aiBandit.ResumePatrol();
-						}
+						isSynced = instance_ref.aiBandit.ResumePatrol();
 					} break;
 					case AI_STATE_BANDIT.CHASE:
 					{
-						if (instance_exists(instance_ref))
+						var targetInstance = FindInstanceNetwork(_patrolState.target_network_id, objPlayer);
+						if (instance_exists(targetInstance))
 						{
-							var targetInstance = FindInstanceNetwork(_patrolState.target_network_id, objPlayer);
-							if (instance_exists(targetInstance))
-							{
-								// SYNC INSTANCE BEHAVIOR
-								with (instance_ref)
-								{
-									// END PATHING
-									path_end();
-								
-									x = _patrolState.position.X;
-									y = _patrolState.position.Y;
-									
-									// SET TARGET
-									aiBandit.SetTargetInstance(targetInstance);
-									
-									// START CHASING TARGET
-									isSynced = aiBandit.StartChasingTarget();
-								}
-							}
-						}
-					} break;
-					case AI_STATE_BANDIT.PATROL_RETURN:
-					{
-						route_progress = _patrolState.route_progress;
-						
-						// SYNC INSTANCE BEHAVIOR
-						if (instance_exists(instance_ref))
-						{
+							// SET TARGET
+							target_network_id = targetInstance.networkId;
+							
+							// SYNC INSTANCE BEHAVIOR
 							with (instance_ref)
 							{
 								// END PATHING
@@ -114,18 +87,35 @@ function Patrol(_patrolId, _regionId, _aiState, _travelTimer, _routeProgress, _t
 								x = _patrolState.position.X;
 								y = _patrolState.position.Y;
 									
+								// SET TARGET
+								aiBandit.SetTargetInstance(targetInstance);
+									
 								// START CHASING TARGET
-								isSynced = aiBandit.ReturnToPatrol();
+								isSynced = aiBandit.StartChasingTarget();
 							}
+						}
+					} break;
+					case AI_STATE_BANDIT.PATROL_RETURN:
+					{
+						route_progress = _patrolState.route_progress;
+						
+						// SYNC INSTANCE BEHAVIOR
+						with (instance_ref)
+						{
+							// END PATHING
+							path_end();
+								
+							x = _patrolState.position.X;
+							y = _patrolState.position.Y;
+									
+							// START CHASING TARGET
+							isSynced = aiBandit.ReturnToPatrol();
 						}
 					} break;
 					case AI_STATE_BANDIT.PATROL_END:
 					{
-						if (instance_exists(instance_ref))
-						{
-							instance_ref.aiBandit.EndPatrol();
-							isSynced = true;
-						}
+						instance_ref.aiBandit.EndPatrol();
+						isSynced = true;
 					} break;
 				}
 			}

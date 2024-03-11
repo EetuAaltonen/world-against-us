@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "PatrolState",
+  "name": "PatrolSnapshot",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
