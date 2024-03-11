@@ -340,23 +340,26 @@ function NetworkHandler() constructor
 	
 	static OnRoomStart = function()
 	{
-		// VALIDATE CONTAINERS
-		if (!network_region_handler.network_region_object_handler.ValidateRegionContainers())
+		if (IS_ROOM_IN_GAME_WORLD)
 		{
-			show_message("Error occured during OnRoomStart");
-			RequestDisconnectSocket(true);
-		} else {
-			// REQUEST REGION SYNC
-			var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.SYNC_INSTANCE);
-			var networkPacket = new NetworkPacket(
-				networkPacketHeader,
-				undefined,
-				PACKET_PRIORITY.DEFAULT,
-				AckTimeoutFuncResend
-			);
-			if (!AddPacketToQueue(networkPacket))
+			// VALIDATE CONTAINERS
+			if (network_region_handler.network_region_object_handler.ValidateRegionContainers())
 			{
-				show_debug_message("Failed to add 'sync instance' packet to queue");
+				// REQUEST REGION SYNC
+				var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.SYNC_INSTANCE);
+				var networkPacket = new NetworkPacket(
+					networkPacketHeader,
+					undefined,
+					PACKET_PRIORITY.DEFAULT,
+					AckTimeoutFuncResend
+				);
+				if (!AddPacketToQueue(networkPacket))
+				{
+					show_debug_message("Failed to add 'sync instance' packet to queue");
+				}
+			} else {
+				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Error occured during container validation OnRoomStart");
+				RequestDisconnectSocket(true);
 			}
 		}
 	}
