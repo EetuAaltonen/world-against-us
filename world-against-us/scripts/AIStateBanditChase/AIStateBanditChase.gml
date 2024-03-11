@@ -22,9 +22,6 @@ function AIStateBanditChase(_aiBase)
 						var targetCharacter = _aiBase.target_instance.character;
 						if (!is_undefined(targetCharacter))
 						{
-							// SET TARGET BEING ROBBED
-							targetCharacter.is_robbed = true;
-						
 							// TRIGGER LOCAL PLAYER ON ROBBED
 							if (targetCharacter.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 							{
@@ -106,14 +103,14 @@ function AIStateBanditChase(_aiBase)
 							var targetCharacter = _aiBase.target_instance.character;
 							if (!is_undefined(targetCharacter))
 							{
-								// SET TARGET BEING ROBBED
-								targetCharacter.is_robbed = true;
-								
 								// TRIGGER LOCAL PLAYER ON ROBBED
 								if (targetCharacter.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
 								{
 									global.PlayerDataHandlerRef.OnRobbed();
 								}
+								
+								// BROADCAST ROB ACTION
+								global.NetworkRegionObjectHandlerRef.BroadcastPatrolActionRob(_aiBase);
 							}
 							// RETURN TO PATROL
 							if (_aiBase.ReturnToPatrol()) global.NetworkRegionObjectHandlerRef.BroadcastPatrolState(_aiBase);
