@@ -23,7 +23,7 @@ function AIStateBanditChase(_aiBase)
 						if (!is_undefined(targetCharacter))
 						{
 							// TRIGGER LOCAL PLAYER ON ROBBED
-							if (targetCharacter.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
+							if (targetCharacter.behavior == CHARACTER_BEHAVIOR.PLAYER)
 							{
 								global.PlayerDataHandlerRef.OnRobbed();
 							}
@@ -104,7 +104,7 @@ function AIStateBanditChase(_aiBase)
 							if (!is_undefined(targetCharacter))
 							{
 								// TRIGGER LOCAL PLAYER ON ROBBED
-								if (targetCharacter.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
+								if (targetCharacter.behavior == CHARACTER_BEHAVIOR.PLAYER)
 								{
 									global.PlayerDataHandlerRef.OnRobbed();
 								}

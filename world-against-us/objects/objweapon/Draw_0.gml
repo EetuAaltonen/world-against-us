@@ -69,7 +69,7 @@ if (!is_undefined(primaryWeapon))
 		}
 	}
 	
-	if (owner.character.behaviour == CHARACTER_BEHAVIOUR.PLAYER)
+	if (owner.character.behavior == CHARACTER_BEHAVIOR.PLAYER)
 	{
 		// CHECK GUI STATE
 		if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;

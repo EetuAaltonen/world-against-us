@@ -1,4 +1,4 @@
-function CharacterHuman(_name, _type, _race, _behaviour) : Character(_name, _type, _race, _behaviour) constructor
+function CharacterHuman(_name, _type, _race, _behavior) : Character(_name, _type, _race, _behavior) constructor
 {
 	// STATS
 	max_fullness = 100;

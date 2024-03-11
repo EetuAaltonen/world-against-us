@@ -18,7 +18,7 @@ function ParseJSONStructToCharacter(_jsonStruct)
 						characterStruct[$ "name"] ?? undefined,
 						characterStruct[$ "type"] ?? undefined,
 						characterStruct[$ "race"] ?? undefined,
-						characterStruct[$ "behaviour"] ?? undefined
+						characterStruct[$ "behavior"] ?? undefined
 					);
 					
 					// VARYING METADATA
