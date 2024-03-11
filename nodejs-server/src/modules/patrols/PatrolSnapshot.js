@@ -1,4 +1,4 @@
-export default class PatrolSnapshotData {
+export default class PatrolSnapshot {
   constructor(patrolId, routeProgress, position) {
     this.patrolId = patrolId;
     this.routeProgress = routeProgress;
