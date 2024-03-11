@@ -1,12 +1,7 @@
-import MESSAGE_TYPE from "../network/MessageType.js";
-import PACKET_PRIORITY from "../network/PacketPriority.js";
 import ROOM_INDEX from "./RoomIndex.js";
 import AI_STATE_BANDIT from "../patrols/AIStateBandit.js";
 
 import ConsoleHandler from "../console/ConsoleHandler.js";
-import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
-import NetworkPacket from "../network_packets/NetworkPacket.js";
-
 import ContainerHandler from "../containers/ContainerHandler.js";
 import Patrol from "../patrols/Patrol.js";
 import PatrolState from "../patrols/PatrolState.js";
@@ -37,9 +32,6 @@ export default class Instance {
     this.containerHandler = new ContainerHandler(this.networkHandler);
 
     this.availablePatrolId = 0;
-
-    this.snapshotSendTimer = 0;
-    this.isNewSnapshotRequired = true;
   }
 
   toJSONStruct() {
@@ -66,36 +58,6 @@ export default class Instance {
       // TODO: Update the Camp
     } else {
       isUpdated = this.updateLocalPatrols(passedTickTime);
-    }
-
-    this.snapshotSendTimer += passedTickTime;
-    if (this.snapshotSendTimer >= SNAPSHOT_SEND_RATE) {
-      this.snapshotSendTimer -= SNAPSHOT_SEND_RATE;
-
-      if (this.isNewSnapshotRequired) {
-        this.isNewSnapshotRequired = false;
-
-        // Broad cast instance snapshot within the instance
-        const clientsToBroadcast =
-          this.networkHandler.clientHandler.getClientsToBroadcastInstance(
-            this.instanceId
-          );
-        const broadcastNetworkPacketHeader = new NetworkPacketHeader(
-          MESSAGE_TYPE.INSTANCE_SNAPSHOT_DATA,
-          undefined
-        );
-        const instanceSnapshot = this.fetchInstanceSnapshot();
-
-        const broadcastNetworkPacket = new NetworkPacket(
-          broadcastNetworkPacketHeader,
-          instanceSnapshot,
-          PACKET_PRIORITY.DEFAULT
-        );
-        this.networkHandler.broadcast(
-          broadcastNetworkPacket,
-          clientsToBroadcast
-        );
-      }
     }
     return isUpdated;
   }

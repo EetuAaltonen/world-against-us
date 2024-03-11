@@ -208,11 +208,6 @@ export default class NetworkPacketBuilder {
               isPayloadWritten = true;
             }
             break;
-          case MESSAGE_TYPE.INSTANCE_SNAPSHOT_DATA:
-            {
-              isPayloadWritten = this.writeInstanceSnapshotBuffer(payload);
-            }
-            break;
           case MESSAGE_TYPE.REMOTE_ENTERED_THE_INSTANCE:
             {
               const bufferClientId = Buffer.from(
@@ -553,12 +548,12 @@ export default class NetworkPacketBuilder {
           );
           patrolDataOffset += BITWISE.BIT16;
           bufferLocalPatrolData.writeUInt32LE(
-            patrol.localPosition.x,
+            patrol.position.x,
             patrolDataOffset
           );
           patrolDataOffset += BITWISE.BIT32;
           bufferLocalPatrolData.writeUInt32LE(
-            patrol.localPosition.y,
+            patrol.position.y,
             patrolDataOffset
           );
           patrolDataOffset += BITWISE.BIT32;

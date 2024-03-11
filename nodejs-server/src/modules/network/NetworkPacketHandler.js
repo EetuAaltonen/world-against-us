@@ -115,6 +115,7 @@ export default class NetworkPacketHandler {
                   activeOperationsScoutStream.scoutingDrone.toJSONStruct();
               }
             }
+
             const networkPacketHeader = new NetworkPacketHeader(
               MESSAGE_TYPE.SYNC_INSTANCE,
               client.uuid
@@ -140,8 +141,6 @@ export default class NetworkPacketHandler {
               const player = instance.getPlayer(client.uuid);
               if (player !== undefined) {
                 player.position = newPosition;
-                // Set new snapshot required flag
-                //instance.isNewSnapshotRequired = true;
 
                 // Broadcast about updated player position data
                 const clientsToBroadcast =
