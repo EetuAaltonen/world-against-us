@@ -399,6 +399,18 @@ function NetworkPacketHandler() constructor
 							isPacketHandled = global.NetworkRegionObjectHandlerRef.SyncRegionPatrolsSnapshot(patrolsSnapshotData);
 						}
 					} break;
+					case MESSAGE_TYPE.PATROL_ACTION_ROB:
+					{
+						var patrolActionData = payload;
+						if (!is_undefined(patrolActionData))
+						{
+							if (global.NetworkRegionObjectHandlerRef.SyncPatrolActionRob(patrolActionData))
+							{
+								// RESPOND WITH ACKNOWLEDGMENT TO PATROL ACTION ROB
+								isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
+							}
+						}
+					} break;
 					case MESSAGE_TYPE.REQUEST_SCOUT_LIST:
 					{
 						var parsedAvailableInstances = payload;
