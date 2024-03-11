@@ -730,30 +730,48 @@ export default class NetworkPacketHandler {
           break;
         case MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA:
           {
-            const patrolsProgressPosition = networkPacket.payload;
-            if (patrolsProgressPosition !== undefined) {
-              if (patrolsProgressPosition.instance_id == instance.instanceId) {
-                patrolsProgressPosition.local_patrols.forEach(
-                  (patrolProgressPosition) => {
-                    const patrol = instance.getPatrol(
-                      patrolProgressPosition.patrol_id
-                    );
-                    if (patrol !== undefined) {
-                      patrol.localPosition.x =
-                        patrolProgressPosition.position_x;
-                      patrol.localPosition.y =
-                        patrolProgressPosition.position_y;
-                      patrol.routeTime =
-                        patrol.totalRouteTime -
-                        patrol.totalRouteTime *
-                          (patrolProgressPosition.route_progress * 0.001);
-                      // Set new snapshot required flag
-                      instance.isNewSnapshotRequired = true;
+            const patrolsSnapshotData = networkPacket.payload;
+            if (patrolsSnapshotData !== undefined) {
+              if (patrolsSnapshotData.instanceId == instance.instanceId) {
+                if (patrolsSnapshotData.localPatrols.length > 0) {
+                  patrolsSnapshotData.localPatrols.forEach(
+                    (patrolSnapshotData) => {
+                      const patrol = instance.getPatrol(
+                        patrolSnapshotData.patrol_id
+                      );
+                      if (patrol !== undefined) {
+                        patrol.position.x = patrolSnapshotData.position.X;
+                        patrol.position.y = patrolSnapshotData.position.X;
+                        patrol.routeProgress = patrolSnapshotData.routeProgress;
+                      }
                     }
-                  }
+                  );
+                }
+
+                // Broadcast patrols snapshot data withing instance
+                const clientsToBroadcast =
+                  this.clientHandler.getClientsToBroadcastInstance(
+                    instance.instanceId,
+                    client.uuid
+                  );
+                const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+                  MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA,
+                  client.uuid
                 );
+                const broadcastNetworkPacket = new NetworkPacket(
+                  broadcastNetworkPacketHeader,
+                  patrolsSnapshotData,
+                  PACKET_PRIORITY.DEFAULT
+                );
+                this.networkHandler.broadcast(
+                  broadcastNetworkPacket,
+                  clientsToBroadcast
+                );
+
+                // Patrol snapshot data is routine and only the latest message takes effect
+                // No guarantee for delivery required
+                isPacketHandled = true;
               }
-              isPacketHandled = true;
             }
           }
           break;
