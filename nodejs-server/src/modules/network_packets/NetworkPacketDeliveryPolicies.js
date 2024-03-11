@@ -26,6 +26,9 @@ networkPacketDeliveryPolicies[MESSAGE_TYPE.REMOTE_DATA_POSITION] =
 networkPacketDeliveryPolicies[MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT] =
   new NetworkPacketDeliveryPolicy(false, true, true, true, false);
 
+networkPacketDeliveryPolicies[MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA] =
+  new NetworkPacketDeliveryPolicy(false, true, true, true, false);
+
 // Default
 networkPacketDeliveryPolicies[MESSAGE_TYPE.LENGTH] =
   new NetworkPacketDeliveryPolicy();
