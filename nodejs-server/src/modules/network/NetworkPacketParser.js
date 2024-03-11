@@ -12,6 +12,7 @@ import WorldMapFastTravelPoint from "../world_map/WorldMapFastTravelInfo.js";
 import InventoryStream from "../inventory/InventoryStream.js";
 import InventoryStreamItems from "../inventory/InventoryStreamItems.js";
 import ContainerInventoryActionInfo from "../containers/ContainerInventoryActionInfo.js";
+import PatrolSnapshotData from "../patrols/PatrolSnapshotData.js";
 import PatrolState from "../patrols/PatrolState.js";
 import DeviceInputMovement from "../device_input/DeviceInputMovement.js";
 import ScoutingDrone from "../operations_center/ScoutingDrone.js";
@@ -333,22 +334,24 @@ export default class NetworkPacketParser {
               for (let i = 0; i < parsedPatrolCount; i++) {
                 const parsedPatrolId = msg.readUInt8(offset);
                 offset += BITWISE.BIT8;
-                const parsedRouteProgress = msg.readUInt16LE(offset);
-                offset += BITWISE.BIT16;
+                const parsedRouteProgress = msg.readFloatLE(offset);
+                offset += BITWISE.BIT32;
                 const parsedPositionX = msg.readUInt32LE(offset);
                 offset += BITWISE.BIT32;
                 const parsedPositionY = msg.readUInt32LE(offset);
                 offset += BITWISE.BIT32;
-                parsedPatrols.push({
-                  patrol_id: parsedPatrolId,
-                  route_progress: parsedRouteProgress,
-                  position_x: parsedPositionX,
-                  position_y: parsedPositionY,
-                });
+                parsedPatrols.push(
+                  new PatrolSnapshotData(
+                    parsedPatrolId,
+                    parsedRouteProgress,
+                    new Vector2(parsedPositionX, parsedPositionY)
+                  )
+                );
               }
+
               payload = {
-                instance_id: parsedInstanceId,
-                local_patrols: parsedPatrols,
+                instanceId: parsedInstanceId,
+                localPatrols: parsedPatrols,
               };
             }
             break;
