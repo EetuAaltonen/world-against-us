@@ -160,10 +160,6 @@ function NetworkPacketParser() constructor
 						var ownerClientId = buffer_read(_msg, buffer_string)
 						parsedPayload = ownerClientId;
 					} break;
-					case MESSAGE_TYPE.INSTANCE_SNAPSHOT_DATA:
-					{
-						parsedPayload = ParseRegionSnapshotPayload(_msg);
-					} break;
 					case MESSAGE_TYPE.REMOTE_ENTERED_THE_INSTANCE:
 					{
 						var parsedRemoteClientId = buffer_read(_msg, buffer_string);
