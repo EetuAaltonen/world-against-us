@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "PatrolState",
-    "path": "folders/Scripts/Game/Network/PatrolState.yy",
+    "name": "Patrol",
+    "path": "folders/Scripts/Game/Network/Patrol.yy",
   },
 }
