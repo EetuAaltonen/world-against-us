@@ -774,6 +774,22 @@ export default class NetworkPacketHandler {
             }
           }
           break;
+        case MESSAGE_TYPE.PATROL_ACTION_ROB:
+          {
+            const patrolActionRob = networkPacket.payload;
+            if (patrolActionRob !== undefined) {
+              // Broadcast about patrol action rob
+              this.networkHandler.broadcastPatrolActionRob(
+                patrolActionRob.toJSONStruct()
+              );
+
+              // Respond with acknowledgment
+              isPacketHandled =
+                this.networkHandler.queueAcknowledgmentResponse(client);
+            }
+          }
+          break;
+
         case MESSAGE_TYPE.REQUEST_SCOUT_LIST:
           {
             const availableInstances =
