@@ -18,44 +18,35 @@ function NetworkRegionObjectHandler() constructor
 	
 	static Update = function()
 	{
-		// SEND PATROL PROGRESS POSITION UPDATE
-		var regionOwnerClient = global.NetworkRegionHandlerRef.owner_client;
-		var clientId = global.NetworkHandlerRef.client_id;
-		if (clientId != UNDEFINED_UUID)
+		if (IS_ROOM_PATROL_ROUTED)
 		{
-			if (clientId == regionOwnerClient)
+			if (global.NetworkRegionHandlerRef.IsClientRegionOwner())
 			{
-				// TODO: Fix patrol logic
-				/*var patrolCount = ds_list_size(local_patrols);
-				if (patrolCount > 0)
+				// PATROL UPDATE
+				patrol_update_timer.Update();
+				if (patrol_update_timer.IsTimerStopped())
 				{
-					
-					// UPDATE PATROL LOCATION
-					patrol_update_timer.Update();
-					if (patrol_update_timer.IsTimerStopped())
+					// FETCH PATROL SNAPSHOT DATA
+					var patrolNetworkIDs = global.NPCPatrolHandlerRef.GetPatrolNetworkIDs();
+					var patrolCount = array_length(patrolNetworkIDs);
+					if (patrolCount > 0)
 					{
 						var formatPatrols = [];
 						for (var i = 0; i < patrolCount; i++)
 						{
-							var patrol = local_patrols[| i];
-							patrol.Update();
-							
-							var formatPatrol = patrol.ToJSONStruct();
-							var formatPosition = new Vector2(0, 0);
-							// UPDATE LOCATION ONLY OUTSIDE THE ROUTE
-							if (patrol.ai_state != AI_STATE_BANDIT.PATROL)
+							var patrol = global.NPCPatrolHandlerRef.GetPatrol(patrolNetworkIDs[@ i]);
+							if (!is_undefined(patrol))
 							{
-								formatPosition = ScaleFloatValuesToIntVector2(patrol.position.X, patrol.position.Y);
+								var patrolSnapshot = new PatrolSnapshot(
+									patrol.patrol_id,
+									patrol.route_progress,
+									patrol.position
+								);
+								array_push(formatPatrols, patrolSnapshot.ToJSONStruct());
 							}
-							array_push(formatPatrols,
-								{
-									patrol_id: formatPatrol.patrol_id,
-									route_progress: formatPatrol.route_progress,
-									position: formatPosition
-								}
-							);
 						}
-						
+				
+						// SEND PATROL SNAPSHOT NETWORK PACKET
 						var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA);
 						var networkPacket = new NetworkPacket(
 							networkPacketHeader,
@@ -66,35 +57,24 @@ function NetworkRegionObjectHandler() constructor
 							PACKET_PRIORITY.DEFAULT,
 							AckTimeoutFuncResend
 						);
-						if (global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+						if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 						{
-							// SHOW SCOUT LIST LOADING ICON
-							var scoutListWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.OperationsCenterScoutList);
-							if (!is_undefined(scoutListWindow))
-							{
-								var scoutListLoadingElement = scoutListWindow.GetChildElementById("ScoutListLoading");
-								if (!is_undefined(scoutListLoadingElement))
-								{
-									scoutListLoadingElement.isVisible = true;
-								}
-							}
-						} else {
-							global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Failed to queue patrol position update");
+							global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Failed to queue patrol snapshot network packet");
 						}
-						
-						// RESET TIMER
-						patrol_update_timer.StartTimer();
 					}
-				}*/
+				
+					// RESTART PATROL UPDATE TIMER
+					patrol_update_timer.StartTimer();
+				}
 			}
-		}
 		
-		// INTERPOLATE SCOUTING DRONE MOVEMENT
-		if (!is_undefined(scouting_drone))
-		{
-			if (instance_exists(scouting_drone.instance_ref))
+			// INTERPOLATE SCOUTING DRONE MOVEMENT
+			if (!is_undefined(scouting_drone))
 			{
-				scouting_drone.InterpolateMovement();
+				if (instance_exists(scouting_drone.instance_ref))
+				{
+					scouting_drone.InterpolateMovement();
+				}
 			}
 		}
 	}
@@ -301,6 +281,11 @@ function NetworkRegionObjectHandler() constructor
 	static SyncRegionPatrolState = function(_patrolState)
 	{
 		return global.NPCPatrolHandlerRef.SyncPatrolState(_patrolState);
+	}
+	
+	static SyncRegionPatrolsSnapshot = function(_patrolsSnapshotData)
+	{
+		return global.NPCPatrolHandlerRef.SyncPatrolsSnapshot(_patrolsSnapshotData);
 	}
 	
 	static ResetRegionObjectData = function()
