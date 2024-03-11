@@ -85,17 +85,6 @@ function NetworkPacketHandler() constructor
 							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 						}
 					} break;
-					case MESSAGE_TYPE.INSTANCE_SNAPSHOT_DATA:
-					{
-						var regionSnapshot = payload;
-						if (!is_undefined(regionSnapshot))
-						{
-							global.NetworkRegionObjectHandlerRef.UpdateRegionFromSnapshot(regionSnapshot);
-							isPacketHandled = true;
-						}
-						// RESPOND WITH ACKNOWLEDGMENT TO INSTANCE SNAPSHOT DATA
-						isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
-					} break;
 					case MESSAGE_TYPE.REMOTE_ENTERED_THE_INSTANCE:
 					{
 						var remotePlayerInfo = payload;
@@ -398,6 +387,16 @@ function NetworkPacketHandler() constructor
 								// RESPOND WITH ACKNOWLEDGMENT TO END PATROL STATE CHANGE
 								isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();	
 							}
+						}
+					} break;
+					case MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA:
+					{
+						var patrolsSnapshotData = payload;
+						if (!is_undefined(patrolsSnapshotData))
+						{
+							// PATROL SNAPSHOT DATA IS ROUTINE AND ONLY LATEST MESSAGE TAKES EFFECT
+							// NO GUARANTEE FOR DELIVERY REQUIRED
+							isPacketHandled = global.NetworkRegionObjectHandlerRef.SyncRegionPatrolsSnapshot(patrolsSnapshotData);
 						}
 					} break;
 					case MESSAGE_TYPE.REQUEST_SCOUT_LIST:

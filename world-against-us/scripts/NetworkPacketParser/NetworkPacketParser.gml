@@ -160,10 +160,6 @@ function NetworkPacketParser() constructor
 						var ownerClientId = buffer_read(_msg, buffer_string)
 						parsedPayload = ownerClientId;
 					} break;
-					case MESSAGE_TYPE.INSTANCE_SNAPSHOT_DATA:
-					{
-						parsedPayload = ParseRegionSnapshotPayload(_msg);
-					} break;
 					case MESSAGE_TYPE.REMOTE_ENTERED_THE_INSTANCE:
 					{
 						var parsedRemoteClientId = buffer_read(_msg, buffer_string);
@@ -317,6 +313,31 @@ function NetworkPacketParser() constructor
 							parsedPosition,
 							parsedTargetNetworkId
 						);
+					} break;
+					case MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA:
+					{
+						var parsedRegionId = buffer_read(_msg, buffer_u32);
+						var parsedPatrolCount = buffer_read(_msg, buffer_u8);
+						var parsedLocalPatrols = [];
+						repeat(parsedPatrolCount)
+						{
+							var parsedPatrolId = buffer_read(_msg, buffer_u8);
+							var parsedRouteProgress = buffer_read(_msg, buffer_f32);
+							var parsedPositionX = buffer_read(_msg, buffer_u32);
+							var parsedPositionY = buffer_read(_msg, buffer_u32);
+							var parsedScaledPosition = ScaleIntValuesToFloatVector2(parsedPositionX, parsedPositionY);
+							var patrol = new PatrolSnapshot(
+								parsedPatrolId,
+								parsedRouteProgress,
+								parsedScaledPosition
+							);
+							array_push(parsedLocalPatrols, patrol);
+						}
+						
+						parsedPayload = {
+							region_id: parsedRegionId,
+							local_patrols: parsedLocalPatrols
+						};
 					} break;
 					case MESSAGE_TYPE.REQUEST_SCOUT_LIST:
 					{

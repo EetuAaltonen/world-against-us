@@ -1,5 +1,8 @@
 function AIStateBanditChase(_aiBase)
 {
+	// UPDATE PATROL POSITION
+	_aiBase.UpdatePatrolPosition();
+	
 	if (!global.MultiplayerMode)
 	{
 #region Offline

@@ -18,44 +18,35 @@ function NetworkRegionObjectHandler() constructor
 	
 	static Update = function()
 	{
-		// SEND PATROL PROGRESS POSITION UPDATE
-		var regionOwnerClient = global.NetworkRegionHandlerRef.owner_client;
-		var clientId = global.NetworkHandlerRef.client_id;
-		if (clientId != UNDEFINED_UUID)
+		if (IS_ROOM_PATROL_ROUTED)
 		{
-			if (clientId == regionOwnerClient)
+			if (global.NetworkRegionHandlerRef.IsClientRegionOwner())
 			{
-				// TODO: Fix patrol logic
-				/*var patrolCount = ds_list_size(local_patrols);
-				if (patrolCount > 0)
+				// PATROL UPDATE
+				patrol_update_timer.Update();
+				if (patrol_update_timer.IsTimerStopped())
 				{
-					
-					// UPDATE PATROL LOCATION
-					patrol_update_timer.Update();
-					if (patrol_update_timer.IsTimerStopped())
+					// FETCH PATROL SNAPSHOT DATA
+					var patrolNetworkIDs = global.NPCPatrolHandlerRef.GetPatrolNetworkIDs();
+					var patrolCount = array_length(patrolNetworkIDs);
+					if (patrolCount > 0)
 					{
 						var formatPatrols = [];
 						for (var i = 0; i < patrolCount; i++)
 						{
-							var patrol = local_patrols[| i];
-							patrol.Update();
-							
-							var formatPatrol = patrol.ToJSONStruct();
-							var formatPosition = new Vector2(0, 0);
-							// UPDATE LOCATION ONLY OUTSIDE THE ROUTE
-							if (patrol.ai_state != AI_STATE_BANDIT.PATROL)
+							var patrol = global.NPCPatrolHandlerRef.GetPatrol(patrolNetworkIDs[@ i]);
+							if (!is_undefined(patrol))
 							{
-								formatPosition = ScaleFloatValuesToIntVector2(patrol.position.X, patrol.position.Y);
+								var patrolSnapshot = new PatrolSnapshot(
+									patrol.patrol_id,
+									patrol.route_progress,
+									patrol.position
+								);
+								array_push(formatPatrols, patrolSnapshot.ToJSONStruct());
 							}
-							array_push(formatPatrols,
-								{
-									patrol_id: formatPatrol.patrol_id,
-									route_progress: formatPatrol.route_progress,
-									position: formatPosition
-								}
-							);
 						}
-						
+				
+						// SEND PATROL SNAPSHOT NETWORK PACKET
 						var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA);
 						var networkPacket = new NetworkPacket(
 							networkPacketHeader,
@@ -66,35 +57,24 @@ function NetworkRegionObjectHandler() constructor
 							PACKET_PRIORITY.DEFAULT,
 							AckTimeoutFuncResend
 						);
-						if (global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+						if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 						{
-							// SHOW SCOUT LIST LOADING ICON
-							var scoutListWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.OperationsCenterScoutList);
-							if (!is_undefined(scoutListWindow))
-							{
-								var scoutListLoadingElement = scoutListWindow.GetChildElementById("ScoutListLoading");
-								if (!is_undefined(scoutListLoadingElement))
-								{
-									scoutListLoadingElement.isVisible = true;
-								}
-							}
-						} else {
-							global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Failed to queue patrol position update");
+							global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Failed to queue patrol snapshot network packet");
 						}
-						
-						// RESET TIMER
-						patrol_update_timer.StartTimer();
 					}
-				}*/
+				
+					// RESTART PATROL UPDATE TIMER
+					patrol_update_timer.StartTimer();
+				}
 			}
-		}
 		
-		// INTERPOLATE SCOUTING DRONE MOVEMENT
-		if (!is_undefined(scouting_drone))
-		{
-			if (instance_exists(scouting_drone.instance_ref))
+			// INTERPOLATE SCOUTING DRONE MOVEMENT
+			if (!is_undefined(scouting_drone))
 			{
-				scouting_drone.InterpolateMovement();
+				if (instance_exists(scouting_drone.instance_ref))
+				{
+					scouting_drone.InterpolateMovement();
+				}
 			}
 		}
 	}
@@ -130,89 +110,6 @@ function NetworkRegionObjectHandler() constructor
 		
 		// RESET PATROL UPDATE TIMER
 		patrol_update_timer.StartTimer();
-	}
-	
-	static UpdateRegionFromSnapshot = function(_regionSnapshot)
-	{
-		// UPDATE LOCAL PLAYERS
-		/*var playerCount = _regionSnapshot.local_player_count;
-		for (var i = 0; i < playerCount; i++)
-		{
-			var playerData = _regionSnapshot.local_players[@ i];
-			if (!is_undefined(playerData))
-			{
-				// DON'T UPDATE LOCAL PLAYER
-				if (playerData.network_id != global.NetworkHandlerRef.client_id)
-				{
-					var playerInstanceObject = GetPlayerInstanceObjectById(playerData.network_id);
-					if (!is_undefined(playerInstanceObject))
-					{
-						var distance = point_distance(
-							playerData.position.X,
-							playerData.position.Y,
-							playerInstanceObject.position.X,
-							playerInstanceObject.position.Y
-						);
-						if (distance > 30)
-						{
-							playerInstanceObject.position.X = playerData.position.X;
-							playerInstanceObject.position.Y = playerData.position.Y;
-							
-							var playerInstanceRef = playerInstanceObject.instance_ref;
-							if (instance_exists(playerInstanceRef))
-							{
-								playerInstanceRef.x = playerInstanceObject.position.X;
-								playerInstanceRef.y = playerInstanceObject.position.Y;
-							}
-						}
-					} else {
-						var consoleLog = string("Unable to update position for unknown remote player instance object with network ID '{0}'", playerData.network_id);
-						global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);	
-					}
-				}
-			}
-		}*/
-		
-		// UPDATE LOCAL PATROLS
-		// CHECK IF CLIENT HAS AUTHORITY ON THE REGION
-		/*if (global.NetworkRegionHandlerRef.owner_client != global.NetworkHandlerRef.client_id)
-		{
-			// TODO: Fix random patrol teleporting on chase start
-			var patrolCount = _regionSnapshot.local_patrol_count;
-			for (var i = 0; i < patrolCount; i++)
-			{
-				var patrolData = _regionSnapshot.local_patrols[@ i];
-				if (!is_undefined(patrolData))
-				{
-					var patrol = GetPatrolById(patrolData.patrol_id);
-					if (!is_undefined(patrol))
-					{
-						if (instance_exists(patrol.instance_ref))
-						{
-							switch (patrol.ai_state)
-							{
-								case AI_STATE_BANDIT.PATROL:
-								{
-									if (patrol.instance_ref.path_index != -1)
-									{
-										show_debug_message(string("patrol.instance_ref.path_position - patrolData.route_progress) == {0}", (patrol.instance_ref.path_position - patrolData.route_progress) * 1000 ));
-										if (patrol.instance_ref.path_position < patrolData.route_progress)
-										{
-											patrol.instance_ref.path_position = patrolData.route_progress;
-										}
-									}
-								} break;
-								default:
-								{
-									patrol.instance_ref.x = patrolData.position.X;
-									patrol.instance_ref.y = patrolData.position.Y;
-								}
-							}
-						}
-					}
-				}
-			}
-		}*/
 	}
 	
 	static SpawnScoutingDrone = function(_instanceObject)
@@ -301,6 +198,11 @@ function NetworkRegionObjectHandler() constructor
 	static SyncRegionPatrolState = function(_patrolState)
 	{
 		return global.NPCPatrolHandlerRef.SyncPatrolState(_patrolState);
+	}
+	
+	static SyncRegionPatrolsSnapshot = function(_patrolsSnapshotData)
+	{
+		return global.NPCPatrolHandlerRef.SyncPatrolsSnapshot(_patrolsSnapshotData);
 	}
 	
 	static ResetRegionObjectData = function()

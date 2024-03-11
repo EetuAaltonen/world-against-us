@@ -14,6 +14,15 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 		return state_machine.Update(self);
 	}
 	
+	static UpdatePatrolPosition = function()
+	{
+		with (instance_ref)
+		{
+			other.patrol.position.X = x;
+			other.patrol.position.Y = y;
+		}
+	}
+	
 	static UpdatePatrolRouteProgress = function()
 	{
 		with (instance_ref)

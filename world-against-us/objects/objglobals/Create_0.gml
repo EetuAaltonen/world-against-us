@@ -98,6 +98,7 @@ randomise();
 
 #macro ROOM_DEFAULT ROOM_INDEX_CAMP
 #macro IS_ROOM_IN_GAME_WORLD (room != roomLaunch && room != roomMainMenu && room != roomLoadResources)
+#macro IS_ROOM_PATROL_ROUTED (layer_exists(LAYER_PATH_PATROL))
 
 // INSTANCES
 #macro CAMP_INSTANCE_ID 0

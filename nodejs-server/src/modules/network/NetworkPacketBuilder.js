@@ -208,11 +208,6 @@ export default class NetworkPacketBuilder {
               isPayloadWritten = true;
             }
             break;
-          case MESSAGE_TYPE.INSTANCE_SNAPSHOT_DATA:
-            {
-              isPayloadWritten = this.writeInstanceSnapshotBuffer(payload);
-            }
-            break;
           case MESSAGE_TYPE.REMOTE_ENTERED_THE_INSTANCE:
             {
               const bufferClientId = Buffer.from(
@@ -400,6 +395,63 @@ export default class NetworkPacketBuilder {
               isPayloadWritten = true;
             }
             break;
+          case MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA:
+            {
+              let offset = 0;
+              const bufferSnapshotData = Buffer.allocUnsafe(
+                BITWISE.BIT32 + BITWISE.BIT8
+              ).fill(0);
+              bufferSnapshotData.writeUInt32LE(payload.instanceId);
+              offset += BITWISE.BIT32;
+              const localPatrolCount = payload.localPatrols.length;
+              bufferSnapshotData.writeUInt8(localPatrolCount, offset);
+
+              this.payloadBuffer = bufferSnapshotData;
+
+              let bufferLocalPatrolData = undefined;
+              if (localPatrolCount > 0) {
+                // Allocate local patrol data buffer
+                bufferLocalPatrolData = Buffer.allocUnsafe(
+                  (BITWISE.BIT8 + // Patrol ID
+                    BITWISE.BIT32 + // Route progress
+                    BITWISE.BIT32 + // X-position
+                    BITWISE.BIT32) * // Y-position
+                    localPatrolCount // Multiplier
+                ).fill(0);
+
+                let patrolDataOffset = 0;
+                for (let i = 0; i < localPatrolCount; i++) {
+                  const patrolSnapshotData = payload.localPatrols[i];
+                  bufferLocalPatrolData.writeUInt8(
+                    patrolSnapshotData.patrolId,
+                    patrolDataOffset
+                  );
+                  patrolDataOffset += BITWISE.BIT8;
+                  bufferLocalPatrolData.writeFloatLE(
+                    patrolSnapshotData.routeProgress,
+                    patrolDataOffset
+                  );
+                  patrolDataOffset += BITWISE.BIT32;
+                  bufferLocalPatrolData.writeUInt32LE(
+                    patrolSnapshotData.position.x,
+                    patrolDataOffset
+                  );
+                  patrolDataOffset += BITWISE.BIT32;
+                  bufferLocalPatrolData.writeUInt32LE(
+                    patrolSnapshotData.position.y,
+                    patrolDataOffset
+                  );
+                  patrolDataOffset += BITWISE.BIT32;
+                }
+
+                this.payloadBuffer = Buffer.concat([
+                  this.payloadBuffer,
+                  bufferLocalPatrolData,
+                ]);
+              }
+              isPayloadWritten = true;
+            }
+            break;
           case MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM:
             {
               isPayloadWritten = this.writeInstanceSnapshotBuffer(payload);
@@ -496,12 +548,12 @@ export default class NetworkPacketBuilder {
           );
           patrolDataOffset += BITWISE.BIT16;
           bufferLocalPatrolData.writeUInt32LE(
-            patrol.localPosition.x,
+            patrol.position.x,
             patrolDataOffset
           );
           patrolDataOffset += BITWISE.BIT32;
           bufferLocalPatrolData.writeUInt32LE(
-            patrol.localPosition.y,
+            patrol.position.y,
             patrolDataOffset
           );
           patrolDataOffset += BITWISE.BIT32;

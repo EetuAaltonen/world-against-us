@@ -223,17 +223,17 @@ function NetworkPacketBuilder() constructor
 					} break;
 					case MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA:
 					{
-						var patrolsDataProgressPosition = _networkPacketPayload;
-						buffer_write(_networkBuffer, buffer_u32, patrolsDataProgressPosition.region_id);
-						var patrolCount = array_length(patrolsDataProgressPosition.local_patrols);
+						var patrolsSnapshotData = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u32, patrolsSnapshotData.region_id);
+						var patrolCount = array_length(patrolsSnapshotData.local_patrols);
 						buffer_write(_networkBuffer, buffer_u8, patrolCount);
 						for (var i = 0; i < patrolCount; i++)
 						{
-							var patrolData = patrolsDataProgressPosition.local_patrols[@ i];
-							buffer_write(_networkBuffer, buffer_u8, patrolData.patrol_id);
-							buffer_write(_networkBuffer, buffer_u16, patrolData.route_progress);
-							buffer_write(_networkBuffer, buffer_u32, patrolData.local_position.X);
-							buffer_write(_networkBuffer, buffer_u32, patrolData.local_position.Y);
+							var patrolSnapshot = patrolsSnapshotData.local_patrols[@ i];
+							buffer_write(_networkBuffer, buffer_u8, patrolSnapshot.patrol_id);
+							buffer_write(_networkBuffer, buffer_f32, patrolSnapshot.route_progress);
+							buffer_write(_networkBuffer, buffer_u32, patrolSnapshot.position.X);
+							buffer_write(_networkBuffer, buffer_u32, patrolSnapshot.position.Y);
 						}
 						isPayloadWritten = true;
 					} break;
