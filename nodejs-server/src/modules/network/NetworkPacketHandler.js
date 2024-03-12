@@ -980,6 +980,58 @@ export default class NetworkPacketHandler {
             }
           }
           break;
+        case MESSAGE_TYPE.SCOUTING_DRONE_DATA_POSITION:
+          {
+            const scoutingDrone = networkPacket.payload;
+            if (scoutingDrone !== undefined) {
+              const activeOperationsScoutStream =
+                this.instanceHandler.activeOperationsScoutStream;
+              if (
+                activeOperationsScoutStream.instanceId ===
+                scoutingDrone.instanceId
+              ) {
+                const scoutInstance = this.instanceHandler.getInstance(
+                  scoutingDrone.instanceId
+                );
+                if (scoutInstance !== undefined) {
+                  activeOperationsScoutStream.scoutingDrone.position.x =
+                    scoutingDrone.position.x;
+                  activeOperationsScoutStream.scoutingDrone.position.y =
+                    scoutingDrone.position.y;
+
+                  // Broadcast scouting drone position withing scouted instance
+                  const formatScoutingDrone =
+                    activeOperationsScoutStream.scoutingDrone;
+                  const clientsToBroadcast =
+                    this.clientHandler.getClientsToBroadcastInstance(
+                      scoutingDrone.instanceId
+                    );
+                  const broadcastNetworkPacketHeader = new NetworkPacketHeader(
+                    MESSAGE_TYPE.SCOUTING_DRONE_DATA_POSITION,
+                    client.uuid
+                  );
+                  const broadcastNetworkPacket = new NetworkPacket(
+                    broadcastNetworkPacketHeader,
+                    formatScoutingDrone,
+                    PACKET_PRIORITY.DEFAULT
+                  );
+                  this.networkHandler.broadcast(
+                    broadcastNetworkPacket,
+                    clientsToBroadcast
+                  );
+                  isPacketHandled = true;
+                } else {
+                  // End operations scout stream if instance has deleted
+                  isPacketHandled =
+                    this.instanceHandler.endOperationsScoutStream(
+                      scoutingDrone.instanceId,
+                      client
+                    );
+                }
+              }
+            }
+          }
+          break;
       }
     }
     return isPacketHandled;
