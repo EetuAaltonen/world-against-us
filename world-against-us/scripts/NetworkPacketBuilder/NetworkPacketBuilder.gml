@@ -243,18 +243,18 @@ function NetworkPacketBuilder() constructor
 						buffer_write(_networkBuffer, buffer_u32, availableInstance.region_id);
 						isPayloadWritten = true;
 					} break;
-					case MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM:
+					case MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM:
+					{
+						var scoutingDroneData = _networkPacketPayload;
+						buffer_write(_networkBuffer, buffer_u32, scoutingDroneData.region_id);
+						isPayloadWritten = true;
+					} break;
+					case MESSAGE_TYPE.SCOUTING_DRONE_DATA_POSITION:
 					{
 						var scoutingDroneData = _networkPacketPayload;
 						buffer_write(_networkBuffer, buffer_u32, scoutingDroneData.region_id);
 						buffer_write(_networkBuffer, buffer_u32, scoutingDroneData.position.X);
 						buffer_write(_networkBuffer, buffer_u32, scoutingDroneData.position.Y);
-						isPayloadWritten = true;
-					} break;
-					case MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM:
-					{
-						var scoutingDroneData = _networkPacketPayload;
-						buffer_write(_networkBuffer, buffer_u32, scoutingDroneData.region_id);
 						isPayloadWritten = true;
 					} break;
 					default:

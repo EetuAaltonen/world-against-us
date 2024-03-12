@@ -68,14 +68,6 @@ function CreateWindowOperationsCenter(_gameWindowId, _zIndex)
 		mapInstanceListButton,
 	);
 	
-	// OVERRIDE WINDOW ONOPEN FUNCTION
-	var overrideOnOpen = function()
-	{
-		// TRIGGER MAP UPDATE
-		global.MapDataHandlerRef.is_dynamic_data_updating = true;
-		global.MapDataHandlerRef.map_update_timer.TriggerTimer();
-	}
-	mapWindow.OnOpen = overrideOnOpen;
 	// OVERRIDE WINDOW ONCLOSE FUNCTION
 	var overrideOnClose = function()
 	{
@@ -84,9 +76,6 @@ function CreateWindowOperationsCenter(_gameWindowId, _zIndex)
 			// REQUEST OPERATIONS END SCOURING STREAM
 			if (!is_undefined(global.MapDataHandlerRef.active_operations_scout_stream))
 			{
-				// RESET ACTIVE OPERATIONS SCOUT STREAM
-				global.MapDataHandlerRef.active_operations_scout_stream = undefined;
-				
 				var targetScoutRegion = global.MapDataHandlerRef.target_scout_region;
 				if (!is_undefined(targetScoutRegion))
 				{
@@ -101,14 +90,14 @@ function CreateWindowOperationsCenter(_gameWindowId, _zIndex)
 					{
 						show_debug_message("Unable to queue MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM");
 					}
-					
-					// RESET TARGET SCOUT REGION
-					global.MapDataHandlerRef.target_scout_region = undefined;
 				}
+				
+				// RESET ACTIVE OPERATIONS SCOUT STREAM AFTER REQUEST
+				global.MapDataHandlerRef.ResetActiveOperationsScoutStream();
 			}
 			// CLEAR AND CANCEL OPERATIONS SCOUTING STREAM MESSAGES
 			global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.START_OPERATIONS_SCOUT_STREAM);
-			global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM);
+			global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.SCOUTING_DRONE_DATA_POSITION);
 		}
 		
 		// RESET MAP DATA

@@ -138,20 +138,23 @@ function NetworkPacketParser() constructor
 							var regionStruct = parsedStruct[$ "region"] ?? undefined;
 							var parsedRegion = ParseJSONStructToRegion(regionStruct);
 							
-							var parsedScoutingDrone = undefined;
+							var scoutingDroneInstanceObject = undefined;
 							var scoutingDroneStruct = parsedStruct[$ "scouting_drone"] ?? undefined;
 							if (!is_undefined(scoutingDroneStruct))
 							{
-								var parsedPosition = ParseJSONStructToVector2(scoutingDroneStruct[$ "position"] ?? undefined);
-								parsedScoutingDrone = new InstanceObject(
-									object_get_sprite(objDrone),
-									objDrone,
-									parsedPosition
-								);
+								var parsedScoutingDrone = ParseJSONStructToScoutingDroneData(scoutingDroneStruct);
+								if (!is_undefined(parsedScoutingDrone))
+								{
+									scoutingDroneInstanceObject = new InstanceObject(
+										object_get_sprite(objDrone),
+										objDrone,
+										parsedScoutingDrone.position
+									);
+								}
 							}
 							parsedPayload = {
 								region: parsedRegion,
-								scouting_drone: parsedScoutingDrone
+								scouting_drone: scoutingDroneInstanceObject
 							}
 						}
 					} break;
@@ -381,12 +384,14 @@ function NetworkPacketParser() constructor
 					} break;
 					case MESSAGE_TYPE.SCOUTING_DRONE_DATA_POSITION:
 					{
-						var payloadString = buffer_read(_msg, buffer_string);
-						var parsedStruct = json_parse(payloadString);
-						if (parsedStruct != EMPTY_STRUCT)
-						{
-							parsedPayload = ParseJSONStructToScoutingDroneData(parsedStruct);
-						}
+						var parsedRegionId = buffer_read(_msg, buffer_u32);
+						var parsedScoutingDronePositionX = buffer_read(_msg, buffer_u32);
+						var parsedScoutingDronPositionY = buffer_read(_msg, buffer_u32);
+						var parsedScaledScoutingDronePosition = ScaleIntValuesToFloatVector2(parsedScoutingDronePositionX, parsedScoutingDronPositionY);
+						parsedPayload = new ScoutingDroneData(
+							parsedRegionId,
+							parsedScaledScoutingDronePosition
+						);
 					} break;
 					case MESSAGE_TYPE.DESTROY_SCOUTING_DRONE_DATA:
 					{
