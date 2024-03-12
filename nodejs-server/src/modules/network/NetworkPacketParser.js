@@ -386,6 +386,19 @@ export default class NetworkPacketParser {
               payload = msg.readUInt32LE(offset);
             }
             break;
+          case MESSAGE_TYPE.SCOUTING_DRONE_DATA_POSITION:
+            {
+              const parsedInstanceId = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedXPos = msg.readUInt32LE(offset);
+              offset += BITWISE.BIT32;
+              const parsedYPos = msg.readUInt32LE(offset);
+              const parsedScoutingDrone = new ScoutingDrone(parsedInstanceId);
+              parsedScoutingDrone.position.x = parsedXPos;
+              parsedScoutingDrone.position.y = parsedYPos;
+              payload = parsedScoutingDrone;
+            }
+            break;
           default: {
             // Default JSON payload parsing
             const jsonString = msg.toString("utf8", offset);
