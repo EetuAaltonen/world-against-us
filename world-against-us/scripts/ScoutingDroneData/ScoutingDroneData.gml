@@ -11,4 +11,9 @@ function ScoutingDroneData(_region_id, _position) constructor
 			position: formatScaledPosition,
 		}
 	}
+	
+	static OnDestroy = function(_struct = self)
+	{
+		DeleteStruct(_struct.position);
+	}
 }

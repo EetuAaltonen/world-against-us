@@ -3,6 +3,7 @@ import WORLD_MAP_LOCATION_HIERARCHY from "../world_map/WorldMapLocationHierarchy
 import MESSAGE_TYPE from "../network/MessageType.js";
 import PACKET_PRIORITY from "../network/PacketPriority.js";
 
+import NetworkQueueEntry from "../network/NetworkQueueEntry.js";
 import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
 import NetworkPacket from "../network_packets/NetworkPacket.js";
 
@@ -308,6 +309,19 @@ export default class InstanceHandler {
               );
             }
           }
+        } else {
+          // End scouting stream
+          if (this.activeOperationsScoutStream !== undefined) {
+            const operatingClient = this.networkHandler.clientHandler.getClient(
+              this.activeOperationsScoutStream.operatingClient
+            );
+            if (operatingClient !== undefined) {
+              this.endOperationsScoutStream(
+                this.activeOperationsScoutStream.instanceId,
+                operatingClient
+              );
+            }
+          }
         }
         isPlayerRemoved = true;
       }
@@ -363,6 +377,38 @@ export default class InstanceHandler {
       }
     }
     return isInstanceReleased;
+  }
+
+  endOperationsScoutStream(scoutInstanceId, client) {
+    let isScoutStreamEnded = false;
+    if (this.activeOperationsScoutStream !== undefined) {
+      if (this.activeOperationsScoutStream.instanceId === scoutInstanceId) {
+        // Broadcast destroy scouting drone withing scouted instance
+        this.networkHandler.networkPacketHandler.broadcastScoutingDroneDestroy(
+          scoutInstanceId,
+          client
+        );
+
+        // Reset active operations scout stream after broadcast
+        this.activeOperationsScoutStream = undefined;
+
+        // Response with end operations scout stream
+        const networkPacketHeader = new NetworkPacketHeader(
+          MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM,
+          client.uuid
+        );
+        const networkPacket = new NetworkPacket(
+          networkPacketHeader,
+          undefined,
+          PACKET_PRIORITY.DEFAULT
+        );
+        this.networkHandler.queueNetworkPacket(
+          new NetworkQueueEntry(networkPacket, [client])
+        );
+        isScoutStreamEnded = true;
+      }
+    }
+    return isScoutStreamEnded;
   }
 
   deleteInstance(instanceId) {

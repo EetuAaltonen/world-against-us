@@ -457,6 +457,35 @@ export default class NetworkPacketBuilder {
               isPayloadWritten = this.writeInstanceSnapshotBuffer(payload);
             }
             break;
+          case MESSAGE_TYPE.SCOUTING_DRONE_DATA_POSITION:
+            {
+              const scoutingDrone = payload;
+              const bufferScoutingDroneData = Buffer.allocUnsafe(
+                BITWISE.BIT32 + // Instance ID
+                  BITWISE.BIT32 + // Position X
+                  BITWISE.BIT32 // Position Y
+              ).fill(0);
+
+              let offset = 0;
+              bufferScoutingDroneData.writeUInt32LE(
+                scoutingDrone.instanceId,
+                offset
+              );
+              offset += BITWISE.BIT32;
+              bufferScoutingDroneData.writeUInt32LE(
+                scoutingDrone.position.x,
+                offset
+              );
+              offset += BITWISE.BIT32;
+              bufferScoutingDroneData.writeUInt32LE(
+                scoutingDrone.position.y,
+                offset
+              );
+
+              this.payloadBuffer = bufferScoutingDroneData;
+              isPayloadWritten = true;
+            }
+            break;
           default: {
             this.payloadBuffer = Buffer.from(
               JSON.stringify(payload ?? {}),

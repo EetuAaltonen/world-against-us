@@ -126,14 +126,15 @@ function NetworkRegionObjectHandler() constructor
 		return isDroneSpawned;
 	}
 	
-	static UpdateScoutingDrone = function(_scoutingDroneData)
+	static UpdateScoutingDronePosition = function(_scoutingDroneData)
 	{
 		var isDroneSynced = false;
 		if (!is_undefined(scouting_drone))
 		{
 			if (instance_exists(scouting_drone.instance_ref))
 			{
-				scouting_drone.StartInterpolateMovement(_scoutingDroneData.position, 300);
+				var scoutingDronePositionUpdateInterval = global.MapDataHandlerRef.scouting_drone_position_sync_interval;
+				scouting_drone.StartInterpolateMovement(_scoutingDroneData.position, scoutingDronePositionUpdateInterval);
 				isDroneSynced = true;
 			}
 		}
