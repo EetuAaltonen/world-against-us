@@ -29,6 +29,9 @@ networkPacketDeliveryPolicies[MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT] =
 networkPacketDeliveryPolicies[MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA] =
   new NetworkPacketDeliveryPolicy(false, true, true, true, false);
 
+networkPacketDeliveryPolicies[MESSAGE_TYPE.SCOUTING_DRONE_DATA_POSITION] =
+  new NetworkPacketDeliveryPolicy(false, true, true, true, false);
+
 // Default
 networkPacketDeliveryPolicies[MESSAGE_TYPE.LENGTH] =
   new NetworkPacketDeliveryPolicy();
