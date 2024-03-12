@@ -446,11 +446,13 @@ function NetworkPacketHandler() constructor
 							}
 							// SET ACTIVE OPERATIONS SCOUT STREAM
 							global.MapDataHandlerRef.active_operations_scout_stream = global.MapDataHandlerRef.target_scout_region;
-							// TRIGGER MAP UPDATE
+							// START SCOUTING DRONE POSITION SYNC TIMER
+							global.MapDataHandlerRef.scouting_drone_position_sync_timer.StartTimer();
+							// START MAP UPDATE
 							global.MapDataHandlerRef.is_dynamic_data_updating = true;
-							global.MapDataHandlerRef.map_update_timer.TriggerTimer();
-							// RESPOND WITH ACKNOWLEDGMENT ON NEXT OPERATION SCOUT STREAM
-							isPacketHandled = true;
+							global.MapDataHandlerRef.map_update_timer.StartTimer();
+							// RESPOND WITH ACKNOWLEDGMENT TO START OPERATIONS SCOUT STREAM
+							isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
 						}
 					} break;
 					case MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM:
@@ -460,15 +462,15 @@ function NetworkPacketHandler() constructor
 						{
 							// SYNC DYNAMIC REGION MAP DATA
 							global.MapDataHandlerRef.SyncDynamicMapData(regionSnapshot);
-							// RESTART MAP DATA UPDATE TIMER
-							global.MapDataHandlerRef.is_dynamic_data_updating = true;
-							global.MapDataHandlerRef.map_update_timer.StartTimer();
 							// NO NEED FOR SEPARATE ACKNOWLEDGMENT WHILE STREAMING
 							isPacketHandled = true;
 						}
 					} break;
 					case MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM:
 					{
+						// RESET OPERATIONS SCOUT STREAM
+						global.MapDataHandlerRef.ResetActiveOperationsScoutStream();
+						
 						// REQUEST GUI STATE RESET
 						global.GUIStateHandlerRef.RequestGUIStateReset();
 						
@@ -495,7 +497,7 @@ function NetworkPacketHandler() constructor
 						var scoutingDroneData = payload;
 						if (!is_undefined(scoutingDroneData))
 						{
-							isPacketHandled = global.NetworkRegionObjectHandlerRef.UpdateScoutingDrone(scoutingDroneData);
+							isPacketHandled = global.NetworkRegionObjectHandlerRef.UpdateScoutingDronePosition(scoutingDroneData);
 						}
 					} break;
 					case MESSAGE_TYPE.DESTROY_SCOUTING_DRONE_DATA:
