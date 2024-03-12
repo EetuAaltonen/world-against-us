@@ -16,17 +16,26 @@ function MapDataHandler() constructor
 	
 	static Update = function()
 	{
-		if (is_dynamic_data_updating)
+		if (!is_undefined(target_scout_region))
 		{
-			map_update_timer.Update();
-			if (map_update_timer.IsTimerStopped())
+			if (!global.MultiplayerMode)
 			{
-				UpdateDynamicMapData();
-				map_update_timer.StartTimer();
+				if (is_dynamic_data_updating)
+				{
+					map_update_timer.Update();
+					if (map_update_timer.IsTimerStopped())
+					{
+						UpdateDynamicMapData();
+						map_update_timer.StartTimer();
+					}
+				}
+			} else {
+				// UPDATE DYNAMIC MAP SIMULATED INTERPOLATION
+				UpdateDynamicMapSimulatedInterpolation();
+				
+				// UPDATE SCOUTING DRONE POSITION BROADCAST
+				UpdateScoutingDronePositionBroadcast();
 			}
-			
-			// UPDATE DYNAMIC MAP SIMULATED INTERPOLATION
-			UpdateDynamicMapSimulatedInterpolation();
 		}
 	}
 	
@@ -505,6 +514,9 @@ function MapDataHandler() constructor
 		scouting_drone_position_sync_timer.StopTimer();
 	}
 	
+	static ResetMapData = function()
+	{
+		ResetActiveOperationsScoutStream();
 		
 		is_dynamic_data_updating = false;
 		map_update_timer.StopTimer();	
