@@ -365,6 +365,38 @@ export default class InstanceHandler {
     return isInstanceReleased;
   }
 
+  endOperationsScoutStream(scoutInstanceId, client) {
+    let isScoutStreamEnded = false;
+    if (this.activeOperationsScoutStream !== undefined) {
+      if (this.activeOperationsScoutStream.instanceId === scoutInstanceId) {
+        // Broadcast destroy scouting drone withing scouted instance
+        this.networkHandler.networkPacketHandler.broadcastScoutingDroneDestroy(
+          scoutInstanceId,
+          client
+        );
+
+        // Reset active operations scout stream after broadcast
+        this.activeOperationsScoutStream = undefined;
+
+        // Response with end operations scout stream
+        const networkPacketHeader = new NetworkPacketHeader(
+          MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM,
+          client.uuid
+        );
+        const networkPacket = new NetworkPacket(
+          networkPacketHeader,
+          undefined,
+          PACKET_PRIORITY.DEFAULT
+        );
+        this.networkHandler.queueNetworkPacket(
+          new NetworkQueueEntry(networkPacket, [client])
+        );
+        isScoutStreamEnded = true;
+      }
+    }
+    return isScoutStreamEnded;
+  }
+
   deleteInstance(instanceId) {
     let isInstanceDeleted = false;
     if (this.getInstance(instanceId) !== undefined) {

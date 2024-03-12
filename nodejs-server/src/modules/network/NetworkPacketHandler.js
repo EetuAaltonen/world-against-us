@@ -1063,34 +1063,4 @@ export default class NetworkPacketHandler {
       }
     }
   }
-
-  endOperationsScoutStream(scoutInstanceId, client) {
-    let isScoutStreamEnded = false;
-    const activeOperationsScoutStream =
-      this.instanceHandler.activeOperationsScoutStream;
-    if (activeOperationsScoutStream !== undefined) {
-      if (activeOperationsScoutStream.instanceId === scoutInstanceId) {
-        this.instanceHandler.activeOperationsScoutStream = undefined;
-
-        // Broadcast destroy scouting drone withing scouted instance
-        this.broadcastScoutingDroneDestroy(scoutInstanceId, client);
-
-        // Response with end operations scout stream
-        const networkPacketHeader = new NetworkPacketHeader(
-          MESSAGE_TYPE.END_OPERATIONS_SCOUT_STREAM,
-          client.uuid
-        );
-        const networkPacket = new NetworkPacket(
-          networkPacketHeader,
-          undefined,
-          PACKET_PRIORITY.DEFAULT
-        );
-        this.networkHandler.queueNetworkPacket(
-          new NetworkQueueEntry(networkPacket, [client])
-        );
-        isScoutStreamEnded = true;
-      }
-    }
-    return isScoutStreamEnded;
-  }
 }
