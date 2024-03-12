@@ -138,20 +138,23 @@ function NetworkPacketParser() constructor
 							var regionStruct = parsedStruct[$ "region"] ?? undefined;
 							var parsedRegion = ParseJSONStructToRegion(regionStruct);
 							
-							var parsedScoutingDrone = undefined;
+							var scoutingDroneInstanceObject = undefined;
 							var scoutingDroneStruct = parsedStruct[$ "scouting_drone"] ?? undefined;
 							if (!is_undefined(scoutingDroneStruct))
 							{
-								var parsedPosition = ParseJSONStructToVector2(scoutingDroneStruct[$ "position"] ?? undefined);
-								parsedScoutingDrone = new InstanceObject(
-									object_get_sprite(objDrone),
-									objDrone,
-									parsedPosition
-								);
+								var parsedScoutingDrone = ParseJSONStructToScoutingDroneData(scoutingDroneStruct);
+								if (!is_undefined(parsedScoutingDrone))
+								{
+									scoutingDroneInstanceObject = new InstanceObject(
+										object_get_sprite(objDrone),
+										objDrone,
+										parsedScoutingDrone.position
+									);
+								}
 							}
 							parsedPayload = {
 								region: parsedRegion,
-								scouting_drone: parsedScoutingDrone
+								scouting_drone: scoutingDroneInstanceObject
 							}
 						}
 					} break;
