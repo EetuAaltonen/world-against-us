@@ -3,6 +3,7 @@ import WORLD_MAP_LOCATION_HIERARCHY from "../world_map/WorldMapLocationHierarchy
 import MESSAGE_TYPE from "../network/MessageType.js";
 import PACKET_PRIORITY from "../network/PacketPriority.js";
 
+import NetworkQueueEntry from "../network/NetworkQueueEntry.js";
 import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
 import NetworkPacket from "../network_packets/NetworkPacket.js";
 
@@ -305,6 +306,19 @@ export default class InstanceHandler {
               // TODO: Proper error handling
               ConsoleHandler.Log(
                 `Failed to reset owner for an instance with ID: ${instanceId}`
+              );
+            }
+          }
+        } else {
+          // End scouting stream
+          if (this.activeOperationsScoutStream !== undefined) {
+            const operatingClient = this.networkHandler.clientHandler.getClient(
+              this.activeOperationsScoutStream.operatingClient
+            );
+            if (operatingClient !== undefined) {
+              this.endOperationsScoutStream(
+                this.activeOperationsScoutStream.instanceId,
+                operatingClient
               );
             }
           }

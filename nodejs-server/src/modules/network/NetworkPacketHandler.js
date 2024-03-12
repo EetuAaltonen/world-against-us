@@ -828,7 +828,7 @@ export default class NetworkPacketHandler {
 
                   // Broadcast scouting drone leave withing prior scouted instance
                   if (
-                    scoutInstance.instanceId !=
+                    scoutInstance.instanceId !==
                     activeOperationsScoutStream.instanceId
                   ) {
                     // Broadcast destroy scouting drone withing scouted instance
@@ -943,7 +943,7 @@ export default class NetworkPacketHandler {
                   );
 
                   // Response with scouted instance data
-                  const scoutInstanceSnapshot =
+                  /*const scoutInstanceSnapshot =
                     scoutInstance.fetchInstanceSnapshot();
                   const networkPacketHeader = new NetworkPacketHeader(
                     MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM,
@@ -956,14 +956,15 @@ export default class NetworkPacketHandler {
                   );
                   this.networkHandler.queueNetworkPacket(
                     new NetworkQueueEntry(networkPacket, [client])
-                  );
+                  );*/
                   isPacketHandled = true;
                 } else {
                   // End operations scout stream if instance has deleted
-                  isPacketHandled = this.endOperationsScoutStream(
-                    scoutingDrone.instanceId,
-                    client
-                  );
+                  isPacketHandled =
+                    this.instanceHandler.endOperationsScoutStream(
+                      scoutingDrone.instanceId,
+                      client
+                    );
                 }
               }
             }
@@ -973,7 +974,7 @@ export default class NetworkPacketHandler {
           {
             const scoutInstanceId = networkPacket.payload;
             if (scoutInstanceId !== undefined) {
-              isPacketHandled = this.endOperationsScoutStream(
+              isPacketHandled = this.instanceHandler.endOperationsScoutStream(
                 scoutInstanceId,
                 client
               );
