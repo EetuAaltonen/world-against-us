@@ -14,6 +14,12 @@ function MapDataHandler() constructor
 	scouting_drone_prev_position = new Vector2(0, 0);
 	scouting_drone_fly_speed = 12;
 	
+	static OnDestroy = function(_struct = self)
+	{
+		DeleteStruct(_struct.static_map_data);
+		DeleteStruct(_struct.dynamic_map_data);
+	}
+	
 	static Update = function()
 	{
 		if (!is_undefined(target_scout_region))
@@ -25,7 +31,8 @@ function MapDataHandler() constructor
 					map_update_timer.Update();
 					if (map_update_timer.IsTimerStopped())
 					{
-						UpdateDynamicMapData();
+						// TODO: Implement singleplayer map data updating
+						//UpdateDynamicMapData();
 						map_update_timer.StartTimer();
 					}
 				}
@@ -37,14 +44,6 @@ function MapDataHandler() constructor
 				UpdateScoutingDronePositionBroadcast();
 			}
 		}
-	}
-	
-	static OnDestroy = function()
-	{
-		static_map_data.OnDestroy();
-		static_map_data = undefined;
-		dynamic_map_data.OnDestroy();
-		dynamic_map_data = undefined;
 	}
 	
 	static GetMapDataFileName = function(roomName)
@@ -117,18 +116,6 @@ function MapDataHandler() constructor
 		var fileName = GetMapDataFileName(_roomIndex);
 		isMapDataUpdated = ReadStaticMapDataFromFile(fileName);
 		return isMapDataUpdated;
-	}
-	
-	static UpdateDynamicMapData = function()
-	{
-		/*if (global.MultiplayerMode)
-		{
-			
-		} else {
-			// TODO: Disabled during prototyping
-			//dynamic_map_data.icons = GenerateMapIcons(DYNAMIC_MAP_ICON);
-			dynamic_map_data.SortIcons();
-		}*/
 	}
 	
 	static UpdateDynamicMapSimulatedInterpolation = function()
