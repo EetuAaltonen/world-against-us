@@ -4,10 +4,12 @@ function PlayerDataHandler() constructor
 	player_name = (global.MultiplayerMode) ? global.NetworkHandlerRef.player_tag : "Player";
 	character = undefined;
 	last_known_location = undefined;
+	// TODO: Low casing property names
 	primaryWeaponSlot = undefined;
 	magazinePockets = undefined;
 	medicinePockets = undefined;
 	
+	// TODO: Typo in variable name
 	positionSyncTImer = new Timer(500);
 	
 	static OnDestroy = function()

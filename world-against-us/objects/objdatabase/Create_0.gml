@@ -3,12 +3,12 @@ itemDatabase = new DatabaseItem();
 var jsonItemStruct = ReadJSONFile("item_data.json") ?? EMPTY_STRUCT;
 ParseJSONStructToMap(itemDatabase.itemData, jsonItemStruct[$ "item_data"] ?? undefined, "name", ParseJSONStructToDatabaseItem);
 
-// QUEST DATA
+// QUEST DATABASE
 questData = ds_map_create();
 var jsonQuestStruct = ReadJSONFile("quest_data.json") ?? EMPTY_STRUCT;
 ParseJSONStructToMap(questData, jsonQuestStruct[$ "quest_data"] ?? undefined, "quest_id", ParseJSONStructToDatabaseQuest);
 
-// DIALOGUE DATA
+// DIALOGUE DATABASE
 dialogueData = ds_map_create();
 // READ ALL LOOT TABLE JSON FILES
 // TODO: Move this to script
@@ -128,7 +128,7 @@ try {
 	global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, error);
 }
 
-// LOOT TABLE DATA
+// LOOT TABLE DATABASE
 lootTableData = ds_map_create();
 // READ ALL LOOT TABLE JSON FILES
 // TODO: Move this to script
@@ -160,7 +160,7 @@ try {
 	show_message(error);
 }
 
-// BLUEPRINT DATA
+// BLUEPRINT DATABASE
 blueprintData = ds_map_create();
 // READ ALL BLUEPRINT JSON FILES
 // TODO: Move this to script
@@ -188,17 +188,17 @@ try {
 	show_message(error);
 }
 
-// OBJECT EXAMINE DATA
+// OBJECT EXAMINE DATABASE
 objectExamineData = ds_map_create();
 var jsonObjectExamineStruct = ReadJSONFile("object_examine_data.json") ?? EMPTY_STRUCT;
 ParseJSONStructToMap(objectExamineData, jsonObjectExamineStruct[$ "object_examine_data"] ?? undefined, "object_name", ParseJSONStructToDatabaseObjectExamine);
 
-// WORLD MAP DATA
+// WORLD MAP DATABASE
 worldMapLocationData = ds_map_create();
 var jsonMapStruct = ReadJSONFile("/map_data/world_map_location_data.json") ?? EMPTY_STRUCT;
 ParseJSONStructToMap(worldMapLocationData, jsonMapStruct[$ "world_map_location_data"] ?? undefined, "room_index", ParseJSONStructToDatabaseWorldMapLocationData);
 
-// MAP ICON STYLE DATA
+// MAP ICON STYLE DATABASE
 mapIconStyleData = ds_map_create();
 var jsonMapIconStyleStruct = ReadJSONFile("/map_data/map_icon_style_data.json") ?? EMPTY_STRUCT;
 ParseJSONStructToMap(mapIconStyleData, jsonMapIconStyleStruct[$ "map_icon_style_data"] ?? undefined, "object_name", ParseJSONStructToDatabaseMapIconStyleData);
