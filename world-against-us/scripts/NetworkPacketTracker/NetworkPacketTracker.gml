@@ -127,8 +127,21 @@ function NetworkPacketTracker() constructor
 		{
 			_networkPacket.timeout_timer.StartTimer();
 			ds_list_add(in_flight_packets, _networkPacket);
+			
+			if (is_undefined(_networkPacket.ack_timeout_callback_func))
+			{
+				var consoleLog = string("Network packet with message type {0} is missing ACK timeout callback function", _networkPacket.header.message_type);
+				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
+			}
+			
 			isPacketTrackPatched = true;
 		} else {
+			if (!is_undefined(_networkPacket.ack_timeout_callback_func))
+			{
+				var consoleLog = string("Network packet with message type {0} has unnecessary ACK timeout callback function", _networkPacket.header.message_type);
+				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
+			}
+			
 			// IN-FLIGHT PACKET TRACK SET TO FALSE IN DELIVERY POLICY
 			isPacketTrackPatched = true;
 		}
