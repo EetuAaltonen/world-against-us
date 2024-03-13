@@ -446,18 +446,20 @@ function NetworkPacketParser() constructor
 		repeat(parsedPatrolCount)
 		{
 			var parsedPatrolId = buffer_read(_msg, buffer_u8);
-			var parsedRouteProgress = buffer_read(_msg, buffer_u16);
-			var scaledRouteProgress = ScaleIntPercentToFloat(parsedRouteProgress);
+			var parsedAIState = buffer_read(_msg, buffer_u8);
+			var parsedRouteProgress = buffer_read(_msg, buffer_f32);
 			var parsedPositionX = buffer_read(_msg, buffer_u32);
 			var parsedPositionY = buffer_read(_msg, buffer_u32);
-			var parsedPosition = ScaleIntValuesToFloatVector2(parsedPositionX, parsedPositionY);
+			var parsedScaledPosition = ScaleIntValuesToFloatVector2(parsedPositionX, parsedPositionY);
 			var patrol = new Patrol(
 				parsedPatrolId,
-				undefined,
-				undefined,
-				scaledRouteProgress
+				parsedRegionId,
+				parsedAIState,
+				0,
+				parsedRouteProgress,
+				UNDEFINED_UUID
 			);
-			patrol.position = parsedPosition;
+			patrol.position = parsedScaledPosition;
 			array_push(localPatrols, patrol);
 		}
 		
