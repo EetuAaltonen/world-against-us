@@ -731,16 +731,16 @@ export default class NetworkPacketHandler {
           {
             const patrolsSnapshotData = networkPacket.payload;
             if (patrolsSnapshotData !== undefined) {
-              if (patrolsSnapshotData.instanceId == instance.instanceId) {
+              if (patrolsSnapshotData.instanceId === instance.instanceId) {
                 if (patrolsSnapshotData.localPatrols.length > 0) {
                   patrolsSnapshotData.localPatrols.forEach(
                     (patrolSnapshotData) => {
                       const patrol = instance.getPatrol(
-                        patrolSnapshotData.patrol_id
+                        patrolSnapshotData.patrolId
                       );
                       if (patrol !== undefined) {
-                        patrol.position.x = patrolSnapshotData.position.X;
-                        patrol.position.y = patrolSnapshotData.position.X;
+                        patrol.position.x = patrolSnapshotData.position.x;
+                        patrol.position.y = patrolSnapshotData.position.y;
                         patrol.routeProgress = patrolSnapshotData.routeProgress;
                       }
                     }
@@ -837,13 +837,16 @@ export default class NetworkPacketHandler {
                 }
 
                 if (isStreamInterruptible) {
+                  // Start operations scout stream
                   const scoutingDrone = new ScoutingDrone(scoutInstanceId);
-                  this.instanceHandler.activeOperationsScoutStream =
-                    new OperationsScoutStream(
-                      scoutInstanceId,
-                      scoutingDrone,
-                      client.uuid
-                    );
+                  const operationsScoutStream = new OperationsScoutStream(
+                    scoutInstanceId,
+                    scoutingDrone,
+                    client.uuid
+                  );
+                  this.instanceHandler.startOperationsScoutStream(
+                    operationsScoutStream
+                  );
 
                   // Broadcast scouting drone sync withing scouted instance
                   const formatScoutingDrone = scoutingDrone.toJSONStruct();
