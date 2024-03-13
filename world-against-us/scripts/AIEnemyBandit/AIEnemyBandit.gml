@@ -136,7 +136,7 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 			EndPathing();
 			
 			// DELETE PATROL
-			global.NPCPatrolHandlerRef.DeletePatrol(patrol.patrol_id)
+			global.NPCPatrolHandlerRef.DeletePatrol(patrol.patrol_id);
 		
 			// NETWORKING
 			if (global.MultiplayerMode)
