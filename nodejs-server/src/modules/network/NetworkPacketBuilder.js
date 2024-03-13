@@ -529,7 +529,7 @@ export default class NetworkPacketBuilder {
           (BITWISE.ID_LENGTH + // Network ID
             BITWISE.BIT8 + // Null Terminator
             BITWISE.BIT32 + // X-position
-            BITWISE.BIT32) * // X-position
+            BITWISE.BIT32) * // Y-position
             localPlayerCount // Multiplier
         ).fill(0);
         let plrDataOffset = 0;
@@ -560,9 +560,10 @@ export default class NetworkPacketBuilder {
         // Allocate local player data buffer
         bufferLocalPatrolData = Buffer.allocUnsafe(
           (BITWISE.BIT8 + // Patrol ID
-            BITWISE.BIT16 + // Route progress
+            BITWISE.BIT8 + // AI state
+            BITWISE.BIT32 + // Route progress
             BITWISE.BIT32 + // X-position
-            BITWISE.BIT32) * // X-position
+            BITWISE.BIT32) * // Y-position
             localPatrolCount // Multiplier
         ).fill(0);
         let patrolDataOffset = 0;
@@ -570,12 +571,13 @@ export default class NetworkPacketBuilder {
           const patrol = payload.localPatrols[i];
           bufferLocalPatrolData.writeUInt8(patrol.patrolId, patrolDataOffset);
           patrolDataOffset += BITWISE.BIT8;
-          const scaledRouteProgress = patrol.getScaledRouteProgress();
-          bufferLocalPatrolData.writeUInt16LE(
-            scaledRouteProgress,
+          bufferLocalPatrolData.writeUInt8(patrol.aiState, patrolDataOffset);
+          patrolDataOffset += BITWISE.BIT8;
+          bufferLocalPatrolData.writeFloatLE(
+            patrol.routeProgress,
             patrolDataOffset
           );
-          patrolDataOffset += BITWISE.BIT16;
+          patrolDataOffset += BITWISE.BIT32;
           bufferLocalPatrolData.writeUInt32LE(
             patrol.position.x,
             patrolDataOffset

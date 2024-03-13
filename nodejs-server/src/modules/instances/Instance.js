@@ -18,8 +18,6 @@ const MAX_PATROL_ID = 100;
 const MIN_PATROL_COUNT = 1;
 const MAX_PATROL_COUNT = 2;
 
-const SNAPSHOT_SEND_RATE = 1000 / 20; // == 100ms
-
 export default class Instance {
   constructor(instanceId, roomIndex, networkHandler) {
     this.instanceId = instanceId;
