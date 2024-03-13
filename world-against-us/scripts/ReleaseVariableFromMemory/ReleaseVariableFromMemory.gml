@@ -21,6 +21,7 @@ function ReleaseVariableFromMemory(_variable, _variableType = undefined)
 			} break;
 			default:
 			{
+				// TODO: Replace with DeleteStruct(...)
 				if (is_struct(_variable))
 				{
 					if (struct_exists(_variable, "OnDestroy"))

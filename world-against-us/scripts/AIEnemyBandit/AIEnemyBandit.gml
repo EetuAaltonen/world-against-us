@@ -132,7 +132,7 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 			// STOP TARGET SEEK TIMER
 			target_seek_timer.StopTimer();
 			
-			// UPDATE INSTANCE BEHAVIOUR
+			// UPDATE INSTANCE BEHAVIOR
 			EndPathing();
 			
 			// DELETE PATROL
