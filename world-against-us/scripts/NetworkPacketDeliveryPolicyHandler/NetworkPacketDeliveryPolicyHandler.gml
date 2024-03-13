@@ -21,6 +21,7 @@ function NetworkPacketDeliveryPolicyHandler() constructor
 		
 		ds_map_add(delivery_policies, MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA, new NetworkPacketDeliveryPolicy(false, true, true, true, false));
 		
+		ds_map_add(delivery_policies, MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM, new NetworkPacketDeliveryPolicy(false, true, true, true, false));
 		ds_map_add(delivery_policies, MESSAGE_TYPE.SCOUTING_DRONE_DATA_POSITION, new NetworkPacketDeliveryPolicy(false, true, true, true, false));
 		
 		// DEFAULT
