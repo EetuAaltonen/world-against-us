@@ -86,6 +86,9 @@ function MapDataHandler() constructor
 		// INITIALIZE SCOUTING DRONE
 		scouting_drone = new InstanceObject(sprDrone, objDrone, new Vector2(0, 0));
 		
+		// CLEAR OUTDATED MAP ICONS
+		dynamic_map_data.ClearIcons();
+		
 		var operationsCenterWindow = global.GameWindowHandlerRef.GetWindowById(GAME_WINDOW.OperationsCenter);
 		if (!is_undefined(operationsCenterWindow))
 		{
@@ -147,8 +150,7 @@ function MapDataHandler() constructor
 	
 	static SyncDynamicMapData = function(_regionSnapshot)
 	{
-		// TODO: Optimize and simplify this code
-		/*if (!is_undefined(target_scout_region))
+		if (!is_undefined(target_scout_region))
 		{
 			var worldMapLocation = global.WorldMapLocationData[? target_scout_region.room_index];
 			if (!is_undefined(worldMapLocation))
@@ -163,6 +165,7 @@ function MapDataHandler() constructor
 							sprite_get_width(sprBandit),
 							sprite_get_height(sprBandit)
 						);
+						
 						// PATCH EXISTENT PATROL MAP ICONS
 						var dynamicIconCount = ds_list_size(dynamic_map_data.icons);
 						for (var i = 0; i < dynamicIconCount; i++)
@@ -185,22 +188,19 @@ function MapDataHandler() constructor
 										}
 									}
 								}
-						
+								
 								if (!is_undefined(existentPatrolIndex))
 								{
-									var patrol = _regionSnapshot.local_patrols[@ existentPatrolIndex];								
-									var patrolPosition = new Vector2(
-										path_get_x(patrolPath, patrol.route_progress),
-										path_get_y(patrolPath, patrol.route_progress)
-									);
-									// USE LOCAL POSITION IF OUTSIDE THE ROUTE
-									if (patrol.position.X != 0 && patrol.position.Y != 0)
+									var patrol = _regionSnapshot.local_patrols[@ existentPatrolIndex];
+									var patrolPosition = patrol.position;
+									if (patrol.ai_state == AI_STATE_BANDIT.PATROL)
 									{
-										patrolPosition = patrol.position;
+										patrolPosition = new Vector2(
+											path_get_x(patrolPath, patrol.route_progress),
+											path_get_y(patrolPath, patrol.route_progress)
+										);
 									}
-									// TODO: Fix interpolation
-									dynamicMapIcon.simulated_instance_object.position = patrolPosition;
-									dynamicMapIcon.simulated_instance_object.StartInterpolateMovement(patrolPosition, MAP_DATA_UPDATE_INTERVAL);
+									dynamicMapIcon.simulated_instance_object.StartInterpolateMovement(patrolPosition, INSTANCE_SNAPSHOT_SYNC_INTERVAL);
 									array_delete(_regionSnapshot.local_patrols, existentPatrolIndex, 1);
 									patrolCount = array_length(_regionSnapshot.local_patrols);
 								} else {
@@ -211,12 +211,9 @@ function MapDataHandler() constructor
 										dynamicIconCount = ds_list_size(dynamic_map_data.icons);
 									}
 								}
-							} else {
-								// DELETE UNDEFINED MAP ICONS
-								ds_list_delete(dynamic_map_data.icons, i--);
-								dynamicIconCount = ds_list_size(dynamic_map_data.icons);
 							}
 						}
+						
 						// ADD NEW PATROL MAP ICONS
 						var newPatrolIconCount = array_length(_regionSnapshot.local_patrols);
 						for (var i = 0; i < newPatrolIconCount; i++)
@@ -224,10 +221,14 @@ function MapDataHandler() constructor
 							var patrol = _regionSnapshot.local_patrols[@ i];
 							if (!is_undefined(patrol))
 							{
-								var patrolPosition = new Vector2(
-									path_get_x(patrolPath, patrol.route_progress),
-									path_get_y(patrolPath, patrol.route_progress)
-								);
+								var patrolPosition = patrol.position;
+								if (patrol.ai_state == AI_STATE_BANDIT.PATROL)
+								{
+									patrolPosition = new Vector2(
+										path_get_x(patrolPath, patrol.route_progress),
+										path_get_y(patrolPath, patrol.route_progress)
+									);
+								}
 								var positionWithOffset = new Vector2(
 									patrolPosition.X - (banditSpriteSize.w * 0.5),
 									patrolPosition.Y - (banditSpriteSize.h)
@@ -252,7 +253,7 @@ function MapDataHandler() constructor
 						}
 					}
 				}
-			
+				
 				var playerMapIconStyle = global.MapIconStyleData[? object_get_name(objPlayer)];
 				if (!is_undefined(playerMapIconStyle))
 				{
@@ -282,15 +283,11 @@ function MapDataHandler() constructor
 									}
 								}
 							}
-						
+							
 							if (!is_undefined(existentPlayerIndex))
 							{
-								var player = _regionSnapshot.local_players[@ existentPlayerIndex];								
-								var playerPosition = new Vector2(
-									player.position.X,
-									player.position.Y
-								);
-								dynamicMapIcon.simulated_instance_object.StartInterpolateMovement(playerPosition, MAP_DATA_UPDATE_INTERVAL);
+								var player = _regionSnapshot.local_players[@ existentPlayerIndex];
+								dynamicMapIcon.simulated_instance_object.StartInterpolateMovement(player.position, INSTANCE_SNAPSHOT_SYNC_INTERVAL);
 								array_delete(_regionSnapshot.local_players, existentPlayerIndex, 1);
 								playerCount = array_length(_regionSnapshot.local_players);
 							} else {
@@ -323,7 +320,7 @@ function MapDataHandler() constructor
 								playerPosition.Y - (playerSpriteSize.h)
 							);
 							var mapIcon = new MapIcon(
-								object_get_name(objBandit),
+								object_get_name(objPlayer),
 								// TOP-LEFT CORNER TO DRAW RECTANGLE
 								positionWithOffset,
 								playerPosition,
@@ -341,10 +338,11 @@ function MapDataHandler() constructor
 						}
 					}
 				}
+				
+				// SORT DYNAMIC MAP ICONS
+				dynamic_map_data.SortIcons();
 			}
-			// SORT DYNAMIC MAP ICONS
-			dynamic_map_data.SortIcons();
-		}*/
+		}
 	}
 	
 	static UpdateScoutingDronePositionBroadcast = function()
@@ -393,7 +391,7 @@ function MapDataHandler() constructor
 		var roomName = room_get_name(room);
 		var fileName = string("{0}{1}", "DEBUG/map_data/", GetMapDataFileName(roomName));
 		
-		static_map_data.icons = GenerateMapIcons(STATIC_MAP_ICON);
+		GenerateMapIcons(static_map_data, STATIC_MAP_ICON);
 		try
 		{
 			var mapDataString = json_stringify(static_map_data.ToJSONStruct());
@@ -416,11 +414,12 @@ function MapDataHandler() constructor
 		return isMapDataGenerated;
 	}
 	
-	static GenerateMapIcons = function(_mapIconType)
+	static GenerateMapIcons = function(_mapDataRef, _mapIconType)
 	{
-		var mapIcons = ds_list_create();
-		var isIconDynamic = (_mapIconType == DYNAMIC_MAP_ICON) ? true : false;
+		// CLEAR OUTDATED ICONS
+		_mapDataRef.ClearIcons();
 		
+		var isIconDynamic = (_mapIconType == DYNAMIC_MAP_ICON) ? true : false;
 		for (var key = ds_map_find_first(global.MapIconStyleData); !is_undefined(key); key = ds_map_find_next(global.MapIconStyleData, key))
 		{
 			var iconStyle = global.MapIconStyleData[? key];
@@ -455,13 +454,12 @@ function MapDataHandler() constructor
 								mapIconStyle,
 								(instance.mask_index != SPRITE_NO_MASK) ? 1 : 0.3
 							);
-							ds_list_add(mapIcons, mapIcon);
+							ds_list_add(_mapDataRef.icons, mapIcon);
 						}
 					}
 				}
 			}
 		}
-		return mapIcons;
 	}
 	
 	static ReadStaticMapDataFromFile = function(_fileName)
