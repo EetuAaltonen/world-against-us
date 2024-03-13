@@ -25,6 +25,54 @@ export default class InstanceHandler {
     // TODO: Move this elsewhere(?)
     // Add class with requestingClient value to validate source of every request
     this.activeOperationsScoutStream = undefined;
+    this.scoutStreamSnapshotInterval = 1000; // ms
+    this.scoutStreamSnapshotTimer = this.scoutStreamSnapshotInterval;
+  }
+
+  update(passedTickTime) {
+    let isUpdated = true;
+    // Update instances
+    this.getInstanceIds().forEach((instanceId) => {
+      const instance = this.getInstance(instanceId);
+      if (instance !== undefined) {
+        if (!instance.update(passedTickTime)) {
+          isUpdated = false;
+        }
+      }
+    });
+
+    // Update operations scout stream snapshot
+    this.updateOperationScoutStreamSnapshot(passedTickTime);
+
+    return isUpdated;
+  }
+
+  updateOperationScoutStreamSnapshot(passedTickTime) {
+    let isUpdated = true;
+    if (this.activeOperationsScoutStream !== undefined) {
+      this.scoutStreamSnapshotTimer -= passedTickTime;
+      if (this.scoutStreamSnapshotTimer <= 0) {
+        this.scoutStreamSnapshotTimer += this.scoutStreamSnapshotInterval;
+
+        // Send operations scout stream snapshot
+        const scoutedInstance = this.getInstance(
+          this.activeOperationsScoutStream.instanceId
+        );
+        if (scoutedInstance !== undefined) {
+          const scoutInstanceSnapshot = scoutedInstance.fetchInstanceSnapshot();
+          const operatingClient = this.networkHandler.clientHandler.getClient(
+            this.activeOperationsScoutStream.operatingClient
+          );
+          if (operatingClient !== undefined) {
+            this.sendOperationsScoutStreamSnapshot(
+              scoutInstanceSnapshot,
+              operatingClient
+            );
+          }
+        }
+      }
+    }
+    return isUpdated;
   }
 
   /**
@@ -110,19 +158,6 @@ export default class InstanceHandler {
       );
     });
     return availableInstances;
-  }
-
-  update(passedTickTime) {
-    let isUpdated = true;
-    this.getInstanceIds().forEach((instanceId) => {
-      const instance = this.getInstance(instanceId);
-      if (instance !== undefined) {
-        if (!instance.update(passedTickTime)) {
-          isUpdated = false;
-        }
-      }
-    });
-    return isUpdated;
   }
 
   isRoomIndexValid(roomIndex) {
