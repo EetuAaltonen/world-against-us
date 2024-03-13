@@ -414,6 +414,40 @@ export default class InstanceHandler {
     return isInstanceReleased;
   }
 
+  startOperationsScoutStream(operationsScoutStream) {
+    let isStreamStarted = false;
+    if (operationsScoutStream !== undefined) {
+      // Set active operations scout stream
+      this.activeOperationsScoutStream = operationsScoutStream;
+
+      // Restart scout stream snapshot timer
+      this.scoutStreamSnapshotTimer = this.scoutStreamSnapshotInterval;
+      isStreamStarted = true;
+    }
+    return isStreamStarted;
+  }
+
+  sendOperationsScoutStreamSnapshot(scoutInstanceSnapshot, client) {
+    let isSnapshotSent = false;
+    if (scoutInstanceSnapshot !== undefined) {
+      // Send operations scout stream snapshot
+      const networkPacketHeader = new NetworkPacketHeader(
+        MESSAGE_TYPE.OPERATIONS_SCOUT_STREAM,
+        client.uuid
+      );
+      const networkPacket = new NetworkPacket(
+        networkPacketHeader,
+        scoutInstanceSnapshot,
+        PACKET_PRIORITY.DEFAULT
+      );
+      this.networkHandler.queueNetworkPacket(
+        new NetworkQueueEntry(networkPacket, [client])
+      );
+      isSnapshotSent = true;
+    }
+    return isSnapshotSent;
+  }
+
   endOperationsScoutStream(scoutInstanceId, client) {
     let isScoutStreamEnded = false;
     if (this.activeOperationsScoutStream !== undefined) {
