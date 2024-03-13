@@ -83,7 +83,7 @@ function NetworkConnectionSampler() constructor
 			networkPacketHeader,
 			last_update_time,
 			PACKET_PRIORITY.DEFAULT,
-			AckTimeoutFuncPinging
+			undefined
 		);
 		
 		// PREPARE AND SEND PING NETWORK PACKET

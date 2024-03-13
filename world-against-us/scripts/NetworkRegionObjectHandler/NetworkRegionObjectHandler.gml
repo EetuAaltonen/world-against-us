@@ -55,7 +55,7 @@ function NetworkRegionObjectHandler() constructor
 								local_patrols: formatPatrols
 							},
 							PACKET_PRIORITY.DEFAULT,
-							AckTimeoutFuncResend
+							undefined
 						);
 						if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 						{
