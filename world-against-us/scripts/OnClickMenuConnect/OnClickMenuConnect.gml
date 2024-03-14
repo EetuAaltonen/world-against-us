@@ -9,23 +9,27 @@ function OnClickMenuConnect()
 			var playerTagInputElement = multiplayerPanelElement.GetChildElementById("MultiplayerPlayerTagInput");
 			var addressInputElement = multiplayerPanelElement.GetChildElementById("MultiplayerAddressInput");
 			var portInputElement = multiplayerPanelElement.GetChildElementById("MultiplayerPortInput");
-			if (!is_undefined(addressInputElement) && !is_undefined(portInputElement))
+			if (!is_undefined(playerTagInputElement) &&
+				!is_undefined(addressInputElement) &&
+				!is_undefined(portInputElement))
 			{
-				// TODO: Validate player tag, address, and port input
 				var playerTag = playerTagInputElement.input;
 				var address = addressInputElement.input;
 				var port = portInputElement.input;
-				if (global.NetworkHandlerRef.CreateSocket())
+				if (ValidateMultiplayerConnectionDetails(playerTagInputElement, addressInputElement, portInputElement))
 				{
-					if (global.NetworkHandlerRef.RequestConnectSocket(playerTag, address, port))
+					if (global.NetworkHandlerRef.CreateSocket())
 					{
-						global.GUIStateHandlerRef.RequestGUIAction(GUI_ACTION.Connect, [
-							CreateWindowMainMenuConnect(GAME_WINDOW.MainMenuConnect, parentWindow.zIndex - 1, address, port)
-						], GUI_CHAIN_RULE.Append);
+						if (global.NetworkHandlerRef.RequestConnectSocket(playerTag, address, port))
+						{
+							global.GUIStateHandlerRef.RequestGUIAction(GUI_ACTION.Connect, [
+								CreateWindowMainMenuConnect(GAME_WINDOW.MainMenuConnect, parentWindow.zIndex - 1, address, port)
+							], GUI_CHAIN_RULE.Append);
+						}
+					} else {
+						// TODO: Generic error handling
+						show_message("Failed to create a socket!");
 					}
-				} else {
-					// TODO: Generic error handling
-					show_message("Failed to create a socket!");
 				}
 			}
 		}

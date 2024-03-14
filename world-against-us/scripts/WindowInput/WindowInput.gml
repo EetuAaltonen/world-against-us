@@ -1,7 +1,8 @@
-function WindowInput(_elementId, _relativePosition, _size, _backgroundColor, _placeholder) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
+function WindowInput(_elementId, _relativePosition, _size, _backgroundColor, _placeholder, _maxInputLength) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	placeholder = _placeholder;
 	input = placeholder;
+	max_input_length = _maxInputLength;
 	
 	isTyping = false;
 	
@@ -12,7 +13,7 @@ function WindowInput(_elementId, _relativePosition, _size, _backgroundColor, _pl
 			if (isHovered && !isTyping)
 			{
 				if (input == placeholder) { input = EMPTY_STRING; }
-				keyboard_string = input;
+				keyboard_string = string(input);
 				isTyping = true;
 			}
 		} if (mouse_check_button_pressed(mb_left))
@@ -28,7 +29,7 @@ function WindowInput(_elementId, _relativePosition, _size, _backgroundColor, _pl
 			if (isHovered && isTyping)
 			{
 				input = EMPTY_STRING;
-				keyboard_string = input;
+				keyboard_string = EMPTY_STRING;
 			}
 		}
 		
@@ -41,28 +42,45 @@ function WindowInput(_elementId, _relativePosition, _size, _backgroundColor, _pl
 			{
 				if (clipboard_has_text())
 				{
-				    input += string_lower(clipboard_get_text());
-					keyboard_string = input;
+					var combinedString = string("{0}{1}", input, clipboard_get_text());
+					if (string_length(combinedString) <= max_input_length)
+					{
+						input = combinedString;
+					}
+					keyboard_string = string(input);
 				}
 			} else if (keyboard_check(vk_anykey))
 			{
-				input = string_lower(keyboard_string);
-				keyboard_string = input;
+				if (string_length(keyboard_string) <= max_input_length)
+				{
+					input = string_lower(string(keyboard_string));
+					keyboard_string = string(input);
+				} else {
+					keyboard_string = string(input);
+				}
 			}
 		}
 	}
 	
 	static DrawContent = function()
 	{
+		draw_set_halign(fa_left);
 		draw_set_valign(fa_middle);
-		
+		var textPadding = 20;
 		var textColor = (isTyping) ? c_black : c_dkgray;
+		var textToDraw = string(input);
+		if ((string_width(string(input)) + (textPadding * 2)) > size.w)
+		{
+			var textLength = string_length(textToDraw);
+			textToDraw = string("...{0}", string_copy(textToDraw, max(1, (textLength - 24)), max_input_length));
+		}
 		draw_text_color(
-			position.X + 20, position.Y + (size.h * 0.5),
-			string(input),
+			position.X + textPadding, position.Y + (size.h * 0.5),
+			textToDraw,
 			textColor, textColor, textColor, textColor, 1
 		);
 		
-		draw_set_valign(fa_top);
+		// RESET DRAW PROPERTIES
+		ResetDrawProperties();
 	}
 }

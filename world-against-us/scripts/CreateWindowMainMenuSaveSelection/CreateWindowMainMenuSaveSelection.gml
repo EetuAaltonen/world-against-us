@@ -59,7 +59,8 @@ function CreateWindowMainMenuSaveSelection(_gameWindowId, _zIndex, playCallbackF
 	var saveInput = new WindowInput(
 		"SaveInput",
 		new Vector2(panelSize.w * 0.5 - (inputSize.w * 0.5), panelSize.h * 0.5 - (inputSize.h * 0.5) - 20),
-		inputSize, #48a630, "*Save name"
+		inputSize, #48a630, "*Save name",
+		MAX_SAVE_NAME_LENGTH
 	);
 	
 	// PLAY BUTTON

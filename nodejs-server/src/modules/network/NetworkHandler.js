@@ -23,6 +23,8 @@ import NetworkJoinGameRequest from "./NetworkJoinGameRequest.js";
 
 const UNDEFINED_UUID = "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined";
 const SERVER_BROADCAST_UUID = "serveruu-uuuu-uuuu-uuuu-uuubroadcast";
+const MAX_PLAYER_TAG_LENGTH = 16;
+const MIN_PLAYER_TAG_LENGTH = 3;
 
 export default class NetworkHandler {
   constructor(socket) {
@@ -298,8 +300,11 @@ export default class NetworkHandler {
                 ) {
                   const playerTag = networkPacket.payload;
                   if (playerTag !== undefined) {
-                    // Check minimum player tag length
-                    if (playerTag.length >= 3) {
+                    // Check minimum and maximum player tag length
+                    if (
+                      playerTag.length >= MIN_PLAYER_TAG_LENGTH &&
+                      playerTag.length <= MAX_PLAYER_TAG_LENGTH
+                    ) {
                       if (clientId === UNDEFINED_UUID) {
                         // Generate new Uuid and save client
                         const newClientId = this.clientHandler.addClient(
@@ -378,6 +383,15 @@ export default class NetworkHandler {
                           `Client with UUID ${clientId} requested to join game`
                         );
                       }
+                    } else {
+                      isMessageHandled = this.onInvalidRequest(
+                        new InvalidRequestInfo(
+                          INVALID_REQUEST_ACTION.DISCONNECT,
+                          messageType,
+                          `Invalid player tag length (${MIN_PLAYER_TAG_LENGTH}-${MAX_PLAYER_TAG_LENGTH} characters)`
+                        ),
+                        rinfo
+                      );
                     }
                   }
                 } else {
