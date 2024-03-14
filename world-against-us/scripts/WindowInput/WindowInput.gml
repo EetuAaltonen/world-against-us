@@ -1,7 +1,8 @@
-function WindowInput(_elementId, _relativePosition, _size, _backgroundColor, _placeholder) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
+function WindowInput(_elementId, _relativePosition, _size, _backgroundColor, _placeholder, _maxInputLength) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	placeholder = _placeholder;
 	input = placeholder;
+	max_input_length = _maxInputLength;
 	
 	isTyping = false;
 	
