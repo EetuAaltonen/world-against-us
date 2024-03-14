@@ -383,6 +383,15 @@ export default class NetworkHandler {
                           `Client with UUID ${clientId} requested to join game`
                         );
                       }
+                    } else {
+                      isMessageHandled = this.onInvalidRequest(
+                        new InvalidRequestInfo(
+                          INVALID_REQUEST_ACTION.DISCONNECT,
+                          messageType,
+                          `Invalid player tag length (${MIN_PLAYER_TAG_LENGTH}-${MAX_PLAYER_TAG_LENGTH} characters)`
+                        ),
+                        rinfo
+                      );
                     }
                   }
                 } else {
