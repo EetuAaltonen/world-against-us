@@ -309,6 +309,7 @@ export default class InstanceHandler {
     } else {
       instance = this.getInstance(instanceId);
     }
+
     if (instance !== undefined) {
       if (instance.removePlayer(clientId)) {
         if (!this.checkInstanceRelease(instanceId)) {
@@ -341,19 +342,6 @@ export default class InstanceHandler {
               // TODO: Proper error handling
               ConsoleHandler.Log(
                 `Failed to reset owner for an instance with ID: ${instanceId}`
-              );
-            }
-          }
-        } else {
-          // End scouting stream
-          if (this.activeOperationsScoutStream !== undefined) {
-            const operatingClient = this.networkHandler.clientHandler.getClient(
-              this.activeOperationsScoutStream.operatingClient
-            );
-            if (operatingClient !== undefined) {
-              this.endOperationsScoutStream(
-                this.activeOperationsScoutStream.instanceId,
-                operatingClient
               );
             }
           }
@@ -480,9 +468,29 @@ export default class InstanceHandler {
     return isScoutStreamEnded;
   }
 
+  onInstanceDelete(instance) {
+    // End scouting stream
+    if (this.activeOperationsScoutStream !== undefined) {
+      if (instance.instanceId === this.activeOperationsScoutStream.instanceId) {
+        const operatingClient = this.networkHandler.clientHandler.getClient(
+          this.activeOperationsScoutStream.operatingClient
+        );
+        if (operatingClient !== undefined) {
+          this.endOperationsScoutStream(
+            this.activeOperationsScoutStream.instanceId,
+            operatingClient
+          );
+        }
+      }
+    }
+  }
+
   deleteInstance(instanceId) {
     let isInstanceDeleted = false;
-    if (this.getInstance(instanceId) !== undefined) {
+    var instance = this.getInstance(instanceId);
+    if (instance !== undefined) {
+      this.onInstanceDelete(instance);
+
       delete this.instances[instanceId];
       isInstanceDeleted = true;
     }
