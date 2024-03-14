@@ -257,6 +257,7 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 						scoutingDronePositionX, scoutingDronePositionY,
 						vision_radius
 					);
+					
 					if (isIconVisible)
 					{
 						var positionOnGUI = CalculateIconPosOnGUI(mapIconToDraw.position);
