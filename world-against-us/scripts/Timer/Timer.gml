@@ -4,6 +4,12 @@ function Timer(_setting_time) constructor
 	running_time = 0;
 	is_timer_running = false;
 	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+		return;
+	}
+	
 	static StartTimer = function()
 	{
 		is_timer_running = true;
