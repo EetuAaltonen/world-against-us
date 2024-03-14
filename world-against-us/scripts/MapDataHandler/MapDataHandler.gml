@@ -155,6 +155,9 @@ function MapDataHandler() constructor
 			var worldMapLocation = global.WorldMapLocationData[? target_scout_region.room_index];
 			if (!is_undefined(worldMapLocation))
 			{
+				// RESET PRIORITIZED ICONS
+				dynamic_map_data.ResetPrioritizedIcons();
+				
 				var patrolPath = worldMapLocation.patrol_path;
 				if (!is_undefined(patrolPath))
 				{
@@ -202,11 +205,17 @@ function MapDataHandler() constructor
 									}
 									dynamicMapIcon.simulated_instance_object.StartInterpolateMovement(patrolPosition, INSTANCE_SNAPSHOT_SYNC_INTERVAL);
 									array_delete(_regionSnapshot.local_patrols, existentPatrolIndex, 1);
+									
+									// PRIORITIZE ICON
+									dynamic_map_data.AddPrioritizedIcon(dynamicMapIcon);
+									
 									patrolCount = array_length(_regionSnapshot.local_patrols);
 								} else {
-									// DELETE OUTDATED PATROL MAP ICONS
 									if (dynamicMapIcon.object_name == object_get_name(objBandit))
 									{
+										// DELETE OUTDATED PATROL MAP ICONS
+										var patrol = dynamic_map_data.icons[| i];
+										DeleteStruct(patrol);
 										ds_list_delete(dynamic_map_data.icons, i--);
 										dynamicIconCount = ds_list_size(dynamic_map_data.icons);
 									}
@@ -249,6 +258,9 @@ function MapDataHandler() constructor
 								);
 								mapIcon.simulated_instance_object.network_id = patrol.patrol_id;
 								ds_list_add(dynamic_map_data.icons, mapIcon);
+								
+								// PRIORITIZE ICON
+								dynamic_map_data.AddPrioritizedIcon(mapIcon);
 							}
 						}
 					}
@@ -290,10 +302,15 @@ function MapDataHandler() constructor
 								dynamicMapIcon.simulated_instance_object.StartInterpolateMovement(player.position, INSTANCE_SNAPSHOT_SYNC_INTERVAL);
 								array_delete(_regionSnapshot.local_players, existentPlayerIndex, 1);
 								playerCount = array_length(_regionSnapshot.local_players);
+								
+								// PRIORITIZE ICON
+								dynamic_map_data.AddPrioritizedIcon(dynamicMapIcon);
 							} else {
-								// DELETE OUTDATED PLAYER MAP ICONS
 								if (dynamicMapIcon.object_name == object_get_name(objPlayer))
 								{
+									// DELETE OUTDATED PLAYER MAP ICONS
+									var player = dynamic_map_data.icons[| i];
+									DeleteStruct(player);
 									ds_list_delete(dynamic_map_data.icons, i--);
 									dynamicIconCount = ds_list_size(dynamic_map_data.icons);
 								}
@@ -335,6 +352,9 @@ function MapDataHandler() constructor
 							);
 							mapIcon.simulated_instance_object.network_id = player.network_id;
 							ds_list_add(dynamic_map_data.icons, mapIcon);
+							
+							// PRIORITIZE ICON
+							dynamic_map_data.AddPrioritizedIcon(mapIcon);
 						}
 					}
 				}
