@@ -94,16 +94,6 @@ function NotificationHandler() constructor
 		}
 	}
 	
-	static ResetNotificationAnimations = function()
-	{
-		// DO NOT CLEAR NOTIFICATION ARRAYS,
-		// BECAUSE NOTIFICATIONS CAN'T THEN CARRY OVER THE ROOM CHANGE
-		
-		// RESET TIMERS
-		popup_animation_curve.Reset();
-		log_notification_timer.StartTimer();
-	}
-	
 	static Draw = function()
 	{
 		// PRIORITIZE LOG NOTIFICATIONS

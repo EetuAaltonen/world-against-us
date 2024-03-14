@@ -47,9 +47,6 @@ function RoomChangeHandler() constructor
 			{
 				var destinationRoom = room_change_queue;
 				
-				// RESET NOTIFICATION ANIMATIONS
-				global.NotificationHandlerRef.ResetNotificationAnimations();
-				
 				// RESET ROOM CHANGE QUEUE
 				room_change_queue = undefined;
 				
