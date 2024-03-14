@@ -43,8 +43,8 @@ function CreateWindowMainMenuMultiplayer(_gameWindowId, _zIndex)
 		"MultiplayerPlayerTagInput",
 		playerTagInputPos, inputSize,
 		inputFieldColor,
-		string("*Name length {0}-{1} characters", MIN_PLAYER_TAG_LENGHT, MAX_PLAYER_TAG_LENGHT),
-		MAX_PLAYER_TAG_LENGHT
+		string("*Name length {0}-{1} characters", MIN_PLAYER_TAG_LENGTH, MAX_PLAYER_TAG_LENGTH),
+		MAX_PLAYER_TAG_LENGTH
 	);
 	
 	// ADDRESS INPUT

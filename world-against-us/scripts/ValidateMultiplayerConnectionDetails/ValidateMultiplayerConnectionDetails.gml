@@ -4,12 +4,12 @@ function ValidateMultiplayerConnectionDetails(_playerTagInputElement, _addressIn
 	// VALIDATE PLAYER TAG
 	if (_playerTagInputElement.input != _playerTagInputElement.placeholder)
 	{
-		if (string_length(_playerTagInputElement.input) < MIN_PLAYER_TAG_LENGHT)
+		if (string_length(_playerTagInputElement.input) < MIN_PLAYER_TAG_LENGTH)
 		{
 			isDetailsValid = false;
 			var notificationText = string(
 				"Player tag is too short (min {0}), please try another",
-				MIN_PLAYER_TAG_LENGHT
+				MIN_PLAYER_TAG_LENGTH
 			);
 			global.NotificationHandlerRef.AddNotification(
 				new Notification(
@@ -19,12 +19,12 @@ function ValidateMultiplayerConnectionDetails(_playerTagInputElement, _addressIn
 					NOTIFICATION_TYPE.Log
 				)
 			);
-		} else if (string_length(_playerTagInputElement.input) > MAX_PLAYER_TAG_LENGHT)
+		} else if (string_length(_playerTagInputElement.input) > MAX_PLAYER_TAG_LENGTH)
 		{
 			isDetailsValid = false;
 			var notificationText = string(
 				"Player tag is too long (max {0}), please try another",
-				MAX_PLAYER_TAG_LENGHT
+				MAX_PLAYER_TAG_LENGTH
 			);
 			global.NotificationHandlerRef.AddNotification(
 				new Notification(
