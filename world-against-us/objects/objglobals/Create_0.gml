@@ -43,6 +43,7 @@ randomise();
 #macro SPRITE_NO_MASK sprNoMask
 #macro ITEM_DEFAULT_ANGLE 0
 #macro ITEM_ROTATED_ANGLE 90
+#macro MAX_SPRITE_SIZE 100000
 
 // COLLISION
 #macro OBJECTS_TO_HIT [objHitbox]
