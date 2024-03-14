@@ -121,7 +121,17 @@ function NetworkHandler() constructor
 		var networkPacketSize = 0;
 		if (!is_undefined(socket))
 		{
-			networkPacketSize = network_send_udp_raw(socket, host_address, host_port, pre_alloc_network_buffer, buffer_tell(pre_alloc_network_buffer));
+			try
+			{
+				networkPacketSize = network_send_udp_raw(socket, host_address, host_port, pre_alloc_network_buffer, buffer_tell(pre_alloc_network_buffer));
+			} catch (error)
+			{
+				// CONSOLE LOG
+				show_debug_message(error);
+				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, "Something went wrong on sending network packets, see details in debug logs. Disconnecting...");
+				// DISCONNECT
+				RequestDisconnectSocket(true);
+			}
 		}
 		return networkPacketSize;
 	}
