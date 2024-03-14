@@ -30,9 +30,6 @@ randomise();
 
 // NETWORKING
 #macro UNDEFINED_UUID "nuuuuuuu-uuuu-uuuu-uuuu-ullundefined"
-// TODO: For debugging
-#macro DEFAULT_HOST_ADDRESS "192.168.1.102"
-#macro DEFAULT_HOST_ADDRESS_LOCAL "127.0.0.1"
 #macro DEFAULT_HOST_PORT 54544
 
 // NETWORKING CLIENT

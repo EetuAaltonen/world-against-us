@@ -81,8 +81,7 @@ function CreateWindowMainMenuMultiplayer(_gameWindowId, _zIndex)
 		MAX_PORT_NUMBER_LENGTH
 	);
 	
-	// SET DEFAULT SERVER INFO
-	addressInput.input = DEFAULT_HOST_ADDRESS;
+	// SET DEFAULT SERVER PORT
 	portInput.input = DEFAULT_HOST_PORT;
 	
 	// CONNECT BUTTON
