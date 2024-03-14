@@ -742,6 +742,9 @@ export default class NetworkPacketHandler {
                         patrol.position.x = patrolSnapshotData.position.x;
                         patrol.position.y = patrolSnapshotData.position.y;
                         patrol.routeProgress = patrolSnapshotData.routeProgress;
+                        patrol.routeTime =
+                          patrol.totalRouteTime -
+                          patrol.totalRouteTime * patrol.routeProgress;
                       }
                     }
                   );

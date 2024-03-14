@@ -248,7 +248,7 @@ export default class NetworkHandler {
       if (networkPacket !== undefined) {
         const messageType = networkPacket.header.messageType;
         // Handle pinging
-        if (messageType == MESSAGE_TYPE.PING) {
+        if (messageType === MESSAGE_TYPE.PING) {
           const client = this.clientHandler.getClientBySocket(
             rinfo.port,
             rinfo.address

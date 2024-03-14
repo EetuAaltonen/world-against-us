@@ -140,7 +140,7 @@ export default class WorldStateHandler {
     const keys = Object.keys(WEATHER_CONDITION);
     const randomKey = keys[(keys.length * Math.random()) << 0];
     const newWeatherCondition = WEATHER_CONDITION[randomKey];
-    if (this.weather != newWeatherCondition) {
+    if (this.weather !== newWeatherCondition) {
       this.weather = newWeatherCondition;
       isWeatherRolled = this.networkHandler.broadcastWeather(this.weather);
     } else {

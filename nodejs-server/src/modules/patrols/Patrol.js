@@ -35,13 +35,7 @@ export default class Patrol {
   }
 
   getRouteProgress() {
-    return 1 - this.routeTime / this.totalRouteTime;
-  }
-
-  getScaledRouteProgress() {
-    return Math.round(
-      (1 - this.routeTime / this.totalRouteTime) * FIXED_POINT_PERCENT_PRECISION
-    );
+    return 1 - Math.max(0, this.routeTime) / this.totalRouteTime;
   }
 
   forceResumePatrolling() {

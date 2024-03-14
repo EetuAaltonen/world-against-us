@@ -4,7 +4,7 @@ import NetworkPingSampler from "./NetworkPingSampler.js";
 export default class NetworkConnectionSample {
   constructor() {
     this.sentRateSampleInterval = 1000; // == 1s
-    this.sentRateSampleTimer = 0;
+    this.sentRateSampleTimer = this.sentRateSampleInterval;
     this.dataSentRate = 0;
     this.pingSampler = new NetworkPingSampler();
   }
@@ -18,10 +18,9 @@ export default class NetworkConnectionSample {
 
   updateSentRate(passedTickTime) {
     let isUpdated = true;
-    this.sentRateSampleTimer += passedTickTime;
-    if (this.sentRateSampleTimer >= this.sentRateSampleInterval) {
-      this.sentRateSampleTimer -= this.sentRateSampleInterval;
-      ConsoleHandler.Log(`Data sent ${this.dataSentRate} kb/s`);
+    this.sentRateSampleTimer -= passedTickTime;
+    if (this.sentRateSampleTimer <= 0) {
+      this.sentRateSampleTimer += this.sentRateSampleInterval;
       this.dataSentRate = 0;
     }
     return isUpdated;
