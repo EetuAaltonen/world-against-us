@@ -110,6 +110,9 @@ function NetworkRegionObjectHandler() constructor
 		
 		// RESET PATROL UPDATE TIMER
 		patrol_update_timer.StartTimer();
+		
+		// CLEAR AND CANCEL PATROLS SNAPSHOT DATA MESSAGES
+		global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.PATROLS_SNAPSHOT_DATA);
 	}
 	
 	static SpawnScoutingDrone = function(_instanceObject)

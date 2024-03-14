@@ -517,6 +517,9 @@ function MapDataHandler() constructor
 		
 		scouting_drone = undefined;
 		scouting_drone_position_sync_timer.StopTimer();
+		
+		// CLEAR AND CANCEL SCOUTING DRONE DATA POSITION MESSAGES
+		global.NetworkHandlerRef.CancelPacketsSendQueueAndTrackingByMessageType(MESSAGE_TYPE.SCOUTING_DRONE_DATA_POSITION);
 	}
 	
 	static ResetMapData = function()

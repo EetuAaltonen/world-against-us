@@ -200,7 +200,11 @@ function NetworkPacketHandler() constructor
 								}
 								// RESPOND WITH ACKNOWLEDGMENT TO END INSTANCE LIST REQUEST
 								isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
+							} else {
+								global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Unable to fetch instance list window element on request instance list handling");
 							}
+						} else {
+							global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Unable to fetch world map window on request instance list handling");
 						}
 					} break;
 					case MESSAGE_TYPE.REQUEST_FAST_TRAVEL:
