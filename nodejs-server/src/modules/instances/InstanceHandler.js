@@ -195,7 +195,7 @@ export default class InstanceHandler {
                     instance.parentInstanceId === sourceInstanceId &&
                     instance.roomIndex === destinationRoomIndex
                   ) {
-                    priorityInstanceId = instanceId;
+                    priorityInstanceId = parseInt(instanceId);
                   }
                 });
               }
