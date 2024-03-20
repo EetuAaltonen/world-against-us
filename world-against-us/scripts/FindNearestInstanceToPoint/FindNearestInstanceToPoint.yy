@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Instance",
-    "path": "folders/Scripts/World/Instance.yy",
+    "name": "world-against-us",
+    "path": "world-against-us.yyp",
   },
 }

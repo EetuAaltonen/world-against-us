@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Patrol",
-    "path": "folders/Scripts/Game/Network/Patrol.yy",
+    "name": "world-against-us",
+    "path": "world-against-us.yyp",
   },
 }
