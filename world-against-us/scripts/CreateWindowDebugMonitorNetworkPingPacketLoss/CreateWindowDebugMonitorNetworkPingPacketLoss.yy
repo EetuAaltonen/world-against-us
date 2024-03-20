@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "CreateWindowDebugMonitorNetwork",
+  "name": "CreateWindowDebugMonitorNetworkPingPacketLoss",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

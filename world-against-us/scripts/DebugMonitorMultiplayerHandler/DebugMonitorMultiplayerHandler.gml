@@ -4,15 +4,21 @@ function DebugMonitorMultiplayerHandler() constructor
 	network_entities_samples = [];
 	network_entities_samples_max_count = 300;
 	network_entities_samples_max_value = 1;
-	network_entities_sample_interval = 2000;
+	network_entities_sample_interval = 2000; //ms
 	network_entities_sample_timer = new Timer(network_entities_sample_interval);
 	network_entities_sample_timer.StartTimer();
 	
 	// FAST TRAVEL TIME
 	fast_travel_time_samples = [];
-	fast_travel_time_samples_max_count = 100;
+	fast_travel_time_samples_max_count = 300;
 	fast_travel_time_samples_max_value = 1;
 	fast_travel_sample_start_time = 0;
+	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+		return;
+	}
 	
 	static Update = function()
 	{
@@ -46,9 +52,13 @@ function DebugMonitorMultiplayerHandler() constructor
 					if (!is_undefined(mapDataHandler.dynamic_map_data)) networkEntityCount += ds_list_size(mapDataHandler.dynamic_map_data);
 				}
 			}
+			networkEntityCount = max(0, networkEntityCount);
 			
 			if (array_length(network_entities_samples) >= network_entities_samples_max_count) array_shift(network_entities_samples);
-			array_push(network_entities_samples, networkEntityCount);
+			array_push(
+				network_entities_samples,
+				new DebugMonitorSample(current_time, networkEntityCount)
+			);
 			network_entities_samples_max_value = max(networkEntityCount, network_entities_samples_max_value);
 				
 			// RESTART SAMPLE TIMER
@@ -56,17 +66,29 @@ function DebugMonitorMultiplayerHandler() constructor
 		}
 	}
 	
+	GetMaxEntitiesSamplesValue = function()
+	{
+		return network_entities_samples_max_value;
+	}
+	
+	GetMaxFastTravelTimeValue = function()
+	{
+		return fast_travel_time_samples_max_value;
+	}
 	
 	static StartFastTravelTimeSampling = function()
 	{
-		fast_travel_sample_start_time = current_time;	
+		fast_travel_sample_start_time = current_time;
 	}
 	
 	static EndFastTravelTimeSampling = function()
 	{
 		if (array_length(fast_travel_time_samples) >= fast_travel_time_samples_max_count) array_shift(fast_travel_time_samples);
-		var fastTravelTimeSample = floor(current_time - fast_travel_sample_start_time);
-		array_push(fast_travel_time_samples, fastTravelTimeSample);
+		var fastTravelTimeSample = max(0, floor(current_time - fast_travel_sample_start_time));
+		array_push(
+			fast_travel_time_samples,
+			new DebugMonitorSample(current_time, fastTravelTimeSample)
+		);
 		fast_travel_time_samples_max_value = max(fastTravelTimeSample, fast_travel_time_samples_max_value);
 		fast_travel_sample_start_time = 0;
 	}
