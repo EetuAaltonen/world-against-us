@@ -19,10 +19,6 @@ function DebugMonitorGameHandler() constructor
 	delta_time_samples = [];
 	delta_time_samples_max_value = 1;
 	
-	// MEMORY USAGE
-	memory_usage_samples = [];
-	memory_usage_samples_max_value = 1;
-	
 	static Update = function()
 	{
 		// UPDATE FPS SAMPLING
@@ -46,13 +42,6 @@ function DebugMonitorGameHandler() constructor
 			var deltaTimeSample = floor(delta_time);
 			array_push(delta_time_samples, deltaTimeSample);
 			delta_time_samples_max_value = max(deltaTimeSample, delta_time_samples_max_value);
-			
-			// SAMPLE MEMORY USAGE
-			if (array_length(memory_usage_samples) >= fps_samples_max_count) array_shift(memory_usage_samples);
-			var memoryDump = debug_event("DumpMemory", true);
-			var memoryUsageSample = floor((memoryDump.totalUsed ?? 0) * 0.000001);
-			array_push(memory_usage_samples, memoryUsageSample);
-			memory_usage_samples_max_value = max(memoryUsageSample, memory_usage_samples_max_value);
 			
 			// RESTART SAMPLE TIMER
 			game_sample_timer.StartTimer();
