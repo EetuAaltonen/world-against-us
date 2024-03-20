@@ -44,6 +44,7 @@ function NetworkConnectionSampler() constructor
 		data_rate_sample_timer.Update();
 		if (data_rate_sample_timer.IsTimerStopped())
 		{
+			// UPDATE LAST DATA RATES
 			last_data_out_rate = data_out_rate;
 			data_out_rate = 0;
 			
@@ -51,18 +52,9 @@ function NetworkConnectionSampler() constructor
 			data_in_rate = 0;
 			
 			// DEBUG MONITOR
-			var monitorHandlerRef = global.DebugMonitorNetworkHandlerRef;
+			global.DebugMonitorNetworkHandlerRef.SampleDataRates(last_data_out_rate, last_data_in_rate);
 			
-			if (array_length(monitorHandlerRef.data_out_samples) >= monitorHandlerRef.data_out_samples_max_count) array_shift(monitorHandlerRef.data_out_samples);
-			var dataOutSampleKilobits = BytesToKilobits(last_data_out_rate);
-			array_push(monitorHandlerRef.data_out_samples, dataOutSampleKilobits);
-			monitorHandlerRef.data_out_samples_max_value = max(dataOutSampleKilobits, monitorHandlerRef.data_out_samples_max_value);
-			
-			if (array_length(monitorHandlerRef.data_in_samples) >= monitorHandlerRef.data_in_samples_max_count) array_shift(monitorHandlerRef.data_in_samples);
-			var dataInSampleKilobits = BytesToKilobits(last_data_in_rate);
-			array_push(monitorHandlerRef.data_in_samples, dataInSampleKilobits);
-			monitorHandlerRef.data_in_samples_max_value = max(dataInSampleKilobits, monitorHandlerRef.data_in_samples_max_value);
-			
+			// RESET DATA RATE SAMPLE TIMER
 			data_rate_sample_timer.StartTimer();
 		}
 	}
@@ -112,10 +104,8 @@ function NetworkConnectionSampler() constructor
 		} else {
 			ping = current_time - _receivedPingSample;
 			
-			var monitorHandlerRef = global.DebugMonitorNetworkHandlerRef;
-			if (array_length(monitorHandlerRef.ping_samples) >= monitorHandlerRef.ping_samples_max_count) array_shift(monitorHandlerRef.ping_samples);
-			array_push(monitorHandlerRef.ping_samples, ping);
-			monitorHandlerRef.ping_samples_max_value = max(ping, monitorHandlerRef.ping_samples_max_value);	
+			// DEBUG MONITOR
+			global.DebugMonitorNetworkHandlerRef.SamplePing(ping);
 		}
 		
 		// STOP TIMEOUT TIMER

@@ -1,4 +1,4 @@
-function CreateWindowDebugMonitorMultiplayer(_gameWindowId, _zIndex, _debugMultiplayerHandlerRef)
+function CreateWindowDebugMonitorMultiplayerEntityFastTravel(_gameWindowId, _zIndex, _debugMultiplayerHandlerRef)
 {
 	var windowSize = new Size(global.GUIW, global.GUIH);
 	var windowStyle = new GameWindowStyle(c_black, 1);
@@ -18,46 +18,36 @@ function CreateWindowDebugMonitorMultiplayer(_gameWindowId, _zIndex, _debugMulti
 		"Debug Monitor - Multiplayer", font_default, fa_left, fa_top, c_white, 1
 	);
 	
+	// NETWORK ENTITY GRAPH
+	var monitorGraphSize = new Size(1700, 300);
 	var monitorGraphPosition = new Vector2(80, 150);
-	var monitorGraphSize = new Size(800, 300);
-	var networkEntitiesSamplesClone = [];
-	array_copy(
-		networkEntitiesSamplesClone, 0,
-		_debugMultiplayerHandlerRef.network_entities_samples, 0,
-		array_length(_debugMultiplayerHandlerRef.network_entities_samples)
-	);
 	var monitorNetworkEntitiesGraphElement = new WindowDebugMonitorGraph(
 		"MonitorNetworkEntitiesGraph",
 		monitorGraphPosition,
 		monitorGraphSize,
-		#1f1f1f,
-		networkEntitiesSamplesClone,
+		undefined,
+		_debugMultiplayerHandlerRef.network_entities_samples,
 		"Network entity count sampling",
 		"Entity count (active)",
 		_debugMultiplayerHandlerRef.network_entities_sample_interval,
-		_debugMultiplayerHandlerRef.network_entities_samples_max_value,
+		_debugMultiplayerHandlerRef.GetMaxEntitiesSamplesValue,
 		"count",
 		#2bbbf2,
 		#f2a035
 	);
 	
-	monitorGraphPosition = new Vector2(970, 150);
-	var fastTravelTimeSamplesClone = [];
-	array_copy(
-		fastTravelTimeSamplesClone, 0,
-		_debugMultiplayerHandlerRef.fast_travel_time_samples, 0,
-		array_length(_debugMultiplayerHandlerRef.fast_travel_time_samples)
-	);
+	// FAST TRAVEL TIME GRAPH
+	monitorGraphPosition = new Vector2(80, 570);
 	var monitorFastTravelTimeGraphElement = new WindowDebugMonitorGraph(
 		"MonitorFastTravelTimeGraph",
 		monitorGraphPosition,
 		monitorGraphSize,
-		#1f1f1f,
-		fastTravelTimeSamplesClone,
+		undefined,
+		_debugMultiplayerHandlerRef.fast_travel_time_samples,
 		"Overall fast travel time sampling",
 		"Fast travel time",
 		undefined,
-		_debugMultiplayerHandlerRef.fast_travel_time_samples_max_value,
+		_debugMultiplayerHandlerRef.GetMaxFastTravelTimeValue,
 		"ms",
 		#2bbbf2,
 		#f2a035
