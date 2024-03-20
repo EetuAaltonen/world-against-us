@@ -6,6 +6,7 @@
   "scripts": {
     "test": "node --test",
     "start": "node ./src/server.js",
+    "dev-monitor": "clinic doctor --on-port 'autocannon localhost:$PORT' -- node ./src/server.js",
     "dev": "nodemon ./src/server.js"
   },
   "author": "",

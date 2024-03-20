@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Timers",
-    "path": "folders/Scripts/Game/Data/Timers.yy",
+    "name": "world-against-us",
+    "path": "world-against-us.yyp",
   },
 }
