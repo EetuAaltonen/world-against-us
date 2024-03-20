@@ -1,10 +1,10 @@
-function WindowDebugMonitorGraph(_elementId, _relativePosition, _size, _backgroundColor, _samples, _graphTitle, _graphLegendTitle, _sampleInterval, _maxSampleValue, _yAxisTitle, _graphLineColor, _drawValuePointColor) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
+function WindowDebugMonitorGraph(_elementId, _relativePosition, _size, _backgroundColor, _samples, _graphTitle, _graphLegendTitle, _sampleInterval, _maxSampleValueGetterFunc, _yAxisTitle, _graphLineColor, _drawValuePointColor) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	samples = _samples;
 	graphTitle = _graphTitle;
 	graphLegendTitle = _graphLegendTitle;
 	sampleInterval = _sampleInterval;
-	maxSampleValue = _maxSampleValue;
+	maxSampleValueGetterFunc = _maxSampleValueGetterFunc;
 	yAxisTitle = _yAxisTitle;
 	graphLineColor = _graphLineColor;
 	drawValuePointColor = _drawValuePointColor;
@@ -13,11 +13,22 @@ function WindowDebugMonitorGraph(_elementId, _relativePosition, _size, _backgrou
 	{
 		var framePadding = 10;
 		var valueLineStepping = 1 / 5;
+		var maxSampleValue = maxSampleValueGetterFunc();
 		var graphMaxValueRaw = maxSampleValue + (maxSampleValue * 0.1);
 		var graphMaxValue = ceil(graphMaxValueRaw / 5) * 5;
 		
 		draw_set_font(font_console);
 		draw_set_color(#dbdbdb);
+		
+		// DRAW GRAPH BACKGROUND
+		var graphBackgroundScale = ScaleSpriteToFitSizeStretch(sprDebugMonitroGraphWide, size);
+		draw_sprite_ext(
+			sprDebugMonitroGraphWide, 0,
+			position.X, position.Y,
+			graphBackgroundScale.X,
+			graphBackgroundScale.Y,
+			0, c_white, 1
+		);
 		
 		// DRAW GRAPH TITLE
 		draw_set_halign(fa_center);
@@ -49,7 +60,6 @@ function WindowDebugMonitorGraph(_elementId, _relativePosition, _size, _backgrou
 		draw_set_halign(fa_right);
 		draw_set_valign(fa_middle);
 		
-		// DRAW GRAPH LINES
 		// DRAW TOP LINE VALUE
 		draw_text(
 			position.X,
@@ -60,13 +70,6 @@ function WindowDebugMonitorGraph(_elementId, _relativePosition, _size, _backgrou
 		for (var i = 0; i < 4; i++)
 		{
 			var lineYPos = position.Y + (size.h - framePadding - ((size.h - (framePadding * 2)) * (valueLineStepping * (i + 1))));
-			draw_line_width_color(
-				position.X + framePadding,
-				lineYPos,
-				position.X + size.w - framePadding,
-				lineYPos,
-				2, #5e5e5e, #5e5e5e
-			);
 			// DRAW LINE VALUE
 			draw_text(
 				position.X,
@@ -74,22 +77,6 @@ function WindowDebugMonitorGraph(_elementId, _relativePosition, _size, _backgrou
 				string("{0}", floor(graphMaxValue * (valueLineStepping * (i + 1))))
 			);
 		}
-		
-		// DRAW GRAPH FRAME
-		draw_line_width_color(
-			position.X + framePadding,
-			position.Y + framePadding,
-			position.X + framePadding,
-			position.Y + size.h - framePadding,
-			4, #dbdbdb, #dbdbdb
-		);
-		draw_line_width_color(
-			position.X + framePadding,
-			position.Y + size.h - framePadding,
-			position.X + size.w - framePadding,
-			position.Y + size.h - framePadding,
-			4, #dbdbdb, #dbdbdb
-		);
 		
 		// DRAW GRAPH AXIS TITLES
 		draw_set_halign(fa_left);
@@ -133,8 +120,14 @@ function WindowDebugMonitorGraph(_elementId, _relativePosition, _size, _backgrou
 			
 				// SAMPLING PERIOD
 				draw_set_halign(fa_right);
-				var totalSampleTimeMinutes = floor((sampleInterval * sampleCount) / 60000);
-				var totalSampleTimeSeconds = floor(((sampleInterval * sampleCount) % 60000) / 1000);
+				var firstSample = array_first(samples);
+				var samplingStartTime = (!is_undefined(firstSample)) ? (firstSample.time_stamp ?? current_time) : 0;
+				var lastSample = array_last(samples);
+				var samplingEndTime = (!is_undefined(lastSample)) ? (lastSample.time_stamp ?? current_time) : 0;
+				var samplingTime = (samplingEndTime - samplingStartTime);
+				
+				var totalSampleTimeMinutes = floor(samplingTime / 60000);
+				var totalSampleTimeSeconds = floor((samplingTime % 60000) / 1000);
 				var totalSampleMinutesFormatText = (totalSampleTimeMinutes < 10) ? string("0{0}", totalSampleTimeMinutes) : totalSampleTimeMinutes;
 				var totalSampleSecondsFormatText = (totalSampleTimeSeconds < 10) ? string("0{0}", totalSampleTimeSeconds) : totalSampleTimeSeconds;
 				var samplingPeriodText = string(
@@ -154,15 +147,23 @@ function WindowDebugMonitorGraph(_elementId, _relativePosition, _size, _backgrou
 			for (var i = 0; i < sampleCount; i++)
 			{
 				var sample = samples[@ i];
-				var sampleNormalized = (sample / graphMaxValue);
+				var sampleNormalized = (sample.value / graphMaxValue);
 				var samplePointX = position.X + graphPointXPadding + (graphPointMargin * i);
 				var samplePointY = position.Y + (size.h - framePadding) - ((size.h - (framePadding * 2)) * sampleNormalized);
 				var nextIndex = (i + 1);
-				var nextSample = (nextIndex < sampleCount) ? samples[@ nextIndex] : undefined;
-				// DRAW SAMPLE LINE
-				if (!is_undefined(nextSample))
+				var nextSampleValue = undefined;
+				if (nextIndex < sampleCount)
 				{
-					var nextSampleNormalized = (nextSample / graphMaxValue);
+					var nextSample = samples[@ nextIndex];
+					if (!is_undefined(nextSample))
+					{
+						nextSampleValue = nextSample.value ?? 0;
+					}
+				}
+				// DRAW SAMPLE LINE
+				if (!is_undefined(nextSampleValue))
+				{
+					var nextSampleNormalized = (nextSampleValue / graphMaxValue);
 					draw_line_width_color(
 						samplePointX, samplePointY,
 						position.X + graphPointXPadding + (graphPointMargin * (i + 1)),
@@ -190,7 +191,7 @@ function WindowDebugMonitorGraph(_elementId, _relativePosition, _size, _backgrou
 					draw_text(
 						position.X + size.w - framePadding,
 						samplePointY,
-						string(sample)
+						string(sample.value)
 					);
 				}
 			}
