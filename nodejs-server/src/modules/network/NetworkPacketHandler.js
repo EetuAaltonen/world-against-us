@@ -2,6 +2,7 @@ import MESSAGE_TYPE from "./MessageType.js";
 import PACKET_PRIORITY from "./PacketPriority.js";
 import INVALID_REQUEST_ACTION from "../invalid_request/InvalidRequestAction.js";
 
+import InvalidRequestInfo from "../invalid_request/InvalidRequestInfo.js";
 import NetworkQueueEntry from "./NetworkQueueEntry.js";
 import NetworkPacketHeader from "../network_packets/NetworkPacketHeader.js";
 import NetworkPacket from "../network_packets/NetworkPacket.js";
