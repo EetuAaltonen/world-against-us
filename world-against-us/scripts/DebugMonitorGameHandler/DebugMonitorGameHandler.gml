@@ -19,6 +19,12 @@ function DebugMonitorGameHandler() constructor
 	delta_time_samples = [];
 	delta_time_samples_max_value = 1;
 	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+		return;
+	}
+	
 	static Update = function()
 	{
 		// UPDATE FPS SAMPLING

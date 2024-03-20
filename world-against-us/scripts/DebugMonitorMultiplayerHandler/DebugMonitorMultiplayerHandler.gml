@@ -14,6 +14,12 @@ function DebugMonitorMultiplayerHandler() constructor
 	fast_travel_time_samples_max_value = 1;
 	fast_travel_sample_start_time = 0;
 	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+		return;
+	}
+	
 	static Update = function()
 	{
 		// UPDATE NETWORK ENTITY SAMPLING
