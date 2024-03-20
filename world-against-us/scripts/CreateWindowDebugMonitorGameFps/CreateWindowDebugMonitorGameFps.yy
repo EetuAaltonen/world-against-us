@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "CreateWindowDebugMonitorGame",
+  "name": "CreateWindowDebugMonitorGameFps",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
