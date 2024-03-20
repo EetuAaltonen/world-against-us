@@ -6,9 +6,11 @@ enum GUI_VIEW
 	Settings,
 	SaveSelection,
 	// DEBUG MONITOR
-	DebugMonitorGame,
-	DebugMonitorNetwork,
-	DebugMonitorMultiplayer,
+	DebugMonitorGameFPS,
+	DebugMonitorGameDeltaTime,
+	DebugMonitorNetworkPingPacketLoss,
+	DebugMonitorNetworkDataRate,
+	DebugMonitorMultiplayerEntityFastTravel,
 	// PLAYER OVERVIEW
 	PlayerBackpack,
 	PlayerHealthStatus,
