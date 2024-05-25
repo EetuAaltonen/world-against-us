@@ -19,27 +19,24 @@ function WorldStateHandler() constructor
 	
 	InitWorldStates();
 	
-	static InitWorldStates = function()
-	{
-		ClearDSMapAndDeleteValues(world_states);
-		world_states[? WORLD_STATE_UNLOCK_WALKIE_TALKIE] = false;
-	}
-	
-	static SetWorldState = function(_worldStateIndex, _new_value)
-	{
-		world_states[? _worldStateIndex] = _new_value;
-	}
-	
 	static OnDestroy = function()
 	{
 		ClearDSMapAndDeleteValues(world_states);
 		ds_map_destroy(world_states);
 	}
 	
+	static InitWorldStates = function()
+	{
+		ClearDSMapAndDeleteValues(world_states);
+		world_states[? WORLD_STATE_UNLOCK_WALKIE_TALKIE] = false;
+	}
+	
+	/// @function		Update()
+	/// @description	Called on every game loop
+	/// @return {bool}
 	static Update = function()
 	{
 		date_time.Update();
-		
 		// UPDATE SKY LIGHT LEVEL
 		if (sky_darkness_last_update_minutes != date_time.minutes)
 		{
@@ -85,27 +82,55 @@ function WorldStateHandler() constructor
 		}
 	}
 	
+	static SetWorldTime = function(_networkWorldStateSync)
+	{
+		date_time.year = _networkWorldStateSync.date_time.year;
+		date_time.month = _networkWorldStateSync.date_time.month;
+		date_time.day = _networkWorldStateSync.date_time.day;
+		date_time.hours = _networkWorldStateSync.date_time.hours;
+		date_time.minutes = _networkWorldStateSync.date_time.minutes;
+		date_time.seconds = _networkWorldStateSync.date_time.seconds;
+		date_time.milliseconds = _networkWorldStateSync.date_time.milliseconds;
+	}
+	
+	/// @function		SetWeather(_weather)
+	/// @description	Set a new weather condition
+	///					and updates visual effects
+	/// @param	{number} weather
+	/// @return {bool}
 	static SetWeather = function(_weather)
 	{
 		var isWeatherSet = false;
 		if (weather != _weather)
 		{
 			// CLEAR CURRENT WEATHER
-			var currentFxLayerName = string("{0}{1}", LAYER_EFFECT_PREFIX, array_get(WEATHER_TEXT, weather));
+			var currentFxLayerName = string(
+				"{0}{1}",
+				LAYER_EFFECT_PREFIX,
+				array_get(WEATHER_TEXT, weather)
+			);
 			var currentFxLayerId = layer_get_id(currentFxLayerName);
 			if (layer_exists(currentFxLayerId))
 			{
-				if (layer_fx_is_enabled(currentFxLayerId)) { layer_enable_fx(currentFxLayerId, false); }
+				if (layer_fx_is_enabled(currentFxLayerId))
+				{
+					layer_enable_fx(currentFxLayerId, false);
+				}
 			}
-		
 			// SET NEW WEATHER
 			weather = _weather;
 			UpdateWeatherEffect();
 			isWeatherSet = true;
 		} else {
+			// NO CHANGES
 			isWeatherSet = true;
 		}
 		return isWeatherSet;
+	}
+	
+	static SetWorldStateProperty = function(_worldStateIndex, _new_value)
+	{
+		world_states[? _worldStateIndex] = _new_value;
 	}
 	
 	static UpdateWeatherEffect = function()
