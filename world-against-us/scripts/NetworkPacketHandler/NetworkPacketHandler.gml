@@ -29,17 +29,16 @@ function NetworkPacketHandler() constructor
 						var networkWorldStateSync = payload;
 						if (!is_undefined(networkWorldStateSync))
 						{
-							global.WorldStateHandlerRef.date_time.year = networkWorldStateSync.date_time.year;
-							global.WorldStateHandlerRef.date_time.month = networkWorldStateSync.date_time.month;
-							global.WorldStateHandlerRef.date_time.day = networkWorldStateSync.date_time.day;
-							global.WorldStateHandlerRef.date_time.hours = networkWorldStateSync.date_time.hours;
-							global.WorldStateHandlerRef.date_time.minutes = networkWorldStateSync.date_time.minutes;
-							global.WorldStateHandlerRef.date_time.seconds = networkWorldStateSync.date_time.seconds;
-							global.WorldStateHandlerRef.date_time.milliseconds = networkWorldStateSync.date_time.milliseconds;
-									
-							global.WorldStateHandlerRef.SetWeather(networkWorldStateSync.weather);
-							// ACKNOWLEDGMENT RESPONSE ON NEXT STEP
 							isPacketHandled = true;
+							
+							if (global.WorldStateHandlerRef.SetWorldTime(networkWorldStateSync))
+							{
+								if (global.WorldStateHandlerRef.SetWeather(networkWorldStateSync.weather))
+								{
+									// RESPOND WITH ACKNOWLEDGMENT TO SYNC WORLD STATE
+									isPacketHandled = global.NetworkHandlerRef.QueueAcknowledgmentResponse();
+								}
+							}
 						}
 					} break;
 					case MESSAGE_TYPE.SYNC_WORLD_STATE_WEATHER:
