@@ -4,7 +4,7 @@ viewSize = viewBaseSize.Clone();
 viewPosition = new Vector2(0, 0);
 
 // ZOOM PROPERTIES
-baseMaxZoom = 2;
+baseMaxZoom = 4;
 maxZoom = baseMaxZoom;
 baseMinZoom = 1;
 minZoom = baseMinZoom;
