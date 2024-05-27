@@ -123,7 +123,11 @@ function NetworkHandler() constructor
 		{
 			try
 			{
-				networkPacketSize = network_send_udp_raw(socket, host_address, host_port, pre_alloc_network_buffer, buffer_tell(pre_alloc_network_buffer));
+				networkPacketSize = network_send_udp_raw(
+					socket,
+					host_address, host_port,
+					pre_alloc_network_buffer, buffer_tell(pre_alloc_network_buffer)
+				);
 			} catch (error)
 			{
 				// CONSOLE LOG

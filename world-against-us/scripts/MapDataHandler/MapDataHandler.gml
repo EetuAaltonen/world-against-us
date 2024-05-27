@@ -482,6 +482,11 @@ function MapDataHandler() constructor
 		}
 	}
 	
+	/// @function			ReadStaticMapDataFromFile(_fileName)
+	/// @description		Reads static map data from a target file
+	///						and overwrites current map data
+	/// @param	{string} fileName	File name (without a path)
+	/// @return {boolean}
 	static ReadStaticMapDataFromFile = function(_fileName)
 	{
 		var isMapDataReaded = false;
@@ -492,7 +497,7 @@ function MapDataHandler() constructor
 		
 		// DESTROY PREV ICONS DS LIST
 		static_map_data.OnDestroy();
-		
+		// UPDATE AND SORT ICONS
 		static_map_data.icons = parsedMapData;
 		static_map_data.SortIcons();
 		

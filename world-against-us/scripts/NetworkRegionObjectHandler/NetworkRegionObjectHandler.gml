@@ -16,6 +16,8 @@ function NetworkRegionObjectHandler() constructor
 		scouting_drone = undefined;
 	}
 	
+	/// @function		Update()
+	/// @description	Executed on every game loop
 	static Update = function()
 	{
 		if (IS_ROOM_PATROL_ROUTED)
