@@ -91,6 +91,12 @@ function NPCPatrolHandler() constructor
 		return isPatrolsSynced;
 	}
 	
+	/// @function		SyncPatrolsSnapshot(_patrolsSnapshotData)
+	/// @description	Loops through a given ACK range
+	///					and removes matching packets from in-flight tracking
+	/// @param	{number} ackCount
+	/// @param	{list} ackRange
+	/// @return {bool}
 	static SyncPatrolsSnapshot = function(_patrolsSnapshotData)
 	{
 		var isPatrolsSynced = false;

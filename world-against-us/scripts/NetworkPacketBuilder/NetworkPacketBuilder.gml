@@ -113,7 +113,7 @@ function NetworkPacketBuilder() constructor
 					} break;
 					case MESSAGE_TYPE.PLAYER_DATA_POSITION:
 					{
-						var playerPosition = _networkPacketPayload;
+						var playerPosition = _networkPacketPayload; // Already scaled
 						buffer_write(_networkBuffer, buffer_u32, playerPosition.X);
 						buffer_write(_networkBuffer, buffer_u32, playerPosition.Y);
 						isPayloadWritten = true;

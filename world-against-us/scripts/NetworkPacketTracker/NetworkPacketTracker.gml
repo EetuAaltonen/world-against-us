@@ -78,6 +78,11 @@ function NetworkPacketTracker() constructor
 		}
 	}
 	
+	/// @function			PatchNetworkPacketAckRange(_networkPacket)
+	/// @description		Patches the ACK Count and ACK Range
+	///						to the outgoing network packet
+	/// @param	{struct} networkPacket
+	/// @return {bool}
 	static PatchNetworkPacketAckRange = function(_networkPacket)
 	{
 		var isAckRangePatched = false;
@@ -92,7 +97,10 @@ function NetworkPacketTracker() constructor
 			} else {
 				if (_networkPacket.header.message_type == MESSAGE_TYPE.ACKNOWLEDGMENT)
 				{
-					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, "Unnecessary MESSAGE_TYPE.ACKNOWLEDGMENT dropped");
+					global.ConsoleHandlerRef.AddConsoleLog(
+						CONSOLE_LOG_TYPE.WARNING,
+						"Unnecessary MESSAGE_TYPE.ACKNOWLEDGMENT dropped"
+					);
 				} else {
 					isAckRangePatched = true;	
 				}
@@ -120,6 +128,11 @@ function NetworkPacketTracker() constructor
 		return isSequenceNumberPatched;
 	}
 	
+	/// @function			PatchInFlightPacketTrack(_networkPacket)
+	/// @description		Patches the tracked in-flight packet's timeout properties
+	///						and starts the timeout timer if needed
+	/// @param	{struct} networkPacket
+	/// @return {bool}
 	static PatchInFlightPacketTrack = function(_networkPacket)
 	{
 		var isPacketTrackPatched = false;
@@ -130,16 +143,27 @@ function NetworkPacketTracker() constructor
 			
 			if (is_undefined(_networkPacket.ack_timeout_callback_func))
 			{
-				var consoleLog = string("Network packet with message type {0} is missing ACK timeout callback function", _networkPacket.header.message_type);
-				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
+				var consoleLog = string(
+					"Network packet with message type {0} is missing ACK timeout callback function",
+					_networkPacket.header.message_type
+				);
+				global.ConsoleHandlerRef.AddConsoleLog(
+					CONSOLE_LOG_TYPE.WARNING,
+					consoleLog
+				);
 			}
-			
 			isPacketTrackPatched = true;
 		} else {
 			if (!is_undefined(_networkPacket.ack_timeout_callback_func))
 			{
-				var consoleLog = string("Network packet with message type {0} has unnecessary ACK timeout callback function", _networkPacket.header.message_type);
-				global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.WARNING, consoleLog);
+				var consoleLog = string(
+					"Network packet with message type {0} has unnecessary ACK timeout callback function",
+					_networkPacket.header.message_type
+				);
+				global.ConsoleHandlerRef.AddConsoleLog(
+					CONSOLE_LOG_TYPE.WARNING,
+					consoleLog
+				);
 			}
 			
 			// IN-FLIGHT PACKET TRACK SET TO FALSE IN DELIVERY POLICY
