@@ -9,6 +9,43 @@ function NotificationHandler() constructor
 	popup_notifications = [];
 	popup_animation_curve = new AnimationCurve(animNotification, "curveNotificationSlideIn", 2);
 	
+	static Update = function()
+	{
+		// PRIORITIZE LOG NOTIFICATIONS
+		var logNotificationCount = array_length(log_notifications);
+		if (logNotificationCount > 0)
+		{
+			log_notification_timer.Update();
+			if (log_notification_timer.IsTimerStopped())
+			{
+				array_delete(log_notifications, 0, 1);
+				log_notification_timer.StartTimer();
+			}
+		} else {
+			var popupNotificationCount = array_length(popup_notifications);
+			if (popupNotificationCount > 0)
+			{
+				if (popup_animation_curve.IsEnded())
+				{
+					if (!popup_animation_curve.isReversed)
+					{
+						popup_animation_curve.PlayReversed();
+					} else {
+						array_delete(popup_notifications, 0, 1);
+						popup_animation_curve.Reset();
+					}
+				} else {
+					if (popup_animation_curve.isPlaying)
+					{
+						popup_animation_curve.Update();
+					} else {
+						popup_animation_curve.Play();
+					}
+				}
+			}
+		}
+	}
+	
 	static AddNotification = function(_notification)
 	{
 		switch (_notification.type)
@@ -55,43 +92,6 @@ function NotificationHandler() constructor
 				NOTIFICATION_TYPE.Popup
 			)
 		);
-	}
-	
-	static Update = function()
-	{
-		// PRIORITIZE LOG NOTIFICATIONS
-		var logNotificationCount = array_length(log_notifications);
-		if (logNotificationCount > 0)
-		{
-			log_notification_timer.Update();
-			if (log_notification_timer.IsTimerStopped())
-			{
-				array_delete(log_notifications, 0, 1);
-				log_notification_timer.StartTimer();
-			}
-		} else {
-			var popupNotificationCount = array_length(popup_notifications);
-			if (popupNotificationCount > 0)
-			{
-				if (popup_animation_curve.IsEnded())
-				{
-					if (!popup_animation_curve.isReversed)
-					{
-						popup_animation_curve.PlayReversed();
-					} else {
-						array_delete(popup_notifications, 0, 1);
-						popup_animation_curve.Reset();
-					}
-				} else {
-					if (popup_animation_curve.isPlaying)
-					{
-						popup_animation_curve.Update();
-					} else {
-						popup_animation_curve.Play();
-					}
-				}
-			}
-		}
 	}
 	
 	static Draw = function()
