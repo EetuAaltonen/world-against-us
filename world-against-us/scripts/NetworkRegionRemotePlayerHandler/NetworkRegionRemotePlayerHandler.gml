@@ -100,33 +100,41 @@ function NetworkRegionRemotePlayerHandler() constructor
 		return isSynced;
 	}
 	
+	/// @function			UpdateRegionRemotePosition(_remoteInstanceObject)
+	/// @description		Updates remote player's position inside the local instance
+	///						using provided instance object data
+	/// @param	{struct} remoteInstanceObject
+	/// @return {bool}
 	static UpdateRegionRemotePosition = function(_remoteInstanceObject)
 	{
+		var isPositionUpdated = false;
 		if (!is_undefined(_remoteInstanceObject))
 		{
-			var playerInstanceObject = GetRemotePlayer(_remoteInstanceObject.network_id);
-			if (!is_undefined(playerInstanceObject))
+			var remotePlayer = GetRemotePlayer(_remoteInstanceObject.network_id);
+			if (!is_undefined(remotePlayer))
 			{
 				var positionThreshold = 50;
 				var distance = point_distance(
 					_remoteInstanceObject.position.X,
 					_remoteInstanceObject.position.Y,
-					playerInstanceObject.position.X,
-					playerInstanceObject.position.Y
+					remotePlayer.position.X,
+					remotePlayer.position.Y
 				);
 				if (distance > positionThreshold)
 				{
-					var playerInstanceRef = playerInstanceObject.instance_ref;
+					var playerInstanceRef = remotePlayer.instance_ref;
 					if (instance_exists(playerInstanceRef))
 					{
-						playerInstanceObject.position.X = playerInstanceRef.x;
-						playerInstanceObject.position.Y = playerInstanceRef.y;
-						playerInstanceObject.start_position = playerInstanceObject.position;
-						playerInstanceObject.StartInterpolateMovement(_remoteInstanceObject.position, 50);
+						remotePlayer.position.X = playerInstanceRef.x;
+						remotePlayer.position.Y = playerInstanceRef.y;
+						remotePlayer.start_position = remotePlayer.position;
+						remotePlayer.StartInterpolateMovement(_remoteInstanceObject.position, 50);
 					}
 				}
+				isPositionUpdated = true;
 			}
 		}
+		return isPositionUpdated;
 	}
 	
 	static UpdateRegionRemoteInput = function(_remoteDataInput)

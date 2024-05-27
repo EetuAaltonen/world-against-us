@@ -110,8 +110,7 @@ function NetworkPacketHandler() constructor
 						if (!is_undefined(remoteInstanceObject))
 						{
 							// TODO: Polish client side interpolation / input simulation
-							global.NetworkRegionRemotePlayerHandlerRef.UpdateRegionRemotePosition(remoteInstanceObject);
-							isPacketHandled = true;
+							isPacketHandled = global.NetworkRegionRemotePlayerHandlerRef.UpdateRegionRemotePosition(remoteInstanceObject);
 						}
 					} break;
 					case MESSAGE_TYPE.REMOTE_DATA_MOVEMENT_INPUT:
