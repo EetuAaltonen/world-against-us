@@ -56,11 +56,32 @@ function RoomChangeHandler() constructor
 		}
 	}
 	
+	/// @function			RequestFastTravel(_fastTravelInfo)
+	/// @description		Requests room change in singleplayer mode
+	///						or sends a fast-travel request to the server
+	/// @param	{struct} fastTravelInfo
+	/// @return {void}
 	static RequestFastTravel = function(_fastTravelInfo)
 	{
-		if (global.MultiplayerMode)
+		if (!global.MultiplayerMode)
 		{
-			// MULTIPLAYER
+#region Offline
+			if (RequestRoomChange(_fastTravelInfo.destination_room_index))
+			{
+				if (!RequestCacheFastTravelInfo(_fastTravelInfo))
+				{
+					global.ConsoleHandlerRef.AddConsoleLog(
+						CONSOLE_LOG_TYPE.ERROR,
+						string(
+							"Unable to fast travel to room '{0}'",
+							_fastTravelInfo.destination_room_index
+						)
+					);
+				}
+			}
+#endregion
+		} else {
+#region Multiplayer
 			var guiState = new GUIState(
 				GUI_STATE.WorldMapFastTravelQueue, undefined, undefined,
 				[
@@ -89,16 +110,8 @@ function RoomChangeHandler() constructor
 					show_debug_message("Failed to request fast travel");	
 				}
 			}
-		} else {
-			// SINGLEPLAYER
-			if (RequestRoomChange(_fastTravelInfo.destination_room_index))
-			{
-				if (!RequestCacheFastTravelInfo(_fastTravelInfo))
-				{
-					global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, string("Unable to fast travel to room '{0}'", _fastTravelInfo.destination_room_index));
-				}
-			}
 		}
+#endregion
 	}
 	
 	static RequestCacheFastTravelInfo = function(_fastTravelInfo)
