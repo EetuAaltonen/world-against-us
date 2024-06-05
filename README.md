@@ -1,6 +1,4 @@
-# world-against-us
-
-Gamemaker Studio 2 and Node.js server integration for real-time 2D multiplayer game called 'World Against Us'.
+# World Against Us
 
 ## Singleplayer
 
@@ -15,8 +13,8 @@ Core features:
 
 ## Multiplayer
 
-Other players can join to the multiplayer and team up with others and share the journey in this unfair and chaotic world.
+See [server](https://github.com/EetuAaltonen/world-against-us-server)
 
-<br><br><br>
+<br>
 
 # _Work heavily in progress..._
