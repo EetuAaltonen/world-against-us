@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "EnemyHorde",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Character",
-    "path": "folders/Scripts/World/Character.yy",
+  "$GMScript":"v1",
+  "%Name":"EnemyHorde",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnemyHorde",
+  "parent":{
+    "name":"Character",
+    "path":"folders/Scripts/World/Character.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

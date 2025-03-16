@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "MetadataItemWeaponGunShotgun",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Metadata",
-    "path": "folders/Scripts/Game/Data/Inventory/Item/Metadata.yy",
+  "$GMScript":"v1",
+  "%Name":"MetadataItemWeaponGunShotgun",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"MetadataItemWeaponGunShotgun",
+  "parent":{
+    "name":"Metadata",
+    "path":"folders/Scripts/Game/Data/Inventory/Item/Metadata.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

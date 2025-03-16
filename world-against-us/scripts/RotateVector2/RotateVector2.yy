@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "RotateVector2",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Vector",
-    "path": "folders/Scripts/Game/Data/Utility/Vector.yy",
+  "$GMScript":"v1",
+  "%Name":"RotateVector2",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"RotateVector2",
+  "parent":{
+    "name":"Vector",
+    "path":"folders/Scripts/Game/Data/Utility/Vector.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

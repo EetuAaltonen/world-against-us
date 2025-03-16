@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "InitializeParticleBulletCasing",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Particles",
-    "path": "folders/Scripts/World/Particles.yy",
+  "$GMScript":"v1",
+  "%Name":"InitializeParticleBulletCasing",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"InitializeParticleBulletCasing",
+  "parent":{
+    "name":"Particles",
+    "path":"folders/Scripts/World/Particles.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CheckCollisionPointOnHitbox",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Collision",
-    "path": "folders/Scripts/World/Collision.yy",
+  "$GMScript":"v1",
+  "%Name":"CheckCollisionPointOnHitbox",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CheckCollisionPointOnHitbox",
+  "parent":{
+    "name":"Collision",
+    "path":"folders/Scripts/World/Collision.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

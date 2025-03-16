@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "NotificationHandler",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Notification",
-    "path": "folders/Scripts/Game/GUI/Notification.yy",
+  "$GMScript":"v1",
+  "%Name":"NotificationHandler",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"NotificationHandler",
+  "parent":{
+    "name":"Notification",
+    "path":"folders/Scripts/Game/GUI/Notification.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CallbackGUIStateInputDebugMonitor",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "DebugMonitor",
-    "path": "folders/Scripts/Game/GUI/DebugMonitor.yy",
+  "$GMScript":"v1",
+  "%Name":"CallbackGUIStateInputDebugMonitor",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CallbackGUIStateInputDebugMonitor",
+  "parent":{
+    "name":"DebugMonitor",
+    "path":"folders/Scripts/Game/GUI/DebugMonitor.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

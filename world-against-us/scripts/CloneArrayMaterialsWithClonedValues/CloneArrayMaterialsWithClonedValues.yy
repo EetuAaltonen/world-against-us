@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CloneArrayMaterialsWithClonedValues",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Array",
-    "path": "folders/Scripts/Game/Data/Utility/Array.yy",
+  "$GMScript":"v1",
+  "%Name":"CloneArrayMaterialsWithClonedValues",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CloneArrayMaterialsWithClonedValues",
+  "parent":{
+    "name":"Array",
+    "path":"folders/Scripts/Game/Data/Utility/Array.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "GetDistanceBetweenInstances",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Instance",
-    "path": "folders/Scripts/World/Instance.yy",
+  "$GMScript":"v1",
+  "%Name":"GetDistanceBetweenInstances",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GetDistanceBetweenInstances",
+  "parent":{
+    "name":"Instance",
+    "path":"folders/Scripts/World/Instance.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

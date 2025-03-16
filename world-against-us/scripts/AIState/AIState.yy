@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "AIState",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "AIStateMachine",
-    "path": "folders/Scripts/Game/Data/AI/AIStateMachine.yy",
+  "$GMScript":"v1",
+  "%Name":"AIState",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"AIState",
+  "parent":{
+    "name":"AIStateMachine",
+    "path":"folders/Scripts/Game/Data/AI/AIStateMachine.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

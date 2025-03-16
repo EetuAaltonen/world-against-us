@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "AnimationCurve",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Animation",
-    "path": "folders/Scripts/Game/Data/Utility/Animation.yy",
+  "$GMScript":"v1",
+  "%Name":"AnimationCurve",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"AnimationCurve",
+  "parent":{
+    "name":"Animation",
+    "path":"folders/Scripts/Game/Data/Utility/Animation.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

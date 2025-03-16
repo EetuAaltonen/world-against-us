@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "DamageSource",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Damage",
-    "path": "folders/Scripts/World/Damage.yy",
+  "$GMScript":"v1",
+  "%Name":"DamageSource",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"DamageSource",
+  "parent":{
+    "name":"Damage",
+    "path":"folders/Scripts/World/Damage.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

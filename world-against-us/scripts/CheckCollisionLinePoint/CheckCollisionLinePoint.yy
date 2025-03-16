@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CheckCollisionLinePoint",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Collision",
-    "path": "folders/Scripts/World/Collision.yy",
+  "$GMScript":"v1",
+  "%Name":"CheckCollisionLinePoint",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CheckCollisionLinePoint",
+  "parent":{
+    "name":"Collision",
+    "path":"folders/Scripts/World/Collision.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

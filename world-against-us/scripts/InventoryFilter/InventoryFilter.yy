@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "InventoryFilter",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Inventory",
-    "path": "folders/Scripts/Game/Data/Inventory.yy",
+  "$GMScript":"v1",
+  "%Name":"InventoryFilter",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"InventoryFilter",
+  "parent":{
+    "name":"Inventory",
+    "path":"folders/Scripts/Game/Data/Inventory.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

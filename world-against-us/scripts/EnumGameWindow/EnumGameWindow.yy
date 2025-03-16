@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "EnumGameWindow",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "GameWindow",
-    "path": "folders/Scripts/Game/GUI/GameWindow.yy",
+  "$GMScript":"v1",
+  "%Name":"EnumGameWindow",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumGameWindow",
+  "parent":{
+    "name":"GameWindow",
+    "path":"folders/Scripts/Game/GUI/GameWindow.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

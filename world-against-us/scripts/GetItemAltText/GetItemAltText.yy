@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "GetItemAltText",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Item",
-    "path": "folders/Scripts/Game/Data/Inventory/Item.yy",
+  "$GMScript":"v1",
+  "%Name":"GetItemAltText",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GetItemAltText",
+  "parent":{
+    "name":"Item",
+    "path":"folders/Scripts/Game/Data/Inventory/Item.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

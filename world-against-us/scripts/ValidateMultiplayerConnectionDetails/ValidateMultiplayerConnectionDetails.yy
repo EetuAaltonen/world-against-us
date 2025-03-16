@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ValidateMultiplayerConnectionDetails",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "ConnectionDetails",
-    "path": "folders/Scripts/Game/Network/ConnectionDetails.yy",
+  "$GMScript":"v1",
+  "%Name":"ValidateMultiplayerConnectionDetails",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ValidateMultiplayerConnectionDetails",
+  "parent":{
+    "name":"ConnectionDetails",
+    "path":"folders/Scripts/Game/Network/ConnectionDetails.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

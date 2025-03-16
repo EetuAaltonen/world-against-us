@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "GetStructureId",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Sturcture",
-    "path": "folders/Scripts/World/Sturcture.yy",
+  "$GMScript":"v1",
+  "%Name":"GetStructureId",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GetStructureId",
+  "parent":{
+    "name":"Sturcture",
+    "path":"folders/Scripts/World/Sturcture.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

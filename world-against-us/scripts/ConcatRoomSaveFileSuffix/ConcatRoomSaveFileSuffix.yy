@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ConcatRoomSaveFileSuffix",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "File",
-    "path": "folders/Scripts/Game/Data/File.yy",
+  "$GMScript":"v1",
+  "%Name":"ConcatRoomSaveFileSuffix",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ConcatRoomSaveFileSuffix",
+  "parent":{
+    "name":"File",
+    "path":"folders/Scripts/Game/Data/File.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

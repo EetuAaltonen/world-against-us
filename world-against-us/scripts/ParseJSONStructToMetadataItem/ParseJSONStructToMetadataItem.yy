@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ParseJSONStructToMetadataItem",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Functions",
-    "path": "folders/Scripts/Game/Data/Inventory/Item/Functions.yy",
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToMetadataItem",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToMetadataItem",
+  "parent":{
+    "name":"Functions",
+    "path":"folders/Scripts/Game/Data/Inventory/Item/Functions.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

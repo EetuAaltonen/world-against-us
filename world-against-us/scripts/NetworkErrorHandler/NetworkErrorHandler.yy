@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "NetworkErrorHandler",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Error",
-    "path": "folders/Scripts/Game/Network/Error.yy",
+  "$GMScript":"v1",
+  "%Name":"NetworkErrorHandler",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"NetworkErrorHandler",
+  "parent":{
+    "name":"Error",
+    "path":"folders/Scripts/Game/Network/Error.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ListDrawAvailableScoutInstance",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "OperationsCenter",
-    "path": "folders/Scripts/Game/GUI/OperationsCenter.yy",
+  "$GMScript":"v1",
+  "%Name":"ListDrawAvailableScoutInstance",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ListDrawAvailableScoutInstance",
+  "parent":{
+    "name":"OperationsCenter",
+    "path":"folders/Scripts/Game/GUI/OperationsCenter.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

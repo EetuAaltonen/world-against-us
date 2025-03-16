@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "RoomData",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Room",
-    "path": "folders/Scripts/Game/Data/Room.yy",
+  "$GMScript":"v1",
+  "%Name":"RoomData",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"RoomData",
+  "parent":{
+    "name":"Room",
+    "path":"folders/Scripts/Game/Data/Room.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

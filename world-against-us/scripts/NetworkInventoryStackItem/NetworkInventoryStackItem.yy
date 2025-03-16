@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "NetworkInventoryStackItem",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Inventory",
-    "path": "folders/Scripts/Game/Network/Inventory.yy",
+  "$GMScript":"v1",
+  "%Name":"NetworkInventoryStackItem",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"NetworkInventoryStackItem",
+  "parent":{
+    "name":"Inventory",
+    "path":"folders/Scripts/Game/Network/Inventory.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

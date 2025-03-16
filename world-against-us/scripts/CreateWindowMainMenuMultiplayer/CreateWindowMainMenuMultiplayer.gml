@@ -64,6 +64,9 @@ function CreateWindowMainMenuMultiplayer(_gameWindowId, _zIndex)
 		MAX_ADDRESS_LENGTH
 	);
 	
+	// SET DEFAULT SERVER ADDRESS
+	addressInput.input = "127.0.0.1";
+	
 	// PORT INPUT
 	var portInputTitlePos = new Vector2(48, 170);
 	var poertInputTitle = new WindowText(

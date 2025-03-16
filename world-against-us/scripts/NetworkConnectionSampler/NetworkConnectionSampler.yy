@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "NetworkConnectionSampler",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "ConnectionSampling",
-    "path": "folders/Scripts/Game/Network/ConnectionSampling.yy",
+  "$GMScript":"v1",
+  "%Name":"NetworkConnectionSampler",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"NetworkConnectionSampler",
+  "parent":{
+    "name":"ConnectionSampling",
+    "path":"folders/Scripts/Game/Network/ConnectionSampling.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

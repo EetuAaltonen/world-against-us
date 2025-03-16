@@ -141,7 +141,10 @@ function NetworkPacketBuilder() constructor
 					{
 						var networkContainerContentRequest = _networkPacketPayload;
 						buffer_write(_networkBuffer, buffer_u32, networkContainerContentRequest.region_id);
-						buffer_write(_networkBuffer, buffer_text, networkContainerContentRequest.container_id);
+						buffer_write(_networkBuffer, buffer_u8, networkContainerContentRequest.inventory_size_columns);
+						buffer_write(_networkBuffer, buffer_u8, networkContainerContentRequest.inventory_size_rows);
+						buffer_write(_networkBuffer, buffer_text, string(networkContainerContentRequest.container_id + "\n"));
+						buffer_write(_networkBuffer, buffer_text, "Test text");
 						isPayloadWritten = true;
 					} break;
 					case MESSAGE_TYPE.START_CONTAINER_INVENTORY_STREAM:

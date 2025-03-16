@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "Size",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Size",
-    "path": "folders/Scripts/Game/Data/Utility/Size.yy",
+  "$GMScript":"v1",
+  "%Name":"Size",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Size",
+  "parent":{
+    "name":"Size",
+    "path":"folders/Scripts/Game/Data/Utility/Size.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

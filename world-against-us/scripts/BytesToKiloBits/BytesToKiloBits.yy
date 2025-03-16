@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "BytesToKiloBits",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "NetworkData",
-    "path": "folders/Scripts/Game/Data/Utility/NetworkData.yy",
+  "$GMScript":"v1",
+  "%Name":"BytesToKiloBits",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"BytesToKiloBits",
+  "parent":{
+    "name":"NetworkData",
+    "path":"folders/Scripts/Game/Data/Utility/NetworkData.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

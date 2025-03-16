@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "NPCHandler",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "NPC",
-    "path": "folders/Scripts/Game/Data/NPC.yy",
+  "$GMScript":"v1",
+  "%Name":"NPCHandler",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"NPCHandler",
+  "parent":{
+    "name":"NPC",
+    "path":"folders/Scripts/Game/Data/NPC.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

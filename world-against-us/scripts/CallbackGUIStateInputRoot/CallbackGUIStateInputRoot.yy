@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CallbackGUIStateInputRoot",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Root",
-    "path": "folders/Scripts/Game/GUI/Root.yy",
+  "$GMScript":"v1",
+  "%Name":"CallbackGUIStateInputRoot",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CallbackGUIStateInputRoot",
+  "parent":{
+    "name":"Root",
+    "path":"folders/Scripts/Game/GUI/Root.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateWindowJournalQuests",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Journal",
-    "path": "folders/Scripts/Game/GUI/GameWindow/Functions/Journal.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateWindowJournalQuests",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateWindowJournalQuests",
+  "parent":{
+    "name":"Journal",
+    "path":"folders/Scripts/Game/GUI/GameWindow/Functions/Journal.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CallbackGUIStateInputPlayerOverview",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "PlayerOverview",
-    "path": "folders/Scripts/Game/GUI/PlayerOverview.yy",
+  "$GMScript":"v1",
+  "%Name":"CallbackGUIStateInputPlayerOverview",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CallbackGUIStateInputPlayerOverview",
+  "parent":{
+    "name":"PlayerOverview",
+    "path":"folders/Scripts/Game/GUI/PlayerOverview.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

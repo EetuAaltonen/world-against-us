@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ListDrawJournalEntry",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Journal",
-    "path": "folders/Scripts/Game/GUI/GameWindow/Functions/Journal.yy",
+  "$GMScript":"v1",
+  "%Name":"ListDrawJournalEntry",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ListDrawJournalEntry",
+  "parent":{
+    "name":"Journal",
+    "path":"folders/Scripts/Game/GUI/GameWindow/Functions/Journal.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "AckTimeoutFuncResend",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "AckTimeoutFunc",
-    "path": "folders/Scripts/Game/Network/AckTimeoutFunc.yy",
+  "$GMScript":"v1",
+  "%Name":"AckTimeoutFuncResend",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"AckTimeoutFuncResend",
+  "parent":{
+    "name":"AckTimeoutFunc",
+    "path":"folders/Scripts/Game/Network/AckTimeoutFunc.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

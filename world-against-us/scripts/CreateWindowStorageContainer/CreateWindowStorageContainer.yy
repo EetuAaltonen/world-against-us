@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateWindowStorageContainer",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Container",
-    "path": "folders/Scripts/Game/GUI/Container.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateWindowStorageContainer",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateWindowStorageContainer",
+  "parent":{
+    "name":"Container",
+    "path":"folders/Scripts/Game/GUI/Container.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

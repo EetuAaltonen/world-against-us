@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "EnumInventoryType",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Inventory",
-    "path": "folders/Scripts/Game/Data/Inventory.yy",
+  "$GMScript":"v1",
+  "%Name":"EnumInventoryType",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumInventoryType",
+  "parent":{
+    "name":"Inventory",
+    "path":"folders/Scripts/Game/Data/Inventory.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

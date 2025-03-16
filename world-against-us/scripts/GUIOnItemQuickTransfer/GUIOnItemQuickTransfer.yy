@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "GUIOnItemQuickTransfer",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Functions",
-    "path": "folders/Scripts/Game/GUI/Functions.yy",
+  "$GMScript":"v1",
+  "%Name":"GUIOnItemQuickTransfer",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GUIOnItemQuickTransfer",
+  "parent":{
+    "name":"Functions",
+    "path":"folders/Scripts/Game/GUI/Functions.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

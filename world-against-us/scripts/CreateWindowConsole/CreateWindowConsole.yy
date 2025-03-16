@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateWindowConsole",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Console",
-    "path": "folders/Scripts/Game/GUI/Console.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateWindowConsole",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateWindowConsole",
+  "parent":{
+    "name":"Console",
+    "path":"folders/Scripts/Game/GUI/Console.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

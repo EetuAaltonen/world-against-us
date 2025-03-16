@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "GridIndex",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "InventoryGrid",
-    "path": "folders/Scripts/Game/GUI/WindowElement/InventoryGrid.yy",
+  "$GMScript":"v1",
+  "%Name":"GridIndex",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GridIndex",
+  "parent":{
+    "name":"InventoryGrid",
+    "path":"folders/Scripts/Game/GUI/WindowElement/InventoryGrid.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

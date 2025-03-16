@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "EnumConsoleLogType",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Console",
-    "path": "folders/Scripts/Game/GUI/Console.yy",
+  "$GMScript":"v1",
+  "%Name":"EnumConsoleLogType",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumConsoleLogType",
+  "parent":{
+    "name":"Console",
+    "path":"folders/Scripts/Game/GUI/Console.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

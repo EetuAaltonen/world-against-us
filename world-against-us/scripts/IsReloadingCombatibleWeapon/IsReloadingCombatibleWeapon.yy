@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "IsReloadingCombatibleWeapon",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Inventory",
-    "path": "folders/Scripts/Game/Data/Inventory.yy",
+  "$GMScript":"v1",
+  "%Name":"IsReloadingCombatibleWeapon",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"IsReloadingCombatibleWeapon",
+  "parent":{
+    "name":"Inventory",
+    "path":"folders/Scripts/Game/Data/Inventory.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

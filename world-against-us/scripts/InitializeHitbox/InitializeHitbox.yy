@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "InitializeHitbox",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Collision",
-    "path": "folders/Scripts/World/Collision.yy",
+  "$GMScript":"v1",
+  "%Name":"InitializeHitbox",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"InitializeHitbox",
+  "parent":{
+    "name":"Collision",
+    "path":"folders/Scripts/World/Collision.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

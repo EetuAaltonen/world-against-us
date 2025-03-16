@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateWindowConstructionSite",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "ConstructionSite",
-    "path": "folders/Scripts/Game/GUI/ConstructionSite.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateWindowConstructionSite",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateWindowConstructionSite",
+  "parent":{
+    "name":"ConstructionSite",
+    "path":"folders/Scripts/Game/GUI/ConstructionSite.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

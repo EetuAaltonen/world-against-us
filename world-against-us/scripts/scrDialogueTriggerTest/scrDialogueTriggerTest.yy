@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "scrDialogueTriggerTest",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Triggers",
-    "path": "folders/Scripts/Game/GUI/Dialogue/Triggers.yy",
+  "$GMScript":"v1",
+  "%Name":"scrDialogueTriggerTest",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scrDialogueTriggerTest",
+  "parent":{
+    "name":"Triggers",
+    "path":"folders/Scripts/Game/GUI/Dialogue/Triggers.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

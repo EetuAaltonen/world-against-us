@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "GetScriptByName",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Sprite",
-    "path": "folders/Scripts/Game/Sprite.yy",
+  "$GMScript":"v1",
+  "%Name":"GetScriptByName",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GetScriptByName",
+  "parent":{
+    "name":"Sprite",
+    "path":"folders/Scripts/Game/Sprite.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

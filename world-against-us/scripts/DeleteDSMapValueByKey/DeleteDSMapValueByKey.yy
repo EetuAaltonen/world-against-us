@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "DeleteDSMapValueByKey",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Map",
-    "path": "folders/Scripts/Game/Data/Utility/Map.yy",
+  "$GMScript":"v1",
+  "%Name":"DeleteDSMapValueByKey",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"DeleteDSMapValueByKey",
+  "parent":{
+    "name":"Map",
+    "path":"folders/Scripts/Game/Data/Utility/Map.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

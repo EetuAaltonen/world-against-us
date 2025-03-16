@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ParseMetadataFacility",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Function",
-    "path": "folders/Scripts/World/Facility/Function.yy",
+  "$GMScript":"v1",
+  "%Name":"ParseMetadataFacility",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseMetadataFacility",
+  "parent":{
+    "name":"Function",
+    "path":"folders/Scripts/World/Facility/Function.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

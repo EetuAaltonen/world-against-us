@@ -8,6 +8,15 @@ questData = ds_map_create();
 var jsonQuestStruct = ReadJSONFile("quest_data.json") ?? EMPTY_STRUCT;
 ParseJSONStructToMap(questData, jsonQuestStruct[$ "quest_data"] ?? undefined, "quest_id", ParseJSONStructToDatabaseQuest);
 
+// TODO: Replace every incompatible UTF8 encodings
+function file_text_readln_and_parse(_file)
+{
+	var textLine = file_text_readln(_file);
+	// REMOVE LINE BREAKS FROM WINDOWS UTF8 AND UTF8 UNIX ENCODING
+	var parsedTextLine = string_replace(string_replace(textLine, STRING_LINE_BREAK_WINDOWS, EMPTY_STRING), STRING_LINE_BREAK, EMPTY_STRING);
+	return parsedTextLine;
+}
+
 // DIALOGUE DATABASE
 dialogueData = ds_map_create();
 // READ ALL LOOT TABLE JSON FILES
@@ -27,25 +36,22 @@ try {
 		    var dialogueFile = file_text_open_read(string("{0}{1}", filePath, fileName));
 			while (!file_text_eof(dialogueFile))
 			{
-			    var textLine = file_text_readln(dialogueFile);
-				// REPLACE WINDOWS UTF8 ENCODING WITH UTF8 UNIX
-				// TODO: Replace every incompatible UTF8 encodings
-				var parsedTextLine = string_replace_all(textLine, STRING_LINE_BREAK_WINDOWS, STRING_LINE_BREAK);
+				var parsedTextLine = file_text_readln_and_parse(dialogueFile);
 				if (parsedTextLine != STRING_LINE_BREAK)
 				{
 					switch (parsedTextLine)
 					{
-						case ":: StoryTitle\n":
+						case ":: StoryTitle":
 						{
 							// FETCH DIALOGUE ID
-							dialogueStoryTitle = string_replace(file_text_readln(dialogueFile), STRING_LINE_BREAK, EMPTY_STRING);
+							dialogueStoryTitle = file_text_readln_and_parse(dialogueFile);
 						} break;
-						case ":: StoryData\n":
+						case ":: StoryData":
 						{
 							// SKIP WHOLE STORY DATA
-							while (parsedTextLine != "}\n")
+							while (parsedTextLine != "}")
 							{
-								parsedTextLine = file_text_readln(dialogueFile);
+								parsedTextLine = file_text_readln_and_parse(dialogueFile);
 							}
 						} break;
 						default:
@@ -58,12 +64,12 @@ try {
 									var dialogueId = string_replace(array_first(textLineParts), ":: ", EMPTY_STRING);
 									var dialogue = new Dialogue(dialogueStoryTitle, dialogueId);
 								
-									parsedTextLine = file_text_readln(dialogueFile);
-									while (!string_starts_with(parsedTextLine,";;end"))
+									parsedTextLine = file_text_readln_and_parse(dialogueFile);
+									while (parsedTextLine != ";;end")
 									{
 										if (string_starts_with(parsedTextLine, "[["))
 										{
-											parsedTextLine = string_replace(string_replace(parsedTextLine, "[[", EMPTY_STRING), "]]\n", EMPTY_STRING);
+											parsedTextLine = string_replace(string_replace(parsedTextLine, "[[", EMPTY_STRING), "]]", EMPTY_STRING);
 											var dialogueOptionParts = string_split(parsedTextLine, "->", true, 1);
 											dialogue.AddDialogueOption(
 												new DialogueOption(
@@ -106,7 +112,7 @@ try {
 										} else {
 											dialogue.AddChatLine(parsedTextLine);
 										}
-										parsedTextLine = file_text_readln(dialogueFile);
+										parsedTextLine = file_text_readln_and_parse(dialogueFile);
 									}
 									ds_map_add(storyDialogues, dialogue.dialogue_index, dialogue);
 								}

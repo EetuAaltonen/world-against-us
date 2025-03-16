@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "WindowDebugMonitorGraph",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "DebugMonitor",
-    "path": "folders/Scripts/Game/GUI/WindowElement/DebugMonitor.yy",
+  "$GMScript":"v1",
+  "%Name":"WindowDebugMonitorGraph",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"WindowDebugMonitorGraph",
+  "parent":{
+    "name":"DebugMonitor",
+    "path":"folders/Scripts/Game/GUI/WindowElement/DebugMonitor.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "Approach",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Coordinates",
-    "path": "folders/Scripts/World/Coordinates.yy",
+  "$GMScript":"v1",
+  "%Name":"Approach",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Approach",
+  "parent":{
+    "name":"Coordinates",
+    "path":"folders/Scripts/World/Coordinates.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

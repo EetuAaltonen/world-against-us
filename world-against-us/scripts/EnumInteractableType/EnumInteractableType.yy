@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "EnumInteractableType",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Interactable",
-    "path": "folders/Scripts/World/Interactable.yy",
+  "$GMScript":"v1",
+  "%Name":"EnumInteractableType",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumInteractableType",
+  "parent":{
+    "name":"Interactable",
+    "path":"folders/Scripts/World/Interactable.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

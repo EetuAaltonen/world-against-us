@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "OnClickWorldMapFastTravel",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "WorldMap",
-    "path": "folders/Scripts/Game/GUI/WorldMap.yy",
+  "$GMScript":"v1",
+  "%Name":"OnClickWorldMapFastTravel",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"OnClickWorldMapFastTravel",
+  "parent":{
+    "name":"WorldMap",
+    "path":"folders/Scripts/Game/GUI/WorldMap.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

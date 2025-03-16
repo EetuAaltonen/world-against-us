@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateWindowDebugMonitorMultiplayerEntityFastTravel",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "DebugMonitor",
-    "path": "folders/Scripts/Game/GUI/DebugMonitor.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateWindowDebugMonitorMultiplayerEntityFastTravel",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateWindowDebugMonitorMultiplayerEntityFastTravel",
+  "parent":{
+    "name":"DebugMonitor",
+    "path":"folders/Scripts/Game/GUI/DebugMonitor.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

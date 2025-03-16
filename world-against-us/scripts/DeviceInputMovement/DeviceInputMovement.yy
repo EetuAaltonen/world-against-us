@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "DeviceInputMovement",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "DeviceInput",
-    "path": "folders/Scripts/Game/Network/DeviceInput.yy",
+  "$GMScript":"v1",
+  "%Name":"DeviceInputMovement",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"DeviceInputMovement",
+  "parent":{
+    "name":"DeviceInput",
+    "path":"folders/Scripts/Game/Network/DeviceInput.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

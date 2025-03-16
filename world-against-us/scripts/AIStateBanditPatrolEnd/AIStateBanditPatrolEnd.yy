@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "AIStateBanditPatrolEnd",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "AIBanditStates",
-    "path": "folders/Scripts/Game/Data/AI/AIStateMachine/AIBanditStates.yy",
+  "$GMScript":"v1",
+  "%Name":"AIStateBanditPatrolEnd",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"AIStateBanditPatrolEnd",
+  "parent":{
+    "name":"AIBanditStates",
+    "path":"folders/Scripts/Game/Data/AI/AIStateMachine/AIBanditStates.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

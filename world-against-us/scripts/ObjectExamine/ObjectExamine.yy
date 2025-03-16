@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ObjectExamine",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "ObjectExamine",
-    "path": "folders/Scripts/Game/Data/ObjectExamine.yy",
+  "$GMScript":"v1",
+  "%Name":"ObjectExamine",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ObjectExamine",
+  "parent":{
+    "name":"ObjectExamine",
+    "path":"folders/Scripts/Game/Data/ObjectExamine.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

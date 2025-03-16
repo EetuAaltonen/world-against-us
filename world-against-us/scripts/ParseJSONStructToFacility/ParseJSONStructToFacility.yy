@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ParseJSONStructToFacility",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Function",
-    "path": "folders/Scripts/World/Facility/Function.yy",
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToFacility",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToFacility",
+  "parent":{
+    "name":"Function",
+    "path":"folders/Scripts/World/Facility/Function.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "RemotePlayerInfo",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Player",
-    "path": "folders/Scripts/Game/Network/Player.yy",
+  "$GMScript":"v1",
+  "%Name":"RemotePlayerInfo",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"RemotePlayerInfo",
+  "parent":{
+    "name":"Player",
+    "path":"folders/Scripts/Game/Network/Player.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

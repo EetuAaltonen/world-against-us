@@ -13,7 +13,9 @@ function InteractionFuncStorageContainer()
 					{
 						// TODO: Use struct instead
 						region_id: global.NetworkRegionHandlerRef.region_id,
-						container_id: containerId
+						container_id: containerId,
+						inventory_size_columns: inventory.size.columns,
+						inventory_size_rows: inventory.size.rows
 					},
 					PACKET_PRIORITY.DEFAULT,
 					AckTimeoutFuncResend

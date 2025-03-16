@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "DeletePath",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Path",
-    "path": "folders/Scripts/Game/Data/Path.yy",
+  "$GMScript":"v1",
+  "%Name":"DeletePath",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"DeletePath",
+  "parent":{
+    "name":"Path",
+    "path":"folders/Scripts/Game/Data/Path.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

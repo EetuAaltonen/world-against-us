@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ParseJSONStructToWorldStateSync",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "WorldState",
-    "path": "folders/Scripts/Game/Network/WorldState.yy",
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToWorldStateSync",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToWorldStateSync",
+  "parent":{
+    "name":"WorldState",
+    "path":"folders/Scripts/Game/Network/WorldState.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

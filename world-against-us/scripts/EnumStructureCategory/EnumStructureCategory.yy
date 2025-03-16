@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "EnumStructureCategory",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Sturcture",
-    "path": "folders/Scripts/World/Sturcture.yy",
+  "$GMScript":"v1",
+  "%Name":"EnumStructureCategory",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumStructureCategory",
+  "parent":{
+    "name":"Sturcture",
+    "path":"folders/Scripts/World/Sturcture.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

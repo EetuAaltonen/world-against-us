@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "MetadataFacilityRoadGate",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Metadata",
-    "path": "folders/Scripts/World/Facility/Metadata.yy",
+  "$GMScript":"v1",
+  "%Name":"MetadataFacilityRoadGate",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"MetadataFacilityRoadGate",
+  "parent":{
+    "name":"Metadata",
+    "path":"folders/Scripts/World/Facility/Metadata.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }
