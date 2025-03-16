@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "MapDataHandler",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Map",
-    "path": "folders/Scripts/Game/Data/Map.yy",
+  "$GMScript":"v1",
+  "%Name":"MapDataHandler",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"MapDataHandler",
+  "parent":{
+    "name":"Map",
+    "path":"folders/Scripts/Game/Data/Map.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

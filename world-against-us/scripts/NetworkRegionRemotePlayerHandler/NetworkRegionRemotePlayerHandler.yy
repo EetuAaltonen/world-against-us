@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "NetworkRegionRemotePlayerHandler",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Region",
-    "path": "folders/Scripts/Game/Network/Region.yy",
+  "$GMScript":"v1",
+  "%Name":"NetworkRegionRemotePlayerHandler",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"NetworkRegionRemotePlayerHandler",
+  "parent":{
+    "name":"Region",
+    "path":"folders/Scripts/Game/Network/Region.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

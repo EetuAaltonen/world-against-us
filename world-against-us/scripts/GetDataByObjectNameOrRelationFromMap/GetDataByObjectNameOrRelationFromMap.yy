@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "GetDataByObjectNameOrRelationFromMap",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Map",
-    "path": "folders/Scripts/Game/Data/Utility/Map.yy",
+  "$GMScript":"v1",
+  "%Name":"GetDataByObjectNameOrRelationFromMap",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GetDataByObjectNameOrRelationFromMap",
+  "parent":{
+    "name":"Map",
+    "path":"folders/Scripts/Game/Data/Utility/Map.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

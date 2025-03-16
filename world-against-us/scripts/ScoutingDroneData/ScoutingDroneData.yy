@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ScoutingDroneData",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "ScoutingDrone",
-    "path": "folders/Scripts/Game/Network/ScoutingDrone.yy",
+  "$GMScript":"v1",
+  "%Name":"ScoutingDroneData",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ScoutingDroneData",
+  "parent":{
+    "name":"ScoutingDrone",
+    "path":"folders/Scripts/Game/Network/ScoutingDrone.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

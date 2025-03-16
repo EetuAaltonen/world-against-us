@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ParseJSONStructToQuestStepProgress",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Functions",
-    "path": "folders/Scripts/Game/Data/Quest/Functions.yy",
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToQuestStepProgress",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToQuestStepProgress",
+  "parent":{
+    "name":"Functions",
+    "path":"folders/Scripts/Game/Data/Quest/Functions.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

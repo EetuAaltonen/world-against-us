@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ParseJSONStructToDatabaseBlueprintMateria",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Database",
-    "path": "folders/Scripts/Game/Data/Database.yy",
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToDatabaseBlueprintMateria",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToDatabaseBlueprintMateria",
+  "parent":{
+    "name":"Database",
+    "path":"folders/Scripts/Game/Data/Database.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

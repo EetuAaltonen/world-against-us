@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ClearDSListAndDeleteValues",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "List",
-    "path": "folders/Scripts/Game/Data/Utility/List.yy",
+  "$GMScript":"v1",
+  "%Name":"ClearDSListAndDeleteValues",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ClearDSListAndDeleteValues",
+  "parent":{
+    "name":"List",
+    "path":"folders/Scripts/Game/Data/Utility/List.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

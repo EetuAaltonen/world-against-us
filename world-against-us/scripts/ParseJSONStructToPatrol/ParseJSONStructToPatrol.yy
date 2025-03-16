@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ParseJSONStructToPatrol",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Patrol",
-    "path": "folders/Scripts/Game/Data/Patrol.yy",
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToPatrol",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToPatrol",
+  "parent":{
+    "name":"Patrol",
+    "path":"folders/Scripts/Game/Data/Patrol.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

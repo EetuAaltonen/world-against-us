@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ReleaseVariableFromMemory",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "MemoryClearing",
-    "path": "folders/Scripts/Game/Data/Utility/MemoryClearing.yy",
+  "$GMScript":"v1",
+  "%Name":"ReleaseVariableFromMemory",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ReleaseVariableFromMemory",
+  "parent":{
+    "name":"MemoryClearing",
+    "path":"folders/Scripts/Game/Data/Utility/MemoryClearing.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

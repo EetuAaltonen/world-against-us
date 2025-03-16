@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CloneStruct",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Struct",
-    "path": "folders/Scripts/Game/Data/Struct.yy",
+  "$GMScript":"v1",
+  "%Name":"CloneStruct",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CloneStruct",
+  "parent":{
+    "name":"Struct",
+    "path":"folders/Scripts/Game/Data/Struct.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "BlueprintMaterial",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Blueprint",
-    "path": "folders/Scripts/Game/Data/Blueprint.yy",
+  "$GMScript":"v1",
+  "%Name":"BlueprintMaterial",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"BlueprintMaterial",
+  "parent":{
+    "name":"Blueprint",
+    "path":"folders/Scripts/Game/Data/Blueprint.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

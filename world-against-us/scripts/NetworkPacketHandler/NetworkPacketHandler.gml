@@ -273,7 +273,7 @@ function NetworkPacketHandler() constructor
 									var activeInventoryStream = new NetworkInventoryStream(
 										targetContainer.containerId,
 										targetContainer.inventory,
-										4, true, 0
+										4, false/*true*/, 0
 									);
 									// CHECK IF SERVER HAS CONTAINER CONTENT
 									if (containerContentInfo.content_count == -1)

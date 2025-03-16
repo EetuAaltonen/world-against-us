@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateWindowMap",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Map",
-    "path": "folders/Scripts/Game/GUI/Map.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateWindowMap",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateWindowMap",
+  "parent":{
+    "name":"Map",
+    "path":"folders/Scripts/Game/GUI/Map.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

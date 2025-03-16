@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "WindowAnimation",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Image",
-    "path": "folders/Scripts/Game/GUI/WindowElement/Image.yy",
+  "$GMScript":"v1",
+  "%Name":"WindowAnimation",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"WindowAnimation",
+  "parent":{
+    "name":"Image",
+    "path":"folders/Scripts/Game/GUI/WindowElement/Image.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "WindowActionMenu",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "WindowElement",
-    "path": "folders/Scripts/Game/GUI/WindowElement.yy",
+  "$GMScript":"v1",
+  "%Name":"WindowActionMenu",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"WindowActionMenu",
+  "parent":{
+    "name":"WindowElement",
+    "path":"folders/Scripts/Game/GUI/WindowElement.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

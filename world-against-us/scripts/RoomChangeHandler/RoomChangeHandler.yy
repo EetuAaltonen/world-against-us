@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "RoomChangeHandler",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "RoomChange",
-    "path": "folders/Scripts/Game/Data/RoomChange.yy",
+  "$GMScript":"v1",
+  "%Name":"RoomChangeHandler",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"RoomChangeHandler",
+  "parent":{
+    "name":"RoomChange",
+    "path":"folders/Scripts/Game/Data/RoomChange.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

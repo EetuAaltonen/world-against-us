@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ParseJSONStructToItem",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Functions",
-    "path": "folders/Scripts/Game/Data/Inventory/Item/Functions.yy",
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToItem",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToItem",
+  "parent":{
+    "name":"Functions",
+    "path":"folders/Scripts/Game/Data/Inventory/Item/Functions.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

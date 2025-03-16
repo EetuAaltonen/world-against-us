@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CallbackItemSlotPlayerBackpack",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "ItemSlot",
-    "path": "folders/Scripts/Game/GUI/WindowElement/ItemSlot.yy",
+  "$GMScript":"v1",
+  "%Name":"CallbackItemSlotPlayerBackpack",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CallbackItemSlotPlayerBackpack",
+  "parent":{
+    "name":"ItemSlot",
+    "path":"folders/Scripts/Game/GUI/WindowElement/ItemSlot.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

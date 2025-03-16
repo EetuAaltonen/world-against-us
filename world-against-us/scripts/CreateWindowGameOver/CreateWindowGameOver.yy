@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateWindowGameOver",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "GameOver",
-    "path": "folders/Scripts/Game/GUI/GameOver.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateWindowGameOver",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateWindowGameOver",
+  "parent":{
+    "name":"GameOver",
+    "path":"folders/Scripts/Game/GUI/GameOver.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

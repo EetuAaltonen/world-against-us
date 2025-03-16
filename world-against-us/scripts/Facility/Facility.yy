@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "Facility",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Facility",
-    "path": "folders/Scripts/World/Facility.yy",
+  "$GMScript":"v1",
+  "%Name":"Facility",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Facility",
+  "parent":{
+    "name":"Facility",
+    "path":"folders/Scripts/World/Facility.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

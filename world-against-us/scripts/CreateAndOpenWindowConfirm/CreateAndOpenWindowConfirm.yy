@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateAndOpenWindowConfirm",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "ConfirmDialog",
-    "path": "folders/Scripts/Game/GUI/ConfirmDialog.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateAndOpenWindowConfirm",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateAndOpenWindowConfirm",
+  "parent":{
+    "name":"ConfirmDialog",
+    "path":"folders/Scripts/Game/GUI/ConfirmDialog.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

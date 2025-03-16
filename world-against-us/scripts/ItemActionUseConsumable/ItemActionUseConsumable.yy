@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ItemActionUseConsumable",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Use",
-    "path": "folders/Scripts/Game/Data/Inventory/Item/Functions/Action/Use.yy",
+  "$GMScript":"v1",
+  "%Name":"ItemActionUseConsumable",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ItemActionUseConsumable",
+  "parent":{
+    "name":"Use",
+    "path":"folders/Scripts/Game/Data/Inventory/Item/Functions/Action/Use.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

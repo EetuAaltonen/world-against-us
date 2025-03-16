@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "RoundToTwoDecimals",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Round",
-    "path": "folders/Scripts/Game/Data/Utility/Round.yy",
+  "$GMScript":"v1",
+  "%Name":"RoundToTwoDecimals",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"RoundToTwoDecimals",
+  "parent":{
+    "name":"Round",
+    "path":"folders/Scripts/Game/Data/Utility/Round.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

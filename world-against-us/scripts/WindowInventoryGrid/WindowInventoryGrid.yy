@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "WindowInventoryGrid",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "InventoryGrid",
-    "path": "folders/Scripts/Game/GUI/WindowElement/InventoryGrid.yy",
+  "$GMScript":"v1",
+  "%Name":"WindowInventoryGrid",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"WindowInventoryGrid",
+  "parent":{
+    "name":"InventoryGrid",
+    "path":"folders/Scripts/Game/GUI/WindowElement/InventoryGrid.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

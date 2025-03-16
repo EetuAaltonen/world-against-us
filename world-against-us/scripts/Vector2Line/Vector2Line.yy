@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "Vector2Line",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Vector",
-    "path": "folders/Scripts/Game/Data/Utility/Vector.yy",
+  "$GMScript":"v1",
+  "%Name":"Vector2Line",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Vector2Line",
+  "parent":{
+    "name":"Vector",
+    "path":"folders/Scripts/Game/Data/Utility/Vector.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "GameWindowHandler",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "GameWindow",
-    "path": "folders/Scripts/Game/GUI/GameWindow.yy",
+  "$GMScript":"v1",
+  "%Name":"GameWindowHandler",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GameWindowHandler",
+  "parent":{
+    "name":"GameWindow",
+    "path":"folders/Scripts/Game/GUI/GameWindow.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

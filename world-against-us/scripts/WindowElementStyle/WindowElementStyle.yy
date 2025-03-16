@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "WindowElementStyle",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Style",
-    "path": "folders/Scripts/Game/GUI/WindowElement/Style.yy",
+  "$GMScript":"v1",
+  "%Name":"WindowElementStyle",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"WindowElementStyle",
+  "parent":{
+    "name":"Style",
+    "path":"folders/Scripts/Game/GUI/WindowElement/Style.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

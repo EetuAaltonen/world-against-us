@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateWindowDialogue",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Dialogue",
-    "path": "folders/Scripts/Game/GUI/Dialogue.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateWindowDialogue",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateWindowDialogue",
+  "parent":{
+    "name":"Dialogue",
+    "path":"folders/Scripts/Game/GUI/Dialogue.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

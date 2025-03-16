@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "GenerateAutopilotMovementInput",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Autopilot",
-    "path": "folders/Scripts/Game/Data/AI/Autopilot.yy",
+  "$GMScript":"v1",
+  "%Name":"GenerateAutopilotMovementInput",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GenerateAutopilotMovementInput",
+  "parent":{
+    "name":"Autopilot",
+    "path":"folders/Scripts/Game/Data/AI/Autopilot.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

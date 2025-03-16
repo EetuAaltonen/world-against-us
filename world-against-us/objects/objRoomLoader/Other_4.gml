@@ -9,7 +9,9 @@ global.DEBUGMODE = false;
 
 for (var i = 0; i < controllerCount; i++)
 {
+	
 	var controller = controllers[@ i];
+	show_debug_message(string("->Initializing {0}", object_get_name(controller.objectIndex)));
 	
 	if (instance_exists(controller.objectIndex))
 	{
@@ -57,7 +59,7 @@ for (var i = 0; i < controllerCount; i++)
 	// CONSOLE LOG
 	if (instance_exists(controller.instance))
 	{
-		show_debug_message(string("->Instance loaded {0}", object_get_name(controller.objectIndex)));	
+		show_debug_message(string("->Instance loaded {0}", object_get_name(controller.objectIndex)));
 	}
 }
 
@@ -74,6 +76,7 @@ for (var i = 0; i < controllerCount; i++)
 		}
 	}
 }
+
 switch (room)
 {
 	case roomLaunch: {

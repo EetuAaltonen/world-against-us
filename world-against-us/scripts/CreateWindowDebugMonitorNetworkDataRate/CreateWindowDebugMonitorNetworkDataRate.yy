@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateWindowDebugMonitorNetworkDataRate",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "DebugMonitor",
-    "path": "folders/Scripts/Game/GUI/DebugMonitor.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateWindowDebugMonitorNetworkDataRate",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateWindowDebugMonitorNetworkDataRate",
+  "parent":{
+    "name":"DebugMonitor",
+    "path":"folders/Scripts/Game/GUI/DebugMonitor.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateWindowFacilityGenerator",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Facility",
-    "path": "folders/Scripts/Game/GUI/Facility.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateWindowFacilityGenerator",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateWindowFacilityGenerator",
+  "parent":{
+    "name":"Facility",
+    "path":"folders/Scripts/Game/GUI/Facility.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

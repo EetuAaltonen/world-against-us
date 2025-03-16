@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ReadJSONFile",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "File",
-    "path": "folders/Scripts/Game/Data/File.yy",
+  "$GMScript":"v1",
+  "%Name":"ReadJSONFile",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ReadJSONFile",
+  "parent":{
+    "name":"File",
+    "path":"folders/Scripts/Game/Data/File.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

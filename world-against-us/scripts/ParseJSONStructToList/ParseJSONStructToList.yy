@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ParseJSONStructToList",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Data",
-    "path": "folders/Scripts/Game/Data.yy",
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToList",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToList",
+  "parent":{
+    "name":"Data",
+    "path":"folders/Scripts/Game/Data.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

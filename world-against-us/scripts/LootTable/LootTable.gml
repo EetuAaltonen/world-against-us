@@ -4,7 +4,7 @@ function LootTable(_tag, _pools) constructor
 	pools = _pools;
 	
 	static RollLoot = function()
-	{ 
+	{
 		var loot = [];
 		var poolCount = array_length(pools);
 		for (var i = 0; i < poolCount; i++)

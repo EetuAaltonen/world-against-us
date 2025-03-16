@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "LootTablePoolEntry",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "LootTable",
-    "path": "folders/Scripts/Game/Data/LootTable.yy",
+  "$GMScript":"v1",
+  "%Name":"LootTablePoolEntry",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"LootTablePoolEntry",
+  "parent":{
+    "name":"LootTable",
+    "path":"folders/Scripts/Game/Data/LootTable.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

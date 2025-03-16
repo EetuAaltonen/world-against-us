@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateWindowGardenBed",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "GardenBed",
-    "path": "folders/Scripts/Game/GUI/GardenBed.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateWindowGardenBed",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateWindowGardenBed",
+  "parent":{
+    "name":"GardenBed",
+    "path":"folders/Scripts/Game/GUI/GardenBed.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ParseJSONStructToPlayerData",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Player",
-    "path": "folders/Scripts/Game/Network/Player.yy",
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToPlayerData",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToPlayerData",
+  "parent":{
+    "name":"Player",
+    "path":"folders/Scripts/Game/Network/Player.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

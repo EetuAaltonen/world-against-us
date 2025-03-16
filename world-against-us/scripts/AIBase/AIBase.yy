@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "AIBase",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "AIBase",
-    "path": "folders/Scripts/Game/Data/AI/AIBase.yy",
+  "$GMScript":"v1",
+  "%Name":"AIBase",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"AIBase",
+  "parent":{
+    "name":"AIBase",
+    "path":"folders/Scripts/Game/Data/AI/AIBase.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

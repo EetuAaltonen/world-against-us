@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "OnPressedGUIDragItemStart",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "DragItem",
-    "path": "folders/Scripts/Game/GUI/DragItem.yy",
+  "$GMScript":"v1",
+  "%Name":"OnPressedGUIDragItemStart",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"OnPressedGUIDragItemStart",
+  "parent":{
+    "name":"DragItem",
+    "path":"folders/Scripts/Game/GUI/DragItem.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

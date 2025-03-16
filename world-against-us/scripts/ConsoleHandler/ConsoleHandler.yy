@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ConsoleHandler",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Console",
-    "path": "folders/Scripts/Game/Data/Console.yy",
+  "$GMScript":"v1",
+  "%Name":"ConsoleHandler",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ConsoleHandler",
+  "parent":{
+    "name":"Console",
+    "path":"folders/Scripts/Game/Data/Console.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

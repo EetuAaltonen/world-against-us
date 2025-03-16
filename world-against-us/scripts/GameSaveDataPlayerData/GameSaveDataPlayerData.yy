@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "GameSaveDataPlayerData",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "GameSave",
-    "path": "folders/Scripts/Game/GameSave.yy",
+  "$GMScript":"v1",
+  "%Name":"GameSaveDataPlayerData",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GameSaveDataPlayerData",
+  "parent":{
+    "name":"GameSave",
+    "path":"folders/Scripts/Game/GameSave.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

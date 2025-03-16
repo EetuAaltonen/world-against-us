@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "MetadataItemMagazine",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Metadata",
-    "path": "folders/Scripts/Game/Data/Inventory/Item/Metadata.yy",
+  "$GMScript":"v1",
+  "%Name":"MetadataItemMagazine",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"MetadataItemMagazine",
+  "parent":{
+    "name":"Metadata",
+    "path":"folders/Scripts/Game/Data/Inventory/Item/Metadata.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

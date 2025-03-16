@@ -26,7 +26,7 @@ function ParseJSONStructToDatabaseItem(_jsonStruct)
 			itemStruct[$ "description"] ?? EMPTY_STRING,
 			1,			// DEFAULT QUANTITY
 			metadata,
-			false,		// DEFAULT IS ROTATED
+			false,		// DEFAULT ROTATION
 			true,		// DEFAULT IS KNOWN
 			undefined	// DEFAULT GRID INDEX
 		);

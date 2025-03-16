@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateWindowEscMenu",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "EscMenu",
-    "path": "folders/Scripts/Game/GUI/EscMenu.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateWindowEscMenu",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateWindowEscMenu",
+  "parent":{
+    "name":"EscMenu",
+    "path":"folders/Scripts/Game/GUI/EscMenu.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

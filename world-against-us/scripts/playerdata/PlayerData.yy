@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "PlayerData",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Player",
-    "path": "folders/Scripts/Game/Network/Player.yy",
+  "$GMScript":"v1",
+  "%Name":"PlayerData",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"PlayerData",
+  "parent":{
+    "name":"Player",
+    "path":"folders/Scripts/Game/Network/Player.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

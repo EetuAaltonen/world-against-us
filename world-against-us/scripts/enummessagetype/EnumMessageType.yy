@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "EnumMessageType",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Network",
-    "path": "folders/Scripts/Game/Network.yy",
+  "$GMScript":"v1",
+  "%Name":"EnumMessageType",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumMessageType",
+  "parent":{
+    "name":"Network",
+    "path":"folders/Scripts/Game/Network.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

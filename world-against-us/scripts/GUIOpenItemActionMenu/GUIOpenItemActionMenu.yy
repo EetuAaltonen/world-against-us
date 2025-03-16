@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "GUIOpenItemActionMenu",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Functions",
-    "path": "folders/Scripts/Game/GUI/Functions.yy",
+  "$GMScript":"v1",
+  "%Name":"GUIOpenItemActionMenu",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GUIOpenItemActionMenu",
+  "parent":{
+    "name":"Functions",
+    "path":"folders/Scripts/Game/GUI/Functions.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

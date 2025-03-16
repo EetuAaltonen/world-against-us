@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ScaleIntValuesToFloatVector2",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "FixedPoint",
-    "path": "folders/Scripts/Game/Data/FixedPoint.yy",
+  "$GMScript":"v1",
+  "%Name":"ScaleIntValuesToFloatVector2",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ScaleIntValuesToFloatVector2",
+  "parent":{
+    "name":"FixedPoint",
+    "path":"folders/Scripts/Game/Data/FixedPoint.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

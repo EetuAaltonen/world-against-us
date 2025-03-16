@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "DrawItem",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Item",
-    "path": "folders/Scripts/Game/GUI/Item.yy",
+  "$GMScript":"v1",
+  "%Name":"DrawItem",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"DrawItem",
+  "parent":{
+    "name":"Item",
+    "path":"folders/Scripts/Game/GUI/Item.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

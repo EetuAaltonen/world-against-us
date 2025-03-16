@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "WindowLoading",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Utility",
-    "path": "folders/Scripts/Game/GUI/WindowElement/Utility.yy",
+  "$GMScript":"v1",
+  "%Name":"WindowLoading",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"WindowLoading",
+  "parent":{
+    "name":"Utility",
+    "path":"folders/Scripts/Game/GUI/WindowElement/Utility.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

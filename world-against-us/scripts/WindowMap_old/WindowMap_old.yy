@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "WindowMap_old",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Map",
-    "path": "folders/Scripts/Game/GUI/WindowElement/Map.yy",
+  "$GMScript":"v1",
+  "%Name":"WindowMap_old",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"WindowMap_old",
+  "parent":{
+    "name":"Map",
+    "path":"folders/Scripts/Game/GUI/WindowElement/Map.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

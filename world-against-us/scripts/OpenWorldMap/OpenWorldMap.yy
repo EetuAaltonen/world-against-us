@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "OpenWorldMap",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "WorldMap",
-    "path": "folders/Scripts/Game/GUI/WorldMap.yy",
+  "$GMScript":"v1",
+  "%Name":"OpenWorldMap",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"OpenWorldMap",
+  "parent":{
+    "name":"WorldMap",
+    "path":"folders/Scripts/Game/GUI/WorldMap.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

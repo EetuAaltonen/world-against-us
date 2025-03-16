@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CallbackGUIStateInputJournal",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Journal",
-    "path": "folders/Scripts/Game/GUI/Journal.yy",
+  "$GMScript":"v1",
+  "%Name":"CallbackGUIStateInputJournal",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CallbackGUIStateInputJournal",
+  "parent":{
+    "name":"Journal",
+    "path":"folders/Scripts/Game/GUI/Journal.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

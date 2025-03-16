@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "OnClickEscMenuQuit",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "EscMenu",
-    "path": "folders/Scripts/Game/GUI/EscMenu.yy",
+  "$GMScript":"v1",
+  "%Name":"OnClickEscMenuQuit",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"OnClickEscMenuQuit",
+  "parent":{
+    "name":"EscMenu",
+    "path":"folders/Scripts/Game/GUI/EscMenu.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "DeleteStruct",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Struct",
-    "path": "folders/Scripts/Game/Data/Struct.yy",
+  "$GMScript":"v1",
+  "%Name":"DeleteStruct",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"DeleteStruct",
+  "parent":{
+    "name":"Struct",
+    "path":"folders/Scripts/Game/Data/Struct.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

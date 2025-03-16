@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "DebugMonitorSample",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "DebugMonitor",
-    "path": "folders/Scripts/Game/Data/DebugMonitor.yy",
+  "$GMScript":"v1",
+  "%Name":"DebugMonitorSample",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"DebugMonitorSample",
+  "parent":{
+    "name":"DebugMonitor",
+    "path":"folders/Scripts/Game/Data/DebugMonitor.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

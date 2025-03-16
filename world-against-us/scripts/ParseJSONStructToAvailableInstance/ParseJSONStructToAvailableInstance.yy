@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ParseJSONStructToAvailableInstance",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "WorldMap",
-    "path": "folders/Scripts/Game/Data/WorldMap.yy",
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToAvailableInstance",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToAvailableInstance",
+  "parent":{
+    "name":"WorldMap",
+    "path":"folders/Scripts/Game/Data/WorldMap.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

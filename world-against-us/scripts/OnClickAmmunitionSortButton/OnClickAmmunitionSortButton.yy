@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "OnClickAmmunitionSortButton",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Facility",
-    "path": "folders/Scripts/Game/GUI/Facility.yy",
+  "$GMScript":"v1",
+  "%Name":"OnClickAmmunitionSortButton",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"OnClickAmmunitionSortButton",
+  "parent":{
+    "name":"Facility",
+    "path":"folders/Scripts/Game/GUI/Facility.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

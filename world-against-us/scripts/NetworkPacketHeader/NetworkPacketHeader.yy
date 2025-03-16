@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "NetworkPacketHeader",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Packet",
-    "path": "folders/Scripts/Game/Network/Packet.yy",
+  "$GMScript":"v1",
+  "%Name":"NetworkPacketHeader",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"NetworkPacketHeader",
+  "parent":{
+    "name":"Packet",
+    "path":"folders/Scripts/Game/Network/Packet.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

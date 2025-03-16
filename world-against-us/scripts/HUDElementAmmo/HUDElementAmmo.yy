@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "HUDElementAmmo",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "HUD",
-    "path": "folders/Scripts/Game/GUI/HUD.yy",
+  "$GMScript":"v1",
+  "%Name":"HUDElementAmmo",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"HUDElementAmmo",
+  "parent":{
+    "name":"HUD",
+    "path":"folders/Scripts/Game/GUI/HUD.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

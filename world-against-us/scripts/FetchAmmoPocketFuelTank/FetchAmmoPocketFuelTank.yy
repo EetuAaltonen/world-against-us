@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "FetchAmmoPocketFuelTank",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Functions",
-    "path": "folders/Scripts/Game/Data/Inventory/Functions.yy",
+  "$GMScript":"v1",
+  "%Name":"FetchAmmoPocketFuelTank",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"FetchAmmoPocketFuelTank",
+  "parent":{
+    "name":"Functions",
+    "path":"folders/Scripts/Game/Data/Inventory/Functions.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

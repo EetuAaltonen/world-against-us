@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateWindowPlayerHealthStatus",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "PlayerOverview",
-    "path": "folders/Scripts/Game/GUI/GameWindow/Functions/PlayerOverview.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateWindowPlayerHealthStatus",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateWindowPlayerHealthStatus",
+  "parent":{
+    "name":"PlayerOverview",
+    "path":"folders/Scripts/Game/GUI/GameWindow/Functions/PlayerOverview.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

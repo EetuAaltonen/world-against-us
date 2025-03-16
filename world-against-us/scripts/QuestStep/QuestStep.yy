@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "QuestStep",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Quest",
-    "path": "folders/Scripts/Game/Data/Quest.yy",
+  "$GMScript":"v1",
+  "%Name":"QuestStep",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"QuestStep",
+  "parent":{
+    "name":"Quest",
+    "path":"folders/Scripts/Game/Data/Quest.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

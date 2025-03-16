@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "GetParentObjectNameByObjectName",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Object",
-    "path": "folders/Scripts/Game/Data/Utility/Object.yy",
+  "$GMScript":"v1",
+  "%Name":"GetParentObjectNameByObjectName",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GetParentObjectNameByObjectName",
+  "parent":{
+    "name":"Object",
+    "path":"folders/Scripts/Game/Data/Utility/Object.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

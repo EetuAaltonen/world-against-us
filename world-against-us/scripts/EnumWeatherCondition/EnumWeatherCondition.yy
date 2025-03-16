@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "EnumWeatherCondition",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "WorldState",
-    "path": "folders/Scripts/Game/Data/WorldState.yy",
+  "$GMScript":"v1",
+  "%Name":"EnumWeatherCondition",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumWeatherCondition",
+  "parent":{
+    "name":"WorldState",
+    "path":"folders/Scripts/Game/Data/WorldState.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "CreateWindowMainMenuMultiplayer",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "MainMenu",
-    "path": "folders/Scripts/Game/GUI/MainMenu.yy",
+  "$GMScript":"v1",
+  "%Name":"CreateWindowMainMenuMultiplayer",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CreateWindowMainMenuMultiplayer",
+  "parent":{
+    "name":"MainMenu",
+    "path":"folders/Scripts/Game/GUI/MainMenu.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

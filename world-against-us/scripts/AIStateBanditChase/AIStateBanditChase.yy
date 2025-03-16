@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "AIStateBanditChase",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "AIBanditStates",
-    "path": "folders/Scripts/Game/Data/AI/AIStateMachine/AIBanditStates.yy",
+  "$GMScript":"v1",
+  "%Name":"AIStateBanditChase",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"AIStateBanditChase",
+  "parent":{
+    "name":"AIBanditStates",
+    "path":"folders/Scripts/Game/Data/AI/AIStateMachine/AIBanditStates.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

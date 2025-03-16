@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "OnClickListJournalQuest",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Quest",
-    "path": "folders/Scripts/Game/GUI/GameWindow/Functions/Quest.yy",
+  "$GMScript":"v1",
+  "%Name":"OnClickListJournalQuest",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"OnClickListJournalQuest",
+  "parent":{
+    "name":"Quest",
+    "path":"folders/Scripts/Game/GUI/GameWindow/Functions/Quest.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

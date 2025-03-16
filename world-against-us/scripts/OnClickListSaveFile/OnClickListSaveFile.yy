@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "OnClickListSaveFile",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "MainMenu",
-    "path": "folders/Scripts/Game/GUI/MainMenu.yy",
+  "$GMScript":"v1",
+  "%Name":"OnClickListSaveFile",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"OnClickListSaveFile",
+  "parent":{
+    "name":"MainMenu",
+    "path":"folders/Scripts/Game/GUI/MainMenu.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

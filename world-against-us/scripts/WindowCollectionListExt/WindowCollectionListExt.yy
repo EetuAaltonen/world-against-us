@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "WindowCollectionListExt",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Collection",
-    "path": "folders/Scripts/Game/GUI/WindowElement/Collection.yy",
+  "$GMScript":"v1",
+  "%Name":"WindowCollectionListExt",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"WindowCollectionListExt",
+  "parent":{
+    "name":"Collection",
+    "path":"folders/Scripts/Game/GUI/WindowElement/Collection.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

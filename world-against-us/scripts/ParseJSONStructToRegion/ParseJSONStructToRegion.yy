@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ParseJSONStructToRegion",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Region",
-    "path": "folders/Scripts/Game/Data/Region.yy",
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToRegion",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToRegion",
+  "parent":{
+    "name":"Region",
+    "path":"folders/Scripts/Game/Data/Region.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

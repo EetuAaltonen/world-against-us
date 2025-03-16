@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "ItemActionUnloadMagazine",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Empty",
-    "path": "folders/Scripts/Game/Data/Inventory/Item/Functions/Action/Empty.yy",
+  "$GMScript":"v1",
+  "%Name":"ItemActionUnloadMagazine",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ItemActionUnloadMagazine",
+  "parent":{
+    "name":"Empty",
+    "path":"folders/Scripts/Game/Data/Inventory/Item/Functions/Action/Empty.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

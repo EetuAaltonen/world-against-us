@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "RollContainerLoot",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Container",
-    "path": "folders/Scripts/Game/Data/Container.yy",
+  "$GMScript":"v1",
+  "%Name":"RollContainerLoot",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"RollContainerLoot",
+  "parent":{
+    "name":"Container",
+    "path":"folders/Scripts/Game/Data/Container.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

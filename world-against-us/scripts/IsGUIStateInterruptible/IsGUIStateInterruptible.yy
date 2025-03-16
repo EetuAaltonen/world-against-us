@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "IsGUIStateInterruptible",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "GUI",
-    "path": "folders/Scripts/Game/GUI.yy",
+  "$GMScript":"v1",
+  "%Name":"IsGUIStateInterruptible",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"IsGUIStateInterruptible",
+  "parent":{
+    "name":"GUI",
+    "path":"folders/Scripts/Game/GUI.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }
