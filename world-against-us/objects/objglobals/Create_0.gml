@@ -99,6 +99,7 @@ randomise();
 // TODO: Move these inside a map locations data file to read
 #macro ROOM_INDEX_MAIN_MENU "roomMainMenu"
 #macro ROOM_INDEX_LOAD_RESOURCES "roomLoadResources"
+#macro ROOM_INDEX_PROLOGUE "roomPrologue"
 #macro ROOM_INDEX_CAMP "roomCamp"
 #macro ROOM_INDEX_TOWN "roomTown"
 #macro ROOM_INDEX_OFFICE "roomOffice"
@@ -106,7 +107,7 @@ randomise();
 #macro ROOM_INDEX_MARKET "roomMarket"
 #macro ROOM_INDEX_FOREST "roomForest"
 
-#macro ROOM_DEFAULT ROOM_INDEX_CAMP
+#macro ROOM_DEFAULT ROOM_INDEX_PROLOGUE
 #macro IS_ROOM_IN_GAME_WORLD (room != roomLaunch && room != roomMainMenu && room != roomLoadResources)
 #macro IS_ROOM_PATROL_ROUTED (layer_exists(LAYER_PATH_PATROL))
 
