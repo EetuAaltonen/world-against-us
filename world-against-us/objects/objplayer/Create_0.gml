@@ -16,6 +16,17 @@ dirSpeed = 0;
 movementInput = new DeviceInputMovement(0, 0, 0, 0);
 prevMovementInput = new DeviceInputMovement(0, 0, 0, 0);
 
+// INIT COLLIDER AND COLLISION BODY
+var collisionBody = new CollisionBody(
+	COLLISION_BODY_TYPE.Humanoid
+);
+collider = new Collider(
+	COLLIDER_TYPE.Circle,
+	sprite_width * 0.5, 
+	-(bbox_bottom - bbox_top) * 0.5,
+	collisionBody
+);
+
 // SPAWN WEAPON
 // TODO: Move the weapon under character struct
 //weapon = instance_create_depth(x, y, depth - 1, objWeapon);
