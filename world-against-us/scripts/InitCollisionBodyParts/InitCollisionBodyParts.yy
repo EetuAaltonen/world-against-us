@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"InitCollisionBodyParts",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"InitCollisionBodyParts",
+  "parent":{
+    "name":"CollisionBody",
+    "path":"folders/Scripts/World/CollisionBody.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
