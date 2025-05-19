@@ -1,3 +1,4 @@
+// TODO: Rectangle can be estimated with only two points
 function Vector2Rectangle(_top_left_point, _top_right_point, _bottom_right_point, _bottom_left_point) constructor
 {
 	// CLONE VALUES INSTEAD OF REFERRING
