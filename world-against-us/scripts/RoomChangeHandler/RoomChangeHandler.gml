@@ -19,6 +19,8 @@ function RoomChangeHandler() constructor
 				case ROOM_INDEX_MAIN_MENU: { room_change_queue = roomMainMenu; } break;
 				case ROOM_INDEX_LOAD_RESOURCES: { room_change_queue = roomLoadResources; } break;
 				
+				case ROOM_INDEX_PROLOGUE: { room_change_queue = roomPrologue; } break;
+				
 				case ROOM_INDEX_CAMP: { room_change_queue = roomCamp; } break;
 				
 				case ROOM_INDEX_TOWN: { room_change_queue = roomTown; } break;

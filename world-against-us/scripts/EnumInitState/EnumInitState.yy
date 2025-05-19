@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"EnumInitState",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumInitState",
+  "parent":{
+    "name":"Instance",
+    "path":"folders/Scripts/World/Instance.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -77,6 +77,25 @@ if (!is_undefined(character))
 				);
 			}
 		}
+		
+		// PROJECTILE TEST
+		var mouseWorldPosition = MouseWorldPosition();
+		var spawnPoint = new Vector2(x, bbox_bottom);
+		if (keyboard_check_released(vk_space))
+		{
+			// CREATE PROJECTILE INSTANCE
+			var projectileInstance = instance_create_depth(spawnPoint.X, spawnPoint.Y, 0/*top most depth*/, objColProjectile);
+			var aimAngle = point_direction(spawnPoint.X, spawnPoint.Y, mouseWorldPosition.X, mouseWorldPosition.Y);
+			var bulletData = global.ItemDatabase.GetItemByName("9mm Bullet");
+			if (bulletData != undefined)
+			{
+				projectileInstance.sprite_index = asset_get_index(bulletData.metadata.projectile);
+				projectileInstance.direction = aimAngle;
+				projectileInstance.image_angle = projectileInstance.direction;
+				projectileInstance.flySpeed = bulletData.metadata.fly_speed;
+				projectileInstance.damageSource = new DamageSource(self, bulletData, MetersToPixels(20), spawnPoint);
+			}
+		}
 	}
 }
 

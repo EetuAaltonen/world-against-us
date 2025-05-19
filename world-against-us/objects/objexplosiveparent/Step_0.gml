@@ -1,8 +1,14 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
-if (condition <= 0)
+/*if (condition <= 0)
 {
+	if (blastInstance == noone)
+	{
+		blastInstance = instance_create_depth(x, y, 0, objExplosiveBlast);
+		blastInstance.damage = damage;
+	}
+
 	visible = false;
 	
 	if (blastInstance != noone)
@@ -25,4 +31,4 @@ if (condition <= 0)
 			blastInstance.image_yscale = newSpriteScale;
 		}
 	}
-}
+}*/

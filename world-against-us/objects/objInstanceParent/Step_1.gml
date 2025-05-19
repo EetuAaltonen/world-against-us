@@ -1,9 +1,10 @@
-// INITIALIZE HITBOX IF FOUND
-if (initHitbox)
+// INITIALIZE INSTANCE
+if (instanceState < INSTANCE_INIT_STATE.InstanceInit)
 {
 	// TODO: Optimize hitboxes
 	//InitializeHitbox(self);
-	initHitbox = false;
+	
+	instanceState = INSTANCE_INIT_STATE.InstanceInit;
 }
 
 depth = -(bbox_bottom);

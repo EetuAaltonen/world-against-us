@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CheckCollisionBetweenInstances",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CheckCollisionBetweenInstances",
+  "parent":{
+    "name":"Collision",
+    "path":"folders/Scripts/World/Collision.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

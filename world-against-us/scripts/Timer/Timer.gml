@@ -44,7 +44,13 @@ function Timer(_setting_time) constructor
 		return running_time;
 	}
 	
-	 //TODO: Rename to "IsTimerTriggered"
+	//TODO: Rename to "IsTimerStopped"
+	static IsTimerTriggered = function()
+	{
+		return running_time <= 0;
+	}
+	
+	//TODO: Rename to "IsTimerTriggered"
 	static IsTimerStopped = function()
 	{
 		return (is_timer_running && running_time <= 0);

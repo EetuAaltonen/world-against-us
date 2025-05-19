@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"EnumColliderType",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumColliderType",
+  "parent":{
+    "name":"Collider",
+    "path":"folders/Scripts/World/Collider.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
