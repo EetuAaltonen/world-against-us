@@ -50,6 +50,7 @@ randomise();
 #macro MAX_SPRITE_SIZE 100000
 
 // COLLISION
+#macro FRAME_TIME (game_get_speed(gamespeed_microseconds)  * 0.001)
 #macro OBJECTS_TO_HIT [objHitbox]
 
 // LAYERS
