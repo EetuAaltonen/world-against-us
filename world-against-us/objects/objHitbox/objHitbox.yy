@@ -10,8 +10,8 @@
   "name":"objHitbox",
   "overriddenProperties":[],
   "parent":{
-    "name":"World",
-    "path":"folders/Objects/World.yy",
+    "name":"Collision",
+    "path":"folders/Objects/World/Collision.yy",
   },
   "parentObjectId":null,
   "persistent":false,
