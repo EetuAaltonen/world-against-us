@@ -1,15 +1,14 @@
 // INHERIT THE PAREN EVENT
 event_inherited();
-
-// CHILD INIT
-if (instanceState < INSTANCE_INIT_STATE.Done) {
+if (instanceState != object_index)
+{
+	instanceState = event_object;
 	if (damageSource != undefined)
 	{
 		speed = flySpeed;
-		instanceState = INSTANCE_INIT_STATE.Done;
 	}
 } else {
-	// CHECK COLLISION
+	// CHECK IF IS OUTSIDE ROOM
 	if (speed > 0)
 	{
 		// DESTROY BEYOND RANGE LIMIT

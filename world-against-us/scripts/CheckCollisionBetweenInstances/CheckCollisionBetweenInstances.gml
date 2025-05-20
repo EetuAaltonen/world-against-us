@@ -2,7 +2,9 @@ function CheckCollisionBetweenInstances(_instanceRef, _targetInstanceRef)
 {
 	var isTargetHit = false;
 	if (_instanceRef.collider == undefined) return isTargetHit;
+	if (_instanceRef.instanceState != _instanceRef.object_index) return isTargetHit;
 	if (_targetInstanceRef.collider == undefined) return isTargetHit;
+	if (_targetInstanceRef.instanceState != _targetInstanceRef.object_index) return isTargetHit;
 	
 	var speedVector = new Vector2(_instanceRef.speed, 0);
 	var directionalSpeedVector = speedVector.Rotate(_instanceRef.direction);

@@ -1,4 +1,8 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
-
-electricalNetwork.electricOutputPower = (facility.inventory.GetItemCount() > 0) ? electricalNetwork.maxElectricOutputPower : 0;
+if (instanceState != object_index)
+{
+	instanceState = event_object;
+} else {
+	electricalNetwork.electricOutputPower = (facility.inventory.GetItemCount() > 0) ? electricalNetwork.maxElectricOutputPower : 0;
+}

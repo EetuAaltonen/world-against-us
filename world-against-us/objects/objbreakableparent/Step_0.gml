@@ -1,6 +1,5 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
-if (instanceState < INSTANCE_INIT_STATE.Done) return;
 
 // CHECK IF DESTROYED
 if (collider != undefined)

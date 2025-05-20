@@ -1,34 +1,37 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
-
-// TODO: Optimize this code
-if (!is_undefined(global.HighlightHandlerRef))
-{
-	var highlightedInteractableLayer = layer_get_id(LAYER_HIGHLIGHT_INTERACTABLE);
-	var highlightedTargetLayer = layer_get_id(LAYER_HIGHLIGHT_TARGET);
-		
-	if (self == global.HighlightHandlerRef.highlightedInteractable) layer_depth(highlightedInteractableLayer, depth);
-	if (self == global.HighlightHandlerRef.highlightedTarget) layer_depth(highlightedTargetLayer, depth);
-		
-	if ((self != global.HighlightHandlerRef.highlightedInteractable && depth == layer_get_depth(highlightedInteractableLayer)) ||
-		(self != global.HighlightHandlerRef.highlightedTarget && depth == layer_get_depth(highlightedTargetLayer))
-	)
+if (instanceState != object_index) {
+	instanceState = event_object;
+} else {
+	// TODO: Optimize this code
+	if (!is_undefined(global.HighlightHandlerRef))
 	{
-		depth += 1;
-	}
-}
-
-if (global.GUIStateHandlerRef.IsGUIStateClosed())
-{
-	if (!is_undefined(interactionFunction))
-	{
-		if (instance_exists(global.HighlightHandlerRef.highlightedInteractable))
+		var highlightedInteractableLayer = layer_get_id(LAYER_HIGHLIGHT_INTERACTABLE);
+		var highlightedTargetLayer = layer_get_id(LAYER_HIGHLIGHT_TARGET);
+		
+		if (self == global.HighlightHandlerRef.highlightedInteractable) layer_depth(highlightedInteractableLayer, depth);
+		if (self == global.HighlightHandlerRef.highlightedTarget) layer_depth(highlightedTargetLayer, depth);
+		
+		if ((self != global.HighlightHandlerRef.highlightedInteractable && depth == layer_get_depth(highlightedInteractableLayer)) ||
+			(self != global.HighlightHandlerRef.highlightedTarget && depth == layer_get_depth(highlightedTargetLayer))
+		)
 		{
-			if (global.HighlightHandlerRef.highlightedInteractable.id == id)
+			depth += 1;
+		}
+	}
+
+	if (global.GUIStateHandlerRef.IsGUIStateClosed())
+	{
+		if (!is_undefined(interactionFunction))
+		{
+			if (instance_exists(global.HighlightHandlerRef.highlightedInteractable))
 			{
-				if (keyboard_check_released(ord("F")))
+				if (global.HighlightHandlerRef.highlightedInteractable.id == id)
 				{
-					interactionFunction();
+					if (keyboard_check_released(ord("F")))
+					{
+						interactionFunction();
+					}
 				}
 			}
 		}

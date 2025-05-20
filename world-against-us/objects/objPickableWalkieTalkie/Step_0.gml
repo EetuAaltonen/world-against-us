@@ -1,8 +1,3 @@
-if (!is_undefined(global.WorldStateData))
-{
-	if (global.WorldStateData[? WORLD_STATE_UNLOCK_WALKIE_TALKIE]) instance_destroy();
-}
-
 if (global.GUIStateHandlerRef.IsGUIStateClosed())
 {
 	overheadDialogueTimer.Update();
