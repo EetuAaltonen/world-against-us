@@ -9,10 +9,6 @@ z = 0;
 
 // COLLISION
 collider = undefined;
-hitboxInstance = noone;
-
-// IN CAMERA VIEW
-isInCameraView = false;
 
 // NETWORKING
 networkId = undefined;
