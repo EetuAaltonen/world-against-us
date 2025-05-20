@@ -1,2 +1,2 @@
-if (instance_exists(hitboxInstance)) { instance_destroy(hitboxInstance); }
+// DESTROY COLLIDER
 if (collider != undefined) collider.OnDestroy();

@@ -41,7 +41,7 @@ function CollisionBody(_collisionBodyType) constructor
 	
 	static Draw = function(_instanceRef)
 	{
-		var outlineColor = iframe_timer.IsTimerTriggered() ? c_red : c_gray;
+		var outlineColor = iframe_timer.IsTimerTriggered() ? c_white : c_orange;
 		switch (collision_body_type)
 		{
 			case COLLISION_BODY_TYPE.Full_sprite: {

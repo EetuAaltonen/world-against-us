@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"InitializeHitbox",
+  "%Name":"CheckLineIntersectCircle",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"InitializeHitbox",
+  "name":"CheckLineIntersectCircle",
   "parent":{
     "name":"Collision",
     "path":"folders/Scripts/World/Collision.yy",

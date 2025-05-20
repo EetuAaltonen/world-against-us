@@ -10,7 +10,10 @@ if (isTargetHit)
 	// COLLIDE
 	if (instance_exists(collisionTarget))
 	{
-		collisionTarget.collider.collision_body.TakeDamage(damageSource.bullet.metadata.base_damage);
+		if (collisionTarget.collider.collision_body != undefined)
+		{
+			collisionTarget.collider.collision_body.TakeDamage(damageSource.bullet.metadata.base_damage);
+		}
 	}
 	
 	// DESTROY AFTER COLLISION

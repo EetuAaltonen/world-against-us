@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"CheckLineCircleIntersect",
+  "%Name":"CheckLineIntersectLine",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"CheckLineCircleIntersect",
+  "name":"CheckLineIntersectLine",
   "parent":{
     "name":"Collision",
     "path":"folders/Scripts/World/Collision.yy",

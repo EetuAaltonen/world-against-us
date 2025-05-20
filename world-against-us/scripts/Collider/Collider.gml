@@ -28,36 +28,32 @@ function Collider(_colliderType, _collisionRadius = 0, _collisionYOffset = 0, _c
 	
 	static Draw = function(_instanceRef)
 	{
+		var outlineColor = c_blue;
 		switch (collider_type)
 		{
 			case COLLIDER_TYPE.Bounding_box:
 			{
-				if (collision_body != undefined)
-				{
-					draw_rectangle_color(
-						_instanceRef.bbox_left, _instanceRef.bbox_top, 
-						_instanceRef.bbox_right, _instanceRef.bbox_bottom,
-						c_red, c_red, c_red, c_red,
-						true
-					);
-					// DRAW COLLISION BODY AND HITBOX
-					collision_body.Draw();
-				}
+				draw_rectangle_color(
+					_instanceRef.bbox_left, _instanceRef.bbox_top, 
+					_instanceRef.bbox_right, _instanceRef.bbox_bottom,
+					outlineColor, outlineColor, outlineColor, outlineColor,
+					true
+				);
 			} break;
 			case COLLIDER_TYPE.Circle:
 			{
 				draw_circle_color(
 					_instanceRef.x, _instanceRef.y + collision_yoffset,
 					collision_radius,
-					c_red, c_red, true
+					outlineColor, outlineColor, true
 				);
-				
-				if (collision_body != undefined)
-				{
-					// DRAW COLLISION BODY AND HITBOX
-					collision_body.Draw(_instanceRef);
-				}
 			} break;
+		}
+		
+		// DRAW COLLISION BODY
+		if (collision_body != undefined)
+		{
+			collision_body.Draw(_instanceRef);
 		}
 	}
 }
