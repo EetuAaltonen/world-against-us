@@ -1,4 +1,5 @@
-instanceState = INSTANCE_INIT_STATE.Created;
+instanceState = event_object;
+isInstanceStateRootEventCalledOnce = false;
 
 // PHYSICS
 hSpeed = 0;

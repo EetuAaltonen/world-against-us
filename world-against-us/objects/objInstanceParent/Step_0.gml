@@ -1,4 +1,4 @@
-if (instanceState < INSTANCE_INIT_STATE.Done) return;
+if (instanceState != object_index) return;
 
 // UPDATE COLLISION BODY
 if (collider != undefined)
