@@ -54,20 +54,36 @@ function CheckCollisionBetweenInstances(_instanceRef, _targetInstanceRef)
 			{
 				case COLLIDER_TYPE.Bounding_box:
 				{
-					// TODO: Collision script
+					// CHECK IF INSTANCE FLIES OVER THE TARGET
+					if (_instanceRef.z <= targetInstanceHeight)
+					{
+						isTargetHit = CheckLineIntersectRectangle(
+							new Vector2Line(
+								new Vector2(_instanceRef.x, _instanceRef.y + _instanceRef.collider.collision_yoffset),
+								new Vector2(_instanceRef.x + directionalSpeedVector.X, _instanceRef.y + _instanceRef.collider.collision_yoffset + directionalSpeedVector.Y)
+							),
+							new Vector2Rectangle(
+								new Vector2(_targetInstanceRef.bbox_left, _targetInstanceRef.bbox_top),
+								new Vector2(_targetInstanceRef.bbox_right, _targetInstanceRef.bbox_top),
+								new Vector2(_targetInstanceRef.bbox_right, _targetInstanceRef.bbox_bottom),
+								new Vector2(_targetInstanceRef.bbox_left, _targetInstanceRef.bbox_bottom)
+							)
+						);
+					}
 				} break;
 				case COLLIDER_TYPE.Circle:
 				{
 					// CHECK IF INSTANCE FLIES OVER THE TARGET
 					if (_instanceRef.z <= targetInstanceHeight)
 					{
-						isTargetHit = CheckLineCircleIntersect(
+						isTargetHit = CheckLineIntersectCircle(
+							_instanceRef.x,
+							_instanceRef.y + _instanceRef.collider.collision_yoffset,
+							_instanceRef.x + directionalSpeedVector.X,
+							_instanceRef.y + _instanceRef.collider.collision_yoffset + directionalSpeedVector.Y,
 							_targetInstanceRef.x,
 							_targetInstanceRef.y + _targetInstanceRef.collider.collision_yoffset,
 							_targetInstanceRef.collider.collision_radius,
-							_instanceRef.x, _instanceRef.y + _instanceRef.collider.collision_yoffset,
-							_instanceRef.x + directionalSpeedVector.X,
-							_instanceRef.y + directionalSpeedVector.Y
 						);
 					}
 				} break;
