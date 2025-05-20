@@ -1,6 +1,5 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
-if (instanceState < INSTANCE_INIT_STATE.Done) return;
 
 // CHECK RANGE
 if (distance_to_point(damageSource.spawn_point.X, damageSource.spawn_point.Y) > damageSource.range) instance_destroy();

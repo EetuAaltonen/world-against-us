@@ -1,6 +1,5 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
-if (instanceState < INSTANCE_INIT_STATE.Done) return;
 if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;
 
 if (collider != undefined)

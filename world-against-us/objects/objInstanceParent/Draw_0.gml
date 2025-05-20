@@ -1,6 +1,7 @@
+if (instanceState != object_index) return;
+
 // DRAW SELF USING Z-AXIS INSTEAD OF X,Y POSITION
 //draw_self();
-if (instanceState < INSTANCE_INIT_STATE.Done) return;
 
 draw_sprite_ext(
 	sprite_index, image_index,

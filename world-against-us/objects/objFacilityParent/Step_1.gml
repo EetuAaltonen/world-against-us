@@ -1,35 +1,39 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
-
-if (!is_undefined(electricalNetwork))
+if (instanceState != object_index)
 {
-	if (electricalNetwork.targetInstance == noone)
+	instanceState = event_object;
+} else {
+	if (!is_undefined(electricalNetwork))
 	{
-		if (electricalNetwork.initNetwork)
+		if (electricalNetwork.targetInstance == noone)
 		{
-			initNetwork = false;
-			if (!is_undefined(electricalNetwork.targetId))
+			if (electricalNetwork.initNetwork)
 			{
-				var instanceCount = instance_number(objFacilityParent);
-				for (var i = 0; i < instanceCount; i++)
+				initNetwork = false;
+				if (!is_undefined(electricalNetwork.targetId))
 				{
-					var facilityInstance = instance_find(objFacilityParent, i);
-					if (instance_exists(facilityInstance))
+					var instanceCount = instance_number(objFacilityParent);
+					for (var i = 0; i < instanceCount; i++)
 					{
-						if (!is_undefined(facilityInstance.electricalNetwork))
+						var facilityInstance = instance_find(objFacilityParent, i);
+						if (instance_exists(facilityInstance))
 						{
-							if (facilityInstance.electricalNetwork.electricId == electricalNetwork.targetId)
+							if (!is_undefined(facilityInstance.electricalNetwork))
 							{
-								electricalNetwork.targetInstance = facilityInstance;
-								break;
+								if (facilityInstance.electricalNetwork.electricId == electricalNetwork.targetId)
+								{
+									electricalNetwork.targetInstance = facilityInstance;
+									break;
+								}
 							}
 						}
 					}
 				}
 			}
+		} else {
+			var targetInstance = electricalNetwork.targetInstance;
+			targetInstance.electricalNetwork.electricPower = max(electricalNetwork.electricPower, electricalNetwork.electricOutputPower);
 		}
-	} else {
-		var targetInstance = electricalNetwork.targetInstance;
-		targetInstance.electricalNetwork.electricPower = max(electricalNetwork.electricPower, electricalNetwork.electricOutputPower);
 	}
 }

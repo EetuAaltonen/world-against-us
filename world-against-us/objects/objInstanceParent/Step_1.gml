@@ -1,11 +1,12 @@
 // INITIALIZE INSTANCE
-if (instanceState < INSTANCE_INIT_STATE.InstanceInit)
+if (instanceState != object_index)
 {
-	// TODO: Optimize hitboxes
-	//InitializeHitbox(self);
-	
-	instanceState = INSTANCE_INIT_STATE.InstanceInit;
+	instanceState = event_object;
+	if (isInstanceStateRootEventCalledOnce)
+	{
+		throw(string("Failed to initialize instance state of an object: {0}", object_get_name(object_index)));
+	}
+	isInstanceStateRootEventCalledOnce = true;
 }
 
 depth = -(bbox_bottom);
-isInCameraView = true;
