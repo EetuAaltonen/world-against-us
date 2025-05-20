@@ -1,4 +1,4 @@
-function CheckLineCircleIntersect(_cx, _cy, _r, _x1, _y1, _x2, _y2)
+function CheckLineIntersectCircle(_x1, _y1, _x2, _y2, _cx, _cy, _r)
 {
 	var d = new Vector2(_x2 - _x1, _y2 - _y1);
 	var f = new Vector2(_x1 - _cx, _y1 - _cy);
