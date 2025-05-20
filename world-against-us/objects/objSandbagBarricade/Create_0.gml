@@ -6,6 +6,3 @@ collider = new Collider(
 	COLLIDER_TYPE.Bounding_box,
 	0, 0, undefined
 );
-
-image_speed = 0;
-facility = new Facility(undefined, undefined, "Road_Gate", new MetadataFacilityRoadGate(false));
