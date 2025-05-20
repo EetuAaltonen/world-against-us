@@ -3,6 +3,6 @@ event_inherited();
 
 // INIT COLLIDER
 collider = new Collider(
-	COLLIDER_TYPE.Collision_mask,
+	COLLIDER_TYPE.Bounding_box,
 	0, 0, undefined
 );
