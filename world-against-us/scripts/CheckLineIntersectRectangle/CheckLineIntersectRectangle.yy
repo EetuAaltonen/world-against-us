@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CheckLineIntersectRectangle",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CheckLineIntersectRectangle",
+  "parent":{
+    "name":"Collision",
+    "path":"folders/Scripts/World/Collision.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
