@@ -42,17 +42,49 @@ function CollisionBody(_collisionBodyType) constructor
 	static Draw = function(_instanceRef)
 	{
 		var outlineColor = iframe_timer.IsTimerTriggered() ? c_white : c_orange;
+		var spriteSize = new Size(_instanceRef.sprite_width, _instanceRef.sprite_height);
 		switch (collision_body_type)
 		{
 			case COLLISION_BODY_TYPE.Full_sprite: {
 				draw_rectangle_color(
-					_instanceRef.x - (_instanceRef.sprite_width * 0.5),
-					_instanceRef.y - (_instanceRef.sprite_height * 0.5) - (_instanceRef.sprite_yoffset * 0.5) + _instanceRef.z,
-					_instanceRef.x + (_instanceRef.sprite_width * 0.5),
-					_instanceRef.y + (_instanceRef.sprite_height * 0.5) - (_instanceRef.sprite_yoffset * 0.5) + _instanceRef.z,
-					outlineColor, outlineColor, outlineColor, outlineColor, outlineColor
-				)
+					_instanceRef.x - (spriteSize.w * 0.5),
+					_instanceRef.y - (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) + _instanceRef.z,
+					_instanceRef.x + (spriteSize.w * 0.5),
+					_instanceRef.y + (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) + _instanceRef.z,
+					outlineColor, outlineColor, outlineColor, outlineColor, true
+				);
 			} break;
+			default: {
+				draw_rectangle_color(
+					_instanceRef.x - (spriteSize.w * 0.5),
+					_instanceRef.y - (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) + _instanceRef.z,
+					_instanceRef.x + (spriteSize.w * 0.5),
+					_instanceRef.y + (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) + _instanceRef.z,
+					outlineColor, outlineColor, outlineColor, outlineColor, true
+				);
+				
+				var collisionBodyTopLeftPos = new Vector2(
+					_instanceRef.x - (spriteSize.w * 0.5),
+					_instanceRef.y - (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) + _instanceRef.z
+				);
+				outlineColor = c_red;
+				var bodyPartIndices = ds_map_keys_to_array(body_parts);
+				var bodyPartCount = array_length(bodyPartIndices);
+				for (var i = 0; i < bodyPartCount; i++)
+				{
+					var bodyPart = body_parts[? bodyPartIndices[@ i]];
+					if (!is_undefined(bodyPart))
+					{
+						draw_rectangle_color(
+							collisionBodyTopLeftPos.X + (spriteSize.w * bodyPart.bounding_box.top_left_point.X),
+							collisionBodyTopLeftPos.Y + (spriteSize.h * bodyPart.bounding_box.top_left_point.Y),
+							collisionBodyTopLeftPos.X + (spriteSize.w * bodyPart.bounding_box.bottom_right_point.X),
+							collisionBodyTopLeftPos.Y + (spriteSize.h * bodyPart.bounding_box.bottom_right_point.Y),
+							outlineColor, outlineColor, outlineColor, outlineColor, true
+						)
+					}
+				}
+			}
 		}
 	}
 	
@@ -86,7 +118,7 @@ function CollisionBody(_collisionBodyType) constructor
 	{
 		var targetBodyPartIndex = _targetBodyPartType || COLLISION_BODY_PART_TYPE.StaticBody;
 		var targetBodyPart = body_parts[? targetBodyPartIndex];
-		if (targetBodyPart != undefined) {
+		if (!is_undefined(targetBodyPart)) {
 			targetBodyPart.TakeDamage(_damage);
 			CalculateHitpoints();
 		} else {
@@ -101,7 +133,7 @@ function CollisionBody(_collisionBodyType) constructor
 	{
 		var targetBodyPartIndex = _targetBodyPartType || COLLISION_BODY_PART_TYPE.StaticBody;
 		var targetBodyPart = body_parts[? targetBodyPartIndex];
-		if (targetBodyPart != undefined) {
+		if (!is_undefined(targetBodyPart)) {
 			targetBodyPart.RestoreHealth(_amount);
 			CalculateHitpoints();
 		} else {
