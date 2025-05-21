@@ -24,6 +24,7 @@ function Vector2(_x, _y) constructor
 		var newX = X * cs - Y * sn;
 		var newY = X * sn + Y * cs;
 	
-		return new Vector2(newX, newY);
+		X = newX;
+		Y = newY;
 	}
 }

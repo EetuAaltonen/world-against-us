@@ -1,11 +1,13 @@
 function CheckLineIntersectCircle(_x1, _y1, _x2, _y2, _cx, _cy, _r)
 {
-	var d = new Vector2(_x2 - _x1, _y2 - _y1);
-	var f = new Vector2(_x1 - _cx, _y1 - _cy);
+	var dx = _x2 - _x1;
+	var dy = _y2 - _y1;
+	var fx = _x1 - _cx;
+	var fy = _y1 - _cy;
 	
-	var a = dot_product(d.X, d.Y, d.X, d.Y);
-	var b = 2 * dot_product(f.X, f.Y, d.X, d.Y);
-	var c = dot_product(f.X, f.Y, f.X, f.Y) - _r * _r ;
+	var a = dot_product(dx, dy, dx, dy);
+	var b = 2 * dot_product(fx, fy, dx, dy);
+	var c = dot_product(fx, fy, fx, fy) - _r * _r ;
 
 	var discriminant = b * b - 4 * a * c;
 	if (discriminant < 0)
