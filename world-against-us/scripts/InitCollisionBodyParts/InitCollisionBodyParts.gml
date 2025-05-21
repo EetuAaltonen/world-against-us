@@ -12,43 +12,85 @@ function InitCollisionBodyParts(_collisionBodyPartsRef, _collisionBodyType)
 				)
 			);
 		} break;
-		/*case COLLISION_BODY_TYPE.Humanoid:
+		case COLLISION_BODY_TYPE.Humanoid:
 		{
-			ds_map_add(_bodyPartsRef, CHARACTER_BODY_PARTS.Head, new CharacterBodyPart(
-				"Head", CHARACTER_BODY_PARTS.Head, 30,
-				new Vector2Rectangle(new Vector2(0.25, 0), new Vector2(0.75, 0), new Vector2(0.75, 0.125), new Vector2(0.25, 0.125))
-			));
-			ds_map_add(_bodyPartsRef, CHARACTER_BODY_PARTS.RightArm, new CharacterBodyPart(
-				"Right Arm", CHARACTER_BODY_PARTS.RightArm, 25,
-				new Vector2Rectangle(new Vector2(0, 0.125), new Vector2(0.25, 0.125), new Vector2(0.25, 0.6), new Vector2(0, 0.6))
-			));
-			ds_map_add(_bodyPartsRef, CHARACTER_BODY_PARTS.Chest, new CharacterBodyPart(
-				"Chest", CHARACTER_BODY_PARTS.Chest, 50,
-				new Vector2Rectangle(new Vector2(0.25, 0.125), new Vector2(0.75, 0.125), new Vector2(0.75, 0.35), new Vector2(0.25, 0.35))
-			));
-			ds_map_add(_bodyPartsRef, CHARACTER_BODY_PARTS.LeftArm, new CharacterBodyPart(
-				"Left Arm", CHARACTER_BODY_PARTS.LeftArm, 25,
-				new Vector2Rectangle(new Vector2(0.75, 0.125), new Vector2(1, 0.125), new Vector2(1, 0.6), new Vector2(0.75, 0.6))
-			));
-			ds_map_add(_bodyPartsRef, CHARACTER_BODY_PARTS.Stomach, new CharacterBodyPart(
-				"Stomach", CHARACTER_BODY_PARTS.Stomach, 40,
-				new Vector2Rectangle(new Vector2(0.25, 0.35), new Vector2(0.75, 0.35), new Vector2(0.75, 0.5), new Vector2(0.25, 0.5))
-			));
-			ds_map_add(_bodyPartsRef, CHARACTER_BODY_PARTS.RightLeg, new CharacterBodyPart(
-				"Right Leg", CHARACTER_BODY_PARTS.RightLeg, 30,
-				new Vector2Rectangle(new Vector2(0.25, 0.5), new Vector2(0.5, 0.5), new Vector2(0.5, 1), new Vector2(0.25, 1))
-			));
-			ds_map_add(_bodyPartsRef, CHARACTER_BODY_PARTS.LeftLeg, new CharacterBodyPart(
-				"Left Leg", CHARACTER_BODY_PARTS.LeftLeg, 30,
-				new Vector2Rectangle(new Vector2(0.5, 0.5), new Vector2(0.75, 0.5), new Vector2(0.75, 1), new Vector2(0.5, 1))
-			));
-		} break;*/
+			// HEAD
+			ds_map_add(
+				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.Head,
+				new CollisionBodyPart(20, true, new Vector2Rectangle(new Vector2(0.35, 0), undefined, new Vector2(0.65, 0.15), undefined)),
+			);
+			// THORAX
+			ds_map_add(
+				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.Thorax,
+				new CollisionBodyPart(40, true, new Vector2Rectangle(new Vector2(0.2, 0.15), undefined, new Vector2(0.8, 0.3), undefined)),
+			);
+			// LEFT ARM
+			ds_map_add(
+				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.L_arm,
+				new CollisionBodyPart(30, false, new Vector2Rectangle(new Vector2(0, 0.15), undefined, new Vector2(0.2, 0.6), undefined)),
+			);
+			// RIGHT ARM
+			ds_map_add(
+				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.R_arm,
+				new CollisionBodyPart(30, false, new Vector2Rectangle(new Vector2(0.8, 0.15), undefined, new Vector2(1, 0.6), undefined)),
+			);
+			// STOMACK
+			ds_map_add(
+				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.Stomack,
+				new CollisionBodyPart(40, true, new Vector2Rectangle(new Vector2(0.2, 0.3), undefined, new Vector2(0.8, 0.6), undefined)),
+			);
+			// LEFT LEG
+			ds_map_add(
+				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.L_leg,
+				new CollisionBodyPart(30, false, new Vector2Rectangle(new Vector2(0.2, 0.6), undefined, new Vector2(0.45, 1), undefined)),
+			);
+			// RIGHT LEG
+			ds_map_add(
+				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.R_leg,
+				new CollisionBodyPart(30, false, new Vector2Rectangle(new Vector2(0.55, 0.6), undefined, new Vector2(0.8, 1), undefined)),
+			);
+		} break;
+		case COLLISION_BODY_TYPE.Zombie:
+		{
+			// HEAD
+			ds_map_add(
+				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.Head,
+				new CollisionBodyPart(10, true, new Vector2Rectangle(new Vector2(0.35, 0), undefined, new Vector2(0.65, 0.15), undefined)),
+			);
+			// THORAX
+			ds_map_add(
+				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.Thorax,
+				new CollisionBodyPart(30, true, new Vector2Rectangle(new Vector2(0.2, 0.15), undefined, new Vector2(0.8, 0.3), undefined)),
+			);
+			// LEFT ARM
+			ds_map_add(
+				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.L_arm,
+				new CollisionBodyPart(20, false, new Vector2Rectangle(new Vector2(0, 0.15), undefined, new Vector2(0.2, 0.6), undefined)),
+			);
+			// RIGHT ARM
+			ds_map_add(
+				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.R_arm,
+				new CollisionBodyPart(20, false, new Vector2Rectangle(new Vector2(0.8, 0.15), undefined, new Vector2(1, 0.6), undefined)),
+			);
+			// STOMACK
+			ds_map_add(
+				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.Stomack,
+				new CollisionBodyPart(30, true, new Vector2Rectangle(new Vector2(0.2, 0.3), undefined, new Vector2(0.8, 0.6), undefined)),
+			);
+			// LEFT LEG
+			ds_map_add(
+				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.L_leg,
+				new CollisionBodyPart(20, false, new Vector2Rectangle(new Vector2(0.2, 0.6), undefined, new Vector2(0.45, 1), undefined)),
+			);
+			// RIGHT LEG
+			ds_map_add(
+				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.R_leg,
+				new CollisionBodyPart(20, false, new Vector2Rectangle(new Vector2(0.55, 0.6), undefined, new Vector2(0.8, 1), undefined)),
+			);
+		} break;
 		default:
 		{
-			show_debug_message(
-				string("Trying to init collision body parts with unknown body type {0}!",
-				_collisionBodyType)
-			);
+			throw(string("Trying to initialize collision body parts with unknown body type {0}!",_collisionBodyType));
 		}
 	}
 }
