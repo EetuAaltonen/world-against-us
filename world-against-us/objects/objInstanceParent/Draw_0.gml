@@ -15,7 +15,7 @@ if (global.DEBUGMODE)
 	draw_circle_color(x, y, 1, c_lime, c_lime, false);
 	
 	// DRAW COLLIDER
-	if (collider != undefined)
+	if (!is_undefined(collider))
 	{
 		collider.Draw(self);
 	}

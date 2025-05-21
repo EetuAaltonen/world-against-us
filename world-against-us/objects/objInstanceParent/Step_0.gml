@@ -1,7 +1,7 @@
 if (instanceState != object_index) return;
 
 // UPDATE COLLISION BODY
-if (collider != undefined)
+if (!is_undefined(collider))
 {
 	collider.Update();
 }

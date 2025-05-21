@@ -10,7 +10,7 @@ function Collider(_colliderType, _collisionRadius = 0, _collisionYOffset = 0, _c
 	
 	static OnDestroy = function()
 	{
-		if (collision_body != undefined)
+		if (!is_undefined(collision_body))
 		{
 			collision_body.OnDestroy();
 			collision_body = undefined;
@@ -20,7 +20,7 @@ function Collider(_colliderType, _collisionRadius = 0, _collisionYOffset = 0, _c
 	static Update = function()
 	{
 		// UPDATE COLLISION BODY
-		if (collision_body != undefined)
+		if (!is_undefined(collision_body))
 		{
 			collision_body.Update();
 		}
@@ -51,7 +51,7 @@ function Collider(_colliderType, _collisionRadius = 0, _collisionYOffset = 0, _c
 		}
 		
 		// DRAW COLLISION BODY
-		if (collision_body != undefined)
+		if (!is_undefined(collision_body))
 		{
 			collision_body.Draw(_instanceRef);
 		}

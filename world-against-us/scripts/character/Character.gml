@@ -50,11 +50,12 @@ function Character(_name, _type, _race, _behavior) constructor
 			for (var i = 0; i < bodyPartCount; i++)
 			{
 				var bodyPart = body_parts[? bodyPartIndices[@ i]];
-			
-				totalBodyPartMaxCondition += bodyPart.max_condition;
-				totalBodyPartCondition += bodyPart.condition;
+				if (!is_undefined(bodyPart))
+				{
+					totalBodyPartMaxCondition += bodyPart.max_condition;
+					totalBodyPartCondition += bodyPart.condition;
+				}
 			}
-		
 			total_hp_percent = floor((totalBodyPartCondition / totalBodyPartMaxCondition) * 100);
 		}
 	}

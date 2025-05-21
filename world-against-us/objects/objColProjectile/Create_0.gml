@@ -1,17 +1,16 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
-// OVERRIDE VALUES
-z = 40
-
 // PROJECTILE PROPERTIES
 speed = 0;
 flySpeed = 0;
+directionalSpeedVector = undefined;
 
 // INIT COLLIDER
 collider = new Collider(COLLIDER_TYPE.Point);
 
 // COLLISION CHECK
+collisionObjects = [objCharacterParent, objBlockParent];
 isTargetHit = false;
 collisionTarget = noone;
 hitIgnoreInstance = noone;

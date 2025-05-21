@@ -3,9 +3,11 @@ event_inherited();
 if (instanceState != object_index)
 {
 	instanceState = event_object;
-	if (damageSource != undefined)
+	if (!is_undefined(damageSource))
 	{
 		speed = flySpeed;
+		directionalSpeedVector = new Vector2(speed, 0);
+		directionalSpeedVector.Rotate(direction);
 	}
 } else {
 	// CHECK IF IS OUTSIDE ROOM

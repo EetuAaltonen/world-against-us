@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"CheckCollisionBetweenInstances",
+  "%Name":"CheckProjectileToObjectCollision",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"CheckCollisionBetweenInstances",
+  "name":"CheckProjectileToObjectCollision",
   "parent":{
     "name":"Collision",
     "path":"folders/Scripts/World/Collision.yy",

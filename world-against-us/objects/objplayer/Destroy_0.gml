@@ -1,9 +1,9 @@
-// OVERRIDE INHERITED EVENT
-if (character.behavior == CHARACTER_BEHAVIOR.PLAYER)
-{
-	// DON'T DESTROY CHARACTER POINTING TO GLOBAL VARIABLE
-	return;
-}
+// INHERIT THE PARENT EVENT
+event_inherited();
 
-character.OnDestroy();
-character = undefined;
+// DON'T DESTROY CHARACTER POINTING TO GLOBAL VARIABLE
+if (character.behavior != CHARACTER_BEHAVIOR.PLAYER)
+{
+	character.OnDestroy();
+	character = undefined;
+}

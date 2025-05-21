@@ -2,9 +2,9 @@
 event_inherited();
 if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;
 
-if (collider != undefined)
+if (!is_undefined(collider))
 {
-	if (collider.collision_body != undefined)
+	if (!is_undefined(collider.collision_body))
 	{
 		draw_set_font(font_small);
 		draw_set_halign(fa_center);

@@ -1,6 +1,17 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
+// INIT COLLIDER AND COLLISION BODY
+var collisionBody = new CollisionBody(
+	COLLISION_BODY_TYPE.Humanoid
+);
+collider = new Collider(
+	COLLIDER_TYPE.Circle,
+	sprite_width * 0.5, 
+	-(bbox_bottom - bbox_top) * 0.5,
+	collisionBody
+);
+
 image_index = 0;
 image_speed = 0;
 
@@ -16,16 +27,8 @@ dirSpeed = 0;
 movementInput = new DeviceInputMovement(0, 0, 0, 0);
 prevMovementInput = new DeviceInputMovement(0, 0, 0, 0);
 
-// INIT COLLIDER AND COLLISION BODY
-var collisionBody = new CollisionBody(
-	COLLISION_BODY_TYPE.Humanoid
-);
-collider = new Collider(
-	COLLIDER_TYPE.Circle,
-	sprite_width * 0.5, 
-	-(bbox_bottom - bbox_top) * 0.5,
-	collisionBody
-);
+// EQUIPMENT POSITIONS
+equipmentOriginOffset = new Vector2(0, -88);
 
 // SPAWN WEAPON
 // TODO: Move the weapon under character struct

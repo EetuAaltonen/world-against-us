@@ -1,2 +1,2 @@
 // DESTROY COLLIDER
-if (collider != undefined) collider.OnDestroy();
+if (!is_undefined(collider)) collider.OnDestroy();
