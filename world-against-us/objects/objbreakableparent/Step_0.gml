@@ -2,9 +2,9 @@
 event_inherited();
 
 // CHECK IF DESTROYED
-if (collider != undefined)
+if (!is_undefined(collider))
 {
-	if (collider.collision_body != undefined)
+	if (!is_undefined(collider.collision_body))
 	{
 		if (collider.collision_body.is_dead)
 		{
