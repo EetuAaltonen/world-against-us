@@ -1,0 +1,9 @@
+enum AI_STATE_ZOMBIE
+{
+	IDLE,
+	WANDER,
+	SEARCH,
+	CHASE,
+	ON_DEAD,
+	DEAD
+}
