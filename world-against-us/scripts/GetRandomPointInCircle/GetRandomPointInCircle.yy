@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"GetRandomPointInCircle",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GetRandomPointInCircle",
+  "parent":{
+    "name":"Geometry",
+    "path":"folders/Scripts/Game/Data/Utility/Geometry.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
