@@ -49,32 +49,40 @@ function Path(_path = undefined) constructor
 		return pathPoint;
 	}
 	
-	static Draw = function(_pathPosition = 0)
+	static ClearPathPoints = function()
+	{
+		if (path_exists(path))
+		{
+			path_clear_points(path);
+		}
+	}
+	
+	static Draw = function(_pathPosition)
 	{
 		if (IsPathExist(path))
 		{
 			var pathPointCount = path_get_number(path);
-			var prevPathPoint = undefined;
+			var prevPathPointX = undefined;
+			var prevPathPointY = undefined;
 			for (var i = 0; i < pathPointCount; i++)
 			{
 				var pointIndex = i / pathPointCount;
-				var pointColor = (CeilToTwoDecimals(_pathPosition) == CeilToTwoDecimals(pointIndex)) ? c_white : c_green;
-				var pathPoint = new Vector2(
-					path_get_point_x(path, i),
-					path_get_point_y(path, i)
-				);
+				var pointColor = (_pathPosition < pointIndex) ? c_green : c_white;
+				var pathPointX = path_get_point_x(path, i);
+				var pathPointY = path_get_point_y(path, i);
+				
+				draw_circle_color(pathPointX, pathPointY, 4, pointColor, pointColor, false);
 		
-				draw_circle_color(pathPoint.X, pathPoint.Y, 4, pointColor, pointColor, false);
-		
-				if (!is_undefined(prevPathPoint))
+				if (!is_undefined(prevPathPointX) || !is_undefined(prevPathPointY))
 				{
 					draw_line_color(
-						pathPoint.X, pathPoint.Y,
-						prevPathPoint.X, prevPathPoint.Y,
+						pathPointX, pathPointY,
+						prevPathPointX, prevPathPointY,
 						c_lime, c_lime
 					);
 				}
-				prevPathPoint = pathPoint;
+				prevPathPointX = pathPointX;
+				prevPathPointY = pathPointY;
 			}
 		}
 	}
