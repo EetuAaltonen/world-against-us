@@ -31,7 +31,7 @@ function CollisionBody(_collisionBodyType) constructor
 		if (state == COLLISION_BODY_STATE.ALIVE)
 		{
 			if (is_condition_modified)
-		{
+			{
 				CalculateHitpoints();
 				is_condition_modified = false;
 			}
@@ -112,6 +112,41 @@ function CollisionBody(_collisionBodyType) constructor
 		// SET HEALTH MODIFIED
 		is_condition_modified = true;
 	}
+	
+	static RestoreHealth = function(_amount, _targetBodyPartType = undefined)
+	{
+		// TODO: Fix this function
+	}
+	
+	static GetBodyPartsByCondition = function(_minimumCondition, _sort = false, _shuffle = false)
+	{
+		var bodyParts = [];
+		var bodyPartIndices = ds_map_keys_to_array(body_parts);
+		var bodyPartCount = array_length(bodyPartIndices);
+		for (var i = 0; i < bodyPartCount; i++)
+		{
+			var bodyPart = body_parts[? bodyPartIndices[@ i]];
+			if (!is_undefined(bodyPart))
+			{
+				if (bodyPart.hitpoints >= _minimumCondition)
+				{
+					array_push(bodyParts, bodyPart)
+				}
+			}
+		}
+		if (_sort)
+		{
+			array_sort(bodyParts, function(elm1, elm2)
+			{
+				return elm1.hitpoints - elm2.hitpoints;
+			});
+		}
+		
+		if (_shuffle)
+		{
+			bodyParts = array_shuffle(bodyParts);
+		}
+		return bodyParts;
 	}
 	
 	static Draw = function(_instanceRef)
@@ -142,7 +177,6 @@ function CollisionBody(_collisionBodyType) constructor
 					_instanceRef.x - (spriteSize.w * 0.5),
 					_instanceRef.y - (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) + _instanceRef.z
 				);
-				outlineColor = c_red;
 				var bodyPartIndices = ds_map_keys_to_array(body_parts);
 				var bodyPartCount = array_length(bodyPartIndices);
 				for (var i = 0; i < bodyPartCount; i++)
@@ -150,6 +184,23 @@ function CollisionBody(_collisionBodyType) constructor
 					var bodyPart = body_parts[? bodyPartIndices[@ i]];
 					if (!is_undefined(bodyPart))
 					{
+						if (bodyPart.hitpoints <= 0)
+						{
+							outlineColor = c_red;
+						} else if (bodyPart.hitpoints <= (bodyPart.total_hitpoints * 0.25))
+						{
+							outlineColor = c_orange;
+						} else if (bodyPart.hitpoints <= (bodyPart.total_hitpoints * 0.50))
+						{
+							outlineColor = c_yellow;
+						} else if (bodyPart.hitpoints <= (bodyPart.total_hitpoints * 0.75))
+						{
+							outlineColor = c_lime;
+						} else if (bodyPart.hitpoints > (bodyPart.total_hitpoints * 0.75))
+						{
+							outlineColor = c_green;
+						}
+						
 						draw_rectangle_color(
 							collisionBodyTopLeftPos.X + (spriteSize.w * bodyPart.bounding_box.top_left_point.X),
 							collisionBodyTopLeftPos.Y + (spriteSize.h * bodyPart.bounding_box.top_left_point.Y),
