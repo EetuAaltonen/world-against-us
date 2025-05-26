@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"AIEnemyZombie",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"AIEnemyZombie",
+  "parent":{
+    "name":"AIBase",
+    "path":"folders/Scripts/Game/Data/AI/AIBase.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

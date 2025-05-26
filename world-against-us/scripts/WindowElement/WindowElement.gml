@@ -60,7 +60,7 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 	
 	static OnUpdate = function()
 	{
-		// OVERRIDE FUNCTION
+		// OVERRIDE THIS FUNCTION
 		return;
 	}
 	
@@ -94,7 +94,7 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 	
 	static UpdateContent = function()
 	{
-		// OVERRIDE FUNCTION
+		// OVERRIDE THIS FUNCTION
 		return;
 	}
 	
@@ -131,7 +131,7 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 	
 	static CheckContentInteraction = function()
 	{
-		// OVERRIDE FUNCTION
+		// OVERRIDE THIS FUNCTION
 		return;
 	}
 	
@@ -142,7 +142,7 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 	
 	static OnHoveredEnd = function()
 	{
-		// OVERRIDE FUNCTION
+		// OVERRIDE THIS FUNCTION
 		return;
 	}
 	
@@ -165,7 +165,7 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 	
 	static DrawContent = function()
 	{
-		// OVERRIDE FUNCTION
+		// OVERRIDE THIS FUNCTION
 		return;
 	}
 }

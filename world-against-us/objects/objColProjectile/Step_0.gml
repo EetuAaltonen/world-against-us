@@ -35,27 +35,31 @@ if (!is_undefined(damageSource))
 				var targetInstanceRef = instance_find(objectToCheck, j);
 				if (damageSource.parent_instance_ref.id != targetInstanceRef.id)
 				{
-					if (CheckProjectileToObjectCollision(self, targetInstanceRef))
+					if (!is_undefined(targetInstanceRef.collider))
 					{
 						if (!is_undefined(targetInstanceRef.collider.collision_body))
 						{
 							// CHECK FOR INVINCIBILITY
-							if (!targetInstanceRef.collider.collision_body.iframe_timer.IsTimerTriggered())
+							if (targetInstanceRef.collider.collision_body.state != COLLISION_BODY_STATE.ALIVE ||
+								!targetInstanceRef.collider.collision_body.iframe_timer.IsTimerTriggered())
 							{
 								continue;
 							}
 						}
-						
-						// CHECK 
-						var distanceToTarget = point_distance(
-							x, y + collider.collision_yoffset,
-							targetInstanceRef.x,
-							targetInstanceRef.y + targetInstanceRef.collider.collision_yoffset
-						);
-						if (distanceToTarget < closestDistance)
+					
+						if (CheckProjectileToObjectCollision(self, targetInstanceRef))
 						{
-							collisionTarget = targetInstanceRef;
-							closestDistance = distanceToTarget;
+							// CHECK 
+							var distanceToTarget = point_distance(
+								x, y + collider.collision_yoffset,
+								targetInstanceRef.x,
+								targetInstanceRef.y + targetInstanceRef.collider.collision_yoffset
+							);
+							if (distanceToTarget < closestDistance)
+							{
+								collisionTarget = targetInstanceRef;
+								closestDistance = distanceToTarget;
+							}
 						}
 					}
 				}

@@ -4,6 +4,7 @@ function AIStateMachine(_states, _defaultStateIndex) constructor
 	default_state_index = _defaultStateIndex;
 	state_func = undefined;
 	state_index = undefined;
+	state_timer = new Timer(0);
 	
 	OnCreate();
 	
@@ -17,12 +18,16 @@ function AIStateMachine(_states, _defaultStateIndex) constructor
 	{
 		if (!SetState(default_state_index))
 		{
-			global.ConsoleHandlerRef.AddConsoleLog("Unable to set default AI state");	
+			var consoleLog = string("Unable to set default AI state");
+			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);
 		}
 	}
 	
 	static Update = function(_aiBase)
 	{
+		// UPDATE STATE TIMER
+		_aiBase.state_machine.state_timer.Update();
+		// CALL STATE FUNCTION
 		return state_func(_aiBase);
 	}
 	
@@ -40,7 +45,7 @@ function AIStateMachine(_states, _defaultStateIndex) constructor
 		// CONSOLE LOG
 		if (!isStateSet)
 		{
-			var consoleLog = string("Failed to change AI state from {0} to {1}", state_machine.state_index, AI_STATE_BANDIT.CHASE);
+			var consoleLog = string("Failed to change AI state from {0} to {1}", state_index, _stateIndex);
 			global.ConsoleHandlerRef.AddConsoleLog(CONSOLE_LOG_TYPE.ERROR, consoleLog);	
 		}
 		return isStateSet;

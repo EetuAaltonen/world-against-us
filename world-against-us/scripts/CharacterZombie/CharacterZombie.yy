@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"InitCharacterBodyParts",
+  "%Name":"CharacterZombie",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"InitCharacterBodyParts",
+  "name":"CharacterZombie",
   "parent":{
     "name":"Character",
     "path":"folders/Scripts/World/Character.yy",

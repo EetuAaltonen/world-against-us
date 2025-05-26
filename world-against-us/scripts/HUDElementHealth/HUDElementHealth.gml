@@ -101,7 +101,7 @@ function HUDElementHealth(_position) : HUDElement(_position) constructor
 				draw_set_halign(fa_center);
 				
 				// HEALTH VALUE
-				draw_text(position.X, position.Y + 10, string(global.InstancePlayer.character.total_hp_percent) + "%");
+				draw_text(position.X, position.Y + 10, "%");
 				
 				// RESET DRAW PROPERTIES
 				ResetDrawProperties();

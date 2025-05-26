@@ -6,6 +6,7 @@ hSpeed = 0;
 vSpeed = 0;
 dirSpeed = 0;
 z = 0;
+guiPos = new Vector2(0, 0);
 
 // COLLISION
 collider = undefined;

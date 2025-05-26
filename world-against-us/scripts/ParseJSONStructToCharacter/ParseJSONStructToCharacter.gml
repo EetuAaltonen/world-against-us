@@ -23,7 +23,6 @@ function ParseJSONStructToCharacter(_jsonStruct)
 					
 					// VARYING METADATA
 					if (!is_undefined(characterStruct[$ "stamina"] ?? undefined)) variable_struct_set(parsedCharacter, "stamina", characterStruct[$ "stamina"]);
-					if (!is_undefined(characterStruct[$ "is_dead"] ?? undefined)) variable_struct_set(parsedCharacter, "is_dead", characterStruct[$ "is_dead"]);
 					if (!is_undefined(characterStruct[$ "fullness"] ?? undefined)) variable_struct_set(parsedCharacter, "fullness", characterStruct[$ "fullness"]);
 					if (!is_undefined(characterStruct[$ "hydration"] ?? undefined)) variable_struct_set(parsedCharacter, "hydration", characterStruct[$ "hydration"]);
 					if (!is_undefined(characterStruct[$ "energy"] ?? undefined)) variable_struct_set(parsedCharacter, "energy", characterStruct[$ "energy"]);

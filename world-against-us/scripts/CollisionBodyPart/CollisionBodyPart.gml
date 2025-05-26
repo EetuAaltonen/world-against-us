@@ -7,11 +7,15 @@ function CollisionBodyPart(_total_hitpoints, _is_vital_part, _bounding_box) cons
 	
 	static TakeDamage = function(_damage)
 	{
-		hitpoints = max(0, hitpoints - _damage);
+		var takenDamage = min(hitpoints, _damage);
+		hitpoints -= takenDamage;
+		return takenDamage;
 	}
 	
 	static RestoreHealth = function(_amount)
 	{
-		hitpoints = min(total_hitpoints, hitpoints + _amount);
+		var receivedHealing = min(total_hitpoints - hitpoints, _amount);
+		hitpoints += receivedHealing;
+		return receivedHealing;
 	}
 }

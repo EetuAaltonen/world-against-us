@@ -6,3 +6,10 @@ event_inherited();
 /*character.OnDestroy();
 character = undefined;*/
 
+ // DELETE AI BASE
+DeleteStruct(aiBase);
+aiBase = undefined;
+
+// DELETE AI STATES MAP
+DestroyDSMapAndDeleteValues(aiStates);
+aiStates = undefined;

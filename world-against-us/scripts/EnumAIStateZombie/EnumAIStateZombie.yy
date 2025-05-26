@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"EnumAIStateZombie",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumAIStateZombie",
+  "parent":{
+    "name":"AIState",
+    "path":"folders/Scripts/Game/Data/AI/AIState.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

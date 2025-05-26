@@ -75,7 +75,7 @@ function InitCollisionBodyParts(_collisionBodyPartsRef, _collisionBodyType)
 			// STOMACK
 			ds_map_add(
 				_collisionBodyPartsRef, COLLISION_BODY_PART_TYPE.Stomack,
-				new CollisionBodyPart(30, true, new Vector2Rectangle(new Vector2(0.2, 0.3), undefined, new Vector2(0.8, 0.6), undefined)),
+				new CollisionBodyPart(30, false, new Vector2Rectangle(new Vector2(0.2, 0.3), undefined, new Vector2(0.8, 0.6), undefined)),
 			);
 			// LEFT LEG
 			ds_map_add(
