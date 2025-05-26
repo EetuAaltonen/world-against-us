@@ -41,6 +41,7 @@
     {"name":"AIBase","order":2,"path":"folders/Scripts/Game/Data/AI/AIBase.yy",},
     {"name":"AIState","order":3,"path":"folders/Scripts/Game/Data/AI/AIState.yy",},
     {"name":"AIStateMachine","order":4,"path":"folders/Scripts/Game/Data/AI/AIStateMachine.yy",},
+    {"name":"AIStatesBandit","order":2,"path":"folders/Scripts/Game/Data/AI/AIStateMachine/AIStatesBandit.yy",},
     {"name":"AIStateZombie","order":3,"path":"folders/Scripts/Game/Data/AI/AIStateMachine/AIStateZombie.yy",},
     {"name":"Autopilot","order":1,"path":"folders/Scripts/Game/Data/AI/Autopilot.yy",},
     {"name":"Blueprint","order":15,"path":"folders/Scripts/Game/Data/Blueprint.yy",},

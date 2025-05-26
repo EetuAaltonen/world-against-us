@@ -30,7 +30,7 @@ function NPCPatrolHandler() constructor
 			var banditInstance = instance_create_layer(_patrol.position.X, _patrol.position.Y, LAYER_CHARACTERS, objBandit);
 			
 			// SET PATROL TO INSTANCE AI BASE
-			banditInstance.aiBandit.patrol = _patrol;
+			banditInstance.aiBase.patrol = _patrol;
 			
 			// SET INSTANCE REF TO PATROL
 			_patrol.instance_ref = banditInstance;

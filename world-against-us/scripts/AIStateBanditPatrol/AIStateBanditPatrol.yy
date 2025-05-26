@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"AIStateBanditPatrol",
   "parent":{
-    "name":"AIBanditStates",
-    "path":"folders/Scripts/Game/Data/AI/AIStateMachine/AIBanditStates.yy",
+    "name":"AIStatesBandit",
+    "path":"folders/Scripts/Game/Data/AI/AIStateMachine/AIStatesBandit.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",
