@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"EnumCollisionBodyState",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumCollisionBodyState",
+  "parent":{
+    "name":"CollisionBody",
+    "path":"folders/Scripts/World/CollisionBody.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,0 +1,6 @@
+enum COLLISION_BODY_STATE
+{
+	DEAD,
+	ON_DEAD,
+	ALIVE
+}
