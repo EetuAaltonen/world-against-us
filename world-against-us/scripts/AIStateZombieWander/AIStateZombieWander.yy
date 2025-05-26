@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"AIStateZombieWander",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"AIStateZombieWander",
+  "parent":{
+    "name":"AIStateZombie",
+    "path":"folders/Scripts/Game/Data/AI/AIStateMachine/AIStateZombie.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
