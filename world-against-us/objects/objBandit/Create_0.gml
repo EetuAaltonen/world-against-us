@@ -1,6 +1,17 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
+// INIT COLLIDER AND COLLISION BODY
+var collisionBody = new CollisionBody(
+	COLLISION_BODY_TYPE.Humanoid
+);
+collider = new Collider(
+	COLLIDER_TYPE.Circle,
+	sprite_width * 0.5, 
+	-(bbox_bottom - bbox_top) * 0.5,
+	collisionBody
+);
+
 // CHARACTER
 character = new CharacterHuman("Bandit", CHARACTER_TYPE.Human, CHARACTER_RACE.humanoid, CHARACTER_BEHAVIOR.HOSTILE);
 
