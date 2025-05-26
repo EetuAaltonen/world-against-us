@@ -73,13 +73,13 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 	
 	static OnOpen = function()
 	{
-		// OVERRIDE FUNCTION
+		// OVERRIDE THIS FUNCTION
 		return;
 	}
 	
 	static OnUpdate = function()
 	{
-		// OVERRIDE FUNCTION
+		// OVERRIDE THIS FUNCTION
 		return;
 	}
 	
@@ -144,7 +144,7 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 	
 	static OnClose = function()
 	{
-		// OVERRIDE FUNCTION
+		// OVERRIDE THIS FUNCTION
 		return;
 	}
 	
