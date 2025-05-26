@@ -68,7 +68,7 @@ function Patrol(_patrolId, _regionId, _aiState, _travelTimer, _routeProgress, _t
 						route_progress = _patrolState.route_progress;
 						
 						// SYNC INSTANCE BEHAVIOR
-						isSynced = instance_ref.aiBandit.ResumePatrol();
+						isSynced = instance_ref.aiBase.ResumePatrol();
 					} break;
 					case AI_STATE_BANDIT.CHASE:
 					{
@@ -88,10 +88,10 @@ function Patrol(_patrolId, _regionId, _aiState, _travelTimer, _routeProgress, _t
 								y = _patrolState.position.Y;
 									
 								// SET TARGET
-								aiBandit.SetTargetInstance(targetInstance);
+								aiBase.SetTargetInstance(targetInstance);
 									
 								// START CHASING TARGET
-								isSynced = aiBandit.StartChasingTarget();
+								isSynced = aiBase.StartChasingTarget();
 							}
 						}
 					} break;
@@ -109,12 +109,12 @@ function Patrol(_patrolId, _regionId, _aiState, _travelTimer, _routeProgress, _t
 							y = _patrolState.position.Y;
 									
 							// START CHASING TARGET
-							isSynced = aiBandit.ReturnToPatrol();
+							isSynced = aiBase.ReturnToPatrol();
 						}
 					} break;
 					case AI_STATE_BANDIT.PATROL_END:
 					{
-						instance_ref.aiBandit.EndPatrol();
+						instance_ref.aiBase.EndPatrol();
 						isSynced = true;
 					} break;
 				}
