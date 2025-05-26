@@ -4,7 +4,6 @@ if (!is_undefined(character))
 	if (character.behavior == CHARACTER_BEHAVIOR.PLAYER)
 	{
 		character.Update();
-		if (character.IsInvulnerableState()) return;
 	
 		// CHECK GUI STATE
 		if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;
