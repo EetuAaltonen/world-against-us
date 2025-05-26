@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CharacterZombie",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CharacterZombie",
+  "parent":{
+    "name":"Character",
+    "path":"folders/Scripts/World/Character.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
