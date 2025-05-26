@@ -6,21 +6,27 @@ if (!is_undefined(collider))
 {
 	if (!is_undefined(collider.collision_body))
 	{
-		draw_set_font(font_small);
-		draw_set_halign(fa_center);
-		draw_set_color(c_red);
+		if (true || collider.collision_body.hitpoints < collider.collision_body.total_hitpoints)
+		{
+			draw_set_font(font_small);
+			draw_set_halign(fa_center);
+			draw_set_color(c_red);
 	
-		var guiPos = PositionToGUI(new Vector2(x, y - z));
-		draw_text(
-			guiPos.X, guiPos.Y + 20,
-			string(
-				"{0}/{1}",
-				collider.collision_body.hitpoints, 
-				collider.collision_body.total_hitpoints
-			)
-		);
+			WorldPositionToGUI(guiPos, x, y - z);
+			var hpText = "Dead";
+			if (collider.collision_body.state == COLLISION_BODY_STATE.ALIVE)
+			{
+				hpText = string(
+					"{0}/{1}",
+					collider.collision_body.hitpoints, 
+					collider.collision_body.total_hitpoints
+				);
+			}
+			draw_text(guiPos.X, guiPos.Y + 20, hpText);
+			draw_text(guiPos.X, guiPos.Y + 40, collider.collision_body.state);
 
-		// RESET DRAW PROPERTIES
-		ResetDrawProperties();
+			// RESET DRAW PROPERTIES
+			ResetDrawProperties();
+		}
 	}
 }
