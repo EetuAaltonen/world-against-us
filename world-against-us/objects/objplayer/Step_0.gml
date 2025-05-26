@@ -1,10 +1,11 @@
+// INHERIT THE PARENT EVETN
+event_inherited();
+
 // OVERRIDE THE PARENT EVENT
 if (!is_undefined(character))
 {
 	if (character.behavior == CHARACTER_BEHAVIOR.PLAYER)
 	{
-		character.Update();
-	
 		// CHECK GUI STATE
 		if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;
 		
