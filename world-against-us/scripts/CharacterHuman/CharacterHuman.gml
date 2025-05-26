@@ -1,5 +1,7 @@
-function CharacterHuman(_name, _type, _race, _behavior) : Character(_name, _type, _race, _behavior) constructor
+function CharacterHuman(_name, _type, _race, _behavior, _colliderRef) : Character(_name, _type, _race, _behavior) constructor
 {
+	collider_ref = _colliderRef;
+	
 	// STATS
 	max_fullness = 100;
 	fullness = max_fullness;
@@ -33,10 +35,6 @@ function CharacterHuman(_name, _type, _race, _behavior) : Character(_name, _type
 	{
 		
 		var scaledStamina = ScaleFloatValueToInt(stamina);
-		
-		// TODO: Fix body part ToJSONStruct logic
-		//var formatBodyParts = (!is_undefined(body_parts)) ? body_parts[@ 0].ToJSONStruct() : undefined;
-		
 		var scaledFullness = ScaleFloatValueToInt(fullness);
 		var scaledHydration = ScaleFloatValueToInt(hydration);
 		var scaledEnergy = ScaleFloatValueToInt(energy);
@@ -51,9 +49,6 @@ function CharacterHuman(_name, _type, _race, _behavior) : Character(_name, _type
 			race: race,
 			stamina: scaledStamina,
 			
-			body_parts: undefined,
-			is_dead: is_dead,
-			
 			fullness: scaledFullness,
 			hydration: scaledHydration,
 			energy: scaledEnergy,
@@ -67,15 +62,35 @@ function CharacterHuman(_name, _type, _race, _behavior) : Character(_name, _type
 		// OVERRIDE FROM PARENT
 		backpack_slot.OnDestroy();
 		backpack_slot = undefined;
-		DestroyDSMapAndDeleteValues(body_parts);
-		body_parts = undefined;
+	}
+	
+	static Update = function()
+	{
+		if (!is_undefined(collider_ref))
+		{
+			if (!is_undefined(collider_ref.collision_body))
+			{
+				if (collider_ref.collision_body.state == COLLISION_BODY_STATE.ALIVE)
+				{
+					UpdateStats();
+				}
+				
+				if (collider_ref.collision_body.state == COLLISION_BODY_STATE.ON_DEAD)
+				{
+					OnDead();
+				}
+			}
+		}
 	}
 	
 	static UpdateStats = function()
 	{
-		fullness = clamp(fullness - (hunger_rate / game_get_speed(gamespeed_fps)), 0, max_fullness);
-		hydration = clamp(hydration - (thirst_rate / game_get_speed(gamespeed_fps)), 0, max_hydration);
-		energy = clamp(energy - (fatigue_rate / game_get_speed(gamespeed_fps)), 0, max_energy);
+		if (behavior == CHARACTER_BEHAVIOR.PLAYER)
+		{
+			fullness = clamp(fullness - (hunger_rate / game_get_speed(gamespeed_fps)), 0, max_fullness);
+			hydration = clamp(hydration - (thirst_rate / game_get_speed(gamespeed_fps)), 0, max_hydration);
+			energy = clamp(energy - (fatigue_rate / game_get_speed(gamespeed_fps)), 0, max_energy);
+		}
 	}
 	
 	static GetBackpackSlotItem = function()
