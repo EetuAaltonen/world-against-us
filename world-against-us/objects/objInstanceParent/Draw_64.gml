@@ -18,7 +18,7 @@ if (!is_undefined(collider))
 			{
 				hpText = string(
 					"{0}/{1}",
-					collider.collision_body.hitpoints, 
+					collider.collision_body.hitpoints,
 					collider.collision_body.total_hitpoints
 				);
 			}
