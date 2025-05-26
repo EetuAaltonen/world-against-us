@@ -1,9 +1,9 @@
-function AIEnemyHuman(_instanceRef, _aiStates, _defaultAIStateIndex, _character, _targetSeekInterval, _pathUpdateInterval, _pathBlockingRadius) : AIBase(_instanceRef, _aiStates, _defaultAIStateIndex) constructor
+function AIEnemyHuman(_instanceRef, _aiStates, _defaultAIStateIndex, _character, _colliderRef, _targetSeekInterval, _pathUpdateInterval, _pathBlockingRadius) : AIBase(_instanceRef, _aiStates, _defaultAIStateIndex) constructor
 {
-	// CHARACTER
 	character = _character;
+	collider_ref = _colliderRef;
 	
-	// TARGET
+	// TARGET SEEK PROPERTIES
 	target_seek_interval = _targetSeekInterval; //ms
 	target_seek_timer = new Timer(target_seek_interval);
 	target_instance = noone;
@@ -86,11 +86,10 @@ function AIEnemyHuman(_instanceRef, _aiStates, _defaultAIStateIndex, _character,
 	static StartPathingToPoint = function()
 	{
 		var isPathingStarted = false;
-		var instanceOriginPosition = GetInstanceOriginPosition(instance_ref);
-		if (!is_undefined(instanceOriginPosition))
+		if (instance_exists(instance_ref))
 		{
 			if (path_to_target.CalculatePath(
-				instanceOriginPosition.X, instanceOriginPosition.Y,
+				instance_ref.x, instance_ref.y,
 				target_position.X, target_position.Y,
 				true
 			))
@@ -123,8 +122,11 @@ function AIEnemyHuman(_instanceRef, _aiStates, _defaultAIStateIndex, _character,
 	{
 		with (instance_ref)
 		{
-			path_end();	
+			path_end();
 		}
+		// RESET TARGET POSITION
+		target_position = undefined;
+		path_to_target.ClearPathPoints();
 	}
 	
 	static CheckPathBlocking = function()
