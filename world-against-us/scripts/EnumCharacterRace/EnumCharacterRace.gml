@@ -1,4 +1,5 @@
 enum CHARACTER_RACE
 {
-	humanoid
+	humanoid,
+	undead
 }
