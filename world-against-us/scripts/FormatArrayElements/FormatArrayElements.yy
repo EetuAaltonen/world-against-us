@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"FormatArrayElements",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"FormatArrayElements",
+  "parent":{
+    "name":"Array",
+    "path":"folders/Scripts/Game/Data/Utility/Array.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

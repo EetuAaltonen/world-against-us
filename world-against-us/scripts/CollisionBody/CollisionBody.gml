@@ -158,24 +158,24 @@ function CollisionBody(_collisionBodyType) constructor
 			case COLLISION_BODY_TYPE.Full_sprite: {
 				draw_rectangle_color(
 					_instanceRef.x - (spriteSize.w * 0.5),
-					_instanceRef.y - (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) + _instanceRef.z,
+					_instanceRef.y - (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) - _instanceRef.z,
 					_instanceRef.x + (spriteSize.w * 0.5),
-					_instanceRef.y + (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) + _instanceRef.z,
+					_instanceRef.y + (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) - _instanceRef.z,
 					outlineColor, outlineColor, outlineColor, outlineColor, true
 				);
 			} break;
 			default: {
 				draw_rectangle_color(
 					_instanceRef.x - (spriteSize.w * 0.5),
-					_instanceRef.y - (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) + _instanceRef.z,
+					_instanceRef.y - (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) - _instanceRef.z,
 					_instanceRef.x + (spriteSize.w * 0.5),
-					_instanceRef.y + (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) + _instanceRef.z,
+					_instanceRef.y + (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) - _instanceRef.z,
 					outlineColor, outlineColor, outlineColor, outlineColor, true
 				);
 				
 				var collisionBodyTopLeftPos = new Vector2(
 					_instanceRef.x - (spriteSize.w * 0.5),
-					_instanceRef.y - (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) + _instanceRef.z
+					_instanceRef.y - (spriteSize.h * 0.5) - (_instanceRef.sprite_yoffset * 0.5) - _instanceRef.z
 				);
 				var bodyPartIndices = ds_map_keys_to_array(body_parts);
 				var bodyPartCount = array_length(bodyPartIndices);
