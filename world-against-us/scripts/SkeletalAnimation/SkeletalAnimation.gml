@@ -14,7 +14,8 @@ function SkeletalAnimation(_instance_ref, _anim_events) constructor
 	
 	static OnDestroy = function()
 	{
-		DestroyDSListAndDeleteValues(animation_names);
+		ReleaseVariableFromMemory(animation_names, ds_type_list);
+		animation_names = undefined;
 	}
 	
 	static Update = function()
