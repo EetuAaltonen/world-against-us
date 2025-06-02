@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"DestroyDSPriorityAndDeleteValues",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"DestroyDSPriorityAndDeleteValues",
+  "parent":{
+    "name":"Priority",
+    "path":"folders/Scripts/Game/Data/Utility/Priority.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
