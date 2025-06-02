@@ -19,7 +19,7 @@ function Structure(_structureId, _interactableType, _category, _metadata) constr
 	
 	static OnDestroy = function()
 	{
-		metadata.OnDestroy();
+		ReleaseVariableFromMemory(metadata);
 		metadata = undefined;
 	}
 }

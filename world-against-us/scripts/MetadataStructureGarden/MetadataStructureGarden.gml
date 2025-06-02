@@ -25,19 +25,19 @@ function MetadataStructureGarden() : Metadata() constructor
 	
 	static OnDestroy = function()
 	{
-		tools_inventory.OnDestroy();
+		ReleaseVariableFromMemory(tools_inventory);
 		tools_inventory = undefined;
 		
-		fertilizer_inventory.OnDestroy();
+		ReleaseVariableFromMemory(fertilizer_inventory);
 		fertilizer_inventory = undefined;
 		
-		water_inventory.OnDestroy();
+		ReleaseVariableFromMemory(water_inventory);
 		water_inventory = undefined;
-
-		seed_inventory.OnDestroy();
+		
+		ReleaseVariableFromMemory(seed_inventory);
 		seed_inventory = undefined;
-
-		output_inventory.OnDestroy();
+		
+		ReleaseVariableFromMemory(output_inventory);
 		output_inventory = undefined;
 		
 	}

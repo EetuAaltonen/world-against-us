@@ -29,11 +29,11 @@ function InstanceObject(_sprite_index, _object_index, _position, _network_id = u
 	
 	static OnDestroy = function(_struct = self)
 	{
-		DeleteStruct(_struct.position);
-		DeleteStruct(_struct.device_input_movement);
-		DeleteStruct(_struct.start_position);
-		DeleteStruct(_struct.target_position);
-		DeleteStruct(_struct.interpolation_timer);
+		ReleaseVariableFromMemory(_struct.position);
+		ReleaseVariableFromMemory(_struct.device_input_movement);
+		ReleaseVariableFromMemory(_struct.start_position);
+		ReleaseVariableFromMemory(_struct.target_position);
+		ReleaseVariableFromMemory(_struct.interpolation_timer);
 	}
 	
 	static StartInterpolateMovement = function(_targetPosition, _interpolationTime)
