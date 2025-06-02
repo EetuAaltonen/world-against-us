@@ -50,7 +50,7 @@ function CheckCollisionLinePoint(_startPosition, _stepEndPosition, _objectsToChe
 			}
 		}
 		// DESTROY TEMP COLLIDE INSTANCE DS LIST
-		DestroyDSListAndDeleteValues(collideInstances);
+		ReleaseVariableFromMemory(collideInstances, ds_type_list);
 		
 		if (collideInstance != noone) {
 			if (!_priorityHighlightedTarget || (_priorityHighlightedTarget && (global.HighlightHandlerRef.highlightedTarget == collideInstance.ownerInstance || global.HighlightHandlerRef.highlightedTarget == noone)))
