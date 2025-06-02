@@ -6,14 +6,14 @@ function GameSaveDataPlayerData(_character, _last_location, _inventory) construc
 	
 	static OnDestroy = function()
 	{
-		character.OnDestroy();
+		ReleaseVariableFromMemory(character);
 		character = undefined;
 		
-		last_location.OnDestroy();
+		ReleaseVariableFromMemory(last_location);
 		last_location = undefined;
 		
 		// TODO: Fix primaryWeaponSlot, magazinePockets, and medicinePockets
-		/*inventory.OnDestroy();
+		/*ReleaseVariableFromMemory(inventory);
 		inventory = undefined;*/
 	}
 	

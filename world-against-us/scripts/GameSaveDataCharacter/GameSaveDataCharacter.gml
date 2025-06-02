@@ -5,7 +5,7 @@ function GameSaveDataCharacter(_name, _backpack) constructor
 	
 	static OnDestroy = function()
 	{
-		backpack.OnDestroy();
+		ReleaseVariableFromMemory(backpack);
 		backpack = undefined;
 	}
 	

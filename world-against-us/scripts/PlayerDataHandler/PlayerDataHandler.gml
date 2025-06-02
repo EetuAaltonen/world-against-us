@@ -14,13 +14,13 @@ function PlayerDataHandler() constructor
 	
 	static OnDestroy = function()
 	{
-		character.OnDestroy();
+		ReleaseVariableFromMemory(character);
 		character = undefined;
-		primaryWeaponSlot.OnDestroy();
+		ReleaseVariableFromMemory(primaryWeaponSlot);
 		primaryWeaponSlot = undefined;
-		magazinePockets.OnDestroy();
+		ReleaseVariableFromMemory(magazinePockets);
 		magazinePockets = undefined;
-		medicinePockets.OnDestroy();
+		ReleaseVariableFromMemory(medicinePockets);
 		medicinePockets = undefined;
 	}
 	
@@ -111,7 +111,7 @@ function PlayerDataHandler() constructor
 			OnDestroy();
 		}
 		
-		character = new CharacterHuman(player_name, CHARACTER_TYPE.Human, CHARACTER_RACE.humanoid, CHARACTER_BEHAVIOR.PLAYER);
+		character = new CharacterHuman(player_name, CHARACTER_TYPE.Human, CHARACTER_RACE.humanoid, CHARACTER_BEHAVIOR.PLAYER, undefined);
 		last_known_location = undefined;
 		primaryWeaponSlot = new Inventory("PlayerPrimaryWeaponSlot", INVENTORY_TYPE.PlayerPrimaryWeaponSlot, new InventorySize(4, 6), new InventoryFilter([], ["Weapon"], []));
 		magazinePockets = new Inventory("PlayerMagazinePocket", INVENTORY_TYPE.MagazinePockets, new InventorySize(4, 2), new InventoryFilter([], ["Magazine", "Bullet", "Fuel Ammo"], []));

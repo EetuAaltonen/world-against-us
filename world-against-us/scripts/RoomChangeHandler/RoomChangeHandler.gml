@@ -5,7 +5,7 @@ function RoomChangeHandler() constructor
 	
 	static OnDestroy = function()
 	{
-		DestroyDSMapAndDeleteValues(fast_travel_cache);
+		ReleaseVariableFromMemory(fast_travel_cache, ds_type_map);
 		fast_travel_cache = undefined;
 	}
 	

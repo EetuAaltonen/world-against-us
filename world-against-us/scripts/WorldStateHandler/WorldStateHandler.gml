@@ -18,11 +18,10 @@ function WorldStateHandler() constructor
 	sky_darkness_last_update_minutes = -1;
 	
 	InitWorldStates();
-	
 	static OnDestroy = function()
 	{
-		ClearDSMapAndDeleteValues(world_states);
-		ds_map_destroy(world_states);
+		ReleaseVariableFromMemory(world_states, ds_type_map);
+		world_states = undefined;
 	}
 	
 	static InitWorldStates = function()
