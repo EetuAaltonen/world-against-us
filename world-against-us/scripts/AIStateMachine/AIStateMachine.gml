@@ -10,7 +10,7 @@ function AIStateMachine(_states, _defaultStateIndex) constructor
 	
 	static OnDestroy = function()
 	{
-		DestroyDSMapAndDeleteValues(states);
+		ReleaseVariableFromMemory(states, ds_type_map);
 		states = undefined;
 	}
 	

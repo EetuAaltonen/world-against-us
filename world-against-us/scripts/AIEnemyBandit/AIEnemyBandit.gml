@@ -152,7 +152,6 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 			{
 				with (instance_ref)
 				{
-					// DESTROY INSTANCE
 					instance_destroy();
 				}
 			}
