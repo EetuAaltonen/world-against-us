@@ -10,17 +10,17 @@ function WindowCollectionListExt(_elementId, _relativePosition, _size, _backgrou
 	
 	static OnDestroy = function()
 	{
-		DestroyDSListAndDeleteValues(childElements);
+		ReleaseVariableFromMemory(childElements, ds_type_list);
 		childElements = undefined;
 		
-		DestroyDSListAndDeleteValues(dataCollection);
+		ReleaseVariableFromMemory(dataCollection, ds_type_list);
 		dataCollection = undefined;
 	}
 	
 	static UpdateDataCollection = function(newDataCollection)
 	{
 		// DESTROY PREV DATA COLLECTION DS LIST
-		DestroyDSListAndDeleteValues(dataCollection);
+		ReleaseVariableFromMemory(dataCollection, ds_type_list);
 		
 		dataCollection = newDataCollection;
 		initDataElements = true;

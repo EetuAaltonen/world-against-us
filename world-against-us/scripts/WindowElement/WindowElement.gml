@@ -18,14 +18,15 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 	
 	static OnDestroy = function()
 	{
-		DestroyDSListAndDeleteValues(childElements);
+		ReleaseVariableFromMemory(childElements, ds_type_list);
 		childElements = undefined;
 	}
 	
 	static AddChildElements = function(_childElements)
 	{
 		// DELETE OLD CHILD ELEMENTS
-		DestroyDSListAndDeleteValues(childElements);
+		ReleaseVariableFromMemory(childElements, ds_type_list);
+		childElements = undefined;
 		
 		// ASSING THE PARENT ELEMENT TO CHILD ELEMENTS
 		var childElementCount = ds_list_size(_childElements);
@@ -98,7 +99,7 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 		return;
 	}
 	
-	static DeleteChildElements = function()
+	static ClearChildElements = function()
 	{
 		ClearDSListAndDeleteValues(childElements);
 	}

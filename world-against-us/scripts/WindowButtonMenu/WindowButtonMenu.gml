@@ -11,7 +11,7 @@ function WindowButtonMenu(_elementId, _relativePosition, _size, _backgroundColor
 		
 		if (!is_undefined(buttonsData))
 		{
-			DeleteChildElements();
+			ClearChildElements();
 			
 			var buttonElements = ds_list_create();
 			var buttonCount = ds_list_size(buttonsData);
