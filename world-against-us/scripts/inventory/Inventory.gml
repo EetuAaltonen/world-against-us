@@ -35,7 +35,7 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 	
 	static OnDestroy = function()
 	{
-		DestroyDSListAndDeleteValues(items);
+		ReleaseVariableFromMemory(items, ds_type_list);
 		items = undefined;
 	}
 	
