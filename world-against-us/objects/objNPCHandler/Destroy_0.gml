@@ -1,1 +1,2 @@
-DeleteStruct(npcHandler);
+ReleaseVariableFromMemory(npcHandler);
+npcHandler = undefined;

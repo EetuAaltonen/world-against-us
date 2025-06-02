@@ -1,1 +1,2 @@
-DeleteStruct(spawnHandler);
+ReleaseVariableFromMemory(spawnHandler);
+spawnHandler = undefined;

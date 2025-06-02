@@ -1,10 +1,5 @@
-// DESTROY SKELETAL ANIMATION
-DestroyDSMapAndDeleteValues(skeletalAnimationEvents);
-skeletalAnimationEvents = undefined;
-
-DeleteStruct(skeletalAnimation);
+ReleaseVariableFromMemory(skeletalAnimation);
 skeletalAnimation = undefined;
 
-// DESTROY COLLIDER
-DeleteStruct(collider);
+ReleaseVariableFromMemory(collider);
 collider = undefined;

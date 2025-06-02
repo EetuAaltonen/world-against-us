@@ -1,1 +1,2 @@
-worldStateHandler.OnDestroy();
+ReleaseVariableFromMemory(worldStateHandler);
+worldStateHandler = undefined;

@@ -1,1 +1,2 @@
-roomChangeHandler.OnDestroy();
+ReleaseVariableFromMemory(roomChangeHandler);
+roomChangeHandler = undefined;

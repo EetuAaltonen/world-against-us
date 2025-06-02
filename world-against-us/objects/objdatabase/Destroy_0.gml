@@ -1,31 +1,31 @@
 // ITEM DATABASE
-itemDatabase.OnDestroy();
+ReleaseVariableFromMemory(itemDatabase);
 itemDatabase = undefined;
 
 // QUEST DATA
-DestroyDSMapAndDeleteValues(questData);
+ReleaseVariableFromMemory(questData, ds_type_map);
 questData = undefined;
 
 // DIALOGUE DATABASE
-DestroyDSMapAndDeleteValues(dialogueData, ds_type_map);
+ReleaseVariableFromMemory(dialogueData, ds_type_map);
 dialogueData = undefined;
 
 // LOOT TABLE DATABASE
-DestroyDSMapAndDeleteValues(lootTableData);
+ReleaseVariableFromMemory(lootTableData, ds_type_map);
 lootTableData = undefined;
 
 // BLUEPRINT DATABASE
-DestroyDSMapAndDeleteValues(blueprintData);
+ReleaseVariableFromMemory(blueprintData, ds_type_map);
 blueprintData = undefined;
 
 // OBJECT EXAMINE DATABASE
-DestroyDSMapAndDeleteValues(objectExamineData);
+ReleaseVariableFromMemory(objectExamineData, ds_type_map);
 objectExamineData = undefined;
 
 // WORLD MAP DATABASE
-DestroyDSMapAndDeleteValues(worldMapLocationData);
+ReleaseVariableFromMemory(worldMapLocationData, ds_type_map);
 worldMapLocationData = undefined;
 
 // MAP ICON STYLE DATABASE
-DestroyDSMapAndDeleteValues(mapIconStyleData);
+ReleaseVariableFromMemory(mapIconStyleData, ds_type_map);
 mapIconStyleData = undefined;

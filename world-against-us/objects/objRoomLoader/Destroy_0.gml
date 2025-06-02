@@ -1,2 +1,2 @@
-ClearDSMapAndDeleteValues(controllerLayers);
-ds_map_destroy(controllerLayers);
+ReleaseVariableFromMemory(controllerLayers, ds_type_map);
+controllerLayers = undefined;

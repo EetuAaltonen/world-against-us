@@ -1,4 +1,4 @@
-playerDataHandler.OnDestroy();
+ReleaseVariableFromMemory(playerDataHandler);
 playerDataHandler = undefined;
 
 // RESET GLOBAL VARIABLES

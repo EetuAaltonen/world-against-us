@@ -1,5 +1,5 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
-structure.OnDestroy();
+ReleaseVariableFromMemory(structure);
 structure = undefined;
