@@ -5,7 +5,7 @@ function QuestHandler() constructor
 	
 	static OnDestroy = function()
 	{
-		ClearDSMapAndDeleteValues(questsProgress);
-		ds_map_destroy(questsProgress);
+		ReleaseVariableFromMemory(questsProgress, ds_type_map);
+		questsProgress = undefined;
 	}
 }

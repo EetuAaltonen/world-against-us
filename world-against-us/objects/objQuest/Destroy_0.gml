@@ -1,1 +1,2 @@
-questHandler.OnDestroy();
+ReleaseVariableFromMemory(questHandler);
+questHandler = undefined;

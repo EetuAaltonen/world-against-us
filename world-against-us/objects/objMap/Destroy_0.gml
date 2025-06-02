@@ -1,2 +1,2 @@
-mapDataHandler.OnDestroy();
+ReleaseVariableFromMemory(mapDataHandler);
 mapDataHandler = undefined;

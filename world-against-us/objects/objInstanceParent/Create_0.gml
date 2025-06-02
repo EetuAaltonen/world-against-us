@@ -9,7 +9,6 @@ z = 0;
 guiPos = new Vector2(0, 0);
 
 // SKELETAL ANIMATION
-skeletalAnimationEvents = undefined;
 skeletalAnimation = undefined;
 
 // COLLISION

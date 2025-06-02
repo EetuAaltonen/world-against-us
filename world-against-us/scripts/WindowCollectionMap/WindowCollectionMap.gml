@@ -2,10 +2,10 @@ function WindowCollectionMap(_elementId, _relativePosition, _size, _backgroundCo
 {
 	static OnDestroy = function()
 	{
-		DestroyDSListAndDeleteValues(childElements);
+		ReleaseVariableFromMemory(childElements, ds_type_list);
 		childElements = undefined;
 		
-		DestroyDSMapAndDeleteValues(dataCollection);
+		ReleaseVariableFromMemory(dataCollection, ds_type_map);
 		dataCollection = undefined;
 	}
 	

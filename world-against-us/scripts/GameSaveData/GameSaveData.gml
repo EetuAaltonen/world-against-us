@@ -14,7 +14,7 @@ function GameSaveData(_player_data/*, _game_state_data*/) constructor
 	
 	static OnDestroy = function()
 	{
-		player_data.OnDestroy();
+		ReleaseVariableFromMemory(player_data);
 		player_data = undefined;
 	}
 	

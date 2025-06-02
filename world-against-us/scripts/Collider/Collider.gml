@@ -10,11 +10,8 @@ function Collider(_colliderType, _collisionRadius = 0, _collisionYOffset = 0, _c
 	
 	static OnDestroy = function()
 	{
-		if (!is_undefined(collision_body))
-		{
-			collision_body.OnDestroy();
-			collision_body = undefined;
-		}
+		ReleaseVariableFromMemory(collision_body);
+		collision_body = undefined;
 	}
 	
 	static Update = function()

@@ -1,2 +1,2 @@
-consoleHandler.OnDestroy();
+ReleaseVariableFromMemory(consoleHandler);
 consoleHandler = undefined;

@@ -15,14 +15,14 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 	
 	static OnDestroy = function()
 	{
-		DestroyDSListAndDeleteValues(childElements);
+		ReleaseVariableFromMemory(childElements, ds_type_list);
 		childElements = undefined;
 	}
 	
 	static AddChildElements = function(_childElements)
 	{
 		// DELETE OLD CHILD ELEMENTS
-		DestroyDSListAndDeleteValues(childElements);
+		ReleaseVariableFromMemory(childElements, ds_type_list);
 		
 		// ASSING THE PARENT ELEMENT TO CHILD ELEMENTS
 		var childElementCount = ds_list_size(_childElements);

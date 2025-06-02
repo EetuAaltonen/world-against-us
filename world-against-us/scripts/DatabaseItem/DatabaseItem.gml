@@ -16,7 +16,7 @@ function DatabaseItem() constructor
 	static OnDestroy = function()
 	{
 		global.ItemDatabase = undefined;
-		ClearDSMapAndDeleteValues(itemData);
-		ds_map_destroy(itemData);
+		ReleaseVariableFromMemory(itemData, ds_type_map);
+		itemData = undefined;
 	}
 }

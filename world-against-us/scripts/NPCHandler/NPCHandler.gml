@@ -4,7 +4,7 @@ function NPCHandler() constructor
 	
 	static OnDestroy = function(_struct = self)
 	{
-		DeleteStruct(_struct.npc_patrol_handler);
+		ReleaseVariableFromMemory(_struct.npc_patrol_handler);
 	}
 	
 	static OnRoomEnd = function()

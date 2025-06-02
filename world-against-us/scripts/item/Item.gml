@@ -50,17 +50,8 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 	
 	static OnDestroy = function()
 	{
-		if (!is_undefined(metadata))
-		{
-			if (is_struct(metadata))
-			{
-				if (struct_exists(metadata, "OnDestroy"))
-				{
-					metadata.OnDestroy();
-				}
-				metadata = undefined;
-			}
-		}
+		ReleaseVariableFromMemory(metadata);
+		metadata = undefined;
 	}
 	
 	static Rotate = function()

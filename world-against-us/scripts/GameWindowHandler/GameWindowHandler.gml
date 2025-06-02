@@ -5,7 +5,7 @@ function GameWindowHandler() constructor
 	
 	static OnDestroy = function()
 	{
-		DestroyDSListAndDeleteValues(gameWindows);
+		ReleaseVariableFromMemory(gameWindows, ds_type_list);
 		gameWindows = undefined;
 	}
 	

@@ -9,7 +9,7 @@ function ConsoleHandler() constructor
 	
 	static OnDestroy = function()
 	{
-		DestroyDSListAndDeleteValues(console_logs);
+		ReleaseVariableFromMemory(console_logs, ds_type_list);
 		console_logs = undefined;
 		
 		console_log_info_count = 0;

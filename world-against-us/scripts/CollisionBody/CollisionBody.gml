@@ -19,10 +19,9 @@ function CollisionBody(_collisionBodyType) constructor
 	
 	static OnDestroy = function()
 	{
-		DestroyDSMapAndDeleteValues(body_parts);
-		body_parts = undefined;
+		ReleaseVariableFromMemory(body_parts, ds_type_map);
 		
-		iframe_timer.OnDestroy();
+		ReleaseVariableFromMemory(iframe_timer);
 		iframe_timer = undefined;
 	}
 	

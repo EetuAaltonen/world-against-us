@@ -1,5 +1,5 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
-character.OnDestroy();
+ReleaseVariableFromMemory(character);
 character = undefined;

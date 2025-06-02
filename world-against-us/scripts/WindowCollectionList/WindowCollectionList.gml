@@ -9,21 +9,17 @@ function WindowCollectionList(_elementId, _relativePosition, _size, _backgroundC
 	
 	static OnDestroy = function()
 	{
-		// TODO:
-		// ds_list_destroy argument 1 incorrect type (undefined) expecting a Number (YYGI32)
-		// at gml_Script_DestroyDSListAndDeleteValues (line 3) - 	ds_list_destroy(_dsListRef);
-		
-		DestroyDSListAndDeleteValues(childElements);
+		ReleaseVariableFromMemory(childElements, ds_type_list);
 		childElements = undefined;
 		
-		DestroyDSListAndDeleteValues(dataCollection);
+		ReleaseVariableFromMemory(dataCollection, ds_type_list);
 		dataCollection = undefined;
 	}
 	
 	static UpdateDataCollection = function(newDataCollection)
 	{
 		// DESTROY PREV DATA COLLECTION DS LIST
-		DestroyDSListAndDeleteValues(dataCollection);
+		ReleaseVariableFromMemory(dataCollection);
 		
 		dataCollection = newDataCollection;
 		initDataElements = true;

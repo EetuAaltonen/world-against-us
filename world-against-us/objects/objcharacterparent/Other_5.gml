@@ -1,2 +1,0 @@
-character.OnDestroy();
-character = undefined;

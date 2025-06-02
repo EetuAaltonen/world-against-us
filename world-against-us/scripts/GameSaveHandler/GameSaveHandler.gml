@@ -65,16 +65,13 @@ function GameSaveHandler() constructor
 	
 	static ResetGameSaveDataCache = function()
 	{
-		if (game_save_data != EMPTY_SAVE_DATA)
-		{
-			game_save_data.OnDestroy();
-		}
+		ReleaseVariableFromMemory(game_save_data);
 		game_save_data = undefined;
 	}
 	
 	static ResetGameSaveRoomData = function()
 	{
-		game_save_data.game_save_room_data.OnDestroy();
+		ReleaseVariableFromMemory(game_save_data.game_save_room_data);
 		game_save_data.game_save_room_data = undefined;
 	}
 	

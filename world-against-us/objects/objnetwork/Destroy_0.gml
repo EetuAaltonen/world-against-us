@@ -1,2 +1,2 @@
-networkHandler.OnDestroy();
+ReleaseVariableFromMemory(networkHandler);
 networkHandler = undefined;

@@ -447,6 +447,7 @@
     {"name":"DeleteStruct","order":9,"path":"scripts/DeleteStruct/DeleteStruct.yy",},
     {"name":"DestroyDSListAndDeleteValues","order":2,"path":"scripts/DestroyDSListAndDeleteValues/DestroyDSListAndDeleteValues.yy",},
     {"name":"DestroyDSMapAndDeleteValues","order":2,"path":"scripts/DestroyDSMapAndDeleteValues/DestroyDSMapAndDeleteValues.yy",},
+    {"name":"DestroyDSPriorityAndDeleteValues","order":1,"path":"scripts/DestroyDSPriorityAndDeleteValues/DestroyDSPriorityAndDeleteValues.yy",},
     {"name":"DialogueHandler","order":1,"path":"scripts/DialogueHandler/DialogueHandler.yy",},
     {"name":"DialogueOption","order":2,"path":"scripts/DialogueOption/DialogueOption.yy",},
     {"name":"DragItem","order":2,"path":"scripts/DragItem/DragItem.yy",},

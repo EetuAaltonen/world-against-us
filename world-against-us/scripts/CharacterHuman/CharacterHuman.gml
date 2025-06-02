@@ -59,8 +59,7 @@ function CharacterHuman(_name, _type, _race, _behavior, _colliderRef) : Characte
 	
 	static OnDestroy = function()
 	{
-		// OVERRIDE FROM PARENT
-		backpack_slot.OnDestroy();
+		ReleaseVariableFromMemory(backpack_slot);
 		backpack_slot = undefined;
 	}
 	
