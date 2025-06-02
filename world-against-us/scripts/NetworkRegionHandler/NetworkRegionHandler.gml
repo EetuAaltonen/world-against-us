@@ -11,8 +11,8 @@ function NetworkRegionHandler() constructor
 	
 	static OnDestroy = function(_struct = self)
 	{
-		DeleteStruct(_struct.network_region_remote_player_handler);
-		DeleteStruct(_struct.network_region_object_handler);
+		ReleaseVariableFromMemory(_struct.network_region_remote_player_handler);
+		ReleaseVariableFromMemory(_struct.network_region_object_handler);
 	}
 	
 	static Update = function()

@@ -22,8 +22,9 @@ function NetworkInventoryStackItem(_inventory, _sourceQuantity, _sourceItem, _ta
 			{
 				show_debug_message("Failed to stack item to container inventory");
 			}
+			
 			// DELETE TEMP STACKED SOURCE ITEM
-			stackedSourceItem.OnDestroy();
+			ReleaseVariableFromMemory(stackedSourceItem);
 			stackedSourceItem = undefined;
 		}
 	}

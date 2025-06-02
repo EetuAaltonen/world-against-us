@@ -4,8 +4,8 @@ function NetworkRegionRemotePlayerHandler() constructor
 	
 	static OnDestroy = function(_struct = self)
 	{
-		DestroyDSMapAndDeleteValues(_struct.remote_players);
-		remote_players = undefined;
+		ReleaseVariableFromMemory(_struct.remote_players, ds_type_map);
+		_struct.remote_players = undefined;
 	}
 	
 	static Update = function()

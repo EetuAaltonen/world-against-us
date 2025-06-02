@@ -29,7 +29,7 @@ function NetworkHandler() constructor
 	
 	static OnDestroy = function()
 	{
-		network_region_handler.OnDestroy();
+		ReleaseVariableFromMemory(network_region_handler);
 		network_region_handler = undefined;
 	}
 	
