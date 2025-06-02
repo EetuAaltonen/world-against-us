@@ -16,8 +16,8 @@ function MapDataHandler() constructor
 	
 	static OnDestroy = function(_struct = self)
 	{
-		DeleteStruct(_struct.static_map_data);
-		DeleteStruct(_struct.dynamic_map_data);
+		ReleaseVariableFromMemory(_struct.static_map_data);
+		ReleaseVariableFromMemory(_struct.dynamic_map_data);
 	}
 	
 	static Update = function()
@@ -215,7 +215,7 @@ function MapDataHandler() constructor
 									{
 										// DELETE OUTDATED PATROL MAP ICONS
 										var patrol = dynamic_map_data.icons[| i];
-										DeleteStruct(patrol);
+										ReleaseVariableFromMemory(patrol);
 										ds_list_delete(dynamic_map_data.icons, i--);
 										dynamicIconCount = ds_list_size(dynamic_map_data.icons);
 									}
@@ -310,7 +310,7 @@ function MapDataHandler() constructor
 								{
 									// DELETE OUTDATED PLAYER MAP ICONS
 									var player = dynamic_map_data.icons[| i];
-									DeleteStruct(player);
+									ReleaseVariableFromMemory(player);
 									ds_list_delete(dynamic_map_data.icons, i--);
 									dynamicIconCount = ds_list_size(dynamic_map_data.icons);
 								}
@@ -496,7 +496,10 @@ function MapDataHandler() constructor
 		ParseJSONStructToList(parsedMapData, staticMapDataStruct[$ "icons"] ?? undefined, ParseJSONStructToMapIcon);
 		
 		// DESTROY PREV ICONS DS LIST
-		static_map_data.OnDestroy();
+		ReleaseVariableFromMemory(static_map_data);
+		static_map_data = undefined;
+		
+		
 		// UPDATE AND SORT ICONS
 		static_map_data.icons = parsedMapData;
 		static_map_data.SortIcons();

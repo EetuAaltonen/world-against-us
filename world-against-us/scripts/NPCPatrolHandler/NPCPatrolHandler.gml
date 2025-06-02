@@ -4,7 +4,7 @@ function NPCPatrolHandler() constructor
 	
 	static OnDestroy = function(_struct = self)
 	{
-		DestroyDSMapAndDeleteValues(_struct.local_patrols);
+		ReleaseVariableFromMemory(local_patrols, ds_type_map);
 		local_patrols = undefined;
 	}
 	

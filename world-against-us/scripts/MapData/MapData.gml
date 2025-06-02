@@ -20,7 +20,7 @@ function MapData() constructor
 	
 	static OnDestroy = function()
 	{
-		DestroyDSListAndDeleteValues(icons);
+		ReleaseVariableFromMemory(icons, ds_type_list);
 		icons = undefined;
 	}
 	
