@@ -167,4 +167,9 @@ function SkeletalAnimation(_instanceRef, _animEvents) constructor
 	{
 		CheckActiveAnimationEventFrames(ev_draw);
 	}
+	
+	static DrawEnd = function()
+	{
+		// OVERRIDE THIS FUNCTION
+	}
 }
