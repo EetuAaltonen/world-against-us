@@ -1,15 +1,18 @@
-function SkeletalAnimation(_instance_ref, _anim_events) constructor
+function SkeletalAnimation(_instanceRef, _animEvents) constructor
 {
-	instance_ref = _instance_ref;
+	instance_ref = _instanceRef;
 	// STOP DEFAULT SPRITE ANIMATION
 	instance_ref.image_speed = 0;
-	animation_events = _anim_events;
+	animation_skin = new SkeletalAnimationSkin(instance_ref);
+	animation_events = _animEvents;
 	
 	animation_names = ds_list_create();
 	GetAnimationNames(animation_names);
 	active_animation_name = GetActiveAnimationName();
 	current_frame = 0;
+	frame_count = 0;
 	
+	animation_skeleton = new SkeletalAnimationSkeleton(instance_ref);
 	InitAnimationEvents();
 	
 	static OnDestroy = function()
@@ -67,6 +70,7 @@ function SkeletalAnimation(_instance_ref, _anim_events) constructor
 				image_speed = _animationSpeed;
 			}
 			active_animation_name = _animationName;
+			frame_count = GetActiveAnimationFrameCount();
 		}
 	}
 	
@@ -162,5 +166,10 @@ function SkeletalAnimation(_instance_ref, _anim_events) constructor
 	static Draw = function()
 	{
 		CheckActiveAnimationEventFrames(ev_draw);
+	}
+	
+	static DrawEnd = function()
+	{
+		// OVERRIDE THIS FUNCTION
 	}
 }

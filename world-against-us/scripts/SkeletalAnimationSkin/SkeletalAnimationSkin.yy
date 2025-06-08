@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"SkeletalAnimationSkin",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"SkeletalAnimationSkin",
+  "parent":{
+    "name":"SkeletalAnimation",
+    "path":"folders/Scripts/Game/SkeletalAnimation.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

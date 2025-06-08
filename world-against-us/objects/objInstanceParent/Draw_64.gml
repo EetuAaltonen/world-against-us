@@ -33,13 +33,13 @@ if (global.DEBUGMODE)
 	if (!is_undefined(skeletalAnimation))
 	{
 		var animName = skeletalAnimation.GetActiveAnimationName();
-		var animFrame = skeletalAnimation.GetActiveAnimationFrame();
-		var animFrameCount = skeletalAnimation.GetActiveAnimationFrameCount();
+		var animFrame = skeletalAnimation.current_frame;
+		var animFrameCount = skeletalAnimation.frame_count;
 		var animDuration = skeletalAnimation.GetActiveAnimationDuration();
 		WorldPositionToGUI(guiPos, x, y);
 		var animText = string(
-			"{0}: {1} / {2} | {3} ms",
-			animName, floor(animFrame), animFrameCount, animDuration
+			"{0}: {1} / {2} ({3}) | {4} ms",
+			animName, animFrame, animFrameCount, image_number, animDuration
 		);
 		draw_text(guiPos.X, guiPos.Y + 60, animText);
 	}
