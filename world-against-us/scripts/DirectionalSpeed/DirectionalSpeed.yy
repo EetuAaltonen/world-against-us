@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"DirectionalSpeed",
   "parent":{
-    "name":"Speed",
-    "path":"folders/Scripts/Game/Data/Utility/Speed.yy",
+    "name":"DirectionalSpeed",
+    "path":"folders/Scripts/Game/Data/Utility/DirectionalSpeed.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",
