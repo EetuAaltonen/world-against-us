@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"DirectionalSpeed",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"DirectionalSpeed",
+  "parent":{
+    "name":"Speed",
+    "path":"folders/Scripts/Game/Data/Utility/Speed.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
