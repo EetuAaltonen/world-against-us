@@ -1,3 +1,6 @@
+// INHERIT THE PARENT EVETN
+event_inherited();
+
 if (global.MultiplayerMode)
 {
 	if (character.behavior == CHARACTER_BEHAVIOR.PLAYER)

@@ -1,6 +1,18 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
+// STOP ANIMATION
+image_speed = 0;
+
+// SKELETAL ANIMATION
+var skeletalAnimationEvents = ds_map_create();
+var skeletalAnimationSliceGroups = ds_list_create();
+ds_list_add(skeletalAnimationSliceGroups, new SkeletalAnimationSliceGroup(self, "rifle_aim", "upperbody", SkeletalAnimationPlaybackPlayerRifleAim));
+ds_list_add(skeletalAnimationSliceGroups, new SkeletalAnimationSliceGroup(self, "walk", "lowerbody", SkeletalAnimationPlaybackPlayerWalk));
+
+skeletalAnimation = new SkeletalAnimationSlice(self, skeletalAnimationEvents, skeletalAnimationSliceGroups);
+skeletalAnimation.SetAnimation("rifle_aim", 1, true);
+
 // INIT COLLIDER AND COLLISION BODY
 var collisionBody = new CollisionBody(
 	COLLISION_BODY_TYPE.Humanoid
@@ -12,10 +24,7 @@ collider = new Collider(
 	collisionBody
 );
 
-image_index = 0;
-image_speed = 0;
-
-baseAcceleration = 0.15;
+baseAcceleration = 0.25;
 acceleration = baseAcceleration;
 baseMaxSpeed = 2.5;
 maxSpeed = baseMaxSpeed;
