@@ -24,7 +24,7 @@ collider = new Collider(
 	collisionBody
 );
 
-baseAcceleration = 0.25;
+baseAcceleration = 0.15;
 acceleration = baseAcceleration;
 baseMaxSpeed = 2.5;
 maxSpeed = baseMaxSpeed;
