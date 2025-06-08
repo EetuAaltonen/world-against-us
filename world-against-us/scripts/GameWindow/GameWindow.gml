@@ -24,7 +24,7 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 		// DELETE OLD CHILD ELEMENTS
 		ReleaseVariableFromMemory(childElements, ds_type_list);
 		
-		// ASSING THE PARENT ELEMENT TO CHILD ELEMENTS
+		// ASSIGN THE PARENT ELEMENT TO CHILD ELEMENTS
 		var childElementCount = ds_list_size(_childElements);
 		for (var i = 0; i < childElementCount; i++)
 		{
