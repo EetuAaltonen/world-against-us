@@ -1,1 +1,0 @@
-if (!is_undefined(skeletalAnimation)) skeletalAnimation.DrawEnd();
