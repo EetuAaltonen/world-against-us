@@ -1,13 +1,7 @@
 if (instance_exists(global.InstancePlayer))
 {
-	var playerRef = global.InstancePlayer;
-	var mouseWorldPosition = MouseWorldPosition();
-	var aimPos = new Vector2(
-		mouseWorldPosition.X + abs(playerRef.equipmentOriginOffset.X),
-		mouseWorldPosition.Y + abs(playerRef.equipmentOriginOffset.Y)
-	);
 	draw_line_color(
-		mouseWorldPosition.X, mouseWorldPosition.Y,
+		mouse_x, mouse_y,
 		aimPos.X, aimPos.Y,
 		c_white, c_white
 	);
