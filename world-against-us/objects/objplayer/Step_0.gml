@@ -1,7 +1,6 @@
 // INHERIT THE PARENT EVETN
 event_inherited();
 
-// OVERRIDE THE PARENT EVENT
 if (!is_undefined(character))
 {
 	if (character.behavior == CHARACTER_BEHAVIOR.PLAYER)
@@ -104,58 +103,68 @@ if (!is_undefined(character))
 	}
 }
 
+// CHECK INPUT
 var hInput = movementInput.key_right - movementInput.key_left;
 var vInput = movementInput.key_down - movementInput.key_up;
 var inputDir = point_direction(0, 0, hInput, vInput);
 
-hSpeed += lengthdir_x(acceleration, inputDir);
-if (hInput == 0)
+if (hInput != 0)
 {
-	hSpeed = Approach(hSpeed, 0, acceleration * 2);
-}
-vSpeed += lengthdir_y(acceleration, inputDir);
-if (vInput == 0)
-{
-	vSpeed = Approach(vSpeed, 0, acceleration * 2);
+	h_speed += lengthdir_x(acceleration, inputDir);
+} else {
+	h_speed = 0;
 }
 
-hSpeed = clamp(hSpeed, -maxSpeed, maxSpeed);
-vSpeed = clamp(vSpeed, -maxSpeed, maxSpeed);
-dirSpeed = sqrt((hSpeed * hSpeed) + (vSpeed * vSpeed));
-
-if (place_meeting(x + hSpeed, y, objBlockParent))
+if (vInput != 0)
 {
-	var meetInstance = instance_place(x + hSpeed, y, objBlockParent);
+	v_speed += lengthdir_y(acceleration, inputDir);
+} else {
+	v_speed = 0;
+}
+
+// CHECK COLLISION
+if (place_meeting(x + h_speed, y, objBlockParent))
+{
+	var meetInstance = instance_place(x + h_speed, y, objBlockParent);
 	if (meetInstance.mask_index != SPRITE_NO_MASK)
 	{
-		while (!place_meeting(x + sign(hSpeed), y, objBlockParent))
+		while (!place_meeting(x + sign(h_speed), y, objBlockParent))
 		{
-			x += sign(hSpeed);
+			x += sign(h_speed);
 		}
-		hSpeed = 0;
+		h_speed = 0;
 	}
 }
-x += hSpeed;
-
-if (place_meeting(x, y + vSpeed, objBlockParent))
+if (place_meeting(x, y + v_speed, objBlockParent))
 {
-	var meetInstance = instance_place(x, y + vSpeed, objBlockParent);
+	var meetInstance = instance_place(x, y + v_speed, objBlockParent);
 	if (meetInstance.mask_index != SPRITE_NO_MASK)
 	{
-		while (!place_meeting(x, y + sign(vSpeed), objBlockParent))
+		while (!place_meeting(x, y + sign(v_speed), objBlockParent))
 		{
-			y += sign(vSpeed);
+			y += sign(v_speed);
 		}
-		vSpeed = 0;
+		v_speed = 0;
 	}
 }
-y += vSpeed;
 
-// CALCULATE IMAGE X SCALE
+// PREVENTS PLAYER TO MOVE FASTER DIAGONALLY
+var diagonalModifier = ((hInput != 0) && (vInput != 0)) ? 0.707 /*cos(radtodeg(45))*/ : 1;
+var totalMaxSpeed = maxSpeed * diagonalModifier;
+
+// CLAMP SPEED
+h_speed = clamp(h_speed, -totalMaxSpeed, totalMaxSpeed);
+v_speed = clamp(v_speed, -totalMaxSpeed, totalMaxSpeed);
+
+// APPLY MOVEMENT
+x += h_speed;
+y += v_speed;
+
+// CALCULATE IMAGE X-SCALE
 if (character.behavior == CHARACTER_BEHAVIOR.PLAYER)
 {
 	var spriteDirection = CalculateSpriteDirectionToAim(new Vector2(x, y), MouseWorldPosition());
 	image_xscale = spriteDirection.image_x_scale;
 } else {
-	image_xscale = (hSpeed != 0) ? sign(hSpeed) : image_xscale;
+	image_xscale = (h_speed != 0) ? sign(h_speed) : image_xscale;
 }

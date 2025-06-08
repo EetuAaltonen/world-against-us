@@ -28,9 +28,6 @@ baseAcceleration = 0.25;
 acceleration = baseAcceleration;
 baseMaxSpeed = 2.5;
 maxSpeed = baseMaxSpeed;
-hSpeed = 0;
-vSpeed = 0;
-dirSpeed = 0;
 
 // CONTROLS
 movementInput = new DeviceInputMovement(0, 0, 0, 0);
