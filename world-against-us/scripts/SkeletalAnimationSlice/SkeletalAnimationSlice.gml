@@ -35,7 +35,7 @@ function SkeletalAnimationSlice(_instanceRef, _animEvents, _animSliceGroups) : S
 		var boneData = ds_map_create();
 		animation_skeleton.GetBoneDataByName("b_weapon_slot", boneData);
 		draw_sprite_ext(
-			sprAk47_test, 0, boneData[? "worldX"], boneData[? "worldY"],
+			sprAk47, 0, boneData[? "worldX"], boneData[? "worldY"],
 			instance_ref.image_xscale, instance_ref.image_yscale,
 			-(boneData[? "worldAngleX"] + 90), c_white, 1
 		);
