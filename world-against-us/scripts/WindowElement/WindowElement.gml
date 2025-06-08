@@ -28,7 +28,7 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 		ReleaseVariableFromMemory(childElements, ds_type_list);
 		childElements = undefined;
 		
-		// ASSING THE PARENT ELEMENT TO CHILD ELEMENTS
+		// ASSIGN THE PARENT ELEMENT TO CHILD ELEMENTS
 		var childElementCount = ds_list_size(_childElements);
 		for (var i = 0; i < childElementCount; i++)
 		{

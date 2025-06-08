@@ -147,6 +147,9 @@ function SpawnHandler() constructor
 			// FETCH CHARACTER FROM GLOBAL VARIABLE
 			playerInstance.character = global.PlayerCharacter;
 			
+			// SET COLLIDER REF
+			playerInstance.character.collider_ref = playerInstance.collider;
+			
 			// SET GLOBAL VARIABLE
 			global.InstancePlayer = playerInstance;
 			

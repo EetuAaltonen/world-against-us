@@ -1,7 +1,6 @@
 // INHERIT THE PARENT EVETN
 event_inherited();
 
-// OVERRIDE THE PARENT EVENT
 if (!is_undefined(character))
 {
 	if (character.behavior == CHARACTER_BEHAVIOR.PLAYER)
@@ -104,58 +103,62 @@ if (!is_undefined(character))
 	}
 }
 
+// CHECK INPUT
 var hInput = movementInput.key_right - movementInput.key_left;
 var vInput = movementInput.key_down - movementInput.key_up;
-var inputDir = point_direction(0, 0, hInput, vInput);
+// PREVENTS PLAYER TO MOVE FASTER DIAGONALLY
+var diagonalModifier = ((hInput != 0) && (vInput != 0)) ? 0.707 /*cos(radtodeg(45))*/ : 1;
+var totalMaxSpeed = maxSpeed * diagonalModifier;
 
-hSpeed += lengthdir_x(acceleration, inputDir);
-if (hInput == 0)
+if (hInput != 0)
 {
-	hSpeed = Approach(hSpeed, 0, acceleration * 2);
-}
-vSpeed += lengthdir_y(acceleration, inputDir);
-if (vInput == 0)
-{
-	vSpeed = Approach(vSpeed, 0, acceleration * 2);
+	dirSpeed.h_speed = Approach(dirSpeed.h_speed, totalMaxSpeed * sign(hInput), acceleration);
+} else {
+	dirSpeed.h_speed = Approach(dirSpeed.h_speed, 0, acceleration * 2);
 }
 
-hSpeed = clamp(hSpeed, -maxSpeed, maxSpeed);
-vSpeed = clamp(vSpeed, -maxSpeed, maxSpeed);
-dirSpeed = sqrt((hSpeed * hSpeed) + (vSpeed * vSpeed));
-
-if (place_meeting(x + hSpeed, y, objBlockParent))
+if (vInput != 0)
 {
-	var meetInstance = instance_place(x + hSpeed, y, objBlockParent);
+	dirSpeed.v_speed = Approach(dirSpeed.v_speed, totalMaxSpeed * sign(vInput), acceleration);
+} else {
+	dirSpeed.v_speed = Approach(dirSpeed.v_speed, 0, acceleration * 2);
+}
+
+// CHECK COLLISION
+if (place_meeting(x + dirSpeed.h_speed, y, objBlockParent))
+{
+	var meetInstance = instance_place(x + dirSpeed.h_speed, y, objBlockParent);
 	if (meetInstance.mask_index != SPRITE_NO_MASK)
 	{
-		while (!place_meeting(x + sign(hSpeed), y, objBlockParent))
+		while (!place_meeting(x + sign(dirSpeed.h_speed), y, objBlockParent))
 		{
-			x += sign(hSpeed);
+			x += sign(dirSpeed.h_speed);
 		}
-		hSpeed = 0;
+		dirSpeed.h_speed = 0;
 	}
 }
-x += hSpeed;
-
-if (place_meeting(x, y + vSpeed, objBlockParent))
+if (place_meeting(x, y + dirSpeed.v_speed, objBlockParent))
 {
-	var meetInstance = instance_place(x, y + vSpeed, objBlockParent);
+	var meetInstance = instance_place(x, y + dirSpeed.v_speed, objBlockParent);
 	if (meetInstance.mask_index != SPRITE_NO_MASK)
 	{
-		while (!place_meeting(x, y + sign(vSpeed), objBlockParent))
+		while (!place_meeting(x, y + sign(dirSpeed.v_speed), objBlockParent))
 		{
-			y += sign(vSpeed);
+			y += sign(dirSpeed.v_speed);
 		}
-		vSpeed = 0;
+		dirSpeed.v_speed = 0;
 	}
 }
-y += vSpeed;
 
-// CALCULATE IMAGE X SCALE
+// APPLY MOVEMENT
+x += dirSpeed.h_speed;
+y += dirSpeed.v_speed;
+
+// CALCULATE IMAGE X-SCALE
 if (character.behavior == CHARACTER_BEHAVIOR.PLAYER)
 {
 	var spriteDirection = CalculateSpriteDirectionToAim(new Vector2(x, y), MouseWorldPosition());
 	image_xscale = spriteDirection.image_x_scale;
 } else {
-	image_xscale = (hSpeed != 0) ? sign(hSpeed) : image_xscale;
+	image_xscale = (dirSpeed.h_speed != 0) ? sign(dirSpeed.h_speed) : image_xscale;
 }
