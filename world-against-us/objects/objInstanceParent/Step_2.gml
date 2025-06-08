@@ -1,0 +1,1 @@
+if (!is_undefined(dirSpeed)) dirSpeed.Update(self);

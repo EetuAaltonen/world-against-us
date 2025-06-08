@@ -23,7 +23,6 @@ if (!is_undefined(collider))
 				);
 			}
 			draw_text(guiPos.X, guiPos.Y + 20, hpText);
-			draw_text(guiPos.X, guiPos.Y + 40, collider.collision_body.state);
 		}
 	}
 }
@@ -43,8 +42,8 @@ if (global.DEBUGMODE)
 		);
 		draw_text(guiPos.X, guiPos.Y + 60, animText);
 	}
-	draw_text(guiPos.X, guiPos.Y + 90, string("{0} / {1}", dirSpeed.hSpeed, dirSpeed.vSpeed));
 }
+draw_text(guiPos.X, guiPos.Y + 90, string("{0} / {1}", dirSpeed.h_speed, dirSpeed.v_speed));
 
 // RESET DRAW PROPERTIES
 ResetDrawProperties();
