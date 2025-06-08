@@ -89,6 +89,7 @@
     {"name":"Queue","order":13,"path":"folders/Scripts/Game/Data/Utility/Queue.yy",},
     {"name":"Round","order":6,"path":"folders/Scripts/Game/Data/Utility/Round.yy",},
     {"name":"Size","order":2,"path":"folders/Scripts/Game/Data/Utility/Size.yy",},
+    {"name":"DirectionalSpeed","order":16,"path":"folders/Scripts/Game/Data/Utility/DirectionalSpeed.yy",},
     {"name":"WorldMap","order":20,"path":"folders/Scripts/Game/Data/WorldMap.yy",},
     {"name":"WorldState","order":14,"path":"folders/Scripts/Game/Data/WorldState.yy",},
     {"name":"GameSave","order":2,"path":"folders/Scripts/Game/GameSave.yy",},
