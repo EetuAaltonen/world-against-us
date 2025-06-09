@@ -1,0 +1,34 @@
+{
+  "skeletal_animation_data": [
+    {
+      "sprite_name": "sprPlayer",
+      "animations": [
+        {
+          "name": "idle",
+          "events": [
+            {
+              "object_event_type": 0,
+              "event_name": "example_event_struct",
+              "event_function": "",
+              "animation_name": "idle"
+            }
+          ],
+          "playback_function": null,
+          "draw_function": null
+        },
+        {
+          "name": "walk",
+          "events": [],
+          "playback_function": "SkeletalAnimationPlaybackPlayerWalk",
+          "draw_function": null
+        },
+        {
+          "name": "rifle_aim",
+          "events": [],
+          "playback_function": "SkeletalAnimationPlaybackPlayerRifleAim",
+          "draw_function": "SkeletalAnimationDrawPlayerRifleAim"
+        }
+      ]
+    }
+  ]
+}
