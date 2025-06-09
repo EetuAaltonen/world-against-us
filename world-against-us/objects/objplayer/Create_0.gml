@@ -5,13 +5,10 @@ event_inherited();
 image_speed = 0;
 
 // SKELETAL ANIMATION
-var skeletalAnimationEvents = ds_map_create();
-var skeletalAnimationSliceGroups = ds_list_create();
-ds_list_add(skeletalAnimationSliceGroups, new SkeletalAnimationSliceGroup(self, "rifle_aim", "upperbody", SkeletalAnimationPlaybackPlayerRifleAim));
-ds_list_add(skeletalAnimationSliceGroups, new SkeletalAnimationSliceGroup(self, "walk", "lowerbody", SkeletalAnimationPlaybackPlayerWalk));
-
-skeletalAnimation = new SkeletalAnimationSlice(self, skeletalAnimationEvents, skeletalAnimationSliceGroups);
-skeletalAnimation.SetAnimation("rifle_aim", 1, true);
+skeletalAnimator = new SkeletalAnimator(self);
+skeletalAnimator.SetActiveAnimation("rifle_aim", "upperbody", 1, false, true);
+skeletalAnimator.SetActiveAnimation("walk", "lowerbody", 1, true, false);
+skeletalAnimator.SetSkeletonSkin("empty");
 
 // INIT COLLIDER AND COLLISION BODY
 var collisionBody = new CollisionBody(
