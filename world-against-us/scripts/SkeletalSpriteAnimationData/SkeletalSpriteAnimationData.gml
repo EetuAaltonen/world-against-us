@@ -22,13 +22,13 @@ function SkeletalSpriteAnimationData(_name, _events, _playbackFunction, _drawFun
 				other.frame_count = skeleton_animation_get_frames(other.name);
 			}
 			
-			// POPULATE INSTANCE RELATED EVENT DATA
+			// POPULATE INSTANCE-RELATED SKELETON SPRITE ANIMATION EVENT DATA INTO DATABASE ON INITIALIZE
 			var eventIndices = ds_map_keys_to_array(events);
 			var eventCount = array_length(eventIndices);
 			for (var i = 0; i < eventCount; i++)
 			{
 				var event = events[? eventIndices[@ i]];
-				event.Initialize(_instanceRef);
+				event.Initialize(_instanceRef, name);
 			}
 		}
 		is_initialized = true;
