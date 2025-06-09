@@ -1,13 +1,15 @@
-function SkeletalActiveAnimation(_animatorRef, _animationName, _animationSkin, _animationSpeed, _isLooping, _isSyncWithInstance) constructor
+function SkeletalActiveAnimation(_animatorRef, _animationName, _animationSkin, _animationTrack, _animationSpeed, _isLooping, _isSyncWithInstance) constructor
 {
 	animator_ref = _animatorRef;
 	animation_name = _animationName;
 	animation_skin = _animationSkin;
+	animation_track = _animationTrack;
 	animation_speed = _animationSpeed;
 	is_looping = _isLooping;
 	is_sync_with_instance = _isSyncWithInstance;
 	
 	animation_data = undefined;
+	animation_event_state = undefined;
 	current_frame = 0;
 	
 	Initialize();
@@ -21,26 +23,19 @@ function SkeletalActiveAnimation(_animatorRef, _animationName, _animationSkin, _
 	
 	static CheckActiveAnimationEventFrames = function()
 	{
-		// TODO: Fix this logic
-		/*var activeAnimationEvents = animation_events[? active_animation_name];
-		if (is_array(activeAnimationEvents))
+		var eventIndices = ds_map_keys_to_array(animation_data.events);
+		var eventCount = array_length(eventIndices);
+		for (var i = 0; i < eventCount; i++)
 		{
-			var eventCount = array_length(activeAnimationEvents);
-			for (var i = 0; i < eventCount; i++)
+			var animationEvent = animation_data.events[? eventIndices[@ i]];
+			if (!is_undefined(animationEvent))
 			{
-				var animationEvent = activeAnimationEvents[@ i];
-				if (animationEvent != undefined)
+				if (array_contains(animationEvent.event_frames, current_frame))
 				{
-					if (animationEvent.object_event_type == _eventType)
-					{
-						if (array_contains(animationEvent.event_frames, current_frame))
-						{
-							animationEvent.event_function(instance_ref);
-						}
-					}
+					animation_event_state = animationEvent.event_name;
 				}
 			}
-		}*/
+		}
 	}
 	
 	static Draw = function(_instanceRef)
@@ -50,30 +45,35 @@ function SkeletalActiveAnimation(_animatorRef, _animationName, _animationSkin, _
 			animation_data.playback_function(self, animator_ref);
 		}
 		
-		if (is_looping)
+		// UNDEFINED CURRENT FRAME VALUE INDICATES TO SKIP ANIMATION DRAWING
+		// LIKE IN CASES WHERE ACTIVE ANIMATION HAS CHANGED DURING PLAYBACK FUNCTION CALL
+		if (!is_undefined(current_frame))
 		{
-			if (current_frame > animation_data.frame_count) { current_frame = 0; }
-			if (current_frame < 0) { current_frame = animation_data.frame_count; }
-		} else {
-			current_frame = max(current_frame, 0.001);
-			current_frame = min(current_frame, animation_data.frame_count - 0.001);
-		}
-
-		if (is_sync_with_instance)
-		{
-			with (_instanceRef)
+			if (is_looping)
 			{
-				skeleton_animation_set_frame(0, other.current_frame);
+				if (current_frame > animation_data.frame_count) { current_frame = 0; }
+				if (current_frame < 0) { current_frame = animation_data.frame_count; }
+			} else {
+				current_frame = max(current_frame, 0.001);
+				current_frame = min(current_frame, animation_data.frame_count - 0.001);
 			}
-		}
+
+			if (is_sync_with_instance)
+			{
+				with (_instanceRef)
+				{
+					skeleton_animation_set_frame(other.animation_track, other.current_frame);
+				}
+			}
 		
-		if (!is_undefined(animation_data.draw_function))
-		{
-			animation_data.draw_function(self, animator_ref);
-		} else {
-			SkeletalAnimationDraw(self, animator_ref);
-		}
+			if (!is_undefined(animation_data.draw_function))
+			{
+				animation_data.draw_function(self, animator_ref);
+			} else {
+				SkeletalAnimationDraw(self, animator_ref);
+			}
 		
-		CheckActiveAnimationEventFrames();
+			CheckActiveAnimationEventFrames();
+		}
 	}
 }
