@@ -4,8 +4,8 @@ dirSpeed = undefined;
 ReleaseVariableFromMemory(guiPos);
 guiPos = undefined;
 
-ReleaseVariableFromMemory(skeletalAnimation);
-skeletalAnimation = undefined;
+ReleaseVariableFromMemory(skeletalAnimator);
+skeletalAnimator = undefined;
 
 ReleaseVariableFromMemory(collider);
 collider = undefined;

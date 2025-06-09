@@ -1,6 +1,6 @@
 if (instanceState != object_index) return;
 
-if (!is_undefined(skeletalAnimation)) skeletalAnimation.Draw();
+if (!is_undefined(skeletalAnimator)) skeletalAnimator.Draw();
 
 // DRAW SELF USING Z-AXIS INSTEAD OF X,Y POSITION
 //draw_self();

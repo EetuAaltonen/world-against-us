@@ -27,23 +27,5 @@ if (!is_undefined(collider))
 	}
 }
 
-if (global.DEBUGMODE)
-{
-	if (!is_undefined(skeletalAnimation))
-	{
-		var animName = skeletalAnimation.GetActiveAnimationName();
-		var animFrame = skeletalAnimation.current_frame;
-		var animFrameCount = skeletalAnimation.frame_count;
-		var animDuration = skeletalAnimation.GetActiveAnimationDuration();
-		WorldPositionToGUI(guiPos, x, y);
-		var animText = string(
-			"{0}: {1} / {2} ({3}) | {4} ms",
-			animName, animFrame, animFrameCount, image_number, animDuration
-		);
-		draw_text(guiPos.X, guiPos.Y + 60, animText);
-	}
-}
-draw_text(guiPos.X, guiPos.Y + 90, string("{0} / {1}", dirSpeed.h_speed, dirSpeed.v_speed));
-
 // RESET DRAW PROPERTIES
 ResetDrawProperties();
