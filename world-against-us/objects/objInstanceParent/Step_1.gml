@@ -9,4 +9,4 @@ if (instanceState != object_index)
 	isInstanceStateRootEventCalledOnce = true;
 }
 
-depth = -(bbox_bottom);
+depth = -y;
