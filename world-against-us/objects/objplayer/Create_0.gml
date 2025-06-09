@@ -6,9 +6,10 @@ image_speed = 0;
 
 // SKELETAL ANIMATION
 skeletalAnimator = new SkeletalAnimator(self);
-skeletalAnimator.SetActiveAnimation("rifle_aim", "upperbody", 1, false, true);
-skeletalAnimator.SetActiveAnimation("walk", "lowerbody", 1, true, false);
 skeletalAnimator.SetSkeletonSkin("empty");
+skeletalAnimator.SetActiveAnimation("rifle_aim", 0, "upperbody", 1, false, true);
+skeletalAnimator.SetActiveAnimation("walk", 1, "lowerbody", 1, true, false);
+
 
 // INIT COLLIDER AND COLLISION BODY
 var collisionBody = new CollisionBody(

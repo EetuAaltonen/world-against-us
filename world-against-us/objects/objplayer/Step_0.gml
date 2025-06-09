@@ -46,6 +46,15 @@ if (!is_undefined(character))
 				);
 			}
 		}
+		
+		// RELOAD WEAPON
+		if (keyboard_check_released(ord("R")))
+		{
+			if (skeletalAnimator.GetActiveAnimationNameByTrack(0) != "rifle_reload")
+			{
+				skeletalAnimator.SetActiveAnimation("rifle_reload", 0, "upperbody", 1, false, true);
+			}
+		}
 	
 		// DEBUG MODE
 		maxSpeed = (global.DEBUGMODE) ? 10 : baseMaxSpeed;

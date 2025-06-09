@@ -8,9 +8,7 @@ function ClearDSMapAndDeleteValues(_dsMap, _valueType = undefined)
 			repeat(mapSize)
 			{
 				var key = ds_map_find_first(_dsMap);
-				var value = _dsMap[? key];
-				ReleaseVariableFromMemory(value, _valueType);
-				ds_map_delete(_dsMap, key);	
+				DeleteDSMapValueByKey(_dsMap, key, _valueType);	
 			}
 			ds_map_clear(_dsMap);
 		} else {

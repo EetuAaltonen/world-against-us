@@ -2,8 +2,8 @@ function SkeletalSpriteAnimationEventData(_objectEventType, _eventName, _eventFu
 {
 	object_event_type = _objectEventType;
 	event_name = _eventName;
-	event_function = _eventFunc;
 	event_frames = [-1];
+	event_function = _eventFunc;
 	is_initialized = false;
 	
 	static Initialize = function(_instanceRef, _animationName)

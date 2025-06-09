@@ -4,6 +4,7 @@ function SkeletalAnimator(_instanceRef) constructor
 	skeleton_sprite_data_ref = undefined;
 	animation_skeleton = new SkeletalAnimationSkeleton(instance_ref);
 	active_animations = ds_map_create();
+	prev_active_animations = ds_map_create();
 	is_initialized = false;
 	
 	Initialize();
@@ -18,13 +19,16 @@ function SkeletalAnimator(_instanceRef) constructor
 		
 		ReleaseVariableFromMemory(active_animations, ds_type_map);
 		active_animations = undefined;
+		
+		ReleaseVariableFromMemory(prev_active_animations, ds_type_map);
+		prev_active_animations = undefined;
 	}
 	
 	static Initialize = function()
 	{
 		if (!is_initialized)
 		{
-			// POPULATE INSTANCE-RELATED SKELETON ANIMATION DATA INTO DATABASE ON INITIALIZE
+			// POPULATE INSTANCE-RELATED SKELETON SPRITE DATA INTO DATABASE ON INITIALIZE
 			var spriteName = sprite_get_name(instance_ref.sprite_index);
 			skeleton_sprite_data_ref = global.SkeletalSpriteDatabase[? spriteName];
 			if (!is_undefined(skeleton_sprite_data_ref))
@@ -35,34 +39,71 @@ function SkeletalAnimator(_instanceRef) constructor
 		is_initialized = true;
 	}
 	
-	static SetActiveAnimation = function(_animationName, _skin, _animationSpeed, _isLooping, _isSyncWithInstance)
+	static SetActiveAnimation = function(_animationName, _track, _skin, _animationSpeed, _isLooping, _isSyncWithInstance)
 	{
-		if (_isSyncWithInstance)
+		if (!is_undefined(skeleton_sprite_data_ref))
 		{
-			with (instance_ref)
+			var skeletalSpriteAnimationData = skeleton_sprite_data_ref.animations[? _animationName];
+			if (!is_undefined(skeletalSpriteAnimationData))
 			{
-				skeleton_animation_set(_animationName, _isLooping);
-				skeleton_skin_set(_skin);
-				image_speed = _animationSpeed;
+				StorePrevActiveAnimationByTrack(_track);
+				RemoveActiveAnimationByTrack(_track);
+				
+				with (instance_ref)
+				{
+					skeleton_animation_clear(_track);
+					if (_isSyncWithInstance)
+					{
+						skeleton_animation_set_position(_track, 0);
+						skeleton_animation_set_ext(_animationName, _track, _isLooping);
+					}
+				}
+
+				var activeAnimation = new SkeletalActiveAnimation(
+					self, _animationName, _skin, _track, _animationSpeed, _isLooping, _isSyncWithInstance
+				);
+				ds_map_add(active_animations, _track, activeAnimation);
+			} else {
+				throw(string("Attempting to set unknown skeletal sprite animation with name '{0}'", _animationName));
 			}
 		}
+	}
+	
+	static GetActiveAnimationNameByTrack = function(_track)
+	{
+		var activeAnimationName = undefined;
+		var activeAnimation = active_animations[? _track];
+		if (!is_undefined(activeAnimation))
+		{
+			activeAnimationName = activeAnimation.animation_name;
+		}
+		return activeAnimationName;
+	}
+	
+	static StorePrevActiveAnimationByTrack = function(_track)
+	{
+		var prevActiveAnimation = prev_active_animations[? _track];
+		if (!is_undefined(prevActiveAnimation))
+		{
+			// DELETE ONLY WHEN OVERWRITING PREV ACTIVE ANIMATIONS
+			DeleteDSMapValueByKey(prev_active_animations, _track);
+		}
 		
-		var activeAnimation = new SkeletalActiveAnimation(
-			self, _animationName, _skin, _animationSpeed, _isLooping, _isSyncWithInstance
-		);
-		ds_map_add(active_animations, _animationName, activeAnimation);
+		var activeAnimation = active_animations[? _track];
+		if (!is_undefined(activeAnimation))
+		{
+			// STORE TO PREV ACTIVE ANIMATIONS
+			ds_map_add(prev_active_animations, _track, activeAnimation);
+		}
 	}
 	
-	static RemoveActiveAnimation = function(_animationName)
+	static RemoveActiveAnimationByTrack = function(_track)
 	{
-		var animation = active_animations[_animationName];
-		ReleaseVariableFromMemory(animation);
-		ds_map_delete(active_animations, _animationName);
-	}
-	
-	static ClearActiveAnimations = function()
-	{
-		ClearDSMapAndDeleteValues(active_animations);
+		var activeAnimation = active_animations[? _track];
+		if (!is_undefined(activeAnimation))
+		{
+			ds_map_delete(active_animations, _track);
+		}
 	}
 	
 	static SetSkeletonSkin = function(_skinName)
@@ -75,11 +116,11 @@ function SkeletalAnimator(_instanceRef) constructor
 	
 	static Draw = function()
 	{
-		var activeAnimationIndices = ds_map_keys_to_array(active_animations);
-		var activeAnimationCount = array_length(activeAnimationIndices);
-		for (var i = 0; i < activeAnimationCount; i++)
+		var trackIndices = ds_map_keys_to_array(active_animations);
+		var trackCount = array_length(trackIndices);
+		for (var i = 0; i < trackCount; i++)
 		{
-			var activeAnimation = active_animations[? activeAnimationIndices[@ i]];
+			var activeAnimation = active_animations[? trackIndices[@ i]];
 			activeAnimation.Draw(instance_ref);
 		}
 	}
