@@ -5,14 +5,7 @@
       "animations": [
         {
           "name": "idle",
-          "events": [
-            {
-              "object_event_type": 0,
-              "event_name": "example_event_struct",
-              "event_function": "",
-              "animation_name": "idle"
-            }
-          ],
+          "events": [],
           "playback_function": null,
           "draw_function": null
         },
@@ -27,6 +20,25 @@
           "events": [],
           "playback_function": "SkeletalAnimationPlaybackPlayerRifleAim",
           "draw_function": "SkeletalAnimationDrawPlayerRifleAim"
+        },
+        {
+          "name": "rifle_reload",
+          "events": [
+            {
+              "object_event_type": 0,
+              "event_name": "ev_rifle_mag_detach",
+              "event_function": null,
+              "animation_name": "rifle_reload"
+            },
+            {
+              "object_event_type": 0,
+              "event_name": "ev_rifle_mag_attach",
+              "event_function": null,
+              "animation_name": "rifle_reload"
+            }
+          ],
+          "playback_function": "SkeletalAnimationPlaybackPlayerRifleReload",
+          "draw_function": "SkeletalAnimationDrawPlayerRifleReload"
         }
       ]
     }
