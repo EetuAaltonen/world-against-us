@@ -65,6 +65,14 @@ function SkeletalAnimator(_instanceRef) constructor
 		ClearDSMapAndDeleteValues(active_animations);
 	}
 	
+	static SetSkeletonSkin = function(_skinName)
+	{
+		with (instance_ref)
+		{
+			skeleton_skin_set(_skinName);
+		}
+	}
+	
 	static Draw = function()
 	{
 		var activeAnimationIndices = ds_map_keys_to_array(active_animations);
