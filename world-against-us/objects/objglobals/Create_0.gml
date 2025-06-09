@@ -159,6 +159,7 @@ global.WorldStateHandlerRef = undefined;
 global.WorldStateData = undefined;
 
 // GLOBAL DATABASE
+global.SkeletalSpriteDatabase = undefined;
 global.ItemDatabase = undefined;
 global.BlueprintData = undefined;
 global.LootTableData = undefined;

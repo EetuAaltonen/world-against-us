@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"SkeletalSpriteAnimationEventData",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"SkeletalSpriteAnimationEventData",
+  "parent":{
+    "name":"SkeletalAnimation",
+    "path":"folders/Scripts/Game/SkeletalAnimation.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

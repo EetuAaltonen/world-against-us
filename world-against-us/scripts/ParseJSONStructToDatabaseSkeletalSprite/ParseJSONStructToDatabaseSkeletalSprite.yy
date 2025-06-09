@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToDatabaseSkeletalSprite",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToDatabaseSkeletalSprite",
+  "parent":{
+    "name":"Database",
+    "path":"folders/Scripts/Game/Data/Database.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

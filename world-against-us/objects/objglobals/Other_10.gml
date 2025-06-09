@@ -22,6 +22,7 @@ global.NetworkConnectionSamplerRef = (!is_undefined(global.NetworkHandlerRef)) ?
 global.WorldStateHandlerRef = instance_exists(objWorldState) ? instance_find(objWorldState, 0).worldStateHandler : undefined;
 global.WorldStateData = (!is_undefined(global.WorldStateHandlerRef)) ? global.WorldStateHandlerRef.world_states : undefined;
 
+global.SkeletalSpriteDatabase = instance_exists(objDatabase) ? instance_find(objDatabase, 0).skeletalSpriteDatabase : undefined;
 global.ItemDatabase = instance_exists(objDatabase) ? instance_find(objDatabase, 0).itemDatabase : undefined;
 global.BlueprintData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).blueprintData : undefined;
 global.LootTableData = instance_exists(objDatabase) ? instance_find(objDatabase, 0).lootTableData : undefined;

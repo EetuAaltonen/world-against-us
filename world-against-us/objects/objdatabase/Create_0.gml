@@ -1,3 +1,8 @@
+// SKELETAL ANIMATION SPRITE DATABASE
+skeletalSpriteDatabase = ds_map_create();
+var jsonSkeletalAnimationStruct = ReadJSONFile("/animations/skeletal_animation_data.json") ?? EMPTY_STRUCT;
+ParseJSONStructToMap(skeletalSpriteDatabase, jsonSkeletalAnimationStruct[$ "skeletal_animation_data"] ?? undefined, "sprite_name", ParseJSONStructToDatabaseSkeletalSprite);
+
 // ITEM DATABASE
 itemDatabase = new DatabaseItem();
 var jsonItemStruct = ReadJSONFile("item_data.json") ?? EMPTY_STRUCT;

@@ -2,7 +2,8 @@ function SkeletalAnimationSkeleton(_instanceRef) constructor
 {
 	instance_ref = _instanceRef;
 	bone_names = ds_list_create();
-	GetBoneNames(bone_names);
+	is_initialized = false;
+	Initialize();
 	
 	static OnDestroy = function()
 	{
@@ -10,12 +11,16 @@ function SkeletalAnimationSkeleton(_instanceRef) constructor
 		bone_names = undefined;
 	}
 	
-	static GetBoneNames = function(_listRef)
+	static Initialize = function()
 	{
-		with (instance_ref)
+		if (!is_initialized)
 		{
-			skeleton_bone_list(sprite_index, _listRef);
+			with (instance_ref)
+			{
+				skeleton_bone_list(sprite_index, other.bone_names);
+			}
 		}
+		is_initialized = true;
 	}
 	
 	static GetBoneDataByName = function(_boneName, _mapRef)

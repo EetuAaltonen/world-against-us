@@ -7,7 +7,7 @@ dirSpeed = new DirectionalSpeed(0, 0);
 guiPos = new Vector2(0, 0);
 
 // SKELETAL ANIMATION
-skeletalAnimation = undefined;
+skeletalAnimator = undefined;
 
 // COLLISION
 collider = undefined;
