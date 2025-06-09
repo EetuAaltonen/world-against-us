@@ -7,6 +7,9 @@ function SkeletalSpriteData(_spriteName, _animations) constructor
 	
 	static OnDestroy = function()
 	{
+		ReleaseVariableFromMemory(animations, ds_type_map);
+		animations = undefined;
+		
 		ReleaseVariableFromMemory(skins, ds_type_list);
 		skins = undefined;
 	}
