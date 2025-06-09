@@ -57,7 +57,7 @@ function SkeletalActiveAnimation(_animatorRef, _animationName, _animationSkin, _
 				current_frame = max(current_frame, 0.001);
 				current_frame = min(current_frame, animation_data.frame_count - 0.001);
 			}
-
+			
 			if (is_sync_with_instance)
 			{
 				with (_instanceRef)
@@ -65,14 +65,14 @@ function SkeletalActiveAnimation(_animatorRef, _animationName, _animationSkin, _
 					skeleton_animation_set_frame(other.animation_track, other.current_frame);
 				}
 			}
-		
+			
 			if (!is_undefined(animation_data.draw_function))
 			{
 				animation_data.draw_function(self, animator_ref);
 			} else {
 				SkeletalAnimationDraw(self, animator_ref);
 			}
-		
+			
 			CheckActiveAnimationEventFrames();
 		}
 	}
