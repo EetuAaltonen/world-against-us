@@ -29,18 +29,22 @@ function CharacterHuman(_name, _type, _race, _behavior, _colliderRef) : Characte
 	// COMBAT
 	close_range_radius = MetersToPixels(2);
 	
+	// GEAR SLOTS
+	gear = new GearSlots(_name);
+	
 	backpack_slot = new Inventory(string("{0}_Inventory", _name), INVENTORY_TYPE.BackpackSlot, new InventorySize(3, 4), new InventoryFilter([], ["Backpack"], []));
 	
 	static ToJSONStruct = function()
 	{
-		
 		var scaledStamina = ScaleFloatValueToInt(stamina);
 		var scaledFullness = ScaleFloatValueToInt(fullness);
 		var scaledHydration = ScaleFloatValueToInt(hydration);
 		var scaledEnergy = ScaleFloatValueToInt(energy);
 		
-		var backpack = backpack_slot.GetItemByIndex(0);
-		var formatBackpack = (!is_undefined(backpack)) ? backpack.ToJSONStruct() : undefined;
+		var formatGear = (!is_undefined(gear)) ? gear.ToJSONStruct() : undefined;
+		
+		var backpackItem = backpack_slot.GetItemByIndex(0);
+		var formatBackpack = (!is_undefined(backpackItem)) ? backpackItem.ToJSONStruct() : undefined;
 		
 		return {
 			name: name,
@@ -53,12 +57,16 @@ function CharacterHuman(_name, _type, _race, _behavior, _colliderRef) : Characte
 			hydration: scaledHydration,
 			energy: scaledEnergy,
 			
+			gear: formatGear,
 			backpack: formatBackpack
 		}
 	}
 	
 	static OnDestroy = function()
 	{
+		ReleaseVariableFromMemory(gear);
+		gear = undefined;
+		
 		ReleaseVariableFromMemory(backpack_slot);
 		backpack_slot = undefined;
 	}
