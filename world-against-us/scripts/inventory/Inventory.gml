@@ -1,10 +1,11 @@
-function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = undefined) constructor
+function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = undefined, _itemLimit = infinity) constructor
 {
-	inventory_id = _inventory_id
+	inventory_id = _inventoryId
     items = ds_list_create();
 	type = _type;
 	size = _size ?? new InventorySize(0, 0);
-	inventory_filter = _inventory_filter ?? new InventoryFilter([], [], []);
+	inventory_filter = _inventoryFilter ?? new InventoryFilter([], [], []);
+	item_limit = _itemLimit;
 	
 	grid_data = [];
 	grid = {
@@ -33,10 +34,14 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 		}
 	}
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(items, ds_type_list);
-		items = undefined;
+		ReleaseVariableFromMemory(_struct.items, ds_type_list);
+		_struct.items = undefined;
+		ReleaseVariableFromMemory(_struct.size);
+		_struct.size = undefined;
+		ReleaseVariableFromMemory(_struct.inventory_filter);
+		_struct.inventory_filter = undefined;
 	}
 	
 	static InitGridData = function()
@@ -98,24 +103,29 @@ function Inventory(_inventory_id, _type, _size = undefined, _inventory_filter = 
 			// CHECK IF ITEM IS ALREADY STACKED
 			if (!isItemStacked)
 			{
-				if (!is_undefined(cloneItem.grid_index))
+				// CHECK ITEM LIMIT
+				var itemCount = ds_list_size(items);
+				if (++itemCount <= item_limit)
 				{
-					cloneItem.is_known = _new_is_known;
-					cloneItem.sourceInventory = self;
+					if (!is_undefined(cloneItem.grid_index))
+					{
+						cloneItem.is_known = _new_is_known;
+						cloneItem.sourceInventory = self;
 				
-					FillGridArea(cloneItem.grid_index.col, cloneItem.grid_index.row, cloneItem.size, cloneItem.grid_index.Clone());
-					ds_list_add(items, cloneItem);
-					addedItemGridIndex = cloneItem.grid_index.Clone();
-				} else {
-					// LOG NOTIFICATION
-					global.NotificationHandlerRef.AddNotification(
-						new Notification(
-							undefined,
-							string("{0} doesn't fit!", _item.name),
-							undefined,
-							NOTIFICATION_TYPE.Log
-						)
-					);
+						FillGridArea(cloneItem.grid_index.col, cloneItem.grid_index.row, cloneItem.size, cloneItem.grid_index.Clone());
+						ds_list_add(items, cloneItem);
+						addedItemGridIndex = cloneItem.grid_index.Clone();
+					} else {
+						// LOG NOTIFICATION
+						global.NotificationHandlerRef.AddNotification(
+							new Notification(
+								undefined,
+								string("{0} doesn't fit!", _item.name),
+								undefined,
+								NOTIFICATION_TYPE.Log
+							)
+						);
+					}
 				}
 			}
 		} else {
