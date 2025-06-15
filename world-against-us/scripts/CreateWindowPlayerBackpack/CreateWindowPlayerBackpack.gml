@@ -44,59 +44,32 @@ function CreateWindowPlayerBackpack(_gameWindowId, _zIndex)
 		CallbackItemSlotPlayerBackpack
 	);
 	
-	// EQUIPPED PRIMARY WEAPON
-	/*var primaryWeaponSlotSize = new Size(200, 100)
+	// GEAR SLOT PRIMARY WEAPON
+	var primaryWeaponSlotSize = new Size(300, 150);
+	var primaryWeaponSlotPosition = new Vector2(10, (windowSize.h - primaryWeaponSlotSize.h - 10));
+	
+	var primaryWeaponSlotTitle = new WindowText(
+		"PrimaryWeaponSlotTitle",
+		new Vector2(primaryWeaponSlotPosition.X, primaryWeaponSlotPosition.Y - 10),
+		undefined, undefined,
+		"Primary Weapon", font_small, fa_left, fa_middle, c_white, 1
+	);
+	var gearSlotInventory = global.PlayerCharacter.gear.primary_weapon;
 	var primaryWeaponSlot = new WindowItemSlot(
 		"PrimaryWeaponSlot",
-		new Vector2((windowSize.w - 20) - primaryWeaponSlotSize.w, 60),
+		primaryWeaponSlotPosition,
 		primaryWeaponSlotSize,
-		c_gray, global.PlayerPrimaryWeaponSlot,
-		CallbackItemSlotPlayerPrimaryWeapon
+		c_gray, gearSlotInventory,
+		CallbackItemSlotGearSlot
 	);
-	
-	// MAGAZINE POCKETS
-	var magazinePocketTitle = new WindowText(
-		"MagazinePocketTitle",
-		new Vector2(windowSize.w - 10, 530),
-		undefined, undefined,
-		"Ammo Pockets", font_default, fa_right, fa_middle, c_white, 1
-		
-	);
-	var magazinePocketGridSize = new Size(windowSize.w * 0.33, 0);
-	var magazinePocketGrid = new WindowInventoryGrid(
-		"MagazinePocketGrid",
-		new Vector2(windowSize.w - magazinePocketGridSize.w - 10, 550),
-		magazinePocketGridSize,
-		undefined,
-		global.PlayerMagazinePockets
-	);
-	// MEDICINE POCKETS
-	var medicinePocketTitle = new WindowText(
-		"MedicinePocketTitle",
-		new Vector2(10, 530),
-		undefined, undefined,
-		"Medicine Pockets", font_default, fa_left, fa_middle, c_white, 1
-		
-	);
-	var medicinePocketGridSize = new Size(windowSize.w * 0.33, 0);
-	var medicinePocketGrid = new WindowInventoryGrid(
-		"MedicinePocketGrid",
-		new Vector2(10, 550),
-		medicinePocketGridSize,
-		undefined,
-		global.PlayerMedicinePockets
-	);*/
 	
 	ds_list_add(backpackElements,
 		backpackTitle,
 		inventoryGrid,
 		backpackSlotTitle,
-		backpackSlot
-		/*primaryWeaponSlot,
-		magazinePocketTitle,
-		magazinePocketGrid,
-		medicinePocketTitle,
-		medicinePocketGrid*/
+		backpackSlot,
+		primaryWeaponSlotTitle,
+		primaryWeaponSlot
 	);
 	
 	backpackWindow.AddChildElements(backpackElements);
