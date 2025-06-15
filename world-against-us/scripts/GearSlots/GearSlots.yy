@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"GearSlots",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GearSlots",
+  "parent":{
+    "name":"GearSlots",
+    "path":"folders/Scripts/World/Character/GearSlots.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
