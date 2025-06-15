@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"DeleteStruct",
+  "%Name":"StructOnDestroy",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"DeleteStruct",
+  "name":"StructOnDestroy",
   "parent":{
     "name":"Struct",
     "path":"folders/Scripts/Game/Data/Struct.yy",

@@ -18,7 +18,13 @@ function ReleaseVariableFromMemory(_variable, _variableType = undefined, _conten
 			} break;
 			default:
 			{
-				DeleteStruct(_variable);
+				delete _variable;
+				// TODO: Use this struct chain to call OnDestroy
+				/*if (is_struct(_variable))
+				{
+					StructOnDestroy(_variable);
+					delete _variable;
+				}*/
 			}
 		}
 	}
