@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"ItemActionUsePrimaryWeapon",
+  "%Name":"ItemActionUseWeapon",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"ItemActionUsePrimaryWeapon",
+  "name":"ItemActionUseWeapon",
   "parent":{
     "name":"Use",
     "path":"folders/Scripts/Game/Data/Inventory/Item/Functions/Action/Use.yy",

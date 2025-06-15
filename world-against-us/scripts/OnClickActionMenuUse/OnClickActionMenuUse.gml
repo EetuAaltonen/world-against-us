@@ -3,7 +3,7 @@ function OnClickActionMenuUse()
 	var item = parentElement.targetItem;
 	switch (item.category)
 	{
-		case "Weapon": { ItemActionUsePrimaryWeapon(item); } break;
+		case "Weapon": { ItemActionUseWeapon(item); } break;
 		case "Consumable": { ItemActionUseConsumable(item); } break;
 		case "Medicine": { ItemActionUseMedicine(item); } break;
 	}

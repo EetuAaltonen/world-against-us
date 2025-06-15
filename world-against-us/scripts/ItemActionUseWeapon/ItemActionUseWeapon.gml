@@ -1,4 +1,4 @@
-function ItemActionUsePrimaryWeapon(_item)
+function ItemActionUseWeapon(_item)
 {
 	if (_item.sourceInventory.type == INVENTORY_TYPE.PlayerBackpack)
 	{
