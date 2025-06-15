@@ -153,7 +153,10 @@ function PlayerDataHandler() constructor
 						global.ItemDatabase.GetItemByName("Watering Can"),
 						global.ItemDatabase.GetItemByName("Garden Tools"),
 						global.ItemDatabase.GetItemByName("Fertilizer Sack"),
-						global.ItemDatabase.GetItemByName("Tomato Seed Pack", 10)
+						global.ItemDatabase.GetItemByName("Tomato Seed Pack", 10),
+						global.ItemDatabase.GetItemByName("Ak-47 Assault Rifle"),
+						global.ItemDatabase.GetItemByName("Ak-47 Magazine", 3),
+						global.ItemDatabase.GetItemByName("7.62 Bullet", 120),
 					]);
 				}
 				isPlayerDataLoaded = true;

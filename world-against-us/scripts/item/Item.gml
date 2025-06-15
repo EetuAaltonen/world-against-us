@@ -20,7 +20,7 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 	
 	static ToJSONStruct = function()
 	{
-		var formatMetadata = (!is_undefined(metadata)) ? metadata.ToJSONStruct(metadata) : metadata;
+		var formatMetadata = (!is_undefined(metadata)) ? metadata.ToJSONStruct() : metadata;
 		var formatGridIndex = (!is_undefined(grid_index)) ? grid_index.ToJSONStruct() : grid_index;
 		return {
 			name: name,
@@ -32,7 +32,7 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 		};
 	}
 	
-	static Clone = function(_newQuantity = undefined)
+	static Clone = function(_newQuantity = undefined, _sourceInventory = undefined, _gridIndex = undefined)
 	{
 		var parsedMetadata = (!is_undefined(metadata)) ? ParseJSONStructToMetadataItem(metadata, category, type) : undefined;
 		var cloneSize = !is_undefined(size) ? size.Clone() : undefined;
@@ -42,9 +42,9 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 			_newQuantity ?? quantity,
 			parsedMetadata,
 			is_rotated, is_known,
-			undefined
+			_gridIndex
 		);
-		
+		cloneItem.sourceInventory = _sourceInventory;
 		return cloneItem;
 	}
 	

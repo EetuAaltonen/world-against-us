@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CallbackItemSlotGearSlot",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CallbackItemSlotGearSlot",
+  "parent":{
+    "name":"ItemSlot",
+    "path":"folders/Scripts/Game/GUI/WindowElement/ItemSlot.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

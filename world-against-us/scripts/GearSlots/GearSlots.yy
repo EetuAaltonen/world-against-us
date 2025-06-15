@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"DeleteStruct",
+  "%Name":"GearSlots",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"DeleteStruct",
+  "name":"GearSlots",
   "parent":{
-    "name":"Struct",
-    "path":"folders/Scripts/Game/Data/Struct.yy",
+    "name":"GearSlots",
+    "path":"folders/Scripts/World/Character/GearSlots.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

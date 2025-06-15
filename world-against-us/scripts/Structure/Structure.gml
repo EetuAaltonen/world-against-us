@@ -7,7 +7,7 @@ function Structure(_structureId, _interactableType, _category, _metadata) constr
 	
 	static ToJSONStruct = function()
 	{
-		var formatMetadata = (!is_undefined(metadata)) ? metadata.ToJSONStruct(metadata) : metadata;
+		var formatMetadata = (!is_undefined(metadata)) ? metadata.ToJSONStruct() : metadata;
 									
 		return {
 			structure_id: structure_id,

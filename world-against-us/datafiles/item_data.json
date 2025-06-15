@@ -19,7 +19,7 @@
       "name": "Army Helmet",
       "short_name": "A. Helmet",
       "icon": "sprArmyHelmet",
-      "category": "Armour",
+      "category": "Armor",
       "type": "Helmet",
       "size": {
         "w": 2,

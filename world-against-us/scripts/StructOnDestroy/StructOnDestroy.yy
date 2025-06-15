@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"StructOnDestroy",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"StructOnDestroy",
+  "parent":{
+    "name":"Struct",
+    "path":"folders/Scripts/Game/Data/Struct.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
