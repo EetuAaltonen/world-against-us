@@ -8,7 +8,7 @@ function Facility(_facility_id, _inventory, _type, _metadata) constructor
 	static ToJSONStruct = function()
 	{
 		var formatInventory = !is_undefined(inventory) ? inventory.ToJSONStruct() : inventory;
-		var formatMetadata = !is_undefined(metadata) ? metadata.ToJSONStruct(metadata) : metadata;
+		var formatMetadata = !is_undefined(metadata) ? metadata.ToJSONStruct() : metadata;
 		return {
 			facility_id: facility_id,
 			type: type,
