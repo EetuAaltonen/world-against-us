@@ -1,9 +1,10 @@
 function OnPressedGUIDragItemStart(_item)
 {
 	// SET DRAGGED ITEM
-	global.ObjMouse.dragItem = new DragItem(_item);
+	var cloneItem = _item.Clone(_item.quantity, _item.sourceInventory, _item.grid_index);
+	global.ObjMouse.dragItem = new DragItem(cloneItem);
 	
-	// REMOVE IT FROM THE SOURCE INVENTORY
+	// REMOVE ITEM FROM SOURCE INVENTORY
 	_item.sourceInventory.RemoveItemByGridIndex(_item.grid_index);
 	
 	// NETWORKING REMOVE ITEM
