@@ -32,8 +32,6 @@ function CharacterHuman(_name, _type, _race, _behavior, _colliderRef) : Characte
 	// GEAR SLOTS
 	gear = new GearSlots(_name);
 	
-	backpack_slot = new Inventory(string("{0}_Inventory", _name), INVENTORY_TYPE.BackpackSlot, new InventorySize(3, 4), new InventoryFilter([], ["Backpack"], []));
-	
 	static ToJSONStruct = function()
 	{
 		var scaledStamina = ScaleFloatValueToInt(stamina);
@@ -42,9 +40,6 @@ function CharacterHuman(_name, _type, _race, _behavior, _colliderRef) : Characte
 		var scaledEnergy = ScaleFloatValueToInt(energy);
 		
 		var formatGear = (!is_undefined(gear)) ? gear.ToJSONStruct() : undefined;
-		
-		var backpackItem = backpack_slot.GetItemByIndex(0);
-		var formatBackpack = (!is_undefined(backpackItem)) ? backpackItem.ToJSONStruct() : undefined;
 		
 		return {
 			name: name,
@@ -57,18 +52,14 @@ function CharacterHuman(_name, _type, _race, _behavior, _colliderRef) : Characte
 			hydration: scaledHydration,
 			energy: scaledEnergy,
 			
-			gear: formatGear,
-			backpack: formatBackpack
+			gear: formatGear
 		}
 	}
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(gear);
-		gear = undefined;
-		
-		ReleaseVariableFromMemory(backpack_slot);
-		backpack_slot = undefined;
+		ReleaseVariableFromMemory(_struct.gear);
+		_struct.gear = undefined;
 	}
 	
 	static Update = function()
@@ -98,25 +89,6 @@ function CharacterHuman(_name, _type, _race, _behavior, _colliderRef) : Characte
 			hydration = clamp(hydration - (thirst_rate / game_get_speed(gamespeed_fps)), 0, max_hydration);
 			energy = clamp(energy - (fatigue_rate / game_get_speed(gamespeed_fps)), 0, max_energy);
 		}
-	}
-	
-	static GetBackpackSlotItem = function()
-	{
-		return backpack_slot.GetItemByIndex(0);
-	}
-	
-	static GetBackpackInventory = function()
-	{
-		var backpackInventory = undefined;
-		var backpackItem = GetBackpackSlotItem();
-		if (!is_undefined(backpackItem))
-		{
-			if (!is_undefined(backpackItem.metadata))
-			{
-				backpackInventory = backpackItem.metadata.inventory;	
-			}
-		}
-		return backpackInventory;
 	}
 	
 	static UseMedicine = function(_item, _targetBodyPartIndex = undefined)
