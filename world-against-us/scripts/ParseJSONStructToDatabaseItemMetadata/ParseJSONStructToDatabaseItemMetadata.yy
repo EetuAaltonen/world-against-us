@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToDatabaseItemMetadata",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToDatabaseItemMetadata",
+  "parent":{
+    "name":"Database",
+    "path":"folders/Scripts/Game/Data/Database.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

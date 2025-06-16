@@ -11,8 +11,7 @@ function ParseJSONStructToDatabaseItem(_jsonStruct)
 		var size = ParseJSONStructToSize(itemStruct[$ "size"] ?? undefined, false);
 		var itemCategory = itemStruct[$ "category"] ?? undefined;
 		var itemType = itemStruct[$ "type"] ?? undefined;
-		var metadata = ParseJSONStructToMetadataItem(itemStruct[$ "metadata"] ?? undefined, itemCategory, itemType);
-		
+		var parsedMetadata = ParseJSONStructToDatabaseItemMetadata(itemStruct[$ "metadata"] ?? undefined, itemCategory, itemType);
 		parsedItem = new Item(
 			itemStruct[$ "name"] ?? undefined,
 			itemStruct[$ "short_name"] ?? EMPTY_STRING,
@@ -25,7 +24,7 @@ function ParseJSONStructToDatabaseItem(_jsonStruct)
 			itemStruct[$ "base_price"] ?? 0,
 			itemStruct[$ "description"] ?? EMPTY_STRING,
 			1,			// DEFAULT QUANTITY
-			metadata,
+			parsedMetadata,	// SET METADATA TO UNDEFINED BEFORE POPULATING IT
 			false,		// DEFAULT ROTATION
 			true,		// DEFAULT IS KNOWN
 			undefined	// DEFAULT GRID INDEX

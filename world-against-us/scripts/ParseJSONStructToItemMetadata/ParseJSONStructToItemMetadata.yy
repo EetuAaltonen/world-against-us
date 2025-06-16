@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"ParseJSONStructToMetadataItem",
+  "%Name":"ParseJSONStructToItemMetadata",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"ParseJSONStructToMetadataItem",
+  "name":"ParseJSONStructToItemMetadata",
   "parent":{
     "name":"Functions",
     "path":"folders/Scripts/Game/Data/Inventory/Item/Functions.yy",
