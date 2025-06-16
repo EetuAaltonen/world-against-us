@@ -417,7 +417,6 @@
     {"name":"ClearDSListAndDeleteValues","order":1,"path":"scripts/ClearDSListAndDeleteValues/ClearDSListAndDeleteValues.yy",},
     {"name":"ClearDSMapAndDeleteValues","order":1,"path":"scripts/ClearDSMapAndDeleteValues/ClearDSMapAndDeleteValues.yy",},
     {"name":"CloneArrayMaterialsWithClonedValues","order":1,"path":"scripts/CloneArrayMaterialsWithClonedValues/CloneArrayMaterialsWithClonedValues.yy",},
-    {"name":"CloneStruct","order":8,"path":"scripts/CloneStruct/CloneStruct.yy",},
     {"name":"CollisionBodyPart","order":1,"path":"scripts/CollisionBodyPart/CollisionBodyPart.yy",},
     {"name":"CombineItems","order":5,"path":"scripts/CombineItems/CombineItems.yy",},
     {"name":"CompareMapIcons","order":6,"path":"scripts/CompareMapIcons/CompareMapIcons.yy",},
