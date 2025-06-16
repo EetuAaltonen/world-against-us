@@ -1,8 +1,6 @@
 function ParseJSONStructToItemMetadata(_jsonStruct, _itemData)
 {
-	// TODO: Fix and optimize this logic to fetch static item data from database
-	// and populating varying metadata from JSON struct
-	var parsedMetadata = _itemData.metadata;
+	var parsedMetadata = undefined;
 	try
 	{
 		if (is_undefined(_jsonStruct)) return parsedMetadata;
@@ -10,6 +8,10 @@ function ParseJSONStructToItemMetadata(_jsonStruct, _itemData)
 		if (variable_struct_names_count(metadataStruct) <= 0) return parsedMetadata;
 		
 		if (is_undefined(_itemData.category)) return parsedMetadata;
+		
+		// POPULATE METADATA WITH DATABASE VALUES
+		// THEN MODIFY IT WITH VARYING METADATA FROM JSON DATA
+		parsedMetadata = _itemData.metadata
 		
 		switch (_itemData.category)
 		{
