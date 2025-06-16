@@ -1,15 +1,15 @@
 function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundColor, _inventory) : WindowElement(_elementId, _relativePosition, _size, _backgroundColor) constructor
 {
 	inventory = _inventory;
-	
-	gridCellSize = new Size(size.w / inventory.grid.columns, size.w / inventory.grid.columns);
-	gridSprite = sprGUIGrid;
-	gridSpriteScale = gridCellSize.w / sprite_get_width(gridSprite);
-	size = new Size(size.w, (gridCellSize.h * inventory.size.rows));
+	grid_cell_size = new Size(0, 0);
+	grid_sprite = sprGUIGrid;
+	grid_sprite_scale = 0;
 	
 	itemBackgroundSprite = sprGUIItemBg;
-	
 	mouseHoverIndex = undefined;
+	is_initialized = false;
+	
+	Initialize();
 	
 	static OnDestroy = function()
 	{
@@ -18,8 +18,26 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 		return;	
 	}
 	
+	static Initialize = function()
+	{
+		if (!is_initialized)
+		{
+			if (!is_undefined(inventory))
+			{
+				grid_cell_size.w = size.w / inventory.grid.columns;
+				grid_cell_size.h = size.w / inventory.grid.columns;
+				grid_sprite_scale = grid_cell_size.w / sprite_get_width(grid_sprite);
+				size.h = (grid_cell_size.h * inventory.size.rows);
+			
+				is_initialized = true;
+			}
+		}
+	}
+	
 	static UpdateContent = function()
 	{
+		if (!is_initialized) return;
+		
 		if (!is_undefined(inventory.identify_index))
 		{
 			inventory.InventoryIdentify();
@@ -31,125 +49,123 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 	
 	static CheckContentInteraction = function()
 	{
+		if (!is_initialized) return;
+		if (is_undefined(mouseHoverIndex)) return;
+		if (!is_undefined(inventory.identify_index)) return;
+		
 		// CHECK FOR INTERACTIONS
-		if (!is_undefined(mouseHoverIndex))
+		if (!is_undefined(global.ObjMouse.dragItem))
 		{
-			if (is_undefined(inventory.identify_index))
+			// DROP DRAG ITEM
+			if (mouse_check_button_released(mb_left))
 			{
-				if (!is_undefined(global.ObjMouse.dragItem))
+				if (!OnReleasedGUIDragItem(inventory, mouseHoverIndex))
 				{
-					// DROP DRAG ITEM
-					if (mouse_check_button_released(mb_left))
-					{
-						if (!OnReleasedGUIDragItem(inventory, mouseHoverIndex))
-						{
-							// RESTORE ITEM IF DROPPING IS INTERRUPTED
-							global.ObjMouse.dragItem.RestoreOriginalItem();
-						}
+					// RESTORE ITEM IF DROPPING IS INTERRUPTED
+					global.ObjMouse.dragItem.RestoreOriginalItem();
+				}
 						
-						global.ObjMouse.dragItem = undefined;
-					}
-					// SPLIT DRAG ITEM
-					else if (mouse_check_button_released(mb_right))
+				global.ObjMouse.dragItem = undefined;
+			}
+			// SPLIT DRAG ITEM
+			else if (mouse_check_button_released(mb_right))
+			{
+				if (OnReleasedGUIDragItemSplit(inventory, mouseHoverIndex))
+				{
+					// REMOVE ITEM IF STACK IS EMPTY AFTER SPLIT ACTION
+					global.ObjMouse.dragItem = undefined;
+				}
+			}
+			// ROTATE DRAG ITEM
+			else if (keyboard_check_released(ord("R")))
+			{
+				global.ObjMouse.dragItem.item_data.Rotate();
+			}
+		} else {
+			// ROTATE
+			if (keyboard_check_released(ord("R")))
+			{
+				var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
+				if (!is_undefined(itemGridIndex))
+				{
+					var item = inventory.GetItemByGridIndex(itemGridIndex);
+					if (!is_undefined(item))
 					{
-						if (OnReleasedGUIDragItemSplit(inventory, mouseHoverIndex))
+						var newRotation = !item.is_rotated;
+						if (inventory.RotateItemByGridIndex(itemGridIndex, newRotation))
 						{
-							// REMOVE ITEM IF STACK IS EMPTY AFTER SPLIT ACTION
-							global.ObjMouse.dragItem = undefined;
-						}
-					}
-					// ROTATE DRAG ITEM
-					else if (keyboard_check_released(ord("R")))
-					{
-						global.ObjMouse.dragItem.item_data.Rotate();
-					}
-				} else {
-					// ROTATE
-					if (keyboard_check_released(ord("R")))
-					{
-						var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
-						if (!is_undefined(itemGridIndex))
-						{
-							var item = inventory.GetItemByGridIndex(itemGridIndex);
-							if (!is_undefined(item))
+							// NETWORKING ROTATE ITEM
+							if (global.MultiplayerMode)
 							{
-								var newRotation = !item.is_rotated;
-								if (inventory.RotateItemByGridIndex(itemGridIndex, newRotation))
+								if (IsInventoryContainer(inventory.type))
 								{
-									// NETWORKING ROTATE ITEM
-									if (global.MultiplayerMode)
+									var containerInventoryActionInfo = new ContainerInventoryActionInfo(inventory.inventory_id, itemGridIndex, undefined, newRotation, undefined, undefined);
+									var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM);
+									var networkPacket = new NetworkPacket(
+										networkPacketHeader,
+										containerInventoryActionInfo,
+										PACKET_PRIORITY.DEFAULT,
+										AckTimeoutFuncResend
+									);
+									if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
 									{
-										if (IsInventoryContainer(inventory.type))
-										{
-											var containerInventoryActionInfo = new ContainerInventoryActionInfo(inventory.inventory_id, itemGridIndex, undefined, newRotation, undefined, undefined);
-											var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.CONTAINER_INVENTORY_ROTATE_ITEM);
-											var networkPacket = new NetworkPacket(
-												networkPacketHeader,
-												containerInventoryActionInfo,
-												PACKET_PRIORITY.DEFAULT,
-												AckTimeoutFuncResend
-											);
-											if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
-											{
-												show_debug_message("Failed to rotate item in container inventory");
-											}
-										}
+										show_debug_message("Failed to rotate item in container inventory");
 									}
 								}
 							}
 						}
 					}
-					// IDENTIFY ITEM
-					else if (mouse_check_button_released(mb_middle))
+				}
+			}
+			// IDENTIFY ITEM
+			else if (mouse_check_button_released(mb_middle))
+			{
+				var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
+				if (!is_undefined(itemGridIndex))
+				{
+					var item = inventory.GetItemByGridIndex(itemGridIndex);
+					if (!is_undefined(item))
 					{
-						var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
-						if (!is_undefined(itemGridIndex))
+						inventory.identify_index = item.grid_index;
+						inventory.identify_timer.StartTimer();
+					}
+				}
+			}
+			// OPEN ACTION MENU
+			else if (mouse_check_button_released(mb_right))
+			{
+				var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
+				if (!is_undefined(itemGridIndex))
+				{
+					var item = inventory.GetItemByGridIndex(itemGridIndex);
+					if (!is_undefined(item))
+					{
+						if (item.is_known)
 						{
-							var item = inventory.GetItemByGridIndex(itemGridIndex);
-							if (!is_undefined(item))
-							{
-								inventory.identify_index = item.grid_index;
-								inventory.identify_timer.StartTimer();
-							}
+							GUIOpenItemActionMenu(item);
 						}
 					}
-					// OPEN ACTION MENU
-					else if (mouse_check_button_released(mb_right))
+				}
+			}
+			else if (keyboard_check(vk_control))
+			{
+				// QUICK TRANSFER
+				if (mouse_check_button_released(mb_left))
+				{
+					GUIOnItemQuickTransfer(inventory, mouseHoverIndex);
+				}
+			}
+			// START DRAG ITEM
+			// MUST BE LOCATED UNDER CTRL CHECK
+			else if (mouse_check_button_pressed(mb_left))
+			{
+				var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
+				if (!is_undefined(itemGridIndex))
+				{
+					var item = inventory.GetItemByGridIndex(itemGridIndex);
+					if (item.is_known)
 					{
-						var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
-						if (!is_undefined(itemGridIndex))
-						{
-							var item = inventory.GetItemByGridIndex(itemGridIndex);
-							if (!is_undefined(item))
-							{
-								if (item.is_known)
-								{
-									GUIOpenItemActionMenu(item);
-								}
-							}
-						}
-					}
-					else if (keyboard_check(vk_control))
-					{
-						// QUICK TRANSFER
-						if (mouse_check_button_released(mb_left))
-						{
-							GUIOnItemQuickTransfer(inventory, mouseHoverIndex);
-						}
-					}
-					// START DRAG ITEM
-					// MUST BE LOCATED UNDER CTRL CHECK
-					else if (mouse_check_button_pressed(mb_left))
-					{
-						var itemGridIndex = inventory.grid_data[mouseHoverIndex.row][mouseHoverIndex.col];
-						if (!is_undefined(itemGridIndex))
-						{
-							var item = inventory.GetItemByGridIndex(itemGridIndex);
-							if (item.is_known)
-							{
-								OnPressedGUIDragItemStart(item);
-							}
-						}
+						OnPressedGUIDragItemStart(item);
 					}
 				}
 			}
@@ -158,6 +174,8 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 	
 	static UpdateMouseHoverIndex = function()
 	{
+		if (!is_initialized) return;
+		
 		mouseHoverIndex = undefined;
 		
 		if (parentWindow.isFocused)
@@ -168,12 +186,12 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 				if (!is_undefined(global.ObjMouse.dragItem))
 				{
 					var dragItemData = global.ObjMouse.dragItem.item_data;
-					mousePositionToGrid.X -= ((gridCellSize.w * 0.5) * (dragItemData.size.w - 1));
-					mousePositionToGrid.Y -= ((gridCellSize.h * 0.5) * (dragItemData.size.h - 1));
+					mousePositionToGrid.X -= ((grid_cell_size.w * 0.5) * (dragItemData.size.w - 1));
+					mousePositionToGrid.Y -= ((grid_cell_size.h * 0.5) * (dragItemData.size.h - 1));
 				}
 				
-				var indexX = floor((mousePositionToGrid.X - position.X) / gridCellSize.w);
-				var indexY = floor((mousePositionToGrid.Y - position.Y) / gridCellSize.h);
+				var indexX = floor((mousePositionToGrid.X - position.X) / grid_cell_size.w);
+				var indexY = floor((mousePositionToGrid.Y - position.Y) / grid_cell_size.h);
 				mouseHoverIndex = new GridIndex(
 					// MAKE SURE THAT MOUSE HOVER INDEX IS INSIDE INVENTORY INDECES
 					clamp(indexX, 0, inventory.size.columns - 1),
@@ -185,6 +203,8 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 	
 	static DrawContent = function()
 	{
+		if (!is_initialized) return;
+		
 		// DRAW GRID BACKGROUND
 		var xPos = position.X;
 		var yPos = position.Y;
@@ -195,10 +215,10 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 			{
 				var gridSpriteIndex = 0;
 				
-				draw_sprite_ext(gridSprite, gridSpriteIndex, xPos, yPos, gridSpriteScale, gridSpriteScale, 0, c_white, 1);
-				xPos += gridCellSize.w;
+				draw_sprite_ext(grid_sprite, gridSpriteIndex, xPos, yPos, grid_sprite_scale, grid_sprite_scale, 0, c_white, 1);
+				xPos += grid_cell_size.w;
 			}
-			yPos += gridCellSize.h;
+			yPos += grid_cell_size.h;
 			xPos = position.X;
 		}
 
@@ -207,8 +227,8 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 		for (var i = 0; i < itemCount; i++)
 		{
 			var item = inventory.GetItemByIndex(i);
-			xPos = position.X + (gridCellSize.w * item.grid_index.col);
-			yPos = position.Y + (gridCellSize.h * item.grid_index.row);
+			xPos = position.X + (grid_cell_size.w * item.grid_index.col);
+			yPos = position.Y + (grid_cell_size.h * item.grid_index.row);
 			var iconBaseScale = 0.8;
 			// DRAW ITEM BACKGROUND
 			var gridSpriteIndex = 0;
@@ -231,7 +251,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					gridSpriteIndex = 1;
 				}
 			}
-			draw_sprite_ext(itemBackgroundSprite, gridSpriteIndex, xPos, yPos, item.size.w * gridSpriteScale, item.size.h * gridSpriteScale, 0, c_white, 0.5);
+			draw_sprite_ext(itemBackgroundSprite, gridSpriteIndex, xPos, yPos, item.size.w * grid_sprite_scale, item.size.h * grid_sprite_scale, 0, c_white, 0.5);
 				
 			// DRAW ITEM
 			var imageAlpha = 1;
@@ -256,8 +276,8 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 			
 			DrawItem(
 				item, 0, iconBaseScale, imageAlpha,
-				new Vector2(xPos + ((gridCellSize.w * 0.5) * item.size.w), yPos + ((gridCellSize.h * 0.5) * item.size.h)),
-				new Size(gridCellSize.w * item.size.w, gridCellSize.h * item.size.h),
+				new Vector2(xPos + ((grid_cell_size.w * 0.5) * item.size.w), yPos + ((grid_cell_size.h * 0.5) * item.size.h)),
+				new Size(grid_cell_size.w * item.size.w, grid_cell_size.h * item.size.h),
 				[DRAW_ITEM_FLAGS.NameBg, DRAW_ITEM_FLAGS.NameShort,
 				DRAW_ITEM_FLAGS.AltTextBg, DRAW_ITEM_FLAGS.AltText]
 			);
@@ -271,8 +291,8 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 		{
 			if (!is_undefined(mouseHoverIndex))
 			{
-				var xHoverPos = position.X + (gridCellSize.w * mouseHoverIndex.col);
-				var yHoverPos = position.Y + (gridCellSize.h * mouseHoverIndex.row);
+				var xHoverPos = position.X + (grid_cell_size.w * mouseHoverIndex.col);
+				var yHoverPos = position.Y + (grid_cell_size.h * mouseHoverIndex.row);
 				var dragItemData = global.ObjMouse.dragItem.item_data;
 				
 				var isGridAreaEmpty = inventory.IsGridAreaEmpty(
@@ -296,8 +316,8 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 				draw_sprite_ext(
 					sprGUIItemBg, 0,
 					xHoverPos, yHoverPos,
-					dragItemData.size.w * gridSpriteScale,
-					dragItemData.size.h * gridSpriteScale,
+					dragItemData.size.w * grid_sprite_scale,
+					dragItemData.size.h * grid_sprite_scale,
 					0, gridAreaColor, 0.5
 				);
 			}
