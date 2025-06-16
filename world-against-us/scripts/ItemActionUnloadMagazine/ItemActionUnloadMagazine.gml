@@ -4,8 +4,9 @@ function ItemActionUnloadMagazine(_item)
 	var bulletCountToUnload = _item.metadata.GetAmmoCount();
 	repeat(bulletCountToUnload)
 	{
-		var bullet = _item.metadata.UnloadAmmo();
-		var unloadedBulletGridIndex = targetInventory.AddItem(bullet.Clone(), undefined, true, true);
+		var bulletName = _item.metadata.UnloadAmmo();
+		var bulletData = global.ItemDatabase.GetItemByName(bulletName);
+		var unloadedBulletGridIndex = targetInventory.AddItem(bulletData, undefined, true, true);
 		if (is_undefined(unloadedBulletGridIndex))
 		{
 			// REVERSE UNLOAD IF DOESN'T FIT
