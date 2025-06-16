@@ -42,7 +42,7 @@ function ParseJSONStructToItem(_jsonStruct)
 			}
 		}
 		// PARSE COMBINED METADATA
-		parsedItem.metadata = ParseJSONStructToMetadataItem(parsedItem.metadata, parsedItem.category, parsedItem.type);
+		parsedItem.metadata = ParseJSONStructToItemMetadata(parsedItem.metadata, parsedItem);
 		
 	} catch (error)
 	{
