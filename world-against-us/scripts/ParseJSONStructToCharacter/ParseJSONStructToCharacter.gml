@@ -18,21 +18,44 @@ function ParseJSONStructToCharacter(_jsonStruct)
 						characterStruct[$ "name"] ?? undefined,
 						characterStruct[$ "type"] ?? undefined,
 						characterStruct[$ "race"] ?? undefined,
-						characterStruct[$ "behavior"] ?? undefined
+						undefined, // SET BEHAVIOR TO INSTANCE BY OBJECT TYPE
+						undefined // SET COLLIDER TO INSTANCE BY OBJECT TYPE 
 					);
 					
 					// VARYING METADATA
-					if (!is_undefined(characterStruct[$ "stamina"] ?? undefined)) variable_struct_set(parsedCharacter, "stamina", characterStruct[$ "stamina"]);
-					if (!is_undefined(characterStruct[$ "fullness"] ?? undefined)) variable_struct_set(parsedCharacter, "fullness", characterStruct[$ "fullness"]);
-					if (!is_undefined(characterStruct[$ "hydration"] ?? undefined)) variable_struct_set(parsedCharacter, "hydration", characterStruct[$ "hydration"]);
-					if (!is_undefined(characterStruct[$ "energy"] ?? undefined)) variable_struct_set(parsedCharacter, "energy", characterStruct[$ "energy"]);
+					if (!is_undefined(characterStruct[$ "stamina"] ?? undefined)) parsedCharacter.stamina = ScaleIntValueToFloat(characterStruct[$ "stamina"]);
 					
-					if (!is_undefined(characterStruct[$ "backpack"] ?? undefined))
+					if (!is_undefined(characterStruct[$ "fullness"] ?? undefined)) parsedCharacter.fullness = ScaleIntValueToFloat(characterStruct[$ "fullness"]);
+					if (!is_undefined(characterStruct[$ "hydration"] ?? undefined)) parsedCharacter.hydration = ScaleIntValueToFloat(characterStruct[$ "hydration"]);
+					if (!is_undefined(characterStruct[$ "energy"] ?? undefined)) parsedCharacter.energy = ScaleIntValueToFloat(characterStruct[$ "energy"]);
+					
+					var characterGear = characterStruct[$ "gear"] ?? undefined;
+					if (!is_undefined(characterGear))
 					{
-						var parsedBackpack = ParseJSONStructToItem(characterStruct[$ "backpack"]);
-						if (!is_undefined(parsedBackpack))
+						if (!is_undefined(characterGear[$ "helmet"] ?? undefined))
 						{
-							parsedCharacter.backpack_slot.AddItem(parsedBackpack, undefined, false, true);
+							var parsedHelmetItem = ParseJSONStructToItem(characterGear[$ "helmet"] ?? undefined);
+							if (!is_undefined(parsedHelmetItem)) parsedCharacter.gear.helmet.AddItem(parsedHelmetItem, undefined, false);
+						}
+						if (!is_undefined(characterGear[$ "body_armor"] ?? undefined))
+						{
+							var parsedBodyArmorItem = ParseJSONStructToItem(characterGear[$ "body_armor"] ?? undefined);
+							if (!is_undefined(parsedBodyArmorItem)) parsedCharacter.gear.body_armor.AddItem(parsedBodyArmorItem, undefined, false);
+						}
+						if (!is_undefined(characterGear[$ "backpack"] ?? undefined))
+						{
+							var parsedBackpackItem = ParseJSONStructToItem(characterGear[$ "backpack"] ?? undefined);
+							if (!is_undefined(parsedBackpackItem)) parsedCharacter.gear.backpack.AddItem(parsedBackpackItem, undefined, false);
+						}
+						if (!is_undefined(characterGear[$ "primary_weapon"] ?? undefined))
+						{
+							var parsedPrimaryWeaponItem = ParseJSONStructToItem(characterGear[$ "primary_weapon"] ?? undefined);
+							if (!is_undefined(parsedPrimaryWeaponItem)) parsedCharacter.gear.primary_weapon.AddItem(parsedPrimaryWeaponItem, undefined, false);
+						}
+						if (!is_undefined(characterGear[$ "secondary_weapon"] ?? undefined))
+						{
+							var parsedSecondaryWeaponItem = ParseJSONStructToItem(characterGear[$ "secondary_weapon"] ?? undefined);
+							if (!is_undefined(parsedSecondaryWeaponItem)) parsedCharacter.gear.secondary_weapon.AddItem(parsedSecondaryWeaponItem, undefined, false);
 						}
 					}
 				} break;

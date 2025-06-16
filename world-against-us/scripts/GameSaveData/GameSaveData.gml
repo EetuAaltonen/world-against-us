@@ -20,11 +20,9 @@ function GameSaveData(_player_data/*, _game_state_data*/) constructor
 	
 	static InitNewSave = function()
 	{
-		var initCharacter = new GameSaveDataCharacter(EMPTY_STRING, undefined);
 		var initPosition = new Vector2(0, 0);
 		var initLastLocation = new GameSaveDataLastLocation(initPosition, ROOM_DEFAULT);
-		player_data = new GameSaveDataPlayerData(initCharacter, initLastLocation, undefined);
-		//game_state_data;
+		player_data = new GameSaveDataPlayerData(undefined, initLastLocation);
 	}
 	
 	static FetchSaveData = function()
@@ -33,8 +31,7 @@ function GameSaveData(_player_data/*, _game_state_data*/) constructor
 		if (IS_ROOM_IN_GAME_WORLD)
 		{
 			// FETCH CHARACTER
-			player_data.character.name = global.PlayerCharacter.name;
-			player_data.character.backpack = global.PlayerCharacter.GetBackpackSlotItem();
+			player_data.character = global.InstancePlayer.character;
 		
 			// FETCH LAST POSITION
 			player_data.last_location.room_index = ROOM_DEFAULT;

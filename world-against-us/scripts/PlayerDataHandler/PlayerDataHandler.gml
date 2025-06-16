@@ -126,29 +126,21 @@ function PlayerDataHandler() constructor
 		{
 			if (gameSaveData != EMPTY_SAVE_DATA)
 			{
-				var gameSaveDataPlayerData = gameSaveData.player_data;
-				if (!is_undefined(gameSaveDataPlayerData))
+				if (!is_undefined(gameSaveData.player_data))
 				{
-					// TODO: Fetch all character data
-					var gameSaveCharacter = gameSaveDataPlayerData.character;
-					if (!is_undefined(gameSaveCharacter))
-					{
-						var gameSaveBackpack = gameSaveCharacter.backpack;
-						if (!is_undefined(gameSaveBackpack))
-						{
-							// FETCH BACKPACK FROM GAME SAVE DATA
-							character.backpack_slot.AddItem(gameSaveBackpack, undefined, false, true);
-							isPlayerDataLoaded = true;
-						}
-					}
+					// DELETE OLD CHARACTER DATA
+					ReleaseVariableFromMemory(character);
+					
+					character = global.GameSaveHandlerRef.game_save_data.player_data.character;
+					isPlayerDataLoaded = true;
 				}
 			} else {
 				// ADD STARTING SUPPLIES
 				var backpack = global.ItemDatabase.GetItemByName("Hiking Backpack");
 				if (!is_undefined(backpack))
 				{
-					backpack.metadata.InitInventory(string("{0}Backpack", character.name), INVENTORY_TYPE.PlayerBackpack);
-					character.backpack_slot.AddItem(backpack, undefined, false, true);
+					backpack.metadata.Initialize(string("{0}Backpack", character.name), INVENTORY_TYPE.PlayerBackpack);
+					character.gear.backpack.AddItem(backpack, undefined, false, true);
 					backpack.metadata.inventory.AddMultipleItems([
 						global.ItemDatabase.GetItemByName("Watering Can"),
 						global.ItemDatabase.GetItemByName("Garden Tools"),
@@ -163,7 +155,7 @@ function PlayerDataHandler() constructor
 			}
 			
 			// SET GLOBAL VARIABLES
-			global.PlayerBackpack = character.GetBackpackInventory();
+			global.PlayerBackpack = character.gear.GetItemBySlot(character.gear.backpack);
 			global.PlayerPrimaryWeaponSlot = primaryWeaponSlot;
 			global.PlayerMagazinePockets = magazinePockets;
 			global.PlayerMedicinePockets = medicinePockets;

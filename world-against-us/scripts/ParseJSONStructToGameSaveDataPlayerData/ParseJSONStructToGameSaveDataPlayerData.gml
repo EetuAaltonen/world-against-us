@@ -7,12 +7,13 @@ function ParseJSONStructToGameSaveDataPlayerData(_jsonStruct)
 		var playerDataStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 		if (variable_struct_names_count(playerDataStruct) <= 0) return playerDataStruct;
 		
-		var parsedCharacter = ParseJSONStructToGameSaveDataCharacter(playerDataStruct[$ "character"]);
+		var parsedCharacter = ParseJSONStructToCharacter(playerDataStruct[$ "character"]);
+		if (!is_undefined(parsedCharacter)) parsedCharacter.behavior = CHARACTER_BEHAVIOR.PLAYER;
 		var parsedLastLocation = ParseJSONStructToGameSaveDataLastLocation(playerDataStruct[$ "last_location"]);
+		
 		parsedPlayerData = new GameSaveDataPlayerData(
 			parsedCharacter,
-			parsedLastLocation,
-			undefined
+			parsedLastLocation
 		);
 	} catch (error)
 	{

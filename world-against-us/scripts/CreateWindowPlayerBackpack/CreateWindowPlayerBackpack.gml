@@ -17,12 +17,14 @@ function CreateWindowPlayerBackpack(_gameWindowId, _zIndex)
 		"Backpack", font_large, fa_center, fa_middle, c_white, 1
 		
 	);
+	var backpackItemRef = global.PlayerCharacter.gear.GetItemBySlot(global.PlayerCharacter.gear.backpack);
+	var backpackInventoryRef = (!is_undefined(backpackItemRef)) ? backpackItemRef.metadata.inventory : undefined;
 	var inventoryGrid = new WindowInventoryGrid(
 		"BackpackInventoryGrid",
 		new Vector2(10, 60),
 		new Size(760, 0),
 		undefined,
-		global.PlayerBackpack
+		backpackInventoryRef
 	);
 	
 	// BACKPACK SLOT
@@ -40,7 +42,7 @@ function CreateWindowPlayerBackpack(_gameWindowId, _zIndex)
 		"BackpackSlot",
 		backpackSlotPosition,
 		backpackSlotSize,
-		c_gray, global.PlayerCharacter.backpack_slot,
+		c_gray, global.PlayerCharacter.gear.backpack,
 		CallbackItemSlotPlayerBackpack
 	);
 	

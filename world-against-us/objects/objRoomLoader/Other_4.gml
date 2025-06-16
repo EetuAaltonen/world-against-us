@@ -85,7 +85,7 @@ switch (room)
 		room_goto(roomMainMenu);
 	} break;
 	case roomLoadResources: {
-		// INIT NEW PLAYER DATA
+		// INITIALIZE NEW PLAYER SAVE DATA
 		global.PlayerDataHandlerRef.InitPlayerData();
 		
 		// LOAD SAVE FILE
