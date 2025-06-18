@@ -27,10 +27,10 @@ function NetworkHandler() constructor
 	
 	network_region_handler = new NetworkRegionHandler();
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(network_region_handler);
-		network_region_handler = undefined;
+		ReleaseVariableFromMemory(_struct.network_region_handler);
+		_struct.network_region_handler = undefined;
 	}
 	
 	static Update = function()

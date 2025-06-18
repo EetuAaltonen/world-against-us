@@ -8,12 +8,11 @@ function NetworkRegionObjectHandler() constructor
 	patrol_update_timer = new Timer(500);
 	patrol_update_timer.StartTimer();
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		active_inventory_stream = undefined;
-		requested_container_access = undefined;
-		
-		scouting_drone = undefined;
+		_struct.active_inventory_stream = undefined;
+		_struct.requested_container_access = undefined;
+		_struct.scouting_drone = undefined;
 	}
 	
 	/// @function		Update()

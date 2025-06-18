@@ -12,7 +12,10 @@ function NetworkRegionHandler() constructor
 	static OnDestroy = function(_struct = self)
 	{
 		ReleaseVariableFromMemory(_struct.network_region_remote_player_handler);
+		_struct.network_region_remote_player_handler = undefined;
+		
 		ReleaseVariableFromMemory(_struct.network_region_object_handler);
+		_struct.network_region_object_handler = undefined;
 	}
 	
 	static Update = function()
