@@ -8,43 +8,36 @@ function AIBase(_instanceRef, _aiStates, _defaultAIStateIndex) constructor
 	static OnCreate = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 	
 	static OnDestroy = function(_struct = self)
 	{
-		// OVERRIDE THIS FUNCTION
-		return;
+		// NO GARBAGE CLEANING
 	}
 	
 	static OnRoomStart = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 	
 	static BeginUpdate = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 	
 	static Update = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 	
 	static EndUpdate = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 	
 	static OnDead = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 	
 	static GetStateIndex = function()

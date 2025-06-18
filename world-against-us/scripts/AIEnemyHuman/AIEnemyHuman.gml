@@ -18,12 +18,14 @@ function AIEnemyHuman(_instanceRef, _aiStates, _defaultAIStateIndex, _character,
 	
 	static OnDestroy = function(_struct = self)
 	{
-		// INHERIT PARENT METHOD
-		static_get(static_get(AIEnemyHuman)).OnDestroy(_struct);
+		DeletePath(_struct.path_to_target);
+		_struct.path_to_target = undefined;
 		
-		ReleaseVariableFromMemory(_struct.path_to_target);
 		ReleaseVariableFromMemory(_struct.target_seek_timer);
+		_struct.target_seek_timer = undefined;
+		
 		ReleaseVariableFromMemory(_struct.path_update_timer);
+		_struct.path_update_timer = undefined;
 	}
 	
 	static SetTargetInstance = function(_targetInstance)
