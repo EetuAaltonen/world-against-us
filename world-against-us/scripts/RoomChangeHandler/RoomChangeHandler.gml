@@ -3,10 +3,10 @@ function RoomChangeHandler() constructor
 	fast_travel_cache = ds_map_create();
 	room_change_queue = undefined;
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(fast_travel_cache, ds_type_map);
-		fast_travel_cache = undefined;
+		ReleaseVariableFromMemory(_struct.fast_travel_cache, ds_type_map);
+		_struct.fast_travel_cache = undefined;
 	}
 	
 	static RequestRoomChange = function(_destinationRoomIndex)
