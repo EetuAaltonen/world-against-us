@@ -13,9 +13,8 @@ function GameSaveDataLastLocation(_position, _room_index) constructor
 		}
 	}
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		// NO PROPERTIES TO DESTROY
-		return;	
+		// NO GARBAGE CLEANING
 	}
 }

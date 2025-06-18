@@ -3,15 +3,6 @@ function GameSaveDataPlayerData(_character, _last_location) constructor
 	character = _character;
 	last_location = _last_location;
 	
-	static OnDestroy = function()
-	{
-		ReleaseVariableFromMemory(character);
-		character = undefined;
-		
-		ReleaseVariableFromMemory(last_location);
-		last_location = undefined;
-	}
-	
 	static ToJSONStruct = function()
 	{
 		var formatCharacterData = character.ToJSONStruct();
@@ -21,5 +12,14 @@ function GameSaveDataPlayerData(_character, _last_location) constructor
 			character: formatCharacterData,
 			last_location: formatLastLocation,
 		}
+	}
+	
+	static OnDestroy = function(_struct = self)
+	{
+		ReleaseVariableFromMemory(_struct.character);
+		_struct.character = undefined;
+		
+		ReleaseVariableFromMemory(_struct.last_location);
+		_struct.last_location = undefined;
 	}
 }

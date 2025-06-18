@@ -12,10 +12,10 @@ function GameSaveData(_player_data/*, _game_state_data*/) constructor
 		}
 	}
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(player_data);
-		player_data = undefined;
+		ReleaseVariableFromMemory(_struct.player_data);
+		_struct.player_data = undefined;
 	}
 	
 	static InitNewSave = function()
