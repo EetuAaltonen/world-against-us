@@ -14,6 +14,11 @@ function SkeletalActiveAnimation(_animatorRef, _animationName, _animationSkin, _
 	
 	Initialize();
 	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+	}
+	
 	static Initialize = function()
 	{
 		var spriteName = sprite_get_name(animator_ref.instance_ref.sprite_index);

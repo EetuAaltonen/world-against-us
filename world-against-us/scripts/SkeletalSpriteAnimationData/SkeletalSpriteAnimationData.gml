@@ -7,10 +7,10 @@ function SkeletalSpriteAnimationData(_name, _events, _playbackFunction, _drawFun
 	frame_count = -1;
 	is_initialized = false;
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(events, ds_type_map);
-		events = undefined;
+		ReleaseVariableFromMemory(_struct.events, ds_type_map);
+		_struct.events = undefined;
 	}
 	
 	static Initialize = function(_instanceRef)

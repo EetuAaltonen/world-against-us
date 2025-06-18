@@ -5,13 +5,13 @@ function SkeletalSpriteData(_spriteName, _animations) constructor
 	skins = ds_list_create();
 	is_initialized = false;
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(animations, ds_type_map);
-		animations = undefined;
+		ReleaseVariableFromMemory(_struct.animations, ds_type_map);
+		_struct.animations = undefined;
 		
-		ReleaseVariableFromMemory(skins, ds_type_list);
-		skins = undefined;
+		ReleaseVariableFromMemory(_struct.skins, ds_type_list);
+		_struct.skins = undefined;
 	}
 	
 	static Initialize = function(_instanceRef)

@@ -12,16 +12,16 @@ function SkeletalAnimator(_instanceRef) constructor
 	// STOP DEFAULT SPRITE ANIMATION
 	instance_ref.image_speed = 0;
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
 		// DON'T DELETE DATABASE REFERENCE DATA
 		skeleton_sprite_data_ref = undefined;
 		
-		ReleaseVariableFromMemory(active_animations, ds_type_map);
-		active_animations = undefined;
+		ReleaseVariableFromMemory(_struct.active_animations, ds_type_map);
+		_struct.active_animations = undefined;
 		
-		ReleaseVariableFromMemory(prev_active_animations, ds_type_map);
-		prev_active_animations = undefined;
+		ReleaseVariableFromMemory(_struct.prev_active_animations, ds_type_map);
+		_struct.prev_active_animations = undefined;
 	}
 	
 	static Initialize = function()

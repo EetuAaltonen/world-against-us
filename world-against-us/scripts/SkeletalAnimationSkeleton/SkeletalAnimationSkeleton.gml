@@ -5,10 +5,10 @@ function SkeletalAnimationSkeleton(_instanceRef) constructor
 	is_initialized = false;
 	Initialize();
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(bone_names, ds_type_list);
-		bone_names = undefined;
+		ReleaseVariableFromMemory(_struct.bone_names, ds_type_list);
+		_struct.bone_names = undefined;
 	}
 	
 	static Initialize = function()
