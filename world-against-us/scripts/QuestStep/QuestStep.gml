@@ -19,8 +19,8 @@ function QuestStep(_quest_step_id, _name, _description, _icon, _type, _completio
 		);
 	}
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		// NO PROPERTIES TO DESTROY
+		// NO GARBAGE CLEANING
 	}
 }
