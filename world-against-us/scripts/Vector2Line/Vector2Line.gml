@@ -12,6 +12,11 @@ function Vector2Line(_start_point, _end_point) constructor
 		}
 	}
 	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+	}
+	
 	static Clone = function()
 	{
 		return new Vector2Line(

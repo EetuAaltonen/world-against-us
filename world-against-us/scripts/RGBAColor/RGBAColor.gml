@@ -15,6 +15,11 @@ function RGBAColor(_red, _green, _blue, _alpha) constructor
 		}
 	}
 	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+	}
+	
 	static Clone = function()
 	{
 		return new RGBAColor(

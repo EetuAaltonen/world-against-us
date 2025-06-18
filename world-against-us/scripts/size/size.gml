@@ -11,6 +11,11 @@ function Size(_w, _h) constructor
 		}
 	}
 	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+	}
+	
 	static Clone = function()
 	{
 		return new Size(w, h);

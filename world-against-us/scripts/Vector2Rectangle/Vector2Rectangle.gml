@@ -7,6 +7,11 @@ function Vector2Rectangle(_top_left_point, _top_right_point, _bottom_right_point
 	bottom_right_point = _bottom_right_point;
 	bottom_left_point = _bottom_left_point;
 	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+	}
+	
 	static Clone = function()
 	{
 		return new Vector2Rectangle(
