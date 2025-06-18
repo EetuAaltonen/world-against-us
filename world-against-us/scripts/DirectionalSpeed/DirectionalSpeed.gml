@@ -7,10 +7,13 @@ function DirectionalSpeed(_hSpeed, _vSpeed) constructor
 	prev_image_scale = new Vector2(0, 0);
 	has_turned = false;
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(prev_pos);
-		prev_pos = undefined;
+		ReleaseVariableFromMemory(_struct.prev_pos);
+		_struct.prev_pos = undefined;
+		
+		ReleaseVariableFromMemory(_struct.prev_image_scale);
+		_struct.prev_image_scale = undefined;
 	}
 	
 	static Update = function(_instanceRef)
