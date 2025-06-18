@@ -18,13 +18,22 @@ function ReleaseVariableFromMemory(_variable, _variableType = undefined, _conten
 			} break;
 			default:
 			{
-				delete _variable;
-				// TODO: Use this struct chain to call OnDestroy
-				/*if (is_struct(_variable))
+				if (is_struct(_variable))
 				{
 					StructOnDestroy(_variable);
 					delete _variable;
-				}*/
+				} else if (is_array(_variable))
+				{
+					ClearArrayAndDeleteValues(_variable, _contentVariableType);
+				} else if (is_string(_variable))
+				{
+					// IGNORE STRING TYPE VALUES
+				} else if (is_numeric(_variable))
+				{
+					// IGNORE NUMERIC TYPE VALUES
+				} else {
+					throw(string("Trying to delete variable with incorrect type with value {0}", _variable));
+				}
 			}
 		}
 	}
