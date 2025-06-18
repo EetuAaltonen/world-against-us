@@ -11,4 +11,9 @@ function ObjectExamine(_object_name, _display_name, _icon, _description) constru
 			// NO DYNAMIC DATA
 		}
 	}
+	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+	}
 }

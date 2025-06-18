@@ -8,9 +8,8 @@ function Metadata() constructor
 		return EMPTY_STRUCT;
 	}
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
 		// OVERRIDE THIS FUNCTION
-		// NO PROPERTIES TO DESTROY
 	}
 }
