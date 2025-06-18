@@ -9,21 +9,29 @@ function CollisionBody(_collisionBodyType) constructor
 	state = COLLISION_BODY_STATE.ALIVE;
 	// TRIGGERS HP UPDATE ON NEXT FRAME
 	is_condition_modified = true;
+	is_initialized = false;
 	
-	InitCollisionBody();
+	Initialize();
 	
-	static InitCollisionBody = function()
+	static OnDestroy = function(_struct = self)
 	{
-		InitCollisionBodyParts(body_parts, collision_body_type);
-	}
-	
-	static OnDestroy = function()
-	{
-		ReleaseVariableFromMemory(body_parts, ds_type_map);
+		ReleaseVariableFromMemory(_struct.body_parts, ds_type_map);
+		_struct.body_parts = undefined;
 		
-		ReleaseVariableFromMemory(iframe_timer);
-		iframe_timer = undefined;
+		ReleaseVariableFromMemory(_struct.iframe_timer);
+		_struct.iframe_timer = undefined;
 	}
+	
+	static Initialize = function()
+	{
+		if (!is_initialized)
+		{
+			InitCollisionBodyParts(body_parts, collision_body_type);
+			is_initialized = true;
+		}
+	}
+	
+	
 	
 	static Update = function()
 	{

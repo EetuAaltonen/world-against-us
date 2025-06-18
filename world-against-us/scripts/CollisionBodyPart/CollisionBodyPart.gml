@@ -5,6 +5,12 @@ function CollisionBodyPart(_total_hitpoints, _is_vital_part, _bounding_box) cons
 	is_vital_part = _is_vital_part;
 	bounding_box = _bounding_box;
 	
+	static OnDestroy = function(_struct = self)
+	{
+		ReleaseVariableFromMemory(_struct.bounding_box);
+		_struct.bounding_box = undefined;
+	}
+	
 	static TakeDamage = function(_damage)
 	{
 		var takenDamage = min(hitpoints, _damage);

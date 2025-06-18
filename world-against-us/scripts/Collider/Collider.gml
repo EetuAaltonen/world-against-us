@@ -8,10 +8,10 @@ function Collider(_colliderType, _collisionRadius = 0, _collisionYOffset = 0, _c
 	// NEGATIVE IS UP
 	collision_yoffset = _collisionYOffset;
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(collision_body);
-		collision_body = undefined;
+		ReleaseVariableFromMemory(_struct.collision_body);
+		_struct.collision_body = undefined;
 	}
 	
 	static Update = function()
