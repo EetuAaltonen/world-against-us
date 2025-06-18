@@ -16,4 +16,9 @@ function Facility(_facility_id, _inventory, _type, _metadata) constructor
 			metadata: formatMetadata
 		}
 	}
+	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+	}
 }

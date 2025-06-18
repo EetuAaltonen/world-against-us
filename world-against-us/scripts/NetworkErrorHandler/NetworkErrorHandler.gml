@@ -1,9 +1,8 @@
 function NetworkErrorHandler() constructor
 {
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		// NO PROPERTIES TO DESTROY
-		return;
+		// NO GARBAGE CLEANING
 	}
 	
 	static HandleInvalidRequest = function(_invalidRequestInfo)

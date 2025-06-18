@@ -11,6 +11,11 @@ function InventorySize(_columns, _rows) constructor
 		};
 	}
 	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+	}
+	
 	static Clone = function()
 	{
 		return new InventorySize(

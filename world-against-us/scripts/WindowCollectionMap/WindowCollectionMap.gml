@@ -1,12 +1,8 @@
 function WindowCollectionMap(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction = undefined) : WindowCollectionList(_elementId, _relativePosition, _size, _backgroundColor, _listData, _drawFunction, _isInteractive, _callbackFunction) constructor
 {
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(childElements, ds_type_list);
-		childElements = undefined;
-		
-		ReleaseVariableFromMemory(dataCollection, ds_type_map);
-		dataCollection = undefined;
+		// NO GARBAGE CLEANING
 	}
 	
 	static UpdateContent = function()

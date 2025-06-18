@@ -8,10 +8,10 @@ function AIStateMachine(_states, _defaultStateIndex) constructor
 	
 	OnCreate();
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(states, ds_type_map);
-		states = undefined;
+		ReleaseVariableFromMemory(_struct.states, ds_type_map);
+		_struct.states = undefined;
 	}
 	
 	static OnCreate = function()

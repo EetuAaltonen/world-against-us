@@ -7,6 +7,11 @@ function WindowText(_elementId, _relativePosition, _size, _backgroundColor, _tex
 	textColor = _textColor;
 	textAlpha = _textAlpha;
 	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+	}
+	
 	static DrawContent = function()
 	{
 		draw_set_font(textFont);

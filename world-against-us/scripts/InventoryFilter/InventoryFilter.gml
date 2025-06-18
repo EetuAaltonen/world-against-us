@@ -13,6 +13,11 @@ function InventoryFilter(_whitelisted_names, _whitelisted_categories, _whitelist
 		};
 	}
 	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+	}
+	
 	static IsItemWhitelisted = function(_item)
 	{
 		var isItemWhitelisted = false;

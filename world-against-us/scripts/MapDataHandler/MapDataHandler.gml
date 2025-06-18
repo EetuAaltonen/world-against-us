@@ -17,7 +17,10 @@ function MapDataHandler() constructor
 	static OnDestroy = function(_struct = self)
 	{
 		ReleaseVariableFromMemory(_struct.static_map_data);
+		_struct.static_map_data = undefined;
+		
 		ReleaseVariableFromMemory(_struct.dynamic_map_data);
+		_struct.dynamic_map_data = undefined;
 	}
 	
 	static Update = function()

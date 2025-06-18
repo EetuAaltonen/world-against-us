@@ -18,10 +18,10 @@ function MapData() constructor
 		}
 	}
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(icons, ds_type_list);
-		icons = undefined;
+		ReleaseVariableFromMemory(_struct.icons, ds_type_list);
+		_struct.icons = undefined;
 	}
 	
 	static SortIcons = function()

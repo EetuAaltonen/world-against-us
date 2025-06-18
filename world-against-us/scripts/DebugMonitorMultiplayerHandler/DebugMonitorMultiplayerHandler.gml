@@ -17,7 +17,6 @@ function DebugMonitorMultiplayerHandler() constructor
 	static OnDestroy = function(_struct = self)
 	{
 		// NO GARBAGE CLEANING
-		return;
 	}
 	
 	static Update = function()

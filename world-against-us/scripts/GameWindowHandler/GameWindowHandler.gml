@@ -3,10 +3,10 @@ function GameWindowHandler() constructor
 	gameWindows = ds_list_create();
 	focusedWindow = undefined;
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(gameWindows, ds_type_list);
-		gameWindows = undefined;
+		ReleaseVariableFromMemory(_struct.gameWindows, ds_type_list);
+		_struct.gameWindows = undefined;
 	}
 	
 	static Update = function()
@@ -141,7 +141,7 @@ function GameWindowHandler() constructor
 				}
 				// CLOSE WINDOW
 				gameWindow.OnClose();
-				DeleteDSListValueByIndex(gameWindows, i++);
+				DeleteDSListValueByIndex(gameWindows, i);
 				windowCount = ds_list_size(gameWindows);
 				break;
 			}

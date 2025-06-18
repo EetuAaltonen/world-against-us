@@ -30,10 +30,19 @@ function InstanceObject(_sprite_index, _object_index, _position, _network_id = u
 	static OnDestroy = function(_struct = self)
 	{
 		ReleaseVariableFromMemory(_struct.position);
+		_struct.position = undefined;
+		
 		ReleaseVariableFromMemory(_struct.device_input_movement);
+		_struct.device_input_movement = undefined;
+		
 		ReleaseVariableFromMemory(_struct.start_position);
+		_struct.start_position = undefined;
+		
 		ReleaseVariableFromMemory(_struct.target_position);
+		_struct.target_position = undefined;
+		
 		ReleaseVariableFromMemory(_struct.interpolation_timer);
+		_struct.interpolation_timer = undefined;
 	}
 	
 	static StartInterpolateMovement = function(_targetPosition, _interpolationTime)

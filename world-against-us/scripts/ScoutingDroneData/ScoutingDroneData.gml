@@ -15,5 +15,6 @@ function ScoutingDroneData(_region_id, _position) constructor
 	static OnDestroy = function(_struct = self)
 	{
 		ReleaseVariableFromMemory(_struct.position);
+		_struct.position = undefined;
 	}
 }

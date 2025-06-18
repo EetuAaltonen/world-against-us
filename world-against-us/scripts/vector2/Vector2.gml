@@ -11,6 +11,11 @@ function Vector2(_x, _y) constructor
 		}
 	}
 	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+	}
+	
 	static Clone = function()
 	{
 		return new Vector2(X, Y);

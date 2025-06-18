@@ -18,10 +18,10 @@ function WorldStateHandler() constructor
 	sky_darkness_last_update_minutes = -1;
 	
 	InitWorldStates();
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(world_states, ds_type_map);
-		world_states = undefined;
+		ReleaseVariableFromMemory(_struct.world_states, ds_type_map);
+		_struct.world_states = undefined;
 	}
 	
 	static InitWorldStates = function()

@@ -2,6 +2,12 @@ function DatabaseItem() constructor
 {
 	itemData = ds_map_create();
 	
+	static OnDestroy = function(_struct = self)
+	{
+		ReleaseVariableFromMemory(_struct.itemData, ds_type_map);
+		_struct.itemData = undefined;
+	}
+	
 	static GetItemByName = function(_name, _quantity = 1)
 	{
 		var itemClone = itemData[? _name].Clone();
@@ -11,12 +17,5 @@ function DatabaseItem() constructor
 		}
 		
 		return itemClone;
-	}
-	
-	static OnDestroy = function()
-	{
-		global.ItemDatabase = undefined;
-		ReleaseVariableFromMemory(itemData, ds_type_map);
-		itemData = undefined;
 	}
 }

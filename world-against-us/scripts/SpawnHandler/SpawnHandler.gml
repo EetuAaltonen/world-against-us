@@ -3,9 +3,9 @@ function SpawnHandler() constructor
 	spawn_point_object_index = objSpawnPoint;
 	spawn_point = undefined;
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		// NO PROPERTIES TO DESTROY
+		// NO GARBAGE CLEANING
 	}
 	
 	static OnRoomStart = function()

@@ -48,10 +48,10 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 		return cloneItem;
 	}
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(metadata);
-		metadata = undefined;
+		ReleaseVariableFromMemory(_struct.metadata);
+		_struct.metadata = undefined;
 	}
 	
 	static Rotate = function()

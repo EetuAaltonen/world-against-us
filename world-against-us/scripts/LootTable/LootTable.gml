@@ -3,6 +3,12 @@ function LootTable(_tag, _pools) constructor
 	tag = _tag;
 	pools = _pools;
 	
+	static OnDestroy = function(_struct = self)
+	{
+		ReleaseVariableFromMemory(_struct.pools);
+		_struct.pools = undefined;
+	}
+	
 	static RollLoot = function()
 	{
 		var loot = [];

@@ -4,8 +4,8 @@ function NPCPatrolHandler() constructor
 	
 	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(local_patrols, ds_type_map);
-		local_patrols = undefined;
+		ReleaseVariableFromMemory(_struct.local_patrols, ds_type_map);
+		_struct.local_patrols = undefined;
 	}
 	
 	static AddPatrol = function(_patrol)

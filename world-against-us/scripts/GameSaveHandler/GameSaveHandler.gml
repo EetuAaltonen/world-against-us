@@ -9,6 +9,11 @@ function GameSaveHandler() constructor
 	show_auto_save_icon = false;
 	auto_save_icon_timer = new Timer(4000);
 	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+	}
+	
 	static Update = function()
 	{
 		// AUTO SAVE ICON

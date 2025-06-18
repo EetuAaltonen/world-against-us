@@ -20,10 +20,10 @@ function Quest(_quest_id, _name, _description, _icon, _type, _steps, _rewards) c
 		);
 	}
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(steps, ds_type_map);
-		steps = undefined;
+		ReleaseVariableFromMemory(_struct.steps, ds_type_map);
+		_struct.steps = undefined;
 	}
 	
 	static CheckCompleted = function()

@@ -5,8 +5,7 @@ function AIEnemyBandit(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 	
 	static OnDestroy = function(_struct = self)
 	{
-		// INHERIT PARENT METHOD
-		static_get(static_get(AIEnemyBandit)).OnDestroy(_struct);
+		// NO GARBAGE CLEANING
 	}
 	
 	static Update = function()

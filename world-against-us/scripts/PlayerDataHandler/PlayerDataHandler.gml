@@ -5,6 +5,7 @@ function PlayerDataHandler() constructor
 	character = undefined;
 	last_known_location = undefined;
 	// TODO: Low casing property names
+	// TODO: Remove obsolete properties
 	primaryWeaponSlot = undefined;
 	magazinePockets = undefined;
 	medicinePockets = undefined;
@@ -12,16 +13,17 @@ function PlayerDataHandler() constructor
 	// TODO: Typo in variable name
 	positionSyncTImer = new Timer(500);
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(character);
-		character = undefined;
-		ReleaseVariableFromMemory(primaryWeaponSlot);
-		primaryWeaponSlot = undefined;
-		ReleaseVariableFromMemory(magazinePockets);
-		magazinePockets = undefined;
-		ReleaseVariableFromMemory(medicinePockets);
-		medicinePockets = undefined;
+		ReleaseVariableFromMemory(_struct.character);
+		_struct.character = undefined;
+		// TODO: Remove obsolete properties
+		ReleaseVariableFromMemory(_struct.primaryWeaponSlot);
+		_struct.primaryWeaponSlot = undefined;
+		ReleaseVariableFromMemory(_struct.magazinePockets);
+		_struct.magazinePockets = undefined;
+		ReleaseVariableFromMemory(_struct.medicinePockets);
+		_struct.medicinePockets = undefined;
 	}
 	
 	static OnRoomStart = function()

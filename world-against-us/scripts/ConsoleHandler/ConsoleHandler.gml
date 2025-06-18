@@ -7,14 +7,10 @@ function ConsoleHandler() constructor
 	console_log_warning_count = 0;
 	console_log_error_count = 0;
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(console_logs, ds_type_list);
-		console_logs = undefined;
-		
-		console_log_info_count = 0;
-		console_log_warning_count = 0;
-		console_log_error_count = 0;
+		ReleaseVariableFromMemory(_struct.console_logs, ds_type_list);
+		_struct.console_logs = undefined;
 	}
 	
 	static AddConsoleLog = function(_consoleLogType, _consoleLogMessage)

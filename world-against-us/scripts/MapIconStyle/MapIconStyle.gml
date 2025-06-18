@@ -4,4 +4,9 @@ function MapIconStyle(_object_name, _rgb_color, _constant_alpha, _is_dynamic) co
 	rgb_color = _rgb_color;
 	constant_alpha = _constant_alpha;
 	is_dynamic = _is_dynamic;
+	
+	static OnDestroy = function(_struct = self)
+	{
+		// NO GARBAGE CLEANING
+	}
 }

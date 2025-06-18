@@ -5,12 +5,13 @@ function Path(_path = undefined) constructor
 	static OnDestroy = function(_struct = self)
 	{
 		DeletePath(_struct.path);
+		_struct.path = undefined;
 	}
 	
 	static CalculatePath = function(_startPositionX, _startPositionY, _endPositionX, _endPositionY, _allowDiagonal)
 	{
 		var isPathFound = false;
-		if (IsPathExist(path))
+		if (path_exists(path ?? -1))
 		{
 			isPathFound = mp_grid_path(
 				global.ObjGridPath.roomGrid, path,
@@ -26,7 +27,7 @@ function Path(_path = undefined) constructor
 	{
 		var isPathFound = false;
 		var factor = 4;
-		if (IsPathExist(path))
+		if (path_exists(path ?? -1))
 		{
 			with (_instanceRef)
 			{
@@ -39,7 +40,7 @@ function Path(_path = undefined) constructor
 	static GetPathPoint = function(_pathPosition)
 	{
 		var pathPoint = undefined;
-		if (IsPathExist(path))
+		if (path_exists(path ?? -1))
 		{
 			pathPoint = new Vector2(
 				path_get_x(path, _pathPosition),
@@ -59,7 +60,7 @@ function Path(_path = undefined) constructor
 	
 	static Draw = function(_pathPosition)
 	{
-		if (IsPathExist(path))
+		if (path_exists(path ?? -1))
 		{
 			var pathPointCount = path_get_number(path);
 			var prevPathPointX = undefined;

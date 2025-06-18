@@ -10,11 +10,10 @@ function AIEnemyZombie(_instanceRef, _aiStates, _defaultAIStateIndex, _character
 	state_machine.state_timer.setting_time = irandom_range(min_idle_state_duration, max_idle_state_duration);
 	state_machine.state_timer.StartTimer();
 	
-	// PATROL
+
 	static OnDestroy = function(_struct = self)
 	{
-		// INHERIT PARENT METHOD
-		static_get(static_get(AIEnemyZombie)).OnDestroy(_struct);
+		// NO GARBAGE CLEANING
 	}
 	
 	static Update = function()

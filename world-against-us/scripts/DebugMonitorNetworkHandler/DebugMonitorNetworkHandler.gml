@@ -24,7 +24,6 @@ function DebugMonitorNetworkHandler() constructor
 	static OnDestroy = function(_struct = self)
 	{
 		// NO GARBAGE CLEANING
-		return;
 	}
 	
 	static SamplePing = function(_ping)

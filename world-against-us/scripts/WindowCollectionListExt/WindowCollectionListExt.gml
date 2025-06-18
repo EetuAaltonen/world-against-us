@@ -8,13 +8,10 @@ function WindowCollectionListExt(_elementId, _relativePosition, _size, _backgrou
 	
 	initDataElements = true;
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(childElements, ds_type_list);
-		childElements = undefined;
-		
-		ReleaseVariableFromMemory(dataCollection, ds_type_list);
-		dataCollection = undefined;
+		ReleaseVariableFromMemory(_struct.dataCollection, ds_type_list);
+		_struct.dataCollection = undefined;
 	}
 	
 	static UpdateDataCollection = function(newDataCollection)

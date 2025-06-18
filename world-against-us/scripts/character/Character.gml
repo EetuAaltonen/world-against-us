@@ -17,21 +17,18 @@ function Character(_name, _type, _race, _behavior) constructor
 		);
 	}
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		// OVERRIDE THIS FUNCTION
-		return;
+		// NO GARBAGE CLEANING
 	}
 	
 	static Update = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 	
 	static OnDead = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 }
