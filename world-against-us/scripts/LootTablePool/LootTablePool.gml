@@ -4,16 +4,30 @@ function LootTablePool(_roll_chance, _rolls, _entries) constructor
 	rolls = _rolls;
 	entries = _entries;
 	probabilitySpectrum = 0;
+	is_initialized = false;
 	
-	InitProbabilitySpectrum();
+	Initialize();
 	
-	static InitProbabilitySpectrum = function()
+	static OnDestroy = function(_struct = self)
 	{
-		var entryCount = array_length(entries);
-		for (var i = 0; i < entryCount; i++)
+		ReleaseVariableFromMemory(_struct.rolls);
+		_struct.rolls = undefined;
+		
+		ReleaseVariableFromMemory(_struct.entries);
+		_struct.entries = undefined;
+	}
+	
+	static Initialize = function()
+	{
+		if (!is_initialized)
 		{
-			var entry = entries[@ i];
-			probabilitySpectrum += entry.weight;
+			var entryCount = array_length(entries);
+			for (var i = 0; i < entryCount; i++)
+			{
+				var entry = entries[@ i];
+				probabilitySpectrum += entry.weight;
+			}
+			is_initialized = true;
 		}
 	}
 	
