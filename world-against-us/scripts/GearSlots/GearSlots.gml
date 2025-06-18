@@ -48,14 +48,18 @@ function GearSlots(_namePrefix) constructor
 	{
 		ReleaseVariableFromMemory(_struct.helmet);
 		_struct.helmet = undefined;
+		
 		ReleaseVariableFromMemory(_struct.body_armor);
 		_struct.body_armor = undefined;
+		
 		ReleaseVariableFromMemory(_struct.backpack);
 		_struct.backpack = undefined;
+		
 		ReleaseVariableFromMemory(_struct.primary_weapon);
 		_struct.primary_weapon = undefined;
-		ReleaseVariableFromMemory(_struct.secondary);
-		_struct.secondary = undefined;
+		
+		ReleaseVariableFromMemory(_struct.secondary_weapon);
+		_struct.secondary_weapon = undefined;
 	}
 	
 	static GetItemBySlot = function(_slotRef)

@@ -7,7 +7,6 @@ function Timer(_setting_time) constructor
 	static OnDestroy = function(_struct = self)
 	{
 		// NO GARBAGE CLEANING
-		return;
 	}
 	
 	static StartTimer = function()
