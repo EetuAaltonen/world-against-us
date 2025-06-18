@@ -6,6 +6,5 @@ function DebugMonitorSample(_timeStamp, _value) constructor
 	static OnDestroy = function(_struct = self)
 	{
 		// NO GARBAGE CLEANING
-		return;
 	}
 }
