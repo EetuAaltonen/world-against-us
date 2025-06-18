@@ -16,10 +16,16 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 	isHovered = false;
 	hoverAnimation = isHovered;
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(childElements, ds_type_list);
-		childElements = undefined;
+		ReleaseVariableFromMemory(_struct.relativePosition);
+		_struct.relativePosition = undefined;
+		
+		ReleaseVariableFromMemory(_struct.size);
+		_struct.size = undefined;
+		
+		ReleaseVariableFromMemory(_struct.childElements, ds_type_list);
+		_struct.childElements = undefined;
 	}
 	
 	static AddChildElements = function(_childElements)
@@ -62,7 +68,6 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 	static OnUpdate = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 	
 	static Update = function()
@@ -96,7 +101,6 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 	static UpdateContent = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 	
 	static ClearChildElements = function()
@@ -133,7 +137,6 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 	static CheckContentInteraction = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 	
 	static OnFocusLostParentWindow = function()
@@ -144,7 +147,6 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 	static OnHoveredEnd = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 	
 	static Draw = function()
@@ -167,6 +169,5 @@ function WindowElement(_elementId, _relativePosition, _size, _backgroundColor) c
 	static DrawContent = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 }

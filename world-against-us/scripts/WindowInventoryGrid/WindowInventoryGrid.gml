@@ -11,11 +11,10 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 	
 	Initialize();
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
 		// DO NOT DESTROY THE INVENTORY
-		// BECAUSE IT'S A REFERENCE
-		return;	
+		// BECAUSE IT'S A REFERENCE	
 	}
 	
 	static Initialize = function()

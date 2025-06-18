@@ -13,10 +13,10 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 	isFocused = false;
 	isVisible = true;
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(childElements, ds_type_list);
-		childElements = undefined;
+		ReleaseVariableFromMemory(_struct.childElements, ds_type_list);
+		_struct.childElements = undefined;
 	}
 	
 	static AddChildElements = function(_childElements)
@@ -74,13 +74,11 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 	static OnOpen = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 	
 	static OnUpdate = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 	
 	static Update = function()
@@ -145,7 +143,6 @@ function GameWindow(_windowId, _position, _size, _style, _zIndex) constructor
 	static OnClose = function()
 	{
 		// OVERRIDE THIS FUNCTION
-		return;
 	}
 	
 	static Draw = function()
