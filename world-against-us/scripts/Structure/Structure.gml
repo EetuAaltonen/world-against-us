@@ -17,9 +17,9 @@ function Structure(_structureId, _interactableType, _category, _metadata) constr
 		}
 	}
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(metadata);
-		metadata = undefined;
+		ReleaseVariableFromMemory(_struct.metadata);
+		_struct.metadata = undefined;
 	}
 }

@@ -23,22 +23,22 @@ function MetadataStructureGarden() : Metadata() constructor
 		}
 	}
 	
-	static OnDestroy = function()
+	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(tools_inventory);
-		tools_inventory = undefined;
+		ReleaseVariableFromMemory(_struct.tools_inventory);
+		_struct.tools_inventory = undefined;
 		
-		ReleaseVariableFromMemory(fertilizer_inventory);
-		fertilizer_inventory = undefined;
+		ReleaseVariableFromMemory(_struct.fertilizer_inventory);
+		_struct.fertilizer_inventory = undefined;
 		
-		ReleaseVariableFromMemory(water_inventory);
-		water_inventory = undefined;
+		ReleaseVariableFromMemory(_struct.water_inventory);
+		_struct.water_inventory = undefined;
 		
-		ReleaseVariableFromMemory(seed_inventory);
-		seed_inventory = undefined;
+		ReleaseVariableFromMemory(_struct.seed_inventory);
+		_struct.seed_inventory = undefined;
 		
-		ReleaseVariableFromMemory(output_inventory);
-		output_inventory = undefined;
+		ReleaseVariableFromMemory(_struct.output_inventory);
+		_struct.output_inventory = undefined;
 		
 	}
 }
