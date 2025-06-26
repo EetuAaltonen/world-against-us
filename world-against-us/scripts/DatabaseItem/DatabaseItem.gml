@@ -13,7 +13,7 @@ function DatabaseItem() constructor
 		var itemClone = itemData[? _name].Clone();
 		if (!is_undefined(itemClone))
 		{
-			itemClone.quantity = _quantity
+			itemClone.quantity = min(itemClone.max_stack, _quantity);
 		}
 		
 		return itemClone;
