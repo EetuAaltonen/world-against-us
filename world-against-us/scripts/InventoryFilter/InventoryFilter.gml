@@ -13,9 +13,29 @@ function InventoryFilter(_whitelisted_names, _whitelisted_categories, _whitelist
 		};
 	}
 	
+	static Clone = function()
+	{
+		var cloneWhitelistedNames = [];
+		array_copy(cloneWhitelistedNames, 0, whitelisted_names, 0, array_length(whitelisted_names));
+		var cloneWhitelistedCategories = [];
+		array_copy(cloneWhitelistedCategories, 0, whitelisted_categories, 0, array_length(whitelisted_categories));
+		var cloneWhitelistedTypes = [];
+		array_copy(cloneWhitelistedTypes, 0, whitelisted_types, 0, array_length(whitelisted_types));
+		return new InventoryFilter(
+			cloneWhitelistedNames,
+			cloneWhitelistedCategories,
+			cloneWhitelistedTypes
+		);
+	}
+	
 	static OnDestroy = function(_struct = self)
 	{
-		// NO GARBAGE CLEANING
+		ReleaseVariableFromMemory(_struct.whitelisted_names)
+		_struct.whitelisted_names = undefined;
+		ReleaseVariableFromMemory(_struct.whitelisted_categories)
+		_struct.whitelisted_categories = undefined;
+		ReleaseVariableFromMemory(_struct.whitelisted_types)
+		_struct.whitelisted_types = undefined;
 	}
 	
 	static IsItemWhitelisted = function(_item)
