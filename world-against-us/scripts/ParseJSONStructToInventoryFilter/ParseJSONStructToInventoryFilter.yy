@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToInventoryFilter",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToInventoryFilter",
+  "parent":{
+    "name":"Inventory",
+    "path":"folders/Scripts/Game/Data/Inventory.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

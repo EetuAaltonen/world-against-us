@@ -128,8 +128,14 @@ function ParseJSONStructToDatabaseItemMetadata(_jsonStruct, _itemCategory, _item
 			} break;
 			case "Backpack":
 			{
+				var jsonInventorySize = metadataStruct[$ "inventory_size"] ?? undefined;
+				if (is_undefined(jsonInventorySize)) return parsedMetadata;
+				var parsedInventorySize = new InventorySize(
+					jsonInventorySize[$ "columns"] ?? undefined,
+					jsonInventorySize[$ "rows"] ?? undefined
+				)
 				parsedMetadata = new MetadataItemBackpack(
-					metadataStruct[$ "inventory_size"] ?? undefined,
+					parsedInventorySize,
 					metadataStruct[$ "max_weight_capacity"] ?? undefined
 				);
 			} break;

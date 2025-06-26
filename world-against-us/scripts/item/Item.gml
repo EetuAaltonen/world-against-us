@@ -34,13 +34,13 @@ function Item(_name, _short_name, _icon, _size, _category, _type, _weight, _max_
 	
 	static Clone = function(_newQuantity = undefined, _sourceInventory = undefined, _gridIndex = undefined)
 	{
-		var parsedMetadata = ParseJSONStructToItemMetadata(metadata, self);
-		var cloneSize = !is_undefined(size) ? size.Clone() : undefined;
+		var cloneMetadata = (!is_undefined(metadata)) ? metadata.Clone() : undefined;
+		var cloneSize = (!is_undefined(size)) ? size.Clone() : undefined;
 		var cloneItem = new Item(
 			name, short_name, icon, cloneSize, category, type,
 			weight, max_stack, base_price, description,
 			_newQuantity ?? quantity,
-			parsedMetadata,
+			cloneMetadata,
 			is_rotated, is_known,
 			_gridIndex
 		);
