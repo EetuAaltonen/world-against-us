@@ -1,17 +1,14 @@
 function ParseJSONStructToItemMetadata(_jsonStruct, _itemData)
 {
-	var parsedMetadata = undefined;
+	// POPULATE METADATA WITH DATABASE VALUES
+	// THEN MODIFY IT WITH VARYING METADATA FROM JSON DATA
+	var parsedMetadata = _itemData.metadata
 	try
 	{
 		if (is_undefined(_jsonStruct)) return parsedMetadata;
 		var metadataStruct = is_string(_jsonStruct) ? json_parse(_jsonStruct) : _jsonStruct;
 		if (variable_struct_names_count(metadataStruct) <= 0) return parsedMetadata;
-		
 		if (is_undefined(_itemData.category)) return parsedMetadata;
-		
-		// POPULATE METADATA WITH DATABASE VALUES
-		// THEN MODIFY IT WITH VARYING METADATA FROM JSON DATA
-		parsedMetadata = _itemData.metadata
 		
 		switch (_itemData.category)
 		{
@@ -66,30 +63,12 @@ function ParseJSONStructToItemMetadata(_jsonStruct, _itemData)
 			} break;
 			case "Backpack":
 			{
-				var inventoryContent = metadataStruct[$ "inventory_content"];
-				if (!is_undefined(inventoryContent))
+				var parsedInventory = ParseJSONStructToInventory(metadataStruct[$ "inventory"]);
+				if (!is_undefined(parsedInventory))
 				{
-					var inventoryId = inventoryContent[$ "inventory_id"] ?? undefined;
-					if (!is_undefined(inventoryId))
-					{
-						var itemsStruct = inventoryContent[$ "items"] ?? [];
-						var parsedItems = ParseJSONStructToArray(itemsStruct ?? undefined, ParseJSONStructToItem);
-						parsedMetadata.Initialize(
-							inventoryId,
-							inventoryContent[$ "inventory_type"] ?? undefined,
-							undefined, // DEFAULT INVENTORY FILTER
-							undefined, // DEFAULT INVENTORY ITEM LIMIT
-							parsedItems
-						);
-					}
+					parsedMetadata.Initialize(parsedInventory);
 				}
 			} break;
-		}
-			
-		if (is_undefined(parsedMetadata))
-		{
-			show_message("ParseMetadataItem : Metadata parse error");
-			throw (string(metadataStruct));
 		}
 	} catch (error) {
 		show_debug_message(error);
