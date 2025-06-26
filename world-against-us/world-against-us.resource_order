@@ -630,6 +630,8 @@
     {"name":"ParseJSONStructToGameSaveDataLastLocation","order":6,"path":"scripts/ParseJSONStructToGameSaveDataLastLocation/ParseJSONStructToGameSaveDataLastLocation.yy",},
     {"name":"ParseJSONStructToGameSaveDataPlayerData","order":8,"path":"scripts/ParseJSONStructToGameSaveDataPlayerData/ParseJSONStructToGameSaveDataPlayerData.yy",},
     {"name":"ParseJSONStructToInventory","order":8,"path":"scripts/ParseJSONStructToInventory/ParseJSONStructToInventory.yy",},
+    {"name":"ParseJSONStructToInventoryFilter","order":13,"path":"scripts/ParseJSONStructToInventoryFilter/ParseJSONStructToInventoryFilter.yy",},
+    {"name":"ParseJSONStructToInventorySize","order":12,"path":"scripts/ParseJSONStructToInventorySize/ParseJSONStructToInventorySize.yy",},
     {"name":"ParseJSONStructToItemMetadata","order":1,"path":"scripts/ParseJSONStructToItemMetadata/ParseJSONStructToItemMetadata.yy",},
     {"name":"ParseJSONStructToJoinGameRequest","order":10,"path":"scripts/ParseJSONStructToJoinGameRequest/ParseJSONStructToJoinGameRequest.yy",},
     {"name":"ParseJSONStructToList","order":16,"path":"scripts/ParseJSONStructToList/ParseJSONStructToList.yy",},

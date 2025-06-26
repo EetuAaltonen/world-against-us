@@ -796,6 +796,8 @@
     {"id":{"name":"ParseJSONStructToGameSaveDataLastLocation","path":"scripts/ParseJSONStructToGameSaveDataLastLocation/ParseJSONStructToGameSaveDataLastLocation.yy",},},
     {"id":{"name":"ParseJSONStructToGameSaveDataPlayerData","path":"scripts/ParseJSONStructToGameSaveDataPlayerData/ParseJSONStructToGameSaveDataPlayerData.yy",},},
     {"id":{"name":"ParseJSONStructToInventory","path":"scripts/ParseJSONStructToInventory/ParseJSONStructToInventory.yy",},},
+    {"id":{"name":"ParseJSONStructToInventoryFilter","path":"scripts/ParseJSONStructToInventoryFilter/ParseJSONStructToInventoryFilter.yy",},},
+    {"id":{"name":"ParseJSONStructToInventorySize","path":"scripts/ParseJSONStructToInventorySize/ParseJSONStructToInventorySize.yy",},},
     {"id":{"name":"ParseJSONStructToItem","path":"scripts/ParseJSONStructToItem/ParseJSONStructToItem.yy",},},
     {"id":{"name":"ParseJSONStructToItemMetadata","path":"scripts/ParseJSONStructToItemMetadata/ParseJSONStructToItemMetadata.yy",},},
     {"id":{"name":"ParseJSONStructToJoinGameRequest","path":"scripts/ParseJSONStructToJoinGameRequest/ParseJSONStructToJoinGameRequest.yy",},},
