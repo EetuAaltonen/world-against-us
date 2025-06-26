@@ -8,9 +8,8 @@ function MetadataItemBullet(_base_damage, _caliber, _fly_speed, _projectile, _tr
 	
 	static ToJSONStruct = function()
 	{
-		return {
-			// NO DYNAMIC METADATA
-		}
+		// NO DYNAMIC METADATA
+		return EMPTY_STRUCT;
 	}
 	
 	static Clone = function()
