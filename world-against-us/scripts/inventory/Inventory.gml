@@ -1,12 +1,12 @@
-function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = undefined, _itemLimit = infinity) constructor
+function Inventory(_inventoryId, _type, _size, _inventoryFilter, _itemCountLimit) constructor
 {
 	inventory_id = _inventoryId
-    items = ds_list_create();
 	type = _type;
-	size = _size ?? new InventorySize(0, 0);
-	inventory_filter = _inventoryFilter ?? new InventoryFilter([], [], []);
-	item_limit = _itemLimit;
+	size = _size;
+	inventory_filter = _inventoryFilter;
+	item_count_limit = _itemCountLimit;
 	
+	items = ds_list_create();
 	grid_data = [];
 	grid = {
 		columns: size.columns,
@@ -24,14 +24,43 @@ function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = un
 	
 	static ToJSONStruct = function()
 	{
-		var formatInventoryFilter = (!is_undefined(inventory_filter)) ? inventory_filter.ToJSONStruct() : inventory_filter;
+		var formatSize = size.ToJSONStruct();
+		var formatInventoryFilter = inventory_filter.ToJSONStruct();
 		var formatItems = FormatItemListToJSONArray(items);
 		return {
 			inventory_id: inventory_id,
-			inventory_type: type,
-			items: formatItems,
-			formatInventoryFilter
+			type: type,
+			size: formatSize,
+			inventory_filter: formatInventoryFilter,
+			item_count_limit: (item_count_limit == infinity) ? -1 : item_count_limit,
+			items: formatItems
 		}
+	}
+	
+	static Clone = function()
+	{
+		var cloneSize = size.Clone();
+		var cloneInventoryFilter = inventory_filter.Clone();
+		var clone = new Inventory(
+			inventory_id,
+			type,
+			cloneSize,
+			cloneInventoryFilter,
+			item_count_limit
+		);
+		// COPY ITEMS
+		var itemCount = GetItemCount();
+		for (var i = 0; i < itemCount; i++)
+		{
+			var item = GetItemByIndex(i);
+			clone.AddItem(
+				item,
+				item.grid_index,
+				item.is_rotated,
+				item.is_known
+			);
+		}
+		return clone;
 	}
 	
 	static OnDestroy = function(_struct = self)
@@ -47,17 +76,17 @@ function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = un
 	static InitGridData = function()
 	{
 		// RESET GRID DATA
-	    for (var i = 0; i < size.rows; i++) {
-		  for (var j = 0; j < size.columns; j ++) {
-		    grid_data[i, j] = undefined;
-		  }
+		for (var i = 0; i < size.rows; i++) {
+			for (var j = 0; j < size.columns; j ++) {
+				grid_data[i, j] = undefined;
+			}
 		}
 	}
 	
 	static GetItemCount = function()
-    {
+	{
 		return ds_list_size(items);
-    }
+	}
 	
 	static ClearAllItems = function()
 	{
@@ -67,15 +96,15 @@ function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = un
 	}
 	
 	static IsItemWhitelisted = function(_item)
-    {
+	{
 		return inventory_filter.IsItemWhitelisted(_item);
-    }
+	}
 
-    static AddItem = function(_item, _new_grid_index = undefined, _new_is_rotated = false, _new_is_known = true)
-    {
+	static AddItem = function(_item, _new_grid_index = undefined, _new_is_rotated = false, _new_is_known = true)
+	{
 		var addedItemGridIndex = undefined;
 		var isItemStacked = false;
-		
+
 		if (IsItemWhitelisted(_item))
 		{
 			var cloneItem = _item.Clone();
@@ -105,7 +134,7 @@ function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = un
 			{
 				// CHECK ITEM LIMIT
 				var itemCount = ds_list_size(items);
-				if (++itemCount <= item_limit)
+				if (++itemCount <= item_count_limit)
 				{
 					if (!is_undefined(cloneItem.grid_index))
 					{
@@ -140,7 +169,7 @@ function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = un
 			);
 		}
 		return addedItemGridIndex;
-    }
+	}
 	
 	static AddMultipleItems = function(_itemArray)
 	{
@@ -197,7 +226,7 @@ function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = un
 	}
 	
 	static ReplaceWithRollback = function(_oldItem, _newItem)
-    {
+	{
 		_oldItem.sourceInventory.RemoveItemByGridIndex(_oldItem.grid_index);
 		var replacedItemGridIndex = _oldItem.sourceInventory.AddItem(_newItem);
 		if (is_undefined(replacedItemGridIndex))
@@ -207,7 +236,7 @@ function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = un
 		}
 		
 		return replacedItemGridIndex;
-    }
+	}
 	
 	static SwapWithRollback = function(_sourceItem, _targetItem)
 	{
@@ -229,12 +258,12 @@ function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = un
 	}
 	
 	static GetItemByIndex = function(_index)
-    {
+	{
 		return items[| _index];
-    }
+	}
 	
 	static GetItemsByIndexRange = function(_startIndex, _endIndex)
-    {
+	{
 		var itemsByRange = ds_list_create();
 		var validEndIndex = min(GetItemCount(), _endIndex);
 		for (var i = _startIndex; i < validEndIndex; i++)
@@ -246,10 +275,10 @@ function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = un
 			}
 		}
 		return itemsByRange;
-    }
+	}
 	
 	static GetItemByGridIndex = function(_gridIndex)
-    {
+	{
 		var foundItem = undefined;
 		var itemCount = GetItemCount();
 		
@@ -264,7 +293,7 @@ function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = un
 			}
 		}
 		return foundItem;
-    }
+	}
 	
 	static RotateItemByGridIndex = function(_gridIndex, _isRotated)
 	{
@@ -290,7 +319,7 @@ function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = un
 						} else {
 							// Reverse rotation if item doesn't fit
 							if (item.is_rotated != originalRotation) {
-							    item.Rotate();
+							item.Rotate();
 							}
 						}
 			
@@ -304,7 +333,7 @@ function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = un
 	}
 	
 	static RemoveItemByIndex = function(_index)
-    {
+	{
 		var isItemRemoved = false;
 		var item = GetItemByIndex(_index);
 		if (!is_undefined(item))
@@ -314,10 +343,10 @@ function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = un
 			isItemRemoved = true;
 		}
 		return isItemRemoved;
-    }
+	}
 	
 	static RemoveItemByGridIndex = function(_gridIndex)
-    {
+	{
 		var isItemRemoved = false;
 		var itemCount = GetItemCount();
 		for (var i = 0; i < itemCount; i++)
@@ -331,7 +360,7 @@ function Inventory(_inventoryId, _type, _size = undefined, _inventoryFilter = un
 			}
 		}
 		return isItemRemoved;
-    }
+	}
 	
 	static FindEmptyIndex = function(_item)
 	{
