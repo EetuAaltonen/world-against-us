@@ -50,7 +50,11 @@ function ParseJSONStructToCharacter(_jsonStruct)
 						if (!is_undefined(characterGear[$ "primary_weapon"] ?? undefined))
 						{
 							var parsedPrimaryWeaponItem = ParseJSONStructToItem(characterGear[$ "primary_weapon"] ?? undefined);
-							if (!is_undefined(parsedPrimaryWeaponItem)) parsedCharacter.gear.primary_weapon.AddItem(parsedPrimaryWeaponItem, undefined, false);
+							if (!is_undefined(parsedPrimaryWeaponItem))
+							{
+								parsedCharacter.gear.primary_weapon.AddItem(parsedPrimaryWeaponItem, undefined, false);
+								parsedCharacter.gear.has_primary_weapon_magazine = (!is_undefined(parsedPrimaryWeaponItem.metadata.magazine));
+							}
 						}
 						if (!is_undefined(characterGear[$ "secondary_weapon"] ?? undefined))
 						{
