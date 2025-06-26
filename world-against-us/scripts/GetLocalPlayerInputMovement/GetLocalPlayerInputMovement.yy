@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"GetLocalPlayerInputMovement",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GetLocalPlayerInputMovement",
+  "parent":{
+    "name":"LocalInput",
+    "path":"folders/Scripts/World/Character/Player/LocalInput.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

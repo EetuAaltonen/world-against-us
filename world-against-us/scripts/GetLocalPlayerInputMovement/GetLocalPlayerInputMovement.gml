@@ -1,4 +1,4 @@
-function GetLocalPlayerMovementInput(movementInput) {
+function GetLocalPlayerInputMovement(movementInput) {
 	movementInput.key_up = keyboard_check(ord("W"));
 	movementInput.key_down = keyboard_check(ord("S"));
 	movementInput.key_left = keyboard_check(ord("A"));
