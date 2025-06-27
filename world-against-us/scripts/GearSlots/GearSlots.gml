@@ -18,12 +18,7 @@ function GearSlots(_namePrefix) constructor
 		new InventorySize(4, 2), new InventoryFilter([], ["Weapon"], []), 1
 	);
 	
-	primary_weapon_position = new Vector2(0, 0);
-	is_primary_weapon_holstered = true;
-	has_primary_weapon_magazine = false;
-	secondary_weapon_position = new Vector2(0, 0);
-	is_secondary_weapon_holstered = true;
-	has_secondary_weapon_magazine = false;
+	primary_weapon_data = new GearSlotDataPrimaryWeapon();
 
 	static ToJSONStruct = function()
 	{
@@ -63,10 +58,9 @@ function GearSlots(_namePrefix) constructor
 		_struct.primary_weapon = undefined;
 		ReleaseVariableFromMemory(_struct.secondary_weapon);
 		_struct.secondary_weapon = undefined;
-		ReleaseVariableFromMemory(_struct.primary_weapon_position);
-		_struct.primary_weapon_position = undefined;
-		ReleaseVariableFromMemory(_struct.secondary_weapon_position);
-		_struct.secondary_weapon_position = undefined;
+		
+		ReleaseVariableFromMemory(_struct.primary_weapon_data);
+		_struct.primary_weapon_data = undefined;
 	}
 	
 	static GetItemBySlot = function(_slotRef)
