@@ -1,20 +1,25 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
+// DEFAULT INSTANCE PROPERTIES
 image_speed = 0;
 speed = 0;
+
+// PROJECTILE PROPERTIES
 flySpeed = 0;
-projectileTrailWidth = 2;
-aimAngleLine = undefined;
-initSpeed = true;
-bullet = undefined;
-// TODO: Fix bullet hole logic
-//bulletHoleRadius = 4;
-// TODO: Fix bullet hole timer
-//bulletHoleDuration = 5000;
+directionalSpeedVector = undefined;
 
-traceTailPosition = new Vector2(x, y);
-traceTailStep = new Vector2(0, 0);
+// INIT COLLIDER
+collider = new Collider(COLLIDER_TYPE.Point);
 
+// COLLISION CHECK
+collisionObjects = [objCharacterParent, objBlockParent];
+collisionTarget = noone;
 hitIgnoreInstance = noone;
 isHit = false;
+
+// BULLET TRACE
+bulletTraceVector = undefined;
+bulletTraceMaxLength = 0;
+bulletTraceLengthScale = 1;
+bulletTraceWidth = 3;

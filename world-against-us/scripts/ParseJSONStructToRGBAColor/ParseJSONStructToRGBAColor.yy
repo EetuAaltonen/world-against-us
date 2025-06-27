@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ParseJSONStructToRGBAColor",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ParseJSONStructToRGBAColor",
+  "parent":{
+    "name":"RGBAColor",
+    "path":"folders/Scripts/Game/Data/Utility/RGBAColor.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

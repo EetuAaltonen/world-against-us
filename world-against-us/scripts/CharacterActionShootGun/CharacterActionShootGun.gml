@@ -12,7 +12,7 @@ function CharacterActionShootGun(_instanceRef, _projectileSpawnPointX, _projecti
 	var projectileInstance = instance_create_depth(
 		_projectileSpawnPointX,
 		_projectileSpawnPointY,
-		0/*top most depth*/, objColProjectile
+		-_instanceRef.y, objProjectile
 	);
 	var aimAngle = point_direction(_projectileSpawnPointX, _projectileSpawnPointY, _aimPosX, _aimPosY);
 	var bulletName = array_pop(bulletsRef);
@@ -30,10 +30,9 @@ function CharacterActionShootGun(_instanceRef, _projectileSpawnPointX, _projecti
 		);
 		projectileInstance.z = _projectileSpawnPointZ;
 		
-		// TODO: Fix bullet casing particles
 		// BURST BULLET CASING PARTICLES
 		// CALCULATE CHAMBER WORLD POSITION
-		/*var primaryWeaponDataRef = _instanceRef.character.gear.primary_weapon_data;
+		var primaryWeaponDataRef = _instanceRef.character.gear.primary_weapon_data;
 		var chamberPos = primaryWeaponRef.metadata.chamber_pos.Clone();
 		chamberPos.X -= sprite_get_xoffset(primaryWeaponRef.icon);
 		chamberPos.Y -= sprite_get_yoffset(primaryWeaponRef.icon);
@@ -45,21 +44,38 @@ function CharacterActionShootGun(_instanceRef, _projectileSpawnPointX, _projecti
 
 		var bulletSpriteName = sprite_get_name(bulletData.icon);
 		var emptyBulletSprite = asset_get_index(string("{0}{1}", bulletSpriteName, "Casing")) ?? SPRITE_ERROR;
-		part_system_depth(partSystemBulletCasing, _instanceRef.depth - 1);
+		part_system_depth(
+			primaryWeaponDataRef.partSystemBulletCasing,
+			-_instanceRef.y - 1
+		);
 		part_emitter_region(
-			partSystemBulletCasing, partEmitterBulletCasing,
+			primaryWeaponDataRef.partSystemBulletCasing, primaryWeaponDataRef.partEmitterBulletCasing,
 			chamberWorldPos.X, chamberWorldPos.X,
 			chamberWorldPos.Y, chamberWorldPos.Y,
 			ps_shape_rectangle, ps_distr_linear
 		);
-		part_type_sprite(partTypeBulletCasing, emptyBulletSprite, false, false, false);
-		part_type_direction(partTypeBulletCasing,
-			sign(_instanceRef.image_yscale) == 1 ? 120 : 60,
-			sign(_instanceRef.image_yscale) == 1 ? 140 : 40,
+		part_type_sprite(
+			primaryWeaponDataRef.partTypeBulletCasing,
+			emptyBulletSprite,
+			false, false, false
+		);
+		part_type_direction(primaryWeaponDataRef.partTypeBulletCasing,
+			aimAngle + (140 * sign(_instanceRef.image_xscale)),
+			aimAngle + (170 * sign(_instanceRef.image_xscale)),
 			0, 0
 		);
-		part_type_orientation(partTypeBulletCasing, image_angle - 90, image_angle - 90, sign(_instanceRef.image_yscale) * 5, false, true);
-		part_emitter_burst(partSystemBulletCasing, partEmitterBulletCasing, partTypeBulletCasing, 1);*/
+		part_type_orientation(
+			primaryWeaponDataRef.partTypeBulletCasing,
+			aimAngle,
+			aimAngle,
+			sign(_instanceRef.image_xscale) * 5,
+			false, true
+		);
+		part_emitter_burst(
+			primaryWeaponDataRef.partSystemBulletCasing,
+			primaryWeaponDataRef.partEmitterBulletCasing,
+			primaryWeaponDataRef.partTypeBulletCasing, 1
+		);
 	}
 	return actionResult;
 }

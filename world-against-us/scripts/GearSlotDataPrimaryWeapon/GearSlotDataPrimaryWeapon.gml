@@ -6,16 +6,14 @@ function GearSlotDataPrimaryWeapon() constructor
 	has_ammo = false;
 	is_holstered = false;
 	
-	// TODO: Fix bullet casing particles
-	/*muzzleFlashTime = 2; // FRAMES
-	muzzleFlashTimer = 0;
+	muzzleFlashTimer = new Timer((1000 / 60) * 2); // 2 FRAMES
 	fireDelay = 0;
 	kickbackAnimation = 0;
 	// EMPTY BULLET CASING PARTICLES
 	partSystemBulletCasing = part_system_create();
 	partEmitterBulletCasing = part_emitter_create(partSystemBulletCasing);
 	partTypeBulletCasing = part_type_create();
-	InitializeParticleBulletCasing(partTypeBulletCasing);*/
+	InitializeParticleBulletCasing(partTypeBulletCasing);
 	
 	static OnDestroy = function(_struct = self)
 	{

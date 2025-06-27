@@ -92,12 +92,14 @@ function ParseJSONStructToDatabaseItemMetadata(_jsonStruct, _itemCategory, _item
 			} break;
 			case "Bullet":
 			{
+				var rgbaColorStruct = metadataStruct[$ "trail_rgba_color"] ?? undefined;
+				var parsedRGBAColor = ParseJSONStructToRGBAColor(rgbaColorStruct);
 				parsedMetadata = new MetadataItemBullet(
 					metadataStruct[$ "base_damage"] ?? undefined,
 					metadataStruct[$ "caliber"] ?? undefined,
 					metadataStruct[$ "fly_speed"] ?? undefined,
 					metadataStruct[$ "projectile"] ?? undefined,
-					new RGBAColor(255, 255, 255, 0)
+					parsedRGBAColor
 				);
 			} break;
 			case "Medicine":

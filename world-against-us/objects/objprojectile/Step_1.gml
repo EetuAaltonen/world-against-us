@@ -1,48 +1,29 @@
-// OVERRIDE INHERITED EVENT
-if (initSpeed) {
-	speed = flySpeed;
-	traceTailStep = new Vector2(hspeed * 0.2, vspeed * 0.2);
-	initSpeed = false;
-}
+// INHERIT THE PAREN EVENT
+event_inherited();
 
-// CHECK COLLISION
-if (speed > 0 && !isHit)
+if (instanceState != object_index)
 {
-	// DESTROY BEYOND RANGE LIMIT
-	var isOutsideRoom = (x > room_width || x < 0 || y > room_height || y < 0);
-	var travelledDistance = point_distance(x, y, damageSource.spawn_point.X, damageSource.spawn_point.Y);
-	if (isOutsideRoom || travelledDistance > damageSource.range)
+	instanceState = event_object;
+	if (!is_undefined(damageSource))
 	{
-		isHit = true;
-		speed = 0;
-	} else {
-		var collisionPoint = CheckCollisionLinePoint(
-			new Vector2(x, y), new Vector2(x + hspeed, y + vspeed),
-			OBJECTS_TO_HIT, true, true, hitIgnoreInstance, true
-		);
-			
-		if (!is_undefined(collisionPoint))
+		// SPEED PROPERTIES
+		speed = flySpeed;
+		directionalSpeedVector = new Vector2(speed, 0);
+		directionalSpeedVector.Rotate(direction);
+		// BULLET TRACE PROPERTIES
+		bulletTraceVector = new Vector2(x, y - z);
+		bulletTraceMaxLength = flySpeed;
+	}
+} else {
+	// CHECK IF IS OUTSIDE ROOM
+	if (!isHit)
+	{
+		// DESTROY BEYOND RANGE LIMIT
+		var isOutsideRoom = (x > room_width || x < 0 || y > room_height || y < 0);
+		if (isOutsideRoom)
 		{
-			var projectileCollisionPosition = CheckCollisionProjectile(collisionPoint, self);
-			if (!is_undefined(projectileCollisionPosition))
-			{
-				isHit = true;
-			
-				x = projectileCollisionPosition.X;
-				y = projectileCollisionPosition.Y;
-				aimAngleLine.end_point.X = projectileCollisionPosition.X;
-				aimAngleLine.end_point.Y = projectileCollisionPosition.Y;
-				speed = 0;
-			}
-		} else {
-			if ((abs(aimAngleLine.end_point.X - x) <= abs(hspeed)) && (abs(aimAngleLine.end_point.Y - y) <= abs(vspeed)))
-			{
-				isHit = true;
-			
-				x = aimAngleLine.end_point.X;
-				y = aimAngleLine.end_point.Y;
-				speed = 0;
-			}
+			speed = 0;
+			isHit = true;
 		}
 	}
 }
