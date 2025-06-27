@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"InventoryQueryFetchMagazine",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"InventoryQueryFetchMagazine",
+  "parent":{
+    "name":"Functions",
+    "path":"folders/Scripts/Game/Data/Inventory/Functions.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
