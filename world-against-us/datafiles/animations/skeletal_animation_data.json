@@ -12,14 +12,14 @@
         {
           "name": "walk",
           "events": [],
-          "playback_function": "SkeletalAnimationPlaybackPlayerWalk",
+          "playback_function": "SkeletalAnimationPlaybackCharacterWalk",
           "draw_function": null
         },
         {
           "name": "rifle_aim",
           "events": [],
-          "playback_function": "SkeletalAnimationPlaybackPlayerRifleAim",
-          "draw_function": "SkeletalAnimationDrawPlayerRifleAim"
+          "playback_function": "SkeletalAnimationPlaybackCharacterRifleAim",
+          "draw_function": "SkeletalAnimationDrawCharacterRifleAim"
         },
         {
           "name": "rifle_reload",
@@ -37,8 +37,8 @@
               "animation_name": "rifle_reload"
             }
           ],
-          "playback_function": "SkeletalAnimationPlaybackPlayerRifleReload",
-          "draw_function": "SkeletalAnimationDrawPlayerRifleReload"
+          "playback_function": "SkeletalAnimationPlaybackCharacterRifleReload",
+          "draw_function": "SkeletalAnimationDrawCharacterRifleReload"
         }
       ]
     }

@@ -2,7 +2,7 @@ function ItemActionUnloadWeapon(_weapon)
 {
 	if (_weapon.type != "Melee")
 	{
-		var targetInventory = (_weapon.sourceInventory.type == INVENTORY_TYPE.PlayerBackpack) ? _weapon.sourceInventory : global.PlayerBackpack;
+		var targetInventory = (_weapon.sourceInventory.type == INVENTORY_TYPE.PlayerBackpack) ? _weapon.sourceInventory : global.PlayerBackpack.metadata.inventory;
 		switch (_weapon.metadata.chamber_type)
 		{
 			case "Fuel Tank": {

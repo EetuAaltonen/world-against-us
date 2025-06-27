@@ -31,8 +31,6 @@ function CollisionBody(_collisionBodyType) constructor
 		}
 	}
 	
-	
-	
 	static Update = function()
 	{
 		if (state == COLLISION_BODY_STATE.ALIVE)

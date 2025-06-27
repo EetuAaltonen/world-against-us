@@ -17,6 +17,8 @@ function GearSlots(_namePrefix) constructor
 	secondary_weapon = new Inventory(string("{0}_Gear_Slot_Secondary_Weapon", name_prefix), INVENTORY_TYPE.GearSlot,
 		new InventorySize(4, 2), new InventoryFilter([], ["Weapon"], []), 1
 	);
+	
+	primary_weapon_data = new GearSlotDataPrimaryWeapon();
 
 	static ToJSONStruct = function()
 	{
@@ -48,18 +50,17 @@ function GearSlots(_namePrefix) constructor
 	{
 		ReleaseVariableFromMemory(_struct.helmet);
 		_struct.helmet = undefined;
-		
 		ReleaseVariableFromMemory(_struct.body_armor);
 		_struct.body_armor = undefined;
-		
 		ReleaseVariableFromMemory(_struct.backpack);
 		_struct.backpack = undefined;
-		
 		ReleaseVariableFromMemory(_struct.primary_weapon);
 		_struct.primary_weapon = undefined;
-		
 		ReleaseVariableFromMemory(_struct.secondary_weapon);
 		_struct.secondary_weapon = undefined;
+		
+		ReleaseVariableFromMemory(_struct.primary_weapon_data);
+		_struct.primary_weapon_data = undefined;
 	}
 	
 	static GetItemBySlot = function(_slotRef)

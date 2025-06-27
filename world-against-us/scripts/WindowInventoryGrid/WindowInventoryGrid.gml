@@ -258,7 +258,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 			{
 				if (!is_undefined(global.ObjMouse.dragItem))
 				{
-					imageAlpha = CombineItems(global.ObjMouse.dragItem.item_data, item, true) ? imageAlpha : 0.2;
+					imageAlpha = InventoryCombineItems(global.ObjMouse.dragItem.item_data, item, true) ? imageAlpha : 0.2;
 				}
 			} else {
 				// TODO: Fix shader while identifying
@@ -305,7 +305,7 @@ function WindowInventoryGrid(_elementId, _relativePosition, _size, _backgroundCo
 					var hoveredItem = inventory.GetItemByGridIndex(itemGridIndex);
 					if (!is_undefined(hoveredItem))
 					{
-						if (CombineItems(dragItemData, hoveredItem, true))
+						if (InventoryCombineItems(dragItemData, hoveredItem, true))
 						{
 							gridAreaColor = #ffe100;
 						}

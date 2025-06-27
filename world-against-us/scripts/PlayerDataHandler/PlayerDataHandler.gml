@@ -6,7 +6,6 @@ function PlayerDataHandler() constructor
 	last_known_location = undefined;
 	// TODO: Low casing property names
 	// TODO: Remove obsolete properties
-	primaryWeaponSlot = undefined;
 	magazinePockets = undefined;
 	medicinePockets = undefined;
 	
@@ -18,8 +17,6 @@ function PlayerDataHandler() constructor
 		ReleaseVariableFromMemory(_struct.character);
 		_struct.character = undefined;
 		// TODO: Remove obsolete properties
-		ReleaseVariableFromMemory(_struct.primaryWeaponSlot);
-		_struct.primaryWeaponSlot = undefined;
 		ReleaseVariableFromMemory(_struct.magazinePockets);
 		_struct.magazinePockets = undefined;
 		ReleaseVariableFromMemory(_struct.medicinePockets);
@@ -115,7 +112,7 @@ function PlayerDataHandler() constructor
 		
 		character = new CharacterHuman(player_name, CHARACTER_TYPE.Human, CHARACTER_RACE.humanoid, CHARACTER_BEHAVIOR.PLAYER, undefined);
 		last_known_location = undefined;
-		primaryWeaponSlot = new Inventory("PlayerPrimaryWeaponSlot", INVENTORY_TYPE.PlayerPrimaryWeaponSlot, new InventorySize(4, 6), new InventoryFilter([], ["Weapon"], []));
+		// TODO: Remove obsolete properties
 		magazinePockets = new Inventory("PlayerMagazinePocket", INVENTORY_TYPE.MagazinePockets, new InventorySize(4, 2), new InventoryFilter([], ["Magazine", "Bullet", "Fuel Ammo"], []));
 		medicinePockets = new Inventory("PlayerMedicinePocket", INVENTORY_TYPE.MedicinePockets, new InventorySize(4, 2), new InventoryFilter([], ["Medicine"], []));
 	}
@@ -141,24 +138,35 @@ function PlayerDataHandler() constructor
 				var backpack = global.ItemDatabase.GetItemByName("Hiking Backpack");
 				if (!is_undefined(backpack))
 				{
-					backpack.metadata.Initialize(string("{0}Backpack", character.name), INVENTORY_TYPE.PlayerBackpack);
-					character.gear.backpack.AddItem(backpack, undefined, false, true);
-					backpack.metadata.inventory.AddMultipleItems([
-						global.ItemDatabase.GetItemByName("Watering Can"),
-						global.ItemDatabase.GetItemByName("Garden Tools"),
-						global.ItemDatabase.GetItemByName("Fertilizer Sack"),
-						global.ItemDatabase.GetItemByName("Tomato Seed Pack", 10),
-						global.ItemDatabase.GetItemByName("Ak-47 Assault Rifle"),
-						global.ItemDatabase.GetItemByName("Ak-47 Magazine", 3),
-						global.ItemDatabase.GetItemByName("7.62 Bullet", 120),
-					]);
+					
+					var backpackInventory = new Inventory(
+						string("{0}Backpack", character.name),
+						INVENTORY_TYPE.PlayerBackpack,
+						backpack.metadata.inventory_size.Clone(),
+						new InventoryFilter([], [], []),
+						infinity
+					);
+					backpackInventory.AddMultipleItems(
+						[
+							global.ItemDatabase.GetItemByName("Watering Can"),
+							global.ItemDatabase.GetItemByName("Garden Tools"),
+							global.ItemDatabase.GetItemByName("Fertilizer Sack"),
+							global.ItemDatabase.GetItemByName("Tomato Seed Pack", 10),
+							global.ItemDatabase.GetItemByName("Ak-47 Assault Rifle"),
+							global.ItemDatabase.GetItemByName("Ak-47 Magazine"),
+							global.ItemDatabase.GetItemByName("Ak-47 Magazine"),
+							global.ItemDatabase.GetItemByName("Ak-47 Magazine"),
+							global.ItemDatabase.GetItemByName("7.62 Bullet", 120),
+						]
+					);
+					backpack.metadata.Initialize(backpackInventory);
+					character.gear.backpack.AddItem(backpack);
 				}
 				isPlayerDataLoaded = true;
 			}
 			
 			// SET GLOBAL VARIABLES
 			global.PlayerBackpack = character.gear.GetItemBySlot(character.gear.backpack);
-			global.PlayerPrimaryWeaponSlot = primaryWeaponSlot;
 			global.PlayerMagazinePockets = magazinePockets;
 			global.PlayerMedicinePockets = medicinePockets;
 		}

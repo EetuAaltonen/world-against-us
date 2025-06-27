@@ -31,14 +31,6 @@ maxSpeed = baseMaxSpeed;
 movementInput = new DeviceInputMovement(0, 0, 0, 0);
 prevMovementInput = new DeviceInputMovement(0, 0, 0, 0);
 
-// EQUIPMENT POSITIONS
-equipmentOriginOffset = new Vector2(0, -88);
-
-// SPAWN WEAPON
-// TODO: Move the weapon under character struct
-//weapon = instance_create_depth(x, y, depth - 1, objWeapon);
-//weapon.owner = self;
-
 // NETWORKING
 previousPosition = new Vector2(0, 0);
 

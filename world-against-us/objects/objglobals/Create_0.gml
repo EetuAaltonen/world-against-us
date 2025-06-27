@@ -172,7 +172,6 @@ global.MapIconStyleData = undefined;
 // PLAYER INVENTORY
 global.PlayerCharacter = undefined;
 global.PlayerBackpack = undefined;
-global.PlayerPrimaryWeaponSlot = undefined;
 global.PlayerMagazinePockets = undefined;
 global.PlayerMedicinePockets = undefined;
 

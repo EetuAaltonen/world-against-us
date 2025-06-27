@@ -10,7 +10,7 @@ if (!is_undefined(character))
 		
 		if (!autopilotMode)
 		{
-			GetLocalPlayerMovementInput(movementInput);
+			GetLocalPlayerInputMovement(movementInput);
 		} else {
 			autopilotInputTimer.Update();
 			if (autopilotInputTimer.IsTimerStopped())
@@ -19,42 +19,12 @@ if (!is_undefined(character))
 				GenerateAutopilotMovementInput(movementInput);
 				
 				// RESTART AUTOPILOT TIMER
-				autopilotInputTimer.StartTimer();	
-			}
-		}
-	
-		// QUICK HEAL
-		if (keyboard_check_released(ord("Q")))
-		{
-			var medicine = FetchMedicineFromPockets();
-			if (!is_undefined(medicine))
-			{
-				character.UseMedicine(medicine);
-				if (medicine.metadata.healing_left <= 0)
-				{
-					medicine.sourceInventory.RemoveItemByGridIndex(medicine.grid_index);
-				}
-			} else {
-				// NOTIFICATION LOG
-				global.NotificationHandlerRef.AddNotification(
-					new Notification(
-						undefined,
-						"Quick healing failed, missing healing items",
-						undefined,
-						NOTIFICATION_TYPE.Log
-					)
-				);
+				autopilotInputTimer.StartTimer();
 			}
 		}
 		
-		// RELOAD WEAPON
-		if (keyboard_check_released(ord("R")))
-		{
-			if (skeletalAnimator.GetActiveAnimationNameByTrack(0) != "rifle_reload")
-			{
-				skeletalAnimator.SetActiveAnimation("rifle_reload", 0, "upperbody", 1, false, true);
-			}
-		}
+		// CHECK ACTION INPUT
+		GetLocalPlayerInputAction();
 	
 		// DEBUG MODE
 		maxSpeed = (global.DEBUGMODE) ? 10 : baseMaxSpeed;
@@ -83,30 +53,6 @@ if (!is_undefined(character))
 						undefined, NOTIFICATION_TYPE.Log
 					)
 				);
-			}
-		}
-		
-		// TODO: PROJECTILE TEST
-		var mouseWorldPosition = MouseWorldPosition();
-		var aimPos = new Vector2(
-			mouseWorldPosition.X + abs(equipmentOriginOffset.X),
-			mouseWorldPosition.Y + abs(equipmentOriginOffset.Y)
-		);
-		var spawnPoint = new Vector2(x, bbox_bottom);
-		if (keyboard_check_released(vk_space))
-		{
-			// CREATE PROJECTILE INSTANCE
-			var projectileInstance = instance_create_depth(spawnPoint.X, spawnPoint.Y, 0/*top most depth*/, objColProjectile);
-			var aimAngle = point_direction(spawnPoint.X, spawnPoint.Y, aimPos.X, aimPos.Y);
-			var bulletData = global.ItemDatabase.GetItemByName("9mm Bullet");
-			if (!is_undefined(bulletData))
-			{
-				projectileInstance.sprite_index = asset_get_index(bulletData.metadata.projectile);
-				projectileInstance.direction = aimAngle;
-				projectileInstance.image_angle = projectileInstance.direction;
-				projectileInstance.flySpeed = bulletData.metadata.fly_speed;
-				projectileInstance.damageSource = new DamageSource(self, bulletData, MetersToPixels(20), spawnPoint);
-				projectileInstance.z = abs(equipmentOriginOffset.Y);
 			}
 		}
 	}

@@ -93,7 +93,7 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 				
 				if (!is_undefined(scoutingDrone))
 				{
-					GetLocalPlayerMovementInput(scouting_drone_movement_input);
+					GetLocalPlayerInputMovement(scouting_drone_movement_input);
 					var hInput = scouting_drone_movement_input.key_right - scouting_drone_movement_input.key_left;
 					var vInput = scouting_drone_movement_input.key_down - scouting_drone_movement_input.key_up;
 					var flySpeed = global.MapDataHandlerRef.scouting_drone_fly_speed;
