@@ -787,13 +787,13 @@
       "metadata": {
         "base_damage": 80,
         "caliber": "7.62",
-        "fly_speed": 50,
+        "fly_speed": 150,
         "projectile": "spr762BulletProjectile",
         "trail_rgba_color": {
-          "red": 255,
-          "green": 255,
-          "blue": 0,
-          "alpha": 0.2
+          "red": 220,
+          "green": 180,
+          "blue": 50,
+          "alpha": 0.4
         }
       }
     },
@@ -814,13 +814,13 @@
       "metadata": {
         "base_damage": 80,
         "caliber": "7.62",
-        "fly_speed": 50,
+        "fly_speed": 150,
         "projectile": "spr762TracerBulletProjectile",
         "trail_rgba_color": {
-          "red": 0,
-          "green": 255,
-          "blue": 0,
-          "alpha": 0.4
+          "red": 100,
+          "green": 220,
+          "blue": 50,
+          "alpha": 0.8
         }
       }
     },
@@ -841,13 +841,13 @@
       "metadata": {
         "base_damage": 60,
         "caliber": "9",
-        "fly_speed": 40,
+        "fly_speed": 120,
         "projectile": "spr9BulletProjectile",
         "trail_rgba_color": {
-          "red": 255,
-          "green": 200,
-          "blue": 0,
-          "alpha": 0.2
+          "red": 220,
+          "green": 180,
+          "blue": 50,
+          "alpha": 0.4
         }
       }
     },
@@ -868,13 +868,13 @@
       "metadata": {
         "base_damage": 60,
         "caliber": "12",
-        "fly_speed": 40,
+        "fly_speed": 120,
         "projectile": "spr12GaugeProjectile",
         "trail_rgba_color": {
-          "red": 255,
-          "green": 0,
-          "blue": 0,
-          "alpha": 0.2
+          "red": 220,
+          "green": 180,
+          "blue": 50,
+          "alpha": 0.4
         }
       }
     },
@@ -895,13 +895,13 @@
       "metadata": {
         "base_damage": 60,
         "caliber": "12",
-        "fly_speed": 40,
+        "fly_speed": 150,
         "projectile": "spr12GaugeSlugProjectile",
         "trail_rgba_color": {
-          "red": 255,
-          "green": 0,
-          "blue": 100,
-          "alpha": 0.2
+          "red": 220,
+          "green": 180,
+          "blue": 50,
+          "alpha": 0.4
         }
       }
     },
