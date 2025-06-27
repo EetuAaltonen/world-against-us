@@ -38,7 +38,7 @@ function OnReleasedGUIDragItem(_inventory, _mouseHoverIndex)
 				if (!is_undefined(targetItem))
 				{
 					var sourceQuantity = dragItemData.quantity;
-					if (CombineItems(dragItemData, targetItem))
+					if (InventoryCombineItems(dragItemData, targetItem))
 					{
 						// NETWORKING STACK ITEM
 						NetworkInventoryStackItem(_inventory, sourceQuantity, dragItemData, targetItem);

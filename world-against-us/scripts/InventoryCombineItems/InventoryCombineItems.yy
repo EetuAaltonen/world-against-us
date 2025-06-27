@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"InventoryCombineItems",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"InventoryCombineItems",
+  "parent":{
+    "name":"Functions",
+    "path":"folders/Scripts/Game/Data/Inventory/Functions.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

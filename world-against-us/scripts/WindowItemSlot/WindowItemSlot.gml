@@ -59,7 +59,7 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 					var slottedItem = inventory.GetItemByIndex(0);
 					if (!is_undefined(slottedItem))
 					{
-						if (CombineItems(dragItemData, slottedItem))
+						if (InventoryCombineItems(dragItemData, slottedItem))
 						{
 							initItem = true;
 						} else {
@@ -133,7 +133,7 @@ function WindowItemSlot(_elementId, _relativePosition, _size, _backgroundColor, 
 				
 				if (!is_undefined(itemData))
 				{
-					if (CombineItems(dragItemData, itemData, true))
+					if (InventoryCombineItems(dragItemData, itemData, true))
 					{
 						gridAreaColor = #ffe100;
 					}

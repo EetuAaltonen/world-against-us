@@ -1,4 +1,4 @@
-function CombineItems(_sourceItem, _targetItem, _only_compatibility = false)
+function InventoryCombineItems(_sourceItem, _targetItem, _only_compatibility = false)
 {
 	var isCombined = false;
 	var combineAction = undefined;
@@ -24,48 +24,34 @@ function CombineItems(_sourceItem, _targetItem, _only_compatibility = false)
 			{
 				if (_targetItem.category == "Magazine")
 				{
-					if (IsReloadingCombatibleMagazine(_sourceItem, _targetItem))
+					if (_sourceItem.metadata.caliber == _targetItem.metadata.caliber)
 					{
 						combineAction = InventoryReloadMagazine;
 						isCombined = true;
 					}
-				} else if (_targetItem.category == "Weapon" && _targetItem.type == "Shotgun")
-				{
-					if (_targetItem.metadata.chamber_type == "Shell")
-					{
-						if (IsReloadingCombatibleWeapon(_sourceItem, _targetItem))
-						{
-							combineAction = InventoryReloadWeaponShotgun;
-							isCombined = true;
-						}
-					}
 				}
+				// TODO: Fix reloading shotguns
 			} break;
 			case "Magazine":
 			{
 				if (_targetItem.category == "Weapon" && _targetItem.type != "Melee")
 				{
-					if (IsReloadingCombatibleWeapon(_sourceItem, _targetItem))
+					if (_sourceItem.metadata.caliber == _targetItem.metadata.caliber)
 					{
-						combineAction = InventoryReloadWeaponGun;
-						isCombined = true;
+						if (_sourceItem.type == _targetItem.type)
+						{
+							combineAction = InventoryReloadWeaponGun;
+							isCombined = true;
+						}
 					}
 				}
 			} break;
 			case "Fuel Ammo":
 			{
-				if (_targetItem.category == "Weapon" && _targetItem.type == "Flamethrower")
-				{
-					if (IsReloadingCombatibleWeapon(_sourceItem, _targetItem))
-					{
-						combineAction = InventoryReloadWeaponFlamethrower;
-						isCombined = true;
-					}
-				}
+				// TODO: Fix reloading flamethrower
 			} break;
 		}
 	}
-	
 	if (!_only_compatibility)
 	{
 		if (!is_undefined(combineAction))

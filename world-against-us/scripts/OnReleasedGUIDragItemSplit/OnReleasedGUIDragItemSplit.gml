@@ -29,7 +29,7 @@ function OnReleasedGUIDragItemSplit(_inventory, _mouseHoverIndex)
 						// TODO: Simplify combine logic
 						var itemCloneToCombine = dragItemData.Clone(splitQuantity);
 						var sourceQuantity = dragItemData.quantity;
-						if (CombineItems(itemCloneToCombine, targetItem))
+						if (InventoryCombineItems(itemCloneToCombine, targetItem))
 						{
 							isDragItemStackEmpty = true;
 						}
