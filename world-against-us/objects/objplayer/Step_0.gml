@@ -10,7 +10,7 @@ if (!is_undefined(character))
 		
 		if (!autopilotMode)
 		{
-			GetLocalPlayerMovementInput(movementInput);
+			GetLocalPlayerInputMovement(movementInput);
 		} else {
 			autopilotInputTimer.Update();
 			if (autopilotInputTimer.IsTimerStopped())
@@ -19,42 +19,12 @@ if (!is_undefined(character))
 				GenerateAutopilotMovementInput(movementInput);
 				
 				// RESTART AUTOPILOT TIMER
-				autopilotInputTimer.StartTimer();	
-			}
-		}
-	
-		// QUICK HEAL
-		if (keyboard_check_released(ord("Q")))
-		{
-			var medicine = FetchMedicineFromPockets();
-			if (!is_undefined(medicine))
-			{
-				character.UseMedicine(medicine);
-				if (medicine.metadata.healing_left <= 0)
-				{
-					medicine.sourceInventory.RemoveItemByGridIndex(medicine.grid_index);
-				}
-			} else {
-				// NOTIFICATION LOG
-				global.NotificationHandlerRef.AddNotification(
-					new Notification(
-						undefined,
-						"Quick healing failed, missing healing items",
-						undefined,
-						NOTIFICATION_TYPE.Log
-					)
-				);
+				autopilotInputTimer.StartTimer();
 			}
 		}
 		
-		// RELOAD WEAPON
-		if (keyboard_check_released(ord("R")))
-		{
-			if (skeletalAnimator.GetActiveAnimationNameByTrack(0) != "rifle_reload")
-			{
-				skeletalAnimator.SetActiveAnimation("rifle_reload", 0, "upperbody", 1, false, true);
-			}
-		}
+		// CHECK ACTION INPUT
+		GetLocalPlayerInputAction();
 	
 		// DEBUG MODE
 		maxSpeed = (global.DEBUGMODE) ? 10 : baseMaxSpeed;
