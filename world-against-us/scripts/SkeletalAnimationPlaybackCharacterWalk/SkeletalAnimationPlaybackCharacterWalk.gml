@@ -1,4 +1,4 @@
-function SkeletalAnimationPlaybackPlayerWalk(_animationRef, _animatorRef)
+function SkeletalAnimationPlaybackCharacterWalk(_animationRef, _animatorRef)
 {
 	var instanceRef = _animatorRef.instance_ref;
 	if (instanceRef.dirSpeed.h_speed != 0 ||

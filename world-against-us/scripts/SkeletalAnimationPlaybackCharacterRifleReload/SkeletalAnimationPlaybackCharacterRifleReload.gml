@@ -1,4 +1,4 @@
-function SkeletalAnimationPlaybackPlayerRifleReload(_animationRef, _animatorRef)
+function SkeletalAnimationPlaybackCharacterRifleReload(_animationRef, _animatorRef)
 {
 	_animationRef.current_frame += _animationRef.animation_speed;
 	

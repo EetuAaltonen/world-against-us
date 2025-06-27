@@ -1,4 +1,4 @@
-function SkeletalAnimationDrawPlayerRifleReload(_animationRef, _animatorRef)
+function SkeletalAnimationDrawCharacterRifleReload(_animationRef, _animatorRef)
 {
 	SkeletalAnimationDraw(_animationRef, _animatorRef);
 	
