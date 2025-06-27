@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"EnumCharacterActionResultShootGun",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumCharacterActionResultShootGun",
+  "parent":{
+    "name":"ActionResult",
+    "path":"folders/Scripts/World/Character/Action/ActionResult.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
