@@ -88,6 +88,7 @@
     {"name":"Object","order":9,"path":"folders/Scripts/Game/Data/Utility/Object.yy",},
     {"name":"Priority","order":11,"path":"folders/Scripts/Game/Data/Utility/Priority.yy",},
     {"name":"Queue","order":13,"path":"folders/Scripts/Game/Data/Utility/Queue.yy",},
+    {"name":"RGBAColor","order":17,"path":"folders/Scripts/Game/Data/Utility/RGBAColor.yy",},
     {"name":"Round","order":6,"path":"folders/Scripts/Game/Data/Utility/Round.yy",},
     {"name":"Size","order":2,"path":"folders/Scripts/Game/Data/Utility/Size.yy",},
     {"name":"WorldMap","order":20,"path":"folders/Scripts/Game/Data/WorldMap.yy",},
