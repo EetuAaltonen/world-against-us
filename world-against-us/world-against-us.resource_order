@@ -248,7 +248,6 @@
     {"name":"objCamperTruck","order":5,"path":"objects/objCamperTruck/objCamperTruck.yy",},
     {"name":"objCar","order":3,"path":"objects/objCar/objCar.yy",},
     {"name":"objCharacterParent","order":1,"path":"objects/objCharacterParent/objCharacterParent.yy",},
-    {"name":"objColProjectile","order":1,"path":"objects/objColProjectile/objColProjectile.yy",},
     {"name":"objColTarget","order":2,"path":"objects/objColTarget/objColTarget.yy",},
     {"name":"objConsole","order":11,"path":"objects/objConsole/objConsole.yy",},
     {"name":"objConstructionSite","order":3,"path":"objects/objConstructionSite/objConstructionSite.yy",},

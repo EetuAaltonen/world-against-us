@@ -312,7 +312,6 @@
     {"id":{"name":"objCamperTruck","path":"objects/objCamperTruck/objCamperTruck.yy",},},
     {"id":{"name":"objCar","path":"objects/objCar/objCar.yy",},},
     {"id":{"name":"objCharacterParent","path":"objects/objCharacterParent/objCharacterParent.yy",},},
-    {"id":{"name":"objColProjectile","path":"objects/objColProjectile/objColProjectile.yy",},},
     {"id":{"name":"objColTarget","path":"objects/objColTarget/objColTarget.yy",},},
     {"id":{"name":"objConsole","path":"objects/objConsole/objConsole.yy",},},
     {"id":{"name":"objConstructionSite","path":"objects/objConstructionSite/objConstructionSite.yy",},},
