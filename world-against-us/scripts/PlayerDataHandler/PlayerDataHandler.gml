@@ -158,7 +158,6 @@ function PlayerDataHandler() constructor
 			
 			// SET GLOBAL VARIABLES
 			global.PlayerBackpack = character.gear.GetItemBySlot(character.gear.backpack);
-			global.PlayerPrimaryWeaponSlot = primaryWeaponSlot;
 			global.PlayerMagazinePockets = magazinePockets;
 			global.PlayerMedicinePockets = medicinePockets;
 		}
