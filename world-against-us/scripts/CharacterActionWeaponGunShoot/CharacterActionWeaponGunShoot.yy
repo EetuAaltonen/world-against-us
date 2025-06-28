@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"CharacterActionReloadGun",
+  "%Name":"CharacterActionWeaponGunShoot",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"CharacterActionReloadGun",
+  "name":"CharacterActionWeaponGunShoot",
   "parent":{
     "name":"Action",
     "path":"folders/Scripts/World/Character/Action.yy",
