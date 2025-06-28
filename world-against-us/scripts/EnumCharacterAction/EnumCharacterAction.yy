@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"EnumCharacterAction",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumCharacterAction",
+  "parent":{
+    "name":"Action",
+    "path":"folders/Scripts/World/Character/Action.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
