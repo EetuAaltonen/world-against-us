@@ -32,6 +32,9 @@ function CharacterHuman(_name, _type, _race, _behavior, _colliderRef) : Characte
 	// GEAR SLOTS
 	gear = new GearSlots(_name);
 	
+	// ACTION
+	action_handler = new CharacterHumanActionHandler();
+	
 	static ToJSONStruct = function()
 	{
 		var scaledStamina = ScaleFloatValueToInt(stamina);
@@ -60,6 +63,8 @@ function CharacterHuman(_name, _type, _race, _behavior, _colliderRef) : Characte
 	{
 		ReleaseVariableFromMemory(_struct.gear);
 		_struct.gear = undefined;
+		ReleaseVariableFromMemory(_struct.action_handler);
+		_struct.action_handler = undefined;
 	}
 	
 	static Update = function()
@@ -71,11 +76,11 @@ function CharacterHuman(_name, _type, _race, _behavior, _colliderRef) : Characte
 				if (collider_ref.collision_body.state == COLLISION_BODY_STATE.ALIVE)
 				{
 					UpdateStats();
-				}
-				
-				if (collider_ref.collision_body.state == COLLISION_BODY_STATE.ON_DEAD)
+					action_handler.Update();
+				} else if (collider_ref.collision_body.state == COLLISION_BODY_STATE.ON_DEAD)
 				{
-					OnDead();
+					// TODO: Fix OnDead logic
+					//OnDead();
 				}
 			}
 		}

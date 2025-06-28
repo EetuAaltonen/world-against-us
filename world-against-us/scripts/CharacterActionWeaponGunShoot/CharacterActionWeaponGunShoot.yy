@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CharacterActionWeaponGunShoot",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CharacterActionWeaponGunShoot",
+  "parent":{
+    "name":"Action",
+    "path":"folders/Scripts/World/Character/Action.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

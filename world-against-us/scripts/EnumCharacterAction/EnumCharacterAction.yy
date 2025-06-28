@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"CharacterActionShootGun",
+  "%Name":"EnumCharacterAction",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"CharacterActionShootGun",
+  "name":"EnumCharacterAction",
   "parent":{
     "name":"Action",
     "path":"folders/Scripts/World/Character/Action.yy",
