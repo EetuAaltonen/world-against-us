@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprStorageShed",
   "bboxMode":2,
   "bbox_bottom":164,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"9d852b72-c0d1-4a41-96b0-239ee65236e5","name":"9d852b72-c0d1-4a41-96b0-239ee65236e5","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"9d852b72-c0d1-4a41-96b0-239ee65236e5","name":"9d852b72-c0d1-4a41-96b0-239ee65236e5","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprOldTruck",
   "bboxMode":2,
   "bbox_bottom":149,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"3b46bb48-3ed5-4c59-8270-e82f2eaed1a6","name":"3b46bb48-3ed5-4c59-8270-e82f2eaed1a6","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"3b46bb48-3ed5-4c59-8270-e82f2eaed1a6","name":"3b46bb48-3ed5-4c59-8270-e82f2eaed1a6","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

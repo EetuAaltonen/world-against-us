@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprFertilizerSack",
   "bboxMode":0,
   "bbox_bottom":127,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"cc4c1c7f-de16-4dfb-8468-f095e844fbb4","name":"cc4c1c7f-de16-4dfb-8468-f095e844fbb4","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"cc4c1c7f-de16-4dfb-8468-f095e844fbb4","name":"cc4c1c7f-de16-4dfb-8468-f095e844fbb4","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

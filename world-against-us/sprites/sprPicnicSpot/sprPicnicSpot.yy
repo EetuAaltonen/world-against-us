@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprPicnicSpot",
   "bboxMode":2,
   "bbox_bottom":88,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"31fc815d-73d8-4033-b8b8-821f4b70e30b","name":"31fc815d-73d8-4033-b8b8-821f4b70e30b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"31fc815d-73d8-4033-b8b8-821f4b70e30b","name":"31fc815d-73d8-4033-b8b8-821f4b70e30b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

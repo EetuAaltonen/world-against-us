@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprOfficePrinter",
   "bboxMode":2,
   "bbox_bottom":127,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"22f156f1-f71c-4924-9b1d-0b2c8799fbba","name":"22f156f1-f71c-4924-9b1d-0b2c8799fbba","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"22f156f1-f71c-4924-9b1d-0b2c8799fbba","name":"22f156f1-f71c-4924-9b1d-0b2c8799fbba","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

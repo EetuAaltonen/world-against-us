@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprTelephoneBooth",
   "bboxMode":2,
   "bbox_bottom":191,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"f5754da4-e353-478e-b16f-18a4897396ee","name":"f5754da4-e353-478e-b16f-18a4897396ee","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"f5754da4-e353-478e-b16f-18a4897396ee","name":"f5754da4-e353-478e-b16f-18a4897396ee","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

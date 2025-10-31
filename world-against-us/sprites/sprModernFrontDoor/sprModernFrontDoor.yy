@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprModernFrontDoor",
   "bboxMode":2,
   "bbox_bottom":120,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"68586675-abe1-4408-a352-648e1dcb0d56","name":"68586675-abe1-4408-a352-648e1dcb0d56","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"68586675-abe1-4408-a352-648e1dcb0d56","name":"68586675-abe1-4408-a352-648e1dcb0d56","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

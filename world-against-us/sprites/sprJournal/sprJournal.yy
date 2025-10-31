@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprJournal",
   "bboxMode":0,
   "bbox_bottom":75,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"fe506039-2a20-4dde-ab1a-873f2fbb08da","name":"fe506039-2a20-4dde-ab1a-873f2fbb08da","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"fe506039-2a20-4dde-ab1a-873f2fbb08da","name":"fe506039-2a20-4dde-ab1a-873f2fbb08da","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

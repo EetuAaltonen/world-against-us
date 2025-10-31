@@ -486,6 +486,7 @@
         },
         "chamber_type": "Magazine",
         "caliber": "7.62",
+        "firing_modes": ["semi", "burst", "auto"],
         "recoil": 5,
         "attachment_slots": ["scope", "laser", "foregrip"]
       }
@@ -530,6 +531,7 @@
         },
         "chamber_type": "Shell",
         "caliber": "12",
+        "firing_modes": ["semi", "burst", "auto"],
         "recoil": 10,
         "attachment_slots": ["scope", "laser"],
         "shell_capacity": 6
@@ -575,6 +577,7 @@
         },
         "chamber_type": "Fuel Tank",
         "caliber": "0",
+        "firing_modes": ["semi", "burst", "auto"],
         "recoil": 12,
         "attachment_slots": []
       }
@@ -619,6 +622,7 @@
         },
         "chamber_type": "Magazine",
         "caliber": "9",
+        "firing_modes": ["semi", "burst", "auto"],
         "recoil": 10,
         "attachment_slots": ["scope", "laser", "foregrip"]
       }
@@ -663,6 +667,7 @@
         },
         "chamber_type": "Magazine",
         "caliber": "9",
+        "firing_modes": ["semi", "burst", "auto"],
         "recoil": 8,
         "attachment_slots": ["scope", "laser"]
       }

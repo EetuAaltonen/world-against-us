@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprMarketPlasticCrates",
   "bboxMode":2,
   "bbox_bottom":35,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"29e6c71d-403b-416a-bda4-dd15d2d15886","name":"29e6c71d-403b-416a-bda4-dd15d2d15886","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"29e6c71d-403b-416a-bda4-dd15d2d15886","name":"29e6c71d-403b-416a-bda4-dd15d2d15886","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprMossStone",
   "bboxMode":2,
   "bbox_bottom":115,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"18cac0a8-48e8-4354-88ff-f65e431dc8e0","name":"18cac0a8-48e8-4354-88ff-f65e431dc8e0","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"18cac0a8-48e8-4354-88ff-f65e431dc8e0","name":"18cac0a8-48e8-4354-88ff-f65e431dc8e0","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

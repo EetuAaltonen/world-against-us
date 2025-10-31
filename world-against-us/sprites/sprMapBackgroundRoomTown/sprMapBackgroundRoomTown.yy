@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprMapBackgroundRoomTown",
   "bboxMode":0,
   "bbox_bottom":886,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"c1f29dd0-7567-449b-8d0d-08b7a0c21f42","name":"c1f29dd0-7567-449b-8d0d-08b7a0c21f42","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"c1f29dd0-7567-449b-8d0d-08b7a0c21f42","name":"c1f29dd0-7567-449b-8d0d-08b7a0c21f42","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

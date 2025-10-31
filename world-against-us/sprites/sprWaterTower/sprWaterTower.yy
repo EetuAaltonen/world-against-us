@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprWaterTower",
   "bboxMode":2,
   "bbox_bottom":250,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"8e7553c7-18ae-4f27-b318-616b26f220ce","name":"8e7553c7-18ae-4f27-b318-616b26f220ce","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"8e7553c7-18ae-4f27-b318-616b26f220ce","name":"8e7553c7-18ae-4f27-b318-616b26f220ce","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

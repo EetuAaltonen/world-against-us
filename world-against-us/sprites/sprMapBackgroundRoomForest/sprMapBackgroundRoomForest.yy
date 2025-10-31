@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprMapBackgroundRoomForest",
   "bboxMode":0,
   "bbox_bottom":885,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"bffdd9fc-fc9f-4c6b-85c4-d3600b975ea3","name":"bffdd9fc-fc9f-4c6b-85c4-d3600b975ea3","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"bffdd9fc-fc9f-4c6b-85c4-d3600b975ea3","name":"bffdd9fc-fc9f-4c6b-85c4-d3600b975ea3","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

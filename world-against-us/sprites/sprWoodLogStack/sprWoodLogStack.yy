@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprWoodLogStack",
   "bboxMode":2,
   "bbox_bottom":80,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"a59b7a44-51e3-4d75-99da-8fa06989589a","name":"a59b7a44-51e3-4d75-99da-8fa06989589a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"a59b7a44-51e3-4d75-99da-8fa06989589a","name":"a59b7a44-51e3-4d75-99da-8fa06989589a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

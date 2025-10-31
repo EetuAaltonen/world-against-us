@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"spr9mmBullet",
   "bboxMode":0,
   "bbox_bottom":7,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"e40b0dbc-2534-4a8f-845d-bf69e42d1f54","name":"e40b0dbc-2534-4a8f-845d-bf69e42d1f54","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"e40b0dbc-2534-4a8f-845d-bf69e42d1f54","name":"e40b0dbc-2534-4a8f-845d-bf69e42d1f54","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

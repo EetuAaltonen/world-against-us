@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprLargeBookcase",
   "bboxMode":2,
   "bbox_bottom":103,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"7edda923-10ee-4e42-9964-f51f341de08e","name":"7edda923-10ee-4e42-9964-f51f341de08e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"7edda923-10ee-4e42-9964-f51f341de08e","name":"7edda923-10ee-4e42-9964-f51f341de08e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

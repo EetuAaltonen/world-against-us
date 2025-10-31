@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprOutpostShed",
   "bboxMode":2,
   "bbox_bottom":133,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"39bff0f2-8f20-4981-b487-a06a291e63b9","name":"39bff0f2-8f20-4981-b487-a06a291e63b9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"39bff0f2-8f20-4981-b487-a06a291e63b9","name":"39bff0f2-8f20-4981-b487-a06a291e63b9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

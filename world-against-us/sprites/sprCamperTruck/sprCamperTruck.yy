@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprCamperTruck",
   "bboxMode":2,
   "bbox_bottom":129,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"9ca01a50-fae6-4d4a-ad76-78ef301aa20c","name":"9ca01a50-fae6-4d4a-ad76-78ef301aa20c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"9ca01a50-fae6-4d4a-ad76-78ef301aa20c","name":"9ca01a50-fae6-4d4a-ad76-78ef301aa20c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

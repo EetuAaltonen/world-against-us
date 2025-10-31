@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprSmallLeafPlant",
   "bboxMode":2,
   "bbox_bottom":65,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"c9087ede-efe6-4d6d-a953-d960730935fd","name":"c9087ede-efe6-4d6d-a953-d960730935fd","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"c9087ede-efe6-4d6d-a953-d960730935fd","name":"c9087ede-efe6-4d6d-a953-d960730935fd","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

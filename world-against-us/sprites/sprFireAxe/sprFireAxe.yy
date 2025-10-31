@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprFireAxe",
   "bboxMode":0,
   "bbox_bottom":91,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"497a3c1d-b446-4463-bdba-138fb05d8e05","name":"497a3c1d-b446-4463-bdba-138fb05d8e05","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"497a3c1d-b446-4463-bdba-138fb05d8e05","name":"497a3c1d-b446-4463-bdba-138fb05d8e05","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

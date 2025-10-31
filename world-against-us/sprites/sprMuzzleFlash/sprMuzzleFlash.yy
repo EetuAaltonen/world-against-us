@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprMuzzleFlash",
   "bboxMode":0,
   "bbox_bottom":12,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"00ab08c7-3155-48b2-aeb2-e458fd9792ac","name":"00ab08c7-3155-48b2-aeb2-e458fd9792ac","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"00ab08c7-3155-48b2-aeb2-e458fd9792ac","name":"00ab08c7-3155-48b2-aeb2-e458fd9792ac","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

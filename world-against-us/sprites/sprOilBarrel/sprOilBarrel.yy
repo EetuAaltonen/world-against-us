@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprOilBarrel",
   "bboxMode":2,
   "bbox_bottom":89,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"56526d2b-035a-43b4-9931-6912ba4f871a","name":"56526d2b-035a-43b4-9931-6912ba4f871a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"56526d2b-035a-43b4-9931-6912ba4f871a","name":"56526d2b-035a-43b4-9931-6912ba4f871a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

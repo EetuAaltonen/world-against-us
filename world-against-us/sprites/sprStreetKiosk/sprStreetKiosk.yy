@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprStreetKiosk",
   "bboxMode":2,
   "bbox_bottom":171,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"bfbadb9e-0837-4437-9ed2-6fcc104b0943","name":"bfbadb9e-0837-4437-9ed2-6fcc104b0943","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"bfbadb9e-0837-4437-9ed2-6fcc104b0943","name":"bfbadb9e-0837-4437-9ed2-6fcc104b0943","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

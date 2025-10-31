@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprShoppingCart",
   "bboxMode":2,
   "bbox_bottom":122,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"763eed95-c25f-4aef-aac6-ab2425c47939","name":"763eed95-c25f-4aef-aac6-ab2425c47939","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"763eed95-c25f-4aef-aac6-ab2425c47939","name":"763eed95-c25f-4aef-aac6-ab2425c47939","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

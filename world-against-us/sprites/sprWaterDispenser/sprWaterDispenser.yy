@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprWaterDispenser",
   "bboxMode":2,
   "bbox_bottom":127,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"e2faea33-59d8-4ffa-a88a-a3bba48abe27","name":"e2faea33-59d8-4ffa-a88a-a3bba48abe27","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"e2faea33-59d8-4ffa-a88a-a3bba48abe27","name":"e2faea33-59d8-4ffa-a88a-a3bba48abe27","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

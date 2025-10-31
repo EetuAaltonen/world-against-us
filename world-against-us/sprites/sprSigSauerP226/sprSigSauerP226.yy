@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprSigSauerP226",
   "bboxMode":0,
   "bbox_bottom":20,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"2e8cf2fb-cc40-41d6-a5bb-1cb5f1baa1fd","name":"2e8cf2fb-cc40-41d6-a5bb-1cb5f1baa1fd","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"68d9344e-6d58-4a39-8cd8-20a5dfb172b1","name":"68d9344e-6d58-4a39-8cd8-20a5dfb172b1","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"2e8cf2fb-cc40-41d6-a5bb-1cb5f1baa1fd","name":"2e8cf2fb-cc40-41d6-a5bb-1cb5f1baa1fd","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"68d9344e-6d58-4a39-8cd8-20a5dfb172b1","name":"68d9344e-6d58-4a39-8cd8-20a5dfb172b1","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprArmyTent",
   "bboxMode":2,
   "bbox_bottom":86,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"1500cb67-2adb-4f21-8c29-ea0818ddec24","name":"1500cb67-2adb-4f21-8c29-ea0818ddec24","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"1500cb67-2adb-4f21-8c29-ea0818ddec24","name":"1500cb67-2adb-4f21-8c29-ea0818ddec24","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

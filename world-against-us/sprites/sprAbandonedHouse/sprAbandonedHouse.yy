@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprAbandonedHouse",
   "bboxMode":2,
   "bbox_bottom":189,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"2f59f758-f5d5-498e-90eb-fb415c387339","name":"2f59f758-f5d5-498e-90eb-fb415c387339","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"2f59f758-f5d5-498e-90eb-fb415c387339","name":"2f59f758-f5d5-498e-90eb-fb415c387339","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprGraveStone",
   "bboxMode":0,
   "bbox_bottom":63,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"4f62ddd4-9ea1-40ec-8667-bde56d8cca96","name":"4f62ddd4-9ea1-40ec-8667-bde56d8cca96","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"4f62ddd4-9ea1-40ec-8667-bde56d8cca96","name":"4f62ddd4-9ea1-40ec-8667-bde56d8cca96","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

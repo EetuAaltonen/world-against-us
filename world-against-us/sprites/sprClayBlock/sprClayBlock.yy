@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprClayBlock",
   "bboxMode":0,
   "bbox_bottom":85,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"5e88b58e-49f0-4915-bd92-c1245ddc98ab","name":"5e88b58e-49f0-4915-bd92-c1245ddc98ab","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"5e88b58e-49f0-4915-bd92-c1245ddc98ab","name":"5e88b58e-49f0-4915-bd92-c1245ddc98ab","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

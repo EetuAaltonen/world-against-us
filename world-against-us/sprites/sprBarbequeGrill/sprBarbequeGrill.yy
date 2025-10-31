@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprBarbequeGrill",
   "bboxMode":2,
   "bbox_bottom":255,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"c1eb4204-8982-4984-8b5e-ebf8d5916e90","name":"c1eb4204-8982-4984-8b5e-ebf8d5916e90","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"c1eb4204-8982-4984-8b5e-ebf8d5916e90","name":"c1eb4204-8982-4984-8b5e-ebf8d5916e90","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

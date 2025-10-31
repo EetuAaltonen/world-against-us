@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprGuitar",
   "bboxMode":0,
   "bbox_bottom":126,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"36faf4ae-9b6c-4688-b6d9-1c0c35a9080c","name":"36faf4ae-9b6c-4688-b6d9-1c0c35a9080c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"36faf4ae-9b6c-4688-b6d9-1c0c35a9080c","name":"36faf4ae-9b6c-4688-b6d9-1c0c35a9080c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

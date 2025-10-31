@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprFirepit",
   "bboxMode":2,
   "bbox_bottom":62,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"25e52481-2fc9-4e1a-9d88-974b26c4ac4a","name":"25e52481-2fc9-4e1a-9d88-974b26c4ac4a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"25e52481-2fc9-4e1a-9d88-974b26c4ac4a","name":"25e52481-2fc9-4e1a-9d88-974b26c4ac4a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

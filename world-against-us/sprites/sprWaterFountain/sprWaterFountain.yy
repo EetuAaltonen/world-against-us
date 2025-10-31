@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprWaterFountain",
   "bboxMode":2,
   "bbox_bottom":175,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"d6ae80c2-ac84-4b6f-8feb-a1194243e3bd","name":"d6ae80c2-ac84-4b6f-8feb-a1194243e3bd","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"d6ae80c2-ac84-4b6f-8feb-a1194243e3bd","name":"d6ae80c2-ac84-4b6f-8feb-a1194243e3bd","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprArmyBackpack",
   "bboxMode":0,
   "bbox_bottom":127,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"a47d30fe-b275-4b9e-93db-2dc84fe98b90","name":"a47d30fe-b275-4b9e-93db-2dc84fe98b90","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"a47d30fe-b275-4b9e-93db-2dc84fe98b90","name":"a47d30fe-b275-4b9e-93db-2dc84fe98b90","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

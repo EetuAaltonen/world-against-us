@@ -71,6 +71,7 @@ function ParseJSONStructToDatabaseItemMetadata(_jsonStruct, _itemCategory, _item
 						metadataStruct[$ "left_hand_position"] ?? undefined,
 						metadataStruct[$ "chamber_type"] ?? undefined,
 						metadataStruct[$ "caliber"] ?? undefined,
+						metadataStruct[$ "firing_modes"] ?? undefined,
 						metadataStruct[$ "recoil"] ?? undefined,
 						metadataStruct[$ "attachment_slots"] ?? undefined
 					);

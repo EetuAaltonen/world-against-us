@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprMausoleum",
   "bboxMode":2,
   "bbox_bottom":252,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"d94f3c31-e610-4d00-a494-da09eca87580","name":"d94f3c31-e610-4d00-a494-da09eca87580","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"d94f3c31-e610-4d00-a494-da09eca87580","name":"d94f3c31-e610-4d00-a494-da09eca87580","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
