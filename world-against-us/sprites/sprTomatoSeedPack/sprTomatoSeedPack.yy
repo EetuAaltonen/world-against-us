@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprTomatoSeedPack",
   "bboxMode":0,
   "bbox_bottom":126,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"f0b6e680-730b-4e9b-a42d-0cf61f86fdba","name":"f0b6e680-730b-4e9b-a42d-0cf61f86fdba","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"f0b6e680-730b-4e9b-a42d-0cf61f86fdba","name":"f0b6e680-730b-4e9b-a42d-0cf61f86fdba","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

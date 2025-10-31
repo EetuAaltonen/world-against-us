@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprMapIconCamp",
   "bboxMode":0,
   "bbox_bottom":83,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"14a51167-8892-4a2e-82b5-d8a2a2ab85ff","name":"14a51167-8892-4a2e-82b5-d8a2a2ab85ff","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"14a51167-8892-4a2e-82b5-d8a2a2ab85ff","name":"14a51167-8892-4a2e-82b5-d8a2a2ab85ff","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

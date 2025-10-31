@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprFloppyDiskBroken",
   "bboxMode":0,
   "bbox_bottom":125,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"1256241a-8e1d-4c4d-8f29-86e02c7bbe71","name":"1256241a-8e1d-4c4d-8f29-86e02c7bbe71","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"1256241a-8e1d-4c4d-8f29-86e02c7bbe71","name":"1256241a-8e1d-4c4d-8f29-86e02c7bbe71","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

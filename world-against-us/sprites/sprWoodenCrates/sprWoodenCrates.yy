@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprWoodenCrates",
   "bboxMode":2,
   "bbox_bottom":67,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"8c29556b-b210-49de-b2ed-f574279b113a","name":"8c29556b-b210-49de-b2ed-f574279b113a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"8c29556b-b210-49de-b2ed-f574279b113a","name":"8c29556b-b210-49de-b2ed-f574279b113a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

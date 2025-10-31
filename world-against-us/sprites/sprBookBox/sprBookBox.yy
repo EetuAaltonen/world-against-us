@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprBookBox",
   "bboxMode":2,
   "bbox_bottom":67,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"4a71f002-cc15-4604-b8a6-b7e9a752b10f","name":"4a71f002-cc15-4604-b8a6-b7e9a752b10f","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"4a71f002-cc15-4604-b8a6-b7e9a752b10f","name":"4a71f002-cc15-4604-b8a6-b7e9a752b10f","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

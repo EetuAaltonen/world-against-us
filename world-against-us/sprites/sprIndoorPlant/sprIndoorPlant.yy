@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprIndoorPlant",
   "bboxMode":2,
   "bbox_bottom":163,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"3d5acece-bc42-4cda-9c35-529a3ae37376","name":"3d5acece-bc42-4cda-9c35-529a3ae37376","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"3d5acece-bc42-4cda-9c35-529a3ae37376","name":"3d5acece-bc42-4cda-9c35-529a3ae37376","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprIconDroneLeaveRegion",
   "bboxMode":2,
   "bbox_bottom":0,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"27cab771-b3a5-4d6d-a404-7636ff79ed25","name":"27cab771-b3a5-4d6d-a404-7636ff79ed25","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"27cab771-b3a5-4d6d-a404-7636ff79ed25","name":"27cab771-b3a5-4d6d-a404-7636ff79ed25","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

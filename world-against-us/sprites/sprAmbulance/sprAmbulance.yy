@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprAmbulance",
   "bboxMode":2,
   "bbox_bottom":104,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"f59af84b-12cb-43f9-bbee-88e819ceb477","name":"f59af84b-12cb-43f9-bbee-88e819ceb477","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"f59af84b-12cb-43f9-bbee-88e819ceb477","name":"f59af84b-12cb-43f9-bbee-88e819ceb477","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprMP5Mag",
   "bboxMode":0,
   "bbox_bottom":63,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"a8c61de6-7e95-48eb-9e5a-a9e47a7336a7","name":"a8c61de6-7e95-48eb-9e5a-a9e47a7336a7","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"a8c61de6-7e95-48eb-9e5a-a9e47a7336a7","name":"a8c61de6-7e95-48eb-9e5a-a9e47a7336a7","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

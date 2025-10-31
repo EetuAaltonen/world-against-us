@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprOfficeWhiteboard",
   "bboxMode":2,
   "bbox_bottom":118,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"cc3dabd1-1e62-4df7-a10a-78af27ba1bae","name":"cc3dabd1-1e62-4df7-a10a-78af27ba1bae","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"cc3dabd1-1e62-4df7-a10a-78af27ba1bae","name":"cc3dabd1-1e62-4df7-a10a-78af27ba1bae","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprFlamethrower",
   "bboxMode":0,
   "bbox_bottom":20,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"c8c4d051-34d8-4cd3-a4f3-c1008c2c4404","name":"c8c4d051-34d8-4cd3-a4f3-c1008c2c4404","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"c8c4d051-34d8-4cd3-a4f3-c1008c2c4404","name":"c8c4d051-34d8-4cd3-a4f3-c1008c2c4404","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

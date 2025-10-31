@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprParkBench1",
   "bboxMode":2,
   "bbox_bottom":67,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"8a545639-d4a4-4b55-97ed-d3d701aae69a","name":"8a545639-d4a4-4b55-97ed-d3d701aae69a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"8a545639-d4a4-4b55-97ed-d3d701aae69a","name":"8a545639-d4a4-4b55-97ed-d3d701aae69a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

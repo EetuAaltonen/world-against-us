@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprPicnicBasket",
   "bboxMode":2,
   "bbox_bottom":55,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"8b7fc6cb-31d0-40a4-b5e0-c97244e2d60e","name":"8b7fc6cb-31d0-40a4-b5e0-c97244e2d60e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"8b7fc6cb-31d0-40a4-b5e0-c97244e2d60e","name":"8b7fc6cb-31d0-40a4-b5e0-c97244e2d60e","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

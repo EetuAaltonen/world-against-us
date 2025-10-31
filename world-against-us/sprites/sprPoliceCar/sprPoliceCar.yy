@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprPoliceCar",
   "bboxMode":2,
   "bbox_bottom":93,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"78b97a20-0c5c-4435-a879-f0c2c13c581f","name":"78b97a20-0c5c-4435-a879-f0c2c13c581f","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"78b97a20-0c5c-4435-a879-f0c2c13c581f","name":"78b97a20-0c5c-4435-a879-f0c2c13c581f","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

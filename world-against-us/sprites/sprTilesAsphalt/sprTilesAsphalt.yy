@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprTilesAsphalt",
   "bboxMode":0,
   "bbox_bottom":255,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"ba1daa86-8df8-4048-b4b6-b9c7a353c369","name":"ba1daa86-8df8-4048-b4b6-b9c7a353c369","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"ba1daa86-8df8-4048-b4b6-b9c7a353c369","name":"ba1daa86-8df8-4048-b4b6-b9c7a353c369","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

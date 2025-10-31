@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprWaterBottle",
   "bboxMode":0,
   "bbox_bottom":95,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"0b1f4a2a-d96b-4031-8159-bb05ee1f0f15","name":"0b1f4a2a-d96b-4031-8159-bb05ee1f0f15","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"0b1f4a2a-d96b-4031-8159-bb05ee1f0f15","name":"0b1f4a2a-d96b-4031-8159-bb05ee1f0f15","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

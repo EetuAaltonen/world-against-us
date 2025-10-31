@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"spr12GaugeSlugCasing",
   "bboxMode":0,
   "bbox_bottom":11,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"d6e6bbc3-d1af-4fa6-9bc8-b317ca38cdcd","name":"d6e6bbc3-d1af-4fa6-9bc8-b317ca38cdcd","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"d6e6bbc3-d1af-4fa6-9bc8-b317ca38cdcd","name":"d6e6bbc3-d1af-4fa6-9bc8-b317ca38cdcd","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

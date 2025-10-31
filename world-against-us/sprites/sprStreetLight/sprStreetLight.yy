@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprStreetLight",
   "bboxMode":2,
   "bbox_bottom":230,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"c9877e75-0e7a-4213-a162-c6511c91f39c","name":"c9877e75-0e7a-4213-a162-c6511c91f39c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"c9877e75-0e7a-4213-a162-c6511c91f39c","name":"c9877e75-0e7a-4213-a162-c6511c91f39c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

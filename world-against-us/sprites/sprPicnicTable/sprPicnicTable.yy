@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprPicnicTable",
   "bboxMode":2,
   "bbox_bottom":245,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"30c02d5a-f53f-475e-8d05-0283d6e4eccf","name":"30c02d5a-f53f-475e-8d05-0283d6e4eccf","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"30c02d5a-f53f-475e-8d05-0283d6e4eccf","name":"30c02d5a-f53f-475e-8d05-0283d6e4eccf","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

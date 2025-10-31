@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprMarketShelf",
   "bboxMode":2,
   "bbox_bottom":125,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"de379522-67fd-4b26-a81e-3037227ed7b2","name":"de379522-67fd-4b26-a81e-3037227ed7b2","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"de379522-67fd-4b26-a81e-3037227ed7b2","name":"de379522-67fd-4b26-a81e-3037227ed7b2","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

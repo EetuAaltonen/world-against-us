@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprMapPrologueBg",
   "bboxMode":0,
   "bbox_bottom":690,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"9d515572-a734-447d-950e-9e5d09b8f271","name":"9d515572-a734-447d-950e-9e5d09b8f271","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"9d515572-a734-447d-950e-9e5d09b8f271","name":"9d515572-a734-447d-950e-9e5d09b8f271","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

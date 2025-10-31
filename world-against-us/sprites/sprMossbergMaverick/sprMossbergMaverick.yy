@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprMossbergMaverick",
   "bboxMode":0,
   "bbox_bottom":21,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"6ea4c26c-1dbf-458a-a5ae-3da3db134e1c","name":"6ea4c26c-1dbf-458a-a5ae-3da3db134e1c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"6ea4c26c-1dbf-458a-a5ae-3da3db134e1c","name":"6ea4c26c-1dbf-458a-a5ae-3da3db134e1c","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprOldTireStack",
   "bboxMode":2,
   "bbox_bottom":88,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"c7392d0e-9c99-4c40-9bb1-548f093d47ab","name":"c7392d0e-9c99-4c40-9bb1-548f093d47ab","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"c7392d0e-9c99-4c40-9bb1-548f093d47ab","name":"c7392d0e-9c99-4c40-9bb1-548f093d47ab","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

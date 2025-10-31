@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprArmyHelmet",
   "bboxMode":0,
   "bbox_bottom":127,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"a2a8add7-f161-4af3-a1f4-d0c4ffc8828a","name":"a2a8add7-f161-4af3-a1f4-d0c4ffc8828a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"a2a8add7-f161-4af3-a1f4-d0c4ffc8828a","name":"a2a8add7-f161-4af3-a1f4-d0c4ffc8828a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

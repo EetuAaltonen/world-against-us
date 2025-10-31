@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprMarketDrinks",
   "bboxMode":2,
   "bbox_bottom":185,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"83fc83e7-51c8-4681-b8b0-115c5a0f7079","name":"83fc83e7-51c8-4681-b8b0-115c5a0f7079","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"83fc83e7-51c8-4681-b8b0-115c5a0f7079","name":"83fc83e7-51c8-4681-b8b0-115c5a0f7079","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,

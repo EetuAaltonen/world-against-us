@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"sprWoodenCrateStack",
   "bboxMode":2,
   "bbox_bottom":116,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"d758d9fe-9b49-4b51-8b67-b9b89ac49fa9","name":"d758d9fe-9b49-4b51-8b67-b9b89ac49fa9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"d758d9fe-9b49-4b51-8b67-b9b89ac49fa9","name":"d758d9fe-9b49-4b51-8b67-b9b89ac49fa9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
