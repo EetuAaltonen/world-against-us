@@ -39,34 +39,35 @@ function SkeletalAnimator(_instanceRef) constructor
 		is_initialized = true;
 	}
 	
-	static SetActiveAnimation = function(_animationName, _track, _skin, _animationSpeed, _isLooping, _isSyncWithInstance)
+	static SetActiveAnimation = function(_activeAnimation)
 	{
+		var isAnimationSet = false;
 		if (!is_undefined(skeleton_sprite_data_ref))
 		{
-			var skeletalSpriteAnimationData = skeleton_sprite_data_ref.animations[? _animationName];
+			var skeletalSpriteAnimationData = skeleton_sprite_data_ref.animations[? _activeAnimation.animation_name];
 			if (!is_undefined(skeletalSpriteAnimationData))
 			{
-				StorePrevActiveAnimationByTrack(_track);
-				RemoveActiveAnimationByTrack(_track);
+				StorePrevActiveAnimationByTrack(_activeAnimation.animation_track);
+				RemoveActiveAnimationByTrack(_activeAnimation.animation_track);
 				
 				with (instance_ref)
 				{
-					skeleton_animation_clear(_track);
-					if (_isSyncWithInstance)
+					skeleton_animation_clear(_activeAnimation.animation_track);
+					if (_activeAnimation.is_sync_with_instance)
 					{
-						skeleton_animation_set_position(_track, 0);
-						skeleton_animation_set_ext(_animationName, _track, _isLooping);
+						skeleton_animation_set_position(_activeAnimation.animation_track, 0);
+						skeleton_animation_set_ext(_activeAnimation.animation_name, _activeAnimation.animation_track, _activeAnimation.is_looping);
 					}
 				}
-
-				var activeAnimation = new SkeletalActiveAnimation(
-					self, _animationName, _skin, _track, _animationSpeed, _isLooping, _isSyncWithInstance
-				);
-				ds_map_add(active_animations, _track, activeAnimation);
+				
+				ds_map_add(active_animations, _activeAnimation.animation_track, _activeAnimation);
+				
+				isAnimationSet = true;
 			} else {
-				throw(string("Attempting to set unknown skeletal sprite animation with name '{0}'", _animationName));
+				throw(string("Attempting to set unknown skeletal sprite animation with name '{0}'", _activeAnimation.animation_name));
 			}
 		}
+		return isAnimationSet;
 	}
 	
 	static GetActiveAnimationNameByTrack = function(_track)
