@@ -408,6 +408,7 @@
     {"name":"Character","order":5,"path":"scripts/Character/Character.yy",},
     {"name":"CharacterActionCooldown","order":6,"path":"scripts/CharacterActionCooldown/CharacterActionCooldown.yy",},
     {"name":"CharacterActionWeaponGunReload","order":2,"path":"scripts/CharacterActionWeaponGunReload/CharacterActionWeaponGunReload.yy",},
+    {"name":"CharacterActiveAction","order":8,"path":"scripts/CharacterActiveAction/CharacterActiveAction.yy",},
     {"name":"CharacterBodyPart","order":4,"path":"scripts/CharacterBodyPart/CharacterBodyPart.yy",},
     {"name":"CharacterHuman","order":8,"path":"scripts/CharacterHuman/CharacterHuman.yy",},
     {"name":"CharacterHumanActionHandler","order":3,"path":"scripts/CharacterHumanActionHandler/CharacterHumanActionHandler.yy",},
