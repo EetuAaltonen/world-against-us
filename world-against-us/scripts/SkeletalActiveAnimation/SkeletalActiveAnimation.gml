@@ -1,9 +1,9 @@
-function SkeletalActiveAnimation(_animatorRef, _animationName, _animationSkin, _animationTrack, _animationSpeed, _isLooping, _isSyncWithInstance) constructor
+function SkeletalActiveAnimation(_animatorRef, _animationName, _animationTrack, _animationSkin, _animationSpeed, _isLooping, _isSyncWithInstance) constructor
 {
 	animator_ref = _animatorRef;
 	animation_name = _animationName;
-	animation_skin = _animationSkin;
 	animation_track = _animationTrack;
+	animation_skin = _animationSkin;
 	animation_speed = _animationSpeed;
 	is_looping = _isLooping;
 	is_sync_with_instance = _isSyncWithInstance;
