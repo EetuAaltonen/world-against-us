@@ -50,9 +50,11 @@ function CharacterActionWeaponGunShoot(_instanceRef, _aimPosX, _aimPosY)
 	
 	// SET CHARACTER ACTION COOLDOWN
 	var fireRateDelayInMilliseconds = time_bpm_to_seconds(primaryWeaponRef.metadata.fire_rate) * 1000;
-	_instanceRef.character.action_handler.SetActionCooldown(
-		CHARACTER_ACTION.SHOOT, fireRateDelayInMilliseconds
+	var activeAction = new CharacterActiveAction(
+		_instanceRef, CHARACTER_ACTION.SHOOT,
+		undefined, 1, fireRateDelayInMilliseconds, false, false
 	);
+	_instanceRef.character.action_handler.SetAction(activeAction);
 	
 	// CALCULATE CHAMBER WORLD POSITION
 	var primaryWeaponDataRef = _instanceRef.character.gear.primary_weapon_data;

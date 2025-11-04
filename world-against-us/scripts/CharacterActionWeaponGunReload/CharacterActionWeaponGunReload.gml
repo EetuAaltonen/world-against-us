@@ -10,34 +10,42 @@ function CharacterActionWeaponGunReload(_instanceRef)
 		switch (gunRef.metadata.chamber_type)
 		{
 			case "Magazine": {
-				var magazine = InventoryQueryFetchMagazine(backpackRef.metadata.inventory, gunRef)
-				if (!is_undefined(magazine))
+				var magazineRef = InventoryQueryFetchMagazine(backpackRef.metadata.inventory, gunRef)
+				if (!is_undefined(magazineRef))
 				{
-					if (is_undefined(gunRef.metadata.magazine))
+					// SET CHARACTER ACTION
+					var activeAnimation = new SkeletalActiveAnimation(
+						_instanceRef.skeletalAnimator, "rifle_reload", 0, "upperbody", 1, false, true
+					);
+					var activeAction = new CharacterActiveAction(
+						_instanceRef, CHARACTER_ACTION.RELOAD, activeAnimation,
+						undefined, undefined, false, false
+					);
+					if (_instanceRef.character.action_handler.SetAction(activeAction, false))
 					{
-						gunRef.metadata.magazine = magazine.Clone();
-						actionResult = CHARACTER_ACTION_RESULT_WEAPON_GUN_RELOAD.RELOADED;
-					} else {
-						var unloadedMagazineIndex = magazine.sourceInventory.AddItem(gunRef.metadata.magazine);
-						if (!is_undefined(unloadedMagazineIndex))
+						if (is_undefined(gunRef.metadata.magazine))
 						{
-							gunRef.metadata.magazine = magazine.Clone();
+							gunRef.metadata.magazine = magazineRef.Clone();
 							actionResult = CHARACTER_ACTION_RESULT_WEAPON_GUN_RELOAD.RELOADED;
 						} else {
-							actionResult = CHARACTER_ACTION_RESULT_WEAPON_GUN_RELOAD.FAILED_MAGAZINE_SWAP;
+							var unloadedMagazineIndex = magazineRef.sourceInventory.AddItem(gunRef.metadata.magazine);
+							if (!is_undefined(unloadedMagazineIndex))
+							{
+								gunRef.metadata.magazine = magazineRef.Clone();
+								actionResult = CHARACTER_ACTION_RESULT_WEAPON_GUN_RELOAD.RELOADED;
+							} else {
+								actionResult = CHARACTER_ACTION_RESULT_WEAPON_GUN_RELOAD.FAILED_MAGAZINE_SWAP;
+							}
 						}
-					}
-					// REMOVE MAGAZINE FROM INVENTORY ON SUCCESSFUL RELOADING
-					if (actionResult == CHARACTER_ACTION_RESULT_WEAPON_GUN_RELOAD.RELOADED)
-					{
-						magazine.sourceInventory.RemoveItemByGridIndex(magazine.grid_index);
-						 _instanceRef.character.gear.has_primary_weapon_magazine = true;
-						 
-						 // SET CHARACTER ACTION
-						_instanceRef.character.action_handler.SetAction(
-							CHARACTER_ACTION.RELOAD, false,
-							undefined, 1000, false
-						);
+					
+						if (actionResult == CHARACTER_ACTION_RESULT_WEAPON_GUN_RELOAD.RELOADED)
+						{
+							// REMOVE MAGAZINE FROM INVENTORY ON SUCCESSFUL RELOADING
+							magazineRef.sourceInventory.RemoveItemByGridIndex(magazineRef.grid_index);
+							_instanceRef.character.gear.has_primary_weapon_magazine = true;
+						}
+					} else {
+						actionResult = CHARACTER_ACTION_RESULT_WEAPON_GUN_RELOAD.ACTION_FAILED;
 					}
 				} else {
 					actionResult = CHARACTER_ACTION_RESULT_WEAPON_GUN_RELOAD.MISSING_REPLACEMENT_MAGAZINE;
