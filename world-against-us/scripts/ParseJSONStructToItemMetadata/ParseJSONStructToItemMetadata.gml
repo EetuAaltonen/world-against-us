@@ -25,7 +25,6 @@ function ParseJSONStructToItemMetadata(_jsonStruct, _itemData)
 					parsedMetadata.fuel_tank = ParseJSONStructToItem(metadataStruct[$ "fuel_tank"] ?? parsedMetadata.fuel_tank);
 				} else {
 					parsedMetadata.magazine = ParseJSONStructToItem(metadataStruct[$ "magazine"] ?? parsedMetadata.magazine);
-					parsedMetadata.firing_mode_index = metadataStruct[$ "firing_mode_index"] ?? parsedMetadata.firing_mode_index;
 				}
 			} break;
 			case "Magazine":
