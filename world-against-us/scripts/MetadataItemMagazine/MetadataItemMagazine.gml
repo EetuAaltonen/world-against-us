@@ -27,12 +27,12 @@ function MetadataItemMagazine(_caliber, _capacity) : Metadata() constructor
 		_struct.bullets = undefined;
 	}
 	
-	static GetAmmoCount = function()
+	static GetBulletCount = function()
 	{
 		return array_length(bullets);
 	}
 	
-	static GetAmmoCapacity = function()
+	static GetBulletCapacity = function()
 	{
 		return capacity;
 	}

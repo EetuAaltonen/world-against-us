@@ -13,10 +13,10 @@ function FetchAmmoPocketMagazine(_weapon)
 				{
 					if (!is_undefined(foundMagazine))
 					{
-						if (item.metadata.GetAmmoCount() > foundMagazine.metadata.GetAmmoCount())
+						if (item.metadata.GetBulletCount() > foundMagazine.metadata.GetBulletCount())
 						{
 							foundMagazine = item;
-						} else if (item.metadata.GetAmmoCount() == foundMagazine.metadata.GetAmmoCount())
+						} else if (item.metadata.GetBulletCount() == foundMagazine.metadata.GetBulletCount())
 						{
 							if (item.grid_index.col < foundMagazine.grid_index.col)
 							{
@@ -30,7 +30,7 @@ function FetchAmmoPocketMagazine(_weapon)
 							}
 						}
 					} else {
-						if (item.metadata.GetAmmoCount() > 0)
+						if (item.metadata.GetBulletCount() > 0)
 						{
 							foundMagazine = item;
 						}

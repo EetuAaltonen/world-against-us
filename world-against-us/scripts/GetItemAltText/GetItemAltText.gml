@@ -25,7 +25,7 @@ function GetItemAltText(_item)
 		} break;
 		case "Magazine":
 		{
-			itemAltText = string("{0} / {1}", _item.metadata.GetAmmoCount(), _item.metadata.GetAmmoCapacity());
+			itemAltText = string("{0} / {1}", _item.metadata.GetBulletCount(), _item.metadata.GetBulletCapacity());
 		} break;
 		case "Fuel Ammo":
 		{
