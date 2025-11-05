@@ -3,7 +3,7 @@ function GearSlotDataPrimaryWeapon() constructor
 	world_position = new Vector2(-1, -1);
 	barrel_to_ground_offset = new Vector2(0, -88);
 	aim_angle = 0;
-	has_ammo = false;
+	// TODO: is_jammed
 	is_holstered = false;
 	
 	muzzleFlashTimer = new Timer((1000 / 60) * 2); // 2 FRAMES
