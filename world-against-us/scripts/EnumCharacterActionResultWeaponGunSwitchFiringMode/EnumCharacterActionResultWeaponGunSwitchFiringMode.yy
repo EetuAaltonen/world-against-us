@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"EnumCharacterActionResultWeaponGunSwitchFiringMode",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumCharacterActionResultWeaponGunSwitchFiringMode",
+  "parent":{
+    "name":"ActionResult",
+    "path":"folders/Scripts/World/Character/Action/ActionResult.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
