@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ItemActionMagazineEjectBullet",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ItemActionMagazineEjectBullet",
+  "parent":{
+    "name":"Attachment",
+    "path":"folders/Scripts/Game/Data/Inventory/Item/Functions/Action/Weapon/Attachment.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
