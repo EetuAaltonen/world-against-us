@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"MacroItemWeaponGun",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"MacroItemWeaponGun",
+  "parent":{
+    "name":"Item",
+    "path":"folders/Scripts/Game/Data/Macro/Item.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
