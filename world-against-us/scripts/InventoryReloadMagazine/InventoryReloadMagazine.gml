@@ -1,7 +1,7 @@
 function InventoryReloadMagazine(_magazine, _ammo)
 {
 	var isAmmoReloaded = false;
-	var reloadCount = min(_ammo.quantity, (_magazine.metadata.GetAmmoCapacity() - _magazine.metadata.GetAmmoCount()));
+	var reloadCount = min(_ammo.quantity, (_magazine.metadata.GetBulletCapacity() - _magazine.metadata.GetBulletCount()));
 	
 	repeat(reloadCount)
 	{

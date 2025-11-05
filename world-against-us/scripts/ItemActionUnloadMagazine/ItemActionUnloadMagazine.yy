@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"ItemActionUnloadMagazine",
   "parent":{
-    "name":"Empty",
-    "path":"folders/Scripts/Game/Data/Inventory/Item/Functions/Action/Empty.yy",
+    "name":"Attachment",
+    "path":"folders/Scripts/Game/Data/Inventory/Item/Functions/Action/Weapon/Attachment.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

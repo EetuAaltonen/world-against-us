@@ -40,7 +40,7 @@ function HUDElementAmmo(_position) : HUDElement(_position) constructor
 							if (!is_undefined(weapon_instance.primaryWeapon.metadata.magazine))
 							{
 								var magazine = weapon_instance.primaryWeapon.metadata.magazine;
-								var bulletCount = magazine.metadata.GetAmmoCount();
+								var bulletCount = magazine.metadata.GetBulletCount();
 								for (var i = 0; i < bulletCount; i++)
 								{
 									array_push(bullet_animations, new HUDBulletAnimation(magazine.metadata.bullets[i].icon, new Vector2(100, 100), -180));

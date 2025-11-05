@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"ItemActionWeaponGunSwitchFiringMode",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"ItemActionWeaponGunSwitchFiringMode",
+  "parent":{
+    "name":"Gun",
+    "path":"folders/Scripts/Game/Data/Inventory/Item/Functions/Action/Weapon/Gun.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

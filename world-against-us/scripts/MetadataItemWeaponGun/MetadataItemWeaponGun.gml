@@ -5,15 +5,18 @@ function MetadataItemWeaponGun(_fire_rate, _range, _kickback, _weapon_offset, _c
 	firing_modes = _firing_modes;
 	recoil = _recoil;
 	attachment_slots = _attachment_slots;
+	
 	magazine = undefined;
+	
+	// FIRING MODE
 	firing_mode_index = 0;
+	burst_firing_index = 0;
 	
 	static ToJSONStruct = function()
 	{
 		var formatMagazine = (!is_undefined(magazine)) ? magazine.ToJSONStruct() : magazine;
 		return {
-			magazine: formatMagazine,
-			firing_mode_index: firing_mode_index
+			magazine: formatMagazine
 		}
 	}
 	
@@ -35,7 +38,6 @@ function MetadataItemWeaponGun(_fire_rate, _range, _kickback, _weapon_offset, _c
 			attachment_slots
 		);
 		clone.magazine = (!is_undefined(magazine)) ? magazine.Clone() : undefined;
-		clone.firing_mode_index = firing_mode_index;
 		return clone;
 	}
 	
@@ -50,7 +52,7 @@ function MetadataItemWeaponGun(_fire_rate, _range, _kickback, _weapon_offset, _c
 		var bulletCount = 0;
 		if (!is_undefined(magazine))
 		{
-			bulletCount = magazine.metadata.GetAmmoCount();
+			bulletCount = magazine.metadata.GetBulletCount();
 		}
 		return bulletCount;
 	}
@@ -60,15 +62,8 @@ function MetadataItemWeaponGun(_fire_rate, _range, _kickback, _weapon_offset, _c
 		var ammoCapacity = 0;
 		if (!is_undefined(magazine))
 		{
-			ammoCapacity = magazine.metadata.GetAmmoCapacity();
+			ammoCapacity = magazine.metadata.GetBulletCapacity();
 		}
 		return ammoCapacity;
-	}
-	
-	static SwitchFiringMode = function()
-	{
-		firing_mode_index++;
-		var firing_modes_count = array_length(firing_modes);
-		if (firing_mode_index >= firing_modes_count) firing_mode_index = 0;
 	}
 }

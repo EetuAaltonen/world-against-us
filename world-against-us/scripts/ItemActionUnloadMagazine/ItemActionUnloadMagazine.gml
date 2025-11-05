@@ -1,7 +1,7 @@
 function ItemActionUnloadMagazine(_item)
 {
 	var targetInventory = (_item.sourceInventory.type == INVENTORY_TYPE.PlayerBackpack) ? _item.sourceInventory : global.PlayerBackpack;
-	var bulletCountToUnload = _item.metadata.GetAmmoCount();
+	var bulletCountToUnload = _item.metadata.GetBulletCount();
 	repeat(bulletCountToUnload)
 	{
 		var bulletName = _item.metadata.UnloadAmmo();

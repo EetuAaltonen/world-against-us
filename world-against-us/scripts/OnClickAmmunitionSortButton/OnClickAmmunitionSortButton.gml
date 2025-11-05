@@ -14,7 +14,7 @@ function OnClickAmmunitionSortButton()
 				{
 					if (magazineItem.metadata.caliber == bulletItem.metadata.caliber)
 					{
-						var bulletCountToLoad = min((magazineItem.metadata.GetAmmoCapacity() - magazineItem.metadata.GetAmmoCount()), bulletItem.quantity);
+						var bulletCountToLoad = min((magazineItem.metadata.GetBulletCapacity() - magazineItem.metadata.GetBulletCount()), bulletItem.quantity);
 						repeat(bulletCountToLoad)
 						{
 							magazineItem.metadata.ReloadAmmo(bulletItem.Clone(1));
