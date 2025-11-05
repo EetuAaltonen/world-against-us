@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"ItemActionUnloadWeapon",
   "parent":{
-    "name":"Empty",
-    "path":"folders/Scripts/Game/Data/Inventory/Item/Functions/Action/Empty.yy",
+    "name":"Gun",
+    "path":"folders/Scripts/Game/Data/Inventory/Item/Functions/Action/Weapon/Gun.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",
