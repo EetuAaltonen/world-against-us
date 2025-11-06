@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"InputDeviceMouse",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"InputDeviceMouse",
+  "parent":{
+    "name":"DeviceInput",
+    "path":"folders/Scripts/Game/Network/DeviceInput.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,8 +1,7 @@
 function CharacterHumanActionHandler() constructor
 {
 	active_action = undefined;
-	is_movement_interrupted = false;
-	action_duration_timer = new Timer(0);
+	action_timer = new Timer(-1);
 	action_cooldowns = undefined;
 	is_initialized = false;
 	
@@ -10,8 +9,6 @@ function CharacterHumanActionHandler() constructor
 	
 	static OnDestroy = function(_struct = self)
 	{
-		ReleaseVariableFromMemory(_struct.action_duration_timer);
-		_struct.action_duration_timer = undefined;
 		ReleaseVariableFromMemory(_struct.action_cooldowns);
 		_struct.action_cooldowns = undefined;
 		
@@ -36,14 +33,22 @@ function CharacterHumanActionHandler() constructor
 	
 	static Update = function()
 	{
-		// UPDATE ACTION DURATION TIMER
-		action_duration_timer.Update();
-		if (action_duration_timer.IsTimerStopped())
-		{
-			ResetAction();
-		}
-		
 		// UPDATE ACTION COOLDOWNS
+		UpdateActionCooldowns();
+		
+		if (!is_undefined(active_action))
+		{
+			// UPDATE ACTIVE ACTION TIMER
+			action_timer.Update();
+			if (action_timer.IsTimerStopped())
+			{
+				ResetAction();
+			}
+		}
+	}
+	
+	static UpdateActionCooldowns = function()
+	{
 		var actionCooldownCount = array_length(action_cooldowns);
 		for (var i = 0; i < actionCooldownCount; i++)
 		{
@@ -61,22 +66,42 @@ function CharacterHumanActionHandler() constructor
 		}
 	}
 	
-	static SetAction = function(_actionIndex, _interruptMovement, _actionDuration, _actionCooldownDuration, _overrideActiveAction)
+	static GetActionIndex = function()
 	{
+		var actionIndex = undefined;
+		if (!is_undefined(active_action))
+		{
+			actionIndex = active_action.action_index;
+		}
+		return actionIndex;
+	}
+	
+	static SetAction = function(_activeAction, _overrideActiveAction)
+	{
+		var isActionSet = false;
+		if (_overrideActiveAction)
+		{
+			if (!is_undefined(active_action))
+			{
+				// CAN'T INTERRUPT ACTIVE ACTION
+				if (!active_action.is_interruptible) return isActionSet;
+			}
+		}
+		
 		if (is_undefined(active_action) || _overrideActiveAction)
 		{
-			active_action = _actionIndex;
-			is_movement_interrupted = _interruptMovement;
-			
-			// SET ACTION ACTIVE IF IT HAS DURATION
-			if (!is_undefined(_actionDuration))
+			active_action = _activeAction;
+			if (!is_undefined(_activeAction.action_duration))
 			{
-				action_duration_timer.setting_time = _actionDuration;
-				action_duration_timer.StartTimer();
+				action_timer.setting_time = _activeAction.action_duration;
+				action_timer.StartTimer();
+			} else if (!is_undefined(_activeAction.action_animation))
+			{
+				_activeAction.instance_ref.skeletalAnimator.SetActiveAnimation(_activeAction.action_animation);
 			}
-			// SET ACTION TO COOLDOWN
-			SetActionCooldown(_actionIndex, _actionCooldownDuration);
+			isActionSet = true;
 		}
+		return isActionSet;
 	}
 	
 	static SetActionCooldown = function(_actionIndex, _actionCooldownDuration)
@@ -89,9 +114,33 @@ function CharacterHumanActionHandler() constructor
 	
 	static ResetAction = function()
 	{
-		active_action = undefined;
-		is_movement_interrupted = false;
-		action_duration_timer.StopTimer();
+		if (!is_undefined(active_action))
+		{
+			// SET ACTION TO COOLDOWN
+			if (!is_undefined(active_action.action_cooldown))
+			{
+				SetActionCooldown(active_action.action_index, active_action.action_cooldown);
+			} else if (!is_undefined(active_action.action_animation))
+			{
+				var animatorRef = active_action.instance_ref.skeletalAnimator;
+				if (!is_undefined(animatorRef))
+				{
+					// SET ANIMATION TO PREVIOUS
+					var prevActiveAnimation = animatorRef.prev_active_animations[? active_action.action_animation.animation_track];
+					if (!is_undefined(prevActiveAnimation))
+					{
+						animatorRef.SetActiveAnimation(prevActiveAnimation);
+					}
+				}
+			}
+		
+			// DELETE ACTIVE ACTION
+			ReleaseVariableFromMemory(active_action);
+			active_action = undefined;
+			
+			// TRIGGER ACTION TIMER
+			action_timer.StopTimer();
+		}
 	}
 	
 	static ResetActionCooldown = function(_actionIndex)

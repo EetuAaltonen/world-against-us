@@ -52,7 +52,20 @@ function SkeletalAnimationDrawCharacterRifleAim(_animationRef, _animatorRef)
 		
 			draw_text(global.ObjMouse.aimPos.X, global.ObjMouse.aimPos.Y + 60, string("Bone: {0} / {1}*", boneData[? "worldAngleX"], boneData[? "worldAngleY"]));
 			draw_text(global.ObjMouse.aimPos.X, global.ObjMouse.aimPos.Y + 100, string("Frame: {0}", _animationRef.current_frame));
-		
+			var characterRef = instanceRef.character;
+			if (!is_undefined(characterRef))
+			{
+				if (!is_undefined(characterRef.gear))
+				{
+					var primaryWeapon = characterRef.gear.GetItemBySlot(characterRef.gear.primary_weapon);
+					if (!is_undefined(primaryWeapon))
+					{
+						var firingModeIndex = primaryWeapon.metadata.firing_mode_index;
+						var firingMode = primaryWeapon.metadata.firing_modes[firingModeIndex];
+						draw_text(global.ObjMouse.aimPos.X, global.ObjMouse.aimPos.Y + 120, string("Firing mode: {0}", firingMode));
+					}
+				}
+			}
 			// RESET DRAW PROPERTIES
 			ResetDrawProperties();
 		}

@@ -5,11 +5,17 @@ if (!is_undefined(character))
 {
 	if (character.behavior == CHARACTER_BEHAVIOR.PLAYER)
 	{
-		// CHECK GUI STATE
-		if (!global.GUIStateHandlerRef.IsGUIStateClosed()) return;
-		
 		if (!autopilotMode)
 		{
+			inputDeviceMouse.Update();
+			
+			// CHECK ACTION INTERRUPTS
+			GetCharacterActionInterrupts(self);
+			
+			// CHECK ACTION INPUT
+			GetLocalPlayerInputAction();
+			
+			// CHECK INPUT ACTION
 			GetLocalPlayerInputMovement(movementInput);
 		} else {
 			autopilotInputTimer.Update();
@@ -22,9 +28,6 @@ if (!is_undefined(character))
 				autopilotInputTimer.StartTimer();
 			}
 		}
-		
-		// CHECK ACTION INPUT
-		GetLocalPlayerInputAction();
 	
 		// DEBUG MODE
 		maxSpeed = (global.DEBUGMODE) ? 10 : baseMaxSpeed;

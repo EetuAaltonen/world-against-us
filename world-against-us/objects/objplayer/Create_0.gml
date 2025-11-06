@@ -38,6 +38,7 @@ maxSpeed = baseMaxSpeed;
 // CONTROLS
 movementInput = new DeviceInputMovement(0, 0, 0, 0);
 prevMovementInput = new DeviceInputMovement(0, 0, 0, 0);
+inputDeviceMouse = new InputDeviceMouse();
 
 // NETWORKING
 previousPosition = new Vector2(0, 0);

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"GetCharacterActionInterrupts",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"GetCharacterActionInterrupts",
+  "parent":{
+    "name":"Action",
+    "path":"folders/Scripts/World/Character/Action.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

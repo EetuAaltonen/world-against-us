@@ -5,24 +5,44 @@ function GetLocalPlayerInputAction()
 	if (is_undefined(actionHandlerRef.active_action))
 	{
 		// SHOOT WEAPON
-		if (mouse_check_button(mb_left))
+		if (inputDeviceMouse.mb_left_pressed || inputDeviceMouse.mb_left_hold_down)
 		{
 			if (!actionHandlerRef.IsActionInCooldown(CHARACTER_ACTION.SHOOT))
 			{
-				var actionResult = CharacterActionWeaponGunShoot(self, mouse_x, mouse_y);
+				var primaryWeaponRef = character.gear.GetItemBySlot(character.gear.primary_weapon);
+				if (!is_undefined(primaryWeaponRef))
+				{
+					var firingModeIndex = primaryWeaponRef.metadata.firing_mode_index;
+					var firingMode = primaryWeaponRef.metadata.firing_modes[firingModeIndex];
+					if (inputDeviceMouse.mb_left_pressed || (inputDeviceMouse.mb_left_hold_down && firingMode == FIRING_MODE_AUTO))
+					{
+						var actionResult = CharacterActionWeaponGunShoot(self, mouse_x, mouse_y);
+						if (actionResult != CHARACTER_ACTION_RESULT_WEAPON_GUN_SHOOT.SHOT)
+						{
+							// ACTION FAILED
+						}
+					}
+				}
 			}
 		} else if (keyboard_check_released(ord("R")))
 		{
-			if (!actionHandlerRef.IsActionInCooldown(CHARACTER_ACTION.RELOAD))
+			if (actionHandlerRef.GetActionIndex() != CHARACTER_ACTION.RELOAD)
 			{
-				var actionResult = CharacterActionWeaponGunReload(self);
-				if (actionResult == CHARACTER_ACTION_RESULT_WEAPON_GUN_RELOAD.RELOADED)
+				if (!actionHandlerRef.IsActionInCooldown(CHARACTER_ACTION.RELOAD))
 				{
-					if (skeletalAnimator.GetActiveAnimationNameByTrack(0) != "rifle_reload")
+					var actionResult = CharacterActionWeaponGunReload(self);
+					if (actionResult != CHARACTER_ACTION_RESULT_WEAPON_GUN_RELOAD.RELOADED)
 					{
-						skeletalAnimator.SetActiveAnimation("rifle_reload", 0, "upperbody", 1, false, true);
+						// ACTION FAILED
 					}
 				}
+			}
+		} else if (keyboard_check_released(ord("V")))
+		{
+			var actionResult = CharacterActionWeaponGunSwitchFiringMode(self);
+			if (actionResult != CHARACTER_ACTION_RESULT_WEAPON_GUN_SWITCH_FIRING_MODE.SWITCHED)
+			{
+				// ACTION FAILED
 			}
 		}
 		// TODO: Fix quick healing

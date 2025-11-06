@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"ItemActionUnloadWeapon",
+  "%Name":"ItemActionWeaponGunShoot",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"ItemActionUnloadWeapon",
+  "name":"ItemActionWeaponGunShoot",
   "parent":{
     "name":"Gun",
     "path":"folders/Scripts/Game/Data/Inventory/Item/Functions/Action/Weapon/Gun.yy",
