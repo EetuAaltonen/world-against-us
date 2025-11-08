@@ -141,16 +141,16 @@ function NetworkRegionRemotePlayerHandler() constructor
 	{
 		if (!is_undefined(_remoteDataInput))
 		{
-			var deviceInputMovement = _remoteDataInput.device_input_movement;
-			if (!is_undefined(deviceInputMovement))
+			var inputDeviceMovement = _remoteDataInput.input_device_movement;
+			if (!is_undefined(inputDeviceMovement))
 			{
 				var playerInstanceObject = GetRemotePlayer(_remoteDataInput.network_id);
 				if (!is_undefined(playerInstanceObject))
 				{
-					playerInstanceObject.device_input_movement.key_up = deviceInputMovement.key_up;
-					playerInstanceObject.device_input_movement.key_down = deviceInputMovement.key_down;
-					playerInstanceObject.device_input_movement.key_left = deviceInputMovement.key_left;
-					playerInstanceObject.device_input_movement.key_right = deviceInputMovement.key_right;
+					playerInstanceObject.input_device_movement.key_up = inputDeviceMovement.key_up;
+					playerInstanceObject.input_device_movement.key_down = inputDeviceMovement.key_down;
+					playerInstanceObject.input_device_movement.key_left = inputDeviceMovement.key_left;
+					playerInstanceObject.input_device_movement.key_right = inputDeviceMovement.key_right;
 				}
 			}
 		}

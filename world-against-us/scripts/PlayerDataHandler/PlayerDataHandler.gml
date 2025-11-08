@@ -72,30 +72,32 @@ function PlayerDataHandler() constructor
 						}
 				
 						// UPDATE PLAYER MOVEMENT INPUT
-						var movementInput = playerInstance.movementInput;
-						var prevMovementInput = playerInstance.prevMovementInput;
-						if (movementInput.key_up != prevMovementInput.key_up ||
-							movementInput.key_down != prevMovementInput.key_down ||
-							movementInput.key_left != prevMovementInput.key_left ||
-							movementInput.key_right != prevMovementInput.key_right)
+						var inputDeviceMovementRef = playerInstance.inputDeviceMovementRef;
+						var prevMovementInput = inputDeviceMovementRef.previous_state;
+						// PREVIOUS STATE IS UNDEFINED IF INPUT HISTORY IS NOT ENABLED
+						if (!is_undefined(prevMovementInput))
 						{
-							var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT);
-							var networkPacket = new NetworkPacket(
-								networkPacketHeader,
-								movementInput,
-								PACKET_PRIORITY.DEFAULT,
-								undefined
-							);
-							if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+							if (inputDeviceMovementRef.key_up != prevMovementInput.key_up ||
+								inputDeviceMovementRef.key_down != prevMovementInput.key_down ||
+								inputDeviceMovementRef.key_left != prevMovementInput.key_left ||
+								inputDeviceMovementRef.key_right != prevMovementInput.key_right)
 							{
-								// TODO: Generic error handling
-								show_debug_message("Unable to queue MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT");
+								var networkPacketHeader = new NetworkPacketHeader(MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT);
+								var networkPacket = new NetworkPacket(
+									networkPacketHeader,
+									inputDeviceMovementRef,
+									PACKET_PRIORITY.DEFAULT,
+									undefined
+								);
+								if (!global.NetworkHandlerRef.AddPacketToQueue(networkPacket))
+								{
+									// TODO: Generic error handling
+									show_debug_message("Unable to queue MESSAGE_TYPE.PLAYER_DATA_MOVEMENT_INPUT");
+								}
+								
+								// UPDATE PREVIOUS INPUT
+								inputDeviceMovementRef.SnapshotToPrevState();
 							}
-					
-							prevMovementInput.key_up = movementInput.key_up;
-							prevMovementInput.key_down = movementInput.key_down;
-							prevMovementInput.key_left = movementInput.key_left;
-							prevMovementInput.key_right = movementInput.key_right;
 						}
 					}
 				}

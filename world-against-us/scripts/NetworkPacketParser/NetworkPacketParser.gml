@@ -203,10 +203,10 @@ function NetworkPacketParser() constructor
 							undefined, objPlayer,
 							undefined, parsedNetworkId
 						);
-						emptyInstanceObject.device_input_movement.key_up = parsedKeyUp;
-						emptyInstanceObject.device_input_movement.key_down = parsedKeyDown;
-						emptyInstanceObject.device_input_movement.key_left = parsedKeyLeft;
-						emptyInstanceObject.device_input_movement.key_right = parsedKeyRight;
+						emptyInstanceObject.input_device_movement.key_up = parsedKeyUp;
+						emptyInstanceObject.input_device_movement.key_down = parsedKeyDown;
+						emptyInstanceObject.input_device_movement.key_left = parsedKeyLeft;
+						emptyInstanceObject.input_device_movement.key_right = parsedKeyRight;
 						
 						parsedPayload = emptyInstanceObject;
 					} break;
