@@ -1,11 +1,8 @@
 function InputDeviceMouse() constructor
 {
-	mb_left_pressed = undefined;
-	mb_left_hold_down = undefined;
-	mb_left_released = undefined;
-	
-	// INIT
-	ResetInput();
+	mb_left_pressed = 0;
+	mb_left_hold_down = 0;
+	mb_left_released = 0;
 	
 	static OnDestroy = function(_struct = self)
 	{
