@@ -518,7 +518,6 @@
     {"name":"GetCharacterActionInterrupts","order":9,"path":"scripts/GetCharacterActionInterrupts/GetCharacterActionInterrupts.yy",},
     {"name":"GetInstanceOriginPosition","order":1,"path":"scripts/GetInstanceOriginPosition/GetInstanceOriginPosition.yy",},
     {"name":"GetItemAltText","order":6,"path":"scripts/GetItemAltText/GetItemAltText.yy",},
-    {"name":"GetLocalPlayerInputMovement","order":1,"path":"scripts/GetLocalPlayerInputMovement/GetLocalPlayerInputMovement.yy",},
     {"name":"GetScriptByName","order":8,"path":"scripts/GetScriptByName/GetScriptByName.yy",},
     {"name":"GetSpriteByName","order":9,"path":"scripts/GetSpriteByName/GetSpriteByName.yy",},
     {"name":"GetStructureId","order":1,"path":"scripts/GetStructureId/GetStructureId.yy",},
