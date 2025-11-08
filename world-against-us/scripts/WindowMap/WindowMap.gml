@@ -16,7 +16,7 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 	is_following_target = true;
 	vision_radius = MetersToPixels(40);
 	
-	scouting_drone_movement_input = new DeviceInputMovement(0, 0, 0, 0);
+	scouting_drone_movement_input = new InputDeviceMovement(false);
 	
 	highlighted_icon = undefined;
 	highlighted_position = undefined;
@@ -93,7 +93,7 @@ function WindowMap(_elementId, _relativePosition, _size, _backgroundColor) : Win
 				
 				if (!is_undefined(scoutingDrone))
 				{
-					GetLocalPlayerInputMovement(scouting_drone_movement_input);
+					scouting_drone_movement_input.Update();
 					var hInput = scouting_drone_movement_input.key_right - scouting_drone_movement_input.key_left;
 					var vInput = scouting_drone_movement_input.key_down - scouting_drone_movement_input.key_up;
 					var flySpeed = global.MapDataHandlerRef.scouting_drone_fly_speed;

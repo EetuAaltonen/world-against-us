@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"DeviceInputMovement",
+  "%Name":"InputDeviceMovement",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"DeviceInputMovement",
+  "name":"InputDeviceMovement",
   "parent":{
     "name":"DeviceInput",
     "path":"folders/Scripts/Game/Network/DeviceInput.yy",

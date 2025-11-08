@@ -7,7 +7,7 @@ function InstanceObject(_sprite_index, _object_index, _position, _network_id = u
 	
 	instance_ref = noone;
 	network_id = _network_id;
-	device_input_movement = new DeviceInputMovement(0, 0, 0, 0);
+	input_device_movement = new InputDeviceMovement(false);
 	
 	// MOVEMENT INTERPOLATION
 	start_position = undefined;
@@ -32,8 +32,8 @@ function InstanceObject(_sprite_index, _object_index, _position, _network_id = u
 		ReleaseVariableFromMemory(_struct.position);
 		_struct.position = undefined;
 		
-		ReleaseVariableFromMemory(_struct.device_input_movement);
-		_struct.device_input_movement = undefined;
+		ReleaseVariableFromMemory(_struct.input_device_movement);
+		_struct.input_device_movement = undefined;
 		
 		ReleaseVariableFromMemory(_struct.start_position);
 		_struct.start_position = undefined;

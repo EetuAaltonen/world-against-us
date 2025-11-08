@@ -36,8 +36,7 @@ baseMaxSpeed = 2.5;
 maxSpeed = baseMaxSpeed;
 
 // CONTROLS
-movementInput = new DeviceInputMovement(0, 0, 0, 0);
-prevMovementInput = new DeviceInputMovement(0, 0, 0, 0);
+inputDeviceMovement = new InputDeviceMovement(true); // ENABLE INPUT HISTORY
 inputDeviceMouse = new InputDeviceMouse();
 
 // NETWORKING

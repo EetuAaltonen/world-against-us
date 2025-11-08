@@ -176,7 +176,7 @@ function SpawnHandler() constructor
 			// SET NETWORK ID
 			playerInstance.networkId = _remotePlayerInstanceObject.network_id;
 			// SET DEVICE INPUT MOVEMENT
-			playerInstance.movementInput = _remotePlayerInstanceObject.device_input_movement;
+			playerInstance.inputDeviceMovement = _remotePlayerInstanceObject.input_device_movement;
 		}
 	}
 }

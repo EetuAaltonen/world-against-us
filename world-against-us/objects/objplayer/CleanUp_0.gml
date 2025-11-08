@@ -1,11 +1,8 @@
 // INHERIT THE PARENT EVENT
 event_inherited();
 
-ReleaseVariableFromMemory(movementInput);
+ReleaseVariableFromMemory(inputDeviceMovement);
 movementInput = undefined;
-
-ReleaseVariableFromMemory(prevMovementInput);
-prevMovementInput = undefined;
 
 ReleaseVariableFromMemory(inputDeviceMouse);
 inputDeviceMouse = undefined;

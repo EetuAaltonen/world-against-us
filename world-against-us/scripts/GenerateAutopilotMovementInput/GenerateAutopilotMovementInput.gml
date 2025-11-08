@@ -1,4 +1,4 @@
-function GenerateAutopilotMovementInput(movementInput) {
+function GenerateAutopilotMovementInput(inputDeviceMovementRef) {
 	// RESET INPUTS
 	movementInput.key_up = false;
 	movementInput.key_down = false;
