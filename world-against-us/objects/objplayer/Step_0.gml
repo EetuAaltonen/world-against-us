@@ -15,14 +15,14 @@ if (!is_undefined(character))
 			// CHECK ACTION INPUT
 			GetLocalPlayerInputAction();
 			
-			// CHECK INPUT ACTION
-			GetLocalPlayerInputMovement(movementInput);
+			// CHECK MOVEMENT INPUT
+			inputDeviceMovement.Update();
 		} else {
 			autopilotInputTimer.Update();
 			if (autopilotInputTimer.IsTimerStopped())
 			{
 				// CALCULATE NEW RANDOM MOVEMENT INPUT
-				GenerateAutopilotMovementInput(movementInput);
+				GenerateAutopilotMovementInput(inputDeviceMovement);
 				
 				// RESTART AUTOPILOT TIMER
 				autopilotInputTimer.StartTimer();
@@ -62,10 +62,10 @@ if (!is_undefined(character))
 }
 
 // CHECK INPUT
-var hInput = movementInput.key_right - movementInput.key_left;
-var vInput = movementInput.key_down - movementInput.key_up;
+var hInput = inputDeviceMovement.key_right - inputDeviceMovement.key_left;
+var vInput = inputDeviceMovement.key_down - inputDeviceMovement.key_up;
 // PREVENTS PLAYER TO MOVE FASTER DIAGONALLY
-var diagonalModifier = ((hInput != 0) && (vInput != 0)) ? 0.707 /*cos(radtodeg(45))*/ : 1;
+var diagonalModifier = ((hInput != 0) && (vInput != 0)) ? 0.707 /*cos(45°)*/ : 1;
 var totalMaxSpeed = maxSpeed * diagonalModifier;
 
 if (hInput != 0)
