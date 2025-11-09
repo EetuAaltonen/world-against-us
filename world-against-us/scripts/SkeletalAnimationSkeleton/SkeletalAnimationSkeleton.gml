@@ -3,6 +3,7 @@ function SkeletalAnimationSkeleton(_instanceRef) constructor
 	instance_ref = _instanceRef;
 	bone_names = ds_list_create();
 	is_initialized = false;
+	
 	Initialize();
 	
 	static OnDestroy = function(_struct = self)
