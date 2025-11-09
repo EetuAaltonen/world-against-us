@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"MacroCharacterAnimation",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"MacroCharacterAnimation",
+  "parent":{
+    "name":"SkeletalAnimation",
+    "path":"folders/Scripts/Game/Data/Macro/SkeletalAnimation.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

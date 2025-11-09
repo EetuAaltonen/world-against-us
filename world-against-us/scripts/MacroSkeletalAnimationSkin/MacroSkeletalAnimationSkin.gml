@@ -1,0 +1,3 @@
+#macro SKELETAL_ANIM_SKIN_EMPTY "empty"
+#macro SKELETAL_ANIM_SKIN_UPPERBODY "upperbody"
+#macro SKELETAL_ANIM_SKIN_LOWERBODY "lowerbody"

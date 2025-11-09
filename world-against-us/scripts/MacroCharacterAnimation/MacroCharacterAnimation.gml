@@ -1,0 +1,6 @@
+// MOVEMENT
+#macro CHARACTER_ANIM_WALK "walk"
+#macro CHARACTER_ANIM_CROUCH "crouch"
+// WEAPONS
+#macro CHARACTER_ANIM_RIFLE_AIM "rifle_aim"
+#macro CHARACTER_ANIM_RIFLE_RELOAD "rifle_reload"
