@@ -8,8 +8,8 @@ function SkeletalAnimationDrawCharacterRifleAim(_animationRef, _animatorRef)
 	var instanceDirSpeed = _animatorRef.instance_ref.dirSpeed;
 	var weaponAngle = instanceRef.character.gear.primary_weapon_data.aim_angle;
 	
-	var weaponPosX = boneData[? "worldX"] + instanceDirSpeed.h_speed;
-	var weaponPosY = boneData[? "worldY"] + instanceDirSpeed.v_speed;
+	var weaponPosX = boneData[? "worldX"];
+	var weaponPosY = boneData[? "worldY"];
 	
 	// PREVENT WEAPON FROM FLICKERING WHEN IMAGE XSCALE CHANGES
 	if (!instanceDirSpeed.has_turned)
