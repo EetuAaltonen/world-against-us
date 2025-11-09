@@ -125,12 +125,8 @@ function CharacterHumanActionHandler() constructor
 				var animatorRef = active_action.instance_ref.skeletalAnimator;
 				if (!is_undefined(animatorRef))
 				{
-					// SET ANIMATION TO PREVIOUS
-					var prevActiveAnimation = animatorRef.prev_active_animations[? active_action.action_animation.animation_track];
-					if (!is_undefined(prevActiveAnimation))
-					{
-						animatorRef.SetActiveAnimation(prevActiveAnimation);
-					}
+					// RESET DEFAULT ANIMATION
+					animatorRef.ResetActiveAnimation();
 				}
 			}
 		
