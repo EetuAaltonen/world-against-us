@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"CharacterChangePosture",
+  "%Name":"CharacterTogglePosture",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"CharacterChangePosture",
+  "name":"CharacterTogglePosture",
   "parent":{
     "name":"Posture",
     "path":"folders/Scripts/World/Character/Posture.yy",
