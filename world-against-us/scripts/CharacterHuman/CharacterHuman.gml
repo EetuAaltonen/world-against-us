@@ -35,6 +35,10 @@ function CharacterHuman(_name, _type, _race, _behavior, _colliderRef) : Characte
 	// ACTION
 	action_handler = new CharacterHumanActionHandler();
 	
+	// POSTURE
+	default_posture = CHARACTER_POSTURE_HUMAN.STAND;
+	posture = default_posture;
+	
 	static ToJSONStruct = function()
 	{
 		var scaledStamina = ScaleFloatValueToInt(stamina);
