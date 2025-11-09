@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"MacroSkeletalAnimationSkin",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"MacroSkeletalAnimationSkin",
+  "parent":{
+    "name":"SkeletalAnimation",
+    "path":"folders/Scripts/Game/Data/Macro/SkeletalAnimation.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -61,56 +61,67 @@ if (!is_undefined(character))
 	}
 }
 
-// CHECK INPUT
-var hInput = inputDeviceMovement.key_right - inputDeviceMovement.key_left;
-var vInput = inputDeviceMovement.key_down - inputDeviceMovement.key_up;
-// PREVENTS PLAYER TO MOVE FASTER DIAGONALLY
-var diagonalModifier = ((hInput != 0) && (vInput != 0)) ? 0.707 /*cos(45°)*/ : 1;
-var totalMaxSpeed = maxSpeed * diagonalModifier;
-
-if (hInput != 0)
+if (character.posture == CHARACTER_POSTURE_HUMAN.STAND)
 {
-	dirSpeed.h_speed = Approach(dirSpeed.h_speed, totalMaxSpeed * sign(hInput), acceleration);
-} else {
-	dirSpeed.h_speed = Approach(dirSpeed.h_speed, 0, acceleration * 2);
-}
+	// CALCULATE INPUT
+	var hInput = inputDeviceMovement.key_right - inputDeviceMovement.key_left;
+	var vInput = inputDeviceMovement.key_down - inputDeviceMovement.key_up;
+	// PREVENTS PLAYER TO MOVE FASTER DIAGONALLY
+	var diagonalModifier = ((hInput != 0) && (vInput != 0)) ? 0.707 /*cos(45°)*/ : 1;
+	var totalMaxSpeed = maxSpeed * diagonalModifier;
 
-if (vInput != 0)
-{
-	dirSpeed.v_speed = Approach(dirSpeed.v_speed, totalMaxSpeed * sign(vInput), acceleration);
-} else {
-	dirSpeed.v_speed = Approach(dirSpeed.v_speed, 0, acceleration * 2);
-}
-
-// CHECK COLLISION
-if (place_meeting(x + dirSpeed.h_speed, y, objBlockParent))
-{
-	var meetInstance = instance_place(x + dirSpeed.h_speed, y, objBlockParent);
-	if (meetInstance.mask_index != SPRITE_NO_MASK)
+	if (hInput != 0)
 	{
-		while (!place_meeting(x + sign(dirSpeed.h_speed), y, objBlockParent))
-		{
-			x += sign(dirSpeed.h_speed);
-		}
-		dirSpeed.h_speed = 0;
+		dirSpeed.h_speed = Approach(dirSpeed.h_speed, totalMaxSpeed * sign(hInput), acceleration);
+	} else {
+		dirSpeed.h_speed = Approach(dirSpeed.h_speed, 0, acceleration * 2);
 	}
-}
-if (place_meeting(x, y + dirSpeed.v_speed, objBlockParent))
-{
-	var meetInstance = instance_place(x, y + dirSpeed.v_speed, objBlockParent);
-	if (meetInstance.mask_index != SPRITE_NO_MASK)
-	{
-		while (!place_meeting(x, y + sign(dirSpeed.v_speed), objBlockParent))
-		{
-			y += sign(dirSpeed.v_speed);
-		}
-		dirSpeed.v_speed = 0;
-	}
-}
 
-// APPLY MOVEMENT
-x += dirSpeed.h_speed;
-y += dirSpeed.v_speed;
+	if (vInput != 0)
+	{
+		dirSpeed.v_speed = Approach(dirSpeed.v_speed, totalMaxSpeed * sign(vInput), acceleration);
+	} else {
+		dirSpeed.v_speed = Approach(dirSpeed.v_speed, 0, acceleration * 2);
+	}
+
+	// CHECK COLLISION
+	if (place_meeting(x + dirSpeed.h_speed, y, objBlockParent))
+	{
+		var meetInstance = instance_place(x + dirSpeed.h_speed, y, objBlockParent);
+		if (meetInstance.mask_index != SPRITE_NO_MASK)
+		{
+			var safetyLimit = abs(dirSpeed.h_speed) + 1;
+			var safetyCounter = 0;
+			while ((!place_meeting(x + sign(dirSpeed.h_speed), y, objBlockParent)) &&
+					(safetyCounter < safetyLimit))
+			{
+				x += sign(dirSpeed.h_speed);
+				safetyCounter++;
+			}
+			dirSpeed.h_speed = 0;
+		}
+	}
+	if (place_meeting(x, y + dirSpeed.v_speed, objBlockParent))
+	{
+		var meetInstance = instance_place(x, y + dirSpeed.v_speed, objBlockParent);
+		if (meetInstance.mask_index != SPRITE_NO_MASK)
+		{
+			var safetyLimit = abs(dirSpeed.v_speed) + 1;
+			var safetyCounter = 0;
+			while ((!place_meeting(x, y + sign(dirSpeed.v_speed), objBlockParent)) &&
+					(safetyCounter < safetyLimit))
+			{
+				y += sign(dirSpeed.v_speed);
+				safetyCounter++;
+			}
+			dirSpeed.v_speed = 0;
+		}
+	}
+
+	// APPLY MOVEMENT
+	x += dirSpeed.h_speed;
+	y += dirSpeed.v_speed;
+}
 
 // CALCULATE IMAGE X-SCALE
 if (character.behavior == CHARACTER_BEHAVIOR.PLAYER)

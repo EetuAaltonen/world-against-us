@@ -15,7 +15,8 @@ function CharacterActionWeaponGunReload(_instanceRef)
 				{
 					// SET CHARACTER ACTION
 					var activeAnimation = new SkeletalActiveAnimation(
-						_instanceRef.skeletalAnimator, "rifle_reload", 0, "upperbody", 1, false, true
+						_instanceRef.skeletalAnimator, CHARACTER_ANIM_RIFLE_RELOAD,
+						0, SKELETAL_ANIM_SKIN_UPPERBODY, 1, false, true
 					);
 					var activeAction = new CharacterActiveAction(
 						_instanceRef, CHARACTER_ACTION.RELOAD, activeAnimation,

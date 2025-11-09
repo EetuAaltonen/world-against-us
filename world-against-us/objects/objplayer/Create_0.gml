@@ -6,18 +6,19 @@ image_speed = 0;
 
 // SKELETAL ANIMATION
 skeletalAnimator = new SkeletalAnimator(self);
-skeletalAnimator.SetSkeletonSkin("empty");
-// SET DEFAULT RIFLE AIM ANIMATION
-var activeAnimation = new SkeletalActiveAnimation(
-	skeletalAnimator, "rifle_aim", 0, "upperbody", 1, false, true
+skeletalAnimator.SetSkeletonSkin(SKELETAL_ANIM_SKIN_EMPTY);
+// SET DEFAULT ANIMATION
+var upperbodyAnimation = new SkeletalActiveAnimation(
+	skeletalAnimator, CHARACTER_ANIM_RIFLE_AIM,
+	0, SKELETAL_ANIM_SKIN_UPPERBODY, 1, false, true
 );
-skeletalAnimator.SetActiveAnimation(activeAnimation);
+skeletalAnimator.SetActiveAnimation(upperbodyAnimation);
 // SET DEFAULT WALK ANIMATION
-var activeAnimation = new SkeletalActiveAnimation(
-	skeletalAnimator, "walk", 1, "lowerbody", 1, true, false
+var lowerbodyAnimation = new SkeletalActiveAnimation(
+	skeletalAnimator, CHARACTER_ANIM_WALK,
+	1, SKELETAL_ANIM_SKIN_LOWERBODY, 1, true, false
 );
-skeletalAnimator.SetActiveAnimation(activeAnimation);
-
+skeletalAnimator.SetActiveAnimation(lowerbodyAnimation);
 
 // INIT COLLIDER AND COLLISION BODY
 var collisionBody = new CollisionBody(

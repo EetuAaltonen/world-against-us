@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"CharacterChangePosture",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"CharacterChangePosture",
+  "parent":{
+    "name":"Posture",
+    "path":"folders/Scripts/World/Character/Posture.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

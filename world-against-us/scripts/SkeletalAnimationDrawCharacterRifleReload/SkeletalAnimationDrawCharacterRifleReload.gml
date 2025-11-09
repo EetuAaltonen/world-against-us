@@ -20,8 +20,8 @@ function SkeletalAnimationDrawCharacterRifleReload(_animationRef, _animatorRef)
 				var magazineAngle = -(boneData[? "worldAngleX"] + 90);
 				draw_sprite_ext(
 					sprAk47Mag, 0,
-					boneData[? "worldX"] + instanceDirSpeed.h_speed,
-					boneData[? "worldY"] + instanceDirSpeed.v_speed,
+					boneData[? "worldX"],
+					boneData[? "worldY"],
 					0.45 * -instanceRef.image_xscale, 0.45 * instanceRef.image_yscale,
 					magazineAngle, c_white, 1
 				);
@@ -41,8 +41,8 @@ function SkeletalAnimationDrawCharacterRifleReload(_animationRef, _animatorRef)
 		var weaponAngle = -(boneData[? "worldAngleX"] + 90);
 		draw_sprite_ext(
 			sprAk47, weaponImageIndex,
-			boneData[? "worldX"] + instanceDirSpeed.h_speed,
-			boneData[? "worldY"] + instanceDirSpeed.v_speed,
+			boneData[? "worldX"],
+			boneData[? "worldY"],
 			instanceRef.image_xscale, instanceRef.image_yscale,
 			weaponAngle, c_white, 1
 		);

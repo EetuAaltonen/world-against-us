@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"EnumCharacterPostureHuman",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"EnumCharacterPostureHuman",
+  "parent":{
+    "name":"Posture",
+    "path":"folders/Scripts/World/Character/Posture.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

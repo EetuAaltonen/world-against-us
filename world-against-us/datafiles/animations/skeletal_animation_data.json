@@ -16,6 +16,12 @@
           "draw_function": null
         },
         {
+          "name": "crouch",
+          "events": [],
+          "playback_function": null,
+          "draw_function": "SkeletalAnimationDrawCharacterCrouch"
+        },
+        {
           "name": "rifle_aim",
           "events": [],
           "playback_function": "SkeletalAnimationPlaybackCharacterRifleAim",
