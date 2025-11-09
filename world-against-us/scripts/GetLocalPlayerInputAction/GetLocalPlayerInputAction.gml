@@ -87,9 +87,9 @@ function GetLocalPlayerInputAction()
 	// POSTURE MODIFIERS
 	if (keyboard_check_released(vk_control))
 	{
-		if (!CharacterChangePosture(self, CHARACTER_POSTURE_HUMAN.CROUCH))
+		if (!CharacterTogglePosture(self, CHARACTER_POSTURE_HUMAN.CROUCH))
 		{
-			// POSTURE CHANGE FAILED
+			// POSTURE TOGGLE FAILED
 		}
 	}
 }

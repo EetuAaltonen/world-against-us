@@ -1,6 +1,5 @@
-function SkeletalActiveAnimation(_animatorRef, _animationName, _animationTrack, _animationSkin, _animationSpeed, _isLooping, _isSyncWithInstance) constructor
+function SkeletalActiveAnimation(_instanceSpriteIndex, _animationName, _animationTrack, _animationSkin, _animationSpeed, _isLooping, _isSyncWithInstance) constructor
 {
-	animator_ref = _animatorRef;
 	animation_name = _animationName;
 	animation_track = _animationTrack;
 	animation_skin = _animationSkin;
@@ -12,16 +11,16 @@ function SkeletalActiveAnimation(_animatorRef, _animationName, _animationTrack, 
 	animation_event_state = undefined;
 	current_frame = 0;
 	
-	Initialize();
+	Initialize(_instanceSpriteIndex);
 	
 	static OnDestroy = function(_struct = self)
 	{
 		// NO GARBAGE CLEANING
 	}
 	
-	static Initialize = function()
+	static Initialize = function(_instanceSpriteIndex)
 	{
-		var spriteName = sprite_get_name(animator_ref.instance_ref.sprite_index);
+		var spriteName = sprite_get_name(_instanceSpriteIndex);
 		var skeletalSpriteData = global.SkeletalSpriteDatabase[? spriteName];
 		animation_data = skeletalSpriteData.animations[? animation_name];
 	}
@@ -43,11 +42,11 @@ function SkeletalActiveAnimation(_animatorRef, _animationName, _animationTrack, 
 		}
 	}
 	
-	static Draw = function(_instanceRef)
+	static Draw = function(_instanceRef, _animatorRef)
 	{
 		if (!is_undefined(animation_data.playback_function))
 		{
-			animation_data.playback_function(self, animator_ref);
+			animation_data.playback_function(self, _animatorRef);
 		}
 		
 		// UNDEFINED CURRENT FRAME VALUE INDICATES TO SKIP ANIMATION DRAWING
@@ -73,9 +72,9 @@ function SkeletalActiveAnimation(_animatorRef, _animationName, _animationTrack, 
 			
 			if (!is_undefined(animation_data.draw_function))
 			{
-				animation_data.draw_function(self, animator_ref);
+				animation_data.draw_function(self, _animatorRef);
 			} else {
-				SkeletalAnimationDraw(self, animator_ref);
+				SkeletalAnimationDraw(self, _animatorRef);
 			}
 			
 			CheckActiveAnimationEventFrames();

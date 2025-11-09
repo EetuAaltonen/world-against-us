@@ -1,21 +1,22 @@
-function SkeletalAnimator(_instanceRef) constructor
+function SkeletalAnimator(_instanceRef, _defaultAnimations) constructor
 {
 	instance_ref = _instanceRef;
 	skeleton_sprite_data_ref = undefined;
-	animation_skeleton = new SkeletalAnimationSkeleton(instance_ref);
+	default_animations = _defaultAnimations;
 	active_animations = ds_map_create();
+	animation_skeleton = new SkeletalAnimationSkeleton(instance_ref);
 	prev_active_animations = ds_map_create();
 	is_initialized = false;
 	
 	Initialize();
 	
-	// STOP DEFAULT SPRITE ANIMATION
-	instance_ref.image_speed = 0;
-	
 	static OnDestroy = function(_struct = self)
 	{
 		// DON'T DELETE DATABASE REFERENCE DATA
-		skeleton_sprite_data_ref = undefined;
+		_struct.skeleton_sprite_data_ref = undefined;
+		
+		ReleaseVariableFromMemory(_struct.default_animations);
+		_struct.default_animations = undefined;
 		
 		ReleaseVariableFromMemory(_struct.active_animations, ds_type_map);
 		_struct.active_animations = undefined;
@@ -28,6 +29,12 @@ function SkeletalAnimator(_instanceRef) constructor
 	{
 		if (!is_initialized)
 		{
+			// SET DEFAULT SKIN EMPTY TO MAKE SKELETAL BONES INVISIBLE
+			// ANIMATIONS ARE DRAWN USING PARTIAL SKINS (UPPER AND LOWER BODY)
+			SetSkeletonSkin(SKELETAL_ANIM_SKIN_EMPTY);
+			// DISABLE DEFAULT SPRITE FRAMES PLAYBACK
+			instance_ref.image_speed = 0;
+			
 			// POPULATE INSTANCE-RELATED SKELETON SPRITE DATA INTO DATABASE ON INITIALIZE
 			var spriteName = sprite_get_name(instance_ref.sprite_index);
 			skeleton_sprite_data_ref = global.SkeletalSpriteDatabase[? spriteName];
@@ -35,6 +42,9 @@ function SkeletalAnimator(_instanceRef) constructor
 			{
 				skeleton_sprite_data_ref.Initialize(instance_ref);
 			}
+			
+			// SET DEFAULT ANIMATIONS ACTIVE
+			ResetActiveAnimation();
 		}
 		is_initialized = true;
 	}
@@ -81,6 +91,23 @@ function SkeletalAnimator(_instanceRef) constructor
 		return activeAnimationName;
 	}
 	
+	static ResetActiveAnimation = function()
+	{
+		if (is_array(default_animations))
+		{
+			var defaultAnimationCount = array_length(default_animations);
+			for (var i = 0; i < defaultAnimationCount; i++)
+			{
+				var defaultAnimation = default_animations[@ i];
+				if (!is_undefined(defaultAnimation))
+				{
+					// SET DEFAULT ANIMATION ACTIVE
+					SetActiveAnimation(defaultAnimation);
+				}
+			}
+		}
+	}
+	
 	static StorePrevActiveAnimationByTrack = function(_track)
 	{
 		var prevActiveAnimation = prev_active_animations[? _track];
@@ -122,7 +149,7 @@ function SkeletalAnimator(_instanceRef) constructor
 		for (var i = 0; i < trackCount; i++)
 		{
 			var activeAnimation = active_animations[? trackIndices[@ i]];
-			activeAnimation.Draw(instance_ref);
+			activeAnimation.Draw(instance_ref, self);
 		}
 	}
 }
